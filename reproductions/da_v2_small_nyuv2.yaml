@@ -1,0 +1,43 @@
+# Depth Anything V2 (small) on NYUv2 Eigen test split
+#
+# First plumbline reproduction to match a published paper number end-to-end.
+# Runs on CPU or Apple Silicon MPS in ~4 minutes.
+
+name: da-v2-small-nyuv2
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: small
+
+dataset:
+  name: nyuv2
+  split: test
+  kwargs:
+    apply_eigen_crop: true
+
+tasks:
+  - mono_depth
+
+# DA-V2 predicts relative disparity; the MiDaS protocol fits scale + shift
+# in inverse-depth space. That's what `scale_shift` does under the hood.
+scale_alignment: scale_shift
+max_views: 1
+device: mps  # override to cuda:0 on a GPU box
+
+paper_reference:
+  primary_metric: abs_rel
+  # DA-V2 paper, Depth Anything V2 (Yang et al. 2024), Table 2: NYU AbsRel
+  # for the small variant is reported at 0.063.
+  value: 0.063
+  # Observed on Apple M-series MPS was 0.0623; 5% tolerance accommodates
+  # MPS/CUDA numerical drift and per-sample alignment noise.
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, Depth Anything V2. NYUv2 Eigen test, Small."
+
+notes: >
+  Reference run on Apple M-series MPS: AbsRel=0.0623, delta1=0.9551,
+  rmse=0.308m. Matches paper within 1%. This is plumbline's end-to-end
+  correctness anchor — if this number drifts more than ±5%, investigate
+  the alignment / Eigen-crop / depth-conversion code before touching
+  anything else.
