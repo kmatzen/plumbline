@@ -15,8 +15,9 @@ from plumbline.datasets.nyuv2 import NYUv2Dataset, load_eigen_test_indices
 def _write_fake_nyuv2(root: Path, n: int = 4) -> Path:
     """Write a synthetic nyu_depth_v2_labeled.mat-alike HDF5 file.
 
-    Layout mirrors NYU's v7.3 MAT: ``images`` (N, 3, 640, 480) uint8 and
-    ``depths`` (N, 640, 480) float32.
+    Layout mirrors NYU's v7.3 MAT: ``images`` (N, 3, 640, 480) uint8,
+    ``depths`` (N, 640, 480) float32 (filled), and ``rawDepths`` (same
+    shape, with ~25% zeroed pixels simulating Kinect holes).
     """
     root.mkdir(parents=True, exist_ok=True)
     path = root / "nyu_depth_v2_labeled.mat"
@@ -26,11 +27,13 @@ def _write_fake_nyuv2(root: Path, n: int = 4) -> Path:
             "images",
             data=(rng.random((n, 3, 640, 480)) * 255).astype(np.uint8),
         )
-        # Depth in meters with a plausible distribution; no zero-depth invalid.
-        f.create_dataset(
-            "depths",
-            data=(rng.random((n, 640, 480)) * 5.0 + 0.5).astype(np.float32),
-        )
+        filled = (rng.random((n, 640, 480)) * 5.0 + 0.5).astype(np.float32)
+        f.create_dataset("depths", data=filled)
+        # rawDepths: same distribution but with ~25% holes marked as 0.
+        raw = filled.copy()
+        holes = rng.random(raw.shape) < 0.25
+        raw[holes] = 0.0
+        f.create_dataset("rawDepths", data=raw)
     return path
 
 
@@ -88,14 +91,25 @@ class TestNYUv2Dataset:
 
     def test_image_dtype_and_range(self, tmp_path: Path) -> None:
         _write_fake_nyuv2(tmp_path, n=1)
-        ds = NYUv2Dataset(root=tmp_path, indices=[0])
+        # Use the filled depth field here: the raw field contains simulated
+        # Kinect holes (zeros), so "all positive" is a filled-only property.
+        ds = NYUv2Dataset(root=tmp_path, indices=[0], depth_field="filled")
         s = next(iter(ds))
         assert s.images.dtype == np.uint8
         assert s.images.min() >= 0 and s.images.max() <= 255
         assert s.depth_gt is not None
         assert s.depth_gt.dtype == np.float32
-        # All depths positive in our fake fixture.
         assert float(s.depth_gt.min()) > 0
+
+    def test_raw_field_is_default(self, tmp_path: Path) -> None:
+        _write_fake_nyuv2(tmp_path, n=1)
+        ds = NYUv2Dataset(root=tmp_path, indices=[0])
+        s = next(iter(ds))
+        # Default depth_field is "raw"; fixture simulates ~25% holes.
+        assert s.metadata["depth_field"] == "raw"
+        assert s.depth_gt is not None
+        assert float(s.depth_gt.min()) == 0.0  # holes present
+        assert 0.5 <= float(s.depth_gt.max()) <= 10.0
 
     def test_bad_split_errors(self, tmp_path: Path) -> None:
         _write_fake_nyuv2(tmp_path, n=1)
@@ -104,7 +118,11 @@ class TestNYUv2Dataset:
 
     def test_eigen_crop_mask_applied(self, tmp_path: Path) -> None:
         _write_fake_nyuv2(tmp_path, n=1)
-        ds = NYUv2Dataset(root=tmp_path, indices=[0], apply_eigen_crop=True)
+        # Use filled to assert the Eigen-crop rectangle is fully valid;
+        # the raw field's holes would punch zeros into the interior.
+        ds = NYUv2Dataset(
+            root=tmp_path, indices=[0], apply_eigen_crop=True, depth_field="filled"
+        )
         s = next(iter(ds))
         assert s.depth_valid is not None
         assert s.depth_valid.shape == (1, 480, 640)
@@ -116,7 +134,7 @@ class TestNYUv2Dataset:
         # Left / right columns excluded.
         assert not mask[:, 0:41].any()
         assert not mask[:, 601:].any()
-        # Interior rectangle is included where depth > 0 (all of it in our fake).
+        # Interior rectangle is fully valid on filled depth.
         assert mask[45:471, 41:601].all()
 
     def test_no_eigen_crop_leaves_mask_none(self, tmp_path: Path) -> None:

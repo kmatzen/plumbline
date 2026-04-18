@@ -73,6 +73,7 @@ def evaluate(
     pose_auc_thresholds: tuple[float, ...] = (5.0, 10.0, 30.0),
     delta_thresholds: tuple[float, ...] = (1.25, 1.25**2, 1.25**3),
     f_score_threshold: float = 0.05,
+    depth_clip: tuple[float, float] | None = None,
 ) -> Report:
     """Evaluate a model on a dataset and return a :class:`Report`.
 
@@ -137,6 +138,7 @@ def evaluate(
             pose_auc_thresholds=pose_auc_thresholds,
             delta_thresholds=delta_thresholds,
             f_score_threshold=f_score_threshold,
+            depth_clip=depth_clip,
         )
         report.per_sample.append(
             SampleResult(
@@ -233,6 +235,7 @@ def _compute_metrics(
     pose_auc_thresholds: tuple[float, ...],
     delta_thresholds: tuple[float, ...],
     f_score_threshold: float,
+    depth_clip: tuple[float, float] | None = None,
 ) -> dict[str, float]:
     out: dict[str, float] = {}
 
@@ -245,6 +248,7 @@ def _compute_metrics(
                 valid=sample.depth_valid,
                 scale_alignment=scale_alignment,
                 delta_thresholds=delta_thresholds,
+                depth_clip=depth_clip,
             )
         )
 
@@ -273,12 +277,21 @@ def _depth_metrics(
     valid: NDArray[Any] | None,
     scale_alignment: str,
     delta_thresholds: tuple[float, ...],
+    depth_clip: tuple[float, float] | None = None,
 ) -> dict[str, float]:
     pred_aligned, gt_flat, valid_flat = _flatten_pred_gt(pred, gt, valid)
     if pred_aligned.size == 0:
         return {k: float("nan") for k in _depth_metric_keys(delta_thresholds)}
 
     aligned = align_depth(pred_aligned, gt_flat, valid_flat, mode=scale_alignment)
+    # Post-alignment clip to a physical depth range. Standard NYU/KITTI eval
+    # protocol clips predictions to the same range as the valid-GT mask so a
+    # handful of alignment-induced outliers don't pull the mean AbsRel up by
+    # orders of magnitude (seen on DA-V2 Large sample 88 where aligned
+    # depth blew up to 1e8m without this clip).
+    if depth_clip is not None:
+        lo, hi = depth_clip
+        aligned = np.clip(aligned, lo, hi)
 
     metrics: dict[str, float] = {
         "abs_rel": abs_rel(aligned, gt_flat, valid_flat),

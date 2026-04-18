@@ -26,10 +26,14 @@ Conventions
 -----------
 - Images are (480, 640, 3) uint8 sRGB. NYU stores them in CHW order inside
   the .mat; we transpose on load.
-- Depth is (480, 640) float32 meters. NYU's ``depths`` field is already
-  "filled" (Colorization by Levin et al. / Silberman's algorithm); the
-  invalid mask is computed from the raw depth (``rawDepths``) but we follow
-  common practice and treat zeros as invalid.
+- Depth is (480, 640) float32 meters. NYU stores two depth fields: ``depths``
+  is Silberman's colorization-filled version (100% dense, interpolated
+  across Kinect holes); ``rawDepths`` is the raw Kinect measurements with
+  ~24% invalid pixels (holes at specular surfaces, thin structures, and
+  beyond-range). Zero means invalid in ``rawDepths``. The Eigen 2014 test
+  protocol that every modern mono-depth paper cites evaluates against
+  ``rawDepths``; that is therefore our default (``depth_field="raw"``).
+  Pass ``depth_field="filled"`` to use the dense colorized variant instead.
 - Intrinsics are the standard Silberman NYUv2 color calibration
   (fx=518.86, fy=519.47, cx=325.58, cy=253.74). NYUv2 is a monocular
   benchmark; ``extrinsics_gt`` is identity.
@@ -97,6 +101,7 @@ class NYUv2Dataset(Dataset):
         split: str = "test",
         indices: list[int] | None = None,
         apply_eigen_crop: bool = False,
+        depth_field: str = "raw",
     ) -> None:
         root_path = Path(root) if root else env_path("NYUV2_ROOT")
         if root_path is None or not root_path.exists():
@@ -127,6 +132,11 @@ class NYUv2Dataset(Dataset):
             )
 
         self.apply_eigen_crop = bool(apply_eigen_crop)
+        if depth_field not in ("raw", "filled"):
+            raise ValueError(
+                f"depth_field must be 'raw' or 'filled'; got {depth_field!r}"
+            )
+        self.depth_field = depth_field
 
     def __iter__(self) -> Iterator[Sample]:
         import h5py
@@ -144,7 +154,16 @@ class NYUv2Dataset(Dataset):
 
         with h5py.File(self.mat_path, "r") as f:
             images_ds = f["images"]  # shape (N, 3, 640, 480) per NYU's ordering
-            depths_ds = f["depths"]  # shape (N, 640, 480)
+            depth_key = "rawDepths" if self.depth_field == "raw" else "depths"
+            if depth_key not in f:
+                alt = "depths" if depth_key == "rawDepths" else "rawDepths"
+                raise DatasetNotAvailable(
+                    f"NYUv2 .mat at {self.mat_path} has no '{depth_key}' field "
+                    f"(has '{alt}'). Pass depth_field='{alt[:3] if alt.startswith('raw') else 'filled'}' "
+                    f"or download the full labeled .mat from "
+                    f"https://horatio.cs.nyu.edu/mit/silberman/nyu_depth_v2/nyu_depth_v2_labeled.mat"
+                )
+            depths_ds = f[depth_key]  # shape (N, 640, 480)
             for idx in self._indices:
                 rgb_raw = np.asarray(images_ds[idx])  # (3, 640, 480) uint8 stored by MATLAB
                 depth_raw = np.asarray(depths_ds[idx])  # (640, 480) float
@@ -173,6 +192,7 @@ class NYUv2Dataset(Dataset):
                         "labeled_index": idx,
                         "split": self.split,
                         "eigen_crop": self.apply_eigen_crop,
+                        "depth_field": self.depth_field,
                     },
                 )
 

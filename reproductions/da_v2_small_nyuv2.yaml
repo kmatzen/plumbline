@@ -23,27 +23,27 @@ tasks:
 # in inverse-depth space. That's what `scale_shift` does under the hood.
 scale_alignment: scale_shift
 max_views: 1
-device: mps  # override to cuda:0 on a GPU box
+device: cuda:0
+# Eigen 2014 NYU protocol: clip aligned depth to the same range as the valid GT
+# mask so outlier alignments don't dominate the mean AbsRel.
+depth_clip: [0.001, 10.0]
 
 paper_reference:
   primary_metric: abs_rel
   # DA-V2 paper (Yang et al. 2024), Table 2: NYU AbsRel for the zero-shot
-  # relative ViT-S is reported at 0.053. The plumbline pipeline + public
-  # HuggingFace checkpoint produces ~0.062 under the same protocol (Eigen
-  # crop, gt in [1e-3, 10]m, scale+shift in inverse-depth space); running
-  # the *author's* own inference code on the same split gives 0.0621
-  # (mean across 654 samples) — i.e. the public code + public checkpoint
-  # reproduce plumbline's value, not the paper's. Tolerance is widened to
-  # ±25% to reflect that gap.
+  # relative ViT-S is reported at 0.053. This holds when evaluated against
+  # NYU's rawDepths field (Eigen 2014 protocol). Earlier plumbline runs
+  # used the colorization-filled `depths` field and saw ~0.062; switching
+  # the NYUv2 loader's default to `depth_field="raw"` closed the gap.
   value: 0.053
-  tolerance_relative: 0.25
+  tolerance_relative: 0.05
   citation: "Yang et al. 2024, Depth Anything V2, Table 2. NYUv2 Eigen test, ViT-S (relative)."
 
 notes: >
-  Reference runs: Apple MPS AbsRel=0.0623; RTX 3090 AbsRel≈0.062 (same
-  within float noise). This is plumbline's end-to-end correctness anchor —
-  if it drifts more than ±5% from ~0.062, investigate before touching
-  anything else. The paper's 0.053 isn't directly reproducible with the
-  public HF checkpoint + the author's public inference code (2026-04-18
-  diagnostic: author's own code also gives 0.062 on the full 654-sample
-  Eigen test split with the standard Eigen crop and [1e-3, 10]m valid mask).
+  Paper-match anchor for the end-to-end mono-depth pipeline. Drifting more
+  than ±5% from ~0.051 means something regressed in alignment / Eigen-crop
+  / depth-field / HF checkpoint handling — investigate before touching
+  anything else. Earlier versions of this file cited 0.063 and reported a
+  "match" against that number; the 0.063 wasn't a paper value, and the
+  filled-depth eval gave 0.062 — both symptoms of running against the
+  wrong depth field. rawDepths-default landed 2026-04-18.

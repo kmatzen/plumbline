@@ -116,6 +116,11 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
         if subset_n:
             dataset = dataset.subset(int(subset_n))
 
+    depth_clip_cfg = cfg.get("depth_clip")
+    depth_clip = (
+        (float(depth_clip_cfg[0]), float(depth_clip_cfg[1])) if depth_clip_cfg else None
+    )
+
     report = evaluate(
         model=model,
         dataset=dataset,
@@ -124,6 +129,7 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
         max_views=int(cfg.get("max_views", 8)),
         device=cfg.get("device", "cuda:0"),
         cache=PredictionCache(cfg.get("cache_dir")) if cfg.get("cache_dir") else None,
+        depth_clip=depth_clip,
     )
 
     paper = cfg.get("paper_reference", {})

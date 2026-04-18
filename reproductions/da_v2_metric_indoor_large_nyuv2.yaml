@@ -33,6 +33,7 @@ tasks:
 scale_alignment: median
 max_views: 1
 device: cuda:0
+depth_clip: [0.001, 10.0]
 
 paper_reference:
   # Intentionally no numeric target. Closest published number from the
