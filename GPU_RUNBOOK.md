@@ -107,22 +107,36 @@ the monocular adapters.
    `intrinsic/` using the `SensReader` from the ScanNet repo.
 4. Set `export SCANNET_ROOT=<path>`.
 
-### ETH3D high-res multi-view (public, ~50 GB for all scenes)
+### ETH3D high-res multi-view (public, no auth; ~50 GB for all 13 train scenes)
+
+Needs `p7zip-full` for the archives:
+
+```bash
+sudo apt-get install -y p7zip-full
+```
+
+Per-scene, we want the **undistorted** archive (images + calibration; the
+loader expects ``dslr_calibration_undistorted/cameras.txt`` etc.) and the
+**scan eval** archive (laser-scan GT):
 
 ```bash
 mkdir -p ~/data/eth3d && cd ~/data/eth3d
 # Training scenes w/ GT (the only ones we eval on):
 for scene in courtyard delivery_area electro facade kicker meadow \
              office pipes playground relief relief_2 terrace terrains; do
-  curl -L -O "https://www.eth3d.net/data/${scene}_dslr_jpg.7z"
-  curl -L -O "https://www.eth3d.net/data/${scene}_dslr_calibration_undistorted.7z"
-  curl -L -O "https://www.eth3d.net/data/${scene}_dslr_scan_eval.7z"
-  7z x "${scene}_dslr_jpg.7z"
-  7z x "${scene}_dslr_calibration_undistorted.7z"
-  7z x "${scene}_dslr_scan_eval.7z"
+  curl -L --fail -O "https://www.eth3d.net/data/${scene}_dslr_undistorted.7z"
+  curl -L --fail -O "https://www.eth3d.net/data/${scene}_dslr_scan_eval.7z"
+  7z x -y "${scene}_dslr_undistorted.7z"
+  7z x -y "${scene}_dslr_scan_eval.7z"
 done
 export ETH3D_ROOT=$HOME/data/eth3d
 ```
+
+Archive names to know:
+- `*_dslr_undistorted.7z` — undistorted jpg + COLMAP calibration
+- `*_dslr_jpg.7z` — distorted jpg only (don't need for eval)
+- `*_dslr_scan_eval.7z` — laser GT in the evaluation coordinate frame
+- `*_scan_clean.7z` — the raw clean laser scan (`.ply`)
 
 ## Per-adapter first-run notes
 
