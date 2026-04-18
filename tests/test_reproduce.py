@@ -20,7 +20,6 @@ from plumbline.models.base import Model, ModelCapabilities, Prediction
 from plumbline.models.registry import MODEL_REGISTRY
 from plumbline.reproduce import ReproductionResult, load_reproduction_config, run_reproduction
 
-
 # ---------------------------------------------------------------------------
 # Test fixtures (fake model + fake dataset)
 # ---------------------------------------------------------------------------
@@ -141,9 +140,7 @@ class TestLoadConfig:
 
 
 class TestRunReproduction:
-    def test_match_within_tolerance(
-        self, repro_dir: Path, registered_fakes: None
-    ) -> None:
+    def test_match_within_tolerance(self, repro_dir: Path, registered_fakes: None) -> None:
         _write_yaml(
             repro_dir / "repro.yaml",
             """
@@ -175,9 +172,7 @@ paper_reference:
         assert result.paper_match is True
         assert result.report.n_evaluated == 3
 
-    def test_mismatch_outside_tolerance(
-        self, repro_dir: Path, registered_fakes: None
-    ) -> None:
+    def test_mismatch_outside_tolerance(self, repro_dir: Path, registered_fakes: None) -> None:
         _write_yaml(
             repro_dir / "repro.yaml",
             """
@@ -275,9 +270,46 @@ device: cpu
         run_reproduction("repro", output=out)
         assert out.exists()
 
-    def test_to_markdown_renders_status(
+    def test_sample_ids_file_pins_exact_samples(
         self, repro_dir: Path, registered_fakes: None
     ) -> None:
+        """`sample_ids_file` pins the exact sample set, not a stride."""
+        (repro_dir / "pinned.txt").write_text("s1\ns3\n# comment\n\ns4\n")
+        _write_yaml(
+            repro_dir / "repro.yaml",
+            """
+name: repro
+model: {name: test-fixed-depth}
+dataset: {name: test-synthetic, kwargs: {n_samples: 10}}
+sample_ids_file: pinned.txt
+tasks: [mono_depth]
+device: cpu
+""".strip(),
+        )
+        result = run_reproduction("repro")
+        assert result.report.n_evaluated == 3
+        ids = [s.sample_id for s in result.report.per_sample]
+        assert ids == ["s1", "s3", "s4"]
+
+    def test_sample_ids_file_missing_id_raises(
+        self, repro_dir: Path, registered_fakes: None
+    ) -> None:
+        (repro_dir / "pinned.txt").write_text("s1\nno_such_sample\n")
+        _write_yaml(
+            repro_dir / "repro.yaml",
+            """
+name: repro
+model: {name: test-fixed-depth}
+dataset: {name: test-synthetic, kwargs: {n_samples: 3}}
+sample_ids_file: pinned.txt
+tasks: [mono_depth]
+device: cpu
+""".strip(),
+        )
+        with pytest.raises(KeyError, match="were not found"):
+            run_reproduction("repro")
+
+    def test_to_markdown_renders_status(self, repro_dir: Path, registered_fakes: None) -> None:
         _write_yaml(
             repro_dir / "repro.yaml",
             """
