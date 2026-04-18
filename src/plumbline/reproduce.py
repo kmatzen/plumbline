@@ -75,6 +75,12 @@ def load_reproduction_config(name: str) -> dict[str, Any]:
 
 
 def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionResult:
+    # Import built-in adapters so programmatic callers don't have to
+    # remember to eager-register before looking things up.
+    from plumbline._discover import register_builtin_adapters
+
+    register_builtin_adapters()
+
     cfg = load_reproduction_config(name)
 
     model_name = cfg["model"]["name"]

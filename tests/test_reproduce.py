@@ -139,6 +139,37 @@ class TestLoadConfig:
 # ---------------------------------------------------------------------------
 
 
+class TestBuiltinDiscovery:
+    def test_run_reproduction_auto_discovers_builtin_adapters(
+        self, repro_dir: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Regression: ``plumbline reproduce`` must auto-register built-ins.
+
+        Previously, calling ``run_reproduction`` on a YAML that pointed at a
+        built-in adapter (e.g. ``depth-anything-v2``) would fail with
+        ``KeyError: model '...' not registered`` because nothing imported the
+        adapter module. Now ``run_reproduction`` calls
+        ``register_builtin_adapters()`` first.
+        """
+        _write_yaml(
+            repro_dir / "r.yaml",
+            """
+name: r
+model: {name: depth-anything-v2, kwargs: {variant: small, device: cpu}}
+dataset: {name: nyuv2, kwargs: {root: /nonexistent/path}}
+tasks: [mono_depth]
+device: cpu
+""".strip(),
+        )
+        # Should raise DatasetNotAvailable (missing root) — NOT KeyError on
+        # model registration. Reaching the dataset construction path proves
+        # both model + dataset auto-discovery ran.
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises((DatasetNotAvailable, FileNotFoundError)):
+            run_reproduction("r")
+
+
 class TestRunReproduction:
     def test_match_within_tolerance(self, repro_dir: Path, registered_fakes: None) -> None:
         _write_yaml(

@@ -6,7 +6,6 @@ Uses typer (click under the hood). Kept thin: it's a view over
 
 from __future__ import annotations
 
-import importlib
 import json
 from pathlib import Path
 from typing import Any
@@ -15,6 +14,7 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
+from plumbline._discover import register_builtin_adapters
 from plumbline._version import __version__
 from plumbline.cache import PredictionCache, default_cache_dir
 from plumbline.datasets.registry import DATASET_REGISTRY
@@ -38,23 +38,12 @@ def _eager_import_adapters() -> None:
     """Import built-in adapter modules so they register with the registry.
 
     Missing optional deps are swallowed — a missing torch or transformers
-    should not block ``list-models`` or CLI help.
+    should not block ``list-models`` or CLI help. Failures surface as
+    yellow notes in the console.
     """
-    for mod in (
-        "plumbline.models.depth_anything_v2",
-        "plumbline.models.metric3d_v2",
-        "plumbline.models.mast3r",
-        "plumbline.models.vggt",
-        "plumbline.models.depth_anything_3",
-        "plumbline.datasets.sintel",
-        "plumbline.datasets.scannet",
-        "plumbline.datasets.eth3d",
-        "plumbline.datasets.nyuv2",
-    ):
-        try:
-            importlib.import_module(mod)
-        except Exception as exc:  # pragma: no cover — depends on optional deps
-            console.print(f"[yellow]note:[/yellow] could not import {mod}: {exc}", soft_wrap=True)
+    failures = register_builtin_adapters()
+    for mod, exc in failures:
+        console.print(f"[yellow]note:[/yellow] could not import {mod}: {exc}", soft_wrap=True)
 
 
 def _version_callback(value: bool) -> None:
