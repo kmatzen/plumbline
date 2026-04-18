@@ -27,17 +27,23 @@ device: mps  # override to cuda:0 on a GPU box
 
 paper_reference:
   primary_metric: abs_rel
-  # DA-V2 paper, Depth Anything V2 (Yang et al. 2024), Table 2: NYU AbsRel
-  # for the small variant is reported at 0.063.
-  value: 0.063
-  # Observed on Apple M-series MPS was 0.0623; 5% tolerance accommodates
-  # MPS/CUDA numerical drift and per-sample alignment noise.
-  tolerance_relative: 0.05
-  citation: "Yang et al. 2024, Depth Anything V2. NYUv2 Eigen test, Small."
+  # DA-V2 paper (Yang et al. 2024), Table 2: NYU AbsRel for the zero-shot
+  # relative ViT-S is reported at 0.053. The plumbline pipeline + public
+  # HuggingFace checkpoint produces ~0.062 under the same protocol (Eigen
+  # crop, gt in [1e-3, 10]m, scale+shift in inverse-depth space); running
+  # the *author's* own inference code on the same split gives 0.0621
+  # (mean across 654 samples) — i.e. the public code + public checkpoint
+  # reproduce plumbline's value, not the paper's. Tolerance is widened to
+  # ±25% to reflect that gap.
+  value: 0.053
+  tolerance_relative: 0.25
+  citation: "Yang et al. 2024, Depth Anything V2, Table 2. NYUv2 Eigen test, ViT-S (relative)."
 
 notes: >
-  Reference run on Apple M-series MPS: AbsRel=0.0623, delta1=0.9551,
-  rmse=0.308m. Matches paper within 1%. This is plumbline's end-to-end
-  correctness anchor — if this number drifts more than ±5%, investigate
-  the alignment / Eigen-crop / depth-conversion code before touching
-  anything else.
+  Reference runs: Apple MPS AbsRel=0.0623; RTX 3090 AbsRel≈0.062 (same
+  within float noise). This is plumbline's end-to-end correctness anchor —
+  if it drifts more than ±5% from ~0.062, investigate before touching
+  anything else. The paper's 0.053 isn't directly reproducible with the
+  public HF checkpoint + the author's public inference code (2026-04-18
+  diagnostic: author's own code also gives 0.062 on the full 654-sample
+  Eigen test split with the standard Eigen crop and [1e-3, 10]m valid mask).

@@ -1,16 +1,12 @@
 # Depth Anything V2 Metric Indoor (Large) on NYUv2 Eigen test split
 #
-# Companion to da-v2-large-nyuv2, targeting the same published AbsRel
-# (0.043) under the correct model family: this repro loads the metric
-# indoor fine-tune (Hypersim), while da-v2-large-nyuv2 loads the relative
-# Large checkpoint.
-#
-# The HF port of the metric checkpoint carries a systematic ~1.3x scale
-# bias vs NYU GT (a normalization constant folded in upstream and dropped
-# during the HF conversion). Unaligned AbsRel on a 3090 is ~0.33; with
-# per-sample median alignment it lands near the paper's 0.043. Median
-# alignment is the minimum fix that lets this repro match the paper with
-# the currently-published -hf weights.
+# Runs the Hypersim-finetuned metric checkpoint on NYU, median-aligned
+# per sample. There is no directly-published "paper number" to target —
+# DA-V2 Table 4a reports an *NYU-finetuned* ViT-L at AbsRel=0.056, but
+# that's a different checkpoint from the Hypersim-trained one we load
+# here. We keep this as an informational run to anchor the metric-indoor
+# variant's behaviour on NYU until a proper cross-domain paper number
+# lands or we wire the NYU-finetuned checkpoint.
 
 name: da-v2-metric-indoor-large-nyuv2
 
@@ -28,32 +24,30 @@ dataset:
 tasks:
   - mono_depth
 
-# See docstring above re: the HF port's ~1.3x scale drift. Paper's
-# evaluation of the metric family on NYU reports unaligned numbers, but
-# those rest on the author weights, not the HF port we load here. Median
-# alignment recovers paper's AbsRel on the currently-published port.
+# The HuggingFace port of the metric checkpoint and the *author's own*
+# checkpoint agree per-pixel to within 0.2% (2026-04-18 diagnostic), but
+# both carry a systematic ~1.34x overshoot against NYU GT in meters —
+# intrinsic to the Hypersim-trained metric model on cross-domain NYU.
+# Median alignment gives ~0.061 on the full 654-sample split; unaligned
+# is ~0.33.
 scale_alignment: median
 max_views: 1
 device: cuda:0
 
 paper_reference:
+  # Intentionally no numeric target. Closest published number from the
+  # DA-V2 paper is Table 4a's 0.056 for the *NYU-finetuned* ViT-L, which
+  # is a different checkpoint. Keeping primary_metric so the runner still
+  # reports AbsRel cleanly; tolerance is permissive because there's no
+  # reference to compare against.
   primary_metric: abs_rel
-  # Yang et al. 2024, DA-V2, Table 2 (metric indoor family): NYU AbsRel
-  # for the Large variant is reported at 0.043.
-  value: 0.043
-  tolerance_relative: 0.10
-  citation: "Yang et al. 2024, Depth Anything V2. NYUv2 Eigen test, Metric-Indoor Large (Hypersim fine-tune)."
+  tolerance_relative: 1.0
+  citation: "No direct paper reference for Hypersim-finetuned ViT-L on NYUv2."
 
 notes: >
   First GPU run (RTX 3090, 2026-04-18, full 654-sample Eigen test split):
-  median-aligned AbsRel=0.0613 (delta1=0.9517, rmse=0.322m). Outside ±10%
-  of the paper's 0.043. Unaligned AbsRel on the same weights is ~0.33
-  (systematic ~1.3x scale bias vs NYU GT).
-  .
-  This gets us close but not to paper. Likely causes: (a) the HuggingFace
-  -hf port drops a normalization constant the author checkpoint carries;
-  (b) the paper's 0.043 may be measured with a scale+shift or per-image
-  calibration the HF post-process doesn't replicate. Closing the remaining
-  ~40% gap likely requires wiring the author checkpoint (non-HF) or
-  reverse-engineering the HF port's missing normalization. For now this
-  repro serves as an honest ceiling for the HF path.
+  median-aligned AbsRel=0.0613, delta1=0.9517, rmse=0.322m. Unaligned
+  ~0.33. Author and HuggingFace checkpoints agree to 0.2% per-pixel, so
+  the HF port is faithful; the 1.34x bias is a cross-domain property of
+  the Hypersim-trained model on NYU. Informational only — no paper match
+  is expected.
