@@ -158,26 +158,49 @@ uv run plumbline run --model metric3d-v2 \
 
 Metric3Dv2 is metric; use `--scale-alignment none`.
 
-### MASt3R (upstream not on PyPI)
+### MASt3R (upstream not on PyPI — or pip-installable)
+
+Upstream has no `pyproject.toml`; needs a recursive clone so the `dust3r`
+and `croco` submodules are available. Install transitive deps into the
+plumbline venv:
 
 ```bash
-uv pip install git+https://github.com/naver/mast3r
+git clone --recursive https://github.com/naver/mast3r /workspace/deps/mast3r
+VIRTUAL_ENV=/workspace/plumbline/.venv uv pip install roma scikit-learn trimesh
+export MAST3R_ROOT=/workspace/deps/mast3r   # DUST3R_ROOT defaults to $MAST3R_ROOT/dust3r
 ```
 
-Then **wire up** `_run_mast3r` in `src/plumbline/models/mast3r.py` per the
-module docstring's output contract. The upstream API has moved around; do
-a single-pair run from a scratch Python REPL first to confirm the shapes,
-then transcribe into `_run_mast3r`.
+`MASt3RAdapter` lazy-adds `$MAST3R_ROOT` + `$DUST3R_ROOT` to `sys.path` on
+first use, runs `dust3r.inference.inference` on a symmetrized pair, then
+fits a `PairViewer` global-aligner to recover per-view focal, principal
+point, camera-frame depth, and world-from-camera pose. The adapter rebases
+the scene so view 0 is always the world frame (PairViewer may pick either
+view as origin based on pair-confidence).
 
-### VGGT (upstream not on PyPI)
+v0.1 caps `max_views=2`. N>2 requires `mast3r.cloud_opt.sparse_ga.
+sparse_global_alignment`, which is iterative — a v0.2 item.
+
+### VGGT (upstream pip-installable from git)
 
 ```bash
-uv pip install git+https://github.com/facebookresearch/vggt
+VIRTUAL_ENV=/workspace/plumbline/.venv uv pip install git+https://github.com/facebookresearch/vggt
 ```
 
-Then wire `_run_vggt` in `src/plumbline/models/vggt.py`. VGGT at 32 views
-×1024² fits in 24 GB (A100 / 4090). OOM? the runner catches and skips the
-sample; drop `--max-views` to 8 or 16.
+`VGGTAdapter` already wires `_run_vggt` against the upstream
+`vggt.models.vggt.VGGT` + `vggt.utils.pose_enc.pose_encoding_to_extri_intri`
+API. Preprocessing mirrors upstream's `mode="crop"`: width=518, height
+rounded to the nearest multiple of 14 preserving aspect ratio, centre-crop
+if tall. Autocast defaults to bf16 on CUDA (sm≥8, matching the VGGT demo);
+set `dtype: float32` in the reproduction YAML for a debug run.
+
+Extrinsic convention: `pose_encoding_to_extri_intri` returns
+`camera_from_world`; the adapter inverts to `world_from_camera` and
+rebases to make view 0 identity (VGGT's pose encoding already biases
+view 0 toward identity within float noise, so this is usually a no-op).
+
+VGGT at 32 views ×1024² fits in 24 GB (A100 / 4090). An RTX 3090 handles
+8 views at the 518-default width comfortably under 10 GB. OOM? the runner
+catches and skips the sample; drop `--max-views` to 4 or adjust the YAML.
 
 ### Depth Anything 3 (wiring TBD at release time)
 

@@ -22,7 +22,7 @@ tasks:
 
 scale_alignment: scale_shift
 max_views: 1
-device: mps  # override to cuda:0 on a GPU box
+device: cuda:0
 
 paper_reference:
   primary_metric: abs_rel
@@ -32,6 +32,13 @@ paper_reference:
   citation: "Yang et al. 2024, Depth Anything V2. NYUv2 Eigen test, Large."
 
 notes: >
-  Validates the DepthAnythingV2Adapter ``variant`` knob against a second
-  paper number. Tolerance is ±10% (wider than Small's ±5%) because Large
-  weights include more nondeterminism-prone ops.
+  First GPU run (RTX 3090, 2026-04-18): observed AbsRel=0.0554 — outside
+  the ±10% window (expected ≤0.0473). Small variant matched to ~1% under
+  the same pipeline, so alignment / crop / inversion are correct. The
+  cited 0.043 almost certainly comes from DA-V2's *metric-indoor-finetuned*
+  Large checkpoint (``depth-anything/Depth-Anything-V2-Metric-Indoor-Large-hf``)
+  evaluated with ``scale_alignment: none``, not the generic relative Large
+  this adapter loads. To actually reproduce 0.043, either: (a) add a
+  ``metric-indoor-large`` variant to DepthAnythingV2Adapter targeting that
+  checkpoint, or (b) relabel this reproduction as "relative Large" and pin
+  ~0.055 as the target from our own measurement. Decide before v0.1 ships.
