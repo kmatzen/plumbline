@@ -37,18 +37,35 @@ uv run huggingface-cli login
 
 ## Dataset downloads
 
-### Sintel (public, ~5 GB)
+### Sintel (public images; depth + cameras are auth-gated)
+
+**The optical-flow bundle is public** (~5.3 GB) and gives you the `final/`,
+`clean/`, and flow data. It does NOT contain depth or camera archives:
 
 ```bash
 mkdir -p ~/data/sintel && cd ~/data/sintel
-curl -L -o sintel.zip http://files.is.tue.mpg.de/sintel/MPI-Sintel-complete.zip
-unzip sintel.zip
-# Verify layout — plumbline expects:
-#   training/final/<scene>/frame_XXXX.png
-#   training/depth/<scene>/frame_XXXX.dpt
-#   training/camdata_left/<scene>/frame_XXXX.cam
+curl -L -o complete.zip http://files.is.tue.mpg.de/sintel/MPI-Sintel-complete.zip
+unzip complete.zip && rm complete.zip
 export SINTEL_ROOT=$HOME/data/sintel
 ```
+
+**Depth + camera archives require registration** at
+https://sintel.is.tue.mpg.de/signup. After login, download the Depth +
+Camera Motion archive from https://sintel.is.tue.mpg.de/depth and extract
+into the same `$SINTEL_ROOT` so the layout merges to:
+
+```
+$SINTEL_ROOT/training/
+  final/<scene>/frame_XXXX.png        # from complete.zip (public)
+  clean/<scene>/frame_XXXX.png        # from complete.zip (public)
+  depth/<scene>/frame_XXXX.dpt        # from depth archive (auth)
+  camdata_left/<scene>/frame_XXXX.cam # from depth archive (auth)
+```
+
+The `plumbline` Sintel loader raises `DatasetNotAvailable` with a pointer
+to the above if any of these are missing. `tests/test_real_imagery_integration.py`
+runs against `final/` only (no auth) and gives a real-data smoke check for
+the monocular adapters.
 
 ### ScanNet v2 test (auth-gated)
 

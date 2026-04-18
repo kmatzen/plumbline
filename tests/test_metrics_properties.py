@@ -114,9 +114,7 @@ class TestAlignmentInvariants:
         assert s == pytest.approx(scale, rel=1e-4)
 
     @given(gt=_depth_array, scale=st.floats(min_value=0.05, max_value=20))
-    def test_align_depth_median_then_abs_rel_is_zero(
-        self, gt: np.ndarray, scale: float
-    ) -> None:
+    def test_align_depth_median_then_abs_rel_is_zero(self, gt: np.ndarray, scale: float) -> None:
         pred = (gt / scale).astype(np.float32)
         aligned = align_depth(pred, gt, mode="median").astype(np.float32)
         assert abs_rel(aligned, gt) == pytest.approx(0.0, abs=1e-4)
@@ -136,9 +134,7 @@ class TestAlignmentInvariants:
         gt=_depth_array,
         noise_scale=st.floats(min_value=1e-3, max_value=0.2),
     )
-    def test_median_robust_to_a_few_outliers(
-        self, gt: np.ndarray, noise_scale: float
-    ) -> None:
+    def test_median_robust_to_a_few_outliers(self, gt: np.ndarray, noise_scale: float) -> None:
         """Median alignment should survive a single egregious outlier."""
         assume(gt.size >= 5)
         rng = np.random.default_rng(0)
@@ -172,14 +168,18 @@ class TestAUCInvariants:
         result = auc(errors, [threshold])
         assert 0.0 <= result[threshold] <= 1.0
 
-    @given(n=st.integers(min_value=1, max_value=32), threshold=st.floats(min_value=0.1, max_value=10))
+    @given(
+        n=st.integers(min_value=1, max_value=32), threshold=st.floats(min_value=0.1, max_value=10)
+    )
     def test_auc_perfect_is_one(self, n: int, threshold: float) -> None:
         from plumbline.metrics.pose import auc
 
         result = auc(np.zeros(n), [threshold])
         assert result[threshold] == pytest.approx(1.0, abs=1e-10)
 
-    @given(n=st.integers(min_value=1, max_value=32), threshold=st.floats(min_value=0.1, max_value=10))
+    @given(
+        n=st.integers(min_value=1, max_value=32), threshold=st.floats(min_value=0.1, max_value=10)
+    )
     def test_auc_all_infinite_is_zero(self, n: int, threshold: float) -> None:
         from plumbline.metrics.pose import auc
 
