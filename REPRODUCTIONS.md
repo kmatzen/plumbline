@@ -16,10 +16,11 @@ value.
 
 ## Status matrix
 
-| Name | Paper | Primary metric | Published | Tolerance | Status |
-| --- | --- | --- | --- | --- | --- |
-| `vggt-paper-scannet-depth` | VGGT, ScanNet, 8 views | `abs_rel` | _TBD_ | ±5% | **placeholder** — fill in on first run |
-| `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | ≈0.075 | ±15% | shakedown — rough sanity |
+| Name | Paper | Primary metric | Published | Observed | Tolerance | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| `da-v2-small-nyuv2` | DA-V2 Small, NYU Eigen test | `abs_rel` | 0.063 | **0.0623** | ±5% | ✅ **match** (MPS, 4 min) |
+| `vggt-paper-scannet-depth` | VGGT, ScanNet, 8 views | `abs_rel` | _TBD_ | — | ±5% | placeholder — awaiting GPU run |
+| `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | ≈0.075 | — | ±15% | blocked on Sintel depth-archive availability |
 
 ## Adding a new reproduction
 
