@@ -33,6 +33,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
@@ -130,7 +131,7 @@ class ScanNetDataset(Dataset):
 
     # -- scanning --------------------------------------------------------
 
-    def _scan(self, scenes: list[str] | None) -> Iterator[dict]:
+    def _scan(self, scenes: list[str] | None) -> Iterator[dict[str, Any]]:
         split_root = self.root / "scans_test"
         if not split_root.exists():
             raise DatasetNotAvailable(f"Expected ScanNet split at {split_root}; not found.")
@@ -170,7 +171,7 @@ class ScanNetDataset(Dataset):
 
     # -- per sample ------------------------------------------------------
 
-    def _load_sample(self, rec: dict) -> Sample:
+    def _load_sample(self, rec: dict[str, Any]) -> Sample:
         images = np.stack([read_rgb_uint8(self.root / p) for p in rec["color_paths"]], axis=0)
         assert_valid_image(images, name=f"scannet/{rec['sample_id']}/image")
 

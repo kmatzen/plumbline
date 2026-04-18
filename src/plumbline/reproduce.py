@@ -150,7 +150,7 @@ def _find_config(name: str) -> Path | None:
         pkg = resources.files("plumbline").parent / "reproductions"  # type: ignore[attr-defined]
         for suffix in (f"{name}.yaml", f"{name.replace('-', '_')}.yaml"):
             candidate = pkg / suffix
-            if candidate.is_file():  # type: ignore[attr-defined]
+            if candidate.is_file():
                 return Path(str(candidate))
     except Exception:
         pass

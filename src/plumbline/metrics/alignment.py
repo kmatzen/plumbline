@@ -24,6 +24,8 @@ Modes
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 from numpy.typing import NDArray
 
@@ -37,7 +39,9 @@ __all__ = [
 ]
 
 
-def align_scale_median(pred: NDArray, gt: NDArray, valid: NDArray | None = None) -> float:
+def align_scale_median(
+    pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None = None
+) -> float:
     """Return the scalar ``s`` such that ``s * pred`` matches ``gt`` in median ratio.
 
     ``s = median(gt / pred)`` over valid pixels where both are positive.
@@ -48,7 +52,9 @@ def align_scale_median(pred: NDArray, gt: NDArray, valid: NDArray | None = None)
     return float(np.median(g / np.maximum(p, EPS)))
 
 
-def align_scale_lstsq(pred: NDArray, gt: NDArray, valid: NDArray | None = None) -> float:
+def align_scale_lstsq(
+    pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None = None
+) -> float:
     """Return the scalar ``s`` minimizing ``||s*pred - gt||_2``.
 
     Closed form: ``s = (pred . gt) / (pred . pred)``.
@@ -60,9 +66,9 @@ def align_scale_lstsq(pred: NDArray, gt: NDArray, valid: NDArray | None = None) 
 
 
 def align_scale_and_shift(
-    pred: NDArray,
-    gt: NDArray,
-    valid: NDArray | None = None,
+    pred: NDArray[Any],
+    gt: NDArray[Any],
+    valid: NDArray[Any] | None = None,
     *,
     space: str = "inv_depth",
 ) -> tuple[float, float]:
@@ -98,12 +104,12 @@ def align_scale_and_shift(
 
 
 def align_depth(
-    pred: NDArray,
-    gt: NDArray,
-    valid: NDArray | None = None,
+    pred: NDArray[Any],
+    gt: NDArray[Any],
+    valid: NDArray[Any] | None = None,
     *,
     mode: str = "median",
-) -> NDArray:
+) -> NDArray[Any]:
     """Apply the named alignment and return the aligned prediction.
 
     Parameters
@@ -140,8 +146,8 @@ def align_depth(
 
 
 def _valid_pairs(
-    pred: NDArray, gt: NDArray, valid: NDArray | None
-) -> tuple[NDArray, NDArray, NDArray]:
+    pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None
+) -> tuple[NDArray[Any], NDArray[Any], NDArray[Any]]:
     if pred.shape != gt.shape:
         raise ValueError(f"pred/gt shape mismatch: {pred.shape} vs {gt.shape}")
     mask = (

@@ -36,13 +36,11 @@ jobs:
       - name: Run tests
         run: uv run pytest -q
 
-  # Optional type-check job; non-blocking for v0.1.
   typecheck:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v3
       - run: uv python install 3.12
       - run: uv sync --python 3.12
-      - run: uv run mypy src || true
+      - run: uv run mypy src

@@ -53,7 +53,7 @@ class Prediction:
     extrinsics: NDArray[np.float32] | None = None
     point_map: NDArray[np.float32] | None = None
     confidence: NDArray[np.float32] | None = None
-    metadata: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict[str, Any])
 
     def has(self, field_name: str) -> bool:
         """Check whether this prediction provides ``field_name``."""
@@ -147,7 +147,9 @@ class Model(ABC):
 
         if name not in MODEL_REGISTRY:
             raise KeyError(f"Unknown model '{name}'. Known: {sorted(MODEL_REGISTRY)}")
-        return MODEL_REGISTRY[name](device=device)
+        # Concrete adapters accept a `device` kwarg in __init__; the ABC
+        # doesn't declare it to keep the interface flexible per-adapter.
+        return MODEL_REGISTRY[name](device=device)  # type: ignore[call-arg]
 
     # Optional: override when the model has tunable preprocessing config.
     def config_hash(self) -> str:

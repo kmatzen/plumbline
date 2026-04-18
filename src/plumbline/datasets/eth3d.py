@@ -30,6 +30,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
@@ -115,7 +116,7 @@ class ETH3DDataset(Dataset):
 
     # -- scanning --------------------------------------------------------
 
-    def _scan(self, scenes: list[str] | None) -> Iterator[dict]:
+    def _scan(self, scenes: list[str] | None) -> Iterator[dict[str, Any]]:
         scene_dirs = sorted(p for p in self.root.iterdir() if p.is_dir())
         if scenes is not None:
             wanted = set(scenes)
@@ -141,7 +142,7 @@ class ETH3DDataset(Dataset):
 
     # -- per sample ------------------------------------------------------
 
-    def _load_sample(self, rec: dict) -> Sample:
+    def _load_sample(self, rec: dict[str, Any]) -> Sample:
         cameras = parse_colmap_cameras(self.root / rec["cameras_txt"])
         cam_for_image: dict[int, NDArray[np.float32]] = {}
 
@@ -235,13 +236,13 @@ def parse_colmap_cameras(path: Path) -> dict[int, NDArray[np.float32]]:
     return cameras
 
 
-def parse_colmap_images(path: Path) -> list[dict]:
+def parse_colmap_images(path: Path) -> list[dict[str, Any]]:
     """Parse a COLMAP ``images.txt`` skipping the 2D-point lines.
 
     Yields one dict per image with keys ``image_id``, ``qw..qz``, ``tx..tz``,
     ``camera_id``, ``name``.
     """
-    out: list[dict] = []
+    out: list[dict[str, Any]] = []
     with path.open("r", encoding="utf-8") as f:
         while True:
             line = f.readline()
@@ -268,7 +269,7 @@ def parse_colmap_images(path: Path) -> list[dict]:
     return out
 
 
-def quat_to_rot(q: NDArray) -> NDArray[np.float64]:
+def quat_to_rot(q: NDArray[Any]) -> NDArray[np.float64]:
     """COLMAP quaternion ``(qw, qx, qy, qz)`` → 3x3 rotation matrix."""
     w, x, y, z = q
     n = np.sqrt(w * w + x * x + y * y + z * z)
@@ -306,20 +307,18 @@ def _load_ply_xyz(path: Path) -> NDArray[np.float32]:
         for ln in header:
             if ln.startswith("element vertex"):
                 vcount = int(ln.split()[2])
-        if fmt.startswith("binary_little_endian"):
-            data = np.frombuffer(f.read(), dtype=np.uint8)
-        else:
-            data = f.read()
+        payload = f.read()
 
     if fmt.startswith("binary_little_endian"):
         # Assume xyz are the first three float32 properties per vertex.
-        itemsize = data.nbytes // max(vcount, 1)
-        pts = np.frombuffer(data.tobytes(), dtype=np.uint8).reshape(vcount, itemsize)
+        buf = np.frombuffer(payload, dtype=np.uint8)
+        itemsize = buf.nbytes // max(vcount, 1)
+        pts = buf.reshape(vcount, itemsize)
         xyz = np.frombuffer(pts[:, :12].tobytes(), dtype=np.float32).reshape(-1, 3)
         return np.ascontiguousarray(xyz)
 
     xyz = np.empty((vcount, 3), dtype=np.float32)
-    for i, line in enumerate(data.decode("ascii").splitlines()[:vcount]):
+    for i, line in enumerate(payload.decode("ascii").splitlines()[:vcount]):
         parts = line.split()
         xyz[i] = [float(parts[0]), float(parts[1]), float(parts[2])]
     return xyz

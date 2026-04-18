@@ -139,7 +139,7 @@ class VGGTAdapter(Model):
 
 def _run_vggt(
     model: Any, images: NDArray[np.uint8], *, device: str, dtype: str
-) -> dict[str, NDArray]:
+) -> dict[str, NDArray[Any]]:
     """Run VGGT end-to-end. Placeholder: wire into upstream in first GPU run.
 
     Expected return dict (after conversion):

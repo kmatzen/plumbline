@@ -22,7 +22,7 @@ __all__ = [
 def ensure_torch() -> Any:
     """Import torch or raise a helpful error pointing at the install extra."""
     try:
-        import torch  # type: ignore[import-not-found]
+        import torch
 
         return torch
     except ImportError as exc:  # pragma: no cover - requires absence of torch
@@ -64,6 +64,6 @@ def numpy_to_torch_images(
     return tensor
 
 
-def torch_to_numpy(x: Any) -> NDArray:
+def torch_to_numpy(x: Any) -> NDArray[Any]:
     """Bring a torch tensor back to numpy, off GPU, detached."""
     return x.detach().cpu().numpy()

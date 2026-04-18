@@ -78,6 +78,7 @@ dev = [
     "ruff>=0.6",
     "scipy>=1.11",
     "mypy>=1.10",
+    "types-pyyaml>=6.0.12.20260408",
 ]
 
 [tool.ruff]
@@ -126,6 +127,9 @@ markers = [
 python_version = "3.10"
 strict = true
 warn_unused_ignores = true
+# Numpy operations return `Any` pervasively; warn_return_any fires on every
+# metric/geometry helper and doesn't meaningfully improve correctness.
+warn_return_any = false
 files = ["src"]
 
 [[tool.mypy.overrides]]

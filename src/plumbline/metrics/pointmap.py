@@ -6,13 +6,15 @@ These are the standard point-set distance metrics used for multi-view stereo
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 from numpy.typing import NDArray
 
 __all__ = ["chamfer_distance", "f_score"]
 
 
-def _nn_distances(a: NDArray, b: NDArray) -> NDArray:
+def _nn_distances(a: NDArray[Any], b: NDArray[Any]) -> NDArray[Any]:
     """For each point in ``a``, distance to its nearest neighbor in ``b``.
 
     Falls back to a numpy pairwise computation when scipy is unavailable. Uses
@@ -21,7 +23,7 @@ def _nn_distances(a: NDArray, b: NDArray) -> NDArray:
     if a.size == 0 or b.size == 0:
         return np.empty(a.shape[0], dtype=np.float64)
     try:
-        from scipy.spatial import cKDTree  # type: ignore[import-not-found]
+        from scipy.spatial import cKDTree
 
         tree = cKDTree(b)
         d, _ = tree.query(a, k=1)
@@ -39,7 +41,7 @@ def _nn_distances(a: NDArray, b: NDArray) -> NDArray:
         return d
 
 
-def chamfer_distance(pred: NDArray, gt: NDArray, *, two_sided: bool = True) -> float:
+def chamfer_distance(pred: NDArray[Any], gt: NDArray[Any], *, two_sided: bool = True) -> float:
     """Symmetric Chamfer distance between two point sets.
 
     ``mean_{x in pred} min_{y in gt} ||x - y||  +  mean_{y in gt} min_{x in pred} ||y - x||``
@@ -65,8 +67,8 @@ def chamfer_distance(pred: NDArray, gt: NDArray, *, two_sided: bool = True) -> f
 
 
 def f_score(
-    pred: NDArray,
-    gt: NDArray,
+    pred: NDArray[Any],
+    gt: NDArray[Any],
     *,
     threshold: float,
 ) -> dict[str, float]:

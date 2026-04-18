@@ -139,7 +139,7 @@ class MASt3RAdapter(Model):
 # ---------------------------------------------------------------------------
 
 
-def _run_mast3r(model: Any, images: NDArray[np.uint8], *, device: str) -> dict[str, NDArray]:
+def _run_mast3r(model: Any, images: NDArray[np.uint8], *, device: str) -> dict[str, NDArray[Any]]:
     """Run MASt3R on a batch of images and return plumbline-shaped arrays.
 
     This is a thin wrapper over the upstream ``inference`` API. The exact

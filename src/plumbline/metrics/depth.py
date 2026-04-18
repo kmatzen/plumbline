@@ -19,6 +19,8 @@ Conventions
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 from numpy.typing import NDArray
 
@@ -27,7 +29,9 @@ from plumbline.conventions import EPS
 __all__ = ["abs_rel", "delta_threshold", "log10_error", "rmse", "silog"]
 
 
-def _flat_valid(pred: NDArray, gt: NDArray, valid: NDArray | None) -> tuple[NDArray, NDArray]:
+def _flat_valid(
+    pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None
+) -> tuple[NDArray[Any], NDArray[Any]]:
     """Return 1D arrays of prediction/GT values on valid pixels only.
 
     Rejects non-finite values and non-positive GT (depth must be > 0).
@@ -42,7 +46,7 @@ def _flat_valid(pred: NDArray, gt: NDArray, valid: NDArray | None) -> tuple[NDAr
     return pred[mask].astype(np.float64), gt[mask].astype(np.float64)
 
 
-def abs_rel(pred: NDArray, gt: NDArray, valid: NDArray | None = None) -> float:
+def abs_rel(pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None = None) -> float:
     """Absolute relative error: ``mean(|pred - gt| / gt)``.
 
     Eigen et al., "Depth Map Prediction from a Single Image using a
@@ -54,7 +58,7 @@ def abs_rel(pred: NDArray, gt: NDArray, valid: NDArray | None = None) -> float:
     return float(np.mean(np.abs(p - g) / np.maximum(g, EPS)))
 
 
-def rmse(pred: NDArray, gt: NDArray, valid: NDArray | None = None) -> float:
+def rmse(pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None = None) -> float:
     """Root mean squared error, in the same units as the input."""
     p, g = _flat_valid(pred, gt, valid)
     if p.size == 0:
@@ -63,9 +67,9 @@ def rmse(pred: NDArray, gt: NDArray, valid: NDArray | None = None) -> float:
 
 
 def delta_threshold(
-    pred: NDArray,
-    gt: NDArray,
-    valid: NDArray | None = None,
+    pred: NDArray[Any],
+    gt: NDArray[Any],
+    valid: NDArray[Any] | None = None,
     *,
     threshold: float = 1.25,
 ) -> float:
@@ -84,9 +88,9 @@ def delta_threshold(
 
 
 def silog(
-    pred: NDArray,
-    gt: NDArray,
-    valid: NDArray | None = None,
+    pred: NDArray[Any],
+    gt: NDArray[Any],
+    valid: NDArray[Any] | None = None,
     *,
     lambda_: float = 1.0,
 ) -> float:
@@ -106,7 +110,7 @@ def silog(
     return float(np.sqrt(max(val, 0.0)) * 100.0)
 
 
-def log10_error(pred: NDArray, gt: NDArray, valid: NDArray | None = None) -> float:
+def log10_error(pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None = None) -> float:
     """Mean |log10(pred) - log10(gt)|. Common on NYUv2 and ScanNet tables."""
     p, g = _flat_valid(pred, gt, valid)
     if p.size == 0:

@@ -90,7 +90,7 @@ class DepthAnythingV2Adapter(Model):
             return
         torch = ensure_torch()
         try:
-            from transformers import (  # type: ignore[import-not-found]
+            from transformers import (
                 AutoImageProcessor,
                 AutoModelForDepthEstimation,
             )
@@ -100,7 +100,8 @@ class DepthAnythingV2Adapter(Model):
                 "`uv pip install -e '.[models]'`."
             ) from exc
         checkpoint = _HF_CHECKPOINTS[self.variant]
-        self._processor = AutoImageProcessor.from_pretrained(checkpoint)
+        # transformers' auto classes are not fully typed; ignore untyped-call.
+        self._processor = AutoImageProcessor.from_pretrained(checkpoint)  # type: ignore[no-untyped-call]
         self._model = AutoModelForDepthEstimation.from_pretrained(checkpoint).to(self.device).eval()
         _ = torch  # used lazily in predict()
 
