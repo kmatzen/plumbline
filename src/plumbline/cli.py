@@ -9,6 +9,7 @@ from __future__ import annotations
 import importlib
 import json
 from pathlib import Path
+from typing import Any
 
 import typer
 from rich.console import Console
@@ -147,7 +148,7 @@ def run_cmd(
         ds_kwargs["split"] = split
     if data_root is not None:
         ds_kwargs["root"] = data_root
-    dataset_instance = dataset_cls(**ds_kwargs)  # type: ignore[arg-type]
+    dataset_instance = dataset_cls(**ds_kwargs)
 
     if subset is not None:
         dataset_instance = dataset_instance.subset(subset)
@@ -232,7 +233,7 @@ def cache_info(
     console.print(f"{count} entries, {total / 1024 / 1024:.1f} MiB at {pred_dir}")
 
 
-def _require(registry: dict, key: str, *, kind: str) -> type:
+def _require(registry: dict[str, Any], key: str, *, kind: str) -> type:
     if key not in registry:
         options = ", ".join(sorted(registry))
         raise typer.BadParameter(f"Unknown {kind} '{key}'. Known: {options}")

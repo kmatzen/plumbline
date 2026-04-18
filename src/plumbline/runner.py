@@ -23,7 +23,6 @@ import random
 import time
 import traceback
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -253,9 +252,9 @@ def _compute_metrics(
 
 def _depth_metrics(
     *,
-    pred: NDArray,
-    gt: NDArray,
-    valid: NDArray | None,
+    pred: NDArray[Any],
+    gt: NDArray[Any],
+    valid: NDArray[Any] | None,
     scale_alignment: str,
     delta_thresholds: tuple[float, ...],
 ) -> dict[str, float]:
@@ -281,10 +280,10 @@ def _depth_metric_keys(deltas: tuple[float, ...]) -> list[str]:
 
 
 def _flatten_pred_gt(
-    pred: NDArray,
-    gt: NDArray,
-    valid: NDArray | None,
-) -> tuple[NDArray, NDArray, NDArray]:
+    pred: NDArray[Any],
+    gt: NDArray[Any],
+    valid: NDArray[Any] | None,
+) -> tuple[NDArray[Any], NDArray[Any], NDArray[Any]]:
     """Resize prediction to GT resolution per-view and flatten batches."""
     pred_out = pred.astype(np.float64) if pred.shape == gt.shape else _resize_depth_to_gt(pred, gt)
     if valid is None:
@@ -292,7 +291,7 @@ def _flatten_pred_gt(
     return pred_out, gt.astype(np.float64), valid
 
 
-def _resize_depth_to_gt(pred: NDArray, gt: NDArray) -> NDArray:
+def _resize_depth_to_gt(pred: NDArray[Any], gt: NDArray[Any]) -> NDArray[Any]:
     """Resize a batch of depth maps to GT resolution with bilinear sampling.
 
     Never bilinear-resizes ground-truth; the runner only resizes predictions.
@@ -310,13 +309,14 @@ def _resize_depth_to_gt(pred: NDArray, gt: NDArray) -> NDArray:
     out = np.empty((flat.shape[0], tgt_h, tgt_w), dtype=np.float64)
     for i, m in enumerate(flat):
         img = Image.fromarray(m.astype(np.float32), mode="F")
-        out[i] = np.asarray(img.resize((tgt_w, tgt_h), resample=Image.BILINEAR), dtype=np.float64)
+        resample = Image.Resampling.BILINEAR
+        out[i] = np.asarray(img.resize((tgt_w, tgt_h), resample=resample), dtype=np.float64)
     return out.reshape(*batch_shape, tgt_h, tgt_w)
 
 
 def _pose_metrics(
-    E_pred: NDArray,
-    E_gt: NDArray,
+    E_pred: NDArray[Any],
+    E_gt: NDArray[Any],
     auc_thresholds: tuple[float, ...],
 ) -> dict[str, float]:
     if E_pred.shape != E_gt.shape:
@@ -344,7 +344,7 @@ def _pose_metrics(
 def _detect_environment() -> RunEnvironment:
     env = RunEnvironment(plumbline_version=_version.__version__)
     try:
-        import torch  # type: ignore[import-not-found]
+        import torch
 
         env.torch_version = torch.__version__
         if torch.cuda.is_available():
@@ -359,7 +359,7 @@ def _seed_everything(seed: int) -> None:
     random.seed(seed)
     np.random.seed(seed)
     try:
-        import torch  # type: ignore[import-not-found]
+        import torch
 
         torch.manual_seed(seed)
         if torch.cuda.is_available():
@@ -377,7 +377,7 @@ def _safe_len(dataset: Dataset) -> int | None:
 
 def _try_empty_cuda_cache() -> None:
     try:
-        import torch  # type: ignore[import-not-found]
+        import torch
 
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
@@ -390,17 +390,12 @@ def _try_empty_cuda_cache() -> None:
 def _oom_types() -> tuple[type[BaseException], ...]:
     types: list[type[BaseException]] = [MemoryError]
     try:
-        import torch  # type: ignore[import-not-found]
+        import torch
 
-        types.append(torch.cuda.OutOfMemoryError)  # type: ignore[attr-defined]
+        types.append(torch.cuda.OutOfMemoryError)
     except Exception:
         pass
     return tuple(types)
 
 
 _OOM_TYPES = _oom_types()
-
-# Keep math imported for downstream future use (delta defaults).
-_ = math
-_ = Path
-_ = Any

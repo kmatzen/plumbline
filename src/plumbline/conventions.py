@@ -27,6 +27,8 @@ Summary
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 from numpy.typing import NDArray
 
@@ -60,7 +62,7 @@ WORLD_FRAME: str = "first_camera"
 # ---------------------------------------------------------------------------
 
 
-def _check_finite(arr: NDArray, name: str, *, allow_nan: bool = False) -> None:
+def _check_finite(arr: NDArray[Any], name: str, *, allow_nan: bool = False) -> None:
     if allow_nan:
         mask = ~np.isnan(arr)
         if not np.all(np.isfinite(arr[mask])):
@@ -70,7 +72,7 @@ def _check_finite(arr: NDArray, name: str, *, allow_nan: bool = False) -> None:
             raise AssertionError(f"{name} contains non-finite values (NaN or inf)")
 
 
-def assert_valid_image(image: NDArray, *, name: str = "image") -> None:
+def assert_valid_image(image: NDArray[Any], *, name: str = "image") -> None:
     """Validate an sRGB uint8 image in canonical layout.
 
     Shape: ``(H, W, 3)`` or ``(N, H, W, 3)``. Dtype: ``uint8``.
@@ -88,7 +90,7 @@ def assert_valid_image(image: NDArray, *, name: str = "image") -> None:
         )
 
 
-def assert_valid_intrinsics(K: NDArray, *, name: str = "intrinsics") -> None:
+def assert_valid_intrinsics(K: NDArray[Any], *, name: str = "intrinsics") -> None:
     """Validate an intrinsics matrix ``K``.
 
     Shape: ``(3, 3)`` or ``(N, 3, 3)``, float. Must be finite and upper-triangular
@@ -114,7 +116,7 @@ def assert_valid_intrinsics(K: NDArray, *, name: str = "intrinsics") -> None:
         raise AssertionError(f"{name} focal lengths (K[0,0], K[1,1]) must be > 0")
 
 
-def assert_valid_extrinsics(E: NDArray, *, name: str = "extrinsics") -> None:
+def assert_valid_extrinsics(E: NDArray[Any], *, name: str = "extrinsics") -> None:
     """Validate a ``world_from_camera`` extrinsic matrix.
 
     Shape: ``(4, 4)`` or ``(N, 4, 4)``, float. ``E[:3, :3]`` must be a rotation
@@ -148,7 +150,7 @@ def assert_valid_extrinsics(E: NDArray, *, name: str = "extrinsics") -> None:
         )
 
 
-def world_from_camera_is_identity(E: NDArray, *, atol: float = 1e-5) -> bool:
+def world_from_camera_is_identity(E: NDArray[Any], *, atol: float = 1e-5) -> bool:
     """Check that the first camera is the world frame (``E[0]`` ≈ identity).
 
     Applies to a batch of shape ``(N, 4, 4)``.
@@ -159,7 +161,7 @@ def world_from_camera_is_identity(E: NDArray, *, atol: float = 1e-5) -> bool:
 
 
 def assert_valid_depth(
-    depth: NDArray, *, name: str = "depth", allow_zero_invalid: bool = True
+    depth: NDArray[Any], *, name: str = "depth", allow_zero_invalid: bool = True
 ) -> None:
     """Validate a depth map.
 
@@ -183,7 +185,7 @@ def assert_valid_depth(
     _ = allow_zero_invalid  # reserved for future use; kept for API stability
 
 
-def depth_is_valid(depth: NDArray, *, allow_zero_invalid: bool = True) -> NDArray:
+def depth_is_valid(depth: NDArray[Any], *, allow_zero_invalid: bool = True) -> NDArray[Any]:
     """Boolean mask of valid depth pixels."""
     mask = ~np.isnan(depth)
     if allow_zero_invalid:
@@ -193,7 +195,7 @@ def depth_is_valid(depth: NDArray, *, allow_zero_invalid: bool = True) -> NDArra
     return mask
 
 
-def assert_valid_point_map(pmap: NDArray, *, name: str = "point_map") -> None:
+def assert_valid_point_map(pmap: NDArray[Any], *, name: str = "point_map") -> None:
     """Validate a world-frame point map.
 
     Shape: ``(H, W, 3)`` or ``(N, H, W, 3)``. NaN allowed as invalid marker.
@@ -214,7 +216,7 @@ def assert_valid_point_map(pmap: NDArray, *, name: str = "point_map") -> None:
 # ---------------------------------------------------------------------------
 
 
-def invert_pose(E: NDArray) -> NDArray:
+def invert_pose(E: NDArray[Any]) -> NDArray[Any]:
     """Invert a batch of rigid-body 4x4 transforms.
 
     Valid for any orthonormal rotation + translation. ``(N, 4, 4) -> (N, 4, 4)``
@@ -237,7 +239,7 @@ def invert_pose(E: NDArray) -> NDArray:
     return inv.reshape(E.shape)
 
 
-def camera_from_world(E_world_from_camera: NDArray) -> NDArray:
+def camera_from_world(E_world_from_camera: NDArray[Any]) -> NDArray[Any]:
     """Alias for :func:`invert_pose` with a documenting name.
 
     In plumbline, extrinsics are always ``world_from_camera``. Some papers and
@@ -247,7 +249,7 @@ def camera_from_world(E_world_from_camera: NDArray) -> NDArray:
     return invert_pose(E_world_from_camera)
 
 
-def rebase_to_first_camera(E: NDArray) -> NDArray:
+def rebase_to_first_camera(E: NDArray[Any]) -> NDArray[Any]:
     """Return extrinsics re-referenced so ``E[0]`` is identity.
 
     Given ``(N, 4, 4)`` ``world_from_camera`` matrices in some arbitrary world

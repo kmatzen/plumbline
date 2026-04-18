@@ -41,7 +41,7 @@ class Sample:
         Optional ``(M, 3)`` world-frame ground-truth point cloud. Used by
         Chamfer/F-score metrics. May be subsampled for evaluation speed.
     metadata
-        Free-form dict: scene id, split, difficulty, timestamps, etc.
+        Free-form dict[str, Any]: scene id, split, difficulty, timestamps, etc.
     """
 
     sample_id: str
@@ -51,7 +51,7 @@ class Sample:
     depth_gt: NDArray[np.float32] | None = None
     depth_valid: NDArray[np.bool_] | None = None
     point_cloud_gt: NDArray[np.float32] | None = None
-    metadata: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict[str, Any])
 
     @property
     def num_views(self) -> int:

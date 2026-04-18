@@ -126,9 +126,10 @@ class PredictionCache:
         arrays["_meta_json"] = np.asarray(json.dumps(meta, default=_json_default))
 
         # np.savez_compressed appends ".npz"; write to a distinct basename
-        # and move into place atomically.
+        # and move into place atomically. The numpy stub claims the second
+        # positional arg is `bool`, but runtime accepts **arrays; suppress.
         tmp = path.with_name(path.stem + ".tmp")
-        np.savez_compressed(tmp, **arrays)
+        np.savez_compressed(tmp, **arrays)  # type: ignore[arg-type]
         os.replace(tmp.with_suffix(".tmp.npz"), path)
         return path
 

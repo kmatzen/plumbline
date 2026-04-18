@@ -6,6 +6,7 @@ import json
 import os
 from collections.abc import Iterable
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
@@ -35,9 +36,9 @@ def env_path(var: str, default: Path | None = None) -> Path | None:
     return default
 
 
-def load_manifest(path: Path) -> list[dict]:
+def load_manifest(path: Path) -> list[dict[str, Any]]:
     """Load a newline-delimited JSON manifest."""
-    records: list[dict] = []
+    records: list[dict[str, Any]] = []
     with path.open("r", encoding="utf-8") as f:
         for i, line in enumerate(f, 1):
             line = line.strip()
@@ -50,7 +51,7 @@ def load_manifest(path: Path) -> list[dict]:
     return records
 
 
-def save_manifest(path: Path, records: Iterable[dict]) -> None:
+def save_manifest(path: Path, records: Iterable[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
         for rec in records:
@@ -62,11 +63,11 @@ def read_rgb_uint8(path: Path) -> NDArray[np.uint8]:
     """Read an image as ``(H, W, 3)`` uint8 sRGB, dropping alpha if present."""
     from PIL import Image
 
-    with Image.open(path) as img:
-        if img.mode not in ("RGB", "RGBA", "L"):
-            img = img.convert("RGB")
-        if img.mode == "L" or img.mode == "RGBA":
-            img = img.convert("RGB")
+    with Image.open(path) as raw:
+        if raw.mode in ("L", "RGBA") or raw.mode not in ("RGB", "RGBA", "L"):
+            img = raw.convert("RGB")
+        else:
+            img = raw
         arr = np.asarray(img, dtype=np.uint8)
     if arr.ndim != 3 or arr.shape[-1] != 3:
         raise ValueError(f"expected (H, W, 3) from {path}, got shape {arr.shape}")

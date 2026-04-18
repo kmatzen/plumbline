@@ -129,13 +129,14 @@ def _invoke_metric3d(model: Any, tensor: Any, intrinsics: list[float]) -> dict[s
     spellings; if none fit, raise with a clear pointer to upstream.
     """
     if hasattr(model, "infer"):
-        return model.infer(tensor, intrinsics=intrinsics)
+        result: dict[str, Any] = model.infer(tensor, intrinsics=intrinsics)
+        return result
     if hasattr(model, "infer_depth"):
         return {"depth": model.infer_depth(tensor, intrinsics=intrinsics)}
     # Last resort: direct forward. Shape contract is upstream-specific.
     out = model(tensor, intrinsics=intrinsics)
     if isinstance(out, dict) and "depth" in out:
-        return out  # type: ignore[return-value]
+        return out
     raise RuntimeError(
         "Could not find a known Metric3Dv2 entry point (tried `infer`, `infer_depth`, "
         "forward). Check that torch.hub pulled a compatible revision from "

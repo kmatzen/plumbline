@@ -30,6 +30,7 @@ from __future__ import annotations
 import struct
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
@@ -126,7 +127,7 @@ class SintelDataset(Dataset):
 
     # -- scanning --------------------------------------------------------
 
-    def _scan(self, pass_name: str, scenes: list[str] | None) -> Iterator[dict]:
+    def _scan(self, pass_name: str, scenes: list[str] | None) -> Iterator[dict[str, Any]]:
         images_root = self.root / "training" / pass_name
         depth_root = self.root / "training" / "depth"
         cam_root = self.root / "training" / "camdata_left"
@@ -159,7 +160,7 @@ class SintelDataset(Dataset):
 
     # -- per-sample ------------------------------------------------------
 
-    def _load_sample(self, rec: dict) -> Sample:
+    def _load_sample(self, rec: dict[str, Any]) -> Sample:
         images = np.stack([read_rgb_uint8(self.root / p) for p in rec["image_paths"]], axis=0)
         assert_valid_image(images, name=f"sintel/{rec['sample_id']}/image")
 

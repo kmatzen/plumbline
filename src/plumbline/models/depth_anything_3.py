@@ -75,7 +75,7 @@ class DepthAnything3Adapter(Model):
         try:
             # When DA3 lands on HuggingFace, this should auto-detect via
             # AutoModel. The exact class name may change; handle at that time.
-            from transformers import AutoModel  # type: ignore[import-not-found]
+            from transformers import AutoModel
         except ImportError as exc:  # pragma: no cover
             raise ImportError(
                 "DepthAnything3Adapter needs `transformers`. Install with "
@@ -128,7 +128,7 @@ class DepthAnything3Adapter(Model):
 
 def _run_depth_anything_3(
     model: Any, images: NDArray[np.uint8], *, device: str
-) -> dict[str, NDArray]:
+) -> dict[str, NDArray[Any]]:
     """Run DA3 end-to-end. Placeholder until the upstream API stabilizes.
 
     Expected return dict (after conversion):

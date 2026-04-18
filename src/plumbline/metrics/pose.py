@@ -8,6 +8,8 @@ policy.
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 from numpy.typing import NDArray
 
@@ -22,7 +24,7 @@ __all__ = [
 ]
 
 
-def rotation_error_degrees(R_pred: NDArray, R_gt: NDArray) -> NDArray:
+def rotation_error_degrees(R_pred: NDArray[Any], R_gt: NDArray[Any]) -> NDArray[Any]:
     """Geodesic rotation error in degrees.
 
     Accepts rotations as ``(3, 3)`` or ``(4, 4)`` (upper-left taken), or batches
@@ -40,7 +42,7 @@ def rotation_error_degrees(R_pred: NDArray, R_gt: NDArray) -> NDArray:
     return np.degrees(np.arccos(cos_theta))
 
 
-def translation_error(t_pred: NDArray, t_gt: NDArray) -> NDArray:
+def translation_error(t_pred: NDArray[Any], t_gt: NDArray[Any]) -> NDArray[Any]:
     """Euclidean translation error, same units as input (meters when metric).
 
     Accepts ``(3,)``, ``(N, 3)``, ``(4, 4)``, or ``(N, 4, 4)`` (last: takes the
@@ -53,7 +55,7 @@ def translation_error(t_pred: NDArray, t_gt: NDArray) -> NDArray:
     return np.linalg.norm(tp - tg, axis=-1)
 
 
-def translation_cosine_error(t_pred: NDArray, t_gt: NDArray) -> NDArray:
+def translation_cosine_error(t_pred: NDArray[Any], t_gt: NDArray[Any]) -> NDArray[Any]:
     """Angular error between translation directions, in degrees.
 
     Used for up-to-scale monocular pose evaluation, where the magnitude of ``t``
@@ -69,7 +71,7 @@ def translation_cosine_error(t_pred: NDArray, t_gt: NDArray) -> NDArray:
     return np.degrees(np.arccos(cos))
 
 
-def auc(errors: NDArray, thresholds: list[float]) -> dict[float, float]:
+def auc(errors: NDArray[Any], thresholds: list[float]) -> dict[float, float]:
     """Area under the accuracy-vs-threshold curve, in the SuperGlue style.
 
     Given a 1D array of per-sample errors (lower is better) and a list of
@@ -97,10 +99,10 @@ def auc(errors: NDArray, thresholds: list[float]) -> dict[float, float]:
 
 
 def pose_auc(
-    R_pred: NDArray,
-    R_gt: NDArray,
-    t_pred: NDArray,
-    t_gt: NDArray,
+    R_pred: NDArray[Any],
+    R_gt: NDArray[Any],
+    t_pred: NDArray[Any],
+    t_gt: NDArray[Any],
     *,
     thresholds: tuple[float, ...] = (5.0, 10.0, 30.0),
     translation_mode: str = "cosine",
@@ -130,7 +132,7 @@ def pose_auc(
 # ---------------------------------------------------------------------------
 
 
-def _extract_rot(x: NDArray) -> NDArray:
+def _extract_rot(x: NDArray[Any]) -> NDArray[Any]:
     x = np.asarray(x)
     if x.shape[-2:] == (3, 3):
         return x
@@ -139,7 +141,7 @@ def _extract_rot(x: NDArray) -> NDArray:
     raise ValueError(f"expected (..., 3, 3) or (..., 4, 4); got {x.shape}")
 
 
-def _extract_trans(x: NDArray) -> NDArray:
+def _extract_trans(x: NDArray[Any]) -> NDArray[Any]:
     x = np.asarray(x)
     if x.shape[-1] == 3 and x.shape[-2:] != (4, 4):
         return x
