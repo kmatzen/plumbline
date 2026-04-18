@@ -91,6 +91,15 @@ class Dataset(ABC):
         """
         return _SubsetDataset(self, n)
 
+    def subset_by_ids(self, sample_ids: list[str]) -> Dataset:
+        """Return a dataset containing only the given ``sample_ids``, in order.
+
+        Unknown IDs raise — a reproduction must fail loudly when the pinned
+        sample list no longer matches the dataset on disk, since a silent
+        drop would invalidate a paper-number comparison.
+        """
+        return _IdFilterDataset(self, sample_ids)
+
 
 class _SubsetDataset(Dataset):
     """Stride-sampled subset wrapper.
@@ -119,3 +128,41 @@ class _SubsetDataset(Dataset):
 
     def __len__(self) -> int:
         return len(self._indices)
+
+
+class _IdFilterDataset(Dataset):
+    """Sample-ID-pinned subset wrapper.
+
+    Iterates the source once, collecting samples whose ID is in the wanted
+    set, and yields them in the order given by ``sample_ids``. Raises
+    ``KeyError`` if any requested ID is absent.
+    """
+
+    def __init__(self, source: Dataset, sample_ids: list[str]) -> None:
+        if not sample_ids:
+            raise ValueError("sample_ids must be non-empty")
+        self._source = source
+        self._ids = list(sample_ids)
+        self.name = source.name
+        self.split = f"{source.split}[pinned={len(self._ids)}]"
+
+    def __iter__(self) -> Iterator[Sample]:
+        wanted = set(self._ids)
+        collected: dict[str, Sample] = {}
+        for sample in self._source:
+            if sample.sample_id in wanted:
+                collected[sample.sample_id] = sample
+                if len(collected) == len(wanted):
+                    break
+        missing = [sid for sid in self._ids if sid not in collected]
+        if missing:
+            raise KeyError(
+                f"{len(missing)} sample_id(s) from the pinned list were not "
+                f"found in {self._source.name!r}: {missing[:5]}"
+                + (" ..." if len(missing) > 5 else "")
+            )
+        for sid in self._ids:
+            yield collected[sid]
+
+    def __len__(self) -> int:
+        return len(self._ids)

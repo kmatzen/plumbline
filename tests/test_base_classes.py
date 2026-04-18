@@ -172,6 +172,30 @@ class TestSubset:
         assert a == b
 
 
+class TestSubsetByIds:
+    def test_picks_specified_ids_in_order(self) -> None:
+        ds = _FakeDataset(n_samples=10)
+        sub = ds.subset_by_ids(["s5", "s2", "s7"])
+        ids = [s.sample_id for s in sub]
+        assert ids == ["s5", "s2", "s7"]
+        assert len(sub) == 3
+
+    def test_unknown_id_raises(self) -> None:
+        ds = _FakeDataset(n_samples=3)
+        with pytest.raises(KeyError, match="were not found"):
+            list(ds.subset_by_ids(["s0", "no_such_id"]))
+
+    def test_empty_list_rejected(self) -> None:
+        ds = _FakeDataset(n_samples=3)
+        with pytest.raises(ValueError, match="non-empty"):
+            ds.subset_by_ids([])
+
+    def test_split_metadata_tagged(self) -> None:
+        ds = _FakeDataset(n_samples=5)
+        sub = ds.subset_by_ids(["s1", "s3"])
+        assert "pinned=2" in sub.split
+
+
 class TestSample:
     def test_num_views(self) -> None:
         s = Sample(

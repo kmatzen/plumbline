@@ -96,9 +96,19 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
         dataset_kwargs.setdefault("split", cfg["dataset"]["split"])
     dataset = dataset_cls(**dataset_kwargs)
 
-    subset_n = cfg.get("subset")
-    if subset_n:
-        dataset = dataset.subset(int(subset_n))
+    # Sample-list pinning takes precedence over numeric subset — reproductions
+    # need exact samples, not a stride over an evolving manifest.
+    sample_ids_file = cfg.get("sample_ids_file")
+    if sample_ids_file:
+        ids_path = Path(sample_ids_file)
+        if not ids_path.is_absolute():
+            ids_path = REPRODUCTIONS_DIR / ids_path
+        sample_ids = _read_sample_ids(ids_path)
+        dataset = dataset.subset_by_ids(sample_ids)
+    else:
+        subset_n = cfg.get("subset")
+        if subset_n:
+            dataset = dataset.subset(int(subset_n))
 
     report = evaluate(
         model=model,
@@ -136,6 +146,25 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
     if output:
         report.save_json(output)
     return result
+
+
+def _read_sample_ids(path: Path) -> list[str]:
+    """Read a newline-delimited sample-id list.
+
+    Lines starting with ``#`` and empty lines are ignored. Used by
+    reproductions to pin the exact sample set across dataset re-scans.
+    """
+    if not path.exists():
+        raise FileNotFoundError(f"sample_ids_file not found: {path}")
+    ids: list[str] = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        ids.append(line)
+    if not ids:
+        raise ValueError(f"sample_ids_file is empty: {path}")
+    return ids
 
 
 def _find_config(name: str) -> Path | None:
