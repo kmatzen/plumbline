@@ -1,0 +1,41 @@
+# Build / cache directories — never ship into the image.
+.venv/
+.venv-*
+venv/
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.hypothesis/
+.coverage
+coverage.xml
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Local data + cache: must be mounted at runtime, never baked in.
+data/
+predictions/
+weights/
+results/
+reports/
+runs/
+.uv-cache/
+
+# Version control + editor metadata.
+.git/
+.gitignore
+.github/
+.vscode/
+.idea/
+*.swp
+*.DS_Store
+
+# Docs / tests — not needed in the runtime image.
+tests/
+docs/
+*.md
+!README.md
+!LICENSE
