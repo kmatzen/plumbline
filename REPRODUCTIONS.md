@@ -25,29 +25,37 @@ value.
 
 | Name | Paper | Primary metric | Published | Observed | Tolerance | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| `da-v2-small-nyuv2` | DA-V2 ViT-S, NYU Eigen test (Table 2) | `abs_rel` | 0.053 | **0.0623** | ±25% | ⚠️ **+17% vs paper** (matches public code, not paper table). See note below. |
-| `da-v2-large-nyuv2` | DA-V2 ViT-L, NYU Eigen test (Table 2) | `abs_rel` | 0.045 | **0.0554** | ±25% | ⚠️ **+23% vs paper** (matches public code, not paper table). See note below. |
-| `da-v2-metric-indoor-large-nyuv2` | DA-V2 Metric-Indoor-Large, NYU Eigen | `abs_rel` | _n/a_ | **0.0613** | n/a | Informational. No published AbsRel for Hypersim-finetuned ViT-L on NYU; closest is Table 4a's 0.056 for a distinct NYU-finetuned checkpoint. Median-aligned. |
+| `da-v2-small-nyuv2` | DA-V2 ViT-S, NYU Eigen test (Table 2) | `abs_rel` | 0.053 | **0.0510** | ±5% | ✅ **match** (RTX 3090, 2 min). |
+| `da-v2-large-nyuv2` | DA-V2 ViT-L, NYU Eigen test (Table 2) | `abs_rel` | 0.045 | **0.0428** | ±10% | ✅ **match** (RTX 3090, 30 s). |
+| `da-v2-metric-indoor-large-nyuv2` | DA-V2 Metric-Indoor-Large, NYU Eigen | `abs_rel` | _n/a_ | **0.0496** | n/a | Informational. Median-aligned. No published AbsRel for Hypersim-finetuned ViT-L on NYU. |
 | `vggt-paper-scannet-depth` | VGGT, ScanNet, 8 views | `abs_rel` | _TBD_ | — | ±5% | VGGT wiring complete (RTX 3090 end-to-end sanity on random images ✓). Blocked on ScanNet ToS signup + `$SCANNET_ROOT` data. |
 | `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | ≈0.075 | — | ±15% | blocked on Sintel depth-archive availability |
 | _VGGT / ETH3D courtyard smoke_ | VGGT-1B, 4 views, first sample | `pose_auc@5°` | — | **0.91** | n/a | informational only. Rotation errors <0.3°/view; translation cos <0.6°/view. Chamfer needs similarity alignment (standard ETH3D protocol, not wired in v0.1). |
 
-### Note on the DA-V2 NYUv2 gap
+### Note on the NYUv2 Eigen 2014 protocol
 
-A 2026-04-18 diagnostic ran the author's own public inference code
-(`DepthAnything-V2/run.py`) on the 654-sample Eigen test split with the
-HuggingFace ViT-S checkpoint, standard Eigen crop, `gt ∈ [1e-3, 10]m`
-valid mask, and MiDaS scale+shift in inverse-depth space. The author's
-public code produced **AbsRel=0.062** — within 0.3% of plumbline's
-0.0623, and ~17% higher than the paper's Table 2 value of 0.053. The
-public HF and author-published `.pth` checkpoints agree per-pixel to
-within 0.2% on NYU sample 0 (median ratio 1.001, mean 1.002). Taken
-together: the plumbline pipeline is faithful to the public-code
-baseline; paper's Table 2 numbers are achieved via a protocol detail
-(dataset split variant, mask, eval aggregation, or a private checkpoint
-refinement) that isn't published. We keep these reproductions so
-pipeline regressions are caught early, but tolerance is ±25% until the
-gap is resolved upstream.
+Paper matches required three loader/runner details that weren't obvious
+from reading the paper itself:
+
+1. **Depth field: `rawDepths`, not `depths`.** NYU's .mat ships both the
+   sparse Kinect measurements (`rawDepths`, ~24% holes) and Silberman's
+   colorization-filled version (`depths`, dense). Every modern mono-depth
+   paper that cites "NYU Eigen" evaluates against `rawDepths`;
+   `NYUv2Dataset(depth_field="raw")` is the default.
+2. **`depth_clip: [0.001, 10.0]` post-alignment.** Scale+shift alignment
+   occasionally produces extreme per-sample predictions (on DA-V2 Large
+   sample 88, an aligned value hit 1e8 m). Paper eval clips the aligned
+   prediction to the same range as the valid GT mask. Reproduction
+   YAMLs set this explicitly.
+3. **`gt ∈ [1e-3, 10]m` valid mask.** Standard NYU convention; plumbline
+   already applies this via the loader's Eigen crop + positivity mask.
+
+A 2026-04-18 diagnostic confirmed the author's own `run.py` on the
+HuggingFace ViT-S checkpoint produces AbsRel=0.0621 against the *filled*
+`depths` field — within 0.3% of what plumbline produced before the raw-
+default landed. Switching to rawDepths drops that to 0.0510 (vs paper
+0.053), and the same switch takes ViT-L from 0.0554 to 0.0428 (vs paper
+0.045). Without the clip, ViT-L averaged 77.9 because of sample 88 alone.
 
 ## Adding a new reproduction
 
