@@ -34,6 +34,7 @@ from plumbline.conventions import depth_is_valid
 from plumbline.datasets.base import Dataset, Sample
 from plumbline.metrics.alignment import align_depth
 from plumbline.metrics.depth import abs_rel, delta_threshold, log10_error, rmse, silog
+from plumbline.metrics.pointmap import chamfer_distance, f_score
 from plumbline.metrics.pose import auc as pose_auc_fn
 from plumbline.metrics.pose import rotation_error_degrees, translation_cosine_error
 from plumbline.models.base import Model, Prediction
@@ -71,6 +72,7 @@ def evaluate(
     seed: int = 0,
     pose_auc_thresholds: tuple[float, ...] = (5.0, 10.0, 30.0),
     delta_thresholds: tuple[float, ...] = (1.25, 1.25**2, 1.25**3),
+    f_score_threshold: float = 0.05,
 ) -> Report:
     """Evaluate a model on a dataset and return a :class:`Report`.
 
@@ -134,6 +136,7 @@ def evaluate(
             scale_alignment=scale_alignment,
             pose_auc_thresholds=pose_auc_thresholds,
             delta_thresholds=delta_thresholds,
+            f_score_threshold=f_score_threshold,
         )
         report.per_sample.append(
             SampleResult(
@@ -229,6 +232,7 @@ def _compute_metrics(
     scale_alignment: str,
     pose_auc_thresholds: tuple[float, ...],
     delta_thresholds: tuple[float, ...],
+    f_score_threshold: float,
 ) -> dict[str, float]:
     out: dict[str, float] = {}
 
@@ -246,6 +250,18 @@ def _compute_metrics(
 
     if "pose" in tasks and prediction.extrinsics is not None:
         out.update(_pose_metrics(prediction.extrinsics, sample.extrinsics_gt, pose_auc_thresholds))
+
+    # Point-cloud metrics fire whenever both are present; gated on
+    # "mvs_depth" or "point_cloud" to keep mono-depth runs cheap.
+    wants_pcd = "mvs_depth" in tasks or "point_cloud" in tasks
+    if wants_pcd and prediction.point_map is not None and sample.point_cloud_gt is not None:
+        out.update(
+            _point_cloud_metrics(
+                point_map=prediction.point_map,
+                point_cloud_gt=sample.point_cloud_gt,
+                f_score_threshold=f_score_threshold,
+            )
+        )
 
     return out
 
@@ -312,6 +328,40 @@ def _resize_depth_to_gt(pred: NDArray[Any], gt: NDArray[Any]) -> NDArray[Any]:
         resample = Image.Resampling.BILINEAR
         out[i] = np.asarray(img.resize((tgt_w, tgt_h), resample=resample), dtype=np.float64)
     return out.reshape(*batch_shape, tgt_h, tgt_w)
+
+
+def _point_cloud_metrics(
+    *,
+    point_map: NDArray[Any],
+    point_cloud_gt: NDArray[Any],
+    f_score_threshold: float,
+) -> dict[str, float]:
+    """Chamfer + F-score between the flattened prediction and GT point cloud.
+
+    Flattens ``(N, H, W, 3)`` prediction into a single ``(M, 3)`` cloud,
+    dropping NaNs/zeros, and compares against the GT cloud with the given
+    distance threshold (meters, matching the units of the point map).
+    """
+    if point_map.ndim < 2 or point_map.shape[-1] != 3:
+        raise ValueError(f"point_map must end in 3 for xyz; got {point_map.shape}")
+    pts = point_map.reshape(-1, 3).astype(np.float64)
+    # Drop NaN-marked invalid points.
+    pts = pts[np.all(np.isfinite(pts), axis=1)]
+    if pts.size == 0:
+        return {
+            "chamfer": float("nan"),
+            "precision": float("nan"),
+            "recall": float("nan"),
+            "f_score": float("nan"),
+        }
+
+    chamfer = chamfer_distance(pts.astype(np.float32), point_cloud_gt.astype(np.float32))
+    f = f_score(
+        pts.astype(np.float32),
+        point_cloud_gt.astype(np.float32),
+        threshold=f_score_threshold,
+    )
+    return {"chamfer": float(chamfer), **{k: float(v) for k, v in f.items()}}
 
 
 def _pose_metrics(

@@ -66,10 +66,12 @@ class TestDepthMetricInvariants:
     @given(gt=_depth_array, scale=st.floats(min_value=0.1, max_value=10))
     def test_rmse_scales_linearly_with_error(self, gt: np.ndarray, scale: float) -> None:
         # For pred = scale * gt, RMSE = sqrt(mean((scale-1)^2 * gt^2)) = |scale-1| * sqrt(mean(gt^2)).
+        # Tolerance is loose because `gt * scale` rounds in float32, which can
+        # introduce relative error up to O(1e-3) for scales near 1.
         pred = (gt * scale).astype(np.float32)
         observed = rmse(pred, gt)
         expected = abs(scale - 1) * float(np.sqrt(np.mean(gt.astype(np.float64) ** 2)))
-        assert observed == pytest.approx(expected, rel=1e-5, abs=1e-6)
+        assert observed == pytest.approx(expected, rel=1e-3, abs=1e-6)
 
     @given(gt=_depth_array)
     def test_delta_is_bounded(self, gt: np.ndarray) -> None:
