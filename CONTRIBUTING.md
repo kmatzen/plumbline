@@ -11,11 +11,16 @@ to contribute.
 ## Dev setup
 
 ```bash
-uv sync                # creates .venv, installs dev deps
-uv run pytest -q       # runs tests on CPU
-uv run ruff check      # lint
-uv run ruff format     # apply formatting
+uv sync                         # creates .venv, installs dev deps
+uv run pre-commit install       # enable pre-commit hooks (one-time per clone)
+uv run pytest -q                # runs tests on CPU
+uv run ruff check               # lint
+uv run ruff format              # apply formatting
+uv run mypy src                 # strict type check
 ```
+
+Pre-commit runs `ruff check --fix`, `ruff format`, and `mypy` on every
+commit; CI runs the same set plus `pytest`.
 
 No GPU required for unit tests — the model-adapter suite is smoke tests only.
 

@@ -79,6 +79,7 @@ dev = [
     "scipy>=1.11",
     "mypy>=1.10",
     "types-pyyaml>=6.0.12.20260408",
+    "pre-commit>=4.5.1",
 ]
 
 [tool.ruff]
