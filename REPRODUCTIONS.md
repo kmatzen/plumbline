@@ -28,6 +28,8 @@ value.
 | `da-v2-small-nyuv2` | DA-V2 ViT-S, NYU Eigen test (Table 2) | `abs_rel` | 0.053 | **0.0510** | ±5% | ✅ **match** (RTX 3090, 2 min). |
 | `da-v2-large-nyuv2` | DA-V2 ViT-L, NYU Eigen test (Table 2) | `abs_rel` | 0.045 | **0.0428** | ±10% | ✅ **match** (RTX 3090, 30 s). |
 | `da-v2-metric-indoor-large-nyuv2` | DA-V2 Metric-Indoor-Large, NYU Eigen | `abs_rel` | _n/a_ | **0.0496** | n/a | Informational. Median-aligned. No published AbsRel for Hypersim-finetuned ViT-L on NYU. |
+| `metric3d-v2-nyuv2` | Metric3Dv2 ViT-L, NYU Eigen (Table I) | `abs_rel` | 0.063 | **0.0660** | ±10% | ✅ **match** (RTX 3090, 4 min). δ₁: paper 0.975, observed 0.974. |
+| `da3-nyuv2` | DA3 Large-1.1, NYU Eigen (Table 4) | `delta_1` | 0.974 | **0.9684** | ±2% | ✅ **match** (RTX 3090, 2 min). AbsRel=0.051 (informational; Table 4 only reports δ₁). |
 | `vggt-paper-scannet-depth` | VGGT, ScanNet, 8 views | `abs_rel` | _TBD_ | — | ±5% | VGGT wiring complete (RTX 3090 end-to-end sanity on random images ✓). Blocked on ScanNet ToS signup + `$SCANNET_ROOT` data. |
 | `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | ≈0.075 | — | ±15% | blocked on Sintel depth-archive availability |
 | _VGGT / ETH3D courtyard smoke_ | VGGT-1B, 4 views, first sample | `pose_auc@5°` | — | **0.91** | n/a | informational only. Rotation errors <0.3°/view; translation cos <0.6°/view. Chamfer needs similarity alignment (standard ETH3D protocol, not wired in v0.1). |
