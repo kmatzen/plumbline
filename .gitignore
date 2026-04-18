@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+.eggs/
+build/
+dist/
+wheels/
+pip-wheel-metadata/
+MANIFEST
+
+# uv
+.venv/
+venv/
+env/
+.uv-cache/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Datasets + weights + predictions cached locally during dev
+data/
+weights/
+predictions/
+runs/
+results/
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+
+# Outputs
+*.log
+results/
+reports/
