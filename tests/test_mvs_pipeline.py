@@ -69,8 +69,10 @@ class _FakeMVSDataset(Dataset):
             # 4 views with random world-from-camera transforms, then rebase
             # so view 0 is identity.
             poses = np.stack(
-                [_pose(_random_rotation(s_idx * 10 + i), rng.uniform(-1, 1, size=3))
-                 for i in range(4)]
+                [
+                    _pose(_random_rotation(s_idx * 10 + i), rng.uniform(-1, 1, size=3))
+                    for i in range(4)
+                ]
             )
             extrinsics = _rebase_to_first(poses)
             intrinsics = np.tile(
@@ -206,9 +208,7 @@ class TestMVSPipeline:
         assert "rotation_error_deg_mean" not in report.aggregate_metrics
         assert report.aggregate_metrics["abs_rel"] == 0.0
 
-    def test_point_cloud_metrics_skip_when_point_map_missing(
-        self, tmp_path: Path
-    ) -> None:
+    def test_point_cloud_metrics_skip_when_point_map_missing(self, tmp_path: Path) -> None:
         class _NoPointMapAdapter(_FakeMVSAdapter):
             name = "fake-nopointmap"
 

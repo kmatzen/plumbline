@@ -1,0 +1,37 @@
+# Depth Anything V2 (large) on NYUv2 Eigen test split
+#
+# Second mono-depth paper-match anchor, same pipeline as the Small
+# reproduction. Large checkpoint is ~1.3 GB; first run downloads it from
+# HuggingFace.
+
+name: da-v2-large-nyuv2
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+dataset:
+  name: nyuv2
+  split: test
+  kwargs:
+    apply_eigen_crop: true
+
+tasks:
+  - mono_depth
+
+scale_alignment: scale_shift
+max_views: 1
+device: mps  # override to cuda:0 on a GPU box
+
+paper_reference:
+  primary_metric: abs_rel
+  # Yang et al. 2024, Depth Anything V2, Table 2: NYU AbsRel = 0.043 (Large).
+  value: 0.043
+  tolerance_relative: 0.10
+  citation: "Yang et al. 2024, Depth Anything V2. NYUv2 Eigen test, Large."
+
+notes: >
+  Validates the DepthAnythingV2Adapter ``variant`` knob against a second
+  paper number. Tolerance is ±10% (wider than Small's ±5%) because Large
+  weights include more nondeterminism-prone ops.
