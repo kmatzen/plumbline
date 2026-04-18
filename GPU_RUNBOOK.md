@@ -145,9 +145,19 @@ The YAML config at `reproductions/vggt_scannet_depth.yaml` currently has
 a placeholder `paper_reference.value = 0.0`. On the first successful run:
 
 1. Record the observed AbsRel in `reproductions/vggt_scannet_depth.yaml`.
-2. Commit the sample-list pinning (either freeze `frame_stride` +
-   `views_per_sample` or materialize
-   `reproductions/vggt_scannet_depth.samples.txt`).
+2. Pin the exact sample list:
+
+   ```bash
+   uv run plumbline make-samples \
+     --dataset scannet --data-root $SCANNET_ROOT \
+     --split test --subset 100 \
+     -o reproductions/vggt_scannet_depth.samples.txt
+   ```
+
+   Then add `sample_ids_file: vggt_scannet_depth.samples.txt` to the
+   YAML (and remove the numeric `subset:` field if present). This
+   freezes the sample set so future runs don't drift when manifests
+   change.
 3. Set `tolerance_relative` to match VGGT paper ± 5% (adjust up if CUDA
    nondeterminism pushes it).
 4. Update the table in [REPRODUCTIONS.md](./REPRODUCTIONS.md).
