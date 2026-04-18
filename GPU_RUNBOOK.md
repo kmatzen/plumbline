@@ -6,8 +6,40 @@ an hourly billing clock.
 
 ## Provider-agnostic box setup
 
-These steps assume a fresh Ubuntu 22.04 box with CUDA drivers preinstalled
-(Lambda, vast.ai, RunPod, etc.).
+Two paths:
+
+### Path A — Docker (recommended for fresh boxes)
+
+If the GPU host has Docker + `nvidia-container-toolkit`:
+
+```bash
+git clone git@github.com:kmatzen/plumbline.git && cd plumbline
+
+# Build once; slim image (no research repos)
+docker build -t plumbline .
+
+# Or full image with VGGT baked in
+docker build --build-arg WITH_GIT_DEPS=1 -t plumbline:full .
+
+# Verify GPU visibility
+docker run --rm --gpus all plumbline --help
+
+# Run a reproduction, mounting host data + cache
+docker run --rm --gpus all \
+    -v $HOME/data:/data \
+    -v $HOME/.cache/plumbline-docker:/cache \
+    plumbline reproduce da-v2-small-nyuv2
+```
+
+Caches persist across runs via the `-v $HOME/.cache/plumbline-docker:/cache`
+mount (holds both the HF/torch weight cache and plumbline's prediction
+cache). Re-running the same reproduction is essentially free after first
+inference.
+
+### Path B — Native install
+
+On a fresh Ubuntu 22.04 box with CUDA drivers preinstalled (Lambda,
+vast.ai, RunPod, etc.):
 
 ```bash
 # 1. Tools
