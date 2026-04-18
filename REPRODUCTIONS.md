@@ -30,6 +30,7 @@ value.
 | `da-v2-metric-indoor-large-nyuv2` | DA-V2 Metric Indoor Large, NYU Eigen test | `abs_rel` | 0.043 | **0.0613** | ±10% | ❌ **mismatch** (3090, 30 s), median-aligned. HF -hf port of the metric checkpoint has a ~1.3× scale drift vs NYU GT; unaligned AbsRel is ~0.33. Author (non-HF) checkpoint may close the remaining gap. See YAML. |
 | `vggt-paper-scannet-depth` | VGGT, ScanNet, 8 views | `abs_rel` | _TBD_ | — | ±5% | VGGT wiring complete (RTX 3090 end-to-end sanity on random images ✓). Blocked on ScanNet ToS signup + `$SCANNET_ROOT` data. |
 | `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | ≈0.075 | — | ±15% | blocked on Sintel depth-archive availability |
+| _VGGT / ETH3D courtyard smoke_ | VGGT-1B, 4 views, first sample | `pose_auc@5°` | — | **0.91** | n/a | informational only. Rotation errors <0.3°/view; translation cos <0.6°/view. Chamfer needs similarity alignment (standard ETH3D protocol, not wired in v0.1). |
 
 ## Adding a new reproduction
 

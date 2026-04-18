@@ -7,14 +7,22 @@ cameras in the COLMAP ``.txt`` format.
 Expected layout (point ``--data-root`` or ``$ETH3D_ROOT`` here)::
 
     <root>/<scene>/
-      images/<image_name>.JPG          # native (often 6K)
+      images/dslr_images_undistorted/<image_name>.JPG  # native (often 6K)
       dslr_calibration_undistorted/
         cameras.txt
         images.txt
         points3D.txt
-      scan_clean.ply                    # ground-truth laser scan
+      scan_clean/scan*.ply   # ground-truth laser scan (ETH3D ships multiple)
+      # or the legacy flat form:
+      # scan_clean.ply
 
 Access: https://www.eth3d.net/high_res_multi_view (public; large downloads).
+Fetch a single scene end-to-end with:
+
+    curl -L --fail -O https://www.eth3d.net/data/<scene>_dslr_undistorted.7z
+    curl -L --fail -O https://www.eth3d.net/data/<scene>_scan_clean.7z
+    7z x -y <scene>_dslr_undistorted.7z
+    7z x -y <scene>_scan_clean.7z
 
 Conventions
 -----------
@@ -80,6 +88,8 @@ class ETH3DDataset(Dataset):
         split: str = "train",
         scenes: list[str] | None = None,
         views_per_sample: int = 4,
+        max_gt_points: int | None = None,
+        gt_subsample_seed: int = 0,
     ) -> None:
         root_path = Path(root) if root else env_path("ETH3D_ROOT")
         if root_path is None or not root_path.exists():
@@ -106,6 +116,8 @@ class ETH3DDataset(Dataset):
         if scenes:
             records = [r for r in records if r["scene"] in scenes]
         self._records = records
+        self.max_gt_points = max_gt_points
+        self.gt_subsample_seed = int(gt_subsample_seed)
 
     def __iter__(self) -> Iterator[Sample]:
         for rec in self._records:
@@ -128,6 +140,7 @@ class ETH3DDataset(Dataset):
             images_info = parse_colmap_images(calib / "images.txt")
             # Stable deterministic order (ascending image_id).
             ordered = sorted(images_info, key=lambda x: x["image_id"])
+            ply_paths = _resolve_scan_clean_plys(scene_dir)
             for i in range(0, len(ordered) - self.views_per_sample + 1):
                 group = ordered[i : i + self.views_per_sample]
                 yield {
@@ -135,8 +148,8 @@ class ETH3DDataset(Dataset):
                     "scene": scene_dir.name,
                     "image_records": group,
                     "cameras_txt": str((calib / "cameras.txt").relative_to(self.root)),
-                    "point_cloud_ply": str((scene_dir / "scan_clean.ply").relative_to(self.root))
-                    if (scene_dir / "scan_clean.ply").exists()
+                    "point_cloud_plys": [str(p.relative_to(self.root)) for p in ply_paths]
+                    if ply_paths
                     else None,
                 }
 
@@ -185,10 +198,28 @@ class ETH3DDataset(Dataset):
         assert_valid_extrinsics(extrinsics, name=f"eth3d/{rec['sample_id']}/extrinsics")
 
         pcd = None
-        if rec.get("point_cloud_ply"):
-            pcd_path = self.root / rec["point_cloud_ply"]
-            if pcd_path.exists():
-                pcd = _load_ply_xyz(pcd_path)
+        # Newer manifests store a list of ply paths (ETH3D ships scan_clean
+        # as multiple files); older manifests stored a single path under
+        # "point_cloud_ply". Accept both so caches don't need a rebuild.
+        ply_rels = rec.get("point_cloud_plys")
+        if ply_rels is None and rec.get("point_cloud_ply"):
+            ply_rels = [rec["point_cloud_ply"]]
+        if ply_rels:
+            chunks: list[NDArray[np.float32]] = []
+            for rel in ply_rels:
+                p = self.root / rel
+                if p.exists():
+                    chunks.append(_load_ply_xyz(p))
+            if chunks:
+                pcd = np.concatenate(chunks, axis=0)
+                # ETH3D scan_clean is ~38M points/scene; chamfer on that is
+                # minutes per sample. Opt-in subsample makes smoke evals
+                # practical. Deterministic seed + per-sample stable choice
+                # so the same sample always gets the same subset.
+                if self.max_gt_points is not None and pcd.shape[0] > self.max_gt_points:
+                    rng = np.random.default_rng(self.gt_subsample_seed)
+                    idx = rng.choice(pcd.shape[0], size=self.max_gt_points, replace=False)
+                    pcd = pcd[idx]
 
         return Sample(
             sample_id=rec["sample_id"],
@@ -286,35 +317,78 @@ def quat_to_rot(q: NDArray[Any]) -> NDArray[np.float64]:
     )
 
 
+def _resolve_scan_clean_plys(scene_dir: Path) -> list[Path]:
+    """Find the ground-truth laser scan ply files for a scene.
+
+    ETH3D archives ship ``scan_clean`` as a directory with one or more
+    ``scan*.ply`` files; older, manually-prepared mirrors sometimes place
+    a single ``scan_clean.ply`` at the scene root. Return a sorted list of
+    paths, or an empty list if neither is present.
+    """
+    direct = scene_dir / "scan_clean.ply"
+    if direct.exists():
+        return [direct]
+    subdir = scene_dir / "scan_clean"
+    if subdir.is_dir():
+        return sorted(subdir.glob("scan*.ply"))
+    return []
+
+
+_PLY_PROP_BYTES = {
+    "char": 1, "int8": 1, "uchar": 1, "uint8": 1,
+    "short": 2, "int16": 2, "ushort": 2, "uint16": 2,
+    "int": 4, "int32": 4, "uint": 4, "uint32": 4,
+    "float": 4, "float32": 4,
+    "double": 8, "float64": 8,
+}
+
+
 def _load_ply_xyz(path: Path) -> NDArray[np.float32]:
     """Minimal PLY parser: returns ``(N, 3)`` float32 XYZ only.
 
     Supports ``ascii`` and ``binary_little_endian`` with ``float`` XYZ as the
-    first three vertex properties. Sufficient for the ETH3D ground truth.
+    first three vertex properties. Computes the vertex stride from the
+    header so files with multiple ``element`` blocks (e.g. ETH3D's
+    ``scan_clean`` PLYs that append a trailing ``element camera`` with
+    sensor metadata) don't mislead the reshape.
     """
     with path.open("rb") as f:
-        header: list[str] = []
+        header_lines: list[str] = []
         while True:
             line = f.readline().decode("ascii", errors="replace").strip()
-            header.append(line)
+            header_lines.append(line)
             if line.startswith("end_header"):
                 break
         fmt = next(
-            (ln.split()[1] for ln in header if ln.startswith("format")),
+            (ln.split()[1] for ln in header_lines if ln.startswith("format")),
             "ascii",
         )
+        # Vertex element + its property widths. Ignore any later elements.
         vcount = 0
-        for ln in header:
-            if ln.startswith("element vertex"):
-                vcount = int(ln.split()[2])
+        vertex_props: list[str] = []
+        in_vertex = False
+        for ln in header_lines:
+            if ln.startswith("element "):
+                parts = ln.split()
+                in_vertex = parts[1] == "vertex"
+                if in_vertex:
+                    vcount = int(parts[2])
+            elif in_vertex and ln.startswith("property "):
+                parts = ln.split()
+                # "property <type> <name>" (skip list properties — not used on
+                # ETH3D scan_clean).
+                if parts[1] == "list":
+                    raise NotImplementedError("list properties unsupported")
+                vertex_props.append(parts[1])
         payload = f.read()
 
     if fmt.startswith("binary_little_endian"):
-        # Assume xyz are the first three float32 properties per vertex.
-        buf = np.frombuffer(payload, dtype=np.uint8)
-        itemsize = buf.nbytes // max(vcount, 1)
-        pts = buf.reshape(vcount, itemsize)
-        xyz = np.frombuffer(pts[:, :12].tobytes(), dtype=np.float32).reshape(-1, 3)
+        vertex_stride = sum(_PLY_PROP_BYTES[p] for p in vertex_props)
+        vertex_bytes = vcount * vertex_stride
+        buf = np.frombuffer(payload[:vertex_bytes], dtype=np.uint8).reshape(
+            vcount, vertex_stride
+        )
+        xyz = np.frombuffer(buf[:, :12].tobytes(), dtype=np.float32).reshape(-1, 3)
         return np.ascontiguousarray(xyz)
 
     xyz = np.empty((vcount, 3), dtype=np.float32)
