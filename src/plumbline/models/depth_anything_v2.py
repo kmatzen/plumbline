@@ -3,20 +3,22 @@
 Upstream: https://github.com/DepthAnything/Depth-Anything-V2
 Paper: "Depth Anything V2" (Yang et al. 2024).
 
-Depth Anything V2 is a monocular depth transformer that predicts **relative**
-inverse depth (disparity-like). It is *not* metric. Evaluation on ScanNet /
-NYU uses MiDaS-style scale-and-shift alignment in inverse-depth space.
+Depth Anything V2 ships as two model families with the same DPT backbone:
 
-We use the HuggingFace Transformers integration (``DepthAnythingForDepthEstimation``)
-because it's the closest thing to a stable, pip-installable, non-CLI surface.
-Model cards:
+- **Relative** variants predict disparity-like inverse depth. Paper
+  evaluation uses MiDaS-style scale-and-shift alignment in inverse-depth
+  space. ``alignment_hint="scale_shift"``.
+- **Metric** variants are fine-tuned on Hypersim (indoor) or VKITTI
+  (outdoor) with metric supervision, and predict depth in meters directly.
+  No alignment at eval time. ``alignment_hint="none"``.
 
-- small:  depth-anything/Depth-Anything-V2-Small-hf
-- base:   depth-anything/Depth-Anything-V2-Base-hf
-- large:  depth-anything/Depth-Anything-V2-Large-hf
-
-Outputs native **disparity** (higher = closer). We invert to depth before
-returning; the scale_shift alignment path recovers the MiDaS protocol.
+We use the HuggingFace Transformers integration
+(``DepthAnythingForDepthEstimation``) because it's the closest thing to a
+stable, pip-installable, non-CLI surface. HF post-processing
+(``post_process_depth_estimation``) resizes ``predicted_depth`` to the
+target size but does *not* change its units — so the adapter must branch
+on the variant to decide whether to invert (relative) or pass through
+(metric).
 """
 
 from __future__ import annotations
@@ -36,10 +38,24 @@ from plumbline.models.registry import register_model
 __all__ = ["DepthAnythingV2Adapter"]
 
 _HF_CHECKPOINTS = {
+    # Relative (zero-shot) disparity models.
     "small": "depth-anything/Depth-Anything-V2-Small-hf",
     "base": "depth-anything/Depth-Anything-V2-Base-hf",
     "large": "depth-anything/Depth-Anything-V2-Large-hf",
+    # Metric, indoor (Hypersim fine-tune).
+    "metric-indoor-small": "depth-anything/Depth-Anything-V2-Metric-Indoor-Small-hf",
+    "metric-indoor-base": "depth-anything/Depth-Anything-V2-Metric-Indoor-Base-hf",
+    "metric-indoor-large": "depth-anything/Depth-Anything-V2-Metric-Indoor-Large-hf",
+    # Metric, outdoor (VKITTI fine-tune).
+    "metric-outdoor-small": "depth-anything/Depth-Anything-V2-Metric-Outdoor-Small-hf",
+    "metric-outdoor-base": "depth-anything/Depth-Anything-V2-Metric-Outdoor-Base-hf",
+    "metric-outdoor-large": "depth-anything/Depth-Anything-V2-Metric-Outdoor-Large-hf",
 }
+
+
+def _is_metric_variant(variant: str) -> bool:
+    """True if the DA-V2 variant outputs depth in meters directly."""
+    return variant.startswith("metric-")
 
 
 @register_model("depth-anything-v2")
@@ -131,22 +147,33 @@ class DepthAnythingV2Adapter(Model):
             )
 
         # post_process_depth_estimation returns a list of dicts with
-        # "predicted_depth" as (H, W) torch tensor in disparity (higher=closer).
-        disparity = np.stack(
+        # "predicted_depth" as (H, W) torch tensor. For *relative* variants
+        # this is disparity (higher=closer); for *metric* variants it is
+        # depth in meters (lower=closer).
+        raw = np.stack(
             [r["predicted_depth"].detach().cpu().numpy().astype(np.float32) for r in resized],
             axis=0,
         )
-        # Convert disparity to depth. DA2 disparity is dimensionless; we clip
-        # to avoid division by zero at sky / texture-less regions.
-        depth = 1.0 / np.maximum(disparity, EPS)
+        if _is_metric_variant(self.variant):
+            # Metric variant: output is depth in meters. Clamp non-finite /
+            # non-positive pixels to 0 (canonical invalid marker).
+            depth = np.where(np.isfinite(raw) & (raw > 0), raw, 0.0).astype(np.float32)
+            native_space = "depth"
+            alignment_hint = "none"
+        else:
+            # Relative variant: output is disparity. Invert to depth with a
+            # floor to avoid division by zero at sky / texture-less regions.
+            depth = (1.0 / np.maximum(raw, EPS)).astype(np.float32)
+            native_space = "disparity"
+            alignment_hint = "scale_shift"
         assert_valid_depth(depth, name="da-v2/output")
         return Prediction(
-            depth=depth.astype(np.float32),
+            depth=depth,
             metadata={
                 "variant": self.variant,
                 "space": "depth",
-                "native_space": "disparity",
-                "alignment_hint": "scale_shift",
+                "native_space": native_space,
+                "alignment_hint": alignment_hint,
                 "checkpoint": _HF_CHECKPOINTS[self.variant],
             },
         )
