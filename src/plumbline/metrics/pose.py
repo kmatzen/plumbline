@@ -94,7 +94,9 @@ def auc(errors: NDArray[Any], thresholds: list[float]) -> dict[float, float]:
             out[t] = float("nan")
             continue
         contributions = np.clip(t - errors, 0.0, t)
-        out[t] = float(contributions.sum() / (n * t))
+        # Clamp to [0, 1]: the integral is bounded by construction, but
+        # floating-point can nudge it to 1 + eps when all errors are zero.
+        out[t] = float(min(1.0, max(0.0, contributions.sum() / (n * t))))
     return out
 
 

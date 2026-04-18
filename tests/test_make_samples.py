@@ -50,11 +50,7 @@ runner = CliRunner()
 
 
 def _parse_ids(text: str) -> list[str]:
-    return [
-        line.strip()
-        for line in text.splitlines()
-        if line.strip() and not line.startswith("#")
-    ]
+    return [line.strip() for line in text.splitlines() if line.strip() and not line.startswith("#")]
 
 
 def test_writes_all_sample_ids(tmp_path: Path, registered_fake: str) -> None:
@@ -110,9 +106,7 @@ def test_unknown_dataset_errors(tmp_path: Path) -> None:
     assert not output.exists()
 
 
-def test_output_is_round_trippable_by_subset_by_ids(
-    tmp_path: Path, registered_fake: str
-) -> None:
+def test_output_is_round_trippable_by_subset_by_ids(tmp_path: Path, registered_fake: str) -> None:
     """The file written by make-samples must be consumable by subset_by_ids."""
     from plumbline.reproduce import _read_sample_ids
 
