@@ -49,6 +49,7 @@ def _eager_import_adapters() -> None:
         "plumbline.datasets.sintel",
         "plumbline.datasets.scannet",
         "plumbline.datasets.eth3d",
+        "plumbline.datasets.nyuv2",
     ):
         try:
             importlib.import_module(mod)

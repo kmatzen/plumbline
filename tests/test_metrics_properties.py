@@ -137,7 +137,6 @@ class TestAlignmentInvariants:
     def test_median_robust_to_a_few_outliers(self, gt: np.ndarray, noise_scale: float) -> None:
         """Median alignment should survive a single egregious outlier."""
         assume(gt.size >= 5)
-        rng = np.random.default_rng(0)
         pred = gt.copy()
         # Poison one pixel with a huge outlier ratio.
         pred[0] *= 1e6

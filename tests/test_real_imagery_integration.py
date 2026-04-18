@@ -64,9 +64,7 @@ pytestmark = [
 def _load_real_frames(n: int) -> np.ndarray:
     assert sintel_root is not None
     frames = sorted(sintel_root.glob("frame_*.png"))[:n]
-    return np.stack(
-        [np.asarray(Image.open(p).convert("RGB"), dtype=np.uint8) for p in frames]
-    )
+    return np.stack([np.asarray(Image.open(p).convert("RGB"), dtype=np.uint8) for p in frames])
 
 
 class TestDepthAnythingV2RealImagery:
