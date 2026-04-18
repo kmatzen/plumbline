@@ -1,0 +1,44 @@
+# Metric3Dv2 (ViT-L) on NYUv2 Eigen test split
+#
+# Zero-shot metric depth reproduction: Metric3Dv2 is trained on outside data
+# (e.g. Hypersim, KITTI, etc.) and tested on NYU without fine-tuning. The
+# paper (Yin et al. 2024, arXiv:2404.15506) reports AbsRel=0.063 and
+# δ₁=0.975 for the ViT-L CSTM_label variant.
+
+name: metric3d-v2-nyuv2
+
+model:
+  name: metric3d-v2
+  kwargs:
+    variant: vit_large
+
+dataset:
+  name: nyuv2
+  split: test
+  kwargs:
+    apply_eigen_crop: true
+
+tasks:
+  - mono_depth
+
+# Metric model — its canonical-camera trick recovers metric scale from fx.
+# No scale alignment; clip to the same range as the NYU valid mask.
+scale_alignment: none
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 10.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # Metric3Dv2 paper, Table I (zero-shot NYU): ViT-L AbsRel=0.063, δ₁=0.975.
+  value: 0.063
+  tolerance_relative: 0.10
+  citation: "Yin et al. 2024, Metric3D v2, Table I. NYUv2 Eigen test, ViT-L CSTM_label ZS."
+
+notes: >
+  Needs torch.hub access to YvanYin/Metric3D plus transitive deps (mmengine,
+  mmcv-lite). Upstream's hubconf uses `pretrain=True` (not `pretrained`)
+  — the adapter passes the right spelling. xFormers must be uninstalled
+  from the project venv if it was built against a mismatched torch/CUDA:
+  the fallback attention path works; the broken xformers build raises
+  at forward time. Runs in ~4 min on a 3090 over the 654-sample split.

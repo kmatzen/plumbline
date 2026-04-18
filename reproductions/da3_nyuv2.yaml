@@ -1,0 +1,48 @@
+# Depth Anything 3 (Large) on NYUv2 Eigen test split
+#
+# DA3 paper (arXiv:2511.10647) Table 4 reports δ₁ on NYU for the public
+# DA3 release at 0.974 (97.4 in the paper's table). Table 4 does NOT
+# report AbsRel for DA3 — only δ₁. Table 11's AbsRel=0.070 refers to a
+# separate "DA3-metric" checkpoint that is not publicly released; the
+# HuggingFace-published DA3-LARGE / DA3-LARGE-1.1 / DA3MONO-LARGE all
+# behave as zero-shot relative on NYU (pred / gt median ratio ≈ 0.32
+# without alignment). We therefore target δ₁ = 0.974 with MiDaS-style
+# scale+shift alignment, same protocol that works for DA-V2.
+
+name: da3-nyuv2
+
+model:
+  name: depth-anything-3
+  kwargs:
+    variant: large
+    # The -1.1 revision is the bug-fixed release per the upstream README;
+    # DA3-LARGE and DA3-LARGE-1.1 both resolve against this target number
+    # in practice but 1.1 is what the README recommends.
+    checkpoint: depth-anything/DA3-LARGE-1.1
+
+dataset:
+  name: nyuv2
+  split: test
+  kwargs:
+    apply_eigen_crop: true
+
+tasks:
+  - mono_depth
+
+scale_alignment: scale_shift
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 10.0]
+
+paper_reference:
+  primary_metric: delta_1
+  # DA3 paper, Table 4: NYU δ₁ = 97.4 (= 0.974). No AbsRel reported there.
+  value: 0.974
+  tolerance_relative: 0.02
+  citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. NYUv2 Eigen test, δ₁ (scale+shift aligned)."
+
+notes: >
+  depth_anything_3 package needed (`uv pip install depth-anything-3`).
+  Adapter feeds a single-view list into model.inference and drops the
+  multi-view outputs (pose/intrinsics are unused on a mono run). First
+  run downloads ~1.5 GB weights.
