@@ -34,16 +34,13 @@ from plumbline.conventions import (
 )
 from plumbline.datasets.eth3d import quat_to_rot
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
 
 def _make_K(fx: float, fy: float, cx: float, cy: float) -> np.ndarray:
-    return np.array(
-        [[fx, 0.0, cx], [0.0, fy, cy], [0.0, 0.0, 1.0]], dtype=np.float64
-    )
+    return np.array([[fx, 0.0, cx], [0.0, fy, cy], [0.0, 0.0, 1.0]], dtype=np.float64)
 
 
 def _rand_rot(seed: int) -> np.ndarray:
