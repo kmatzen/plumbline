@@ -12,14 +12,14 @@ from __future__ import annotations
 
 import json
 import os
-import subprocess
-from pathlib import Path
-
-import pytest
 
 # If the console script wasn't installed (e.g. `pip install -e .` skipped),
 # these tests are meaningless; skip cleanly rather than failing confusingly.
 import shutil
+import subprocess
+from pathlib import Path
+
+import pytest
 
 plumbline_bin = shutil.which("plumbline")
 pytestmark = pytest.mark.skipif(
@@ -125,8 +125,10 @@ def test_report_roundtrip(tmp_path: Path) -> None:
 def test_run_unknown_model_clear_error() -> None:
     r = _run(
         "run",
-        "--model", "does-not-exist",
-        "--dataset", "sintel",
+        "--model",
+        "does-not-exist",
+        "--dataset",
+        "sintel",
     )
     assert r.returncode != 0
     combined = r.stdout + r.stderr

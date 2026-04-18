@@ -141,7 +141,8 @@ def _write_fake_scannet(root: Path, *, scenes: int = 1, frames: int = 3) -> None
                 scene_dir / "color" / f"{fi}.jpg", quality=95
             )
             depth_mm = (np.random.rand(8, 16) * 1000 + 500).astype(np.uint16)
-            Image.fromarray(depth_mm, mode="I;16").save(scene_dir / "depth" / f"{fi}.png")
+            # Pillow infers 'I;16' from uint16; explicit mode= is deprecated in 12+.
+            Image.fromarray(depth_mm).save(scene_dir / "depth" / f"{fi}.png")
             # camera_from_world identity (with tiny translation).
             pose = np.eye(4)
             pose[:3, 3] = [0.05 * fi, 0.0, 0.0]
