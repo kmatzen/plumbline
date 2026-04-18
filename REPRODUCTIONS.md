@@ -27,6 +27,7 @@ value.
 | --- | --- | --- | --- | --- | --- | --- |
 | `da-v2-small-nyuv2` | DA-V2 Small, NYU Eigen test | `abs_rel` | 0.063 | **0.0623** | ±5% | ✅ **match** (MPS, 4 min, 8 GB RAM OK) |
 | `da-v2-large-nyuv2` | DA-V2 Large, NYU Eigen test | `abs_rel` | 0.043 | **0.0554** | ±10% | ❌ **mismatch** (3090, 30 s). Cited 0.043 likely from the *metric-indoor-finetuned* Large variant; adapter loads the *relative* Large checkpoint. See YAML. |
+| `da-v2-metric-indoor-large-nyuv2` | DA-V2 Metric Indoor Large, NYU Eigen test | `abs_rel` | 0.043 | **0.0613** | ±10% | ❌ **mismatch** (3090, 30 s), median-aligned. HF -hf port of the metric checkpoint has a ~1.3× scale drift vs NYU GT; unaligned AbsRel is ~0.33. Author (non-HF) checkpoint may close the remaining gap. See YAML. |
 | `vggt-paper-scannet-depth` | VGGT, ScanNet, 8 views | `abs_rel` | _TBD_ | — | ±5% | VGGT wiring complete (RTX 3090 end-to-end sanity on random images ✓). Blocked on ScanNet ToS signup + `$SCANNET_ROOT` data. |
 | `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | ≈0.075 | — | ±15% | blocked on Sintel depth-archive availability |
 
