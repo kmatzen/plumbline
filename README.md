@@ -42,6 +42,7 @@ plumbline reproduce vggt-paper-scannet-depth
 ## Documentation
 
 - [`plan.md`](./plan.md) — full spec and roadmap.
+- [`GPU_RUNBOOK.md`](./GPU_RUNBOOK.md) — how to run on a rented GPU.
 - [`REPRODUCTIONS.md`](./REPRODUCTIONS.md) — paper-number configs and
   tolerances.
 - [`CONTRIBUTING.md`](./CONTRIBUTING.md) — how to add a model or dataset.
