@@ -13,8 +13,10 @@ name: vggt-paper-scannet-depth
 model:
   name: vggt
   kwargs:
-    variant: "large"
-    dtype: float32
+    # Only one public VGGT checkpoint today: facebook/VGGT-1B (the Large).
+    # If upstream ships additional sizes, add a ``variant`` kwarg and wire it
+    # through VGGTAdapter.__init__ first.
+    dtype: bfloat16
 
 dataset:
   name: scannet
