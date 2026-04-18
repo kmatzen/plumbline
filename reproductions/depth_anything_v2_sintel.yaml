@@ -1,0 +1,40 @@
+# Depth Anything V2 — Sintel shakedown run
+#
+# Not a paper-number reproduction: this is the smallest end-to-end smoke
+# test. DA-V2 is relative, Sintel is tiny, and the MiDaS scale-and-shift
+# protocol gives a stable number.
+
+name: depth-anything-v2-sintel
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: "large"
+    input_size: 518
+
+dataset:
+  name: sintel
+  split: training
+  kwargs:
+    pass_name: final
+    views_per_sample: 1
+
+tasks:
+  - mono_depth
+
+scale_alignment: scale_shift
+max_views: 1
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  # DA-V2 Table 2 lists Sintel AbsRel around 0.075 with scale-and-shift
+  # alignment. Kept here as a rough sanity value; verify against upstream
+  # before declaring it the reference.
+  value: 0.075
+  tolerance_relative: 0.15
+  citation: "DepthAnything V2, Yang et al. 2024. Sintel subset, scale-shift alignment."
+
+notes: >
+  Use this as the CPU-free pipeline shakedown: small HF checkpoint + small
+  dataset. No metric-scale assumptions — run with scale_shift alignment.
