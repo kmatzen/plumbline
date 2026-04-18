@@ -32,7 +32,18 @@ from plumbline.metrics.depth import abs_rel, delta_threshold, rmse, silog
 # Strategies
 # ---------------------------------------------------------------------------
 
-_FINITE = st.floats(min_value=1e-4, max_value=1e3, allow_nan=False, allow_infinity=False)
+# ``width=32`` keeps hypothesis from generating float64 values that can't
+# round-trip into the float32 arrays below. Bounds are cast through
+# ``float(np.float32(...))`` because newer hypothesis enforces that the
+# min/max arguments are themselves exact at the requested width — 1e-4 and
+# 1e3 aren't float32-exact, but their nearest-representable neighbours are.
+_FINITE = st.floats(
+    min_value=float(np.float32(1e-4)),
+    max_value=float(np.float32(1e3)),
+    allow_nan=False,
+    allow_infinity=False,
+    width=32,
+)
 
 # 1D arrays of positive, finite depths with modest length so hypothesis
 # searches run fast.
