@@ -20,6 +20,7 @@ import plumbline.models.depth_anything_3
 import plumbline.models.depth_anything_v2
 import plumbline.models.mast3r
 import plumbline.models.metric3d_v2
+import plumbline.models.marigold
 import plumbline.models.moge
 import plumbline.models.vggt  # noqa: F401
 from plumbline.models.registry import MODEL_REGISTRY
@@ -31,6 +32,7 @@ EXPECTED_ADAPTERS = [
     "vggt",
     "depth-anything-3",
     "moge",
+    "marigold",
 ]
 
 
@@ -141,3 +143,38 @@ def test_moge_checkpoint_matches_variant() -> None:
         cls(device="cpu", variant="2-vitb-normal").checkpoint  # type: ignore[call-arg]
         == "Ruicheng/moge-2-vitb-normal"
     )
+
+
+def test_marigold_rejects_unknown_variant() -> None:
+    cls = MODEL_REGISTRY["marigold"]
+    with pytest.raises(ValueError, match="variant"):
+        cls(device="cpu", variant="nope")  # type: ignore[call-arg]
+
+
+def test_marigold_rejects_bad_inference_params() -> None:
+    cls = MODEL_REGISTRY["marigold"]
+    with pytest.raises(ValueError, match="num_inference_steps"):
+        cls(device="cpu", num_inference_steps=0)  # type: ignore[call-arg]
+    with pytest.raises(ValueError, match="ensemble_size"):
+        cls(device="cpu", ensemble_size=0)  # type: ignore[call-arg]
+    with pytest.raises(ValueError, match="dtype"):
+        cls(device="cpu", dtype="bfloat16")  # type: ignore[call-arg]  # Marigold wants fp16/fp32
+
+
+def test_marigold_config_hash_varies_by_inference_params() -> None:
+    """Changing inference knobs should change config_hash so the prediction
+    cache doesn't silently re-use a 1-step result when the user upgraded to
+    paper-protocol 4-step 10-ensemble."""
+
+    cls = MODEL_REGISTRY["marigold"]
+    fast = cls(device="cpu", num_inference_steps=1, ensemble_size=1).config_hash()  # type: ignore[call-arg]
+    paper = cls(device="cpu", num_inference_steps=4, ensemble_size=10).config_hash()  # type: ignore[call-arg]
+    assert fast != paper
+
+
+def test_marigold_capabilities_are_mono_relative() -> None:
+    cls = MODEL_REGISTRY["marigold"]
+    caps = cls.capabilities  # type: ignore[attr-defined]
+    assert "mono_depth" in caps.tasks
+    assert caps.is_metric is False  # affine-invariant
+    assert caps.min_views == 1

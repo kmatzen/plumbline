@@ -507,26 +507,51 @@ missing and which items matter most for reproducing published tables.
 
 ### Tier 2 — new paper-row unlocks
 
-4. **Diffusion depth models.** Currently zero coverage. Marigold
-   (Ke et al. 2024, SD-based, HF: `prs-eth/marigold-depth-v1-1`) is
-   the highest-leverage single add — cited everywhere, plugs cleanly
-   into the mono-depth adapter shape, publishes NYU + KITTI numbers
-   that would land in the existing reproduction infrastructure.
-   Follow-ups: GeoWizard (depth + normals), DepthFM (flow-matching).
+4. **Diffusion / generative depth models.** Marigold landed in this
+   session (adapter wired, NYU reproduction running). Follow-ups:
+   - **GeoWizard** (Fu et al. 2024): diffusion depth + normals.
+   - **DepthFM** (Gui et al. 2024): flow-matching-based depth.
+   - **Depth Pro** (Apple, Bochkovskii et al. 2024): not diffusion
+     but a recent HF-available metric model; fits the mono-depth
+     shape, adds a paper-validated comparison point.
+   - **GeoCrafter** (if different from GeoWizard — confirm) and
+     video-consistent diffusion depth models.
 
-5. **Pose benchmarks.** Infrastructure (rotation / translation /
+5. **Multi-view 3D foundation models** (the recent wave beyond
+   VGGT/MASt3R/DA3):
+   - **π³ (Pi-Cubed / PI3)**: multi-view from Bytedance (2024).
+   - **CUT3R**: "Continuous 3D Tokenizer" (Wang et al. 2025).
+     Stateful, ingests a sequence of views.
+   - **Fast3R**: large-ensemble 3D from Meta (2024/2025). Single
+     forward pass on many views.
+   - **FLARE**: [confirm — possibly FLARE by Meng et al. 2025 for
+     fast multi-view reconstruction; check canonical repo].
+   - **MapAnything**: unified 3D reconstruction w/ map prior (Wang
+     et al. 2025).
+   - **MonST3R**: dynamic-scene variant of DUSt3R. Multi-frame video
+     input.
+   All of these fit the ``mvs_depth`` / ``pose`` capability shape
+   but individually have upstream-install quirks — each is ~1 day of
+   adapter work + smoke-test.
+
+6. **Pose benchmarks.** Infrastructure (rotation / translation /
    AUC@5/10/30° metrics, pairwise relative pose) exists; the loaders
-   that map to canonical paper pose tables don't:
-   - **ScanNet-1500**: 2-view matching, VGGT Table 4 + MASt3R. 1,500
-     pre-selected pairs from ScanNet; small download if the pair list
-     is pinned (a few MB of JSONs + images).
+   that map to canonical paper pose tables don't. As of 2026-04-19 a
+   ScanNet-1500 loader is wired (blocked on the same ScanNet ToS
+   access as the depth split; pair list is public):
+   - **ScanNet-1500** ✅ loader wired, awaiting data. VGGT Table 4 +
+     MASt3R paper §4.1.
    - **RealEstate10K**: trajectory, VGGT Table 1. Paid-to-download
      RGB but public metadata.
-   - **Co3Dv2**: VGGT Table 1 + DUSt3R. Public.
-   - **7Scenes**, **TUM-RGBD**: classical benchmarks, small.
+   - **Co3Dv2**: VGGT Table 1 + DUSt3R. Public (Meta).
+   - **7Scenes**: classical relocalization, MASt3R.
+   - **TUM-RGBD**: SLAM-style trajectory.
 
-6. **Depth Pro adapter** (Apple, 2024). HF-available, fits the mono-
-   depth shape. Adds a paper-validated comparison point.
+7. **MoGe-2 metric eval**. Already have the config
+   (`moge2-vitl-nyuv2-metric`, observed AbsRel=0.0899 without
+   alignment). Paper reports MoGe-2 improvements under
+   `scale_alignment: none` protocol on benchmarks with GT intrinsics
+   — extend to DIODE + KITTI + more indoor benchmarks.
 
 ### Tier 3 — systems / structural
 
@@ -551,15 +576,40 @@ missing and which items matter most for reproducing published tables.
 ### Tier 4 — parking lot
 
 - **Novel-view synthesis evaluation** (PSNR/SSIM/LPIPS).
-- **Point tracking evaluation.**
+- **Point tracking evaluation** (TAP-Vid, BADJA).
 - **Uncertainty calibration metrics.**
 - **Failure-case browser web UI.**
 - **Nightly CI running the full suite.**
 - **Hosted leaderboard site.**
-- **Additional models**: π³, CUT3R, MonST3R, Fast3R, MapAnything.
-- **Additional datasets**: TUM-dynamics, Replica, Tanks & Temples.
+- **Additional datasets**: TUM-dynamics, Replica, Tanks & Temples,
+  **NRGBD** (Neural RGB-D scene dataset — Azinović et al. 2022, indoor
+  RGB-D used by recent SLAM / reconstruction papers; worth considering
+  once we're testing SLAM-adjacent benchmarks).
 - **HDR / linear-color evaluation path** (leverages framewright).
 - **Distributed eval across multiple GPUs.**
+
+### Tier 5 — model-roster tracker
+
+Full current + planned adapter roster so no one loses track.
+
+| Adapter | Status | Paper rows available |
+|---|---|---|
+| DA-V2 (S/B/L + metric I/O variants) | **shipped** | NYU S/B/L ✅, DIODE-indoor ✅, KITTI TODO |
+| Metric3D-v2 (S/L/Giant) | **shipped** | NYU L/G ✅, KITTI TODO |
+| MASt3R (2-view PairViewer) | **shipped** | ScanNet-1500 blocked on data |
+| VGGT (1B) | **shipped** | ETH3D / DTU chamfer — protocol gap; pose tables TODO |
+| DA3 (Large-1.1) | **shipped** | NYU ✅, multi-view TODO |
+| MoGe (v1 + v2 variants) | **shipped** | NYU ✅ under ROE; DIODE in progress |
+| Marigold (v1-1, v1-0) | **shipped 2026-04-19** | NYU in progress; KITTI TODO |
+| **Depth Pro** (Apple 2024) | planned (Tier 2) | NYU / KITTI / DIODE paper rows |
+| **GeoWizard** (depth + normals) | planned (Tier 2) | NYU / KITTI / ETH3D |
+| **DepthFM** (flow-matching) | planned (Tier 2) | NYU / KITTI |
+| **π³** (Pi-Cubed) | planned (Tier 2) | multi-view depth benchmarks |
+| **CUT3R** (continuous 3D tokenizer) | planned (Tier 2) | sequential multi-view |
+| **Fast3R** (Meta) | planned (Tier 2) | many-view 3D reconstruction |
+| **FLARE** | planned (Tier 2) | fast multi-view 3D (confirm repo) |
+| **MapAnything** | planned (Tier 2) | 3D recon w/ map prior |
+| **MonST3R** (dynamic DUSt3R) | planned (Tier 3) | dynamic-scene 3D |
 
 ### What's NOT in v0.2 (and why)
 

@@ -1,0 +1,58 @@
+# Marigold (v1-1) on NYUv2 Eigen test split
+#
+# First diffusion-depth reproduction in plumbline. Marigold is a
+# Stable-Diffusion-v2-initialised UNet fine-tuned to produce affine-
+# invariant depth maps — fundamentally different from the deterministic
+# ViT adapters (DA-V2, DA3, MoGe, Metric3D). Tests whether the harness
+# correctly handles stochastic / ensemble-averaged predictions.
+#
+# Paper target (Ke et al. 2024, "Repurposing Diffusion-Based Image
+# Generators for Monocular Depth Estimation", Table 2 NYU row):
+#     AbsRel  0.055
+#     delta_1 0.964
+#
+# Paper protocol: num_inference_steps=4, ensemble_size=10, fp32 weights.
+# We use fp16 by default for speed (~2x on a 3090); fp32 can be toggled
+# in the YAML if exact paper-row matching is needed. Expect 2-5x slower
+# wall time than DA-V2 due to the 4×10=40 UNet passes per sample.
+
+name: marigold-v1-1-nyuv2
+
+model:
+  name: marigold
+  kwargs:
+    variant: v1-1
+    num_inference_steps: 4
+    ensemble_size: 10
+    dtype: float16
+    seed: 2024
+
+dataset:
+  name: nyuv2
+  split: test
+  kwargs:
+    apply_eigen_crop: true
+
+tasks:
+  - mono_depth
+
+# Marigold outputs relative depth in [0, 1] — use scale_shift_robust
+# (ROE) alignment, same protocol that closed the MoGe NYU gap to paper.
+scale_alignment: scale_shift_robust
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 10.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.055
+  tolerance_relative: 0.15
+  citation: "Ke et al. 2024, Marigold, Table 2. NYUv2 Eigen test, v1-0 (affine-invariant)."
+
+notes: >
+  Needs `pip install diffusers` (bundled in the models extra).
+  Expected wall time on 3090 Ti: ~30 min for the 654-sample Eigen
+  split at paper protocol (4 steps × 10 ensemble = 40 UNet passes
+  per sample × ~130 ms/pass = ~5 s/sample). Speed mode
+  (num_inference_steps=1, ensemble_size=1) drops to ~1 min total
+  but sacrifices precision — use for dev loops, not for the pin.
