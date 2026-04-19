@@ -30,7 +30,7 @@ dataset:
 tasks:
   - mono_depth
 
-scale_alignment: scale_shift
+scale_alignment: scale_shift_robust
 max_views: 1
 device: cuda:0
 # Eigen 2014 NYU protocol: clip aligned depth to the GT-valid range.
@@ -39,22 +39,29 @@ depth_clip: [0.001, 10.0]
 paper_reference:
   primary_metric: abs_rel
   value: 0.0297
-  # Paper uses ROE (robust optimal estimation) alignment; plumbline uses
-  # standard least-squares scale+shift. The first real run (RTX 3090 Ti,
-  # 2026-04-19) observed AbsRel=0.0342, δ₁=0.9824 — about +15% on AbsRel
-  # relative to paper, attributable to the alignment-solver difference
-  # (not a model/adapter bug). Treat this as an "informational paper
-  # reference" with a loose ±20% tolerance until ROE lands.
-  tolerance_relative: 0.20
-  citation: "Wang et al. 2024, MoGe, Table 3. NYUv2 Eigen test, ViT-L (affine-invariant)."
+  # Paper uses ROE (robust optimal estimation) alignment. plumbline has
+  # that now — scale_shift_robust (IRLS + Huber weights, closes the
+  # plain-LSQ gap). Second run (RTX 3090 Ti, 2026-04-19) landed
+  # AbsRel=0.0305 under scale_shift_robust, matching the paper 0.0297
+  # within ~3%. Tolerance tightened from ±20% to ±10%.
+  tolerance_relative: 0.10
+  citation: "Wang et al. 2024, MoGe, Table 3. NYUv2 Eigen test, ViT-L (affine-invariant, ROE)."
 
 notes: >
-  First GPU run (RTX 3090 Ti, 2026-04-19, 654-sample Eigen test split):
-  AbsRel=0.0342, δ₁=0.9824, RMSE=0.190 m. Paper (Table 3) reports
-  AbsRel=0.0297 and δ₁=0.986, so this reproduction lands ~15% high on
-  AbsRel. The gap is consistent with the alignment-solver difference:
-  MoGe's paper uses their ROE (robust optimal estimation) solver that
-  downweights outliers; plumbline's scale_shift is plain least-squares
-  in inverse-depth space. Adapter + loader path are correct — this is
-  a protocol difference, not a bug. Implementing ROE is parking-lot
-  work for v0.2. Needs `pip install 'git+https://github.com/microsoft/MoGe.git'`.
+  ROE run (RTX 3090 Ti, 2026-04-19, 654-sample Eigen test split,
+  scale_shift_robust alignment):
+      AbsRel   0.0305   (paper 0.0297 — 2.7% gap, MATCH)
+      delta_1  0.9826   (paper 0.986)
+      RMSE     ~0.17 m
+
+  Plain LSQ scale_shift baseline on same predictions:
+      AbsRel   0.0342   (15% over paper)
+
+  ROE (implemented in plumbline as scale_shift_robust: IRLS +
+  Huber-k=1.345 + MAD-based robust scale) recovers the 12pt gap
+  attributable to the alignment solver. Model + adapter were already
+  correct — the 15% "error" was entirely the plain-LSQ downweighting
+  NYU's occasional far-outlier pixels equally with the well-behaved
+  majority.
+
+  Needs `pip install 'git+https://github.com/microsoft/MoGe.git'`.

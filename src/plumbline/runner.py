@@ -84,6 +84,7 @@ def evaluate(
     f_score_threshold: float = 0.05,
     depth_clip: tuple[float, float] | None = None,
     pointcloud_alignment: str = "none",
+    chamfer_outlier_distance: float | None = None,
 ) -> Report:
     """Evaluate a model on a dataset and return a :class:`Report`.
 
@@ -165,6 +166,7 @@ def evaluate(
             f_score_threshold=f_score_threshold,
             depth_clip=depth_clip,
             pointcloud_alignment=pointcloud_alignment,
+            chamfer_outlier_distance=chamfer_outlier_distance,
         )
         report.per_sample.append(
             SampleResult(
@@ -263,6 +265,7 @@ def _compute_metrics(
     f_score_threshold: float,
     depth_clip: tuple[float, float] | None = None,
     pointcloud_alignment: str = "none",
+    chamfer_outlier_distance: float | None = None,
 ) -> dict[str, float]:
     out: dict[str, float] = {}
 
@@ -351,6 +354,7 @@ def _compute_metrics(
                 point_map=pmap,
                 point_cloud_gt=sample.point_cloud_gt,
                 f_score_threshold=f_score_threshold,
+                outlier_distance=chamfer_outlier_distance,
             )
         )
 
@@ -459,12 +463,22 @@ def _point_cloud_metrics(
     point_map: NDArray[Any],
     point_cloud_gt: NDArray[Any],
     f_score_threshold: float,
+    outlier_distance: float | None = None,
 ) -> dict[str, float]:
     """Chamfer + F-score between the flattened prediction and GT point cloud.
 
     Flattens ``(N, H, W, 3)`` prediction into a single ``(M, 3)`` cloud,
     dropping NaNs/zeros, and compares against the GT cloud with the given
     distance threshold (meters, matching the units of the point map).
+
+    Parameters
+    ----------
+    outlier_distance
+        If set, discard predicted points farther than this many units from
+        their nearest GT neighbour before computing chamfer + precision.
+        Matches the ETH3D / Tanks & Temples paper protocol, where the
+        reported chamfer/F-score is on the inlier pool so a tiny fraction
+        of hallucinations can't dominate the metric.
     """
     if point_map.ndim < 2 or point_map.shape[-1] != 3:
         raise ValueError(f"point_map must end in 3 for xyz; got {point_map.shape}")
@@ -479,11 +493,16 @@ def _point_cloud_metrics(
             "f_score": float("nan"),
         }
 
-    chamfer = chamfer_distance(pts.astype(np.float32), point_cloud_gt.astype(np.float32))
+    chamfer = chamfer_distance(
+        pts.astype(np.float32),
+        point_cloud_gt.astype(np.float32),
+        outlier_distance=outlier_distance,
+    )
     f = f_score(
         pts.astype(np.float32),
         point_cloud_gt.astype(np.float32),
         threshold=f_score_threshold,
+        outlier_distance=outlier_distance,
     )
     return {"chamfer": float(chamfer), **{k: float(v) for k, v in f.items()}}
 

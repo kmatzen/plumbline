@@ -160,6 +160,60 @@ class TestAlignment:
         s, b = align_scale_and_shift(p, g)
         assert np.isnan(s) and np.isnan(b)
 
+    def test_robust_scale_shift_rejects_outliers(self) -> None:
+        """Plain LSQ scale+shift is pulled off the right answer by a big
+        outlier; the robust (IRLS / Huber) variant should recover it."""
+        from plumbline.metrics.alignment import align_scale_and_shift_robust
+
+        # Ground truth in inverse-depth space: g = 2 * p + 0.1
+        rng = np.random.default_rng(0)
+        p_inv = rng.uniform(0.1, 1.0, size=200).astype(np.float32)
+        g_inv = (2.0 * p_inv + 0.1).astype(np.float32)
+        # Convert to depth so the alignment solves in inv_depth space
+        # (the default matching MoGe's protocol).
+        pred = 1.0 / p_inv
+        gt = 1.0 / g_inv
+        # Add a handful of extreme pred outliers (~10% contamination).
+        outlier_idx = rng.choice(pred.shape[0], size=20, replace=False)
+        pred[outlier_idx] = pred[outlier_idx] * 100.0
+
+        s_plain, b_plain = align_scale_and_shift(pred, gt, space="inv_depth")
+        s_rob, b_rob = align_scale_and_shift_robust(pred, gt, space="inv_depth")
+
+        # Robust fit must be closer to (2.0, 0.1) than the plain fit.
+        err_plain = abs(s_plain - 2.0) + abs(b_plain - 0.1)
+        err_rob = abs(s_rob - 2.0) + abs(b_rob - 0.1)
+        assert err_rob < err_plain
+        # And close to the ground truth — within 5% of scale.
+        assert abs(s_rob - 2.0) / 2.0 < 0.05
+
+    def test_robust_scale_shift_recovers_clean_case(self) -> None:
+        """With no outliers, robust and plain should agree to within a
+        small tolerance."""
+        from plumbline.metrics.alignment import align_scale_and_shift_robust
+
+        rng = np.random.default_rng(7)
+        p_inv = rng.uniform(0.1, 1.0, size=100).astype(np.float32)
+        g_inv = (1.5 * p_inv + 0.05).astype(np.float32)
+        pred = 1.0 / p_inv
+        gt = 1.0 / g_inv
+        s_rob, b_rob = align_scale_and_shift_robust(pred, gt, space="inv_depth")
+        assert abs(s_rob - 1.5) < 1e-3
+        assert abs(b_rob - 0.05) < 1e-3
+
+    def test_robust_scale_shift_via_align_depth_wrapper(self) -> None:
+        """align_depth(mode='scale_shift_robust') threads through."""
+        from plumbline.metrics.alignment import align_depth
+
+        rng = np.random.default_rng(3)
+        p_inv = rng.uniform(0.1, 1.0, size=60).astype(np.float32)
+        g_inv = (2.0 * p_inv + 0.1).astype(np.float32)
+        pred = 1.0 / p_inv
+        gt = 1.0 / g_inv
+        out = align_depth(pred, gt, mode="scale_shift_robust")
+        # Aligned prediction should be close to GT.
+        assert np.mean(np.abs(out - gt) / gt) < 0.05
+
 
 # ---------------------------------------------------------------------------
 # Pose
