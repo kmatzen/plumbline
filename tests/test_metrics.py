@@ -343,3 +343,60 @@ class TestUmeyamaSimilarity:
 
         with pytest.raises(ValueError, match="matching"):
             umeyama_similarity(np.zeros((5, 3)), np.zeros((4, 3)))
+
+
+class TestPairwisePose:
+    def test_identity_pair_has_zero_error(self) -> None:
+        import numpy as np
+        from plumbline.metrics.pose import pairwise_pose_errors
+
+        N = 4
+        E = np.eye(4)[None].repeat(N, 0).astype(np.float64)
+        # Random non-identity poses (world_from_cam), same on pred and GT.
+        rng = np.random.default_rng(0)
+        for i in range(1, N):
+            axis = rng.standard_normal(3)
+            axis /= np.linalg.norm(axis)
+            theta = rng.uniform(0.1, 1.0)
+            # Rodrigues rotation
+            K = np.array(
+                [[0, -axis[2], axis[1]], [axis[2], 0, -axis[0]], [-axis[1], axis[0], 0]]
+            )
+            R = np.eye(3) + np.sin(theta) * K + (1 - np.cos(theta)) * (K @ K)
+            E[i, :3, :3] = R
+            E[i, :3, 3] = rng.standard_normal(3)
+        rot, trans = pairwise_pose_errors(E, E)
+        assert rot.shape == (N * (N - 1) // 2,) == trans.shape
+        # arccos near 0 rounds at O(1e-6) rad ≈ 1e-4 deg in fp64.
+        assert np.all(rot < 1e-4)
+        assert np.all(trans < 1e-4)
+
+    def test_frame_invariant_under_common_transform(self) -> None:
+        """Pairwise errors don't change if both pred and GT are wrapped by
+        the same rigid transform (they're already relative quantities)."""
+        import numpy as np
+        from plumbline.metrics.pose import pairwise_pose_errors
+
+        rng = np.random.default_rng(1)
+        N = 4
+        # Build pred poses
+        Epred = np.tile(np.eye(4)[None], (N, 1, 1)).astype(np.float64)
+        Egt = Epred.copy()
+        for i in range(1, N):
+            for E in (Epred, Egt):
+                axis = rng.standard_normal(3); axis /= np.linalg.norm(axis)
+                theta = rng.uniform(0.1, 1.0)
+                K = np.array([[0,-axis[2],axis[1]],[axis[2],0,-axis[0]],[-axis[1],axis[0],0]])
+                R = np.eye(3) + np.sin(theta)*K + (1-np.cos(theta)) * (K @ K)
+                E[i, :3, :3] = R
+                E[i, :3, 3] = rng.standard_normal(3)
+
+        # Wrap pred by an arbitrary rigid transform.
+        T = np.eye(4); T[:3, :3] = np.array(
+            [[0.8, -0.6, 0.0], [0.6, 0.8, 0.0], [0.0, 0.0, 1.0]]
+        ); T[:3, 3] = [5.0, -1.0, 3.0]
+        Epred_t = np.einsum("ij,njk->nik", T, Epred)
+        rot0, trans0 = pairwise_pose_errors(Epred, Egt)
+        rot1, trans1 = pairwise_pose_errors(Epred_t, np.einsum("ij,njk->nik", T, Egt))
+        assert np.allclose(rot0, rot1, atol=1e-8)
+        assert np.allclose(trans0, trans1, atol=1e-8)

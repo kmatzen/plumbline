@@ -36,7 +36,11 @@ from plumbline.metrics.alignment import align_depth, apply_similarity, umeyama_s
 from plumbline.metrics.depth import abs_rel, delta_threshold, log10_error, rmse, silog
 from plumbline.metrics.pointmap import chamfer_distance, f_score
 from plumbline.metrics.pose import auc as pose_auc_fn
-from plumbline.metrics.pose import rotation_error_degrees, translation_cosine_error
+from plumbline.metrics.pose import (
+    pairwise_pose_errors,
+    rotation_error_degrees,
+    translation_cosine_error,
+)
 from plumbline.models.base import Model, Prediction
 from plumbline.report import Report, RunEnvironment, SampleResult
 
@@ -445,23 +449,40 @@ def _pose_metrics(
 ) -> dict[str, float]:
     if E_pred.shape != E_gt.shape:
         raise ValueError(f"pose shape mismatch: {E_pred.shape} vs {E_gt.shape}")
-    # Skip camera 0 (identity by convention, no error to compute).
+    # Absolute per-view errors: compare pred[i] vs GT[i] in their shared
+    # world frame (view-0 identity by convention). Skip camera 0.
     if E_pred.ndim == 3 and E_pred.shape[0] > 1:
         Ep = E_pred[1:]
         Eg = E_gt[1:]
     else:
         Ep = E_pred
         Eg = E_gt
-    rot = rotation_error_degrees(Ep, Eg)
-    trans = translation_cosine_error(Ep[..., :3, 3], Eg[..., :3, 3])
-    combined = np.maximum(np.asarray(rot).reshape(-1), np.asarray(trans).reshape(-1))
-    aucs = pose_auc_fn(combined, list(auc_thresholds))
+    abs_rot = np.asarray(rotation_error_degrees(Ep, Eg)).reshape(-1)
+    abs_trans = np.asarray(
+        translation_cosine_error(Ep[..., :3, 3], Eg[..., :3, 3])
+    ).reshape(-1)
+    abs_combined = np.maximum(abs_rot, abs_trans)
+    abs_aucs = pose_auc_fn(abs_combined, list(auc_thresholds))
+
     out: dict[str, float] = {
-        "rotation_error_deg_mean": float(np.nanmean(np.asarray(rot))),
-        "translation_cos_err_deg_mean": float(np.nanmean(np.asarray(trans))),
+        "rotation_error_deg_mean": float(np.nanmean(abs_rot)),
+        "translation_cos_err_deg_mean": float(np.nanmean(abs_trans)),
     }
-    for t, v in aucs.items():
+    for t, v in abs_aucs.items():
         out[f"pose_auc@{t:g}"] = float(v)
+
+    # Pairwise relative pose errors: frame-invariant, compared over all
+    # N*(N-1)/2 unordered pairs. This is the metric VGGT / MASt3R /
+    # DUSt3R papers report — directly comparable to their tables.
+    if E_pred.ndim == 3 and E_pred.shape[0] >= 2:
+        pw_rot, pw_trans = pairwise_pose_errors(E_pred, E_gt)
+        pw_combined = np.maximum(pw_rot, pw_trans)
+        pw_aucs = pose_auc_fn(pw_combined, list(auc_thresholds))
+        out["pairwise_rot_err_deg_mean"] = float(np.nanmean(pw_rot))
+        out["pairwise_trans_cos_err_deg_mean"] = float(np.nanmean(pw_trans))
+        for t, v in pw_aucs.items():
+            out[f"pairwise_pose_auc@{t:g}"] = float(v)
+
     return out
 
 

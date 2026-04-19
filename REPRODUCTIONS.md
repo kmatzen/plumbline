@@ -36,8 +36,26 @@ value.
 | `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | ≈0.075 | — | ±15% | blocked on Sintel depth-archive availability |
 | _VGGT / ETH3D courtyard smoke_ | VGGT-1B, 4 views, first sample | `pose_auc@5°` | — | **0.91** | n/a | informational only. Rotation errors <0.3°/view; translation cos <0.6°/view. |
 | _MASt3R / ETH3D courtyard pairs_ | MASt3R ViT-L, 35 consecutive 2-view samples | `pose_auc@5°` | — | **0.46** | n/a | informational only. Mean rotation error 0.32°/pair; translation cos 3.42°. 2-view setup (PairViewer) — Umeyama needs N≥3 so no chamfer. |
-| _VGGT / ETH3D courtyard view-count sweep_ | VGGT-1B on 31 sliding 8-view windows | `pose_auc@5°` | — | see below | n/a | informational. Sweep: views=2 → 0.60, views=4 → **0.67** (peak), views=8 → 0.61. Per-view rotation error medians 0.29° / 0.35° / 0.49° respectively; translation cos 2.26° / 1.73° / 2.02°. 4-view is the sweet spot at the default 518px input. |
-| _DA3 / ETH3D courtyard view-count sweep_ | DA3 Large-1.1 on 31 sliding 8-view windows | `pose_auc@5°` | — | see below | n/a | informational. Sweep: views=2 → 0.57, views=4 → **0.63** (peak), views=8 → 0.57. Rotation medians 0.39° / 0.39° / 0.70°; translation cos 2.84° / 2.21° / 2.44°. DA3 trails VGGT by ~3-4% AUC@5 at every view count but is ~3× faster per sample. |
+| _VGGT / ETH3D courtyard view-count sweep_ | VGGT-1B on 31 sliding 8-view windows | pairwise `pose_auc@5°` | — | see below | n/a | informational. Reports both absolute per-view and pairwise relative-pose AUC (the latter matches paper tables). Peak at 4 views: **pw@5°=0.66**, abs@5°=0.67. |
+| _DA3 / ETH3D courtyard view-count sweep_ | DA3 Large-1.1 on 31 sliding 8-view windows | pairwise `pose_auc@5°` | — | see below | n/a | informational. Peak at 4 views: **pw@5°=0.61**, abs@5°=0.63. DA3 trails VGGT by ~5 pts pw@5° at peak but is ~3× faster per forward. |
+
+### Courtyard view-count sweep results
+
+All numbers are pose only (no chamfer). Aggregated over 31 sliding 8-view windows; `*@5` / `*@10` are AUC in the SuperGlue style, `*_rot°m` is per-pair rotation error median.
+
+| Model | views | abs_rot°m | abs@5 | abs@10 | pw_rot°m | pw@5 | pw@10 | run/s |
+|---|---|---|---|---|---|---|---|---|
+| VGGT  | 2 | 0.285 | 0.598 | 0.779 | 0.286 | 0.598 | 0.779 | 1.84 |
+| VGGT  | 4 | 0.348 | 0.668 | 0.821 | 0.299 | 0.656 | 0.812 | 1.68 |
+| VGGT  | 8 | 0.490 | 0.613 | 0.784 | 0.504 | 0.548 | 0.713 | 3.34 |
+| DA3   | 2 | 0.389 | 0.574 | 0.727 | 0.389 | 0.574 | 0.727 | 1.00 |
+| DA3   | 4 | 0.390 | 0.626 | 0.789 | 0.370 | 0.612 | 0.772 | 0.79 |
+| DA3   | 8 | 0.704 | 0.569 | 0.756 | 0.598 | 0.568 | 0.755 | 1.29 |
+
+Notes:
+- At `views=2` pairwise == absolute (only one non-origin view → single pair).
+- VGGT peaks at 4 views; DA3 peaks at 4 views too. Both degrade at 8 views on this scene — more pairs dilute the mean.
+- Pairwise is a strictly-harder aggregation for N>2 because it includes every pair (not just cam-i vs origin), but it's frame-invariant so it's what papers report.
 
 ### Note on the NYUv2 Eigen 2014 protocol
 
