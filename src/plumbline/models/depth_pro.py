@@ -130,10 +130,14 @@ class DepthProAdapter(Model):
         # Upstream's create_model_and_transforms() looks for ./checkpoints/
         # by default. We use the `checkpoint_uri` config override so the
         # adapter works regardless of cwd.
+        import dataclasses
+
         from depth_pro import depth_pro as dp_module  # type: ignore[import-not-found]
 
-        config = dp_module.DEFAULT_MONODEPTH_CONFIG_DICT.copy()  # type: ignore[attr-defined]
-        config.checkpoint_uri = str(self.weights_path)
+        config = dataclasses.replace(
+            dp_module.DEFAULT_MONODEPTH_CONFIG_DICT,
+            checkpoint_uri=str(self.weights_path),
+        )
         self._model, self._transform = depth_pro.create_model_and_transforms(
             config=config, device=torch.device(self.device)
         )
