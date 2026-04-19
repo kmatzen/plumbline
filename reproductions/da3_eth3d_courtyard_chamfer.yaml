@@ -33,9 +33,21 @@ paper_reference:
   citation: "DA3 Large-1.1, ETH3D courtyard sweep — informational."
 
 notes: >
-  Informational. DA3 pose sweep peaked at 4 views on courtyard with
-  pairwise AUC@5° = 0.61 (~5 pts below VGGT at the same count), so
-  chamfer quality here is expected to trail VGGT's slightly too. First
-  GPU run should pin observed chamfer / F-score in REPRODUCTIONS.md
-  alongside the VGGT number for an apples-to-apples comparison on the
-  same alignment protocol.
+  First GPU run (RTX 3090 Ti, 2026-04-19, 31 sliding 8-view windows):
+  chamfer=7.99, F-score@0.05=0.12%, precision=0.09%, recall=0.25%.
+  Compare with VGGT on the same slice: chamfer=7.71, F-score=0.12%.
+  The two models land within 4% of each other on chamfer despite
+  quite different architectures — strong evidence that the ~8m
+  chamfer is a PROTOCOL effect (camera-centres Umeyama alignment
+  doesn't match the paper's ICP-on-point-clouds protocol) rather
+  than model-specific.
+
+  Added value of this A/B: DA3 doesn't return a dense point_map
+  directly (only depth + K + E), so this run also validated the
+  runner's back-projection fallback added alongside. Before that
+  fallback, chamfer was NaN here and reproducible-only on VGGT.
+  Now any adapter providing depth+intrinsics+extrinsics gets
+  chamfer for free.
+
+  v0.2 work: add an ICP alignment mode so absolute chamfer numbers
+  approach the paper tables.

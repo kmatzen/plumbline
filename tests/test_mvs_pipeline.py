@@ -208,7 +208,15 @@ class TestMVSPipeline:
         assert "rotation_error_deg_mean" not in report.aggregate_metrics
         assert report.aggregate_metrics["abs_rel"] == 0.0
 
-    def test_point_cloud_metrics_skip_when_point_map_missing(self, tmp_path: Path) -> None:
+    def test_point_cloud_metrics_back_project_when_point_map_missing(
+        self, tmp_path: Path
+    ) -> None:
+        """Chamfer must still fire when the adapter returns depth+K+E but no
+        dense point_map — DA3, DA-V2 metric, Depth Pro, etc. only produce
+        depth. The runner back-projects depth→world to form the point map
+        and runs chamfer against GT. Regression guard for the DA3 ETH3D
+        chamfer YAML, which first exposed this gap."""
+
         class _NoPointMapAdapter(_FakeMVSAdapter):
             name = "fake-nopointmap"
 
@@ -224,8 +232,32 @@ class TestMVSPipeline:
             scale_alignment="none",
             cache=PredictionCache(tmp_path),
         )
-        assert "chamfer" not in report.aggregate_metrics
+        # Back-projected pmap should produce a finite chamfer now.
+        assert "chamfer" in report.aggregate_metrics
+        assert np.isfinite(report.aggregate_metrics["chamfer"])
         assert "abs_rel" in report.aggregate_metrics
+
+    def test_point_cloud_metrics_skip_when_no_depth_either(self, tmp_path: Path) -> None:
+        """If neither point_map NOR depth is provided (can't back-project),
+        chamfer must silently skip — don't raise, don't report NaN."""
+
+        class _NoPmapNoDepthAdapter(_FakeMVSAdapter):
+            name = "fake-nopmap-nodepth"
+
+            def predict(self, images: np.ndarray, intrinsics: np.ndarray | None = None):
+                p = super().predict(images, intrinsics)
+                p.point_map = None
+                p.depth = None
+                return p
+
+        report = evaluate(
+            model=_NoPmapNoDepthAdapter(),
+            dataset=_FakeMVSDataset(),
+            tasks=["mvs_depth"],
+            scale_alignment="none",
+            cache=PredictionCache(tmp_path),
+        )
+        assert "chamfer" not in report.aggregate_metrics
 
     def test_view_count_is_capped_at_max_views(self, tmp_path: Path) -> None:
         """Runner's ``max_views`` trims samples before the adapter sees them."""

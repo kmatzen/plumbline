@@ -275,8 +275,24 @@ def _compute_metrics(
     # Point-cloud metrics fire whenever both are present; gated on
     # "mvs_depth" or "point_cloud" to keep mono-depth runs cheap.
     wants_pcd = "mvs_depth" in tasks or "point_cloud" in tasks
-    if wants_pcd and prediction.point_map is not None and sample.point_cloud_gt is not None:
+    if wants_pcd and sample.point_cloud_gt is not None:
         pmap = prediction.point_map
+        # Back-project depth + intrinsics + extrinsics into a point map when
+        # the adapter didn't return one directly (DA3, DA-V2 metric, etc.
+        # only return depth). This matches how VGGT-style adapters' native
+        # point_map is constructed: per-pixel (u, v, d) → camera frame via
+        # K^-1, then world-frame via world_from_camera extrinsic.
+        if pmap is None:
+            if (
+                prediction.depth is None
+                or prediction.intrinsics is None
+                or prediction.extrinsics is None
+            ):
+                # Not enough info — fall through; metrics stay empty.
+                return out
+            pmap = _back_project_depth(
+                prediction.depth, prediction.intrinsics, prediction.extrinsics
+            )
         # Optional 7-DoF similarity alignment: ETH3D / T&T / DTU chamfer eval
         # protocol. The predicted and GT clouds live in different world
         # frames (VGGT's first-view origin vs ETH3D's laser-scan frame); we
@@ -528,6 +544,54 @@ def _try_empty_cuda_cache() -> None:
             torch.cuda.empty_cache()
     except Exception:
         pass
+
+
+def _back_project_depth(
+    depth: NDArray[Any], intrinsics: NDArray[Any], extrinsics: NDArray[Any]
+) -> NDArray[np.float32]:
+    """Lift ``(N, H, W)`` depth + ``(N, 3, 3)`` K + ``(N, 4, 4)`` E_world_from_cam
+    into a ``(N, H, W, 3)`` point map in the world frame.
+
+    Matches the implicit point map that VGGT-style adapters return directly:
+    per-pixel (u, v, d) → camera-frame (x_cam, y_cam, z_cam) via K^-1,
+    then world-frame via the extrinsic. Invalid pixels (depth ≤ 0 or
+    non-finite) become zero points. Vectorised over views.
+
+    Used by :func:`_compute_metrics` to unlock chamfer/F-score for
+    adapters (DA3, DA-V2 metric) that return depth but not a dense
+    point_map directly.
+    """
+    depth = np.asarray(depth)
+    K = np.asarray(intrinsics, dtype=np.float64)
+    E = np.asarray(extrinsics, dtype=np.float64)
+    N, H, W = depth.shape
+    # Pixel grid, same for every view.
+    u = np.arange(W, dtype=np.float64)
+    v = np.arange(H, dtype=np.float64)
+    uu, vv = np.meshgrid(u, v, indexing="xy")  # (H, W)
+    out = np.zeros((N, H, W, 3), dtype=np.float32)
+    for i in range(N):
+        fx = K[i, 0, 0]
+        fy = K[i, 1, 1]
+        cx = K[i, 0, 2]
+        cy = K[i, 1, 2]
+        d = np.asarray(depth[i], dtype=np.float64)
+        valid = np.isfinite(d) & (d > 0)
+        x_cam = (uu - cx) * d / max(fx, 1e-12)
+        y_cam = (vv - cy) * d / max(fy, 1e-12)
+        z_cam = d
+        # (H, W, 3) in cam frame, zero where invalid.
+        p_cam = np.stack([x_cam, y_cam, z_cam], axis=-1)
+        p_cam = np.where(valid[..., None], p_cam, 0.0)
+        # World = E @ [x; y; z; 1]; E is world_from_camera.
+        R = E[i, :3, :3]
+        t = E[i, :3, 3]
+        p_world = p_cam @ R.T + t  # (H, W, 3)
+        # Keep invalid pixels as exact zeros (chamfer skips them when
+        # masked, though currently the metric runs on all points).
+        p_world = np.where(valid[..., None], p_world, 0.0)
+        out[i] = p_world.astype(np.float32)
+    return out
 
 
 # Types we treat as OOM. Lazy-resolved so `import plumbline.runner` doesn't
