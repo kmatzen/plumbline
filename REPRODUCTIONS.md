@@ -26,14 +26,17 @@ value.
 | Name | Paper | Primary metric | Published | Observed | Tolerance | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | `da-v2-small-nyuv2` | DA-V2 ViT-S, NYU Eigen test (Table 2) | `abs_rel` | 0.053 | **0.0510** | ±5% | ✅ **match** (RTX 3090, 2 min). |
+| `da-v2-base-nyuv2` | DA-V2 ViT-B, NYU Eigen test (Table 2) | `abs_rel` | 0.049 | **0.0456** | ±10% | ✅ **match** (RTX 3090, 2 min). δ₁: paper 0.976, observed 0.977. |
 | `da-v2-large-nyuv2` | DA-V2 ViT-L, NYU Eigen test (Table 2) | `abs_rel` | 0.045 | **0.0428** | ±10% | ✅ **match** (RTX 3090, 30 s). |
 | `da-v2-metric-indoor-large-nyuv2` | DA-V2 Metric-Indoor-Large, NYU Eigen | `abs_rel` | _n/a_ | **0.0496** | n/a | Informational. Median-aligned. No published AbsRel for Hypersim-finetuned ViT-L on NYU. |
 | `metric3d-v2-nyuv2` | Metric3Dv2 ViT-L, NYU Eigen (Table I) | `abs_rel` | 0.063 | **0.0660** | ±10% | ✅ **match** (RTX 3090, 4 min). δ₁: paper 0.975, observed 0.974. |
+| `metric3d-v2-giant-nyuv2` | Metric3Dv2 ViT-Giant2, NYU Eigen (Table I) | `abs_rel` | 0.067 | **0.0702** | ±10% | ✅ **match** (RTX 3090, ~50 min). δ₁: paper 0.980, observed 0.973. |
 | `da3-nyuv2` | DA3 Large-1.1, NYU Eigen (Table 4) | `delta_1` | 0.974 | **0.9684** | ±2% | ✅ **match** (RTX 3090, 2 min). AbsRel=0.051 (informational; Table 4 only reports δ₁). |
 | `vggt-paper-scannet-depth` | VGGT, ScanNet, 8 views | `abs_rel` | _TBD_ | — | ±5% | VGGT wiring complete (RTX 3090 end-to-end sanity on random images ✓). Blocked on ScanNet ToS signup + `$SCANNET_ROOT` data. |
 | `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | ≈0.075 | — | ±15% | blocked on Sintel depth-archive availability |
 | _VGGT / ETH3D courtyard smoke_ | VGGT-1B, 4 views, first sample | `pose_auc@5°` | — | **0.91** | n/a | informational only. Rotation errors <0.3°/view; translation cos <0.6°/view. |
 | _MASt3R / ETH3D courtyard pairs_ | MASt3R ViT-L, 35 consecutive 2-view samples | `pose_auc@5°` | — | **0.46** | n/a | informational only. Mean rotation error 0.32°/pair; translation cos 3.42°. 2-view setup (PairViewer) — Umeyama needs N≥3 so no chamfer. |
+| _VGGT / ETH3D courtyard view-count sweep_ | VGGT-1B on 31 sliding 8-view windows | `pose_auc@5°` | — | see below | n/a | informational. Sweep: views=2 → 0.60, views=4 → **0.67** (peak), views=8 → 0.61. Per-view rotation error medians 0.29° / 0.35° / 0.49° respectively; translation cos 2.26° / 1.73° / 2.02°. 4-view is the sweet spot at the default 518px input. |
 
 ### Note on the NYUv2 Eigen 2014 protocol
 
