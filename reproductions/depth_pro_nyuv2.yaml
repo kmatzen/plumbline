@@ -40,9 +40,13 @@ depth_clip: [0.001, 10.0]
 
 paper_reference:
   primary_metric: abs_rel
-  value: 0.058
-  tolerance_relative: 0.20
-  citation: "Bochkovskii et al. 2024, Depth Pro, Table 4. NYU ZS."
+  # Target value and table number NOT pinned — an earlier WebFetch
+  # claimed "Table 4 NYU ZS AbsRel 0.058" but the user verified the
+  # Depth Pro paper does not have a Table 4. First GPU run will land
+  # the observed number; until we have a confirmed paper row, treat
+  # this as informational only.
+  tolerance_relative: 1.0
+  citation: "TBD — need to read Depth Pro paper to find the actual NYU row."
 
 notes: >
   Requires `uv pip install 'git+https://github.com/apple/ml-depth-pro.git'`

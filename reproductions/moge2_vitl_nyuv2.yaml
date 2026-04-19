@@ -30,12 +30,14 @@ depth_clip: [0.001, 10.0]
 
 paper_reference:
   primary_metric: abs_rel
-  # MoGe-2 paper (Wang et al. 2025 update). Direct paper value to pin
-  # on first run; expect it to come in similar to or slightly better
-  # than MoGe-1's observed 0.0342. Using a loose ±20% tolerance for
-  # same ROE-vs-scale_shift gap documented in moge-vitl-nyuv2.
-  tolerance_relative: 0.20
-  citation: "Wang et al. 2025, MoGe-2 update. NYUv2 Eigen test, ViT-L (metric)."
+  # No target pinned — MoGe-2 update paper's NYU row needs to be
+  # verified directly (not via WebFetch; prior responses fabricated
+  # a "Table 3" for MoGe v1 that doesn't exist). Observed 0.0305
+  # under scale_shift_robust; indistinguishable from MoGe-1's 0.0305
+  # because under disparity-space alignment the metric vs affine-
+  # invariant distinction is absorbed.
+  tolerance_relative: 1.0
+  citation: "UNVERIFIED — needs direct paper read for MoGe-2 NYU affine-invariant disparity row."
 
 notes: >
   ROE run (RTX 3090 Ti, 2026-04-19, 654-sample Eigen test split,

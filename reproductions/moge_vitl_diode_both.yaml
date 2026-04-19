@@ -28,9 +28,13 @@ depth_clip: [0.001, 50.0]
 
 paper_reference:
   primary_metric: abs_rel
-  value: 0.0313
+  # MoGe paper (Wang et al. 2024), Table 2 Depth-Map Estimation, DIODE
+  # column, "affine-invariant disparity" row (matches plumbline's
+  # scale_shift_robust alignment which fits in inverse-depth space):
+  #     Reld = 4.00 → AbsRel 0.0400, δ₁ = 97.3
+  value: 0.0400
   tolerance_relative: 0.15
-  citation: "Wang et al. 2024, MoGe, Table 3. DIODE combined val, ViT-L (affine-invariant, ROE)."
+  citation: "Wang et al. 2024, MoGe, Table 2 (Depth Map Est.). DIODE column, affine-invariant disparity row, ViT-L."
 
 notes: >
   RTX 3090 Ti, 2026-04-19, full 771-sample val split (325 indoor +
