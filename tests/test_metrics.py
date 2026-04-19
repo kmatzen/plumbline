@@ -295,3 +295,51 @@ class TestPointMapMetrics:
     def test_chamfer_shape_validation(self) -> None:
         with pytest.raises(ValueError):
             chamfer_distance(np.zeros((4, 2)), np.zeros((4, 3)))
+
+
+class TestUmeyamaSimilarity:
+    def test_recovers_identity(self) -> None:
+        import numpy as np
+        from plumbline.metrics.alignment import umeyama_similarity, apply_similarity
+
+        rng = np.random.default_rng(0)
+        src = rng.standard_normal((10, 3))
+        s, R, t = umeyama_similarity(src, src)
+        assert s == pytest.approx(1.0, abs=1e-8)
+        assert np.allclose(R, np.eye(3), atol=1e-8)
+        assert np.allclose(t, 0.0, atol=1e-8)
+        assert np.allclose(apply_similarity(src, s, R, t), src, atol=1e-8)
+
+    def test_recovers_known_similarity(self) -> None:
+        import numpy as np
+        from plumbline.metrics.alignment import apply_similarity, umeyama_similarity
+
+        rng = np.random.default_rng(42)
+        src = rng.standard_normal((12, 3))
+        # Random rotation via QR
+        M = rng.standard_normal((3, 3))
+        Q, _ = np.linalg.qr(M)
+        if np.linalg.det(Q) < 0:
+            Q[:, 0] *= -1
+        R_true = Q
+        s_true = 2.37
+        t_true = np.array([0.5, -1.2, 3.0])
+        dst = s_true * src @ R_true.T + t_true
+        s, R, t = umeyama_similarity(src, dst)
+        assert s == pytest.approx(s_true, rel=1e-6)
+        assert np.allclose(R, R_true, atol=1e-6)
+        assert np.allclose(t, t_true, atol=1e-6)
+
+    def test_rejects_fewer_than_three_points(self) -> None:
+        import numpy as np
+        from plumbline.metrics.alignment import umeyama_similarity
+
+        with pytest.raises(ValueError, match=">= 3"):
+            umeyama_similarity(np.zeros((2, 3)), np.ones((2, 3)))
+
+    def test_shape_mismatch_errors(self) -> None:
+        import numpy as np
+        from plumbline.metrics.alignment import umeyama_similarity
+
+        with pytest.raises(ValueError, match="matching"):
+            umeyama_similarity(np.zeros((5, 3)), np.zeros((4, 3)))
