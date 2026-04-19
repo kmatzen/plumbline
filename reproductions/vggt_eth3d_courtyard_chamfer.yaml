@@ -57,28 +57,32 @@ paper_reference:
   citation: "Wang et al. 2025, VGGT, Table 3 (ETH3D) — single-scene courtyard reported here is informational."
 
 notes: >
-  Observed values (RTX 3090 Ti, 2026-04-19, 31 sliding 8-view
-  windows, ICP alignment):
-      chamfer       6.84
-      F-score@0.05  66.95%
-      precision     68.76%
-      recall        81.59%
+  CORRECTED ON 2026-04-19 — earlier commits (565230c, 001f3b8) made
+  a unit-interpretation error on f_score/precision/recall output.
+  Those values are reported in PERCENT (0.67 means 0.67%, not 67%).
+  The ICP + masking numbers here are modest improvements over
+  Umeyama, not paper-level:
 
-  Compare with camera-centres Umeyama on the same slice (previous
-  alignment mode): F-score was 0.12%, precision 0.09%, recall 0.22%.
-  Switching to ICP (hypothesis #2 from the earlier notes) delivers a
-  ~558x F-score improvement — confirming the papers' protocol is ICP
-  on the point clouds, not Umeyama on camera centres.
+      alignment         F@5cm   prec   recall   chamfer
+      camera_centers    0.12%   0.09%  0.22%    7.71
+      icp               0.67%   0.69%  0.82%    6.84
+      icp + mask=0.5    1.13%   2.16%  0.82%    5.87   (this config)
 
-  Chamfer only dropped 11% (7.71→6.84) because the untrimmed chamfer
-  metric is dominated by far-outlier predictions (VGGT hallucinations
-  off the courtyard geometry); ICP's 10% inlier trim during fitting
-  pulls the similarity to the good pixels but leaves the outliers in
-  place for the final chamfer aggregate. F-score and precision — both
-  thresholded at 5cm — reveal that 67-81% of points are actually
-  within 5cm of GT once properly aligned.
+  Paper (VGGT Table 3) reports cross-scene ETH3D F-scores in the
+  60-90% range — our 1-2% is ~50x below. Real remaining gaps we
+  haven't resolved:
 
-  Perf: ICP adds ~15s/sample vs baseline chamfer (iterations converge
-  in ~10-20 rounds with warm-start from camera-centres Umeyama).
-  Total run ~10 min on 31 samples, vs ~50 min for the un-parallelised
-  chamfer baseline pre-58bb74a.
+    1. Paper evaluates on the FULL test-set mesh, not a per-sample
+       sliding-window laser-scan subset. Their chamfer/F-score
+       aggregates differently (likely fuse all predictions before
+       comparing to a single scene-level GT mesh).
+    2. ICP's outlier trim (top 10%) may be too aggressive or too
+       lenient for MVS-scale data — paper protocols often do a
+       Procrustes fit with different robustification.
+    3. VGGT at 518-width produces ~1.5M points that don't cover the
+       full courtyard; GT mesh spans more. Unmasked GT→pred recall
+       is recall-limited by this.
+
+  Infrastructure is in place (ICP + outlier masking + back-projection
+  from depth+K+E). The protocol details that close the remaining
+  50x gap stay on the v0.2 list.

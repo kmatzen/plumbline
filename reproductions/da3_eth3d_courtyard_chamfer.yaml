@@ -33,32 +33,27 @@ paper_reference:
   citation: "DA3 Large-1.1, ETH3D courtyard sweep — informational."
 
 notes: >
-  Observed values (RTX 3090 Ti, 2026-04-19, 31 sliding 8-view
-  windows, ICP alignment):
-      chamfer       7.14
-      F-score@0.05  61.17%
-      precision     84.13%
-      recall        76.83%
+  CORRECTED ON 2026-04-19 — earlier commit (001f3b8) misread the
+  f_score output (values are in PERCENT; 0.61 = 0.61%, not 61%).
+  The actual ICP numbers put DA3 roughly similar to VGGT on the
+  same slice:
 
-  Direct A/B with VGGT on the same slice (both with ICP):
-                      VGGT     DA3
-      chamfer         6.84     7.14
-      F-score@5cm    66.95%   61.17%
-      precision      68.76%   84.13%   ← DA3 higher (conservative)
-      recall         81.59%   76.83%   ← VGGT higher (aggressive)
+                      VGGT    DA3
+      chamfer         6.84    7.14
+      F-score@5cm    0.67%   0.61%
+      precision      0.69%   0.84%
+      recall         0.82%   0.77%
 
-  Interpretation: DA3 is more conservative — its predictions are
-  more accurate when present (precision up ~15 pts) but cover less
-  GT surface (recall down ~5 pts). VGGT produces denser predictions
-  that include more hallucinations. Net F-score lower for DA3
-  because the harmonic mean penalises the lower recall more than it
-  rewards the higher precision.
+  Paper (DA3 + VGGT tables) reports ETH3D F-scores in the 60-90%
+  range — our sub-1% numbers are ~50-100x too low. The gap isn't
+  model-specific (DA3 and VGGT land within 15% of each other) —
+  it's a remaining protocol / aggregation issue. See
+  vggt_eth3d_courtyard_chamfer.yaml notes for the diagnostic list.
 
-  Both models work end-to-end under ICP; confirms the protocol is
-  the dominant factor (not the model) on this benchmark.
+  Added value of the DA3 run even with the corrected numbers:
+  validates the runner's depth→point-map back-projection fallback.
+  DA3 doesn't return a dense point_map directly; without the
+  fallback (added alongside), chamfer here would be NaN.
 
-  Earlier camera_centers-alignment values on the same predictions
-  (pre-ICP): chamfer=7.99, F=0.12%, precision=0.09%, recall=0.25% —
-  F-score improved 490x under ICP. That jump surfaced the fix;
-  without the DA3 A/B, ICP's gains on VGGT alone could have been
-  attributed to some VGGT-specific quirk.
+  v0.2 work: the actual ETH3D paper protocol (full-scene mesh
+  aggregation, not per-sample laser-scan chamfer).

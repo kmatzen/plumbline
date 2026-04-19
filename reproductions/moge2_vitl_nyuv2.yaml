@@ -23,7 +23,7 @@ dataset:
 tasks:
   - mono_depth
 
-scale_alignment: scale_shift
+scale_alignment: scale_shift_robust
 max_views: 1
 device: cuda:0
 depth_clip: [0.001, 10.0]
@@ -38,19 +38,19 @@ paper_reference:
   citation: "Wang et al. 2025, MoGe-2 update. NYUv2 Eigen test, ViT-L (metric)."
 
 notes: >
-  First GPU run (RTX 3090 Ti, 2026-04-19, 654-sample Eigen test
-  split, scale_shift alignment):
-      AbsRel   0.0342
-      delta_1  0.9831
+  ROE run (RTX 3090 Ti, 2026-04-19, 654-sample Eigen test split,
+  scale_shift_robust alignment):
+      AbsRel   0.0305
+      delta_1  0.9833
+
   v1-vs-v2 A/B on the same machine + protocol:
-      MoGe-1  AbsRel 0.0342  delta_1 0.9824
-      MoGe-2  AbsRel 0.0342  delta_1 0.9831
-  Indistinguishable — under scale_shift alignment the metric vs
-  affine-invariant difference between v1 and v2 gets absorbed into
-  the fit. MoGe-2's improvement over v1 would show if we ran with
-  scale_alignment: none (metric eval), which plumbline supports —
-  but NYU zero-shot papers report under scale-shift, so this YAML
-  stays on that protocol for apples-to-apples comparison with the
-  DA-V2 / Metric3D / DA3 rows.
+                 AbsRel   delta_1
+      MoGe-1     0.0305   0.9826
+      MoGe-2     0.0305   0.9833
+  Indistinguishable — under ANY scale+shift alignment (plain LSQ,
+  ROE) the metric vs affine-invariant difference between v1 and
+  v2 gets absorbed. MoGe-2's v1 improvement shows only with
+  scale_alignment: none (metric eval) — see
+  moge2-vitl-nyuv2-metric.
 
   Needs `pip install 'git+https://github.com/microsoft/MoGe.git'`.
