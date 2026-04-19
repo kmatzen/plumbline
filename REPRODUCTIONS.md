@@ -19,6 +19,7 @@ export NYUV2_ROOT=~/data/nyuv2      # for any da-v2-*-nyuv2 reproduction
 export SCANNET_ROOT=~/data/scannet  # for vggt-paper-scannet-depth
 export SINTEL_ROOT=~/data/sintel    # for depth-anything-v2-sintel
 export KITTI_ROOT=~/data/kitti      # for any *-kitti reproduction
+export DIODE_ROOT=~/data/diode      # for any *-diode-* reproduction
 
 plumbline reproduce <name>
 ```
@@ -45,6 +46,7 @@ value.
 | `da-v2-metric-outdoor-large-kitti` | DA-V2 Metric-Outdoor-Large, KITTI Eigen | `abs_rel` | _n/a_ | — | n/a | Informational; VKITTI-finetuned checkpoint on KITTI. No direct paper target (paper's KITTI 0.049 is the *KITTI*-finetuned ViT-L). Paired with the KITTI loader as a cross-model smoke reproduction. |
 | `vggt-eth3d-courtyard-chamfer` | VGGT on ETH3D courtyard, 8-view | `chamfer` | _n/a_ | — | n/a | First chamfer/F-score reproduction. Exercises the 7-DoF Umeyama + point-cloud metric path. Informational single-scene; paper's Table 6 is across the whole test set. |
 | `da3-eth3d-courtyard-chamfer` | DA3 Large-1.1 on ETH3D courtyard, 8-view | `chamfer` | _n/a_ | — | n/a | DA3 counterpart to the VGGT chamfer config — confirms the alignment path isn't VGGT-specific and gives a direct A/B on the same slice. |
+| `da-v2-small-diode-indoor` | DA-V2 ViT-S on DIODE val-indoor (Table 3) | `abs_rel` | _TBD_ | — | ±10% | DIODE loader ready; public dataset (~1 GB for val-indoor). User supplies `$DIODE_ROOT`. Paper value to be pinned on first run. |
 | _VGGT / ETH3D courtyard smoke_ | VGGT-1B, 4 views, first sample | `pose_auc@5°` | — | **0.91** | n/a | informational only. Rotation errors <0.3°/view; translation cos <0.6°/view. |
 | _MASt3R / ETH3D courtyard pairs_ | MASt3R ViT-L, 35 consecutive 2-view samples | `pose_auc@5°` | — | **0.46** | n/a | informational only. Mean rotation error 0.32°/pair; translation cos 3.42°. 2-view setup (PairViewer) — Umeyama needs N≥3 so no chamfer. |
 | _VGGT / ETH3D courtyard view-count sweep_ | VGGT-1B on 31 sliding 8-view windows | pairwise `pose_auc@5°` | — | see below | n/a | informational. Reports both absolute per-view and pairwise relative-pose AUC (the latter matches paper tables). Peak at 4 views: **pw@5°=0.66**, abs@5°=0.67. |

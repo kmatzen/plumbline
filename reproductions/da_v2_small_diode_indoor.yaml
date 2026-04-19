@@ -1,0 +1,49 @@
+# Depth Anything V2 (small) on DIODE val-indoor
+#
+# Indoor dense-depth counterpart to da-v2-small-nyuv2 using DIODE rather
+# than NYU. DIODE's depth is a LiDAR scan (FARO Focus3D X330), so the
+# distribution differs from Kinect-derived NYU: much longer range,
+# dense beyond NYU's ~10m, and different sensor noise characteristics.
+# DA-V2 paper Table 3 reports relative-depth DIODE-indoor numbers for
+# the ViT-S / ViT-B / ViT-L variants.
+
+name: da-v2-small-diode-indoor
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: small
+
+dataset:
+  name: diode
+  split: val
+  kwargs:
+    domain: indoors
+
+tasks:
+  - mono_depth
+
+# DA-V2 predicts relative disparity; MiDaS-style scale + shift fit in
+# inverse-depth space is the protocol papers use for DIODE zero-shot
+# evaluation.
+scale_alignment: scale_shift
+max_views: 1
+device: cuda:0
+# DIODE indoor depths span ~0–50 m. Use a permissive clip to catch any
+# alignment-induced outliers without truncating real far returns.
+depth_clip: [0.001, 50.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # DA-V2 paper (Yang et al. 2024), Table 3: DIODE zero-shot AbsRel for
+  # the relative ViT-S. PLACEHOLDER — pin from the paper on first run.
+  value: 0.0  # TODO: pin from DA-V2 paper Table 3, DIODE row, ViT-S AbsRel.
+  tolerance_relative: 0.10
+  citation: "Yang et al. 2024, Depth Anything V2, Table 3. DIODE, ViT-S (relative)."
+
+notes: >
+  Needs DIODE val-indoor unpacked under $DIODE_ROOT (~1 GB public).
+  Depth mask from the loader populates Sample.depth_valid, so invalid
+  LiDAR returns are already excluded from the metric. DA-V2 paper also
+  reports DIODE-outdoor numbers; swap domain: outdoor for that
+  reproduction (same dataset, different subtree).

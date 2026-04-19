@@ -20,6 +20,12 @@ from plumbline.datasets.eth3d import (
     parse_colmap_images,
     quat_to_rot,
 )
+from plumbline.datasets.diode import (
+    DIODE_INTRINSIC,
+    DIODEDataset,
+    load_diode_depth_m,
+    load_diode_depth_mask,
+)
 from plumbline.datasets.kitti import (
     KITTIDataset,
     eigen_crop_mask,
@@ -585,3 +591,171 @@ class TestKITTI:
         rows_only_in_garg = (garg & ~eigen).any(axis=1)
         assert rows_only_in_eigen.any()
         assert rows_only_in_garg.any()
+
+
+# ---------------------------------------------------------------------------
+# DIODE
+# ---------------------------------------------------------------------------
+
+
+def _write_fake_diode(
+    root: Path,
+    *,
+    split: str = "val",
+    domain: str = "indoors",
+    scenes: int = 1,
+    scans_per_scene: int = 1,
+    frames: int = 2,
+    H: int = 24,
+    W: int = 32,
+) -> list[str]:
+    """Write a minimal DIODE-shaped tree and return sample_ids for reference."""
+    sample_ids: list[str] = []
+    for s in range(scenes):
+        scene = f"scene_{s:05d}"
+        for k in range(scans_per_scene):
+            scan = f"scan_{k:05d}"
+            scan_dir = root / split / domain / scene / scan
+            scan_dir.mkdir(parents=True, exist_ok=True)
+            for f_idx in range(frames):
+                base = f"{s:05d}_{k:05d}_{domain}_{100 + f_idx}_000"
+                # RGB
+                Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
+                    scan_dir / f"{base}.png"
+                )
+                # Depth: DIODE ships (H, W, 1) float32 — we keep that shape on
+                # disk so load_diode_depth_m's squeeze path is exercised.
+                depth = np.full((H, W, 1), 2.5, dtype=np.float32)
+                # Poke an invalid pixel so the mask boolification is testable.
+                depth[0, 0, 0] = 0.0
+                np.save(scan_dir / f"{base}_depth.npy", depth)
+                # Mask: uint8, 1=valid, 0=invalid.
+                mask = np.ones((H, W), dtype=np.uint8)
+                mask[0, 0] = 0
+                np.save(scan_dir / f"{base}_depth_mask.npy", mask)
+                sample_ids.append(f"{domain}/{scene}/{scan}/{base}")
+    return sample_ids
+
+
+class TestDIODE:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable):
+            DIODEDataset(root=tmp_path / "nope")
+
+    def test_missing_split_subtree(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        (tmp_path / "val").mkdir()  # root exists but indoors/ under it doesn't
+        with pytest.raises(DatasetNotAvailable):
+            list(DIODEDataset(root=tmp_path, domain="indoors"))
+
+    def test_invalid_split_errors(self, tmp_path: Path) -> None:
+        _write_fake_diode(tmp_path)
+        with pytest.raises(ValueError, match="split"):
+            DIODEDataset(root=tmp_path, split="test")
+
+    def test_invalid_domain_errors(self, tmp_path: Path) -> None:
+        _write_fake_diode(tmp_path)
+        with pytest.raises(ValueError, match="domain"):
+            DIODEDataset(root=tmp_path, domain="mixed")
+
+    def test_basic_load_indoors(self, tmp_path: Path) -> None:
+        _write_fake_diode(tmp_path, frames=3)
+        ds = DIODEDataset(root=tmp_path, domain="indoors")
+        samples = list(ds)
+        assert len(samples) == 3
+        s = samples[0]
+        assert s.num_views == 1
+        assert s.images.shape == (1, 24, 32, 3)
+        assert s.depth_gt is not None and s.depth_gt.shape == (1, 24, 32)
+        assert s.depth_gt.dtype == np.float32
+        # Invalid pixel at (0, 0) should be marked via depth_valid (mask), not
+        # by zeroing out depth.
+        assert s.depth_valid is not None
+        assert s.depth_valid.shape == (1, 24, 32) and s.depth_valid.dtype == bool
+        assert not bool(s.depth_valid[0, 0, 0])
+        assert bool(s.depth_valid[0, -1, -1])
+
+    def test_default_intrinsic_is_diode_devkit_value(self, tmp_path: Path) -> None:
+        _write_fake_diode(tmp_path)
+        ds = DIODEDataset(root=tmp_path)
+        s = next(iter(ds))
+        fx, fy, cx, cy = DIODE_INTRINSIC
+        assert s.intrinsics[0, 0, 0] == fx
+        assert s.intrinsics[0, 1, 1] == fy
+        assert s.intrinsics[0, 0, 2] == cx
+        assert s.intrinsics[0, 1, 2] == cy
+        assert s.metadata["intrinsic_source"] == "diode_devkit_default"
+
+    def test_intrinsic_override(self, tmp_path: Path) -> None:
+        _write_fake_diode(tmp_path)
+        ds = DIODEDataset(root=tmp_path, intrinsic=(1000.0, 1000.0, 500.0, 375.0))
+        s = next(iter(ds))
+        assert s.intrinsics[0, 0, 0] == 1000.0
+        assert s.metadata["intrinsic_source"] == "user-supplied"
+
+    def test_domain_alias_indoor_maps_to_indoors(self, tmp_path: Path) -> None:
+        _write_fake_diode(tmp_path, domain="indoors")
+        # Pass the English-preferred singular form; loader should canonicalise.
+        ds = DIODEDataset(root=tmp_path, domain="indoor")
+        assert len(ds) == 2
+        assert next(iter(ds)).metadata["domain"] == "indoors"
+
+    def test_domain_both_concatenates(self, tmp_path: Path) -> None:
+        _write_fake_diode(tmp_path, domain="indoors", scenes=1, frames=2)
+        _write_fake_diode(tmp_path, domain="outdoor", scenes=1, frames=3)
+        ds = DIODEDataset(root=tmp_path, domain="both")
+        domains = [s.metadata["domain"] for s in ds]
+        assert len(domains) == 5
+        assert domains.count("indoors") == 2 and domains.count("outdoor") == 3
+
+    def test_domain_both_skips_missing(self, tmp_path: Path) -> None:
+        # Only indoors on disk; domain=both should yield indoor samples alone.
+        _write_fake_diode(tmp_path, domain="indoors")
+        ds = DIODEDataset(root=tmp_path, domain="both")
+        assert len(ds) == 2
+        assert {s.metadata["domain"] for s in ds} == {"indoors"}
+
+    def test_scene_whitelist(self, tmp_path: Path) -> None:
+        _write_fake_diode(tmp_path, scenes=3, frames=1)
+        ds = DIODEDataset(root=tmp_path, scenes=["scene_00001"])
+        assert len(ds) == 1
+        assert next(iter(ds)).metadata["scene"] == "scene_00001"
+
+    def test_skips_samples_with_missing_rgb_or_mask(self, tmp_path: Path) -> None:
+        ids = _write_fake_diode(tmp_path, frames=3)
+        # Remove the RGB for the second sample; loader should silently drop it.
+        base_parts = ids[1].split("/")  # .../<scan>/<base>
+        scan_dir = tmp_path / "val" / base_parts[0] / base_parts[1] / base_parts[2]
+        (scan_dir / f"{base_parts[3]}.png").unlink()
+        ds = DIODEDataset(root=tmp_path)
+        assert len(ds) == 2
+
+    def test_manifest_cached(self, tmp_path: Path) -> None:
+        _write_fake_diode(tmp_path)
+        DIODEDataset(root=tmp_path)
+        assert (tmp_path / ".plumbline_manifest").exists()
+
+    def test_load_diode_depth_m_squeezes_trailing_axis(self, tmp_path: Path) -> None:
+        depth = np.full((16, 8, 1), 3.25, dtype=np.float32)
+        p = tmp_path / "d.npy"
+        np.save(p, depth)
+        out = load_diode_depth_m(p)
+        assert out.shape == (16, 8) and out.dtype == np.float32
+        assert out[0, 0] == 3.25
+
+    def test_load_diode_depth_m_rejects_higher_dim(self, tmp_path: Path) -> None:
+        p = tmp_path / "d.npy"
+        np.save(p, np.zeros((4, 4, 3), dtype=np.float32))
+        with pytest.raises(ValueError, match="expected 2D depth"):
+            load_diode_depth_m(p)
+
+    def test_load_diode_depth_mask_returns_bool(self, tmp_path: Path) -> None:
+        mask = np.array([[1, 0], [0, 1]], dtype=np.uint8)
+        p = tmp_path / "m.npy"
+        np.save(p, mask)
+        out = load_diode_depth_mask(p)
+        assert out.dtype == bool
+        np.testing.assert_array_equal(out, np.array([[True, False], [False, True]]))
