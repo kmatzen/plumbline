@@ -1,0 +1,45 @@
+# Depth Anything 3 (Large) on GSO (Google Scanned Objects)
+#
+# GSO is the Tier-2 synthetic-clean-GT slot post 2026-04-19 pivot.
+# Runs the public DA3-LARGE-1.1 checkpoint with MiDaS-style scale+shift
+# alignment — same mono-depth protocol as da3-nyuv2. GSO's intrinsics
+# are MoGe-bundled, not DA3's own.
+#
+# Paper target UNVERIFIED. DA3 paper (arXiv:2511.10647) may report GSO
+# in Table 4 or elsewhere; cross-check and pin before gating. Running
+# this is informational until the value is confirmed.
+
+name: da3-gso
+
+model:
+  name: depth-anything-3
+  kwargs:
+    variant: large
+    checkpoint: depth-anything/DA3-LARGE-1.1
+
+dataset:
+  name: gso
+
+tasks:
+  - mono_depth
+
+scale_alignment: scale_shift_robust
+max_views: 1
+device: cuda:0
+# GSO objects render at ~0.3-1.0 m; keep clip wide but positive.
+depth_clip: [0.001, 100.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # UNVERIFIED — placeholder. DA3 paper Table 4/11 may report GSO;
+  # exact row + metric convention TBD.
+  value: 0.0
+  tolerance_relative: 1.0
+  citation: "Bytedance Seed 2025, Depth Anything 3, GSO column (exact row TBD). UNVERIFIED."
+
+notes: >
+  Informational-only until the paper GSO number is pinned. Loader +
+  alignment are paper-faithful; this YAML just needs a target.
+
+  Needs `uv pip install depth-anything-3`. First run downloads
+  ~1.5 GB weights.
