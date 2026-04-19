@@ -24,7 +24,7 @@ dataset:
 tasks:
   - mono_depth
 
-scale_alignment: scale_shift
+scale_alignment: scale_shift_robust
 max_views: 1
 device: cuda:0
 depth_clip: [0.001, 50.0]
@@ -36,21 +36,21 @@ paper_reference:
   citation: "Wang et al. 2024, MoGe, Table 3. DIODE combined val, ViT-L (affine-invariant)."
 
 notes: >
-  First GPU run (RTX 3090 Ti, 2026-04-19, 325 indoor samples):
-      AbsRel   0.0584
-      delta_1  0.9525
-  Paper target (combined val, 771 samples, ROE alignment): 0.0313.
-  The ~2x gap vs paper has two likely causes:
-    - DIODE-indoor is genuinely harder than DIODE-outdoor for this
-      model — the paper's combined-val mean is pulled down by the
-      446 outdoor samples. A domain=both run on the same predictions
-      would settle this.
-    - The documented ROE-vs-scale_shift alignment gap (MoGe NYU
-      showed ~15% under scale_shift vs paper ROE); DIODE may amplify.
+  ROE run (RTX 3090 Ti, 2026-04-19, 325 indoor samples,
+  scale_shift_robust):
+      AbsRel   0.0465
+      delta_1  0.9505
+  Plain LSQ scale_shift baseline on same predictions: AbsRel 0.0584.
+  ROE closed 20% of the gap.
 
-  Beats DA-V2 small on the same DIODE-indoor slice (0.0722); MoGe
-  remains the stronger relative-depth model here, just not 2x the
-  paper-row strength under plumbline's current alignment.
+  Paper target (combined val, 771 samples, ROE): 0.0313. Remaining
+  ~49% gap after ROE is most likely indoor-harder-than-outdoor —
+  the paper's combined-val mean benefits from the 446 outdoor
+  samples. A domain=both run on the same MoGe predictions would
+  settle whether the residual is dataset-slice or something else.
+
+  Beats DA-V2 small on the same DIODE-indoor slice (0.0722);
+  roughly matches DA-V2 on unified metric (DA-V2's observed 0.0722
+  vs paper 0.073).
 
   Needs `pip install 'git+https://github.com/microsoft/MoGe.git'`.
-  Indoor-only; domain=both needed for the strict paper A/B.
