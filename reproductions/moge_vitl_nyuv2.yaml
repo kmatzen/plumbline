@@ -38,14 +38,22 @@ depth_clip: [0.001, 10.0]
 
 paper_reference:
   primary_metric: abs_rel
+  # ⚠️ 2026-04-19 CORRECTION: The originally cited "Table 3 NYU 0.0297"
+  # came from the same WebFetch that fabricated a DIODE table 3 row
+  # and a Depth Pro Table 4. The MoGe paper's NYU evaluation lives in
+  # Table 2 (Depth Map Estimation), not Table 3 (which is Camera FOV).
+  # Table 2 DIODE had separate rows for "affine-invariant depth" vs
+  # "affine-invariant disparity" with very different targets (3.13
+  # vs 4.00 Reld); the NYU column almost certainly does too, and
+  # plumbline's scale_shift_robust aligns in INVERSE-DEPTH space so
+  # the correct comparison column is "affine-invariant disparity" —
+  # not the "affine-invariant depth" value 0.0297 we pinned here.
+  # Value left in place pending user confirmation of the real NYU
+  # "affine-invariant disparity" row; observed 0.0305 may or may not
+  # be a paper match depending on which column we're meant to target.
   value: 0.0297
-  # Paper uses ROE (robust optimal estimation) alignment. plumbline has
-  # that now — scale_shift_robust (IRLS + Huber weights, closes the
-  # plain-LSQ gap). Second run (RTX 3090 Ti, 2026-04-19) landed
-  # AbsRel=0.0305 under scale_shift_robust, matching the paper 0.0297
-  # within ~3%. Tolerance tightened from ±20% to ±10%.
-  tolerance_relative: 0.10
-  citation: "Wang et al. 2024, MoGe, Table 3. NYUv2 Eigen test, ViT-L (affine-invariant, ROE)."
+  tolerance_relative: 0.15  # loosened until citation is verified
+  citation: "UNVERIFIED — originally 'Table 3' which is wrong (Table 3 is FOV not depth); user to confirm Table 2 NYU row, affine-invariant disparity column."
 
 notes: >
   ROE run (RTX 3090 Ti, 2026-04-19, 654-sample Eigen test split,
