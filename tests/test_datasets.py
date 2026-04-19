@@ -20,6 +20,14 @@ from plumbline.datasets.eth3d import (
     parse_colmap_images,
     quat_to_rot,
 )
+from plumbline.datasets.kitti import (
+    KITTIDataset,
+    eigen_crop_mask,
+    garg_crop_mask,
+    load_kitti_calib,
+    load_kitti_depth_png_to_m,
+    parse_eigen_sample_list,
+)
 from plumbline.datasets.scannet import ScanNetDataset, load_scannet_pose
 from plumbline.datasets.sintel import SintelDataset, load_cam, load_dpt
 
@@ -270,3 +278,310 @@ class TestETH3D:
     def test_quat_to_rot_normalizes(self) -> None:
         R = quat_to_rot(np.array([2.0, 0.0, 0.0, 0.0]))
         np.testing.assert_allclose(R, np.eye(3), atol=1e-12)
+
+
+# ---------------------------------------------------------------------------
+# KITTI
+# ---------------------------------------------------------------------------
+
+
+def _write_fake_kitti(
+    root: Path,
+    *,
+    date: str = "2011_09_26",
+    drive_ids: tuple[int, ...] = (2,),
+    frames: int = 3,
+    depth_split: str = "val",
+    camera: str = "image_02",
+    H: int = 16,
+    W: int = 32,
+) -> list[tuple[str, str, str]]:
+    """Lay out a minimal KITTI-shaped tree and return the (drive, frame, cam) entries."""
+    entries: list[tuple[str, str, str]] = []
+    date_dir = root / "raw" / date
+    date_dir.mkdir(parents=True, exist_ok=True)
+
+    # calib_cam_to_cam.txt — only the P_rect_<NN> lines matter for the loader.
+    # Values use fx=fy=100, cx=W/2, cy=H/2 (baseline term set to 0 for image_02
+    # / image_03 on a rectified rig is fine for this synthetic test).
+    calib_lines = [
+        "calib_time: synthetic",
+        f"P_rect_02: 100 0 {W / 2} 0 0 100 {H / 2} 0 0 0 1 0",
+        f"P_rect_03: 100 0 {W / 2} 0 0 100 {H / 2} 0 0 0 1 0",
+    ]
+    (date_dir / "calib_cam_to_cam.txt").write_text("\n".join(calib_lines) + "\n")
+
+    for drive_id in drive_ids:
+        drive = f"{date}_drive_{drive_id:04d}_sync"
+        img_dir = root / "raw" / date / drive / camera / "data"
+        img_dir.mkdir(parents=True, exist_ok=True)
+        gt_dir = (
+            root
+            / "depth_annotated"
+            / depth_split
+            / drive
+            / "proj_depth"
+            / "groundtruth"
+            / camera
+        )
+        gt_dir.mkdir(parents=True, exist_ok=True)
+
+        for fi in range(frames):
+            frame_id = f"{fi:010d}"
+            Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
+                img_dir / f"{frame_id}.png"
+            )
+            # Depth: uint16, meters * 256. Use a nontrivial pattern with some
+            # zero (invalid) pixels so the loader's 0-preservation is testable.
+            depth_m = np.full((H, W), 5.0, dtype=np.float32)
+            depth_m[0, :] = 0.0  # simulate invalid top row
+            depth_u16 = (depth_m * 256.0).astype(np.uint16)
+            Image.fromarray(depth_u16).save(gt_dir / f"{frame_id}.png")
+            entries.append((drive, frame_id, camera))
+    return entries
+
+
+class TestKITTI:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable):
+            KITTIDataset(root=tmp_path / "nope")
+
+    def test_missing_raw_subtree(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        (tmp_path / "depth_annotated").mkdir()
+        with pytest.raises(DatasetNotAvailable, match="raw tree"):
+            KITTIDataset(root=tmp_path)
+
+    def test_missing_depth_subtree(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        (tmp_path / "raw").mkdir()
+        with pytest.raises(DatasetNotAvailable, match="annotated-depth"):
+            KITTIDataset(root=tmp_path)
+
+    def test_invalid_camera(self, tmp_path: Path) -> None:
+        (tmp_path / "raw").mkdir()
+        (tmp_path / "depth_annotated").mkdir()
+        with pytest.raises(ValueError, match="image_02"):
+            KITTIDataset(root=tmp_path, camera="rgb")
+
+    def test_scan_basic_load(self, tmp_path: Path) -> None:
+        _write_fake_kitti(tmp_path, frames=3)
+        ds = KITTIDataset(root=tmp_path)
+        samples = list(ds)
+        assert len(samples) == 3
+        s = samples[0]
+        assert s.num_views == 1
+        assert s.images.shape == (1, 16, 32, 3)
+        assert s.depth_gt is not None and s.depth_gt.shape == (1, 16, 32)
+        # Depth round-trip: 5.0 m encoded as uint16 and decoded should return 5.0.
+        assert abs(float(s.depth_gt[0, -1, -1]) - 5.0) < 1e-3
+        # Invalid pixels should remain exactly 0 after decoding.
+        assert float(s.depth_gt[0, 0, 0]) == 0.0
+        # Extrinsics identity; intrinsics match the synthetic P_rect_02.
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-5)
+        assert s.intrinsics[0, 0, 0] == 100 and s.intrinsics[0, 1, 1] == 100
+
+    def test_apply_garg_crop_sets_depth_valid(self, tmp_path: Path) -> None:
+        _write_fake_kitti(tmp_path, frames=1, H=100, W=200)
+        ds = KITTIDataset(root=tmp_path, apply_garg_crop=True)
+        s = next(iter(ds))
+        assert s.depth_valid is not None
+        assert s.depth_valid.shape == (1, 100, 200)
+        # Garg crop excludes the top ~40% of rows — our synthetic invalid top
+        # row (y=0) is guaranteed to be outside the crop.
+        assert not bool(s.depth_valid[0, 0, 100])
+        # A row near the bottom, middle column should be inside.
+        assert bool(s.depth_valid[0, 90, 100])
+        assert s.metadata["crop"] == "garg"
+
+    def test_apply_eigen_crop_sets_depth_valid(self, tmp_path: Path) -> None:
+        _write_fake_kitti(tmp_path, frames=1, H=100, W=200)
+        ds = KITTIDataset(root=tmp_path, apply_eigen_crop=True)
+        s = next(iter(ds))
+        assert s.depth_valid is not None
+        assert s.metadata["crop"] == "eigen"
+
+    def test_garg_and_eigen_crops_mutually_exclusive(self, tmp_path: Path) -> None:
+        _write_fake_kitti(tmp_path, frames=1)
+        with pytest.raises(ValueError, match="mutually exclusive"):
+            KITTIDataset(root=tmp_path, apply_garg_crop=True, apply_eigen_crop=True)
+
+    def test_scan_picks_up_multiple_drives(self, tmp_path: Path) -> None:
+        _write_fake_kitti(tmp_path, drive_ids=(2, 5), frames=2)
+        ds = KITTIDataset(root=tmp_path)
+        assert len(ds) == 4
+        drives = {s.metadata["drive"] for s in ds}
+        assert drives == {
+            "2011_09_26_drive_0002_sync",
+            "2011_09_26_drive_0005_sync",
+        }
+
+    def test_scan_skips_images_without_gt(self, tmp_path: Path) -> None:
+        entries = _write_fake_kitti(tmp_path, frames=3)
+        # Delete one GT file BEFORE instantiating the loader so the initial
+        # scan sees the mismatch and silently drops that frame.
+        drive, frame_id, cam = entries[1]
+        gt_path = (
+            tmp_path
+            / "depth_annotated"
+            / "val"
+            / drive
+            / "proj_depth"
+            / "groundtruth"
+            / cam
+            / f"{frame_id}.png"
+        )
+        gt_path.unlink()
+        ds = KITTIDataset(root=tmp_path)
+        assert len(ds) == 2
+        frame_ids = {s.metadata["frame_id"] for s in ds}
+        assert frame_id not in frame_ids
+
+    def test_manifest_cached_and_reused(self, tmp_path: Path) -> None:
+        _write_fake_kitti(tmp_path, frames=2)
+        KITTIDataset(root=tmp_path)
+        manifest_dir = tmp_path / ".plumbline_manifest"
+        assert manifest_dir.exists()
+        # Re-opening should use the cached manifest (same record count).
+        ds2 = KITTIDataset(root=tmp_path)
+        assert len(ds2) == 2
+
+    def test_sample_list_monodepth2_format(self, tmp_path: Path) -> None:
+        entries = _write_fake_kitti(tmp_path, frames=3)
+        list_path = tmp_path / "eigen_test.txt"
+        with list_path.open("w") as f:
+            f.write("# comment\n\n")
+            # Monodepth2 format: "<date>/<drive>_sync <frame> l|r"
+            for drive, frame_id, _cam in entries[:2]:
+                # Strip leading zeros to test zero-padding canonicalization.
+                bare = str(int(frame_id))
+                f.write(f"2011_09_26/{drive} {bare} l\n")
+        ds = KITTIDataset(root=tmp_path, sample_list=list_path)
+        samples = list(ds)
+        assert len(samples) == 2
+        assert samples[0].metadata["frame_id"].startswith("000000")
+
+    def test_sample_list_requires_matching_camera(self, tmp_path: Path) -> None:
+        entries = _write_fake_kitti(tmp_path, frames=1)
+        list_path = tmp_path / "list.txt"
+        drive, frame_id, _cam = entries[0]
+        list_path.write_text(f"2011_09_26/{drive} {frame_id} r\n")
+        with pytest.raises(ValueError, match="does not match"):
+            KITTIDataset(root=tmp_path, sample_list=list_path, camera="image_02")
+
+    def test_sample_list_missing_file_errors(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        _write_fake_kitti(tmp_path, frames=1)
+        with pytest.raises(DatasetNotAvailable, match="sample_list not found"):
+            KITTIDataset(root=tmp_path, sample_list=tmp_path / "missing.txt")
+
+    def test_sample_list_entry_without_data_errors(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        _write_fake_kitti(tmp_path, frames=1)
+        list_path = tmp_path / "list.txt"
+        # Point at a frame that doesn't exist on disk.
+        list_path.write_text(
+            "2011_09_26/2011_09_26_drive_0002_sync 0000009999 l\n"
+        )
+        with pytest.raises(DatasetNotAvailable, match="Missing data"):
+            KITTIDataset(root=tmp_path, sample_list=list_path)
+
+    def test_load_kitti_calib_image_02(self, tmp_path: Path) -> None:
+        p = tmp_path / "calib_cam_to_cam.txt"
+        p.write_text(
+            "calib_time: x\n"
+            "P_rect_02: 721.5377 0 609.5593 44.85728 0 721.5377 172.854 0.2163791 "
+            "0 0 1 0.002745884\n"
+        )
+        K = load_kitti_calib(p, camera="image_02")
+        assert K.shape == (3, 3) and K.dtype == np.float32
+        assert abs(K[0, 0] - 721.5377) < 1e-3
+        assert abs(K[0, 2] - 609.5593) < 1e-3
+
+    def test_load_kitti_calib_missing_key(self, tmp_path: Path) -> None:
+        p = tmp_path / "calib_cam_to_cam.txt"
+        p.write_text("P_rect_01: 1 0 0 0 0 1 0 0 0 0 1 0\n")
+        with pytest.raises(ValueError, match="P_rect_02"):
+            load_kitti_calib(p, camera="image_02")
+
+    def test_load_kitti_depth_png_roundtrip(self, tmp_path: Path) -> None:
+        depth_m = np.array([[0.0, 1.5, 5.25], [10.0, 20.0, 0.0]], dtype=np.float32)
+        depth_u16 = (depth_m * 256.0).astype(np.uint16)
+        p = tmp_path / "d.png"
+        Image.fromarray(depth_u16).save(p)
+        loaded = load_kitti_depth_png_to_m(p)
+        np.testing.assert_allclose(loaded, depth_m, atol=1e-3)
+        assert loaded.dtype == np.float32
+
+    def test_load_kitti_depth_rejects_wrong_dtype(self, tmp_path: Path) -> None:
+        p = tmp_path / "d.png"
+        Image.fromarray(np.zeros((4, 4, 3), dtype=np.uint8)).save(p)
+        with pytest.raises(ValueError, match="uint16"):
+            load_kitti_depth_png_to_m(p)
+
+    def test_parse_eigen_sample_list_monodepth2(self, tmp_path: Path) -> None:
+        p = tmp_path / "list.txt"
+        p.write_text(
+            "# comment\n"
+            "2011_09_26/2011_09_26_drive_0002_sync 69 l\n"
+            "2011_09_26/2011_09_26_drive_0002_sync 54 r\n"
+        )
+        entries = parse_eigen_sample_list(p)
+        assert entries == [
+            ("2011_09_26_drive_0002_sync", "0000000069", "image_02"),
+            ("2011_09_26_drive_0002_sync", "0000000054", "image_03"),
+        ]
+
+    def test_parse_eigen_sample_list_explicit_camera(self, tmp_path: Path) -> None:
+        p = tmp_path / "list.txt"
+        p.write_text("2011_09_26_drive_0002_sync 0000000069 image_02\n")
+        entries = parse_eigen_sample_list(p)
+        assert entries == [("2011_09_26_drive_0002_sync", "0000000069", "image_02")]
+
+    def test_parse_eigen_sample_list_rejects_bad_line(self, tmp_path: Path) -> None:
+        p = tmp_path / "list.txt"
+        p.write_text("drive_sync 12345\n")  # only 2 fields
+        with pytest.raises(ValueError, match="3 whitespace fields"):
+            parse_eigen_sample_list(p)
+
+    def test_parse_eigen_sample_list_rejects_bad_camera(self, tmp_path: Path) -> None:
+        p = tmp_path / "list.txt"
+        p.write_text("2011_09_26_drive_0002_sync 0000000069 middle\n")
+        with pytest.raises(ValueError, match="camera token"):
+            parse_eigen_sample_list(p)
+
+    def test_parse_eigen_sample_list_rejects_empty(self, tmp_path: Path) -> None:
+        p = tmp_path / "list.txt"
+        p.write_text("# just a comment\n\n")
+        with pytest.raises(ValueError, match="0 sample entries"):
+            parse_eigen_sample_list(p)
+
+    def test_garg_crop_mask_shape_and_extent(self) -> None:
+        mask = garg_crop_mask((375, 1242))
+        assert mask.shape == (375, 1242) and mask.dtype == bool
+        # Spec-checks: top row and bottom row should be outside the crop.
+        assert not mask[0].any()
+        assert not mask[-1].any()
+        # A sizable middle region should be inside.
+        assert mask[200, 600]
+
+    def test_eigen_and_garg_crops_differ(self) -> None:
+        # Eigen and Garg overlap substantially but neither contains the other:
+        # Garg's bottom extends further than Eigen's (0.992 vs 0.914),
+        # while Eigen's top extends further than Garg's (0.332 vs 0.408).
+        eigen = eigen_crop_mask((375, 1242))
+        garg = garg_crop_mask((375, 1242))
+        assert eigen.shape == garg.shape == (375, 1242)
+        assert int(eigen.sum()) > 0 and int(garg.sum()) > 0
+        # Asymmetric containment: there are rows only in one mask and rows only
+        # in the other.
+        rows_only_in_eigen = (eigen & ~garg).any(axis=1)
+        rows_only_in_garg = (garg & ~eigen).any(axis=1)
+        assert rows_only_in_eigen.any()
+        assert rows_only_in_garg.any()

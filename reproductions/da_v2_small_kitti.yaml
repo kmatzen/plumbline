@@ -1,0 +1,54 @@
+# Depth Anything V2 (small) on KITTI Eigen test split
+#
+# Outdoor counterpart to da-v2-small-nyuv2. KITTI Eigen is the default
+# outdoor mono-depth benchmark: 652-image with-GT subset, evaluated
+# against the KITTI Depth-Prediction Benchmark's annotated dense depth
+# maps (Uhrig et al. 2017). The DA-V2 paper's Table 2 reports relative-
+# depth ViT-S numbers for this protocol.
+
+name: da-v2-small-kitti
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: small
+
+dataset:
+  name: kitti
+  kwargs:
+    # Sample list must be supplied by the user — download from
+    # https://github.com/nianticlabs/monodepth2/tree/master/splits/eigen
+    # or the reference implementation being reproduced. Uncomment and
+    # point at your local file:
+    # sample_list: /path/to/kitti_eigen_test_files_with_gt.txt
+    camera: image_02
+    apply_garg_crop: true
+
+tasks:
+  - mono_depth
+
+# DA-V2 predicts relative disparity — same MiDaS protocol as NYU.
+scale_alignment: scale_shift
+max_views: 1
+device: cuda:0
+# KITTI standard eval cap (meters). Papers typically clip aligned
+# predictions to this range before metric computation.
+depth_clip: [0.001, 80.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # DA-V2 paper (Yang et al. 2024), Table 2: KITTI zero-shot AbsRel for
+  # the relative ViT-S. PLACEHOLDER — fill in from the paper table once
+  # you're running against real KITTI data, the same way vggt-paper-
+  # scannet-depth will be filled in when ScanNet lands.
+  value: 0.0  # TODO: pin from DA-V2 paper Table 2, KITTI row, ViT-S AbsRel.
+  tolerance_relative: 0.10
+  citation: "Yang et al. 2024, Depth Anything V2, Table 2. KITTI Eigen test, ViT-S (relative)."
+
+notes: >
+  Blocked on user-supplied KITTI data + a pinned sample list. Both the raw
+  drives (https://www.cvlibs.net/datasets/kitti/raw_data.php) and the
+  annotated-depth archive (data_depth_annotated.zip from
+  https://www.cvlibs.net/datasets/kitti/eval_depth.php) are public — no
+  ToS — so this is just a download/unpack away. Garg crop is the standard
+  for DA-V2's KITTI evaluation.

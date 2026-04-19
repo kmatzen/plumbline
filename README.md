@@ -13,9 +13,10 @@ will still change before 1.0.
 - **5 model adapters** fully wired: DA-V2 (6 variants including metric
   Indoor/Outdoor), DA3, Metric3Dv2 (ViT-S/L/Giant2), MASt3R (PairViewer,
   2-view), VGGT.
-- **4 datasets**: NYUv2 (Eigen 2014 protocol, rawDepths), ETH3D high-res
+- **5 datasets**: NYUv2 (Eigen 2014 protocol, rawDepths), ETH3D high-res
   multi-view, Sintel (RGB + flow; depth archive still gated), ScanNet
-  (loader ready; data still gated).
+  (loader ready; data still gated), KITTI (Eigen split against annotated
+  GT — loader + Garg/Eigen crops ready).
 - **7 paper-match NYUv2 reproductions** — see [REPRODUCTIONS.md](./REPRODUCTIONS.md).
 - **Pose metrics** include both absolute per-view and **pairwise
   relative-pose AUC** (the aggregation VGGT / MASt3R / DUSt3R papers
@@ -98,8 +99,13 @@ See the "Note on the NYUv2 Eigen 2014 protocol" section of
 - `depth-anything-v2-sintel` — Sintel loader works on the public RGB
   bundle, but the paper's AbsRel target needs the auth-gated depth +
   camera archive.
+- `da-v2-small-kitti` / `metric3d-v2-kitti` — KITTI loader + Garg/Eigen
+  crop masks landed; reproductions need the user to (a) unpack the
+  public KITTI raw + annotated-depth archives under `$KITTI_ROOT` and
+  (b) supply a pinned Eigen sample list (e.g. from Monodepth2's
+  `splits/eigen`).
 
-Both reproductions will run end-to-end the moment those datasets land.
+All of these run end-to-end the moment their data lands.
 
 ## Documentation
 
