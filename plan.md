@@ -648,8 +648,8 @@ Full current + planned adapter roster so no one loses track.
 | DIODE | **shipped**, seg-mask integration in flight | mixed indoor/outdoor dense-LiDAR (MoGe / DA-V2 paper rows) |
 | ETH3D high-res | **shipped** | multi-view chamfer (VGGT / DA3 / MASt3R) |
 | DTU MVS | **shipped**, GT download in flight | v0.1 paper-match gate (VGGT Table 2) |
-| **Co3Dv2** | planned (Tier 2) | pose paper rows (VGGT Table 1, DUSt3R, MASt3R) |
-| **GSO** | planned (Tier 2) | synthetic clean-GT (MoGe Table 1/2) |
+| **Co3Dv2** | loader **shipped** (2026-04-19) | pose paper rows (VGGT Table 1, DUSt3R, MASt3R) |
+| **GSO** | loader **shipped** (2026-04-19), 1030 objects on disk | synthetic clean-GT (MoGe Table 1/2) |
 | **7Scenes** | planned (Tier 3) | classical relocalization |
 | **iBims-1** | planned (Tier 3) | high-fidelity indoor synthetic |
 | Sintel | **deprioritized 2026-04-19** | auth-gated; substituted by GSO / iBims-1 |
