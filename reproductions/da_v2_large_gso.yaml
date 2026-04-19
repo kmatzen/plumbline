@@ -1,0 +1,48 @@
+# Depth Anything V2 (large) on GSO (Google Scanned Objects)
+#
+# Third public GSO reproduction, matching moge-vitl-gso and da3-gso.
+# All three use the same scale_shift_robust (ROE) alignment so the
+# numbers are directly comparable.
+#
+# Paper target UNVERIFIED — DA-V2 paper (Yang et al. 2024) does not
+# natively report GSO. Any GSO row for DA-V2 would come from a
+# downstream comparison table (e.g. MoGe paper's baseline columns).
+# Informational-only until the user pins a target.
+
+name: da-v2-large-gso
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+dataset:
+  name: gso
+
+tasks:
+  - mono_depth
+
+scale_alignment: scale_shift_robust
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 100.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.0  # PLACEHOLDER
+  tolerance_relative: 1.0
+  citation: "Yang et al. 2024, Depth Anything V2 (no native GSO). UNVERIFIED — informational row."
+
+notes: >
+  Observed (RTX 3090 Ti, 2026-04-19, full 1030-object eval split, ROE):
+      AbsRel   0.0122
+      delta_1  0.9999
+      delta_2  1.0000
+      delta_3  1.0000
+
+  Slots between MoGe-1 (0.0094) and DA3 (0.0150) on the same archive.
+  All three models are effectively at-ceiling on synthetic clean-GT.
+  DA-V2-Large lands closer to MoGe than DA3 does despite also being
+  zero-shot on GSO, likely because DA-V2's training mix overlaps more
+  with the rendering conventions MoGe used (both lean on Objects-
+  style renders).
