@@ -95,8 +95,10 @@ See the "Note on the NYUv2 Eigen 2014 protocol" section of
 
 ## Not yet reproducible without user-supplied credentials
 
-- `vggt-paper-scannet-depth` — VGGT wiring complete + sanity-checked;
-  blocked on ScanNet ToS signup + `$SCANNET_ROOT`.
+- `vggt-paper-dtu-mvs` — v0.1 paper-match gate. Pins VGGT Table 2's
+  chamfer=0.382 on DTU. Blocked on the DTU loader (follows; data is
+  public, no ToS). **Replaces** the previous `vggt-paper-scannet-depth`
+  placeholder, which assumed a VGGT paper table that doesn't exist.
 - `depth-anything-v2-sintel` — Sintel loader works on the public RGB
   bundle, but the paper's AbsRel target needs the auth-gated depth +
   camera archive.
