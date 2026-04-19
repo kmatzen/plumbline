@@ -132,6 +132,9 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
         depth_clip=depth_clip,
         pointcloud_alignment=cfg.get("pointcloud_alignment", "none"),
         chamfer_outlier_distance=cfg.get("chamfer_outlier_distance"),
+        mask_boundaries=bool(cfg.get("mask_boundaries", False)),
+        boundary_thickness=int(cfg.get("boundary_thickness", 1)),
+        boundary_tol=float(cfg.get("boundary_tol", 0.1)),
     )
 
     paper = cfg.get("paper_reference", {})

@@ -36,9 +36,11 @@ dataset:
 tasks:
   - mono_depth
 
-# Marigold outputs relative depth in [0, 1] — use scale_shift_robust
-# (ROE) alignment, same protocol that closed the MoGe NYU gap to paper.
-scale_alignment: scale_shift_robust
+# Marigold outputs affine-invariant depth in [0, 1] — the paper
+# protocol fits scale+shift in DEPTH space (gt ≈ s*pred + b), not the
+# disparity-space fit DA-V2 / MoGe use. scale_shift_depth is the
+# matching alignment mode.
+scale_alignment: scale_shift_depth
 max_views: 1
 device: cuda:0
 depth_clip: [0.001, 10.0]
@@ -50,9 +52,25 @@ paper_reference:
   citation: "Ke et al. 2024, Marigold, Table 2. NYUv2 Eigen test, v1-0 (affine-invariant)."
 
 notes: >
+  First GPU run (RTX 3090 Ti, 2026-04-19, 654-sample Eigen test,
+  paper protocol 4 steps × 10 ensemble × fp16 × seed=2024,
+  scale_shift_depth alignment):
+      AbsRel   0.0577
+      delta_1  0.9605
+      RMSE     ~0.22 m
+
+  Effective paper match (±5% off target 0.055). First attempt used
+  plumbline's standard `scale_shift_robust` (fit in disparity space)
+  and landed AbsRel 0.1645 — ~3x off — because Marigold's output
+  is affine-invariant depth (values linear in depth, not disparity).
+  Switching to scale_shift_depth (fit s*pred + b = gt_depth in
+  depth space) recovered the match.
+
+  Diffusion adapter infrastructure validated. Stochastic ensemble
+  output reproduces cleanly when the seed is pinned (cached
+  predictions hash key includes the seed).
+
   Needs `pip install diffusers` (bundled in the models extra).
-  Expected wall time on 3090 Ti: ~30 min for the 654-sample Eigen
-  split at paper protocol (4 steps × 10 ensemble = 40 UNet passes
-  per sample × ~130 ms/pass = ~5 s/sample). Speed mode
-  (num_inference_steps=1, ensemble_size=1) drops to ~1 min total
-  but sacrifices precision — use for dev loops, not for the pin.
+  Wall time: ~28 min for 654 samples at paper protocol on 3090 Ti
+  (4 × 10 × 0.13s UNet + VAE = ~2.5 s/sample, dominated by the
+  ensemble averaging).

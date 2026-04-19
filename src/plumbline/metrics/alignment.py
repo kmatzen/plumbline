@@ -205,9 +205,18 @@ def align_depth(
         Boolean mask of pixels to use for fitting. ``None`` = use all pixels
         where both pred and gt are positive and finite.
     mode
-        One of ``"none"``, ``"median"``, ``"lstsq"``, ``"scale_shift"``,
-        ``"scale_shift_robust"``. The last is ROE — matches MoGe's paper
-        protocol and downweights outliers per-sample.
+        One of:
+          - ``"none"`` — no alignment (metric models)
+          - ``"median"`` / ``"lstsq"`` — scale-only in depth space
+          - ``"scale_shift"`` — scale+shift in inverse-depth (disparity)
+            space. Matches MiDaS / DA-V2 / MoGe "affine-invariant
+            disparity" protocol.
+          - ``"scale_shift_robust"`` — same as scale_shift but IRLS +
+            Huber weights (MoGe paper's ROE).
+          - ``"scale_shift_depth"`` — scale+shift fit in DEPTH space.
+            Matches Marigold / Depth Pro / "affine-invariant depth"
+            protocols. The model output is a depth value where
+            ``s * pred + b = gt_depth`` is the natural fit.
     """
     if mode == "none":
         return pred
@@ -235,6 +244,15 @@ def align_depth(
             inv = 1.0 / np.maximum(out, EPS)
             inv = s * inv + b
             out = 1.0 / np.maximum(inv, EPS)
+        return out
+    if mode == "scale_shift_depth":
+        # Fit in depth space: gt_depth ≈ s * pred + b (no 1/. wrapping).
+        # Matches Marigold / Depth Pro protocol where the model already
+        # outputs a depth-like [0, 1] and the paper eval is depth-space
+        # LSQ.
+        s, b = align_scale_and_shift(pred, gt, valid, space="depth")
+        if np.isfinite(s) and np.isfinite(b):
+            out = s * out + b
         return out
     raise ValueError(f"unknown alignment mode '{mode}'")
 

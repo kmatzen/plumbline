@@ -85,6 +85,9 @@ def evaluate(
     depth_clip: tuple[float, float] | None = None,
     pointcloud_alignment: str = "none",
     chamfer_outlier_distance: float | None = None,
+    mask_boundaries: bool = False,
+    boundary_thickness: int = 1,
+    boundary_tol: float = 0.1,
 ) -> Report:
     """Evaluate a model on a dataset and return a :class:`Report`.
 
@@ -167,6 +170,9 @@ def evaluate(
             depth_clip=depth_clip,
             pointcloud_alignment=pointcloud_alignment,
             chamfer_outlier_distance=chamfer_outlier_distance,
+            mask_boundaries=mask_boundaries,
+            boundary_thickness=boundary_thickness,
+            boundary_tol=boundary_tol,
         )
         report.per_sample.append(
             SampleResult(
@@ -266,16 +272,31 @@ def _compute_metrics(
     depth_clip: tuple[float, float] | None = None,
     pointcloud_alignment: str = "none",
     chamfer_outlier_distance: float | None = None,
+    mask_boundaries: bool = False,
+    boundary_thickness: int = 1,
+    boundary_tol: float = 0.1,
 ) -> dict[str, float]:
     out: dict[str, float] = {}
 
     wants_depth = "mono_depth" in tasks or "mvs_depth" in tasks
     if wants_depth and prediction.depth is not None and sample.depth_gt is not None:
+        valid = sample.depth_valid
+        if mask_boundaries:
+            # MoGe / Depth Pro / many mono-depth papers exclude pixels near
+            # GT depth discontinuities from evaluation (sensor noise at
+            # edges). Port of depth_occlusion_edge_numpy: disparity-space
+            # max/min-over-window edge detection + dilation + AND-fg-bg.
+            valid = _apply_boundary_mask(
+                gt=sample.depth_gt,
+                valid=valid,
+                thickness=boundary_thickness,
+                tol=boundary_tol,
+            )
         out.update(
             _depth_metrics(
                 pred=prediction.depth,
                 gt=sample.depth_gt,
-                valid=sample.depth_valid,
+                valid=valid,
                 scale_alignment=scale_alignment,
                 delta_thresholds=delta_thresholds,
                 depth_clip=depth_clip,
@@ -591,6 +612,41 @@ def _try_empty_cuda_cache() -> None:
             torch.cuda.empty_cache()
     except Exception:
         pass
+
+
+def _apply_boundary_mask(
+    *,
+    gt: NDArray[Any],
+    valid: NDArray[Any] | None,
+    thickness: int,
+    tol: float,
+) -> NDArray[np.bool_]:
+    """AND MoGe's boundary-edge mask into the existing valid mask.
+
+    Operates on ``(N, H, W)`` or ``(H, W)`` GT depth. Returns a bool
+    array of the same shape with ``False`` where the pixel either
+    wasn't already valid OR was classified as a depth-discontinuity
+    edge by :func:`plumbline.metrics.masks.boundary_edge_mask`.
+    """
+    from plumbline.metrics.masks import boundary_edge_mask
+
+    gt_arr = np.asarray(gt)
+    if valid is None:
+        base_valid = np.isfinite(gt_arr) & (gt_arr > 0)
+    else:
+        base_valid = np.asarray(valid, dtype=bool) & np.isfinite(gt_arr) & (gt_arr > 0)
+
+    if gt_arr.ndim == 2:
+        edge = boundary_edge_mask(gt_arr, base_valid, thickness=thickness, tol=tol)
+        return base_valid & ~edge
+
+    # Batched (N, H, W): process each view independently — the boundary
+    # method is per-image.
+    out = np.empty_like(base_valid)
+    for i in range(gt_arr.shape[0]):
+        edge_i = boundary_edge_mask(gt_arr[i], base_valid[i], thickness=thickness, tol=tol)
+        out[i] = base_valid[i] & ~edge_i
+    return out
 
 
 def _back_project_depth(

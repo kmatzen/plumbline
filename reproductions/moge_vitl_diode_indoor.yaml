@@ -29,6 +29,11 @@ max_views: 1
 device: cuda:0
 depth_clip: [0.001, 50.0]
 
+# MoGe paper protocol: exclude pixels near GT depth discontinuities.
+mask_boundaries: true
+boundary_thickness: 1
+boundary_tol: 0.1
+
 paper_reference:
   primary_metric: abs_rel
   # MoGe paper (Wang et al. 2024), Table 2 Depth-Map Estimation, DIODE
