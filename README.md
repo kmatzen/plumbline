@@ -10,9 +10,9 @@ will still change before 1.0.
 
 ## What works today
 
-- **5 model adapters** fully wired: DA-V2 (6 variants including metric
+- **6 model adapters** fully wired: DA-V2 (6 variants including metric
   Indoor/Outdoor), DA3, Metric3Dv2 (ViT-S/L/Giant2), MASt3R (PairViewer,
-  2-view), VGGT.
+  2-view), VGGT, MoGe (v1 ViT-L + v2 variants including `*-normal`).
 - **7 datasets**: NYUv2 (Eigen 2014 protocol, rawDepths), ETH3D high-res
   multi-view, Sintel (RGB + flow; depth archive still gated), ScanNet
   (loader ready; data still gated), KITTI (Eigen split against annotated
