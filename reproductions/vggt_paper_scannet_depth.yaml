@@ -1,0 +1,66 @@
+# VGGT ScanNet depth — NO LONGER THE V0.1 PAPER-MATCH GATE
+#
+# !!! READ BEFORE TOUCHING !!!
+#
+# The VGGT paper (Wang et al. 2025, arXiv:2503.11651) does NOT report
+# ScanNet depth numbers. Its tables are:
+#   Table 1 — Pose on RealEstate10K / CO3Dv2
+#   Table 2 — Dense MVS on DTU           <-- the real depth/chamfer table
+#   Table 3 — Point maps on ETH3D
+#   Table 4 — Two-view MATCHING on ScanNet-1500 (not depth)
+#
+# The original v0.1 gate referenced by plan.md assumed a ScanNet depth
+# row that doesn't exist. The genuine paper-match gate moved to
+# reproductions/vggt_dtu_mvs.yaml (chamfer=0.382, Table 2).
+#
+# This config is kept, not deleted, because it's still a USEFUL informational
+# target for v0.2: running VGGT on ScanNet is a reasonable community eval
+# even though the paper doesn't report a number there. When ScanNet access
+# lands, treat the observed AbsRel as informational and add it to the
+# "community reproductions" section of REPRODUCTIONS.md — don't claim a
+# paper match.
+
+name: vggt-paper-scannet-depth
+
+model:
+  name: vggt
+  kwargs:
+    # Only one public VGGT checkpoint today: facebook/VGGT-1B (the Large).
+    # If upstream ships additional sizes, add a ``variant`` kwarg and wire it
+    # through VGGTAdapter.__init__ first.
+    dtype: bfloat16
+
+dataset:
+  name: scannet
+  split: test
+  kwargs:
+    frame_stride: 30
+    views_per_sample: 8
+
+tasks:
+  - mvs_depth
+
+# VGGT predicts metric depth, so no scale alignment — this is the whole
+# point of testing it as the metric benchmark.
+scale_alignment: none
+max_views: 8
+device: cuda:0
+
+# OPTIONAL: pin a specific subset of scenes for exact reproduction.
+# The paper's sample list should be materialized as
+# reproductions/vggt_scannet_depth.samples.txt and referenced here.
+# sample_manifest: vggt_scannet_depth.samples.txt
+
+paper_reference:
+  primary_metric: abs_rel
+  # No paper value to pin; VGGT's paper doesn't evaluate on ScanNet depth.
+  # Tolerance permissive so any observed number is treated as informational.
+  tolerance_relative: 1.0
+  citation: "No direct VGGT paper target — see header note. Community eval only."
+
+notes: >
+  Informational only — NOT a paper-match. The real VGGT paper-match config
+  is reproductions/vggt_dtu_mvs.yaml (Table 2). Running this YAML against
+  ScanNet data (when access lands) produces a community-comparable AbsRel;
+  pin the observed number in REPRODUCTIONS.md's "community reproductions"
+  section rather than under "paper-match".

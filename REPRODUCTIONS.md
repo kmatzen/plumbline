@@ -20,6 +20,7 @@ export SCANNET_ROOT=~/data/scannet  # for vggt-paper-scannet-depth
 export SINTEL_ROOT=~/data/sintel    # for depth-anything-v2-sintel
 export KITTI_ROOT=~/data/kitti      # for any *-kitti reproduction
 export DIODE_ROOT=~/data/diode      # for any *-diode-* reproduction
+export DTU_ROOT=~/data/dtu          # for vggt-paper-dtu-mvs
 
 plumbline reproduce <name>
 ```
@@ -39,7 +40,8 @@ value.
 | `metric3d-v2-nyuv2` | Metric3Dv2 ViT-L, NYU Eigen (Table I) | `abs_rel` | 0.063 | **0.0660** | ±10% | ✅ **match** (RTX 3090, 4 min). δ₁: paper 0.975, observed 0.974. |
 | `metric3d-v2-giant-nyuv2` | Metric3Dv2 ViT-Giant2, NYU Eigen (Table I) | `abs_rel` | 0.067 | **0.0702** | ±10% | ✅ **match** (RTX 3090, ~50 min). δ₁: paper 0.980, observed 0.973. |
 | `da3-nyuv2` | DA3 Large-1.1, NYU Eigen (Table 4) | `delta_1` | 0.974 | **0.9684** | ±2% | ✅ **match** (RTX 3090, 2 min). AbsRel=0.051 (informational; Table 4 only reports δ₁). |
-| `vggt-paper-scannet-depth` | VGGT, ScanNet, 8 views | `abs_rel` | _TBD_ | — | ±5% | VGGT wiring complete (RTX 3090 end-to-end sanity on random images ✓). Blocked on ScanNet ToS signup + `$SCANNET_ROOT` data. |
+| `vggt-paper-dtu-mvs` | VGGT, DTU dense MVS (Table 2) | `chamfer` | **0.382** | — | ±5% | **v0.1 paper-match gate** (retargeted from the defunct ScanNet placeholder). Blocked on the DTU loader + public data under `$DTU_ROOT`. |
+| `vggt-paper-scannet-depth` | VGGT on ScanNet (community eval, no paper target) | `abs_rel` | _n/a_ | — | n/a | Informational only — VGGT's paper doesn't evaluate ScanNet depth (Table 4 is matching, not depth). Kept for a future community run; not a paper-match. |
 | `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | ≈0.075 | — | ±15% | blocked on Sintel depth-archive availability |
 | `da-v2-small-kitti` | DA-V2 ViT-S, KITTI Eigen test (Table 2) | `abs_rel` | _TBD_ | — | ±10% | KITTI loader + Garg crop ready. User supplies `$KITTI_ROOT` (public) + pinned Eigen sample list. |
 | `metric3d-v2-kitti` | Metric3Dv2 ViT-L, KITTI Eigen test (Table I) | `abs_rel` | _TBD_ | — | ±10% | same gating as above; no ToS needed. |

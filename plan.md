@@ -9,14 +9,17 @@ deviating from the architecture; feel free to deviate on implementation
 details within each section.
 
 > **Status banner (2026-04-19)** — the original v0.1 gate
-> (`reproduce vggt-paper-scannet-depth`) is implemented but blocked on
-> ScanNet ToS signup + data. In the meantime the harness ships **7
-> paper-match reproductions on NYUv2** across four model families
-> (DA-V2 S/B/L, DA-V2 Metric-Indoor-L, Metric3Dv2 L/Giant2, DA3),
-> plus informational ETH3D courtyard pose sweeps for VGGT and DA3.
-> See [REPRODUCTIONS.md](./REPRODUCTIONS.md) for the live status
-> matrix; see [README.md](./README.md) for a quickstart reflecting
-> this reality rather than the originally-planned Week 1 path.
+> (`reproduce vggt-paper-scannet-depth`) has been **retargeted** to
+> `reproduce vggt-paper-dtu-mvs`. The VGGT paper doesn't actually
+> report ScanNet depth (Table 2 is DTU; ScanNet-1500 is two-view
+> matching, not depth). The DTU gate pins Table 2's chamfer=0.382 and
+> is unblocked on data (DTU is public, no ToS) but blocked on the DTU
+> loader, which arrives in a follow-up. In the meantime the harness
+> ships **7 paper-match reproductions on NYUv2** across four model
+> families (DA-V2 S/B/L, DA-V2 Metric-Indoor-L, Metric3Dv2 L/Giant2,
+> DA3), plus informational ETH3D courtyard pose sweeps for VGGT and
+> DA3 and chamfer reproduction configs for both. See
+> [REPRODUCTIONS.md](./REPRODUCTIONS.md) for the live status matrix.
 
 ---
 
@@ -69,12 +72,17 @@ published number.
 **Acceptance criterion for v0.1:**
 
 ```
-$ plumbline reproduce vggt-paper-scannet-depth
+$ plumbline reproduce vggt-paper-dtu-mvs
 ```
 
-...runs the VGGT model on the ScanNet test split and produces AbsRel/δ₁
-numbers within tolerance of the published VGGT paper table. When this works
-end-to-end and the number is right, v0.1 ships.
+...runs VGGT on the DTU MVS test set and produces chamfer (overall)
+within ±5% of the published 0.382 (VGGT paper Table 2, no-GT-camera
+block). Originally this gate targeted ScanNet depth, but the VGGT
+paper does not evaluate on ScanNet depth — Table 2 (DTU) is the real
+depth/point-map table; ScanNet-1500 (Table 4) is two-view matching.
+See § 11 below for the history; see
+[REPRODUCTIONS.md](./REPRODUCTIONS.md) for the live status. When the
+DTU gate lands within tolerance, v0.1 ships.
 
 ## 3. Canonical conventions (non-negotiable)
 
@@ -301,8 +309,8 @@ laptop-plus-occasional-GPU budget.
 ```
 plumbline list-models
 plumbline list-datasets
-plumbline run --model vggt --dataset scannet --tasks depth,pose
-plumbline reproduce vggt-paper-scannet-depth
+plumbline run --model vggt --dataset dtu --tasks mvs_depth
+plumbline reproduce vggt-paper-dtu-mvs
 plumbline report --json results.json
 plumbline clear-cache [--model X] [--dataset Y]
 ```
@@ -377,12 +385,12 @@ different input shapes, different output formats, and pose.
 - [ ] Implement VGGT adapter. It's the biggest model; validate VRAM usage
       fits in 24GB at the paper's default view count.
 - [ ] Implement ETH3D multi-view loader.
-- [ ] Pick one specific number from the VGGT paper (e.g., ScanNet depth
-      AbsRel). Write `reproductions/vggt_scannet_depth.yaml` pinning exact
-      sample list, view count, alignment mode, resolution.
-- [ ] Run `plumbline reproduce vggt-paper-scannet-depth`. Debug until the
-      number matches the paper within a documented tolerance (e.g., ±5%
-      relative). **This is the v0.1 gate.**
+- [ ] Pick one specific number from the VGGT paper. **Status: Table 2 (DTU
+      dense MVS, chamfer=0.382) is the real depth/point-map target**; the
+      original plan referenced ScanNet depth which the paper does not
+      report. `reproductions/vggt_dtu_mvs.yaml` pins the DTU target.
+- [ ] Run `plumbline reproduce vggt-paper-dtu-mvs`. Debug until the
+      chamfer is within ±5% of 0.382. **This is the v0.1 gate.**
 - [ ] Write `REPRODUCTIONS.md` documenting the exact procedure and the
       published reference.
 - [ ] Commit. Tag `v0.1.0`.

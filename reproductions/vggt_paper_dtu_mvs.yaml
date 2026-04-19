@@ -1,0 +1,59 @@
+# VGGT dense MVS on DTU
+#
+# This is the paper-match configuration that REPLACES the original
+# vggt-paper-scannet-depth gate (the VGGT paper doesn't actually report
+# ScanNet depth — see that YAML's notes). The VGGT paper's headline
+# depth/point-map evaluation is Table 2: Dense MVS Estimation on DTU,
+# measuring accuracy + completeness + overall (chamfer distance).
+#
+# Published VGGT row (Table 2, lower block, "methods that do not know
+# the ground-truth camera"):
+#     Accuracy  0.389
+#     Completeness  0.374
+#     Overall (Chamfer)  0.382
+# Protocol: "follows MASt3R" per paper section 4.2.
+
+name: vggt-paper-dtu-mvs
+
+model:
+  name: vggt
+  kwargs:
+    dtype: bfloat16
+
+dataset:
+  name: dtu
+  # The MASt3R/VGGT protocol uses the standard DTU MVS 22-scan test set.
+  # Exact view count per scan is set by max_views below.
+  kwargs:
+    split: test
+
+tasks:
+  - mvs_depth  # fires the chamfer + F-score runner path
+
+# VGGT predicts a dense point map without GT extrinsics; the predicted
+# frame is set by VGGT's first-view convention. DTU's GT clouds live
+# in a scanner frame. Fit 7-DoF similarity on predicted camera centres
+# → GT centres, then apply to the dense point map before chamfer. This
+# is the same protocol used for ETH3D chamfer reproductions.
+pointcloud_alignment: camera_centers
+max_views: 8
+device: cuda:0
+
+paper_reference:
+  primary_metric: chamfer
+  value: 0.382
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2025, VGGT, Table 2. DTU dense MVS, VGGT (no-GT-camera block). Acc=0.389, Comp=0.374, Overall=0.382."
+
+notes: >
+  BLOCKED on the DTU loader (dataset: dtu is not yet registered — the
+  loader lands in a follow-up commit). Once it does, this YAML is the
+  new v0.1 gate: plumbline reproduce vggt-paper-dtu-mvs should land
+  within ±5% of chamfer=0.382.
+
+  The exact MASt3R DTU protocol has per-scan view counts and an optional
+  outlier-filtering step on the predicted cloud; the first GPU run
+  should measure against the unfiltered prediction, then toggle
+  filtering to measure the sensitivity. Paper tolerance is tight (±5%)
+  because the protocol is well-specified and VGGT inference is ~stable
+  on DTU's clean synthetic imagery.
