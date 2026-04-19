@@ -51,6 +51,41 @@ class _FixedDepthModel(Model):
         return Prediction(depth=depth)
 
 
+class _PointMapModel(Model):
+    """Fake multi-view model that returns an identity point map + extrinsics.
+
+    ``predict`` builds a point map whose XYZ values reconstruct a trivial
+    scene (depth=1 at every pixel for every view) in the first camera's
+    frame, and returns extrinsics that place the cameras along +X at unit
+    spacing. Lets reproduction tests exercise the chamfer / F-score path
+    without needing GPU or HuggingFace downloads.
+    """
+
+    capabilities = ModelCapabilities(
+        tasks=frozenset({"mono_depth", "mvs_depth", "pose"}),
+        is_metric=True,
+        min_views=1,
+        max_views=math.inf,
+    )
+
+    def __init__(self, *, device: str = "cpu") -> None:
+        self.device = device
+
+    def predict(
+        self,
+        images: np.ndarray,
+        intrinsics: np.ndarray | None = None,
+    ) -> Prediction:
+        n, h, w, _ = images.shape
+        # Point map in the first camera's frame: every pixel at Z=1 m.
+        pmap = np.zeros((n, h, w, 3), dtype=np.float32)
+        pmap[..., 2] = 1.0
+        ext = np.tile(np.eye(4, dtype=np.float32)[None], (n, 1, 1))
+        for i in range(n):
+            ext[i, 0, 3] = float(i)  # cameras at x=0, 1, 2, ...
+        return Prediction(point_map=pmap, extrinsics=ext)
+
+
 class _FakeDataset(Dataset):
     split = "test"
 
@@ -71,6 +106,41 @@ class _FakeDataset(Dataset):
         return self.n
 
 
+class _MultiViewPointCloudDataset(Dataset):
+    """3-view synthetic dataset with a GT point cloud — for chamfer tests.
+
+    Cameras placed along +X at unit spacing (matching ``_PointMapModel``'s
+    predicted extrinsic layout) so camera-centre Umeyama on pred → gt is
+    the identity. GT point cloud is a tiny grid at Z=1; predicted point
+    map has the same structure, so aligned chamfer is small.
+    """
+
+    split = "test"
+
+    def __init__(self, *, n_samples: int = 2) -> None:
+        self.n = n_samples
+
+    def __iter__(self) -> Iterator[Sample]:
+        for i in range(self.n):
+            ext = np.tile(np.eye(4, dtype=np.float32)[None], (3, 1, 1))
+            for v in range(3):
+                ext[v, 0, 3] = float(v)
+            pcd = np.array(
+                [[0.0, 0.0, 1.0], [0.5, 0.0, 1.0], [0.0, 0.5, 1.0]],
+                dtype=np.float32,
+            )
+            yield Sample(
+                sample_id=f"s{i}",
+                images=np.zeros((3, 4, 4, 3), dtype=np.uint8),
+                intrinsics=np.tile(np.eye(3, dtype=np.float32)[None], (3, 1, 1)),
+                extrinsics_gt=ext,
+                point_cloud_gt=pcd,
+            )
+
+    def __len__(self) -> int:
+        return self.n
+
+
 @pytest.fixture
 def registered_fakes() -> Iterator[None]:
     """Register the fakes in MODEL_REGISTRY and DATASET_REGISTRY for one test."""
@@ -82,6 +152,26 @@ def registered_fakes() -> Iterator[None]:
     _FakeDataset.name = dataset_name  # type: ignore[attr-defined]
     MODEL_REGISTRY[model_name] = _FixedDepthModel
     DATASET_REGISTRY[dataset_name] = _FakeDataset
+    try:
+        yield
+    finally:
+        MODEL_REGISTRY.clear()
+        MODEL_REGISTRY.update(before_models)
+        DATASET_REGISTRY.clear()
+        DATASET_REGISTRY.update(before_datasets)
+
+
+@pytest.fixture
+def registered_pointmap_fakes() -> Iterator[None]:
+    """Register point-map model + point-cloud dataset for chamfer-path tests."""
+    model_name = "test-pointmap"
+    dataset_name = "test-pointcloud"
+    before_models = dict(MODEL_REGISTRY)
+    before_datasets = dict(DATASET_REGISTRY)
+    _PointMapModel.name = model_name  # type: ignore[attr-defined]
+    _MultiViewPointCloudDataset.name = dataset_name  # type: ignore[attr-defined]
+    MODEL_REGISTRY[model_name] = _PointMapModel
+    DATASET_REGISTRY[dataset_name] = _MultiViewPointCloudDataset
     try:
         yield
     finally:
@@ -359,3 +449,114 @@ paper_reference:
         assert "Reproduction check" in md
         assert "abs_rel" in md
         assert "Match:" in md
+
+
+class TestChamferReproduction:
+    """Regression: ``pointcloud_alignment`` must flow from YAML → runner.
+
+    These tests are what the ETH3D chamfer reproduction YAMLs exercise in
+    production. Without this coverage, silently dropping
+    ``pointcloud_alignment=cfg.get(...)`` in reproduce.py would make every
+    chamfer YAML run *without* the 7-DoF similarity fit, scoring random
+    chamfer against the GT frame — the exact failure mode that 7-DoF
+    alignment was added to prevent.
+    """
+
+    def test_mvs_depth_task_fires_chamfer_and_f_score(
+        self, repro_dir: Path, registered_pointmap_fakes: None
+    ) -> None:
+        _write_yaml(
+            repro_dir / "repro.yaml",
+            """
+name: repro
+model: {name: test-pointmap}
+dataset: {name: test-pointcloud, kwargs: {n_samples: 2}}
+tasks: [mvs_depth]
+pointcloud_alignment: camera_centers
+max_views: 3
+device: cpu
+paper_reference:
+  primary_metric: chamfer
+""".strip(),
+        )
+        result = run_reproduction("repro")
+        metrics = result.report.aggregate_metrics
+        # The chamfer path must fire whenever tasks include mvs_depth AND the
+        # prediction has point_map AND the sample has point_cloud_gt.
+        assert "chamfer" in metrics
+        assert "f_score" in metrics
+        assert "precision" in metrics
+        assert "recall" in metrics
+        # Finite. Exact value depends on GT spread vs predicted point map;
+        # identity camera layout here means Umeyama is the identity so
+        # chamfer equals the GT self-spread, not a near-zero match.
+        assert np.isfinite(metrics["chamfer"])
+        assert metrics["chamfer"] < 1.0
+
+    def test_camera_centers_alignment_beats_none(
+        self, repro_dir: Path, registered_pointmap_fakes: None
+    ) -> None:
+        """With a deliberate world-frame offset, Umeyama alignment should
+        dramatically reduce chamfer vs running without alignment."""
+
+        # Shadow the point-cloud dataset with one whose GT cameras are offset
+        # by +10 m from the predicted extrinsics. Without alignment, pred
+        # point map lives at Z=1 near origin; GT is centred ~10 m away.
+        class _OffsetGTDataset(_MultiViewPointCloudDataset):
+            def __iter__(self) -> Iterator[Sample]:
+                for base in super().__iter__():
+                    ext = base.extrinsics_gt.copy()
+                    ext[:, 0, 3] += 10.0
+                    pcd = base.point_cloud_gt.copy() if base.point_cloud_gt is not None else None
+                    if pcd is not None:
+                        pcd[:, 0] += 10.0
+                    yield Sample(
+                        sample_id=base.sample_id,
+                        images=base.images,
+                        intrinsics=base.intrinsics,
+                        extrinsics_gt=ext,
+                        point_cloud_gt=pcd,
+                    )
+
+        _OffsetGTDataset.name = "test-pointcloud-offset"  # type: ignore[attr-defined]
+        DATASET_REGISTRY["test-pointcloud-offset"] = _OffsetGTDataset
+        try:
+            for mode in ("none", "camera_centers"):
+                _write_yaml(
+                    repro_dir / f"repro_{mode}.yaml",
+                    f"""
+name: repro_{mode}
+model: {{name: test-pointmap}}
+dataset: {{name: test-pointcloud-offset, kwargs: {{n_samples: 1}}}}
+tasks: [mvs_depth]
+pointcloud_alignment: {mode}
+max_views: 3
+device: cpu
+paper_reference:
+  primary_metric: chamfer
+""".strip(),
+                )
+            unaligned = run_reproduction("repro_none").report.aggregate_metrics["chamfer"]
+            aligned = run_reproduction("repro_camera_centers").report.aggregate_metrics["chamfer"]
+            assert unaligned > 5.0, f"expected large chamfer without alignment; got {unaligned}"
+            assert aligned < 1.0, f"expected small chamfer with alignment; got {aligned}"
+            assert aligned < unaligned
+        finally:
+            DATASET_REGISTRY.pop("test-pointcloud-offset", None)
+
+    def test_unknown_pointcloud_alignment_raises(
+        self, repro_dir: Path, registered_pointmap_fakes: None
+    ) -> None:
+        _write_yaml(
+            repro_dir / "repro.yaml",
+            """
+name: repro
+model: {name: test-pointmap}
+dataset: {name: test-pointcloud}
+tasks: [mvs_depth]
+pointcloud_alignment: not-a-real-mode
+device: cpu
+""".strip(),
+        )
+        with pytest.raises(ValueError, match="unknown pointcloud_alignment"):
+            run_reproduction("repro")
