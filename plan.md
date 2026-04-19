@@ -8,20 +8,32 @@ This document is the spec. Work through it section by section. Ask before
 deviating from the architecture; feel free to deviate on implementation
 details within each section.
 
-> **Status banner (2026-04-19)** — the original v0.1 gate
-> (`reproduce vggt-paper-scannet-depth`) has been **retargeted** to
-> `reproduce vggt-paper-dtu-mvs`. The VGGT paper doesn't actually
-> report ScanNet depth (Table 2 is DTU; ScanNet-1500 is two-view
-> matching, not depth). The DTU gate pins Table 2's chamfer=0.382; the
-> DTU loader is implemented, and data is public (no ToS) — unblocks as
-> soon as someone runs it on GPU with `$DTU_ROOT` set. Meanwhile, the
-> harness
-> ships **7 paper-match reproductions on NYUv2** across four model
-> ships **7 paper-match reproductions on NYUv2** across four model
-> families (DA-V2 S/B/L, DA-V2 Metric-Indoor-L, Metric3Dv2 L/Giant2,
-> DA3), plus informational ETH3D courtyard pose sweeps for VGGT and
-> DA3 and chamfer reproduction configs for both. See
-> [REPRODUCTIONS.md](./REPRODUCTIONS.md) for the live status matrix.
+> **Status banner (2026-04-19, after GPU session)** —
+>
+> v0.1 gate `reproduce vggt-paper-dtu-mvs` retargeted from the
+> defunct ScanNet placeholder; DTU GT download running in
+> background (SampleSet.zip, 6.9 GB at ~680 KB/s). Spent a GPU
+> session (RTX 3090 Ti) pinning real numbers across 6 model
+> adapters and 5 datasets.
+>
+> | Family | Paper-match rows |
+> |---|---|
+> | NYU mono-depth | **7** (DA-V2 S/B/L + Metric-Indoor-L, Metric3Dv2 L/Giant2, DA3) |
+> | DIODE mono-depth | **2** (DA-V2-small indoor, MoGe-1-ROE indoor) |
+> | MoGe NYU (ROE) | **1** (MoGe-1 0.0305 vs paper 0.0297) |
+> | ETH3D / DTU chamfer | **0** (infrastructure works but ~100× off paper — protocol gap) |
+> | KITTI / Sintel / ScanNet depth | **0** (data partial or gated) |
+> | VGGT/MASt3R/DA3 paper pose tables | **0** (no loaders for ScanNet-1500 / RealEstate10K / Co3Dv2) |
+>
+> Major session wins: ROE alignment (`scale_shift_robust`) closed
+> MoGe NYU to paper; ICP alignment mode + chamfer outlier-mask +
+> depth→point-map back-projection all shipped as infrastructure;
+> 16 GPU reproductions pinned with zero regressions on the 7-row
+> NYU matrix. Major session find: an earlier celebration of a
+> "500× ETH3D F-score improvement" was a unit misread (f_score
+> returns percent, not fraction); the real improvement was 5.6×.
+> See [REPRODUCTIONS.md](./REPRODUCTIONS.md) for the live status;
+> see § 10 below for the revised v0.2 roadmap.
 
 ---
 
@@ -461,21 +473,99 @@ These are the parts that determine whether the harness is trusted.
   even with seeds; document the tolerance and don't chase bitwise
   reproducibility.
 
-## 10. Out-of-scope parking lot (v0.2 and beyond)
+## 10. v0.2 roadmap (ordered by paper-gap leverage)
 
-Capture ideas here instead of building them:
-- Novel-view synthesis evaluation (PSNR/SSIM/LPIPS).
-- Point tracking evaluation.
-- Uncertainty calibration metrics.
-- Failure-case browser web UI.
-- Nightly CI running the full suite.
-- Hosted leaderboard site.
-- Additional models: π³, MoGe, CUT3R, MonST3R, Fast3R, Depth Pro, MapAnything
-  backends.
-- Additional datasets: TUM-dynamics, CO3Dv2, KITTI, DTU, NYUv2, Tanks &
-  Temples, Replica.
-- HDR / linear-color evaluation path (leverages framewright).
-- Distributed eval across multiple GPUs.
+Revised 2026-04-19 after a GPU-validation session pinned 16 reproductions
+on an RTX 3090 Ti. The session surfaced a clearer picture of what's
+missing and which items matter most for reproducing published tables.
+
+### Tier 1 — close known paper gaps
+
+1. **ETH3D / DTU chamfer protocol rewrite.** The single biggest gap.
+   Current chamfer produces ~1% F-score where VGGT / MASt3R / DA3
+   papers report 60-90%. Infrastructure (ICP 7-DoF, chamfer + F-score,
+   0.5 m outlier mask, back-projection from depth+K+E, `workers=-1`)
+   all works; the remaining 100× gap is almost certainly that papers
+   evaluate on a **full-scene GT mesh** with their predictions **fused
+   across views** before comparing, not per-sample 8-view-window
+   chamfer against a laser-scan subset. Task: find and port the actual
+   MASt3R / MVSNet eval pipeline.
+
+2. **KITTI reproduction.** Loader exists; data partially downloaded
+   (annotated-depth GT on disk at `/home/claude/data/kitti`). Needs:
+   per-drive raw imagery for the ~28 drives in the Eigen-with-GT test
+   split, plus a pinned sample list. Unblocks DA-V2 / Metric3Dv2 /
+   MoGe KITTI rows — at least 3 paper rows per model.
+
+3. **DIODE outdoor protocol.** Indoor-only matches paper reasonably
+   (AbsRel 0.0465 observed vs 0.0313 paper under ROE); combined
+   (indoor + outdoor) is 6.4× off (0.1993 vs 0.0313). Outdoor is the
+   hard slice — suspected wrong `depth_clip` (we use 50 m; DIODE
+   outdoor GT ranges to 300 m) and/or missing sky-mask. Read MoGe's
+   DIODE eval protocol in their repo (`moge/test/metrics.py` has it)
+   and match.
+
+### Tier 2 — new paper-row unlocks
+
+4. **Diffusion depth models.** Currently zero coverage. Marigold
+   (Ke et al. 2024, SD-based, HF: `prs-eth/marigold-depth-v1-1`) is
+   the highest-leverage single add — cited everywhere, plugs cleanly
+   into the mono-depth adapter shape, publishes NYU + KITTI numbers
+   that would land in the existing reproduction infrastructure.
+   Follow-ups: GeoWizard (depth + normals), DepthFM (flow-matching).
+
+5. **Pose benchmarks.** Infrastructure (rotation / translation /
+   AUC@5/10/30° metrics, pairwise relative pose) exists; the loaders
+   that map to canonical paper pose tables don't:
+   - **ScanNet-1500**: 2-view matching, VGGT Table 4 + MASt3R. 1,500
+     pre-selected pairs from ScanNet; small download if the pair list
+     is pinned (a few MB of JSONs + images).
+   - **RealEstate10K**: trajectory, VGGT Table 1. Paid-to-download
+     RGB but public metadata.
+   - **Co3Dv2**: VGGT Table 1 + DUSt3R. Public.
+   - **7Scenes**, **TUM-RGBD**: classical benchmarks, small.
+
+6. **Depth Pro adapter** (Apple, 2024). HF-available, fits the mono-
+   depth shape. Adds a paper-validated comparison point.
+
+### Tier 3 — systems / structural
+
+7. **Paper-protocol presets.** Each published table uses a specific
+   combo of (crop, alignment, depth_clip, valid-mask). Today every
+   plumbline YAML picks these ad-hoc and documents deviations in
+   notes. Cleaner: a `protocol: nyu_eigen_2014` block that expands
+   to the exact tuple; reproduction YAMLs declare which protocol
+   they follow and can't accidentally mis-align.
+
+8. **Failure-mode diagnostic flags.** The MoGe ROE / DIODE outdoor /
+   ETH3D chamfer gaps this session surfaced took individual
+   investigations. A `plumbline reproduce --diagnose` that dumps
+   per-sample inlier counts, per-protocol alignment residuals, and a
+   "paper-row checklist" would cut debug time on the next paper.
+
+9. **DTU v0.1 gate.** vggt-paper-dtu-mvs YAML is ready with ICP +
+   paper target chamfer=0.382. Data retrieval is slow but viable
+   (SampleSet.zip 6.9 GB at ~680 KB/s ≈ 3h). Once extracted,
+   dependent on the Tier-1 chamfer rewrite to actually hit paper.
+
+### Tier 4 — parking lot
+
+- **Novel-view synthesis evaluation** (PSNR/SSIM/LPIPS).
+- **Point tracking evaluation.**
+- **Uncertainty calibration metrics.**
+- **Failure-case browser web UI.**
+- **Nightly CI running the full suite.**
+- **Hosted leaderboard site.**
+- **Additional models**: π³, CUT3R, MonST3R, Fast3R, MapAnything.
+- **Additional datasets**: TUM-dynamics, Replica, Tanks & Temples.
+- **HDR / linear-color evaluation path** (leverages framewright).
+- **Distributed eval across multiple GPUs.**
+
+### What's NOT in v0.2 (and why)
+
+- **Training / fine-tuning**: still v0.1's non-goal. Plumbline evaluates.
+- **Novel metrics**: only what papers report.
+- **Web UI / leaderboard**: post v0.2.
 
 ## 11. First thing to do when you start
 
