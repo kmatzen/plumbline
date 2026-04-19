@@ -1,0 +1,64 @@
+# MoGe (ViT-L) on GSO (Google Scanned Objects, via MoGe's preprocessed bundle)
+#
+# GSO fills the synthetic-clean-GT slot after the 2026-04-19 pivot
+# (Sintel remained auth-gated). 1030 single-object renders at 512x512
+# with pristine log-encoded depth PNGs + normalized intrinsics, from
+# MoGe's HF dataset Ruicheng/monocular-geometry-evaluation.
+#
+# GSO is MoGe's own eval bundle so the depth preprocessing question
+# that bit DIODE (2.7x residual) is definitionally resolved here —
+# same encoding, same invalid marker, same image resolution.
+#
+# Paper target: UNVERIFIED. The MoGe paper (Wang et al. 2024) reports
+# GSO in Table 2/3 of the Depth Map Estimation section, but we have
+# not yet cross-checked the exact row/column the user wants plumbline
+# to gate against. Run informationally first; pin the value after the
+# user reads off the paper number.
+
+name: moge-vitl-gso
+
+model:
+  name: moge
+  kwargs:
+    variant: vitl
+
+dataset:
+  name: gso
+
+tasks:
+  - mono_depth
+
+scale_alignment: scale_shift_robust
+max_views: 1
+device: cuda:0
+# GSO is single-object at ~0.3-1.0 m depth; render far-plane varies
+# per-object. Keep clip wide but positive.
+depth_clip: [0.001, 100.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # UNVERIFIED target until the paper table row is confirmed. MoGe
+  # reports GSO with three alignment columns (scale-invariant depth /
+  # affine-invariant depth / affine-invariant disparity); plumbline's
+  # scale_shift_robust matches the "affine-invariant disparity" column.
+  value: 0.0  # PLACEHOLDER — do not gate on this
+  tolerance_relative: 1.0  # 100% — effectively informational-only
+  citation: "Wang et al. 2024, MoGe, Table 2/3 GSO column (exact row TBD). UNVERIFIED."
+
+notes: >
+  Informational-only until the paper GSO number is pinned. Everything
+  upstream (loader, alignment, clip) is paper-faithful — this YAML
+  just needs the target value filled in.
+
+  GSO dataset:
+      1030 objects; 512x512; log-encoded uint16 depth.png with
+      per-image near/far metadata; normalized intrinsics in meta.json.
+      Principal point is at image centre for every sample.
+
+  Download (no auth):
+      hf download Ruicheng/monocular-geometry-evaluation \
+          --repo-type dataset --include 'GSO*' \
+          --local-dir $GSO_ROOT/..
+      cd $GSO_ROOT/.. && unzip GSO.zip
+
+  Needs `pip install 'git+https://github.com/microsoft/MoGe.git'`.

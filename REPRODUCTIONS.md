@@ -12,22 +12,22 @@ Model × dataset cell statuses:
 ⌛ infra ready, awaiting data/compute · 🚧 planned (loader/adapter
 not yet wired) · — not a canonical paper combo
 
-| Model → Dataset | NYUv2 | KITTI | DIODE | ETH3D | DTU | Co3Dv2 |
-|---|---|---|---|---|---|---|
-| **DA-V2 Small** | ✅ **0.0510** | ⌛ | ⚠️ **0.0722** vs 0.0533 _(indoor-only)_ | — | — | — |
-| **DA-V2 Base** | ✅ **0.0456** | ⌛ | — | — | — | — |
-| **DA-V2 Large** | ✅ **0.0428** (vs 0.0420) | ⌛ | — | — | — | — |
-| **DA-V2 Metric-Outdoor-L** | — | ⌛ YAML ready | — | — | — | — |
-| **Metric3D-v2 L** | ✅ **0.0660** | ⌛ | — | — | — | — |
-| **Metric3D-v2 Giant** | ✅ **0.0702** | ⌛ | — | — | — | — |
-| **DA3** | ✅ δ₁ **0.9684** | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | — |
-| **MoGe-1 ViT-L** | ✅ **0.0305** (ROE, vs 0.0341) | ⌛ | ⚠️ **0.1088** vs 0.0400 _(2.7× off; MoGe preproc depth differs)_ | — | — | — |
-| **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ⌛ | ⌛ | — | — | — |
-| **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — |
-| **Marigold v1-1** | ✅ **0.0577** vs ~0.055 | ⌛ | — | — | — | — |
-| **Depth Pro** | ✅ δ₁ **0.9347** vs 0.961 | ⌛ | — | — | — | — |
-| **MASt3R** (2-view) | — | — | — | 2-view pose sweep | — | 🚧 |
-| **VGGT** | — | — | — | ⚠️ chamfer 6.84, F@5cm 1.13% (protocol gap) | ⌛ GT downloading; v0.1 gate 0.382 | 🚧 |
+| Model → Dataset | NYUv2 | KITTI | DIODE | ETH3D | DTU | Co3Dv2 | GSO |
+|---|---|---|---|---|---|---|---|
+| **DA-V2 Small** | ✅ **0.0510** | ⌛ | ⚠️ **0.0722** vs 0.0533 _(indoor-only)_ | — | — | — | ⌛ |
+| **DA-V2 Base** | ✅ **0.0456** | ⌛ | — | — | — | — | — |
+| **DA-V2 Large** | ✅ **0.0428** (vs 0.0420) | ⌛ | — | — | — | — | ⌛ |
+| **DA-V2 Metric-Outdoor-L** | — | ⌛ YAML ready | — | — | — | — | — |
+| **Metric3D-v2 L** | ✅ **0.0660** | ⌛ | — | — | — | — | — |
+| **Metric3D-v2 Giant** | ✅ **0.0702** | ⌛ | — | — | — | — | — |
+| **DA3** | ✅ δ₁ **0.9684** | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | — | ⌛ |
+| **MoGe-1 ViT-L** | ✅ **0.0305** (ROE, vs 0.0341) | ⌛ | ⚠️ **0.1088** vs 0.0400 _(2.7× off; MoGe preproc depth differs)_ | — | — | — | ⌛ loader ready |
+| **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ⌛ | ⌛ | — | — | — | ⌛ |
+| **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — | — |
+| **Marigold v1-1** | ✅ **0.0577** vs ~0.055 | ⌛ | — | — | — | — | — |
+| **Depth Pro** | ✅ δ₁ **0.9347** vs 0.961 | ⌛ | — | — | — | — | — |
+| **MASt3R** (2-view) | — | — | — | 2-view pose sweep | — | 🚧 | — |
+| **VGGT** | — | — | — | ⚠️ chamfer 6.84, F@5cm 1.13% (protocol gap) | ⌛ GT downloading; v0.1 gate 0.382 | 🚧 | — |
 
 ### Paper-match count
 
