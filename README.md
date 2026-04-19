@@ -13,11 +13,13 @@ will still change before 1.0.
 - **5 model adapters** fully wired: DA-V2 (6 variants including metric
   Indoor/Outdoor), DA3, Metric3Dv2 (ViT-S/L/Giant2), MASt3R (PairViewer,
   2-view), VGGT.
-- **6 datasets**: NYUv2 (Eigen 2014 protocol, rawDepths), ETH3D high-res
+- **7 datasets**: NYUv2 (Eigen 2014 protocol, rawDepths), ETH3D high-res
   multi-view, Sintel (RGB + flow; depth archive still gated), ScanNet
   (loader ready; data still gated), KITTI (Eigen split against annotated
   GT — loader + Garg/Eigen crops ready), DIODE (indoor + outdoor dense
-  RGB-D — loader with configurable intrinsic, bool mask → depth_valid).
+  RGB-D — loader with configurable intrinsic, bool mask → depth_valid),
+  DTU (MVSNet-repacked, 22-scan MVS test split — the v0.1 paper-match
+  target).
 - **7 paper-match NYUv2 reproductions** — see [REPRODUCTIONS.md](./REPRODUCTIONS.md).
 - **Pose metrics** include both absolute per-view and **pairwise
   relative-pose AUC** (the aggregation VGGT / MASt3R / DUSt3R papers
@@ -96,8 +98,9 @@ See the "Note on the NYUv2 Eigen 2014 protocol" section of
 ## Not yet reproducible without user-supplied credentials
 
 - `vggt-paper-dtu-mvs` — v0.1 paper-match gate. Pins VGGT Table 2's
-  chamfer=0.382 on DTU. Blocked on the DTU loader (follows; data is
-  public, no ToS). **Replaces** the previous `vggt-paper-scannet-depth`
+  chamfer=0.382 on DTU. Loader + YAML ready; data is public, no ToS —
+  unblock by downloading DTU + the MVSNet preprocessing and setting
+  `$DTU_ROOT`. **Replaces** the previous `vggt-paper-scannet-depth`
   placeholder, which assumed a VGGT paper table that doesn't exist.
 - `depth-anything-v2-sintel` — Sintel loader works on the public RGB
   bundle, but the paper's AbsRel target needs the auth-gated depth +

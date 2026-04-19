@@ -14,17 +14,22 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from plumbline.datasets.eth3d import (
-    ETH3DDataset,
-    parse_colmap_cameras,
-    parse_colmap_images,
-    quat_to_rot,
-)
 from plumbline.datasets.diode import (
     DIODE_INTRINSIC,
     DIODEDataset,
     load_diode_depth_m,
     load_diode_depth_mask,
+)
+from plumbline.datasets.dtu import (
+    DTU_MVS_TEST_SCANS,
+    DTUDataset,
+    load_dtu_cam,
+)
+from plumbline.datasets.eth3d import (
+    ETH3DDataset,
+    parse_colmap_cameras,
+    parse_colmap_images,
+    quat_to_rot,
 )
 from plumbline.datasets.kitti import (
     KITTIDataset,
@@ -322,13 +327,7 @@ def _write_fake_kitti(
         img_dir = root / "raw" / date / drive / camera / "data"
         img_dir.mkdir(parents=True, exist_ok=True)
         gt_dir = (
-            root
-            / "depth_annotated"
-            / depth_split
-            / drive
-            / "proj_depth"
-            / "groundtruth"
-            / camera
+            root / "depth_annotated" / depth_split / drive / "proj_depth" / "groundtruth" / camera
         )
         gt_dir.mkdir(parents=True, exist_ok=True)
 
@@ -492,9 +491,7 @@ class TestKITTI:
         _write_fake_kitti(tmp_path, frames=1)
         list_path = tmp_path / "list.txt"
         # Point at a frame that doesn't exist on disk.
-        list_path.write_text(
-            "2011_09_26/2011_09_26_drive_0002_sync 0000009999 l\n"
-        )
+        list_path.write_text("2011_09_26/2011_09_26_drive_0002_sync 0000009999 l\n")
         with pytest.raises(DatasetNotAvailable, match="Missing data"):
             KITTIDataset(root=tmp_path, sample_list=list_path)
 
@@ -759,3 +756,225 @@ class TestDIODE:
         out = load_diode_depth_mask(p)
         assert out.dtype == bool
         np.testing.assert_array_equal(out, np.array([[True, False], [False, True]]))
+
+
+# ---------------------------------------------------------------------------
+# DTU
+# ---------------------------------------------------------------------------
+
+
+def _write_fake_dtu_cam(path: Path, *, tx: float = 0.0) -> None:
+    """Write an MVSNet-style _cam.txt with identity rotation + x translation."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w") as f:
+        f.write("extrinsic\n")
+        f.write(f"1 0 0 {tx}\n")
+        f.write("0 1 0 0\n")
+        f.write("0 0 1 0\n")
+        f.write("0 0 0 1\n")
+        f.write("\n")
+        f.write("intrinsic\n")
+        f.write("100 0 16\n")
+        f.write("0 100 8\n")
+        f.write("0 0 1\n")
+        f.write("\n")
+        f.write("425 2.5\n")
+
+
+def _write_minimal_ply(path: Path, points: np.ndarray) -> None:
+    """Write an ASCII PLY with just (x, y, z) float properties."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w") as f:
+        f.write("ply\nformat ascii 1.0\n")
+        f.write(f"element vertex {points.shape[0]}\n")
+        f.write("property float x\n")
+        f.write("property float y\n")
+        f.write("property float z\n")
+        f.write("end_header\n")
+        for p in points:
+            f.write(f"{p[0]} {p[1]} {p[2]}\n")
+
+
+def _write_fake_dtu(
+    root: Path,
+    *,
+    scan_ids: tuple[int, ...] = (1, 4),
+    views: int = 4,
+    light: int = 3,
+    write_gt: bool = True,
+    H: int = 16,
+    W: int = 32,
+) -> None:
+    # Shared Cameras_1/: one cam file per view index, 0-indexed.
+    for v in range(views):
+        _write_fake_dtu_cam(root / "Cameras_1" / f"{v:08d}_cam.txt", tx=float(v))
+    # Per-scan Rectified/scanN_train/rect_<VVV>_<L>_r5000.png.
+    for scan_id in scan_ids:
+        scan_dir = root / "Rectified" / f"scan{scan_id}_train"
+        scan_dir.mkdir(parents=True, exist_ok=True)
+        for v in range(views):
+            view_1based = v + 1
+            # Also include a non-canonical light so we can test filtering.
+            for L in (light, (light + 1) % 7):
+                Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
+                    scan_dir / f"rect_{view_1based:03d}_{L}_r5000.png"
+                )
+        if write_gt:
+            pts = np.array(
+                [
+                    [0.0, 0.0, 1.0],
+                    [10.0, 0.0, 1.0],
+                    [0.0, 10.0, 1.0],
+                    [5.0, 5.0, 2.0],
+                ],
+                dtype=np.float32,
+            )
+            _write_minimal_ply(root / "Points" / "stl" / f"stl{scan_id:03d}_total.ply", pts)
+
+
+class TestDTU:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable):
+            DTUDataset(root=tmp_path / "nope")
+
+    def test_missing_cameras_dir(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        (tmp_path / "Rectified").mkdir()
+        with pytest.raises(DatasetNotAvailable, match="Cameras_1"):
+            DTUDataset(root=tmp_path, scans=[1])
+
+    def test_invalid_light_range(self, tmp_path: Path) -> None:
+        _write_fake_dtu(tmp_path, scan_ids=(1,))
+        with pytest.raises(ValueError, match="light"):
+            DTUDataset(root=tmp_path, scans=[1], light=7)
+
+    def test_invalid_views_per_sample(self, tmp_path: Path) -> None:
+        _write_fake_dtu(tmp_path, scan_ids=(1,))
+        with pytest.raises(ValueError, match="views_per_sample"):
+            DTUDataset(root=tmp_path, scans=[1], views_per_sample=0)
+
+    def test_invalid_split(self, tmp_path: Path) -> None:
+        _write_fake_dtu(tmp_path, scan_ids=(1,))
+        with pytest.raises(ValueError, match="DTU split"):
+            DTUDataset(root=tmp_path, split="nope")
+
+    def test_basic_load_with_custom_scans(self, tmp_path: Path) -> None:
+        _write_fake_dtu(tmp_path, scan_ids=(1,), views=4)
+        ds = DTUDataset(root=tmp_path, scans=[1], views_per_sample=2)
+        samples = list(ds)
+        # Sliding window over 4 views at size 2 → 3 samples.
+        assert len(samples) == 3
+        s = samples[0]
+        assert s.num_views == 2
+        assert s.images.shape == (2, 16, 32, 3)
+        # First camera is identity after rebase.
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-5)
+        # GT point cloud attached.
+        assert s.point_cloud_gt is not None and s.point_cloud_gt.shape[1] == 3
+        # Metadata carries scan id + view indices.
+        assert s.metadata["scan_id"] == 1
+        assert s.metadata["view_indices"] == [0, 1]
+        assert s.metadata["units"] == "mm"
+
+    def test_test_split_uses_canonical_22_scans(self) -> None:
+        assert len(DTU_MVS_TEST_SCANS) == 22
+        # Spot-check a few MVSNet benchmark scans.
+        assert 1 in DTU_MVS_TEST_SCANS
+        assert 118 in DTU_MVS_TEST_SCANS
+
+    def test_test_split_missing_scan_errors(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        # Write Cameras_1 + Rectified but no scan1_train.
+        for v in range(2):
+            _write_fake_dtu_cam(tmp_path / "Cameras_1" / f"{v:08d}_cam.txt")
+        (tmp_path / "Rectified").mkdir()
+        with pytest.raises(DatasetNotAvailable, match="test-split scan"):
+            DTUDataset(root=tmp_path, split="test", views_per_sample=1)
+
+    def test_custom_scans_skip_missing_silently(self, tmp_path: Path) -> None:
+        # scan1 exists on disk; scan99 doesn't. Custom list should use whatever's there.
+        _write_fake_dtu(tmp_path, scan_ids=(1,))
+        ds = DTUDataset(root=tmp_path, scans=[1, 99], views_per_sample=4)
+        samples = list(ds)
+        assert len(samples) == 1
+        assert samples[0].metadata["scan_id"] == 1
+
+    def test_light_selection(self, tmp_path: Path) -> None:
+        _write_fake_dtu(tmp_path, scan_ids=(1,), views=3, light=3)
+        # Light 3 is the default; picking 4 should still work because
+        # _write_fake_dtu also writes (light + 1) % 7 = 4 for each view.
+        ds3 = DTUDataset(root=tmp_path, scans=[1], views_per_sample=3, light=3)
+        ds4 = DTUDataset(root=tmp_path, scans=[1], views_per_sample=3, light=4)
+        s3 = next(iter(ds3))
+        s4 = next(iter(ds4))
+        assert s3.metadata["light"] == 3
+        assert s4.metadata["light"] == 4
+        # Different light → different pixel values (random images).
+        assert not np.array_equal(s3.images, s4.images)
+
+    def test_multiple_scans_produce_separate_samples(self, tmp_path: Path) -> None:
+        _write_fake_dtu(tmp_path, scan_ids=(1, 4), views=2)
+        ds = DTUDataset(root=tmp_path, scans=[1, 4], views_per_sample=2)
+        samples = list(ds)
+        assert len(samples) == 2
+        assert {s.metadata["scan_id"] for s in samples} == {1, 4}
+
+    def test_max_gt_points_subsamples_deterministically(self, tmp_path: Path) -> None:
+        _write_fake_dtu(tmp_path, scan_ids=(1,), views=2)
+        ds_a = DTUDataset(root=tmp_path, scans=[1], views_per_sample=2, max_gt_points=2)
+        ds_b = DTUDataset(root=tmp_path, scans=[1], views_per_sample=2, max_gt_points=2)
+        a = next(iter(ds_a)).point_cloud_gt
+        b = next(iter(ds_b)).point_cloud_gt
+        assert a is not None and b is not None
+        assert a.shape == (2, 3)
+        np.testing.assert_array_equal(a, b)  # same seed → identical subset
+
+    def test_extrinsics_rebased_to_first_camera(self, tmp_path: Path) -> None:
+        _write_fake_dtu(tmp_path, scan_ids=(1,), views=3)
+        ds = DTUDataset(root=tmp_path, scans=[1], views_per_sample=3)
+        s = next(iter(ds))
+        # First view is identity after rebase_to_first_camera.
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-5)
+        # Subsequent cameras remain distinct (our fake cams offset in x).
+        assert not np.allclose(s.extrinsics_gt[1], np.eye(4))
+
+    def test_manifest_cached(self, tmp_path: Path) -> None:
+        _write_fake_dtu(tmp_path, scan_ids=(1,))
+        DTUDataset(root=tmp_path, scans=[1], views_per_sample=2)
+        assert (tmp_path / ".plumbline_manifest").exists()
+
+    def test_no_gt_ply_leaves_point_cloud_none(self, tmp_path: Path) -> None:
+        _write_fake_dtu(tmp_path, scan_ids=(1,), views=2, write_gt=False)
+        ds = DTUDataset(root=tmp_path, scans=[1], views_per_sample=2)
+        s = next(iter(ds))
+        assert s.point_cloud_gt is None
+
+    def test_load_dtu_cam_basic(self, tmp_path: Path) -> None:
+        _write_fake_dtu_cam(tmp_path / "cam.txt", tx=5.0)
+        K, E = load_dtu_cam(tmp_path / "cam.txt")
+        assert K.shape == (3, 3) and E.shape == (4, 4)
+        assert K[0, 0] == 100 and K[1, 2] == 8
+        np.testing.assert_allclose(E[:3, :3], np.eye(3))
+        assert E[0, 3] == 5.0
+
+    def test_load_dtu_cam_rejects_missing_markers(self, tmp_path: Path) -> None:
+        p = tmp_path / "bad.txt"
+        p.write_text("1 2 3 4\n")
+        with pytest.raises(ValueError, match="extrinsic"):
+            load_dtu_cam(p)
+
+    def test_load_dtu_cam_rejects_short_extrinsic(self, tmp_path: Path) -> None:
+        p = tmp_path / "bad.txt"
+        p.write_text("extrinsic\n1 2 3\nintrinsic\n1 0 0 0 1 0 0 0 1\n")
+        with pytest.raises(ValueError, match="16 extrinsic"):
+            load_dtu_cam(p)
+
+    def test_load_dtu_cam_rejects_short_intrinsic(self, tmp_path: Path) -> None:
+        p = tmp_path / "bad.txt"
+        p.write_text("extrinsic\n1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1\nintrinsic\n1 0 0\n")
+        with pytest.raises(ValueError, match="9 intrinsic"):
+            load_dtu_cam(p)

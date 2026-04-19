@@ -12,9 +12,11 @@ details within each section.
 > (`reproduce vggt-paper-scannet-depth`) has been **retargeted** to
 > `reproduce vggt-paper-dtu-mvs`. The VGGT paper doesn't actually
 > report ScanNet depth (Table 2 is DTU; ScanNet-1500 is two-view
-> matching, not depth). The DTU gate pins Table 2's chamfer=0.382 and
-> is unblocked on data (DTU is public, no ToS) but blocked on the DTU
-> loader, which arrives in a follow-up. In the meantime the harness
+> matching, not depth). The DTU gate pins Table 2's chamfer=0.382; the
+> DTU loader is implemented, and data is public (no ToS) — unblocks as
+> soon as someone runs it on GPU with `$DTU_ROOT` set. Meanwhile, the
+> harness
+> ships **7 paper-match reproductions on NYUv2** across four model
 > ships **7 paper-match reproductions on NYUv2** across four model
 > families (DA-V2 S/B/L, DA-V2 Metric-Indoor-L, Metric3Dv2 L/Giant2,
 > DA3), plus informational ETH3D courtyard pose sweeps for VGGT and
