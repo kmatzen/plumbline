@@ -20,6 +20,7 @@ import plumbline.models.depth_anything_3
 import plumbline.models.depth_anything_v2
 import plumbline.models.mast3r
 import plumbline.models.metric3d_v2
+import plumbline.models.depth_pro
 import plumbline.models.marigold
 import plumbline.models.moge
 import plumbline.models.vggt  # noqa: F401
@@ -33,6 +34,7 @@ EXPECTED_ADAPTERS = [
     "depth-anything-3",
     "moge",
     "marigold",
+    "depth-pro",
 ]
 
 
@@ -178,3 +180,30 @@ def test_marigold_capabilities_are_mono_relative() -> None:
     assert "mono_depth" in caps.tasks
     assert caps.is_metric is False  # affine-invariant
     assert caps.min_views == 1
+
+
+def test_depth_pro_rejects_bad_dtype() -> None:
+    cls = MODEL_REGISTRY["depth-pro"]
+    with pytest.raises(ValueError, match="dtype"):
+        cls(device="cpu", dtype="bfloat16")  # type: ignore[call-arg]
+
+
+def test_depth_pro_capabilities_are_mono_metric() -> None:
+    """Depth Pro declares is_metric=True so the runner defaults to
+    scale_alignment=none when YAML doesn't override. Regression: if
+    someone accidentally flips this to False, every Depth Pro repro
+    silently switches to scale+shift fitting and hides the model's
+    actual metric accuracy."""
+
+    cls = MODEL_REGISTRY["depth-pro"]
+    caps = cls.capabilities  # type: ignore[attr-defined]
+    assert "mono_depth" in caps.tasks
+    assert caps.is_metric is True  # key assertion
+    assert caps.requires_intrinsics is False
+
+
+def test_depth_pro_config_hash_varies_by_dtype() -> None:
+    cls = MODEL_REGISTRY["depth-pro"]
+    h16 = cls(device="cpu", dtype="float16").config_hash()  # type: ignore[call-arg]
+    h32 = cls(device="cpu", dtype="float32").config_hash()  # type: ignore[call-arg]
+    assert h16 != h32
