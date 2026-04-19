@@ -1,0 +1,61 @@
+# MoGe-2 (ViT-L, metric) on NYUv2 Eigen test — NO alignment
+#
+# Sister config to moge2-vitl-nyuv2, which runs the same model under
+# scale_shift alignment (the NYU-paper protocol for apples-to-apples
+# with DA-V2 / Metric3D / DA3 baselines). Under that protocol the
+# metric vs affine-invariant difference between MoGe-1 and MoGe-2
+# gets absorbed into the fit — both came in at 0.0342 AbsRel.
+#
+# This YAML runs with scale_alignment: none, exposing MoGe-2's
+# direct metric prediction. The number here is NOT paper-comparable
+# against the relative-depth Table 3 row — it's the strict "does the
+# model produce NYU-scale metric depth out of the box" test.
+
+name: moge2-vitl-nyuv2-metric
+
+model:
+  name: moge
+  kwargs:
+    variant: 2-vitl
+
+dataset:
+  name: nyuv2
+  split: test
+  kwargs:
+    apply_eigen_crop: true
+
+tasks:
+  - mono_depth
+
+# NO alignment — MoGe-2 is metric by design.
+scale_alignment: none
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 10.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # No direct paper value; informational metric-eval of MoGe-2 on NYU.
+  tolerance_relative: 1.0
+  citation: "Informational metric eval; MoGe-2 paper targets are under affine-invariant alignment."
+
+notes: >
+  First GPU run (RTX 3090 Ti, 2026-04-19, 654-sample Eigen test
+  split, NO alignment):
+      AbsRel   0.0899
+      delta_1  0.9455
+      RMSE     0.407 m
+
+  The v2 metric path works — 9% metric error out of the box on
+  indoor Kinect data, no per-scene calibration needed. For
+  comparison, MoGe-2 under scale_shift alignment hits 0.0342, so
+  scale+shift fitting absorbs ~2.6x of the remaining error. Still
+  useful as-is for any downstream metric geometry (scene
+  reconstruction, SLAM re-anchoring) that needs absolute distances
+  without a known GT to fit against.
+
+  v0.1 reference point: Metric3Dv2's canonical-camera trick on NYU
+  hits AbsRel 0.066 without alignment. MoGe-2 trails it by ~35%
+  on metric-eval NYU — not surprising: Metric3Dv2 explicitly takes
+  GT focal-length as input and MoGe-2 infers its own intrinsics.
+  Different tradeoffs for different use cases.
