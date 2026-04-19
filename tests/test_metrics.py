@@ -482,6 +482,55 @@ class TestICPSimilarity:
             icp_similarity(np.zeros((10, 3)), np.zeros((2, 3)))
 
 
+class TestBoundaryEdgeMask:
+    """Depth-discontinuity boundary mask used by MoGe / Depth Pro /
+    most mono-depth eval protocols."""
+
+    def test_flat_region_no_edges(self) -> None:
+        from plumbline.metrics.masks import boundary_edge_mask
+
+        depth = np.full((10, 10), 2.0, dtype=np.float32)
+        valid = np.ones_like(depth, dtype=bool)
+        edge = boundary_edge_mask(depth, valid)
+        # Flat scene has no discontinuities — no edges should fire.
+        assert not edge.any()
+
+    def test_step_discontinuity_fires(self) -> None:
+        from plumbline.metrics.masks import boundary_edge_mask
+
+        # 10×10 depth with a sharp left-vs-right discontinuity (1 m vs 5 m).
+        depth = np.where(
+            np.arange(10)[None, :] < 5, 1.0, 5.0
+        ).astype(np.float32)
+        depth = np.broadcast_to(depth, (10, 10)).copy()
+        valid = np.ones_like(depth, dtype=bool)
+        edge = boundary_edge_mask(depth, valid, thickness=1, tol=0.1)
+        # Pixels on either side of column 5 should be flagged.
+        assert edge.any()
+        # Interior of the flat "near" side (away from boundary) shouldn't be.
+        assert not edge[5, 0]
+        # Interior of the flat "far" side either.
+        assert not edge[5, 9]
+
+    def test_tol_larger_suppresses_small_edges(self) -> None:
+        from plumbline.metrics.masks import boundary_edge_mask
+
+        # Small step: 1.0 vs 1.05 (5% discontinuity).
+        depth = np.where(np.arange(10)[None, :] < 5, 1.0, 1.05).astype(np.float32)
+        depth = np.broadcast_to(depth, (10, 10)).copy()
+        valid = np.ones_like(depth, dtype=bool)
+        edge_strict = boundary_edge_mask(depth, valid, tol=0.01)  # 1% → catches
+        edge_loose = boundary_edge_mask(depth, valid, tol=0.2)  # 20% → doesn't
+        assert edge_strict.any()
+        assert not edge_loose.any()
+
+    def test_shape_mismatch_errors(self) -> None:
+        from plumbline.metrics.masks import boundary_edge_mask
+
+        with pytest.raises(ValueError, match="shape"):
+            boundary_edge_mask(np.zeros((5, 5)), np.zeros((6, 6), dtype=bool))
+
+
 class TestPairwisePose:
     def test_identity_pair_has_zero_error(self) -> None:
         import numpy as np

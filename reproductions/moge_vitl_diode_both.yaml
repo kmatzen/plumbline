@@ -26,6 +26,13 @@ max_views: 1
 device: cuda:0
 depth_clip: [0.001, 50.0]
 
+# MoGe paper's DIODE protocol (from moge/utils/geometry_numpy.py::
+# depth_occlusion_edge_numpy): mask out pixels near GT depth
+# discontinuities before evaluation. Same defaults the paper uses.
+mask_boundaries: true
+boundary_thickness: 1
+boundary_tol: 0.1
+
 paper_reference:
   primary_metric: abs_rel
   # MoGe paper (Wang et al. 2024), Table 2 Depth-Map Estimation, DIODE
