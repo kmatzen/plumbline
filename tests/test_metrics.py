@@ -300,7 +300,8 @@ class TestPointMapMetrics:
 class TestUmeyamaSimilarity:
     def test_recovers_identity(self) -> None:
         import numpy as np
-        from plumbline.metrics.alignment import umeyama_similarity, apply_similarity
+
+        from plumbline.metrics.alignment import apply_similarity, umeyama_similarity
 
         rng = np.random.default_rng(0)
         src = rng.standard_normal((10, 3))
@@ -312,7 +313,8 @@ class TestUmeyamaSimilarity:
 
     def test_recovers_known_similarity(self) -> None:
         import numpy as np
-        from plumbline.metrics.alignment import apply_similarity, umeyama_similarity
+
+        from plumbline.metrics.alignment import umeyama_similarity
 
         rng = np.random.default_rng(42)
         src = rng.standard_normal((12, 3))
@@ -332,6 +334,7 @@ class TestUmeyamaSimilarity:
 
     def test_rejects_fewer_than_three_points(self) -> None:
         import numpy as np
+
         from plumbline.metrics.alignment import umeyama_similarity
 
         with pytest.raises(ValueError, match=">= 3"):
@@ -339,15 +342,96 @@ class TestUmeyamaSimilarity:
 
     def test_shape_mismatch_errors(self) -> None:
         import numpy as np
+
         from plumbline.metrics.alignment import umeyama_similarity
 
         with pytest.raises(ValueError, match="matching"):
             umeyama_similarity(np.zeros((5, 3)), np.zeros((4, 3)))
 
 
+class TestICPSimilarity:
+    def test_improves_over_identity_alignment(self) -> None:
+        """On a shuffled+translated copy of a structured cloud, ICP must
+        dramatically reduce the chamfer vs a no-alignment baseline.
+        We use a "T"-shape so the orientation is strongly determined
+        (not spherically symmetric like pure gaussian clouds, where ICP
+        is prone to get stuck at R equivalent under symmetry).
+        """
+        import numpy as np
+
+        from plumbline.metrics.alignment import apply_similarity, icp_similarity
+
+        rng = np.random.default_rng(13)
+        # Build a T-shape point cloud: vertical bar + horizontal top.
+        n = 300
+        vbar = (
+            np.stack([np.zeros(n), np.linspace(0, 5, n), np.zeros(n)], axis=-1)
+            + rng.standard_normal((n, 3)) * 0.02
+        )
+        hbar = (
+            np.stack([np.linspace(-2, 2, n), np.full(n, 5.0), np.zeros(n)], axis=-1)
+            + rng.standard_normal((n, 3)) * 0.02
+        )
+        src = np.concatenate([vbar, hbar], axis=0)
+
+        # Transform by a known translation (+ small rotation). Shuffle.
+        from scipy.spatial.transform import Rotation as Rot
+
+        R_true = Rot.from_euler("xyz", [0.1, 0.2, 0.05]).as_matrix()
+        t_true = np.array([10.0, -5.0, 3.0])
+        dst = src @ R_true.T + t_true
+        dst = dst[rng.permutation(dst.shape[0])]
+
+        # Baseline: no alignment — chamfer is dominated by the 10+ unit offset.
+        from scipy.spatial import cKDTree
+
+        nn_no_align = cKDTree(dst).query(src, k=1, workers=-1)[0].mean()
+
+        # ICP with identity init. Expect big improvement.
+        s, R, t, _info = icp_similarity(src, dst, max_iter=50)
+        warped = apply_similarity(src, s, R, t)
+        nn_icp = cKDTree(dst).query(warped, k=1, workers=-1)[0].mean()
+
+        # The actual numbers depend on rotation/translation, but ICP should
+        # cut the residual by at least an order of magnitude relative to
+        # the unaligned case (10+ unit offset → sub-unit post-ICP).
+        assert nn_icp < 0.5, f"ICP residual {nn_icp:.3f} too high"
+        assert nn_icp < nn_no_align / 10, f"ICP only got {nn_no_align / nn_icp:.1f}x improvement"
+
+    def test_warm_start_reduces_iterations(self) -> None:
+        """Warm-started ICP (with init close to truth) converges in fewer
+        iterations than cold start."""
+        import numpy as np
+
+        from plumbline.metrics.alignment import icp_similarity
+
+        rng = np.random.default_rng(11)
+        src = rng.standard_normal((300, 3))
+        t_true = np.array([5.0, 5.0, 5.0])  # big offset makes cold start harder
+        dst = src + t_true
+        dst = dst[rng.permutation(dst.shape[0])]
+
+        _, _, _, info_cold = icp_similarity(src, dst, max_iter=50)
+        _, _, _, info_warm = icp_similarity(src, dst, init_t=t_true, max_iter=50)
+        # Warm start from (exactly) the true translation should converge
+        # in 1-2 iterations; cold start needs more.
+        assert info_warm["iterations"] < info_cold["iterations"]
+
+    def test_rejects_small_clouds(self) -> None:
+        import numpy as np
+
+        from plumbline.metrics.alignment import icp_similarity
+
+        with pytest.raises(ValueError, match="3 points"):
+            icp_similarity(np.zeros((2, 3)), np.zeros((10, 3)))
+        with pytest.raises(ValueError, match="3 points"):
+            icp_similarity(np.zeros((10, 3)), np.zeros((2, 3)))
+
+
 class TestPairwisePose:
     def test_identity_pair_has_zero_error(self) -> None:
         import numpy as np
+
         from plumbline.metrics.pose import pairwise_pose_errors
 
         N = 4
@@ -359,9 +443,7 @@ class TestPairwisePose:
             axis /= np.linalg.norm(axis)
             theta = rng.uniform(0.1, 1.0)
             # Rodrigues rotation
-            K = np.array(
-                [[0, -axis[2], axis[1]], [axis[2], 0, -axis[0]], [-axis[1], axis[0], 0]]
-            )
+            K = np.array([[0, -axis[2], axis[1]], [axis[2], 0, -axis[0]], [-axis[1], axis[0], 0]])
             R = np.eye(3) + np.sin(theta) * K + (1 - np.cos(theta)) * (K @ K)
             E[i, :3, :3] = R
             E[i, :3, 3] = rng.standard_normal(3)
@@ -375,6 +457,7 @@ class TestPairwisePose:
         """Pairwise errors don't change if both pred and GT are wrapped by
         the same rigid transform (they're already relative quantities)."""
         import numpy as np
+
         from plumbline.metrics.pose import pairwise_pose_errors
 
         rng = np.random.default_rng(1)
@@ -384,17 +467,20 @@ class TestPairwisePose:
         Egt = Epred.copy()
         for i in range(1, N):
             for E in (Epred, Egt):
-                axis = rng.standard_normal(3); axis /= np.linalg.norm(axis)
+                axis = rng.standard_normal(3)
+                axis /= np.linalg.norm(axis)
                 theta = rng.uniform(0.1, 1.0)
-                K = np.array([[0,-axis[2],axis[1]],[axis[2],0,-axis[0]],[-axis[1],axis[0],0]])
-                R = np.eye(3) + np.sin(theta)*K + (1-np.cos(theta)) * (K @ K)
+                K = np.array(
+                    [[0, -axis[2], axis[1]], [axis[2], 0, -axis[0]], [-axis[1], axis[0], 0]]
+                )
+                R = np.eye(3) + np.sin(theta) * K + (1 - np.cos(theta)) * (K @ K)
                 E[i, :3, :3] = R
                 E[i, :3, 3] = rng.standard_normal(3)
 
         # Wrap pred by an arbitrary rigid transform.
-        T = np.eye(4); T[:3, :3] = np.array(
-            [[0.8, -0.6, 0.0], [0.6, 0.8, 0.0], [0.0, 0.0, 1.0]]
-        ); T[:3, 3] = [5.0, -1.0, 3.0]
+        T = np.eye(4)
+        T[:3, :3] = np.array([[0.8, -0.6, 0.0], [0.6, 0.8, 0.0], [0.0, 0.0, 1.0]])
+        T[:3, 3] = [5.0, -1.0, 3.0]
         Epred_t = np.einsum("ij,njk->nik", T, Epred)
         rot0, trans0 = pairwise_pose_errors(Epred, Egt)
         rot1, trans1 = pairwise_pose_errors(Epred_t, np.einsum("ij,njk->nik", T, Egt))

@@ -32,7 +32,12 @@ from plumbline import _version
 from plumbline.cache import PredictionCache
 from plumbline.conventions import depth_is_valid
 from plumbline.datasets.base import Dataset, Sample
-from plumbline.metrics.alignment import align_depth, apply_similarity, umeyama_similarity
+from plumbline.metrics.alignment import (
+    align_depth,
+    apply_similarity,
+    icp_similarity,
+    umeyama_similarity,
+)
 from plumbline.metrics.depth import abs_rel, delta_threshold, log10_error, rmse, silog
 from plumbline.metrics.pointmap import chamfer_distance, f_score
 from plumbline.metrics.pose import auc as pose_auc_fn
@@ -142,8 +147,13 @@ def evaluate(
         # that genuinely need all-view GT should raise max_views accordingly.
         trimmed_sample = _trim_sample_to_views(
             sample,
-            prediction.extrinsics.shape[0] if prediction.extrinsics is not None
-            else (prediction.depth.shape[0] if prediction.depth is not None else sample.images.shape[0]),
+            prediction.extrinsics.shape[0]
+            if prediction.extrinsics is not None
+            else (
+                prediction.depth.shape[0]
+                if prediction.depth is not None
+                else sample.images.shape[0]
+            ),
         )
         sample_metrics = _compute_metrics(
             prediction=prediction,
@@ -311,10 +321,30 @@ def _compute_metrics(
                         "got %d — leaving point map unaligned",
                         int(pred_centers.shape[0]),
                     )
+        elif pointcloud_alignment == "icp":
+            # ICP 7-DoF similarity against the GT cloud itself — the
+            # alignment protocol VGGT / MASt3R / DUSt3R papers report
+            # chamfer under. Warm-started from camera-centres Umeyama when
+            # available so convergence is quick; falls back to identity
+            # otherwise.
+            warm_s = warm_R = warm_t = None
+            if prediction.extrinsics is not None and sample.extrinsics_gt is not None:
+                pred_centers = prediction.extrinsics[:, :3, 3]
+                gt_centers = sample.extrinsics_gt[:, :3, 3]
+                if pred_centers.shape[0] >= 3:
+                    warm_s, warm_R, warm_t = umeyama_similarity(pred_centers, gt_centers)
+            s, R, t, _info = icp_similarity(
+                pmap.reshape(-1, 3),
+                sample.point_cloud_gt,
+                init_s=warm_s,
+                init_R=warm_R,
+                init_t=warm_t,
+            )
+            pmap = apply_similarity(pmap, s, R, t).astype(np.float32)
         elif pointcloud_alignment != "none":
             raise ValueError(
                 f"unknown pointcloud_alignment '{pointcloud_alignment}'; "
-                "use 'none' or 'camera_centers'"
+                "use 'none', 'camera_centers', or 'icp'"
             )
         out.update(
             _point_cloud_metrics(
@@ -474,9 +504,7 @@ def _pose_metrics(
         Ep = E_pred
         Eg = E_gt
     abs_rot = np.asarray(rotation_error_degrees(Ep, Eg)).reshape(-1)
-    abs_trans = np.asarray(
-        translation_cosine_error(Ep[..., :3, 3], Eg[..., :3, 3])
-    ).reshape(-1)
+    abs_trans = np.asarray(translation_cosine_error(Ep[..., :3, 3], Eg[..., :3, 3])).reshape(-1)
     abs_combined = np.maximum(abs_rot, abs_trans)
     abs_aucs = pose_auc_fn(abs_combined, list(auc_thresholds))
 
