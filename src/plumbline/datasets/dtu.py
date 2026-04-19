@@ -171,14 +171,19 @@ class DTUDataset(Dataset):
         light: int = 3,
         max_gt_points: int | None = 200_000,
         gt_subsample_seed: int = 0,
+        points_root: Path | str | None = None,
     ) -> None:
         root_path = Path(root) if root else env_path("DTU_ROOT")
         if root_path is None or not root_path.exists():
             raise DatasetNotAvailable(
                 "DTU not found. Set --data-root or $DTU_ROOT to the MVSNet-repacked "
-                "DTU directory (Cameras_1/, Rectified/scan*_train/, Points/stl/stl*_total.ply). "
-                "Public (no ToS) download: https://roboimagedata.compute.dtu.dk/?page_id=36 "
-                "plus the MVSNet preprocessing: https://github.com/YoYo000/MVSNet."
+                "DTU directory. Two layouts are auto-detected: (1) the training-format "
+                "'Cameras_1/ + Rectified/scanN_train/' repack, and (2) the test-format "
+                "'dtu/scanN/{cams,images}/' repack that ships as dtu_test.zip "
+                "(MVSNet Google Drive). GT point clouds live in Points/stl/ or are "
+                "overridable via points_root. Public download: "
+                "https://roboimagedata.compute.dtu.dk/?page_id=36 ; "
+                "https://github.com/YoYo000/MVSNet."
             )
         if not 0 <= light <= 6:
             raise ValueError(f"light must be in 0..6; got {light}")
@@ -202,18 +207,30 @@ class DTUDataset(Dataset):
         self.max_gt_points = max_gt_points
         self.gt_subsample_seed = int(gt_subsample_seed)
 
-        cameras_dir = self.root / "Cameras_1"
-        if not cameras_dir.exists():
+        # Auto-detect layout. Prefer the training-format repack when both are
+        # present (it has shared Cameras_1 that's more authoritative).
+        layout, scans_root, cameras_dir = _detect_dtu_layout(root_path)
+        if layout is None:
             raise DatasetNotAvailable(
-                f"Expected {cameras_dir}; not found. This loader targets the "
-                "MVSNet-repacked layout — see module docstring for the expected tree."
+                f"Expected a DTU layout under {root_path}. Either "
+                "Cameras_1/ (training-format) or <root>/[dtu/]scanN/cams/ "
+                "(test-format) must exist. See module docstring."
             )
-        self.cameras_dir = cameras_dir
+        self.layout = layout
+        self._scans_root = scans_root
+        self.cameras_dir = cameras_dir  # None when layout == "per_scan"
+
+        # GT point-cloud source: explicit override wins; else search
+        # <root>/Points/stl/, <root>/SampleSet/MVS Data/Points/stl/.
+        if points_root is not None:
+            self.points_root: Path | None = Path(points_root)
+        else:
+            self.points_root = _detect_points_root(root_path)
 
         manifest_path = (
             self.root
             / ".plumbline_manifest"
-            / f"dtu_{split_name}_vps{self.views_per_sample}_L{self.light}_n{len(scan_ids)}.jsonl"
+            / f"dtu_{split_name}_{layout}_vps{self.views_per_sample}_L{self.light}_n{len(scan_ids)}.jsonl"
         )
         if manifest_path.exists():
             records = load_manifest(manifest_path)
@@ -232,33 +249,28 @@ class DTUDataset(Dataset):
     # -- scanning --------------------------------------------------------
 
     def _scan(self, scan_ids: list[int]) -> Iterator[dict[str, Any]]:
-        rectified = self.root / "Rectified"
-        if not rectified.exists():
-            raise DatasetNotAvailable(f"Expected {rectified}; not found.")
+        if self.layout == "training":
+            yield from self._scan_training(scan_ids)
+        else:
+            yield from self._scan_per_scan(scan_ids)
+
+    def _scan_training(self, scan_ids: list[int]) -> Iterator[dict[str, Any]]:
+        """Training-format repack: Rectified/scanN_train/rect_VVV_L_r5000.png."""
+        assert self._scans_root is not None
         for scan_id in scan_ids:
-            scan_dir = rectified / f"scan{scan_id}_train"
+            scan_dir = self._scans_root / f"scan{scan_id}_train"
             if not scan_dir.exists():
-                # Skip missing scans silently when custom list is provided;
-                # for the fixed test split, scan loss is a real error.
                 if self.split == "test":
                     raise DatasetNotAvailable(
                         f"Required test-split scan directory missing: {scan_dir}"
                     )
                 continue
-            # DTU filenames are rect_<VVV>_<L>_r5000.png with VVV one-indexed
-            # 001..049. We enumerate all available views at the chosen light.
             img_paths = sorted(scan_dir.glob(f"rect_*_{self.light}_r5000.png"))
             if not img_paths:
                 continue
-
-            # Per-view cam file: 0-indexed in Cameras_1/.
             view_indices = [_view_index_from_filename(p.name) for p in img_paths]
-            # Construct sliding windows over available views (0-indexed).
             ordered = sorted(zip(view_indices, img_paths, strict=True))
-
-            gt_ply = self.root / "Points" / "stl" / f"stl{scan_id:03d}_total.ply"
-            gt_rel = str(gt_ply.relative_to(self.root)) if gt_ply.exists() else None
-
+            gt_rel = self._locate_gt_ply(scan_id)
             for i in range(0, len(ordered) - self.views_per_sample + 1):
                 group = ordered[i : i + self.views_per_sample]
                 first_view = group[0][0]
@@ -267,8 +279,73 @@ class DTUDataset(Dataset):
                     "scan_id": scan_id,
                     "view_indices": [v for v, _ in group],
                     "image_paths": [str(p.relative_to(self.root)) for _, p in group],
+                    "cam_paths": None,  # shared Cameras_1/ lookup happens in _load_sample
                     "gt_ply": gt_rel,
                 }
+
+    def _scan_per_scan(self, scan_ids: list[int]) -> Iterator[dict[str, Any]]:
+        """Test-format repack: <scans_root>/scanN/{images,cams}/ per scan.
+
+        Filenames are 0-indexed (``00000000.jpg``, ``00000000_cam.txt``);
+        light is not encoded in the test archive so ``self.light`` is
+        ignored in this layout.
+        """
+        assert self._scans_root is not None
+        for scan_id in scan_ids:
+            scan_dir = self._scans_root / f"scan{scan_id}"
+            if not scan_dir.exists():
+                if self.split == "test":
+                    raise DatasetNotAvailable(
+                        f"Required test-split scan directory missing: {scan_dir}"
+                    )
+                continue
+            img_dir = scan_dir / "images"
+            cam_dir = scan_dir / "cams"
+            if not (img_dir.exists() and cam_dir.exists()):
+                continue
+            img_paths = sorted(img_dir.glob("*.jpg")) + sorted(img_dir.glob("*.png"))
+            if not img_paths:
+                continue
+            # Filenames encode 0-indexed view; pair with matching cam file.
+            triples: list[tuple[int, Path, Path]] = []
+            for p in img_paths:
+                view_idx = int(p.stem)
+                cam_path = cam_dir / f"{view_idx:08d}_cam.txt"
+                if cam_path.exists():
+                    triples.append((view_idx, p, cam_path))
+            ordered = sorted(triples)
+            gt_rel = self._locate_gt_ply(scan_id)
+            for i in range(0, len(ordered) - self.views_per_sample + 1):
+                group = ordered[i : i + self.views_per_sample]
+                first_view = group[0][0]
+                yield {
+                    "sample_id": f"scan{scan_id}/view{first_view:03d}_v{self.views_per_sample}",
+                    "scan_id": scan_id,
+                    "view_indices": [v for v, _, _ in group],
+                    "image_paths": [str(p.relative_to(self.root)) for _, p, _ in group],
+                    "cam_paths": [str(c.relative_to(self.root)) for _, _, c in group],
+                    "gt_ply": gt_rel,
+                }
+
+    def _locate_gt_ply(self, scan_id: int) -> str | None:
+        """Return a relative path to stl<scan_id>_total.ply if present anywhere
+        under the configured points_root, else None."""
+        if self.points_root is None or not self.points_root.exists():
+            return None
+        # Try a few standard names; original DTU sometimes has trailing spaces.
+        candidates = [
+            self.points_root / "stl" / f"stl{scan_id:03d}_total.ply",
+            self.points_root / f"stl{scan_id:03d}_total.ply",
+        ]
+        for c in candidates:
+            if c.exists():
+                # Return relative to self.root when possible so manifests stay
+                # portable across machines.
+                try:
+                    return str(c.relative_to(self.root))
+                except ValueError:
+                    return str(c)
+        return None
 
     # -- per-sample ------------------------------------------------------
 
@@ -281,8 +358,14 @@ class DTUDataset(Dataset):
 
         Ks: list[NDArray[np.float64]] = []
         cam_from_world: list[NDArray[np.float64]] = []
-        for view_idx in rec["view_indices"]:
-            cam_path = self.cameras_dir / f"{view_idx:08d}_cam.txt"
+        cam_rel_paths = rec.get("cam_paths")
+        for i, view_idx in enumerate(rec["view_indices"]):
+            if cam_rel_paths is not None:
+                cam_path = self.root / cam_rel_paths[i]
+            else:
+                # training-format: shared Cameras_1/ lookup by 0-indexed view
+                assert self.cameras_dir is not None
+                cam_path = self.cameras_dir / f"{view_idx:08d}_cam.txt"
             K, E_cw = load_dtu_cam(cam_path)
             Ks.append(K)
             cam_from_world.append(E_cw)
@@ -379,6 +462,54 @@ def load_dtu_cam(path: Path) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
+
+def _detect_dtu_layout(
+    root: Path,
+) -> tuple[str | None, Path | None, Path | None]:
+    """Auto-detect DTU repack format.
+
+    Returns ``(layout, scans_root, cameras_dir)`` where:
+    - ``layout`` is ``"training"``, ``"per_scan"``, or ``None`` if neither
+      matches.
+    - ``scans_root`` is the directory that contains per-scan subdirs.
+    - ``cameras_dir`` is the shared ``Cameras_1/`` (training layout only).
+
+    Preference order: training layout first (more authoritative — shared
+    Cameras_1 reflects the calibrated rig), then per_scan.
+    """
+    cameras_dir = root / "Cameras_1"
+    rectified = root / "Rectified"
+    if cameras_dir.exists() and rectified.exists():
+        return "training", rectified, cameras_dir
+    # Test-format repack may live either directly under root or under
+    # "dtu/"  (matches the MVSNet Google Drive archive we distribute).
+    for candidate in (root, root / "dtu"):
+        if (candidate / "scan1").is_dir() and (candidate / "scan1" / "cams").is_dir():
+            return "per_scan", candidate, None
+    return None, None, None
+
+
+def _detect_points_root(root: Path) -> Path | None:
+    """Find the directory that holds DTU GT point clouds.
+
+    Tries several known layouts in order:
+
+    1. ``<root>/Points/``
+    2. ``<root>/SampleSet/MVS Data/Points/`` (original DTU archive)
+    3. ``<root>/Points/stl/``  (already-drilled-in variant)
+
+    Returns ``None`` when nothing looks right; the loader then yields
+    samples with ``point_cloud_gt=None`` and chamfer silently skips.
+    """
+    candidates = [
+        root / "Points",
+        root / "SampleSet" / "MVS Data" / "Points",
+    ]
+    for c in candidates:
+        if c.exists():
+            return c
+    return None
 
 
 def _view_index_from_filename(name: str) -> int:
