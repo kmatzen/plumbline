@@ -1,0 +1,54 @@
+# Depth Anything V2 Metric Outdoor (Large) on KITTI Eigen test split
+#
+# Outdoor counterpart to da-v2-metric-indoor-large-nyuv2. This is the
+# VKITTI-finetuned metric ViT-L checkpoint; unlike its indoor sibling
+# it is trained on KITTI-shaped synthetic outdoor data, so it should be
+# the natural match for KITTI eval.
+#
+# DA-V2 Table 4b reports KITTI AbsRel for the *KITTI-finetuned* ViT-L
+# at 0.049 (in-domain). The HuggingFace port we load here is trained on
+# VKITTI, not KITTI, so expect a ~0.05–0.08 range after median alignment
+# rather than an exact paper match. Primary metric still reported so the
+# runner can produce AbsRel cleanly.
+
+name: da-v2-metric-outdoor-large-kitti
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: metric-outdoor-large
+
+dataset:
+  name: kitti
+  kwargs:
+    # sample_list: /path/to/kitti_eigen_test_files_with_gt.txt
+    camera: image_02
+    apply_garg_crop: true
+
+tasks:
+  - mono_depth
+
+# The checkpoint predicts depth in meters directly. A paper match against
+# an in-domain (KITTI-finetuned) ViT-L would require no alignment, but
+# the VKITTI-trained port carries a domain bias similar to what the
+# Hypersim-trained indoor checkpoint shows on NYU. Median-align per
+# sample and treat as informational until the first GPU run lands.
+scale_alignment: median
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 80.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # No directly-published number for the *VKITTI-finetuned* ViT-L on
+  # KITTI; the paper's KITTI 0.049 is for a *KITTI-finetuned* ViT-L
+  # (Table 4b). Keeping tolerance permissive until the first run.
+  tolerance_relative: 1.0
+  citation: "No direct paper reference for VKITTI-finetuned ViT-L on KITTI (DA-V2 Table 4b targets the KITTI-finetuned variant)."
+
+notes: >
+  Informational reproduction that pairs the KITTI loader with DA-V2's
+  outdoor metric variant. Blocked on $KITTI_ROOT + a pinned Eigen sample
+  list. Expect the same "author vs HF port agreement" diagnostic the
+  indoor variant showed on NYU; any residual domain bias goes in
+  REPRODUCTIONS.md once the first GPU run lands.
