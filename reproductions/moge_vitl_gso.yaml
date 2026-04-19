@@ -46,9 +46,24 @@ paper_reference:
   citation: "Wang et al. 2024, MoGe, Table 2/3 GSO column (exact row TBD). UNVERIFIED."
 
 notes: >
-  Informational-only until the paper GSO number is pinned. Everything
-  upstream (loader, alignment, clip) is paper-faithful — this YAML
-  just needs the target value filled in.
+  Observed (RTX 3090 Ti, 2026-04-19, full 1030-object eval split, ROE):
+      AbsRel   0.0094
+      delta_1  0.9999
+      delta_2  1.0000
+      delta_3  1.0000
+      RMSE     0.006 m
+
+  Near-perfect — expected, because GSO is MoGe's own eval bundle
+  (they rendered these 1030 objects for their paper) with pristine
+  log-encoded GT, known intrinsics, and single-object framing. This
+  is the anti-DIODE: no depth-preprocessing mismatch, no ambiguity
+  over which distance convention, no outdoor sky pixels. Treat this
+  as a smoke test that the loader + alignment are wired correctly
+  rather than a discrimination test.
+
+  Target value still pending user confirmation from Wang et al. 2024,
+  Table 2 or Table 3 GSO column. Once pinned, re-gate with a 5-10%
+  tolerance (matching other MoGe reproductions).
 
   GSO dataset:
       1030 objects; 512x512; log-encoded uint16 depth.png with

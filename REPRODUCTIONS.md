@@ -9,8 +9,9 @@ harness's acceptance test.
 Model × dataset cell statuses:
 
 **Legend:** ✅ MATCH within tolerance · ⚠️ observed, off paper ·
-⌛ infra ready, awaiting data/compute · 🚧 planned (loader/adapter
-not yet wired) · — not a canonical paper combo
+🎯 observed, paper target unconfirmed · ⌛ infra ready, awaiting
+data/compute · 🚧 planned (loader/adapter not yet wired) · —
+not a canonical paper combo
 
 | Model → Dataset | NYUv2 | KITTI | DIODE | ETH3D | DTU | Co3Dv2 | GSO |
 |---|---|---|---|---|---|---|---|
@@ -21,7 +22,7 @@ not yet wired) · — not a canonical paper combo
 | **Metric3D-v2 L** | ✅ **0.0660** | ⌛ | — | — | — | — | — |
 | **Metric3D-v2 Giant** | ✅ **0.0702** | ⌛ | — | — | — | — | — |
 | **DA3** | ✅ δ₁ **0.9684** | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | — | ⌛ |
-| **MoGe-1 ViT-L** | ✅ **0.0305** (ROE, vs 0.0341) | ⌛ | ⚠️ **0.1088** vs 0.0400 _(2.7× off; MoGe preproc depth differs)_ | — | — | — | ⌛ loader ready |
+| **MoGe-1 ViT-L** | ✅ **0.0305** (ROE, vs 0.0341) | ⌛ | ⚠️ **0.1088** vs 0.0400 _(2.7× off; MoGe preproc depth differs)_ | — | — | — | 🎯 **0.0094** (δ₁ 0.9999) _(target TBD)_ |
 | **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ⌛ | ⌛ | — | — | — | ⌛ |
 | **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — | — |
 | **Marigold v1-1** | ✅ **0.0577** vs ~0.055 | ⌛ | — | — | — | — | — |
@@ -33,8 +34,9 @@ not yet wired) · — not a canonical paper combo
 
 **12 ✅ cells** across 8 model families × NYUv2 (the primary mono-depth
 anchor). Plus 1 DIODE effective-match (DA-V2-small-DIODE-indoor
-within a loose tolerance). All validated on an RTX 3090 Ti,
-2026-04-19.
+within a loose tolerance). Plus 1 🎯 informational GSO run
+(MoGe-1 ViT-L, AbsRel 0.0094, δ₁ 0.9999; paper target unconfirmed).
+All validated on an RTX 3090 Ti, 2026-04-19.
 
 ### Biggest open gaps (in order of per-cell leverage)
 
