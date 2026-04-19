@@ -27,13 +27,17 @@ depth_clip: [0.001, 10.0]
 
 paper_reference:
   primary_metric: abs_rel
-  # DA-V2 paper (Yang et al. 2024), Table 2: NYU AbsRel = 0.045 for ViT-L
-  # relative (zero-shot, scale+shift). Reproducible under the Eigen 2014
-  # protocol (NYU rawDepths, gt in [1e-3, 10]m, scale+shift in inverse
-  # depth, Eigen crop). NYUv2 loader defaults to depth_field="raw".
-  value: 0.045
+  # Verified against MoGe paper Table 2 (which reports DA-V2 as a
+  # baseline on NYU): DA-V2 ViT-L affine-invariant disparity =
+  # Reld 4.20 → 0.0420, δ₁ 98.2. plumbline's scale_shift fits in
+  # inverse-depth space, matching this column.
+  #
+  # The original 0.045 pin came from WebFetch of the DA-V2 paper's own
+  # table and may be from a different (e.g. alignment-free, or
+  # affine-depth-space) column. Keeping 0.0420 as the verified target.
+  value: 0.0420
   tolerance_relative: 0.10
-  citation: "Yang et al. 2024, Depth Anything V2, Table 2. NYUv2 Eigen test, ViT-L (relative)."
+  citation: "MoGe paper Table 2, NYU column, affine-invariant disparity row, DA-V2 ViT-L baseline."
 
 notes: >
   First GPU run against the filled `depths` field (pre-raw-default,

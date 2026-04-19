@@ -25,12 +25,16 @@ depth_clip: [0.001, 10.0]
 
 paper_reference:
   primary_metric: abs_rel
-  # Yang et al. 2024, DA-V2, Table 2: NYU ViT-B AbsRel=0.049, δ₁=0.976.
-  # Our Eigen + rawDepths + depth_clip pipeline consistently lands 5-8%
-  # BETTER than paper across S/B/L — ±10% reflects that empirical band.
+  # UNVERIFIED — originally 0.049 from WebFetch of DA-V2 paper's per-
+  # variant table. User has verified only the DA-V2 ViT-L affine-
+  # disparity value (0.0420, see da_v2_large_nyuv2.yaml). The per-
+  # variant Small/Base numbers haven't been cross-checked against
+  # the paper directly. plumbline observed 0.0456 is plausibly close
+  # to paper-for-this-variant but treat the match claim as
+  # unverified until confirmed.
   value: 0.049
-  tolerance_relative: 0.10
-  citation: "Yang et al. 2024, Depth Anything V2, Table 2. NYUv2 Eigen test, ViT-B (relative)."
+  tolerance_relative: 0.15
+  citation: "UNVERIFIED — DA-V2 paper per-variant NYU table needs direct read."
 
 notes: >
   Base checkpoint is ~400 MB; first run downloads from HuggingFace.

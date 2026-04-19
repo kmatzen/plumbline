@@ -35,6 +35,10 @@ paper_reference:
   # NYU's rawDepths field (Eigen 2014 protocol). Earlier plumbline runs
   # used the colorization-filled `depths` field and saw ~0.062; switching
   # the NYUv2 loader's default to `depth_field="raw"` closed the gap.
+  # UNVERIFIED — 0.053 came from WebFetch of DA-V2 paper's per-variant
+  # table. User has verified only the DA-V2 ViT-L affine-disparity
+  # value (0.0420, see da_v2_large_nyuv2.yaml). Small-variant target
+  # needs direct paper read to confirm.
   value: 0.053
   tolerance_relative: 0.05
   citation: "Yang et al. 2024, Depth Anything V2, Table 2. NYUv2 Eigen test, ViT-S (relative)."
