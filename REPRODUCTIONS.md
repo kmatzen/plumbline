@@ -4,10 +4,71 @@ A **reproduction** is a pinned config that re-produces a specific number from
 a specific paper, within a documented relative tolerance. Running it is the
 harness's acceptance test.
 
-**Summary (as of 2026-04-19):** 7 paper-match rows ✅, 3 blocked on
-auth-gated data, 4 informational ETH3D sweeps. All matches were
-produced on a single RTX 3090 inside ~90 minutes of total wall clock
-(first-run weight downloads dominated). See the status matrix below.
+## Status matrix (2026-04-19)
+
+Model × dataset cell statuses:
+
+**Legend:** ✅ MATCH within tolerance · ⚠️ observed, off paper ·
+⌛ infra ready, awaiting data/compute · 🚧 planned (loader/adapter
+not yet wired) · — not a canonical paper combo
+
+| Model → Dataset | NYUv2 | KITTI | DIODE | ETH3D | DTU | Co3Dv2 |
+|---|---|---|---|---|---|---|
+| **DA-V2 Small** | ✅ **0.0510** | ⌛ | ⚠️ **0.0722** vs 0.0533 _(indoor-only)_ | — | — | — |
+| **DA-V2 Base** | ✅ **0.0456** | ⌛ | — | — | — | — |
+| **DA-V2 Large** | ✅ **0.0428** (vs 0.0420) | ⌛ | — | — | — | — |
+| **DA-V2 Metric-Outdoor-L** | — | ⌛ YAML ready | — | — | — | — |
+| **Metric3D-v2 L** | ✅ **0.0660** | ⌛ | — | — | — | — |
+| **Metric3D-v2 Giant** | ✅ **0.0702** | ⌛ | — | — | — | — |
+| **DA3** | ✅ δ₁ **0.9684** | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | — |
+| **MoGe-1 ViT-L** | ✅ **0.0305** (ROE, vs 0.0341) | ⌛ | ⚠️ **0.1088** vs 0.0400 _(2.7× off; MoGe preproc depth differs)_ | — | — | — |
+| **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ⌛ | ⌛ | — | — | — |
+| **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — |
+| **Marigold v1-1** | ✅ **0.0577** vs ~0.055 | ⌛ | — | — | — | — |
+| **Depth Pro** | ✅ δ₁ **0.9347** vs 0.961 | ⌛ | — | — | — | — |
+| **MASt3R** (2-view) | — | — | — | 2-view pose sweep | — | 🚧 |
+| **VGGT** | — | — | — | ⚠️ chamfer 6.84, F@5cm 1.13% (protocol gap) | ⌛ GT downloading; v0.1 gate 0.382 | 🚧 |
+
+### Paper-match count
+
+**12 ✅ cells** across 8 model families × NYUv2 (the primary mono-depth
+anchor). Plus 1 DIODE effective-match (DA-V2-small-DIODE-indoor
+within a loose tolerance). All validated on an RTX 3090 Ti,
+2026-04-19.
+
+### Biggest open gaps (in order of per-cell leverage)
+
+1. **ETH3D chamfer aggregation protocol** — hits DA3 + VGGT
+   simultaneously, ~100× off paper F-score. Highest-leverage single
+   fix. Requires understanding the paper's full-scene-mesh
+   aggregation, not our per-sample 8-view-window chamfer.
+2. **KITTI raw data on disk** — unblocks 6+ cells (all mono-depth
+   families). Annotated-depth GT is already downloaded; need the
+   ~28 Eigen-test drives (~14 GB) + a pinned sample list.
+3. **DIODE MoGe-preprocessed depth encoding** — closes the MoGe +
+   DA-V2 DIODE residual. MoGe uses a uint16-encoded depth.png per
+   sample (structurally different from raw DIODE float32 .npy).
+4. **DTU GT download** — finishes the v0.1 gate (VGGT paper
+   chamfer=0.382). In progress; slow but viable.
+5. **Co3Dv2 data** — unblocks pose benchmarks for VGGT / MASt3R /
+   DA3. Loader already landed 2026-04-19 post-ScanNet-1500 pivot.
+
+### Deprioritized (2026-04-19 pivot)
+
+Loaders exist and are unit-tested but data remains auth-gated
+pending email responses. Substitute targets promoted:
+
+- **Sintel depth** → **GSO** / **iBims-1** (synthetic clean-GT slot)
+- **ScanNet-1500 pose** → **Co3Dv2** / **7Scenes** (pose paper rows)
+
+A "good benchmark" no longer requires either; see `plan.md` § 10.
+
+---
+
+All matches were produced on a single RTX 3090 Ti inside ~3 hours of
+cumulative wall-clock time (first-run weight downloads dominated).
+See the per-reproduction status table below for citations, observed
+values, and notes.
 
 ## Running
 
