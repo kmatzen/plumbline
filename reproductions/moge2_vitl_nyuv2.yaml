@@ -1,0 +1,56 @@
+# MoGe-2 (ViT-L, metric) on NYUv2 Eigen test split
+#
+# Companion to moge-vitl-nyuv2 (the v1 affine-invariant config).
+# MoGe-2 predicts metric depth directly (is_metric=True on the
+# adapter instance); the paper still reports it under affine-invariant
+# alignment on the zero-shot NYU table for apples-to-apples with v1
+# and DA-V2 / Metric3D baselines, so we match that protocol here with
+# scale_shift rather than no-alignment.
+
+name: moge2-vitl-nyuv2
+
+model:
+  name: moge
+  kwargs:
+    variant: 2-vitl
+
+dataset:
+  name: nyuv2
+  split: test
+  kwargs:
+    apply_eigen_crop: true
+
+tasks:
+  - mono_depth
+
+scale_alignment: scale_shift
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 10.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # MoGe-2 paper (Wang et al. 2025 update). Direct paper value to pin
+  # on first run; expect it to come in similar to or slightly better
+  # than MoGe-1's observed 0.0342. Using a loose ±20% tolerance for
+  # same ROE-vs-scale_shift gap documented in moge-vitl-nyuv2.
+  tolerance_relative: 0.20
+  citation: "Wang et al. 2025, MoGe-2 update. NYUv2 Eigen test, ViT-L (metric)."
+
+notes: >
+  First GPU run (RTX 3090 Ti, 2026-04-19, 654-sample Eigen test
+  split, scale_shift alignment):
+      AbsRel   0.0342
+      delta_1  0.9831
+  v1-vs-v2 A/B on the same machine + protocol:
+      MoGe-1  AbsRel 0.0342  delta_1 0.9824
+      MoGe-2  AbsRel 0.0342  delta_1 0.9831
+  Indistinguishable — under scale_shift alignment the metric vs
+  affine-invariant difference between v1 and v2 gets absorbed into
+  the fit. MoGe-2's improvement over v1 would show if we ran with
+  scale_alignment: none (metric eval), which plumbline supports —
+  but NYU zero-shot papers report under scale-shift, so this YAML
+  stays on that protocol for apples-to-apples comparison with the
+  DA-V2 / Metric3D / DA3 rows.
+
+  Needs `pip install 'git+https://github.com/microsoft/MoGe.git'`.
