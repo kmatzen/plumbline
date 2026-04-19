@@ -20,6 +20,7 @@ from plumbline.datasets.diode import (
     load_diode_depth_m,
     load_diode_depth_mask,
 )
+from plumbline.datasets.gso import GSODataset, read_moge_depth_png
 from plumbline.datasets.dtu import (
     DTU_MVS_TEST_SCANS,
     DTUDataset,
@@ -1273,3 +1274,168 @@ class TestCo3Dv2:
                 size_hw=(100, 100),
                 intrinsics_format="nope",
             )
+
+
+# ---------------------------------------------------------------------------
+# GSO (Google Scanned Objects, via MoGe's preprocessed HF bundle)
+# ---------------------------------------------------------------------------
+
+
+def _encode_moge_depth_png(
+    depth: np.ndarray,
+    *,
+    near: float,
+    far: float,
+    path: Path,
+    unit: float | None = None,
+) -> None:
+    """Invert read_moge_depth_png: depth → uint16 log-encoded PNG with metadata."""
+    from PIL import Image
+    from PIL.PngImagePlugin import PngInfo
+
+    if unit is not None:
+        depth_to_encode = depth / unit
+    else:
+        depth_to_encode = depth
+    # t = log(d/near) / log(far/near); raw = round(t * 65533 + 1).
+    mask_nan = np.isnan(depth_to_encode)
+    mask_inf = np.isinf(depth_to_encode) & (depth_to_encode > 0)
+    safe = np.where(mask_nan | mask_inf, near, np.clip(depth_to_encode, near, far))
+    t = np.log(safe / near) / np.log(far / near)
+    raw = np.clip(np.round(t * 65533.0 + 1.0), 1, 65534).astype(np.uint16)
+    raw[mask_nan] = 0
+    raw[mask_inf] = 65535
+    meta = PngInfo()
+    meta.add_text("near", repr(near))
+    meta.add_text("far", repr(far))
+    if unit is not None:
+        meta.add_text("unit", repr(unit))
+    Image.fromarray(raw).save(path, pnginfo=meta)
+
+
+def _write_fake_gso(
+    root: Path,
+    *,
+    objects: tuple[str, ...] = ("obj_a", "obj_b"),
+    H: int = 32,
+    W: int = 32,
+    depth_m: float = 1.5,
+    near: float = 0.1,
+    far: float = 10.0,
+) -> None:
+    import json
+
+    for obj in objects:
+        obj_dir = root / obj
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
+            obj_dir / "image.jpg", quality=90
+        )
+        depth = np.full((H, W), depth_m, dtype=np.float32)
+        depth[0, 0] = np.nan  # invalid
+        depth[0, 1] = np.inf  # beyond far
+        _encode_moge_depth_png(depth, near=near, far=far, path=obj_dir / "depth.png")
+        # Normalized intrinsics (fx/W, cx/W, fy/H, cy/H; principal point at centre).
+        K_norm = [[1.0, 0.0, 0.5], [0.0, 1.0, 0.5], [0.0, 0.0, 1.0]]
+        (obj_dir / "meta.json").write_text(json.dumps({"intrinsics": K_norm}))
+
+
+class TestGSO:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable):
+            GSODataset(root=tmp_path / "nope")
+
+    def test_empty_root_errors(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        # Root exists but no object subdirs with meta.json.
+        (tmp_path / "stray.txt").write_text("x")
+        with pytest.raises(DatasetNotAvailable, match="No GSO"):
+            GSODataset(root=tmp_path)
+
+    def test_basic_load(self, tmp_path: Path) -> None:
+        _write_fake_gso(tmp_path, objects=("obj_a", "obj_b"))
+        ds = GSODataset(root=tmp_path)
+        assert len(ds) == 2
+        samples = list(ds)
+        s = samples[0]
+        assert s.num_views == 1
+        assert s.images.shape == (1, 32, 32, 3)
+        assert s.depth_gt is not None and s.depth_gt.shape == (1, 32, 32)
+        assert s.depth_gt.dtype == np.float32
+        # Identity extrinsics for single-view synthetic.
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-5)
+        # Intrinsics un-normalized: fx = 1.0 * W = 32, cx = 0.5 * W = 16.
+        assert s.intrinsics[0, 0, 0] == pytest.approx(32.0)
+        assert s.intrinsics[0, 0, 2] == pytest.approx(16.0)
+        assert s.intrinsics[0, 1, 1] == pytest.approx(32.0)
+        assert s.intrinsics[0, 1, 2] == pytest.approx(16.0)
+        assert s.metadata["object"] in {"obj_a", "obj_b"}
+
+    def test_nan_and_inf_treated_as_invalid(self, tmp_path: Path) -> None:
+        _write_fake_gso(tmp_path, objects=("obj_a",), depth_m=1.5, near=0.1, far=10.0)
+        ds = GSODataset(root=tmp_path)
+        s = next(iter(ds))
+        assert s.depth_valid is not None
+        # NaN at (0, 0) and inf at (0, 1) should be marked invalid and zeroed.
+        assert not bool(s.depth_valid[0, 0, 0])
+        assert not bool(s.depth_valid[0, 0, 1])
+        assert s.depth_gt is not None
+        assert float(s.depth_gt[0, 0, 0]) == 0.0
+        assert float(s.depth_gt[0, 0, 1]) == 0.0
+        # A mid-image pixel should be finite and positive.
+        assert bool(s.depth_valid[0, 16, 16])
+        assert float(s.depth_gt[0, 16, 16]) > 0.0
+
+    def test_object_whitelist(self, tmp_path: Path) -> None:
+        _write_fake_gso(tmp_path, objects=("apple", "banana", "cherry"))
+        ds = GSODataset(root=tmp_path, objects=["apple", "cherry"])
+        names = {s.metadata["object"] for s in ds}
+        assert names == {"apple", "cherry"}
+
+    def test_depth_shape_mismatch_errors(self, tmp_path: Path) -> None:
+        _write_fake_gso(tmp_path, objects=("obj",), H=32, W=32)
+        # Overwrite depth.png with a smaller one — loader should raise.
+        depth = np.full((16, 16), 1.0, dtype=np.float32)
+        _encode_moge_depth_png(
+            depth, near=0.1, far=10.0, path=tmp_path / "obj" / "depth.png"
+        )
+        ds = GSODataset(root=tmp_path)
+        with pytest.raises(ValueError, match="mismatches image"):
+            next(iter(ds))
+
+    def test_read_moge_depth_png_roundtrip(self, tmp_path: Path) -> None:
+        # Pick depth values spanning the encoded log range.
+        depth = np.array([[0.5, 1.0, 2.0], [5.0, np.nan, np.inf]], dtype=np.float32)
+        p = tmp_path / "d.png"
+        _encode_moge_depth_png(depth, near=0.1, far=10.0, path=p)
+        loaded = read_moge_depth_png(p)
+        assert loaded.dtype == np.float32
+        # Finite entries round-trip within log-quantization error (<< 0.01).
+        np.testing.assert_allclose(loaded[0], depth[0], rtol=1e-3)
+        np.testing.assert_allclose(loaded[1, 0], depth[1, 0], rtol=1e-3)
+        assert np.isnan(loaded[1, 1])
+        assert np.isinf(loaded[1, 2])
+
+    def test_read_moge_depth_png_rejects_missing_metadata(
+        self, tmp_path: Path
+    ) -> None:
+        # Save a uint16 PNG without near/far in info — loader must refuse.
+        raw = np.zeros((4, 4), dtype=np.uint16)
+        p = tmp_path / "no_meta.png"
+        Image.fromarray(raw).save(p)
+        with pytest.raises(ValueError, match="near"):
+            read_moge_depth_png(p)
+
+    def test_read_moge_depth_png_rejects_wrong_dtype(self, tmp_path: Path) -> None:
+        from PIL.PngImagePlugin import PngInfo
+
+        p = tmp_path / "wrong.png"
+        meta = PngInfo()
+        meta.add_text("near", "0.1")
+        meta.add_text("far", "10.0")
+        Image.fromarray(np.zeros((4, 4, 3), dtype=np.uint8)).save(p, pnginfo=meta)
+        with pytest.raises(ValueError, match="uint16"):
+            read_moge_depth_png(p)
