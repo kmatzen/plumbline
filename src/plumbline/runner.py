@@ -131,9 +131,19 @@ def evaluate(
             continue
 
         runtime_ms = (time.perf_counter() - t0) * 1000.0
+        # The runner trimmed the model input to ``keep`` views in
+        # ``_predict_with_cache`` (honouring max_views + the model's cap).
+        # Trim the sample's per-view GT arrays to the same count so that
+        # pose / depth / point-map metrics see matching shapes. Sample IDs
+        # that genuinely need all-view GT should raise max_views accordingly.
+        trimmed_sample = _trim_sample_to_views(
+            sample,
+            prediction.extrinsics.shape[0] if prediction.extrinsics is not None
+            else (prediction.depth.shape[0] if prediction.depth is not None else sample.images.shape[0]),
+        )
         sample_metrics = _compute_metrics(
             prediction=prediction,
-            sample=sample,
+            sample=trimmed_sample,
             tasks=tasks,
             scale_alignment=scale_alignment,
             pose_auc_thresholds=pose_auc_thresholds,
@@ -295,6 +305,30 @@ def _compute_metrics(
         )
 
     return out
+
+
+def _trim_sample_to_views(sample: Sample, n: int) -> Sample:
+    """Return a new Sample whose per-view arrays are sliced to the first ``n`` views.
+
+    Adapters that cap ``max_views`` (MASt3R's 2-view PairViewer, VGGT's
+    N<=32) leave a predicted tensor with fewer views than the loader
+    produced. Pose / depth / point-map metrics expect matching view
+    counts; this helper makes the mismatch a non-issue. No-op when the
+    sample already has ≤ n views.
+    """
+    if n <= 0 or sample.images.shape[0] <= n:
+        return sample
+    from dataclasses import replace
+
+    return replace(
+        sample,
+        images=sample.images[:n],
+        intrinsics=sample.intrinsics[:n],
+        extrinsics_gt=sample.extrinsics_gt[:n],
+        depth_gt=sample.depth_gt[:n] if sample.depth_gt is not None else None,
+        depth_valid=sample.depth_valid[:n] if sample.depth_valid is not None else None,
+        # point_cloud_gt is scene-level (M, 3); not per-view, so leave it.
+    )
 
 
 def _depth_metrics(

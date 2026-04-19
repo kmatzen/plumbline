@@ -123,6 +123,11 @@ class TestAlignmentInvariants:
     @given(gt=_depth_array, scale=st.floats(min_value=0.05, max_value=20))
     def test_lstsq_recovers_exact_scale(self, gt: np.ndarray, scale: float) -> None:
         pred = (gt / scale).astype(np.float32)
+        # align_scale_lstsq guards against a near-zero ``pred @ pred``
+        # denominator (returns NaN). Skip degenerate arrays that land
+        # below that guard — the recovery property is defined only when
+        # the normal equation is well-posed.
+        assume(float(np.asarray(pred, dtype=np.float64) @ np.asarray(pred, dtype=np.float64)) >= 1e-6)
         s = align_scale_lstsq(pred, gt)
         assert s == pytest.approx(scale, rel=1e-4)
 
