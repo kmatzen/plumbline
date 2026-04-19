@@ -131,6 +131,7 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
         cache=PredictionCache(cfg.get("cache_dir")) if cfg.get("cache_dir") else None,
         depth_clip=depth_clip,
         pointcloud_alignment=cfg.get("pointcloud_alignment", "none"),
+        chamfer_outlier_distance=cfg.get("chamfer_outlier_distance"),
     )
 
     paper = cfg.get("paper_reference", {})

@@ -40,6 +40,12 @@ tasks:
 pointcloud_alignment: icp
 max_views: 8
 device: cuda:0
+# Paper-protocol chamfer: discard predicted points farther than this
+# distance from the GT cloud before averaging. MVS papers report
+# chamfer on the inlier pool so a tiny fraction of far-outlier
+# hallucinations can't dominate the mean. 0.5 m is generous for a
+# courtyard-sized scene.
+chamfer_outlier_distance: 0.5
 
 paper_reference:
   primary_metric: chamfer

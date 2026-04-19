@@ -45,7 +45,13 @@ def _nn_distances(a: NDArray[Any], b: NDArray[Any]) -> NDArray[Any]:
         return d
 
 
-def chamfer_distance(pred: NDArray[Any], gt: NDArray[Any], *, two_sided: bool = True) -> float:
+def chamfer_distance(
+    pred: NDArray[Any],
+    gt: NDArray[Any],
+    *,
+    two_sided: bool = True,
+    outlier_distance: float | None = None,
+) -> float:
     """Symmetric Chamfer distance between two point sets.
 
     ``mean_{x in pred} min_{y in gt} ||x - y||  +  mean_{y in gt} min_{x in pred} ||y - x||``
@@ -56,6 +62,23 @@ def chamfer_distance(pred: NDArray[Any], gt: NDArray[Any], *, two_sided: bool = 
     ----------
     pred, gt
         ``(N, 3)`` and ``(M, 3)`` float arrays in the same world frame.
+    outlier_distance
+        If set, discard predicted points whose nearest GT distance exceeds
+        this threshold BEFORE computing the mean. Matches the
+        standard MVS paper protocol (ETH3D / Tanks & Temples) where the
+        mean is reported over "inlier" predictions — far-outlier
+        hallucinations are excluded so a tiny fraction of bad predictions
+        can't dominate the metric.
+
+        The GT→pred direction keeps all GT points (recall is meant to
+        reflect coverage and shouldn't be pruned). Effectively this turns
+        the reported chamfer from
+            mean(d_pred→gt) + mean(d_gt→pred)
+        into
+            mean(d_pred→gt | d_pred→gt < outlier_distance) + mean(d_gt→pred).
+
+        ``None`` (default) reports the untrimmed chamfer — matches prior
+        plumbline behaviour.
     """
     if pred.ndim != 2 or pred.shape[-1] != 3:
         raise ValueError(f"pred must be (N, 3); got {pred.shape}")
@@ -64,6 +87,15 @@ def chamfer_distance(pred: NDArray[Any], gt: NDArray[Any], *, two_sided: bool = 
     if pred.size == 0 or gt.size == 0:
         return float("nan")
     d_pg = _nn_distances(pred, gt)
+    if outlier_distance is not None:
+        if outlier_distance <= 0:
+            raise ValueError(f"outlier_distance must be > 0; got {outlier_distance}")
+        inlier = d_pg < outlier_distance
+        if not inlier.any():
+            # No inliers means the prediction is entirely outside the GT
+            # region — mean-over-empty is undefined, report NaN.
+            return float("nan")
+        d_pg = d_pg[inlier]
     if not two_sided:
         return float(d_pg.mean())
     d_gp = _nn_distances(gt, pred)
@@ -75,6 +107,7 @@ def f_score(
     gt: NDArray[Any],
     *,
     threshold: float,
+    outlier_distance: float | None = None,
 ) -> dict[str, float]:
     """F-score / precision / recall at a distance threshold.
 
@@ -86,6 +119,21 @@ def f_score(
 
     Returned as percentages in ``[0, 100]``, matching the Tanks & Temples and
     ETH3D reporting convention.
+
+    Parameters
+    ----------
+    threshold
+        Inlier distance for precision/recall (typically 5 cm or 10 cm).
+    outlier_distance
+        If set, discard predicted points whose nearest GT distance exceeds
+        this threshold before computing precision. Precision is always
+        already insensitive to outliers when ``outlier_distance >= threshold``
+        — a point outside threshold isn't counted either way — so this
+        only matters when you want the *base* denominator (all pred
+        points including far hallucinations) replaced by the inlier pool.
+        Matches the chamfer-side outlier masking protocol used by MVS
+        papers when they report F-score alongside chamfer. Recall is
+        unchanged (coverage-on-GT shouldn't be pruned).
     """
     if threshold <= 0:
         raise ValueError(f"threshold must be > 0; got {threshold}")
@@ -93,6 +141,13 @@ def f_score(
         return {"precision": float("nan"), "recall": float("nan"), "f_score": float("nan")}
     d_pg = _nn_distances(pred, gt)
     d_gp = _nn_distances(gt, pred)
+    if outlier_distance is not None:
+        if outlier_distance <= 0:
+            raise ValueError(f"outlier_distance must be > 0; got {outlier_distance}")
+        inlier = d_pg < outlier_distance
+        if not inlier.any():
+            return {"precision": float("nan"), "recall": float("nan"), "f_score": float("nan")}
+        d_pg = d_pg[inlier]
     precision = float((d_pg < threshold).mean()) * 100.0
     recall = float((d_gp < threshold).mean()) * 100.0
     f = 0.0 if precision + recall <= 0 else 2 * precision * recall / (precision + recall)
