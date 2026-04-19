@@ -1,0 +1,39 @@
+# Metric3Dv2 (ViT-Giant2) on NYUv2 Eigen test split
+#
+# Companion to metric3d-v2-nyuv2 (ViT-L). Paper Table I reports ViT-giant2
+# at AbsRel=0.067, δ₁=0.980 on NYU zero-shot. First run downloads the
+# ViT-giant2 weights (~1.5 GB).
+
+name: metric3d-v2-giant-nyuv2
+
+model:
+  name: metric3d-v2
+  kwargs:
+    variant: vit_giant2
+
+dataset:
+  name: nyuv2
+  split: test
+  kwargs:
+    apply_eigen_crop: true
+
+tasks:
+  - mono_depth
+
+scale_alignment: none
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 10.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # Yin et al. 2024, Metric3D v2, Table I: NYU ViT-giant2 CSTM_label ZS
+  # reports AbsRel=0.067, δ₁=0.980.
+  value: 0.067
+  tolerance_relative: 0.10
+  citation: "Yin et al. 2024, Metric3D v2, Table I. NYUv2 Eigen test, ViT-giant2 CSTM_label ZS."
+
+notes: >
+  Needs mmengine + mmcv-lite installed and xformers NOT installed in
+  the venv (see the ViT-L YAML's notes). Weights ~1.5 GB; first-run
+  download dominates the wall-clock for the first sample.
