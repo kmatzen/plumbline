@@ -22,8 +22,9 @@ details within each section.
 > | DIODE mono-depth | **2** (DA-V2-small indoor, MoGe-1-ROE indoor) |
 > | MoGe NYU (ROE) | **1** (MoGe-1 0.0305 vs paper 0.0297) |
 > | ETH3D / DTU chamfer | **0** (infrastructure works but ~100× off paper — protocol gap) |
-> | KITTI / Sintel / ScanNet depth | **0** (data partial or gated) |
-> | VGGT/MASt3R/DA3 paper pose tables | **0** (no loaders for ScanNet-1500 / RealEstate10K / Co3Dv2) |
+> | KITTI depth | **0** (data partial, downloading) |
+> | Sintel / ScanNet | **deprioritized 2026-04-19** — auth-gated, substitute with GSO / iBims-1 for synthetic + Co3Dv2 / 7Scenes for pose |
+> | VGGT/MASt3R/DA3 paper pose tables | **0** (Co3Dv2 / 7Scenes loaders on Tier-2 queue; ScanNet-1500 loader wired but data blocked) |
 >
 > Major session wins: ROE alignment (`scale_shift_robust`) closed
 > MoGe NYU to paper; ICP alignment mode + chamfer outlier-mask +
@@ -534,18 +535,26 @@ missing and which items matter most for reproducing published tables.
    but individually have upstream-install quirks — each is ~1 day of
    adapter work + smoke-test.
 
-6. **Pose benchmarks.** Infrastructure (rotation / translation /
-   AUC@5/10/30° metrics, pairwise relative pose) exists; the loaders
-   that map to canonical paper pose tables don't. As of 2026-04-19 a
-   ScanNet-1500 loader is wired (blocked on the same ScanNet ToS
-   access as the depth split; pair list is public):
-   - **ScanNet-1500** ✅ loader wired, awaiting data. VGGT Table 4 +
-     MASt3R paper §4.1.
-   - **RealEstate10K**: trajectory, VGGT Table 1. Paid-to-download
-     RGB but public metadata.
-   - **Co3Dv2**: VGGT Table 1 + DUSt3R. Public (Meta).
-   - **7Scenes**: classical relocalization, MASt3R.
-   - **TUM-RGBD**: SLAM-style trajectory.
+6. **Pose benchmarks — pivoted to Co3Dv2 + 7Scenes.** Infrastructure
+   (rotation / translation / AUC@5/10/30° metrics, pairwise relative
+   pose) exists; the loaders that map to paper pose tables don't.
+   ScanNet-1500 is deprioritized (see 2026-04-19 pivot below); the
+   active Tier-2 pose-benchmark targets are:
+   - **Co3Dv2** (Meta, public, no auth) — VGGT Table 1, DUSt3R,
+     MASt3R all report on it. Object-centric, ~1.5M frames across
+     ~19K sequences. The flagship pose benchmark that unblocks
+     real paper-row reproductions.
+   - **7Scenes** (Microsoft Research, public) — classical
+     relocalization, still cited in MASt3R era.
+   - **TUM-RGBD** (SLAM-style trajectory, public).
+
+   Deprioritized:
+   - **ScanNet-1500** — loader is wired and unit-tested (shipped
+     in 2026-04-19 session) but the image data is ScanNet-ToS-gated
+     and the auth email hasn't landed. Remains usable the moment
+     access arrives; just not on the critical path for "good
+     benchmark" because Co3Dv2 covers the same protocol space.
+   - **RealEstate10K** — trajectory, paid-to-download RGB.
 
 7. **MoGe-2 metric eval**. Already have the config
    (`moge2-vitl-nyuv2-metric`, observed AbsRel=0.0899 without
@@ -572,6 +581,25 @@ missing and which items matter most for reproducing published tables.
    paper target chamfer=0.382. Data retrieval is slow but viable
    (SampleSet.zip 6.9 GB at ~680 KB/s ≈ 3h). Once extracted,
    dependent on the Tier-1 chamfer rewrite to actually hit paper.
+
+### 2026-04-19 pivot: deprioritize Sintel + ScanNet (auth-gated)
+
+Both were originally in v0.1's 3-dataset shortlist. We spent a GPU
+session pinning 13 paper reproductions without either; neither has
+its access email landed yet either. Rather than block on the emails,
+promote public substitutes:
+
+| Dropped (auth-gated) | Substitute (public) | What it covers |
+|---|---|---|
+| ScanNet-1500 pose | **Co3Dv2** | two-view + multi-view pose paper rows (VGGT Table 1, DUSt3R, MASt3R) |
+| ScanNet-1500 pose | **7Scenes** | relocalization paper rows (MASt3R) |
+| Sintel depth | **GSO** (Google Scanned Objects) | synthetic clean-GT slot (MoGe Table 2) |
+| Sintel depth | **iBims-1** | high-fidelity indoor synthetic (MoGe Table 1/2) |
+
+Sintel and ScanNet loaders stay in the repo (they work, just blocked
+on data access). When either email lands, the infrastructure is
+ready; otherwise, **a good benchmark is achievable without either**
+using the substitutes above.
 
 ### Tier 4 — parking lot
 
@@ -610,6 +638,22 @@ Full current + planned adapter roster so no one loses track.
 | **FLARE** | planned (Tier 2) | fast multi-view 3D (confirm repo) |
 | **MapAnything** | planned (Tier 2) | 3D recon w/ map prior |
 | **MonST3R** (dynamic DUSt3R) | planned (Tier 3) | dynamic-scene 3D |
+
+#### Dataset roster (current + Tier-2 planned)
+
+| Dataset | Status | Primary use |
+|---|---|---|
+| NYUv2 | **shipped** | indoor mono-depth (7 paper-matches) |
+| KITTI | loader **shipped**, data partial | outdoor mono-depth (DA-V2/MoGe/Metric3D/Depth Pro paper rows) |
+| DIODE | **shipped**, seg-mask integration in flight | mixed indoor/outdoor dense-LiDAR (MoGe / DA-V2 paper rows) |
+| ETH3D high-res | **shipped** | multi-view chamfer (VGGT / DA3 / MASt3R) |
+| DTU MVS | **shipped**, GT download in flight | v0.1 paper-match gate (VGGT Table 2) |
+| **Co3Dv2** | planned (Tier 2) | pose paper rows (VGGT Table 1, DUSt3R, MASt3R) |
+| **GSO** | planned (Tier 2) | synthetic clean-GT (MoGe Table 1/2) |
+| **7Scenes** | planned (Tier 3) | classical relocalization |
+| **iBims-1** | planned (Tier 3) | high-fidelity indoor synthetic |
+| Sintel | **deprioritized 2026-04-19** | auth-gated; substituted by GSO / iBims-1 |
+| ScanNet + ScanNet-1500 | **deprioritized 2026-04-19** | loaders wired, data auth-gated; Co3Dv2 covers pose protocol |
 
 ### What's NOT in v0.2 (and why)
 
