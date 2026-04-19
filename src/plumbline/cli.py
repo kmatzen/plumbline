@@ -34,6 +34,34 @@ app = typer.Typer(
 console = Console()
 
 
+def _parse_kv_value(v: str) -> object:
+    """Parse a ``KEY=VALUE`` right-hand side into an int/float/bool/str.
+
+    Bare tokens are tried in order: int, float, ``true``/``false``, plain
+    string. Quoted strings lose their outer quotes. ``none``/``null`` →
+    Python ``None``.
+    """
+    s = v.strip()
+    if len(s) >= 2 and s[0] == s[-1] and s[0] in ("'", '"'):
+        return s[1:-1]
+    lo = s.lower()
+    if lo in ("none", "null"):
+        return None
+    if lo == "true":
+        return True
+    if lo == "false":
+        return False
+    try:
+        return int(s)
+    except ValueError:
+        pass
+    try:
+        return float(s)
+    except ValueError:
+        pass
+    return s
+
+
 def _eager_import_adapters() -> None:
     """Import built-in adapter modules so they register with the registry.
 
@@ -123,6 +151,15 @@ def run_cmd(
     cache_dir: Path | None = typer.Option(
         None, "--cache-dir", help="Override prediction cache dir."
     ),
+    dataset_kwargs: list[str] = typer.Option(
+        [],
+        "--dataset-kwargs",
+        help=(
+            "Extra kwargs for the dataset constructor as KEY=VALUE pairs "
+            "(e.g. --dataset-kwargs views_per_sample=8 --dataset-kwargs "
+            "depth_field=raw). Values are parsed as int / float / bool / str."
+        ),
+    ),
 ) -> None:
     """Evaluate a model on a dataset."""
     _eager_import_adapters()
@@ -138,6 +175,13 @@ def run_cmd(
         ds_kwargs["split"] = split
     if data_root is not None:
         ds_kwargs["root"] = data_root
+    for kv in dataset_kwargs:
+        if "=" not in kv:
+            raise typer.BadParameter(
+                f"--dataset-kwargs expects KEY=VALUE; got {kv!r}"
+            )
+        k, _, v = kv.partition("=")
+        ds_kwargs[k.strip()] = _parse_kv_value(v)
     dataset_instance = dataset_cls(**ds_kwargs)
 
     if subset is not None:

@@ -82,7 +82,11 @@ class TestDepthMetricInvariants:
         pred = (gt * scale).astype(np.float32)
         observed = rmse(pred, gt)
         expected = abs(scale - 1) * float(np.sqrt(np.mean(gt.astype(np.float64) ** 2)))
-        assert observed == pytest.approx(expected, rel=1e-3, abs=1e-6)
+        # For scales extremely close to 1, ``expected`` collapses to O(1e-5)
+        # and the rel=1e-3 bound evaluates to <1e-8. Widen the absolute
+        # tolerance so float32 rounding of ``gt * scale`` (up to O(1e-5))
+        # stays inside the combined bound.
+        assert observed == pytest.approx(expected, rel=1e-3, abs=1e-4)
 
     @given(gt=_depth_array)
     def test_delta_is_bounded(self, gt: np.ndarray) -> None:

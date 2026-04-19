@@ -59,3 +59,19 @@ def test_cache_info_empty(tmp_path: Path) -> None:
 def test_clear_cache_empty(tmp_path: Path) -> None:
     result = runner.invoke(app, ["clear-cache", "--cache-dir", str(tmp_path)])
     assert result.exit_code == 0
+
+
+def test_parse_kv_value_types() -> None:
+    from plumbline.cli import _parse_kv_value
+
+    assert _parse_kv_value("42") == 42
+    assert _parse_kv_value("3.14") == 3.14
+    assert _parse_kv_value("true") is True
+    assert _parse_kv_value("False") is False
+    assert _parse_kv_value("none") is None
+    assert _parse_kv_value("null") is None
+    assert _parse_kv_value("hello") == "hello"
+    assert _parse_kv_value('"quoted"') == "quoted"
+    assert _parse_kv_value("'quoted'") == "quoted"
+    # Strings that look like versions stay as strings.
+    assert _parse_kv_value("1.2.3") == "1.2.3"

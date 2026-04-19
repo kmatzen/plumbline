@@ -37,6 +37,7 @@ value.
 | _VGGT / ETH3D courtyard smoke_ | VGGT-1B, 4 views, first sample | `pose_auc@5°` | — | **0.91** | n/a | informational only. Rotation errors <0.3°/view; translation cos <0.6°/view. |
 | _MASt3R / ETH3D courtyard pairs_ | MASt3R ViT-L, 35 consecutive 2-view samples | `pose_auc@5°` | — | **0.46** | n/a | informational only. Mean rotation error 0.32°/pair; translation cos 3.42°. 2-view setup (PairViewer) — Umeyama needs N≥3 so no chamfer. |
 | _VGGT / ETH3D courtyard view-count sweep_ | VGGT-1B on 31 sliding 8-view windows | `pose_auc@5°` | — | see below | n/a | informational. Sweep: views=2 → 0.60, views=4 → **0.67** (peak), views=8 → 0.61. Per-view rotation error medians 0.29° / 0.35° / 0.49° respectively; translation cos 2.26° / 1.73° / 2.02°. 4-view is the sweet spot at the default 518px input. |
+| _DA3 / ETH3D courtyard view-count sweep_ | DA3 Large-1.1 on 31 sliding 8-view windows | `pose_auc@5°` | — | see below | n/a | informational. Sweep: views=2 → 0.57, views=4 → **0.63** (peak), views=8 → 0.57. Rotation medians 0.39° / 0.39° / 0.70°; translation cos 2.84° / 2.21° / 2.44°. DA3 trails VGGT by ~3-4% AUC@5 at every view count but is ~3× faster per sample. |
 
 ### Note on the NYUv2 Eigen 2014 protocol
 
