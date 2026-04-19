@@ -42,19 +42,36 @@ device: cuda:0
 
 paper_reference:
   primary_metric: chamfer
-  # VGGT's paper Table 6 reports ETH3D accuracy/completeness/overall
+  # VGGT's paper Table 3 reports ETH3D accuracy/completeness/overall
   # distance across the full test set (not a single scene). A single-
-  # scene courtyard number is not directly comparable to that table,
-  # so this is informational: we report observed chamfer / F-score at
-  # threshold 0.05 m but do not claim a paper match.
+  # scene courtyard number is not directly comparable to that table.
+  # Informational only.
   tolerance_relative: 1.0
-  citation: "Wang et al. 2025, VGGT, Table 6 (ETH3D) — single-scene courtyard reported here is informational."
+  citation: "Wang et al. 2025, VGGT, Table 3 (ETH3D) — single-scene courtyard reported here is informational."
 
 notes: >
-  Informational. Produces the first paper-style 3D metrics in the
-  reproductions surface: chamfer, precision (accuracy), recall
-  (completeness), and F-score at 0.05 m threshold. First real run
-  should record the observed chamfer and precision/recall here and
-  in REPRODUCTIONS.md. 8 views on a courtyard sliding window; VGGT
-  peaked at 4 views in the pose sweep so expect chamfer quality to
-  track that trend.
+  First GPU run (RTX 3090 Ti, 2026-04-19, 31 sliding 8-view windows):
+  chamfer=7.71, F-score@0.05=0.12%, precision=0.09%, recall=0.22%.
+  These numbers are much worse than the VGGT paper's full-ETH3D
+  table would suggest (paper Table 3 reports sub-0.1 scale on a
+  different protocol). Most likely explanations — not yet
+  investigated — in rough order of plausibility:
+
+    1. Courtyard is a notoriously hard ETH3D scene (textured wall
+       + ground, strong specular glass window frames). Single-scene
+       chamfer can be 10-50x worse than the cross-scene mean.
+    2. 8-view Umeyama on courtyard's near-collinear camera track may
+       be numerically fragile, biasing the 7-DoF similarity fit.
+       Paper tables use a DIFFERENT alignment protocol — possibly
+       ICP on the point clouds themselves, not camera centres.
+    3. VGGT's internal point-map scale is not metric; our fit
+       recovers a 5.84x scale but the translation may be off.
+
+  This YAML is the first infrastructure check that the chamfer
+  path runs end-to-end. Accuracy calibration on a full-dataset
+  protocol is v0.2 work. Do NOT cite these numbers against paper
+  tables without re-doing the protocol.
+
+  Perf note: requires the metrics/pointmap.py workers=-1 fix
+  (commit 58bb74a); without it each sample takes ~3 min of chamfer
+  and the 31-sample run is ~50 min instead of ~7 min.
