@@ -54,6 +54,7 @@ from plumbline.datasets._common import (
     DatasetNotAvailable,
     env_path,
     load_manifest,
+    load_ply_xyz,
     read_rgb_uint8,
     save_manifest,
 )
@@ -209,7 +210,7 @@ class ETH3DDataset(Dataset):
             for rel in ply_rels:
                 p = self.root / rel
                 if p.exists():
-                    chunks.append(_load_ply_xyz(p))
+                    chunks.append(load_ply_xyz(p))
             if chunks:
                 pcd = np.concatenate(chunks, axis=0)
                 # ETH3D scan_clean is ~38M points/scene; chamfer on that is
@@ -334,65 +335,8 @@ def _resolve_scan_clean_plys(scene_dir: Path) -> list[Path]:
     return []
 
 
-_PLY_PROP_BYTES = {
-    "char": 1, "int8": 1, "uchar": 1, "uint8": 1,
-    "short": 2, "int16": 2, "ushort": 2, "uint16": 2,
-    "int": 4, "int32": 4, "uint": 4, "uint32": 4,
-    "float": 4, "float32": 4,
-    "double": 8, "float64": 8,
-}
-
-
-def _load_ply_xyz(path: Path) -> NDArray[np.float32]:
-    """Minimal PLY parser: returns ``(N, 3)`` float32 XYZ only.
-
-    Supports ``ascii`` and ``binary_little_endian`` with ``float`` XYZ as the
-    first three vertex properties. Computes the vertex stride from the
-    header so files with multiple ``element`` blocks (e.g. ETH3D's
-    ``scan_clean`` PLYs that append a trailing ``element camera`` with
-    sensor metadata) don't mislead the reshape.
-    """
-    with path.open("rb") as f:
-        header_lines: list[str] = []
-        while True:
-            line = f.readline().decode("ascii", errors="replace").strip()
-            header_lines.append(line)
-            if line.startswith("end_header"):
-                break
-        fmt = next(
-            (ln.split()[1] for ln in header_lines if ln.startswith("format")),
-            "ascii",
-        )
-        # Vertex element + its property widths. Ignore any later elements.
-        vcount = 0
-        vertex_props: list[str] = []
-        in_vertex = False
-        for ln in header_lines:
-            if ln.startswith("element "):
-                parts = ln.split()
-                in_vertex = parts[1] == "vertex"
-                if in_vertex:
-                    vcount = int(parts[2])
-            elif in_vertex and ln.startswith("property "):
-                parts = ln.split()
-                # "property <type> <name>" (skip list properties — not used on
-                # ETH3D scan_clean).
-                if parts[1] == "list":
-                    raise NotImplementedError("list properties unsupported")
-                vertex_props.append(parts[1])
-        payload = f.read()
-
-    if fmt.startswith("binary_little_endian"):
-        vertex_stride = sum(_PLY_PROP_BYTES[p] for p in vertex_props)
-        vertex_bytes = vcount * vertex_stride
-        buf = np.frombuffer(payload[:vertex_bytes], dtype=np.uint8).reshape(
-            vcount, vertex_stride
-        )
-        xyz = np.frombuffer(buf[:, :12].tobytes(), dtype=np.float32).reshape(-1, 3)
-        return np.ascontiguousarray(xyz)
-
-    xyz = np.empty((vcount, 3), dtype=np.float32)
-    for i, line in enumerate(payload.decode("ascii").splitlines()[:vcount]):
-        parts = line.split()
-        xyz[i] = [float(parts[0]), float(parts[1]), float(parts[2])]
-    return xyz
+# _load_ply_xyz lived here previously. It was moved to
+# plumbline.datasets._common.load_ply_xyz so the DTU loader could share
+# it; this module now re-exports the canonical version for backward
+# compatibility with any external caller that imported the private name.
+_load_ply_xyz = load_ply_xyz

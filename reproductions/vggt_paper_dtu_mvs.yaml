@@ -46,14 +46,18 @@ paper_reference:
   citation: "Wang et al. 2025, VGGT, Table 2. DTU dense MVS, VGGT (no-GT-camera block). Acc=0.389, Comp=0.374, Overall=0.382."
 
 notes: >
-  BLOCKED on the DTU loader (dataset: dtu is not yet registered — the
-  loader lands in a follow-up commit). Once it does, this YAML is the
-  new v0.1 gate: plumbline reproduce vggt-paper-dtu-mvs should land
-  within ±5% of chamfer=0.382.
+  New v0.1 paper-match gate. The DTU loader is now registered
+  (src/plumbline/datasets/dtu.py); data is public (no ToS). Unblock by:
+    1. Download DTU MVS + MVSNet preprocessing per the dtu.py docstring.
+    2. export DTU_ROOT=/path/to/mvsnet_dtu
+    3. plumbline reproduce vggt-paper-dtu-mvs
 
-  The exact MASt3R DTU protocol has per-scan view counts and an optional
+  Expected chamfer: within ±5% of 0.382 (mm). The loader keeps units in
+  mm end-to-end (both GT cloud and cam-file translations); VGGT's point
+  map will be in the same unit after the camera-centres Umeyama fit.
+
+  The MASt3R DTU protocol has per-scan view counts and an optional
   outlier-filtering step on the predicted cloud; the first GPU run
-  should measure against the unfiltered prediction, then toggle
-  filtering to measure the sensitivity. Paper tolerance is tight (±5%)
-  because the protocol is well-specified and VGGT inference is ~stable
-  on DTU's clean synthetic imagery.
+  should measure the unfiltered prediction first, then toggle filtering
+  to measure sensitivity. Tolerance is tight (±5%) because the protocol
+  is well-specified and VGGT is ~stable on DTU's clean imagery.
