@@ -1085,3 +1085,191 @@ class TestScanNet1500:
         assert len(recs) == 2
         assert recs[0]["scene"] == "scene0707_00"
         assert recs[0]["pair_id"] == "pair_00001_scene0707_00"
+
+
+# ---------------------------------------------------------------------------
+# Co3Dv2
+# ---------------------------------------------------------------------------
+
+
+def _write_fake_co3dv2(
+    root: Path,
+    *,
+    category: str = "hydrant",
+    sequences: int = 2,
+    frames_per_sequence: int = 6,
+    H: int = 64,
+    W: int = 96,
+) -> None:
+    """Write a minimal Co3Dv2-shaped tree for loader smoke tests."""
+    import gzip
+    import json
+
+    cat_dir = root / category
+    cat_dir.mkdir(parents=True, exist_ok=True)
+    annotations = []
+    for s in range(sequences):
+        seq_name = f"{category}_seq_{s:04d}"
+        images_dir = cat_dir / seq_name / "images"
+        images_dir.mkdir(parents=True, exist_ok=True)
+        for f in range(frames_per_sequence):
+            img_name = f"frame{f + 1:06d}.jpg"
+            img_path = images_dir / img_name
+            Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
+                img_path, quality=85
+            )
+            # Identity-ish extrinsics with small translation in world frame.
+            R = np.eye(3).tolist()
+            T = [0.0, 0.0, 0.5 + f * 0.1]
+            annotations.append(
+                {
+                    "sequence_name": seq_name,
+                    "frame_number": f + 1,
+                    "frame_timestamp": float(f),
+                    "image": {
+                        "path": f"{category}/{seq_name}/images/{img_name}",
+                        "size": [H, W],
+                    },
+                    "viewpoint": {
+                        "R": R,
+                        "T": T,
+                        "focal_length": [2.0, 2.0 * H / W],  # ndc_norm_image_bounds
+                        "principal_point": [0.0, 0.0],
+                        "intrinsics_format": "ndc_norm_image_bounds",
+                    },
+                }
+            )
+    # Co3Dv2 stores frame annotations as a gzipped JSON list.
+    anno_path = cat_dir / "frame_annotations.jgz"
+    with gzip.open(anno_path, "wt", encoding="utf-8") as f:
+        json.dump(annotations, f)
+
+
+class TestCo3Dv2:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+        from plumbline.datasets.co3dv2 import Co3Dv2Dataset
+
+        with pytest.raises(DatasetNotAvailable):
+            Co3Dv2Dataset(root=tmp_path / "nope")
+
+    def test_empty_categories(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+        from plumbline.datasets.co3dv2 import Co3Dv2Dataset
+
+        # Root exists but no category has frame_annotations.jgz.
+        (tmp_path / "fake_dir").mkdir()
+        with pytest.raises(DatasetNotAvailable, match="categories"):
+            Co3Dv2Dataset(root=tmp_path)
+
+    def test_invalid_views_per_sample(self, tmp_path: Path) -> None:
+        _write_fake_co3dv2(tmp_path)
+        from plumbline.datasets.co3dv2 import Co3Dv2Dataset
+
+        with pytest.raises(ValueError, match="views_per_sample"):
+            Co3Dv2Dataset(root=tmp_path, views_per_sample=0)
+
+    def test_basic_load(self, tmp_path: Path) -> None:
+        _write_fake_co3dv2(tmp_path, sequences=2, frames_per_sequence=6)
+        from plumbline.datasets.co3dv2 import Co3Dv2Dataset
+
+        ds = Co3Dv2Dataset(root=tmp_path, views_per_sample=4)
+        samples = list(ds)
+        # 2 sequences × (6 frames - 4 + 1) = 2 × 3 = 6 samples
+        assert len(samples) == 6
+        s = samples[0]
+        assert s.num_views == 4
+        assert s.images.shape == (4, 64, 96, 3)
+        # First camera is identity after rebase.
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-5)
+        # Intrinsics: pixel-space with principal point at image centre.
+        assert s.intrinsics[0, 0, 2] == pytest.approx(48.0)  # cx = W/2
+        assert s.intrinsics[0, 1, 2] == pytest.approx(32.0)  # cy = H/2
+        # fx / fy recovered from fx_ndc=2.0 on W/2: fx_px = 2 * 48 = 96
+        assert s.intrinsics[0, 0, 0] == pytest.approx(96.0)
+
+    def test_category_whitelist(self, tmp_path: Path) -> None:
+        _write_fake_co3dv2(tmp_path, category="hydrant")
+        _write_fake_co3dv2(tmp_path, category="teddybear")
+        from plumbline.datasets.co3dv2 import Co3Dv2Dataset
+
+        ds = Co3Dv2Dataset(root=tmp_path, categories=["hydrant"], views_per_sample=4)
+        cats = {s.metadata["category"] for s in ds}
+        assert cats == {"hydrant"}
+
+    def test_missing_category_errors(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+        from plumbline.datasets.co3dv2 import Co3Dv2Dataset
+
+        _write_fake_co3dv2(tmp_path, category="hydrant")
+        with pytest.raises(DatasetNotAvailable, match="not found"):
+            Co3Dv2Dataset(root=tmp_path, categories=["apple"], views_per_sample=4)
+
+    def test_sequence_whitelist_prunes(self, tmp_path: Path) -> None:
+        _write_fake_co3dv2(tmp_path, sequences=3, frames_per_sequence=4)
+        from plumbline.datasets.co3dv2 import Co3Dv2Dataset
+
+        ds = Co3Dv2Dataset(
+            root=tmp_path,
+            sequences=["hydrant_seq_0001"],
+            views_per_sample=4,
+        )
+        seqs = {s.metadata["sequence"] for s in ds}
+        assert seqs == {"hydrant_seq_0001"}
+
+    def test_max_sequences_per_category(self, tmp_path: Path) -> None:
+        _write_fake_co3dv2(tmp_path, sequences=3, frames_per_sequence=4)
+        from plumbline.datasets.co3dv2 import Co3Dv2Dataset
+
+        ds = Co3Dv2Dataset(
+            root=tmp_path, views_per_sample=4, max_sequences_per_category=2
+        )
+        assert len(ds) == 2  # 2 sequences × 1 sliding window each at full-frame count
+
+    def test_pytorch3d_to_opencv_identity(self) -> None:
+        """PyTorch3D identity → world_from_cam that's the axis-flip itself.
+
+        When R = I, T = 0 in PyTorch3D's right-multiply form, the world
+        frame is the PyTorch3D camera frame. plumbline asks for the
+        OpenCV world_from_camera; that's a pure axis-flip (x → -x, y → -y).
+        """
+        from plumbline.datasets.co3dv2 import co3d_pytorch3d_to_opencv
+
+        R = np.eye(3)
+        T = np.zeros(3)
+        E = co3d_pytorch3d_to_opencv(R, T)
+        # World origin = PyTorch3D origin = OpenCV origin (at cam0). Translation = 0.
+        np.testing.assert_allclose(E[:3, 3], 0.0, atol=1e-10)
+        # Rotation: OpenCV cam axes negate PyTorch3D X and Y.
+        expected_R = np.diag([-1.0, -1.0, 1.0])
+        # world_from_cam = invert(cam_from_world = flip) = flip (self-inverse).
+        np.testing.assert_allclose(E[:3, :3], expected_R, atol=1e-10)
+
+    def test_ndc_to_pixel_isotropic(self) -> None:
+        from plumbline.datasets.co3dv2 import co3d_ndc_intrinsics_to_pixel
+
+        # Isotropic NDC with focal=1 and principal point at image centre.
+        # Larger side spans [-s, s] where s = W/H; shorter is [-1, 1].
+        H, W = 400, 600
+        K = co3d_ndc_intrinsics_to_pixel(
+            focal_length=(1.0, 1.0),
+            principal_point=(0.0, 0.0),
+            size_hw=(H, W),
+            intrinsics_format="ndc_isotropic",
+        )
+        # fx = 1 * max(H, W) / 2 = 300
+        assert K[0, 0] == pytest.approx(300.0)
+        assert K[1, 1] == pytest.approx(300.0)
+        assert K[0, 2] == pytest.approx(300.0)  # cx = W/2
+        assert K[1, 2] == pytest.approx(200.0)  # cy = H/2
+
+    def test_ndc_unknown_format_errors(self) -> None:
+        from plumbline.datasets.co3dv2 import co3d_ndc_intrinsics_to_pixel
+
+        with pytest.raises(ValueError, match="unknown Co3D intrinsics_format"):
+            co3d_ndc_intrinsics_to_pixel(
+                focal_length=(1.0, 1.0),
+                principal_point=(0.0, 0.0),
+                size_hw=(100, 100),
+                intrinsics_format="nope",
+            )

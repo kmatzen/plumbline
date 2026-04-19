@@ -37,6 +37,7 @@ _BUILTIN_ADAPTER_MODULES: tuple[str, ...] = (
     "plumbline.datasets.diode",
     "plumbline.datasets.dtu",
     "plumbline.datasets.scannet_1500",
+    "plumbline.datasets.co3dv2",
 )
 
 
