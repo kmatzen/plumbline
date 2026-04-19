@@ -8,6 +8,16 @@ This document is the spec. Work through it section by section. Ask before
 deviating from the architecture; feel free to deviate on implementation
 details within each section.
 
+> **Status banner (2026-04-19)** — the original v0.1 gate
+> (`reproduce vggt-paper-scannet-depth`) is implemented but blocked on
+> ScanNet ToS signup + data. In the meantime the harness ships **7
+> paper-match reproductions on NYUv2** across four model families
+> (DA-V2 S/B/L, DA-V2 Metric-Indoor-L, Metric3Dv2 L/Giant2, DA3),
+> plus informational ETH3D courtyard pose sweeps for VGGT and DA3.
+> See [REPRODUCTIONS.md](./REPRODUCTIONS.md) for the live status
+> matrix; see [README.md](./README.md) for a quickstart reflecting
+> this reality rather than the originally-planned Week 1 path.
+
 ---
 
 ## 0. Context for the agent

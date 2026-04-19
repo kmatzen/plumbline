@@ -69,6 +69,23 @@ uv run huggingface-cli login
 
 ## Dataset downloads
 
+### NYUv2 (public, single .mat, ~3 GB)
+
+The primary mono-depth benchmark. The "labeled" subset contains 1449
+RGB-D pairs; the 654-sample Eigen test split is the canonical eval.
+
+```bash
+mkdir -p ~/data/nyuv2 && cd ~/data/nyuv2
+curl -L -O https://horatio.cs.nyu.edu/mit/silberman/nyu_depth_v2/nyu_depth_v2_labeled.mat
+export NYUV2_ROOT=$HOME/data/nyuv2
+```
+
+``NYUv2Dataset`` defaults to ``depth_field="raw"`` (the sparse Kinect
+measurements, with holes) — this is what the Eigen 2014 protocol uses
+and what every DA-V2 / Metric3Dv2 paper number in the status matrix
+targets. Pass ``depth_field="filled"`` for Silberman's colorization-
+filled variant.
+
 ### Sintel (public images; depth + cameras are auth-gated)
 
 **The optical-flow bundle is public** (~5.3 GB) and gives you the `final/`,
@@ -142,35 +159,76 @@ Archive names to know:
 
 ### DepthAnything V2 (fully wired)
 
-Uses HuggingFace Transformers. No extra setup.
+Uses HuggingFace Transformers. No extra setup. Six variants:
+`small`, `base`, `large`, `metric-indoor-{small,base,large}`,
+`metric-outdoor-{small,base,large}`.
+
+Paper-match run on NYUv2 (all three relative variants land inside
+their tolerance bands):
+
+```bash
+export NYUV2_ROOT=/path/to/nyuv2
+uv run plumbline reproduce da-v2-small-nyuv2   # AbsRel 0.053 → 0.051
+uv run plumbline reproduce da-v2-base-nyuv2    # AbsRel 0.049 → 0.046
+uv run plumbline reproduce da-v2-large-nyuv2   # AbsRel 0.045 → 0.043
+```
+
+Or a custom run:
 
 ```bash
 uv run plumbline run --model depth-anything-v2 \
-  --dataset sintel --tasks mono_depth \
-  --scale-alignment scale_shift \
-  --subset 50 \
-  -o da-v2_sintel.json
+  --dataset nyuv2 --tasks mono_depth \
+  --scale-alignment scale_shift --max-views 1 \
+  -o da-v2_nyuv2.json
 ```
 
-Expected: AbsRel ~0.07–0.10 on Sintel with `scale_shift` alignment.
+Sintel with depth GT is still gated — see the dataset section above.
 
 ### Metric3Dv2 (torch.hub)
 
-Pulls from https://github.com/YvanYin/Metric3D. On first run, torch.hub
-clones the repo into `~/.cache/torch/hub/` and downloads weights. If
-the entry-point name has drifted upstream, edit
-`src/plumbline/models/metric3d_v2.py::_HUB_MODELS` accordingly.
+Pulls from https://github.com/YvanYin/Metric3D via `torch.hub.load`
+with `trust_repo=True` on first use; weights download from the
+JUGGHM/Metric3D HuggingFace mirror. Upstream's hubconf depends on
+`mmengine` and imports through `mmcv` (with a fallback). Install the
+pure-Python variants:
 
 ```bash
-uv run plumbline run --model metric3d-v2 \
-  --dataset scannet --tasks mono_depth \
-  --scale-alignment none \
-  --data-root $SCANNET_ROOT \
-  --subset 100 \
-  -o metric3d_scannet.json
+VIRTUAL_ENV=.venv uv pip install mmengine mmcv-lite
 ```
 
-Metric3Dv2 is metric; use `--scale-alignment none`.
+**Important env hygiene:** if `xformers` is installed with a prebuilt
+wheel that doesn't match your torch/CUDA exactly, Metric3D's bundled
+dinov2 backbone will `import xformers.ops` successfully but then raise
+`NotImplementedError` inside `memory_efficient_attention_forward` at
+forward time. Two options:
+
+1. Ensure a matching xformers wheel is installed for your torch/CUDA.
+2. Uninstall xformers — Metric3D falls back to a correct pure-PyTorch
+   attention path. This is what plumbline's CI does:
+
+   ```bash
+   VIRTUAL_ENV=.venv uv pip uninstall xformers
+   ```
+
+Known upstream gotcha wired into the adapter: `torch.hub.load`'s
+pretrained-weight flag is `pretrain=True` (no "ed") — passing
+`pretrained=True` is silently swallowed by `**kwargs` so the model
+returns NaN on the first forward. `Metric3Dv2Adapter` passes the right
+spelling; if you write your own integration, don't trip on this.
+
+Canonical-camera protocol (replicated in the adapter):
+
+- `cv2.resize` to fit (616, 1064) at native aspect ratio; scale
+  intrinsics by the same factor.
+- Pad with ImageNet mean colour to exactly (616, 1064).
+- Normalise with ImageNet mean/std at **[0, 255] scale** (not [0, 1]).
+- `model.inference({'input': ...})` → `(pred_depth, conf, out)`.
+- Un-pad, upsample to native, multiply by `scaled_fx / 1000` to
+  de-canonicalise to metric meters.
+
+Metric3Dv2 is metric; reproductions use `scale_alignment: none`.
+Paper matches ViT-L and ViT-Giant2 on NYU land inside ±10% — see
+`reproductions/metric3d_v2_nyuv2.yaml` and `..._giant_nyuv2.yaml`.
 
 ### MASt3R (upstream not on PyPI — or pip-installable)
 
@@ -216,37 +274,64 @@ VGGT at 32 views ×1024² fits in 24 GB (A100 / 4090). An RTX 3090 handles
 8 views at the 518-default width comfortably under 10 GB. OOM? the runner
 catches and skips the sample; drop `--max-views` to 4 or adjust the YAML.
 
-### Depth Anything 3 (wiring TBD at release time)
+### Depth Anything 3 (pip package)
 
-Wiring is gated on upstream API stabilizing. Check the HF Hub model card
-for the DA3 release name and update `DepthAnything3Adapter.checkpoint`.
+```bash
+VIRTUAL_ENV=.venv uv pip install depth-anything-3
+```
 
-## The v0.1 gate
+Default checkpoint is `depth-anything/DA3-LARGE` (the adapter also
+handles `DA3-LARGE-1.1`, the bug-fix release, and `DA3MONO-LARGE`).
+Preprocessing is DA3's own canonical-camera path with a 504-pixel long
+edge; the adapter feeds `model.inference(images, export_dir=None)` and
+harvests depth / conf / extrinsics / intrinsics.
+
+Extrinsic convention: DA3's `Prediction.extrinsics` are `w2c` 3x4
+(camera-from-world). The adapter pads to 4x4 and inverts to
+world-from-camera; a rebase guard handles the (rare) case where view 0
+isn't identity out of the box.
+
+DA3's public mono-depth checkpoints are **relative** on NYU (pred /
+GT ratio ≈ 0.32 unaligned). Use `scale_alignment: scale_shift` for
+NYU — `reproductions/da3_nyuv2.yaml` matches the paper's Table 4 δ₁.
+The "DA3-metric" checkpoint referenced in the paper's Table 11 is not
+publicly released; don't expect the metric AbsRel=0.070 to be
+reproducible until it ships.
+
+## v0.1 gate status
+
+The originally-planned gate is
+`plumbline reproduce vggt-paper-scannet-depth` — VGGT wiring is
+complete and sanity-checked end-to-end on random and ETH3D courtyard
+inputs, but the reproduction itself is blocked on ScanNet ToS signup
+and data. When the user has `$SCANNET_ROOT` set, the steps are:
 
 ```bash
 uv run plumbline reproduce vggt-paper-scannet-depth -o vggt_scannet.json
 ```
 
-The YAML config at `reproductions/vggt_scannet_depth.yaml` currently has
-a placeholder `paper_reference.value = 0.0`. On the first successful run:
+The YAML at `reproductions/vggt_scannet_depth.yaml` has
+`paper_reference.value = 0.0` as a placeholder. On the first successful
+run:
 
-1. Record the observed AbsRel in `reproductions/vggt_scannet_depth.yaml`.
-2. Pin the exact sample list:
-
+1. Record the observed AbsRel in the YAML.
+2. Pin the sample list:
    ```bash
    uv run plumbline make-samples \
      --dataset scannet --data-root $SCANNET_ROOT \
      --split test --subset 100 \
      -o reproductions/vggt_scannet_depth.samples.txt
    ```
-
-   Then add `sample_ids_file: vggt_scannet_depth.samples.txt` to the
-   YAML (and remove the numeric `subset:` field if present). This
-   freezes the sample set so future runs don't drift when manifests
-   change.
-3. Set `tolerance_relative` to match VGGT paper ± 5% (adjust up if CUDA
-   nondeterminism pushes it).
+   Add `sample_ids_file: vggt_scannet_depth.samples.txt` to the YAML
+   (remove the numeric `subset:` field). Freezes the sample set across
+   manifest re-scans.
+3. Set `tolerance_relative` ±5% (widen if CUDA nondeterminism pushes it).
 4. Update the table in [REPRODUCTIONS.md](./REPRODUCTIONS.md).
+
+In the meantime, the plumbline has a **7-row paper-match matrix** on
+NYUv2 (DA-V2 S/B/L, DA-V2 Metric-Indoor-L, Metric3Dv2 L/Giant2, DA3)
+that confirms the pipeline end-to-end for mono depth. See
+[REPRODUCTIONS.md](./REPRODUCTIONS.md) for the current status.
 
 ## Cost tracking
 
