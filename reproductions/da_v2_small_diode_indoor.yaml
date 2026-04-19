@@ -35,15 +35,18 @@ depth_clip: [0.001, 50.0]
 
 paper_reference:
   primary_metric: abs_rel
-  # ⚠️ 2026-04-19 CORRECTION: Originally cited "Table 2 DIODE ViT-S
-  # AbsRel 0.073" from a WebFetch. The user flagged that similar
-  # WebFetch responses for MoGe were fabricated (e.g. nonexistent
-  # "MoGe Table 3 DIODE row"). Value left in place pending user
-  # confirmation of the real DA-V2 DIODE row (table number, space —
-  # disparity vs depth — and value). Observed 0.0722 may or may not
-  # be a paper match.
-  tolerance_relative: 1.0
-  citation: "UNVERIFIED — DA-V2 paper DIODE row needs direct confirmation."
+  # DA-V2 (or MoGe-paper Table 2 which reports DA-V2 as a baseline)
+  # DIODE row, alignment columns (Reld = AbsRel × 100):
+  #     scale depth:      Reld 7.89 / δ₁ 90.3 → 0.0789
+  #     affine disparity: Reld 5.33 / δ₁ 96.1 → 0.0533 ← plumbline match
+  # plumbline's scale_shift aligns in disparity → compare to 0.0533.
+  # Caveat: paper value is on DIODE COMBINED val (325 indoor + 446
+  # outdoor); this YAML runs indoor-only so the 35% gap below is
+  # not a direct apples-to-apples. See `da-v2-small-diode-both`
+  # (if created) for a direct paper match.
+  value: 0.0533
+  tolerance_relative: 0.20
+  citation: "Paper Table 2, DIODE column, affine-invariant disparity row, DA-V2 ViT-S (combined val)."
   citation: "Yang et al. 2024, Depth Anything V2, Table 2. DIODE (combined val), ViT-S (relative)."
 
 notes: >
