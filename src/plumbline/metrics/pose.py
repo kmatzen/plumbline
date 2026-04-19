@@ -17,6 +17,8 @@ from plumbline.conventions import EPS
 
 __all__ = [
     "auc",
+    "pairwise_pose_errors",
+    "pairwise_relative_poses",
     "pose_auc",
     "rotation_error_degrees",
     "translation_cosine_error",
@@ -127,6 +129,61 @@ def pose_auc(
         raise ValueError(f"unknown translation_mode '{translation_mode}'")
     combined = np.maximum(np.asarray(rot_err), np.asarray(trans_err))
     return auc(combined, list(thresholds))
+
+
+# ---------------------------------------------------------------------------
+# Pairwise relative pose (the metric papers like VGGT / MASt3R report)
+# ---------------------------------------------------------------------------
+
+
+def pairwise_relative_poses(
+    extrinsics: NDArray[Any],
+) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+    """All unordered pairwise relative poses from N ``world_from_camera`` matrices.
+
+    For ``E_i = [R_i | t_i]`` (world-from-cam), the relative pose of cam ``j``
+    in cam ``i``'s frame is ``E_i^-1 @ E_j``, giving
+    ``R_ij = R_i^T @ R_j`` and ``t_ij = R_i^T @ (t_j - t_i)``.
+
+    Returns two arrays of length ``N*(N-1)/2``:
+    ``(R_rel, t_rel)`` over pairs ``(i, j)`` with ``i < j``.
+    """
+    E = np.asarray(extrinsics, dtype=np.float64)
+    if E.ndim != 3 or E.shape[-2:] != (4, 4):
+        raise ValueError(f"extrinsics must be (N, 4, 4); got {E.shape}")
+    n = E.shape[0]
+    if n < 2:
+        return np.zeros((0, 3, 3), dtype=np.float64), np.zeros((0, 3), dtype=np.float64)
+    i_idx, j_idx = np.triu_indices(n, k=1)
+    Ri = E[i_idx, :3, :3]  # (P, 3, 3)
+    Rj = E[j_idx, :3, :3]
+    ti = E[i_idx, :3, 3]  # (P, 3)
+    tj = E[j_idx, :3, 3]
+    Ri_T = np.transpose(Ri, (0, 2, 1))
+    R_rel = Ri_T @ Rj
+    t_rel = np.einsum("pij,pj->pi", Ri_T, tj - ti)
+    return R_rel, t_rel
+
+
+def pairwise_pose_errors(
+    E_pred: NDArray[Any], E_gt: NDArray[Any]
+) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+    """Per-pair rotation + translation-direction errors (degrees) over all (i, j), i < j.
+
+    Frame-invariant: uses relative poses, so no "same world frame"
+    assumption between pred and GT. This is what VGGT / MASt3R / DUSt3R
+    papers report as "relative pose AUC". Returns ``(rot_deg, trans_cos_deg)``
+    each of shape ``(N*(N-1)/2,)``.
+    """
+    E_pred = np.asarray(E_pred, dtype=np.float64)
+    E_gt = np.asarray(E_gt, dtype=np.float64)
+    if E_pred.shape != E_gt.shape:
+        raise ValueError(f"pred/gt extrinsics shape mismatch: {E_pred.shape} vs {E_gt.shape}")
+    R_p, t_p = pairwise_relative_poses(E_pred)
+    R_g, t_g = pairwise_relative_poses(E_gt)
+    rot = rotation_error_degrees(R_p, R_g)
+    trans = translation_cosine_error(t_p, t_g)
+    return np.asarray(rot, dtype=np.float64), np.asarray(trans, dtype=np.float64)
 
 
 # ---------------------------------------------------------------------------
