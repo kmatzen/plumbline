@@ -1,0 +1,56 @@
+# MoGe-1 (ViT-L) on DIODE val-indoor
+#
+# Companion to moge-vitl-nyuv2 — same adapter + scale_shift protocol
+# on a different dataset. DA-V2 indoor AbsRel on DIODE-indoor was
+# 0.0722 on this machine; MoGe-1 should land roughly similar.
+#
+# Paper target: MoGe paper Table 3 reports ViT-L DIODE AbsRel=0.0313,
+# but that's on the COMBINED val split (325 indoor + 446 outdoor).
+# This YAML runs indoor-only; domain=both needs a separate YAML.
+
+name: moge-vitl-diode-indoor
+
+model:
+  name: moge
+  kwargs:
+    variant: vitl
+
+dataset:
+  name: diode
+  split: val
+  kwargs:
+    domain: indoors
+
+tasks:
+  - mono_depth
+
+scale_alignment: scale_shift
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 50.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.0313
+  tolerance_relative: 0.20
+  citation: "Wang et al. 2024, MoGe, Table 3. DIODE combined val, ViT-L (affine-invariant)."
+
+notes: >
+  First GPU run (RTX 3090 Ti, 2026-04-19, 325 indoor samples):
+      AbsRel   0.0584
+      delta_1  0.9525
+  Paper target (combined val, 771 samples, ROE alignment): 0.0313.
+  The ~2x gap vs paper has two likely causes:
+    - DIODE-indoor is genuinely harder than DIODE-outdoor for this
+      model — the paper's combined-val mean is pulled down by the
+      446 outdoor samples. A domain=both run on the same predictions
+      would settle this.
+    - The documented ROE-vs-scale_shift alignment gap (MoGe NYU
+      showed ~15% under scale_shift vs paper ROE); DIODE may amplify.
+
+  Beats DA-V2 small on the same DIODE-indoor slice (0.0722); MoGe
+  remains the stronger relative-depth model here, just not 2x the
+  paper-row strength under plumbline's current alignment.
+
+  Needs `pip install 'git+https://github.com/microsoft/MoGe.git'`.
+  Indoor-only; domain=both needed for the strict paper A/B.
