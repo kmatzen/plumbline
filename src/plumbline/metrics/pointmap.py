@@ -18,7 +18,11 @@ def _nn_distances(a: NDArray[Any], b: NDArray[Any]) -> NDArray[Any]:
     """For each point in ``a``, distance to its nearest neighbor in ``b``.
 
     Falls back to a numpy pairwise computation when scipy is unavailable. Uses
-    ``scipy.spatial.cKDTree`` when available for O(M log N) behavior.
+    ``scipy.spatial.cKDTree`` when available for O(M log N) behavior, with
+    ``workers=-1`` so queries parallelise across all CPU cores. The
+    single-threaded default was an ~8x slowdown on the 1.45M-point MVS
+    predictions (VGGT at 518×350 × 8 views) — enough to turn a 7-minute
+    chamfer reproduction into 50+ min.
     """
     if a.size == 0 or b.size == 0:
         return np.empty(a.shape[0], dtype=np.float64)
@@ -26,7 +30,7 @@ def _nn_distances(a: NDArray[Any], b: NDArray[Any]) -> NDArray[Any]:
         from scipy.spatial import cKDTree
 
         tree = cKDTree(b)
-        d, _ = tree.query(a, k=1)
+        d, _ = tree.query(a, k=1, workers=-1)
         return d.astype(np.float64)
     except ImportError:  # pragma: no cover — exercised only without scipy
         a64 = a.astype(np.float64)
