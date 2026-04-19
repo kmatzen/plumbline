@@ -32,7 +32,7 @@ from plumbline import _version
 from plumbline.cache import PredictionCache
 from plumbline.conventions import depth_is_valid
 from plumbline.datasets.base import Dataset, Sample
-from plumbline.metrics.alignment import align_depth
+from plumbline.metrics.alignment import align_depth, apply_similarity, umeyama_similarity
 from plumbline.metrics.depth import abs_rel, delta_threshold, log10_error, rmse, silog
 from plumbline.metrics.pointmap import chamfer_distance, f_score
 from plumbline.metrics.pose import auc as pose_auc_fn
@@ -74,6 +74,7 @@ def evaluate(
     delta_thresholds: tuple[float, ...] = (1.25, 1.25**2, 1.25**3),
     f_score_threshold: float = 0.05,
     depth_clip: tuple[float, float] | None = None,
+    pointcloud_alignment: str = "none",
 ) -> Report:
     """Evaluate a model on a dataset and return a :class:`Report`.
 
@@ -139,6 +140,7 @@ def evaluate(
             delta_thresholds=delta_thresholds,
             f_score_threshold=f_score_threshold,
             depth_clip=depth_clip,
+            pointcloud_alignment=pointcloud_alignment,
         )
         report.per_sample.append(
             SampleResult(
@@ -236,6 +238,7 @@ def _compute_metrics(
     delta_thresholds: tuple[float, ...],
     f_score_threshold: float,
     depth_clip: tuple[float, float] | None = None,
+    pointcloud_alignment: str = "none",
 ) -> dict[str, float]:
     out: dict[str, float] = {}
 
@@ -259,9 +262,33 @@ def _compute_metrics(
     # "mvs_depth" or "point_cloud" to keep mono-depth runs cheap.
     wants_pcd = "mvs_depth" in tasks or "point_cloud" in tasks
     if wants_pcd and prediction.point_map is not None and sample.point_cloud_gt is not None:
+        pmap = prediction.point_map
+        # Optional 7-DoF similarity alignment: ETH3D / T&T / DTU chamfer eval
+        # protocol. The predicted and GT clouds live in different world
+        # frames (VGGT's first-view origin vs ETH3D's laser-scan frame); we
+        # fit Umeyama on corresponding *camera centres* (one per view) then
+        # apply it to the full dense prediction. Needs N >= 3 views.
+        if pointcloud_alignment == "camera_centers":
+            if prediction.extrinsics is not None and sample.extrinsics_gt is not None:
+                pred_centers = prediction.extrinsics[:, :3, 3]
+                gt_centers = sample.extrinsics_gt[:, :3, 3]
+                if pred_centers.shape[0] >= 3:
+                    s, R, t = umeyama_similarity(pred_centers, gt_centers)
+                    pmap = apply_similarity(pmap, s, R, t).astype(np.float32)
+                else:
+                    log.warning(
+                        "pointcloud_alignment=camera_centers needs >= 3 views; "
+                        "got %d — leaving point map unaligned",
+                        int(pred_centers.shape[0]),
+                    )
+        elif pointcloud_alignment != "none":
+            raise ValueError(
+                f"unknown pointcloud_alignment '{pointcloud_alignment}'; "
+                "use 'none' or 'camera_centers'"
+            )
         out.update(
             _point_cloud_metrics(
-                point_map=prediction.point_map,
+                point_map=pmap,
                 point_cloud_gt=sample.point_cloud_gt,
                 f_score_threshold=f_score_threshold,
             )
