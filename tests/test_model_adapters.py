@@ -20,6 +20,7 @@ import plumbline.models.depth_anything_3
 import plumbline.models.depth_anything_v2
 import plumbline.models.mast3r
 import plumbline.models.metric3d_v2
+import plumbline.models.moge
 import plumbline.models.vggt  # noqa: F401
 from plumbline.models.registry import MODEL_REGISTRY
 
@@ -29,6 +30,7 @@ EXPECTED_ADAPTERS = [
     "mast3r",
     "vggt",
     "depth-anything-3",
+    "moge",
 ]
 
 
@@ -100,3 +102,42 @@ def test_metric3d_requires_intrinsics() -> None:
     images = np.zeros((1, 8, 8, 3), dtype=np.uint8)
     with pytest.raises(ValueError, match="requires intrinsics"):
         model.predict(images)
+
+
+def test_moge_v1_variant_is_relative() -> None:
+    """MoGe v1 ('vitl') is affine-invariant → the instance overrides
+    capabilities to is_metric=False so the runner picks scale_shift
+    alignment. Regression: the class-level capabilities declares
+    is_metric=True for the default MoGe-2 case."""
+
+    cls = MODEL_REGISTRY["moge"]
+    v1 = cls(device="cpu", variant="vitl")  # type: ignore[call-arg]
+    v2 = cls(device="cpu", variant="2-vitl")  # type: ignore[call-arg]
+    assert v1.capabilities.is_metric is False
+    assert v2.capabilities.is_metric is True
+
+
+def test_moge_unknown_variant_errors() -> None:
+    cls = MODEL_REGISTRY["moge"]
+    with pytest.raises(ValueError, match="variant"):
+        cls(device="cpu", variant="not-a-variant")  # type: ignore[call-arg]
+
+
+def test_moge_config_hash_varies_by_variant() -> None:
+    cls = MODEL_REGISTRY["moge"]
+    a = cls(device="cpu", variant="vitl").config_hash()  # type: ignore[call-arg]
+    b = cls(device="cpu", variant="2-vitl").config_hash()  # type: ignore[call-arg]
+    assert a != b
+
+
+def test_moge_checkpoint_matches_variant() -> None:
+    """Locks the variant → HF-checkpoint mapping so silently retargeting a
+    variant at the dict level can't sneak into a release."""
+
+    cls = MODEL_REGISTRY["moge"]
+    assert cls(device="cpu", variant="vitl").checkpoint == "Ruicheng/moge-vitl"  # type: ignore[call-arg]
+    assert cls(device="cpu", variant="2-vitl").checkpoint == "Ruicheng/moge-2-vitl"  # type: ignore[call-arg]
+    assert (
+        cls(device="cpu", variant="2-vitb-normal").checkpoint  # type: ignore[call-arg]
+        == "Ruicheng/moge-2-vitb-normal"
+    )

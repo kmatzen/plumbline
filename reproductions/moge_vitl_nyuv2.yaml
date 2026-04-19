@@ -1,0 +1,50 @@
+# MoGe (ViT-L) on NYUv2 Eigen test split
+#
+# MoGe-1 is the affine-invariant variant (equivalent to DA-V2's relative
+# zero-shot models): predictions need scale + shift alignment in depth
+# space before metric comparison. MoGe-2 is metric and uses a different
+# YAML.
+#
+# Paper target (Wang et al. 2024, MoGe, Table 3, ViT-L row):
+#     AbsRel × 100 = 2.97  (i.e. AbsRel = 0.0297)
+#     δ₁ × 100 = 98.6     (i.e. δ₁ = 0.986)
+# Protocol: affine-invariant depth with the paper's ROE (robust optimal
+# estimation) scale+shift alignment. plumbline's "scale_shift" mode
+# approximates the same thing via least-squares in inverse-depth space
+# — expect a small residual gap from the paper's ROE solver, so
+# tolerance is loose (±10%).
+
+name: moge-vitl-nyuv2
+
+model:
+  name: moge
+  kwargs:
+    variant: vitl
+
+dataset:
+  name: nyuv2
+  split: test
+  kwargs:
+    apply_eigen_crop: true
+
+tasks:
+  - mono_depth
+
+scale_alignment: scale_shift
+max_views: 1
+device: cuda:0
+# Eigen 2014 NYU protocol: clip aligned depth to the GT-valid range.
+depth_clip: [0.001, 10.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.0297
+  tolerance_relative: 0.10
+  citation: "Wang et al. 2024, MoGe, Table 3. NYUv2 Eigen test, ViT-L (affine-invariant)."
+
+notes: >
+  Needs `pip install 'git+https://github.com/microsoft/MoGe.git'` —
+  MoGe isn't in transformers or PyTorch Hub. On first GPU run, expect
+  a small ROE-vs-scale_shift mismatch; if the gap is consistent, pin
+  the observed value here and document the alignment-mode difference
+  in REPRODUCTIONS.md's protocol notes section.
