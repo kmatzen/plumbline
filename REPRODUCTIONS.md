@@ -4,6 +4,11 @@ A **reproduction** is a pinned config that re-produces a specific number from
 a specific paper, within a documented relative tolerance. Running it is the
 harness's acceptance test.
 
+**Summary (as of 2026-04-19):** 7 paper-match rows ✅, 3 blocked on
+auth-gated data, 4 informational ETH3D sweeps. All matches were
+produced on a single RTX 3090 inside ~90 minutes of total wall clock
+(first-run weight downloads dominated). See the status matrix below.
+
 ## Running
 
 Set the appropriate dataset-root env var first; YAML files deliberately
