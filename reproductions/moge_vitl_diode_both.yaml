@@ -1,0 +1,60 @@
+# MoGe-1 (ViT-L) on DIODE val — combined indoor + outdoor
+#
+# The direct paper-match slice: 325 indoor + 446 outdoor = 771 samples
+# per the MoGe Table 3 DIODE row (AbsRel 0.0313). Sister config to
+# moge-vitl-diode-indoor (which ran indoor-only and landed 0.0465
+# under ROE).
+
+name: moge-vitl-diode-both
+
+model:
+  name: moge
+  kwargs:
+    variant: vitl
+
+dataset:
+  name: diode
+  split: val
+  kwargs:
+    domain: both
+
+tasks:
+  - mono_depth
+
+scale_alignment: scale_shift_robust
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 50.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.0313
+  tolerance_relative: 0.15
+  citation: "Wang et al. 2024, MoGe, Table 3. DIODE combined val, ViT-L (affine-invariant, ROE)."
+
+notes: >
+  RTX 3090 Ti, 2026-04-19, full 771-sample val split (325 indoor +
+  446 outdoor), ROE alignment:
+      AbsRel   0.1993
+      delta_1  0.8544
+      RMSE    ~28 m  (DIODE outdoor has 300+ m returns)
+
+  Indoor-only was 0.0465 under ROE; combined landed 4.3x worse.
+  Outdoor — NOT indoor — is the hard slice for MoGe on DIODE. Paper
+  Table 3 reports 0.0313 on combined val; we're 6.4x over. The
+  remaining gap is almost certainly protocol-level on the outdoor
+  samples:
+    - Depth cap: our depth_clip [1e-3, 50] is probably wrong; DIODE
+      outdoor GT ranges to 300 m. Paper may clip to 80 m (KITTI
+      convention) or even 30 m (a NYU-style cap that would trim
+      the hardest outdoor samples).
+    - Sky masking: many outdoor pixels are sky (GT is 300 m / invalid);
+      paper probably masks them. plumbline's current DIODE loader
+      uses the bundled depth_mask which should reject invalid sky
+      but may keep very far true returns that trip up scale_shift.
+
+  Indoor-only (moge-vitl-diode-indoor) is the closer-to-paper number
+  at 0.0465 under ROE; treat that as the primary DIODE reproduction
+  until the outdoor protocol is nailed down.
+
+  Needs `pip install 'git+https://github.com/microsoft/MoGe.git'`.
