@@ -21,7 +21,7 @@ not a canonical paper combo
 | **DA-V2 Metric-Outdoor-L** | — | ⌛ YAML ready | — | — | — | — | — |
 | **Metric3D-v2 L** | ✅ **0.0660** | ⌛ | — | — | — | — | — |
 | **Metric3D-v2 Giant** | ✅ **0.0702** | ⌛ | — | — | — | — | — |
-| **DA3** | ✅ δ₁ **0.9684** | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | — | ⌛ |
+| **DA3** | ✅ δ₁ **0.9684** | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | — | 🎯 **0.0150** (δ₁ 0.9994) _(target TBD)_ |
 | **MoGe-1 ViT-L** | ✅ **0.0305** (ROE, vs 0.0341) | ⌛ | ⚠️ **0.1088** vs 0.0400 _(2.7× off; MoGe preproc depth differs)_ | — | — | — | 🎯 **0.0094** (δ₁ 0.9999) _(target TBD)_ |
 | **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ⌛ | ⌛ | — | — | — | ⌛ |
 | **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — | — |

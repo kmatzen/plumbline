@@ -38,8 +38,21 @@ paper_reference:
   citation: "Bytedance Seed 2025, Depth Anything 3, GSO column (exact row TBD). UNVERIFIED."
 
 notes: >
-  Informational-only until the paper GSO number is pinned. Loader +
-  alignment are paper-faithful; this YAML just needs a target.
+  Observed (RTX 3090 Ti, 2026-04-19, full 1030-object eval split, ROE):
+      AbsRel   0.0150
+      delta_1  0.9994
+      delta_2  1.0000
+      delta_3  1.0000
+      RMSE     0.0092
 
-  Needs `uv pip install depth-anything-3`. First run downloads
-  ~1.5 GB weights.
+  Zero-shot on GSO — slightly worse than MoGe-1's 0.0094 on the same
+  data, which is expected: MoGe rendered these 1030 objects as its
+  own eval bundle (same preprocessing pipeline as training-adjacent
+  data), while DA3 is genuinely out-of-distribution here. A 60%
+  relative gap at the 1-1.5% error regime — both models are
+  essentially at-ceiling for synthetic clean-GT, just quantized
+  differently by their training distributions.
+
+  Informational-only until the paper GSO number is pinned. Needs
+  `uv pip install depth-anything-3`. First run downloads ~1.5 GB
+  weights.
