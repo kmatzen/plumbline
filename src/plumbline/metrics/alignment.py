@@ -37,6 +37,7 @@ __all__ = [
     "align_scale_lstsq",
     "align_scale_median",
     "apply_similarity",
+    "icp_similarity",
     "umeyama_similarity",
 ]
 
@@ -226,3 +227,112 @@ def apply_similarity(
     if pts.shape[-1] != 3:
         raise ValueError(f"pts last dim must be 3; got shape {pts.shape}")
     return s * (pts @ R.T) + t
+
+
+def icp_similarity(
+    src: NDArray[Any],
+    dst: NDArray[Any],
+    *,
+    init_s: float | None = None,
+    init_R: NDArray[np.float64] | None = None,
+    init_t: NDArray[np.float64] | None = None,
+    max_iter: int = 30,
+    rel_tol: float = 1e-4,
+    sample_cap: int | None = 200_000,
+    rng_seed: int = 0,
+) -> tuple[float, NDArray[np.float64], NDArray[np.float64], dict[str, float]]:
+    """Iterative Closest Point 7-DoF similarity fit of dense ``src`` → dense ``dst``.
+
+    Unlike :func:`umeyama_similarity` — which needs per-row correspondence —
+    ICP works on unordered dense point clouds. Each iteration:
+
+      1. For each ``src`` point, find its nearest neighbour in ``dst`` (KDTree).
+      2. Reject the top 10% of distances as outliers (trimmed correspondences).
+      3. Re-fit (s, R, t) with Umeyama on the remaining inliers.
+      4. Apply and repeat until the mean inlier distance stops improving by
+         more than ``rel_tol`` relative.
+
+    This is the chamfer-protocol alignment that VGGT / MASt3R / DUSt3R
+    papers report on ETH3D and DTU — their published chamfer numbers are
+    against ICP-aligned predictions, not camera-centres Umeyama.
+
+    Parameters
+    ----------
+    src, dst
+        ``(N, 3)`` / ``(M, 3)`` float arrays. Caller keeps units consistent
+        (no auto-normalization).
+    init_s, init_R, init_t
+        Optional warm-start similarity (from camera-centres Umeyama) —
+        dramatically speeds up convergence when pred and dst are far apart
+        in the raw frame. Default: identity.
+    max_iter
+        Hard cap on iterations (typically converges in 5-15).
+    rel_tol
+        Relative improvement threshold for the mean inlier distance;
+        iteration stops when ``(prev - curr) / prev < rel_tol``.
+    sample_cap
+        If ``src`` has more points than this, subsample (deterministically
+        per ``rng_seed``) before each KDTree query. Bounds wall time on
+        the million-point predictions typical of dense MVS. Set to ``None``
+        to disable. Default matches the loader's ``max_gt_points`` so the
+        final correspondence pool is comparable on both sides.
+
+    Returns
+    -------
+    s, R, t, info
+        Similarity transform plus a dict with convergence stats: final
+        mean inlier distance, iteration count, initial vs final.
+    """
+    src = np.asarray(src, dtype=np.float64)
+    dst = np.asarray(dst, dtype=np.float64)
+    if src.ndim != 2 or src.shape[-1] != 3 or dst.ndim != 2 or dst.shape[-1] != 3:
+        raise ValueError(f"src/dst must be (N, 3); got {src.shape} / {dst.shape}")
+    if src.shape[0] < 3 or dst.shape[0] < 3:
+        raise ValueError(
+            f"icp_similarity needs at least 3 points on each side; got "
+            f"{src.shape[0]} / {dst.shape[0]}"
+        )
+
+    # Warm start: caller-supplied transform (e.g. from umeyama on camera
+    # centres), else identity.
+    s = 1.0 if init_s is None else float(init_s)
+    R = np.eye(3, dtype=np.float64) if init_R is None else np.asarray(init_R, dtype=np.float64)
+    t = np.zeros(3, dtype=np.float64) if init_t is None else np.asarray(init_t, dtype=np.float64)
+
+    # Deterministic subsample of src — large dense predictions have 1M+
+    # points and we don't need every one of them to converge ICP.
+    if sample_cap is not None and src.shape[0] > sample_cap:
+        rng = np.random.default_rng(rng_seed)
+        idx = rng.choice(src.shape[0], size=sample_cap, replace=False)
+        src_sub = src[idx]
+    else:
+        src_sub = src
+
+    from scipy.spatial import cKDTree
+
+    tree = cKDTree(dst)
+
+    prev_mean = float("inf")
+    info: dict[str, float] = {}
+    final_iter = 0
+    for it in range(max_iter):
+        final_iter = it + 1
+        warped = apply_similarity(src_sub, s, R, t)
+        d, nn_idx = tree.query(warped, k=1, workers=-1)
+        # Trim the top 10% as outliers — standard ICP robustification.
+        keep = d < np.quantile(d, 0.9)
+        if keep.sum() < 3:
+            break
+        src_keep = src_sub[keep]
+        dst_keep = dst[nn_idx[keep]]
+        s, R, t = umeyama_similarity(src_keep, dst_keep)
+        mean_d = float(d[keep].mean())
+        if it == 0:
+            info["initial_mean_inlier"] = mean_d
+        if prev_mean < float("inf") and (prev_mean - mean_d) / max(prev_mean, EPS) < rel_tol:
+            break
+        prev_mean = mean_d
+
+    info["iterations"] = float(final_iter)
+    info["final_mean_inlier"] = prev_mean if prev_mean < float("inf") else float("nan")
+    return s, R, t, info

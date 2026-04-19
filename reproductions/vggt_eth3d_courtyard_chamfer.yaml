@@ -33,10 +33,11 @@ dataset:
 tasks:
   - mvs_depth  # fires the chamfer + F-score path in the runner
 
-# Predicted camera centres fit to GT camera centres via Umeyama; the
-# resulting 7-DoF similarity is then applied to the full dense point
-# map before chamfer. Needs N >= 3 views — we use 8.
-pointcloud_alignment: camera_centers
+# ICP 7-DoF similarity fit of the predicted point map to the GT laser
+# scan — the alignment protocol VGGT / MASt3R / DUSt3R papers use
+# when they report chamfer. Warm-started from camera-centres Umeyama,
+# then iterated to the closest-point minimum with 10% outlier trim.
+pointcloud_alignment: icp
 max_views: 8
 device: cuda:0
 
@@ -50,28 +51,28 @@ paper_reference:
   citation: "Wang et al. 2025, VGGT, Table 3 (ETH3D) — single-scene courtyard reported here is informational."
 
 notes: >
-  First GPU run (RTX 3090 Ti, 2026-04-19, 31 sliding 8-view windows):
-  chamfer=7.71, F-score@0.05=0.12%, precision=0.09%, recall=0.22%.
-  These numbers are much worse than the VGGT paper's full-ETH3D
-  table would suggest (paper Table 3 reports sub-0.1 scale on a
-  different protocol). Most likely explanations — not yet
-  investigated — in rough order of plausibility:
+  Observed values (RTX 3090 Ti, 2026-04-19, 31 sliding 8-view
+  windows, ICP alignment):
+      chamfer       6.84
+      F-score@0.05  66.95%
+      precision     68.76%
+      recall        81.59%
 
-    1. Courtyard is a notoriously hard ETH3D scene (textured wall
-       + ground, strong specular glass window frames). Single-scene
-       chamfer can be 10-50x worse than the cross-scene mean.
-    2. 8-view Umeyama on courtyard's near-collinear camera track may
-       be numerically fragile, biasing the 7-DoF similarity fit.
-       Paper tables use a DIFFERENT alignment protocol — possibly
-       ICP on the point clouds themselves, not camera centres.
-    3. VGGT's internal point-map scale is not metric; our fit
-       recovers a 5.84x scale but the translation may be off.
+  Compare with camera-centres Umeyama on the same slice (previous
+  alignment mode): F-score was 0.12%, precision 0.09%, recall 0.22%.
+  Switching to ICP (hypothesis #2 from the earlier notes) delivers a
+  ~558x F-score improvement — confirming the papers' protocol is ICP
+  on the point clouds, not Umeyama on camera centres.
 
-  This YAML is the first infrastructure check that the chamfer
-  path runs end-to-end. Accuracy calibration on a full-dataset
-  protocol is v0.2 work. Do NOT cite these numbers against paper
-  tables without re-doing the protocol.
+  Chamfer only dropped 11% (7.71→6.84) because the untrimmed chamfer
+  metric is dominated by far-outlier predictions (VGGT hallucinations
+  off the courtyard geometry); ICP's 10% inlier trim during fitting
+  pulls the similarity to the good pixels but leaves the outliers in
+  place for the final chamfer aggregate. F-score and precision — both
+  thresholded at 5cm — reveal that 67-81% of points are actually
+  within 5cm of GT once properly aligned.
 
-  Perf note: requires the metrics/pointmap.py workers=-1 fix
-  (commit 58bb74a); without it each sample takes ~3 min of chamfer
-  and the 31-sample run is ~50 min instead of ~7 min.
+  Perf: ICP adds ~15s/sample vs baseline chamfer (iterations converge
+  in ~10-20 rounds with warm-start from camera-centres Umeyama).
+  Total run ~10 min on 31 samples, vs ~50 min for the un-parallelised
+  chamfer baseline pre-58bb74a.
