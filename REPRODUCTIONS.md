@@ -18,6 +18,7 @@ don't hardcode machine-specific paths:
 export NYUV2_ROOT=~/data/nyuv2      # for any da-v2-*-nyuv2 reproduction
 export SCANNET_ROOT=~/data/scannet  # for vggt-paper-scannet-depth
 export SINTEL_ROOT=~/data/sintel    # for depth-anything-v2-sintel
+export KITTI_ROOT=~/data/kitti      # for any *-kitti reproduction
 
 plumbline reproduce <name>
 ```
@@ -39,6 +40,8 @@ value.
 | `da3-nyuv2` | DA3 Large-1.1, NYU Eigen (Table 4) | `delta_1` | 0.974 | **0.9684** | ±2% | ✅ **match** (RTX 3090, 2 min). AbsRel=0.051 (informational; Table 4 only reports δ₁). |
 | `vggt-paper-scannet-depth` | VGGT, ScanNet, 8 views | `abs_rel` | _TBD_ | — | ±5% | VGGT wiring complete (RTX 3090 end-to-end sanity on random images ✓). Blocked on ScanNet ToS signup + `$SCANNET_ROOT` data. |
 | `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | ≈0.075 | — | ±15% | blocked on Sintel depth-archive availability |
+| `da-v2-small-kitti` | DA-V2 ViT-S, KITTI Eigen test (Table 2) | `abs_rel` | _TBD_ | — | ±10% | KITTI loader + Garg crop ready. User supplies `$KITTI_ROOT` (public) + pinned Eigen sample list. |
+| `metric3d-v2-kitti` | Metric3Dv2 ViT-L, KITTI Eigen test (Table I) | `abs_rel` | _TBD_ | — | ±10% | same gating as above; no ToS needed. |
 | _VGGT / ETH3D courtyard smoke_ | VGGT-1B, 4 views, first sample | `pose_auc@5°` | — | **0.91** | n/a | informational only. Rotation errors <0.3°/view; translation cos <0.6°/view. |
 | _MASt3R / ETH3D courtyard pairs_ | MASt3R ViT-L, 35 consecutive 2-view samples | `pose_auc@5°` | — | **0.46** | n/a | informational only. Mean rotation error 0.32°/pair; translation cos 3.42°. 2-view setup (PairViewer) — Umeyama needs N≥3 so no chamfer. |
 | _VGGT / ETH3D courtyard view-count sweep_ | VGGT-1B on 31 sliding 8-view windows | pairwise `pose_auc@5°` | — | see below | n/a | informational. Reports both absolute per-view and pairwise relative-pose AUC (the latter matches paper tables). Peak at 4 views: **pw@5°=0.66**, abs@5°=0.67. |
@@ -86,6 +89,31 @@ HuggingFace ViT-S checkpoint produces AbsRel=0.0621 against the *filled*
 default landed. Switching to rawDepths drops that to 0.0510 (vs paper
 0.053), and the same switch takes ViT-L from 0.0554 to 0.0428 (vs paper
 0.045). Without the clip, ViT-L averaged 77.9 because of sample 88 alone.
+
+### Note on the KITTI Eigen protocol
+
+Three details tend to separate "just ran the HF model on KITTI" numbers
+from the paper targets:
+
+1. **Annotated-depth GT, not raw LiDAR projections.** The original Eigen
+   2014 protocol reprojects Velodyne points into camera frame, yielding
+   sparse and noisy GT. Modern papers (DA-V2, Metric3Dv2, DA3, MoGe,
+   Depth Pro) evaluate against the KITTI Depth-Prediction Benchmark's
+   *annotated* dense depth maps (Uhrig et al. 2017, ~14 GB public
+   archive). plumbline's `KITTIDataset` loads the annotated maps.
+2. **Garg crop on evaluation.** Pixels outside
+   `row ∈ [0.408 H, 0.992 H) × col ∈ [0.036 W, 0.964 W)` are excluded.
+   Pass `apply_garg_crop: true` in the dataset kwargs; the loader
+   populates `Sample.depth_valid` with the crop AND-ed with `depth > 0`.
+   Without the crop, hood-of-car pixels and image borders dominate the
+   metric.
+3. **`depth_clip: [1e-3, 80.0]` post-alignment.** Standard KITTI cap
+   (80 m). Apply it the same way NYU's `[1e-3, 10.0]` clip is applied.
+
+KITTI sample-list variants (697 raw / 652 with-GT / 500 improved)
+differ by paper; plumbline does not bundle one, so reproduction YAMLs
+should point at an explicit `sample_list` file (e.g. from Monodepth2's
+`splits/eigen`) to avoid silent divergence.
 
 ## Adding a new reproduction
 

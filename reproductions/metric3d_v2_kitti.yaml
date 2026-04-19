@@ -1,0 +1,44 @@
+# Metric3Dv2 (ViT-L) on KITTI Eigen test split
+#
+# Zero-shot metric depth on the outdoor benchmark. KITTI is one of the
+# datasets Metric3Dv2's Table I reports zero-shot numbers on, alongside
+# NYU. The model's canonical-camera trick recovers metric scale from
+# each frame's focal length, so no scale alignment is applied.
+
+name: metric3d-v2-kitti
+
+model:
+  name: metric3d-v2
+  kwargs:
+    variant: vit_large
+
+dataset:
+  name: kitti
+  kwargs:
+    # Supply a pinned sample list — see da_v2_small_kitti.yaml notes.
+    # sample_list: /path/to/kitti_eigen_test_files_with_gt.txt
+    camera: image_02
+    apply_garg_crop: true
+
+tasks:
+  - mono_depth
+
+# Metric model — no scale alignment.
+scale_alignment: none
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 80.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # Metric3Dv2 paper (Yin et al. 2024, arXiv:2404.15506), Table I, KITTI
+  # zero-shot row, ViT-L CSTM_label. PLACEHOLDER — pin from the paper
+  # once running.
+  value: 0.0  # TODO: pin from Metric3Dv2 paper Table I, KITTI row, ViT-L ZS.
+  tolerance_relative: 0.10
+  citation: "Yin et al. 2024, Metric3D v2, Table I. KITTI Eigen test, ViT-L CSTM_label ZS."
+
+notes: >
+  Same upstream-install caveats as metric3d-v2-nyuv2 (mmengine + mmcv-lite;
+  xformers must be ABI-matched or absent). Blocked on user-supplied KITTI
+  data; both required archives are public.
