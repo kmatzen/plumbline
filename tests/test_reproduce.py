@@ -560,3 +560,41 @@ device: cpu
         )
         with pytest.raises(ValueError, match="unknown pointcloud_alignment"):
             run_reproduction("repro")
+
+
+class TestBundledReproductionFilenames:
+    """Every bundled reproduction YAML must be discoverable via its own slug.
+
+    Regression: an earlier vggt_scannet_depth.yaml declared
+    ``name: vggt-paper-scannet-depth`` but lived at a filename that
+    ``plumbline reproduce <slug>`` couldn't find. Any future drift
+    where the internal ``name:`` and the filename stem stop matching
+    makes the config silently uninvokable, which is exactly the
+    failure mode this test catches.
+    """
+
+    def test_every_bundled_yaml_is_invokable_by_its_name(self) -> None:
+        import yaml as yaml_mod  # local import so test module stays lightweight
+
+        from plumbline.reproduce import REPRODUCTIONS_DIR, load_reproduction_config
+
+        yamls = sorted(REPRODUCTIONS_DIR.glob("*.yaml"))
+        assert yamls, "expected at least one bundled reproduction YAML"
+        for path in yamls:
+            cfg = yaml_mod.safe_load(path.read_text(encoding="utf-8"))
+            assert isinstance(cfg, dict) and "name" in cfg, (
+                f"{path.name} is missing a top-level 'name:' field"
+            )
+            slug = cfg["name"]
+            # load_reproduction_config accepts both hyphen- and underscore-
+            # separated slugs; if it can't find either, the YAML is
+            # effectively orphaned from `plumbline reproduce`.
+            try:
+                load_reproduction_config(slug)
+            except FileNotFoundError as exc:
+                raise AssertionError(
+                    f"{path.name} declares name={slug!r} but that slug does "
+                    f"not resolve to a YAML under {REPRODUCTIONS_DIR}. "
+                    f"Fix by renaming the file to match the slug "
+                    f"(hyphens → underscores)."
+                ) from exc
