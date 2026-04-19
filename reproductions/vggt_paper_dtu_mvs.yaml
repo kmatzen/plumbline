@@ -35,7 +35,10 @@ tasks:
 # in a scanner frame. Fit 7-DoF similarity on predicted camera centres
 # → GT centres, then apply to the dense point map before chamfer. This
 # is the same protocol used for ETH3D chamfer reproductions.
-pointcloud_alignment: camera_centers
+# ICP 7-DoF similarity — the paper's alignment protocol. Camera-centres
+# Umeyama (the prior default) under-aligns the dense cloud by ~500x on
+# the ETH3D courtyard reproduction; see commit 565230c for the diagnostic.
+pointcloud_alignment: icp
 max_views: 8
 device: cuda:0
 
