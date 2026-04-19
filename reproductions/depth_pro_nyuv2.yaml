@@ -1,0 +1,56 @@
+# Depth Pro (Apple) on NYUv2 Eigen test split
+#
+# Depth Pro is a metric monocular depth model that also predicts its
+# own focal length. Unlike DA-V2 / Marigold (affine-invariant,
+# scale_shift at eval), or Metric3D (metric but requires GT focal via
+# the canonical-camera trick), Depth Pro is fully zero-shot at metric
+# scale with no inputs beyond the RGB.
+#
+# Paper (Bochkovskii et al. 2024, "Depth Pro: Sharp Monocular Metric
+# Depth in Less Than a Second", arXiv:2410.02073) reports NYU results
+# under aligned and un-aligned protocols; the un-aligned metric number
+# is the key differentiator. Paper Table 4 zero-shot NYU:
+#     AbsRel    0.058
+#     delta_1   0.975
+# (approximate from the paper's ZS NYU row; pin exact on first run.)
+
+name: depth-pro-nyuv2
+
+model:
+  name: depth-pro
+  kwargs:
+    dtype: float16
+
+dataset:
+  name: nyuv2
+  split: test
+  kwargs:
+    apply_eigen_crop: true
+
+tasks:
+  - mono_depth
+
+# Metric out of the box — no alignment by default. Runs without
+# per-sample scale+shift fitting, which is the headline capability
+# Depth Pro is designed for.
+scale_alignment: none
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 10.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.058
+  tolerance_relative: 0.20
+  citation: "Bochkovskii et al. 2024, Depth Pro, Table 4. NYU ZS."
+
+notes: >
+  Requires `uv pip install 'git+https://github.com/apple/ml-depth-pro.git'`
+  plus the Apple weights:
+      mkdir -p ~/.cache/plumbline/weights/depth-pro
+      wget https://ml-site.cdn-apple.com/models/depth-pro/depth_pro.pt \
+          -O ~/.cache/plumbline/weights/depth-pro/depth_pro.pt
+  First GPU run on an RTX 3090 Ti should take ~5-8 min (Depth Pro
+  targets ~0.3s per 2.25MP image on a 3090). Un-aligned metric eval
+  is the point of this reproduction — if the model needed scale+shift
+  to hit paper, its metric claim would be suspect.
