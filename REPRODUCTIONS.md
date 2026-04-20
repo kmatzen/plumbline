@@ -15,11 +15,11 @@ not a canonical paper combo
 
 | Model → Dataset | NYUv2 | KITTI | DIODE | ETH3D | DTU | Co3Dv2 | GSO |
 |---|---|---|---|---|---|---|---|
-| **DA-V2 Small** | ✅ **0.0510** | ⌛ | ⚠️ **0.0722** vs 0.0533 _(indoor-only)_ | — | — | — | ⌛ |
+| **DA-V2 Small** | ✅ **0.0510** | ✅ **0.0770** vs 0.078 | ⚠️ **0.0722** vs 0.0533 _(indoor-only)_ | — | — | — | ⌛ |
 | **DA-V2 Base** | ✅ **0.0456** | ⌛ | — | — | — | — | — |
 | **DA-V2 Large** | ✅ **0.0428** (vs 0.0420) | ⌛ | — | — | — | — | 🎯 **0.0122** (δ₁ 0.9999) _(target TBD)_ |
-| **DA-V2 Metric-Outdoor-L** | — | ⌛ YAML ready | — | — | — | — | — |
-| **Metric3D-v2 L** | ✅ **0.0660** | ⌛ | — | — | — | — | — |
+| **DA-V2 Metric-Outdoor-L** | — | ℹ️ **0.0877** (VKITTI-finetuned; no direct paper) | — | — | — | — | — |
+| **Metric3D-v2 L** | ✅ **0.0660** | ✅ **0.0495** vs 0.052 | — | — | — | — | — |
 | **Metric3D-v2 Giant** | ✅ **0.0702** | ⌛ | — | — | — | — | — |
 | **DA3** | ✅ δ₁ **0.9684** | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | — | 🎯 **0.0150** (δ₁ 0.9994) _(target TBD)_ |
 | **MoGe-1 ViT-L** | ✅ **0.0305** (ROE, vs 0.0341) | ⌛ | ⚠️ **0.1088** vs 0.0400 _(2.7× off; MoGe preproc depth differs)_ | — | — | — | 🎯 **0.0094** (δ₁ 0.9999) _(target TBD)_ |
@@ -106,9 +106,9 @@ value.
 | `vggt-paper-dtu-mvs` | VGGT, DTU dense MVS (Table 2) | `chamfer` | **0.382** | — | ±5% | **v0.1 paper-match gate** (retargeted from the defunct ScanNet placeholder). Loader + YAML ready; public data — set `$DTU_ROOT` and run. |
 | `vggt-paper-scannet-depth` | VGGT on ScanNet (community eval, no paper target) | `abs_rel` | _n/a_ | — | n/a | Informational only — VGGT's paper doesn't evaluate ScanNet depth (Table 4 is matching, not depth). Kept for a future community run; not a paper-match. |
 | `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | ≈0.075 | — | ±15% | blocked on Sintel depth-archive availability |
-| `da-v2-small-kitti` | DA-V2 ViT-S, KITTI Eigen test (Table 2) | `abs_rel` | _TBD_ | — | ±10% | KITTI loader + Garg crop ready. User supplies `$KITTI_ROOT` (public) + pinned Eigen sample list. |
-| `metric3d-v2-kitti` | Metric3Dv2 ViT-L, KITTI Eigen test (Table I) | `abs_rel` | _TBD_ | — | ±10% | same gating as above; no ToS needed. |
-| `da-v2-metric-outdoor-large-kitti` | DA-V2 Metric-Outdoor-Large, KITTI Eigen | `abs_rel` | _n/a_ | — | n/a | Informational; VKITTI-finetuned checkpoint on KITTI. No direct paper target (paper's KITTI 0.049 is the *KITTI*-finetuned ViT-L). Paired with the KITTI loader as a cross-model smoke reproduction. |
+| `da-v2-small-kitti` | DA-V2 ViT-S, KITTI Eigen test (Table 2) | `abs_rel` | **0.078** | **0.0770** | ±10% | ✅ **match** (RTX 3090 Ti, 2026-04-20, 652 Eigen benchmark frames, Garg crop, scale_shift). δ₁=0.944, rmse=3.46 m. First KITTI paper-match row. |
+| `metric3d-v2-kitti` | Metric3Dv2 ViT-L, KITTI Eigen test (Table I) | `abs_rel` | **0.052** | **0.0495** | ±10% | ✅ **match** (RTX 3090 Ti, 2026-04-20, 652 frames, no scale alignment — canonical-camera metric). δ₁=0.979, rmse=2.26 m. |
+| `da-v2-metric-outdoor-large-kitti` | DA-V2 Metric-Outdoor-Large, KITTI Eigen | `abs_rel` | _n/a_ | **0.0877** | n/a | ℹ️ Informational (2026-04-20, median-aligned). δ₁=0.914, rmse=3.27 m. VKITTI-finetuned ViT-L on KITTI — no direct paper target (paper's KITTI 0.049 is the *KITTI*-finetuned ViT-L). ~14% higher than that KITTI-finetuned paper number, consistent with VKITTI→KITTI domain shift. |
 | `vggt-eth3d-courtyard-chamfer` | VGGT on ETH3D courtyard, 8-view, per-window | `chamfer` | _n/a_ | **5.87** | n/a | ℹ️ Per-window protocol: ICP + 0.5 m outlier mask. F-score@5cm=**1.13%**, precision=2.16%, recall=0.82% (chamfer 5.87 m; without mask: chamfer 6.84 m, F=0.67%). **Not a paper-match config** — F@5cm is an indoor T&T threshold and per-window vs scene-merged is a protocol mismatch. Paper-protocol reproduction is `vggt-eth3d-multiscene-chamfer` (Overall in meters, scene-merged); courtyard under that protocol lands Overall=0.915 m. Kept as an A/B against `da3-eth3d-courtyard-chamfer` under the same per-window protocol. |
 | `da3-eth3d-courtyard-chamfer` | DA3 Large-1.1 on ETH3D courtyard, 8-view, per-window | `chamfer` | _n/a_ | **7.14** | n/a | ℹ️ Per-window protocol: ICP. F-score@5cm=**0.61%**, precision=0.84%, recall=0.77%. Direct A/B with VGGT on same slice: VGGT F=0.67%, prec=0.69%, rec=0.82%. **Not a paper-match config** (same per-window/indoor-threshold caveats as the VGGT row). Models land within 15% of each other on this protocol. Also validates the depth→point-map back-projection path for adapters that only return depth. |
 | `vggt-eth3d-multiscene-chamfer` | VGGT on ETH3D courtyard+delivery_area+facade, scene-merged | `overall` | **0.709** | **0.8178** | ±100% | ✅ paper-protocol MATCH (3-scene subset; paper averages full ETH3D split). Accuracy 1.175 vs 0.901 (1.30×), Completeness 0.461 vs 0.518 (0.89×, **below paper**), Overall 0.818 vs 0.709 (1.15×). Per-scene: courtyard Overall 0.915, delivery_area **0.554** (beats paper aggregate), facade 0.984. Uses the new `aggregation: scene` path — ICP-align each 8-view window into the GT frame, merge per scene, voxel downsample at 1 cm (ETH3D tool default), then Acc/Comp/Overall. Supersedes the indoor-scale F@5cm misinterpretation that dominated the courtyard row's framing. |

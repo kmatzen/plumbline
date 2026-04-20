@@ -44,9 +44,15 @@ paper_reference:
   citation: "Yang et al. 2024, Depth Anything V2, Table 2 (zero-shot relative depth). KITTI, ViT-S."
 
 notes: >
-  Blocked on user-supplied KITTI data + a pinned sample list. Both the raw
-  drives (https://www.cvlibs.net/datasets/kitti/raw_data.php) and the
-  annotated-depth archive (data_depth_annotated.zip from
-  https://www.cvlibs.net/datasets/kitti/eval_depth.php) are public — no
-  ToS — so this is just a download/unpack away. Garg crop is the standard
-  for DA-V2's KITTI evaluation.
+  ✅ MATCH (2026-04-20, RTX 3090 Ti, 652 Eigen benchmark frames with
+  Uhrig 2017 annotated GT, Garg crop, scale_shift alignment):
+
+      abs_rel   delta_1   delta_2   rmse    log10
+      0.0770    0.9441    0.9894    3.464   0.0324
+
+  Paper target 0.0780 — observed 0.0770 is 1.3% below (well inside
+  ±10% tolerance). First KITTI paper-match row in the matrix.
+
+  Raw drives + annotated-depth archive are public (no ToS). Sample
+  list is monodepth2's eigen_benchmark subset; place it at
+  $KITTI_ROOT/eigen_benchmark_test_files.txt.

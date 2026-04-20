@@ -48,8 +48,16 @@ paper_reference:
   citation: "No direct paper reference for VKITTI-finetuned ViT-L on KITTI (DA-V2 Table 4b targets the KITTI-finetuned variant)."
 
 notes: >
-  Informational reproduction that pairs the KITTI loader with DA-V2's
-  outdoor metric variant. Blocked on $KITTI_ROOT + a pinned Eigen sample
-  list. Expect the same "author vs HF port agreement" diagnostic the
-  indoor variant showed on NYU; any residual domain bias goes in
-  REPRODUCTIONS.md once the first GPU run lands.
+  ℹ️ Informational result (2026-04-20, RTX 3090 Ti, 652 Eigen benchmark,
+  Garg crop, median scale alignment per sample):
+
+      abs_rel   delta_1   delta_2   rmse    log10
+      0.0877    0.9138    0.9837    3.269   0.0366
+
+  No direct paper target (the VKITTI-finetuned ViT-L isn't the
+  checkpoint reported in DA-V2 Table 4b's KITTI 0.049 — that was the
+  KITTI-finetuned ViT-L). VKITTI domain shift shows up as ~14%
+  higher AbsRel than the KITTI-finetuned paper number. For
+  paper-match outdoor: use da-v2-small-kitti (relative,
+  scale_shift-aligned, matches at 0.0770) or metric3d-v2-kitti
+  (metric, matches at 0.0495).
