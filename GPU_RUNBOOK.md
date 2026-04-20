@@ -86,6 +86,43 @@ and what every DA-V2 / Metric3Dv2 paper number in the status matrix
 targets. Pass ``depth_field="filled"`` for Silberman's colorization-
 filled variant.
 
+### KITTI (public, Eigen-benchmark 652-frame subset)
+
+KITTI raw is ~65 GB across 28 drives if you fetch every frame — but
+the Eigen benchmark only evaluates 12–25 frames per drive (652
+total). The committed sample list
+(`reproductions/kitti_eigen_benchmark_652.txt`) drives a selective
+fetcher that downloads each drive zip, extracts only the listed
+``image_02`` PNGs + calib, and discards the rest:
+
+```bash
+export KITTI_ROOT=$HOME/data/kitti
+scripts/fetch_kitti.py --kitti-root $KITTI_ROOT
+```
+
+Bandwidth: ~8.5 GB (28 drive zips × ~300 MB). On-disk footprint
+after prune: ~700 MB for the 652 RGB frames + calib. Resumable —
+re-running skips drives whose listed frames are already present.
+
+Annotated-depth GT is a separate bundle (single 14 GB zip covering
+all drives); fetch once, unpack once:
+
+```bash
+curl -L -o /tmp/data_depth_annotated.zip \
+    https://s3.eu-central-1.amazonaws.com/avg-kitti/data_depth_annotated.zip
+mkdir -p $KITTI_ROOT/depth_annotated
+unzip -d $KITTI_ROOT/depth_annotated /tmp/data_depth_annotated.zip
+rm /tmp/data_depth_annotated.zip
+```
+
+After the fetch, push the pruned KITTI tree to the S3 cache so
+future rentals skip the 8.5 GB re-download:
+
+```bash
+aws s3 sync $KITTI_ROOT s3://plumbline-bench/datasets/kitti/ \
+    --exclude '*/.plumbline_manifest/*'
+```
+
 ### Sintel (public images; depth + cameras are auth-gated)
 
 **The optical-flow bundle is public** (~5.3 GB) and gives you the `final/`,
@@ -154,6 +191,51 @@ Archive names to know:
 - `*_dslr_jpg.7z` — distorted jpg only (don't need for eval)
 - `*_dslr_scan_eval.7z` — laser GT in the evaluation coordinate frame
 - `*_scan_clean.7z` — the raw clean laser scan (`.ply`)
+
+### iBims-1 (MoGe preprocessed bundle, public)
+
+100 high-fidelity indoor scenes (Koch et al. 2018) rendered into the
+same per-scene directory format as GSO: `image.jpg` +
+log-encoded uint16 `depth.png` + `segmentation.png` + normalised-K
+`meta.json`. Bundle is tiny (~40 MB zipped); perfect "quick high-quality
+indoor" slot for MoGe Table 1/2 reproductions.
+
+```bash
+pip install huggingface-hub
+hf download Ruicheng/monocular-geometry-evaluation \
+    --repo-type dataset --include 'iBims-1*' --local-dir ~/data/moge_eval
+cd ~/data/moge_eval && unzip iBims-1.zip
+export IBIMS1_ROOT=$HOME/data/moge_eval/iBims-1
+```
+
+The TUM upstream release (https://www.asg.ed.tum.de/lmf/ibims1/) is
+the canonical source but ships a .mat-based layout that this loader
+does not speak. Stick with the MoGe bundle.
+
+### 7-Scenes (Microsoft, public, no auth; ~12 GB for all 7 scenes)
+
+RGB-D + per-frame pose, Kinect v1. Default test-split per Shotton 2013
+(loaded automatically by `SevenScenesDataset(split="test")`). Download
+per-scene zips; each is ~1-2 GB after unpacking.
+
+```bash
+mkdir -p ~/data/7scenes && cd ~/data/7scenes
+base="http://download.microsoft.com/download/2/8/5/28564B23-0828-408F-8631-23B1EFF1DAC8"
+for scene in chess fire heads office pumpkin redkitchen stairs; do
+  curl -L --fail -O "${base}/${scene}.zip"
+  unzip "${scene}.zip" && rm "${scene}.zip"
+  # Scenes unpack to nested zips per sequence; extract the inner ones too.
+  (cd "$scene" && for f in seq-*.zip; do unzip -o "$f" && rm "$f"; done)
+done
+export SEVEN_SCENES_ROOT=$HOME/data/7scenes
+```
+
+Loader options:
+- `split="test"` uses the canonical test-sequences-per-scene split.
+- `views_per_sample=2` (default) yields two-view pairs for relative-
+  pose evaluation; MASt3R paper §4.2 uses this shape.
+- `stride=10, baseline=10` is the default — window starts every 10
+  frames, pair spans 10 frames (≈0.3 s at 30 fps). Tune per paper.
 
 ## Per-adapter first-run notes
 
@@ -297,6 +379,73 @@ NYU — `reproductions/da3_nyuv2.yaml` matches the paper's Table 4 δ₁.
 The "DA3-metric" checkpoint referenced in the paper's Table 11 is not
 publicly released; don't expect the metric AbsRel=0.070 to be
 reproducible until it ships.
+
+### π³ (Pi-Cubed) — upstream not on PyPI; clone + sys.path
+
+ByteDance's multi-view 3D foundation model (ICLR 2026 submission).
+Same install pattern as MASt3R / GeoWizard: clone the repo, point
+`$PI3_ROOT` at it; the adapter lazy-imports
+`pi3.models.pi3{,x}.{Pi3,Pi3X}`. Two checkpoints on HF:
+`yyfz233/Pi3` (original) and `yyfz233/Pi3X` (Dec 2025 improved rev,
+adapter default).
+
+```bash
+git clone https://github.com/yyfz/Pi3 /workspace/deps/pi3
+cd /workspace/deps/pi3 && uv pip install -r requirements.txt
+export PI3_ROOT=/workspace/deps/pi3
+```
+
+Input/output convention matches plumbline:
+- Input: `(N, H, W, 3)` uint8 sRGB at native resolution. Adapter
+  normalises to `[0, 1]` and reshapes to `(1, N, 3, H, W)`.
+- Output: `local_points[..., 2]` → per-view depth (z); `camera_poses`
+  → world_from_camera (already OpenCV); `points` → world-frame point
+  map; `conf` → per-pixel confidence after sigmoid.
+- Default `dtype: bfloat16`. Defaults `max_views: 16` (conservative;
+  can raise on >24 GB cards).
+
+Smoke test (no paper-row YAML committed yet — first-run results pin
+the value):
+
+```bash
+uv run plumbline run --model pi3 --dataset eth3d \
+    --tasks mvs_depth pose --max-views 8 -o pi3_eth3d.json
+```
+
+### GeoWizard (upstream not on PyPI — clone + sys.path)
+
+Upstream ships as a CLI-oriented repo without a Python package
+interface. The adapter lazy-imports
+`models.geowizard_pipeline.DepthNormalEstimationPipeline` from a local
+clone pointed at by `$GEOWIZARD_ROOT`. Weights come from
+`lemonaddie/Geowizard` on HuggingFace (~5 GB).
+
+```bash
+git clone https://github.com/fuxiao0719/GeoWizard /workspace/deps/geowizard
+export GEOWIZARD_ROOT=/workspace/deps/geowizard
+# Extra deps that upstream pins but doesn't ship as a requirements.txt in the
+# `geowizard/` subdir — install into plumbline's venv:
+VIRTUAL_ENV=/workspace/plumbline/.venv uv pip install accelerate transformers
+```
+
+Domain conditioning: GeoWizard is a single model with per-sample
+`domain={"indoor","outdoor","object"}` conditioning. The reproduction
+YAML picks the domain to match the paper's target table — indoor for
+NYU / DIODE-indoor / iBims, outdoor for KITTI / DIODE-outdoor, object
+for GSO.
+
+Alignment: GeoWizard outputs affine-invariant depth in [0, 1] like
+Marigold. Use `scale_alignment: scale_shift_depth` (fit scale+shift in
+depth space) rather than the inverse-depth fit DA-V2 / MoGe use.
+
+Smoke test (no paper-row YAML yet — add after first run pins a
+reference value):
+
+```bash
+uv run plumbline run --model geowizard --dataset nyuv2 \
+    --tasks mono_depth --scale-alignment scale_shift_depth \
+    --max-views 1 -o geowizard_nyuv2.json
+```
 
 ## v0.1 gate status
 

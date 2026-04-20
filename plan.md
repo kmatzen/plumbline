@@ -512,16 +512,37 @@ missing and which items matter most for reproducing published tables.
 4. **Diffusion / generative depth models.** Marigold landed in this
    session (adapter wired, NYU reproduction running). Follow-ups:
    - **GeoWizard** (Fu et al. 2024): diffusion depth + normals.
+     **Adapter shipped 2026-04-20** (lazy-import via `$GEOWIZARD_ROOT`).
+     Inference smoke-test pending GPU rental.
    - **DepthFM** (Gui et al. 2024): flow-matching-based depth.
    - **Depth Pro** (Apple, Bochkovskii et al. 2024): not diffusion
      but a recent HF-available metric model; fits the mono-depth
-     shape, adds a paper-validated comparison point.
+     shape. **Adapter wired 2026-04-19; original A9 plan to expand
+     paper rows on KITTI/NYU was killed by the 2026-04-20 audit** —
+     Depth Pro paper Table 1 evaluates only Booster, ETH3D, Middlebury,
+     NuScenes, Sintel, Sun-RGBD (δ₁ values 40-89). To unlock real
+     Depth Pro paper rows, choose:
+       - **(a) Sun-RGBD loader** (~5 GB, semi-public; new dataset module).
+         Targets δ₁=89.0 — easiest cell to reproduce. Estimated 1 day.
+       - **(b) Extend ETH3DDataset to project the laser-scan point
+         cloud through each camera's pose to a per-image GT depth
+         map.** Targets δ₁=41.5. Reuses existing ETH3D infrastructure
+         but the projection + visibility step is non-trivial (occlusion
+         culling, masking). Estimated 1-2 days.
+       - **(c) Sintel-depth** (already have RGB loader; depth + cam
+         archives are auth-gated). Targets δ₁=40.0. Blocked on
+         user's TUM email.
+     None are on the v0.1 critical path; pick during a focused Depth
+     Pro paper-row sprint, not a side-effort.
    - **GeoCrafter** (if different from GeoWizard — confirm) and
      video-consistent diffusion depth models.
 
 5. **Multi-view 3D foundation models** (the recent wave beyond
    VGGT/MASt3R/DA3):
    - **π³ (Pi-Cubed / PI3)**: multi-view from Bytedance (2024).
+     **Adapter shipped 2026-04-20** (lazy-import via `$PI3_ROOT`).
+     Two variants wired (`pi3` original + `pi3x` Dec-2025 rev).
+     Inference smoke-test pending GPU rental.
    - **CUT3R**: "Continuous 3D Tokenizer" (Wang et al. 2025).
      Stateful, ingests a sequence of views.
    - **Fast3R**: large-ensemble 3D from Meta (2024/2025). Single

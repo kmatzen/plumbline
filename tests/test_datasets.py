@@ -40,7 +40,15 @@ from plumbline.datasets.kitti import (
     load_kitti_depth_png_to_m,
     parse_eigen_sample_list,
 )
+from plumbline.datasets.ibims1 import IBims1Dataset
 from plumbline.datasets.scannet import ScanNetDataset, load_scannet_pose
+from plumbline.datasets.seven_scenes import (
+    SEVEN_SCENES_INTRINSIC,
+    SEVEN_SCENES_TEST_SEQUENCES,
+    SevenScenesDataset,
+    load_seven_scenes_depth_m,
+    load_seven_scenes_pose,
+)
 from plumbline.datasets.sintel import SintelDataset, load_cam, load_dpt
 
 # ---------------------------------------------------------------------------
@@ -1492,3 +1500,280 @@ class TestGSO:
         Image.fromarray(np.zeros((4, 4, 3), dtype=np.uint8)).save(p, pnginfo=meta)
         with pytest.raises(ValueError, match="uint16"):
             read_moge_depth_png(p)
+
+
+# ---------------------------------------------------------------------------
+# 7-Scenes
+# ---------------------------------------------------------------------------
+
+
+def _write_fake_seven_scenes_sequence(
+    root: Path,
+    *,
+    scene: str,
+    seq: str,
+    n_frames: int,
+    H: int = 48,
+    W: int = 64,
+) -> list[str]:
+    """Write a minimal 7-Scenes sequence tree and return the frame IDs."""
+    seq_dir = root / scene / seq
+    seq_dir.mkdir(parents=True, exist_ok=True)
+    frame_ids: list[str] = []
+    rng = np.random.default_rng(seed=hash((scene, seq)) & 0xFFFF_FFFF)
+    for i in range(n_frames):
+        fid = f"frame-{i:06d}"
+        frame_ids.append(fid)
+        # RGB
+        rgb = (rng.random((H, W, 3)) * 255).astype(np.uint8)
+        Image.fromarray(rgb).save(seq_dir / f"{fid}.color.png")
+        # Depth: uint16, 1000 units/m. 2.5 m with one invalid sentinel pixel.
+        depth = np.full((H, W), 2500, dtype=np.uint16)
+        depth[0, 0] = 65535  # invalid
+        depth[0, 1] = 0  # also invalid (alternate encoding)
+        Image.fromarray(depth).save(seq_dir / f"{fid}.depth.png")
+        # Pose: 4x4 camera-to-world. Translate by i along +X to make the
+        # rebase-to-camera-0 transform exercised below non-trivial.
+        pose = np.eye(4, dtype=np.float64)
+        pose[0, 3] = float(i) * 0.05  # 5 cm between frames
+        np.savetxt(seq_dir / f"{fid}.pose.txt", pose)
+    return frame_ids
+
+
+class TestSevenScenes:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable):
+            SevenScenesDataset(root=tmp_path / "nope")
+
+    def test_default_test_split_has_all_seven_scenes(self) -> None:
+        assert set(SEVEN_SCENES_TEST_SEQUENCES) == {
+            "chess", "fire", "heads", "office", "pumpkin", "redkitchen", "stairs",
+        }
+
+    def test_rejects_bad_views_or_stride(self, tmp_path: Path) -> None:
+        _write_fake_seven_scenes_sequence(tmp_path, scene="chess", seq="seq-03", n_frames=3)
+        with pytest.raises(ValueError, match="views_per_sample"):
+            SevenScenesDataset(root=tmp_path, views_per_sample=0)
+        with pytest.raises(ValueError, match="stride"):
+            SevenScenesDataset(root=tmp_path, stride=0)
+        with pytest.raises(ValueError, match="baseline"):
+            SevenScenesDataset(root=tmp_path, baseline=0)
+
+    def test_custom_scenes_whitelist(self, tmp_path: Path) -> None:
+        _write_fake_seven_scenes_sequence(tmp_path, scene="chess", seq="seq-03", n_frames=20)
+        _write_fake_seven_scenes_sequence(tmp_path, scene="fire", seq="seq-03", n_frames=20)
+        ds = SevenScenesDataset(root=tmp_path, scenes=["chess"])
+        samples = list(ds)
+        assert all(s.metadata["scene"] == "chess" for s in samples)
+
+    def test_default_two_view_pair_window(self, tmp_path: Path) -> None:
+        _write_fake_seven_scenes_sequence(tmp_path, scene="chess", seq="seq-03", n_frames=25)
+        # Only 'chess' is populated on disk; other test-split scenes are
+        # skipped silently (partial download).
+        ds = SevenScenesDataset(root=tmp_path, stride=10, baseline=10)
+        samples = list(ds)
+        # 25 frames, stride 10, width = baseline+1 = 11. Starts: 0, 10, 14.
+        # range(0, 25 - 11 + 1, 10) = [0, 10]. So 2 windows.
+        assert len(samples) == 2
+        s = samples[0]
+        assert s.images.shape == (2, 48, 64, 3)
+        assert s.intrinsics.shape == (2, 3, 3)
+        assert s.extrinsics_gt.shape == (2, 4, 4)
+        # Camera 0 should be identity after rebase_to_first_camera.
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-5)
+        # Intrinsics match Kinect v1 default.
+        fx, fy, cx, cy = SEVEN_SCENES_INTRINSIC
+        np.testing.assert_allclose(s.intrinsics[0, 0, 0], fx)
+        np.testing.assert_allclose(s.intrinsics[0, 1, 1], fy)
+
+    def test_depth_mask_handles_both_invalid_sentinels(self, tmp_path: Path) -> None:
+        _write_fake_seven_scenes_sequence(tmp_path, scene="chess", seq="seq-03", n_frames=2)
+        ds = SevenScenesDataset(root=tmp_path, stride=1, baseline=1, views_per_sample=1)
+        s = next(iter(ds))
+        assert s.depth_valid is not None
+        # Fixture plants two invalid pixels: 65535 at (0,0) and 0 at (0,1).
+        assert s.depth_valid[0, 0, 0] is np.False_ or bool(s.depth_valid[0, 0, 0]) is False
+        assert s.depth_valid[0, 0, 1] is np.False_ or bool(s.depth_valid[0, 0, 1]) is False
+        # Valid body pixel is ~2.5 m.
+        np.testing.assert_allclose(s.depth_gt[0, 10, 10], 2.5)
+
+    def test_pose_file_4x4_roundtrip(self, tmp_path: Path) -> None:
+        pose_path = tmp_path / "pose.txt"
+        pose = np.array(
+            [
+                [1.0, 0.0, 0.0, 0.1],
+                [0.0, 1.0, 0.0, 0.2],
+                [0.0, 0.0, 1.0, 0.3],
+                [0.0, 0.0, 0.0, 1.0],
+            ],
+            dtype=np.float64,
+        )
+        np.savetxt(pose_path, pose)
+        out = load_seven_scenes_pose(pose_path)
+        np.testing.assert_allclose(out, pose)
+
+    def test_pose_file_rejects_wrong_shape(self, tmp_path: Path) -> None:
+        p = tmp_path / "p.txt"
+        np.savetxt(p, np.eye(3))
+        with pytest.raises(ValueError, match="4x4"):
+            load_seven_scenes_pose(p)
+
+    def test_depth_loader_unit_conversion(self, tmp_path: Path) -> None:
+        p = tmp_path / "d.png"
+        # 1500 units = 1.5 m
+        arr = np.full((4, 4), 1500, dtype=np.uint16)
+        arr[0, 0] = 65535
+        Image.fromarray(arr).save(p)
+        depth, valid = load_seven_scenes_depth_m(p)
+        assert depth.dtype == np.float32
+        np.testing.assert_allclose(depth[1, 1], 1.5)
+        assert not valid[0, 0]
+        assert valid[1, 1]
+
+    def test_manifest_cached_and_reused(self, tmp_path: Path) -> None:
+        _write_fake_seven_scenes_sequence(tmp_path, scene="chess", seq="seq-03", n_frames=12)
+        SevenScenesDataset(root=tmp_path, stride=5, baseline=2)
+        manifest_dir = tmp_path / ".plumbline_manifest"
+        assert manifest_dir.exists()
+        # Re-opening should hit the cached manifest.
+        ds2 = SevenScenesDataset(root=tmp_path, stride=5, baseline=2)
+        assert len(list(ds2)) == len(list(SevenScenesDataset(root=tmp_path, stride=5, baseline=2)))
+
+    def test_custom_sequences_override_split(self, tmp_path: Path) -> None:
+        _write_fake_seven_scenes_sequence(tmp_path, scene="chess", seq="seq-99", n_frames=5)
+        ds = SevenScenesDataset(
+            root=tmp_path,
+            split="custom",
+            scenes=["chess"],
+            sequences={"chess": ["seq-99"]},
+            views_per_sample=1,
+            stride=1,
+            baseline=1,
+        )
+        samples = list(ds)
+        assert len(samples) == 5
+        assert all(s.metadata["sequence"] == "seq-99" for s in samples)
+
+
+# ---------------------------------------------------------------------------
+# iBims-1
+# ---------------------------------------------------------------------------
+
+
+def _write_fake_moge_depth_png(
+    path: Path, *, depth_m: float, H: int, W: int,
+    near: float = 0.1, far: float = 10.0,
+) -> None:
+    """Emit a MoGe-encoded uint16 PNG whose decoded value is ~depth_m everywhere."""
+    from PIL import PngImagePlugin
+
+    # Invert the encoding: raw = round(1 + 65533 * t),
+    # where depth = near^(1-t) * far^t → t = log(depth/near) / log(far/near).
+    t = (np.log(depth_m) - np.log(near)) / (np.log(far) - np.log(near))
+    raw = int(round(1 + 65533 * t))
+    arr = np.full((H, W), raw, dtype=np.uint16)
+    # Plant an invalid (NaN→0 sentinel) and a "beyond far" (65535) pixel.
+    arr[0, 0] = 0
+    arr[0, 1] = 65535
+    info = PngImagePlugin.PngInfo()
+    info.add_text("near", str(near))
+    info.add_text("far", str(far))
+    Image.fromarray(arr).save(path, pnginfo=info)
+
+
+def _write_fake_ibims1(
+    root: Path, *, scenes: int = 3, H: int = 48, W: int = 64,
+) -> list[str]:
+    """Write a minimal iBims-1 bundle and return scene names."""
+    names: list[str] = []
+    for i in range(scenes):
+        name = f"fake_{i:02d}"
+        scene_dir = root / name
+        scene_dir.mkdir(parents=True, exist_ok=True)
+        # RGB
+        rgb = (np.random.rand(H, W, 3) * 255).astype(np.uint8)
+        Image.fromarray(rgb).save(scene_dir / "image.jpg")
+        # Depth
+        _write_fake_moge_depth_png(scene_dir / "depth.png", depth_m=2.5, H=H, W=W)
+        # Segmentation (optional but present in real bundle)
+        seg = np.ones((H, W), dtype=np.uint8)
+        seg[10:20, :] = 5
+        Image.fromarray(seg).save(scene_dir / "segmentation.png")
+        # Meta — normalised intrinsics per MoGe bundle convention.
+        meta = {"intrinsics": [
+            [0.87, 0.0, 0.5],   # fx/W, 0, cx/W
+            [0.0, 1.16, 0.5],   # 0, fy/H, cy/H
+            [0.0, 0.0, 1.0],
+        ]}
+        (scene_dir / "meta.json").write_text(__import__("json").dumps(meta))
+        names.append(name)
+    return names
+
+
+class TestIBims1:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable):
+            IBims1Dataset(root=tmp_path / "nope")
+
+    def test_empty_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        (tmp_path / "just_a_file.txt").write_text("")
+        with pytest.raises(DatasetNotAvailable, match="scene subdirs"):
+            IBims1Dataset(root=tmp_path)
+
+    def test_iterates_all_scenes(self, tmp_path: Path) -> None:
+        names = _write_fake_ibims1(tmp_path, scenes=5)
+        ds = IBims1Dataset(root=tmp_path)
+        assert len(ds) == 5
+        assert [s.sample_id for s in ds] == [f"ibims1/{n}" for n in names]
+
+    def test_scene_whitelist(self, tmp_path: Path) -> None:
+        _write_fake_ibims1(tmp_path, scenes=5)
+        ds = IBims1Dataset(root=tmp_path, scenes=["fake_01", "fake_03"])
+        ids = [s.sample_id for s in ds]
+        assert ids == ["ibims1/fake_01", "ibims1/fake_03"]
+
+    def test_depth_decoding_and_invalid_pixels(self, tmp_path: Path) -> None:
+        _write_fake_ibims1(tmp_path, scenes=1, H=32, W=32)
+        ds = IBims1Dataset(root=tmp_path)
+        s = next(iter(ds))
+        # Most pixels decode to ~2.5 m (up to float roundoff in the uint16
+        # encoding, which is coarse — allow a relative tolerance).
+        valid = s.depth_valid[0]
+        body = s.depth_gt[0][valid]
+        np.testing.assert_allclose(body.mean(), 2.5, rtol=0.01)
+        # Invalid-sentinel (raw=0) pixel masked out.
+        assert not s.depth_valid[0, 0, 0]
+        # "Beyond far" (raw=65535 → inf) also masked out.
+        assert not s.depth_valid[0, 0, 1]
+
+    def test_intrinsics_pixel_scaling(self, tmp_path: Path) -> None:
+        _write_fake_ibims1(tmp_path, scenes=1, H=48, W=64)
+        ds = IBims1Dataset(root=tmp_path)
+        s = next(iter(ds))
+        K = s.intrinsics[0]
+        # Fixture's normalized fx/W = 0.87, cx/W = 0.5 (→ pixel K[0,0]=55.68, K[0,2]=32.0).
+        np.testing.assert_allclose(K[0, 0], 0.87 * 64, rtol=1e-5)
+        np.testing.assert_allclose(K[0, 2], 0.5 * 64, rtol=1e-5)
+        np.testing.assert_allclose(K[1, 1], 1.16 * 48, rtol=1e-5)
+        np.testing.assert_allclose(K[1, 2], 0.5 * 48, rtol=1e-5)
+
+    def test_segmentation_exposed_in_metadata(self, tmp_path: Path) -> None:
+        _write_fake_ibims1(tmp_path, scenes=1)
+        ds = IBims1Dataset(root=tmp_path)
+        s = next(iter(ds))
+        seg = s.metadata["segmentation"]
+        assert seg is not None
+        assert seg.dtype == np.uint8
+        assert seg.shape == s.images.shape[1:3]
+
+    def test_extrinsics_are_identity_single_view(self, tmp_path: Path) -> None:
+        _write_fake_ibims1(tmp_path, scenes=1)
+        ds = IBims1Dataset(root=tmp_path)
+        s = next(iter(ds))
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4))
