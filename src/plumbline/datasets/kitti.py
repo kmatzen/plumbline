@@ -191,6 +191,11 @@ class KITTIDataset(Dataset):
             )
 
         sample_list_path = Path(sample_list) if sample_list else None
+        if sample_list_path is not None and not sample_list_path.is_absolute():
+            # Portability: yamls can name the list file relatively (e.g.
+            # `eigen_benchmark_test_files.txt`) and we resolve it against
+            # KITTI_ROOT so committed reproductions work on any machine.
+            sample_list_path = self.root / sample_list_path
         list_tag = sample_list_path.stem if sample_list_path else "scan"
 
         manifest_path = self.root / ".plumbline_manifest" / f"kitti_{list_tag}_{camera}.jsonl"
