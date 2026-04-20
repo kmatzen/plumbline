@@ -1,0 +1,53 @@
+# VGGT multi-scene ETH3D chamfer (ICP alignment)
+#
+# Closer analogue to the VGGT paper's cross-scene ETH3D chamfer than the
+# courtyard-only config. Paper Table 3 reports chamfer (and accuracy /
+# completeness) averaged across the full training+test ETH3D split;
+# plumbline runs on whatever scenes the user has unpacked under
+# $ETH3D_ROOT, so this YAML just enumerates them explicitly.
+#
+# Scenes chosen for the first cross-scene validation: courtyard,
+# delivery_area, facade. Each has a GT laser scan + DSLR imagery.
+
+name: vggt-eth3d-multiscene-chamfer
+
+model:
+  name: vggt
+  kwargs:
+    dtype: bfloat16
+
+dataset:
+  name: eth3d
+  split: train
+  kwargs:
+    scenes: [courtyard, delivery_area, facade]
+    views_per_sample: 8
+    max_gt_points: 100000
+
+tasks:
+  - mvs_depth
+
+pointcloud_alignment: icp
+max_views: 8
+device: cuda:0
+
+paper_reference:
+  primary_metric: chamfer
+  tolerance_relative: 1.0
+  citation: "Wang et al. 2025, VGGT, Table 3 (ETH3D) — multi-scene aggregate approaches paper mean."
+
+notes: >
+  Multi-scene extension of vggt-eth3d-courtyard-chamfer. The
+  single-scene courtyard config (ICP + mask=0.5) landed F@5cm=1.13%,
+  precision=2.16%, recall=0.82%, chamfer=5.87 — still ~50x below
+  paper-level (VGGT Table 3: cross-scene F-scores 60-90%). Paper
+  protocol is cross-scene aggregate, so running courtyard +
+  delivery_area + facade is a closer apples-to-apples signal without
+  needing the full ~80 GB ETH3D archive.
+
+  This config does NOT currently set chamfer_outlier_distance, so
+  results are comparable to the unmasked courtyard row (F=0.67%,
+  chamfer=6.84), not the masked 1.13% headline.
+
+  Observed (3 scenes, 8-view windows): TBD — recorded in follow-up
+  commit.
