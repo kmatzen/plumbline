@@ -12,7 +12,12 @@ from plumbline.metrics.alignment import (
     align_scale_median,
 )
 from plumbline.metrics.depth import abs_rel, delta_threshold, log10_error, rmse, silog
-from plumbline.metrics.pointmap import chamfer_distance, f_score
+from plumbline.metrics.pointmap import (
+    accuracy_completeness,
+    chamfer_distance,
+    f_score,
+    voxel_downsample,
+)
 from plumbline.metrics.pose import (
     auc,
     pose_auc,
@@ -349,6 +354,66 @@ class TestPointMapMetrics:
     def test_chamfer_shape_validation(self) -> None:
         with pytest.raises(ValueError):
             chamfer_distance(np.zeros((4, 2)), np.zeros((4, 3)))
+
+
+class TestVoxelDownsample:
+    def test_collapses_within_cell(self) -> None:
+        # Three points inside the same 1 m voxel → one output point at their centroid.
+        pts = np.array([[0.1, 0.2, 0.3], [0.4, 0.5, 0.6], [0.7, 0.8, 0.9]])
+        out = voxel_downsample(pts, voxel_size=1.0)
+        assert out.shape == (1, 3)
+        np.testing.assert_allclose(out[0], pts.mean(axis=0), atol=1e-9)
+
+    def test_separate_cells_stay_separate(self) -> None:
+        # Two points 1.5 m apart at voxel_size=1.0 → two output points.
+        pts = np.array([[0.0, 0.0, 0.0], [1.5, 0.0, 0.0]])
+        out = voxel_downsample(pts, voxel_size=1.0)
+        assert out.shape == (2, 3)
+
+    def test_voxel_size_validation(self) -> None:
+        with pytest.raises(ValueError):
+            voxel_downsample(np.zeros((1, 3)), voxel_size=0.0)
+
+
+class TestAccuracyCompleteness:
+    def test_identical_clouds_are_zero(self) -> None:
+        rng = np.random.default_rng(0)
+        pts = rng.standard_normal((200, 3)).astype(np.float32)
+        out = accuracy_completeness(pts, pts, voxel_size=0.01)
+        assert out["accuracy"] == pytest.approx(0.0, abs=1e-6)
+        assert out["completeness"] == pytest.approx(0.0, abs=1e-6)
+        assert out["overall"] == pytest.approx(0.0, abs=1e-6)
+
+    def test_known_translation(self) -> None:
+        # Grid of points spaced well above the translation, so each pred
+        # point's nearest GT is its translated partner. Exact 0.5 m distance
+        # both ways. Voxel size << grid spacing so no collapsing.
+        grid_xy = np.arange(0.0, 10.0, 2.0)
+        grid = np.stack(np.meshgrid(grid_xy, grid_xy, grid_xy), axis=-1).reshape(-1, 3)
+        gt = grid + np.array([0.5, 0.0, 0.0])
+        out = accuracy_completeness(grid, gt, voxel_size=0.1)
+        assert out["accuracy"] == pytest.approx(0.5, abs=1e-6)
+        assert out["completeness"] == pytest.approx(0.5, abs=1e-6)
+        assert out["overall"] == pytest.approx(0.5, abs=1e-6)
+
+    def test_voxel_normalizes_density(self) -> None:
+        # Two prediction sets that differ only in density (one has many
+        # duplicates in a region) should produce the same accuracy — voxel
+        # downsampling collapses the duplicates before the mean.
+        gt = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0]])
+        sparse = np.array([[0.01, 0.0, 0.0], [1.01, 0.0, 0.0]])
+        # Stack 100 duplicates of the first point so dense[0] dominates
+        # without voxel normalization.
+        dense = np.vstack([np.tile(sparse[0], (100, 1)), sparse[1:2]])
+        out_sparse = accuracy_completeness(sparse, gt, voxel_size=0.05)
+        out_dense = accuracy_completeness(dense, gt, voxel_size=0.05)
+        assert out_dense["accuracy"] == pytest.approx(out_sparse["accuracy"], abs=1e-9)
+
+    def test_empty_inputs_return_nan(self) -> None:
+        out = accuracy_completeness(np.zeros((0, 3)), np.zeros((10, 3)))
+        assert np.isnan(out["accuracy"])
+        assert np.isnan(out["completeness"])
+        assert np.isnan(out["overall"])
 
 
 class TestUmeyamaSimilarity:

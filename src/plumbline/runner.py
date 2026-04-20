@@ -39,7 +39,11 @@ from plumbline.metrics.alignment import (
     umeyama_similarity,
 )
 from plumbline.metrics.depth import abs_rel, delta_threshold, log10_error, rmse, silog
-from plumbline.metrics.pointmap import chamfer_distance, f_score
+from plumbline.metrics.pointmap import (
+    accuracy_completeness,
+    chamfer_distance,
+    f_score,
+)
 from plumbline.metrics.pose import auc as pose_auc_fn
 from plumbline.metrics.pose import (
     pairwise_pose_errors,
@@ -88,6 +92,8 @@ def evaluate(
     mask_boundaries: bool = False,
     boundary_thickness: int = 1,
     boundary_tol: float = 0.1,
+    aggregation: str = "sample",
+    scene_voxel_size: float = 0.01,
 ) -> Report:
     """Evaluate a model on a dataset and return a :class:`Report`.
 
@@ -120,6 +126,15 @@ def evaluate(
 
     total = _safe_len(dataset)
     report.n_total = total if total is not None else 0
+
+    # Scene-merge mode accumulates aligned point clouds by scene prefix
+    # and computes Acc/Comp/Overall on the merged cloud at the end —
+    # matches the ETH3D / MVS paper protocol where predictions across all
+    # views are fused into one reconstruction before comparison with GT.
+    if aggregation not in ("sample", "scene"):
+        raise ValueError(f"unknown aggregation '{aggregation}'; use 'sample' or 'scene'")
+    scene_points: dict[str, list[NDArray[np.float32]]] = {}
+    scene_gt: dict[str, NDArray[Any]] = {}
 
     for sample in dataset:
         report.n_total = max(report.n_total, len(report.per_sample) + 1)
@@ -159,6 +174,38 @@ def evaluate(
                 else sample.images.shape[0]
             ),
         )
+        if aggregation == "scene" and trimmed_sample.point_cloud_gt is not None:
+            aligned = _aligned_point_map(
+                prediction=prediction,
+                sample=trimmed_sample,
+                pointcloud_alignment=pointcloud_alignment,
+            )
+            if aligned is not None:
+                scene = sample.sample_id.split("/", 1)[0]
+                scene_points.setdefault(scene, []).append(aligned.reshape(-1, 3))
+                # GT is the same across samples of a scene (subsampled
+                # laser scan); keep the first one we see.
+                scene_gt.setdefault(scene, trimmed_sample.point_cloud_gt)
+                report.per_sample.append(
+                    SampleResult(
+                        sample_id=sample.sample_id,
+                        metrics={"n_points": float(aligned.size // 3)},
+                        runtime_ms=runtime_ms,
+                    )
+                )
+                report.n_evaluated += 1
+            else:
+                report.n_skipped += 1
+                report.per_sample.append(
+                    SampleResult(
+                        sample_id=sample.sample_id,
+                        metrics={},
+                        skipped=True,
+                        skip_reason="no point map (missing depth or K/E)",
+                    )
+                )
+            continue
+
         sample_metrics = _compute_metrics(
             prediction=prediction,
             sample=trimmed_sample,
@@ -184,6 +231,25 @@ def evaluate(
         report.n_evaluated += 1
         for key, value in sample_metrics.items():
             per_metric_values.setdefault(key, []).append(value)
+
+    # Scene-merge post-processing: merge per-scene, voxel downsample,
+    # compute Acc/Comp/Overall against scene GT. Aggregate across scenes
+    # with an unweighted mean — matches the per-scene-then-average
+    # convention in MVS benchmark tables.
+    if aggregation == "scene" and scene_points:
+        per_scene: dict[str, dict[str, float]] = {}
+        for scene, chunks in scene_points.items():
+            merged = np.vstack(chunks).astype(np.float32)
+            gt = scene_gt[scene]
+            per_scene[scene] = accuracy_completeness(
+                merged, gt, voxel_size=scene_voxel_size
+            )
+        report.per_scene_metrics = per_scene
+        keys = sorted({k for m in per_scene.values() for k in m})
+        report.aggregate_metrics = {
+            k: float(np.mean([per_scene[s][k] for s in per_scene])) for k in keys
+        }
+        return report
 
     # Aggregate with per-sample mean; skip NaNs.
     aggregate: dict[str, float] = {}
@@ -310,66 +376,11 @@ def _compute_metrics(
     # "mvs_depth" or "point_cloud" to keep mono-depth runs cheap.
     wants_pcd = "mvs_depth" in tasks or "point_cloud" in tasks
     if wants_pcd and sample.point_cloud_gt is not None:
-        pmap = prediction.point_map
-        # Back-project depth + intrinsics + extrinsics into a point map when
-        # the adapter didn't return one directly (DA3, DA-V2 metric, etc.
-        # only return depth). This matches how VGGT-style adapters' native
-        # point_map is constructed: per-pixel (u, v, d) → camera frame via
-        # K^-1, then world-frame via world_from_camera extrinsic.
+        pmap = _aligned_point_map(
+            prediction=prediction, sample=sample, pointcloud_alignment=pointcloud_alignment
+        )
         if pmap is None:
-            if (
-                prediction.depth is None
-                or prediction.intrinsics is None
-                or prediction.extrinsics is None
-            ):
-                # Not enough info — fall through; metrics stay empty.
-                return out
-            pmap = _back_project_depth(
-                prediction.depth, prediction.intrinsics, prediction.extrinsics
-            )
-        # Optional 7-DoF similarity alignment: ETH3D / T&T / DTU chamfer eval
-        # protocol. The predicted and GT clouds live in different world
-        # frames (VGGT's first-view origin vs ETH3D's laser-scan frame); we
-        # fit Umeyama on corresponding *camera centres* (one per view) then
-        # apply it to the full dense prediction. Needs N >= 3 views.
-        if pointcloud_alignment == "camera_centers":
-            if prediction.extrinsics is not None and sample.extrinsics_gt is not None:
-                pred_centers = prediction.extrinsics[:, :3, 3]
-                gt_centers = sample.extrinsics_gt[:, :3, 3]
-                if pred_centers.shape[0] >= 3:
-                    s, R, t = umeyama_similarity(pred_centers, gt_centers)
-                    pmap = apply_similarity(pmap, s, R, t).astype(np.float32)
-                else:
-                    log.warning(
-                        "pointcloud_alignment=camera_centers needs >= 3 views; "
-                        "got %d — leaving point map unaligned",
-                        int(pred_centers.shape[0]),
-                    )
-        elif pointcloud_alignment == "icp":
-            # ICP 7-DoF similarity against the GT cloud itself — the
-            # alignment protocol VGGT / MASt3R / DUSt3R papers report
-            # chamfer under. Warm-started from camera-centres Umeyama when
-            # available so convergence is quick; falls back to identity
-            # otherwise.
-            warm_s = warm_R = warm_t = None
-            if prediction.extrinsics is not None and sample.extrinsics_gt is not None:
-                pred_centers = prediction.extrinsics[:, :3, 3]
-                gt_centers = sample.extrinsics_gt[:, :3, 3]
-                if pred_centers.shape[0] >= 3:
-                    warm_s, warm_R, warm_t = umeyama_similarity(pred_centers, gt_centers)
-            s, R, t, _info = icp_similarity(
-                pmap.reshape(-1, 3),
-                sample.point_cloud_gt,
-                init_s=warm_s,
-                init_R=warm_R,
-                init_t=warm_t,
-            )
-            pmap = apply_similarity(pmap, s, R, t).astype(np.float32)
-        elif pointcloud_alignment != "none":
-            raise ValueError(
-                f"unknown pointcloud_alignment '{pointcloud_alignment}'; "
-                "use 'none', 'camera_centers', or 'icp'"
-            )
+            return out
         out.update(
             _point_cloud_metrics(
                 point_map=pmap,
@@ -380,6 +391,63 @@ def _compute_metrics(
         )
 
     return out
+
+
+def _aligned_point_map(
+    *,
+    prediction: Prediction,
+    sample: Sample,
+    pointcloud_alignment: str,
+) -> NDArray[np.float32] | None:
+    """Build the aligned dense point map for ``prediction`` in the GT scene frame.
+
+    Used by both per-sample chamfer/F-score metrics and the scene-merge
+    aggregation path. Returns ``None`` when there isn't enough information
+    (no point_map and no depth+K+E).
+    """
+    pmap = prediction.point_map
+    if pmap is None:
+        if (
+            prediction.depth is None
+            or prediction.intrinsics is None
+            or prediction.extrinsics is None
+        ):
+            return None
+        pmap = _back_project_depth(prediction.depth, prediction.intrinsics, prediction.extrinsics)
+    if pointcloud_alignment == "camera_centers":
+        if prediction.extrinsics is not None and sample.extrinsics_gt is not None:
+            pred_centers = prediction.extrinsics[:, :3, 3]
+            gt_centers = sample.extrinsics_gt[:, :3, 3]
+            if pred_centers.shape[0] >= 3:
+                s, R, t = umeyama_similarity(pred_centers, gt_centers)
+                pmap = apply_similarity(pmap, s, R, t).astype(np.float32)
+            else:
+                log.warning(
+                    "pointcloud_alignment=camera_centers needs >= 3 views; "
+                    "got %d — leaving point map unaligned",
+                    int(pred_centers.shape[0]),
+                )
+    elif pointcloud_alignment == "icp":
+        warm_s = warm_R = warm_t = None
+        if prediction.extrinsics is not None and sample.extrinsics_gt is not None:
+            pred_centers = prediction.extrinsics[:, :3, 3]
+            gt_centers = sample.extrinsics_gt[:, :3, 3]
+            if pred_centers.shape[0] >= 3:
+                warm_s, warm_R, warm_t = umeyama_similarity(pred_centers, gt_centers)
+        s, R, t, _info = icp_similarity(
+            pmap.reshape(-1, 3),
+            sample.point_cloud_gt,
+            init_s=warm_s,
+            init_R=warm_R,
+            init_t=warm_t,
+        )
+        pmap = apply_similarity(pmap, s, R, t).astype(np.float32)
+    elif pointcloud_alignment != "none":
+        raise ValueError(
+            f"unknown pointcloud_alignment '{pointcloud_alignment}'; "
+            "use 'none', 'camera_centers', or 'icp'"
+        )
+    return pmap
 
 
 def _trim_sample_to_views(sample: Sample, n: int) -> Sample:

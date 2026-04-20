@@ -11,7 +11,7 @@ from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 
-__all__ = ["chamfer_distance", "f_score"]
+__all__ = ["accuracy_completeness", "chamfer_distance", "f_score", "voxel_downsample"]
 
 
 def _nn_distances(a: NDArray[Any], b: NDArray[Any]) -> NDArray[Any]:
@@ -152,3 +152,56 @@ def f_score(
     recall = float((d_gp < threshold).mean()) * 100.0
     f = 0.0 if precision + recall <= 0 else 2 * precision * recall / (precision + recall)
     return {"precision": precision, "recall": recall, "f_score": f}
+
+
+def voxel_downsample(points: NDArray[Any], voxel_size: float) -> NDArray[np.float64]:
+    """One representative point per occupied voxel (centroid of cell members).
+
+    Matches the density normalization ETH3D's multi-view-evaluation tool
+    applies before chamfer/accuracy — prevents dense regions of the
+    prediction from dominating mean-distance statistics.
+    """
+    if voxel_size <= 0:
+        raise ValueError(f"voxel_size must be > 0; got {voxel_size}")
+    if points.size == 0:
+        return np.empty((0, 3), dtype=np.float64)
+    p = points.astype(np.float64)
+    keys = np.floor(p / voxel_size).astype(np.int64)
+    # Unique voxel indices with an inverse map so we can bincount means.
+    _, inv = np.unique(keys, axis=0, return_inverse=True)
+    n_cells = int(inv.max()) + 1
+    counts = np.bincount(inv, minlength=n_cells).astype(np.float64)
+    sums = np.zeros((n_cells, 3), dtype=np.float64)
+    for i in range(3):
+        sums[:, i] = np.bincount(inv, weights=p[:, i], minlength=n_cells)
+    return sums / counts[:, None]
+
+
+def accuracy_completeness(
+    pred: NDArray[Any],
+    gt: NDArray[Any],
+    *,
+    voxel_size: float = 0.01,
+) -> dict[str, float]:
+    """Paper-protocol ETH3D-style Acc/Comp/Overall, all in meters.
+
+    - ``accuracy``     — mean pred→GT nearest-neighbor distance (after
+      voxel-downsampling the prediction to uniform density)
+    - ``completeness`` — mean GT→pred nearest-neighbor distance
+    - ``overall``      — (accuracy + completeness) / 2, matches VGGT paper
+      Table 3 "Overall (Chamfer distance)" convention.
+
+    All three values share units with ``pred`` / ``gt`` — for ETH3D scans
+    the ETH3D tool default voxel_size is 0.01 (i.e. metres, 1 cm cell).
+    """
+    if pred.ndim != 2 or pred.shape[-1] != 3:
+        raise ValueError(f"pred must be (N, 3); got {pred.shape}")
+    if gt.ndim != 2 or gt.shape[-1] != 3:
+        raise ValueError(f"gt must be (M, 3); got {gt.shape}")
+    if pred.size == 0 or gt.size == 0:
+        nan = float("nan")
+        return {"accuracy": nan, "completeness": nan, "overall": nan}
+    pred_ds = voxel_downsample(pred, voxel_size)
+    acc = float(_nn_distances(pred_ds, gt).mean())
+    comp = float(_nn_distances(gt, pred_ds).mean())
+    return {"accuracy": acc, "completeness": comp, "overall": 0.5 * (acc + comp)}
