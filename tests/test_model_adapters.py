@@ -18,11 +18,13 @@ import plumbline.models.depth_anything_3
 
 # Force import so decorators run.
 import plumbline.models.depth_anything_v2
+import plumbline.models.geowizard
 import plumbline.models.mast3r
 import plumbline.models.metric3d_v2
 import plumbline.models.depth_pro
 import plumbline.models.marigold
 import plumbline.models.moge
+import plumbline.models.pi3
 import plumbline.models.vggt  # noqa: F401
 from plumbline.models.registry import MODEL_REGISTRY
 
@@ -35,6 +37,8 @@ EXPECTED_ADAPTERS = [
     "moge",
     "marigold",
     "depth-pro",
+    "geowizard",
+    "pi3",
 ]
 
 
@@ -188,6 +192,46 @@ def test_depth_pro_rejects_bad_dtype() -> None:
         cls(device="cpu", dtype="bfloat16")  # type: ignore[call-arg]
 
 
+def test_geowizard_rejects_bad_domain() -> None:
+    cls = MODEL_REGISTRY["geowizard"]
+    with pytest.raises(ValueError, match="domain"):
+        cls(device="cpu", domain="underwater")  # type: ignore[call-arg]
+
+
+def test_geowizard_rejects_bad_inference_params() -> None:
+    cls = MODEL_REGISTRY["geowizard"]
+    with pytest.raises(ValueError, match="num_inference_steps"):
+        cls(device="cpu", num_inference_steps=0)  # type: ignore[call-arg]
+    with pytest.raises(ValueError, match="ensemble_size"):
+        cls(device="cpu", ensemble_size=0)  # type: ignore[call-arg]
+    with pytest.raises(ValueError, match="processing_res"):
+        cls(device="cpu", processing_res=60)  # not multiple of 8  # type: ignore[call-arg]
+    with pytest.raises(ValueError, match="dtype"):
+        cls(device="cpu", dtype="bfloat16")  # type: ignore[call-arg]
+
+
+def test_geowizard_config_hash_varies_by_domain_and_inference_params() -> None:
+    """Domain conditioning matters for the prediction; indoor/outdoor
+    produce different depths for the same input. The cache key must
+    reflect it so swapping domains doesn't return a stale cached result."""
+
+    cls = MODEL_REGISTRY["geowizard"]
+    indoor = cls(device="cpu", domain="indoor").config_hash()  # type: ignore[call-arg]
+    outdoor = cls(device="cpu", domain="outdoor").config_hash()  # type: ignore[call-arg]
+    fast = cls(device="cpu", domain="indoor", num_inference_steps=4).config_hash()  # type: ignore[call-arg]
+    paper = cls(device="cpu", domain="indoor", num_inference_steps=10).config_hash()  # type: ignore[call-arg]
+    assert indoor != outdoor
+    assert fast != paper
+
+
+def test_geowizard_capabilities_are_mono_relative() -> None:
+    cls = MODEL_REGISTRY["geowizard"]
+    caps = cls.capabilities  # type: ignore[attr-defined]
+    assert "mono_depth" in caps.tasks
+    assert caps.is_metric is False  # affine-invariant
+    assert caps.min_views == 1
+
+
 def test_depth_pro_capabilities_are_mono_metric() -> None:
     """Depth Pro declares is_metric=True so the runner defaults to
     scale_alignment=none when YAML doesn't override. Regression: if
@@ -207,3 +251,37 @@ def test_depth_pro_config_hash_varies_by_dtype() -> None:
     h16 = cls(device="cpu", dtype="float16").config_hash()  # type: ignore[call-arg]
     h32 = cls(device="cpu", dtype="float32").config_hash()  # type: ignore[call-arg]
     assert h16 != h32
+
+
+def test_pi3_rejects_bad_variant() -> None:
+    cls = MODEL_REGISTRY["pi3"]
+    with pytest.raises(ValueError, match="variant"):
+        cls(device="cpu", variant="pi4")  # type: ignore[call-arg]
+
+
+def test_pi3_rejects_bad_dtype() -> None:
+    cls = MODEL_REGISTRY["pi3"]
+    with pytest.raises(ValueError, match="dtype"):
+        cls(device="cpu", dtype="int8")  # type: ignore[call-arg]
+
+
+def test_pi3_config_hash_varies_by_variant_and_dtype() -> None:
+    """Pi3 vs Pi3X are different trained models; their cached predictions must
+    not collide. Dtype also changes the cache key so a bf16 run doesn't serve
+    a pre-cached fp32 result (or vice versa)."""
+
+    cls = MODEL_REGISTRY["pi3"]
+    h1 = cls(device="cpu", variant="pi3", dtype="bfloat16").config_hash()  # type: ignore[call-arg]
+    h2 = cls(device="cpu", variant="pi3x", dtype="bfloat16").config_hash()  # type: ignore[call-arg]
+    h3 = cls(device="cpu", variant="pi3x", dtype="float32").config_hash()  # type: ignore[call-arg]
+    assert len({h1, h2, h3}) == 3
+
+
+def test_pi3_capabilities_are_multi_view_metric() -> None:
+    cls = MODEL_REGISTRY["pi3"]
+    caps = cls.capabilities  # type: ignore[attr-defined]
+    assert "mono_depth" in caps.tasks
+    assert "mvs_depth" in caps.tasks
+    assert "pose" in caps.tasks
+    assert caps.is_metric is True
+    assert caps.min_views == 2

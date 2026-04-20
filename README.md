@@ -106,10 +106,10 @@ See the "Note on the NYUv2 Eigen 2014 protocol" section of
   bundle, but the paper's AbsRel target needs the auth-gated depth +
   camera archive.
 - `da-v2-small-kitti` / `metric3d-v2-kitti` — KITTI loader + Garg/Eigen
-  crop masks landed; reproductions need the user to (a) unpack the
-  public KITTI raw + annotated-depth archives under `$KITTI_ROOT` and
-  (b) supply a pinned Eigen sample list (e.g. from Monodepth2's
-  `splits/eigen`).
+  crop masks landed; reproductions need the user to unpack the public
+  KITTI raw + annotated-depth archives under `$KITTI_ROOT`. The pinned
+  652-frame Eigen sample list ships in-repo at
+  `reproductions/kitti_eigen_benchmark_652.txt`.
 
 All of these run end-to-end the moment their data lands.
 

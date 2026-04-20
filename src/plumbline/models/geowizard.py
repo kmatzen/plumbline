@@ -1,0 +1,242 @@
+"""GeoWizard diffusion depth+normals adapter.
+
+Upstream: https://github.com/fuxiao0719/GeoWizard
+Paper: "GeoWizard: Unleashing the Diffusion Priors for 3D Geometry
+Estimation from a Single Image" (Fu et al. 2024, arXiv:2403.12013).
+
+GeoWizard is a diffusion-based monocular depth + surface-normals model,
+built on a Stable-Diffusion-v2-initialised UNet. Conceptually a close
+cousin of Marigold (this plumbline's `marigold` adapter), with two
+differentiators:
+
+  1. Joint depth + normals in a single forward pass (we only use depth).
+  2. Domain conditioning: passing ``domain="indoor"`` vs ``"outdoor"``
+     swaps an embedding that trades off near-field detail vs far-field
+     range. Indoor conditioning is the correct setting for NYU / DIODE
+     indoor / iBims; outdoor is for KITTI / DIODE outdoor.
+
+Upstream does **not** ship on PyPI. Pattern mirrors the MASt3R adapter:
+
+    git clone https://github.com/fuxiao0719/GeoWizard /workspace/deps/geowizard
+    export GEOWIZARD_ROOT=/workspace/deps/geowizard
+
+The adapter lazy-adds ``$GEOWIZARD_ROOT/geowizard`` to ``sys.path`` on
+first ``predict()`` so it can `from models.geowizard_pipeline import
+DepthNormalEstimationPipeline`. Weights come from the HuggingFace repo
+``lemonaddie/Geowizard`` (safetensors, loaded via
+``DepthNormalEstimationPipeline.from_pretrained``).
+
+Alignment: GeoWizard output is affine-invariant depth in [0, 1], same
+as Marigold. Use ``scale_alignment: scale_shift_depth`` to match the
+paper's depth-space alignment protocol (not the inverse-depth fit
+DA-V2 / MoGe use).
+"""
+
+from __future__ import annotations
+
+import hashlib
+import math
+import os
+import sys
+from typing import Any
+
+import numpy as np
+from numpy.typing import NDArray
+
+from plumbline.conventions import assert_valid_depth, assert_valid_image
+from plumbline.models._torch_utils import ensure_torch
+from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.registry import register_model
+
+__all__ = ["GeoWizardAdapter"]
+
+# GeoWizard ships one depth+normals checkpoint at this HF repo. The
+# value below matches the default used by upstream's run_infer.py.
+_HF_CHECKPOINT: str = "lemonaddie/Geowizard"
+
+_VALID_DOMAINS: frozenset[str] = frozenset({"indoor", "outdoor", "object"})
+
+
+@register_model("geowizard")
+class GeoWizardAdapter(Model):
+    """Monocular, relative-depth adapter for GeoWizard (diffusion-based).
+
+    Parameters
+    ----------
+    device
+        torch device string.
+    domain
+        ``"indoor"``, ``"outdoor"``, or ``"object"``. GeoWizard trains a
+        single model with per-sample domain conditioning; pick the value
+        the paper's target table uses. NYU / DIODE-indoor / iBims-1 use
+        ``"indoor"``; KITTI / DIODE-outdoor use ``"outdoor"``; GSO
+        synthetic-object runs use ``"object"``.
+    num_inference_steps
+        Denoising steps per sample. Upstream default for paper-row
+        reproductions: 10. Speed mode: 4.
+    ensemble_size
+        Number of random-noise passes to average per sample. Upstream
+        default: 10. Speed mode: 3.
+    processing_res
+        Long-edge the diffusion model consumes; upstream default 768.
+        Drop to 512 for speed on <24 GB VRAM.
+    dtype
+        ``"float16"`` (fast) or ``"float32"`` (paper protocol).
+    seed
+        Integer seed for the diffusion latent generator. Fixed for
+        reproducibility + plumbline prediction-cache key stability.
+    """
+
+    version = "1.0"
+    capabilities = ModelCapabilities(
+        tasks=frozenset({"mono_depth"}),
+        is_metric=False,
+        min_views=1,
+        max_views=math.inf,
+        requires_intrinsics=False,
+        default_resolution=(768, 768),
+    )
+
+    def __init__(
+        self,
+        *,
+        device: str = "cuda:0",
+        domain: str = "indoor",
+        num_inference_steps: int = 10,
+        ensemble_size: int = 10,
+        processing_res: int = 768,
+        dtype: str = "float16",
+        seed: int = 0,
+    ) -> None:
+        if domain not in _VALID_DOMAINS:
+            raise ValueError(
+                f"domain must be one of {sorted(_VALID_DOMAINS)}; got {domain!r}"
+            )
+        if num_inference_steps < 1:
+            raise ValueError(f"num_inference_steps must be >= 1; got {num_inference_steps}")
+        if ensemble_size < 1:
+            raise ValueError(f"ensemble_size must be >= 1; got {ensemble_size}")
+        if processing_res < 64 or processing_res % 8 != 0:
+            raise ValueError(
+                f"processing_res must be >= 64 and a multiple of 8 (diffusion VAE); got {processing_res}"
+            )
+        if dtype not in ("float16", "float32"):
+            raise ValueError(f"dtype must be 'float16' or 'float32'; got {dtype!r}")
+        self.device = device
+        self.domain = domain
+        self.num_inference_steps = int(num_inference_steps)
+        self.ensemble_size = int(ensemble_size)
+        self.processing_res = int(processing_res)
+        self.dtype = dtype
+        self.seed = int(seed)
+        self._pipe: Any = None
+        self._generator: Any = None
+
+    # -- lazy load -------------------------------------------------------
+
+    def _load(self) -> None:
+        if self._pipe is not None:
+            return
+        torch = ensure_torch()
+        _ensure_geowizard_on_path()
+        try:
+            # Upstream's pipeline class; discovered at runtime from
+            # $GEOWIZARD_ROOT/geowizard/models/geowizard_pipeline.py.
+            from models.geowizard_pipeline import DepthNormalEstimationPipeline
+        except ImportError as exc:  # pragma: no cover
+            raise ImportError(
+                "GeoWizardAdapter could not import the upstream pipeline. "
+                "Clone https://github.com/fuxiao0719/GeoWizard and point "
+                "$GEOWIZARD_ROOT at it (see the module docstring)."
+            ) from exc
+
+        torch_dtype = torch.float16 if self.dtype == "float16" else torch.float32
+        self._pipe = DepthNormalEstimationPipeline.from_pretrained(
+            _HF_CHECKPOINT,
+            torch_dtype=torch_dtype,
+        ).to(self.device)
+        self._pipe.set_progress_bar_config(disable=True)
+        self._generator = torch.Generator(device=self.device).manual_seed(self.seed)
+
+    # -- predict ---------------------------------------------------------
+
+    def predict(
+        self,
+        images: NDArray[np.uint8],
+        intrinsics: NDArray[np.float32] | None = None,
+    ) -> Prediction:
+        assert_valid_image(images, name="geowizard/input")
+        self._load()
+        from PIL import Image as PImage
+
+        n, h, w, _ = images.shape
+        depths = np.empty((n, h, w), dtype=np.float32)
+        for i in range(n):
+            pil = PImage.fromarray(images[i])
+            # Upstream's __call__ signature (run_infer.py):
+            #   pipe(input_image, denoising_steps, ensemble_size,
+            #        processing_res, match_input_res, domain,
+            #        color_map, show_progress_bar, generator)
+            out = self._pipe(
+                pil,
+                denoising_steps=self.num_inference_steps,
+                ensemble_size=self.ensemble_size,
+                processing_res=self.processing_res,
+                match_input_res=True,
+                domain=self.domain,
+                show_progress_bar=False,
+                generator=self._generator,
+            )
+            # Upstream emits `depth_np` as float in [0, 1], affine-invariant.
+            arr = np.asarray(out.depth_np).astype(np.float32)
+            if arr.shape != (h, w):
+                raise RuntimeError(
+                    f"geowizard returned {arr.shape}, expected ({h}, {w}). "
+                    "Set match_input_res=True (the adapter does) and check for "
+                    "upstream API drift."
+                )
+            arr = np.clip(arr, 1e-6, 1.0)
+            depths[i] = arr
+
+        assert_valid_depth(depths, name="geowizard/output")
+        return Prediction(
+            depth=depths,
+            metadata={
+                "domain": self.domain,
+                "checkpoint": _HF_CHECKPOINT,
+                "num_inference_steps": self.num_inference_steps,
+                "ensemble_size": self.ensemble_size,
+                "processing_res": self.processing_res,
+                "dtype": self.dtype,
+                "seed": self.seed,
+                "native_space": "depth_affine_invariant",
+                "alignment_hint": "scale_shift_depth",
+            },
+        )
+
+    def config_hash(self) -> str:
+        s = (
+            f"{self.name}@{self.version}/domain={self.domain}"
+            f"/steps={self.num_inference_steps}/ens={self.ensemble_size}"
+            f"/res={self.processing_res}/dtype={self.dtype}/seed={self.seed}"
+        )
+        return hashlib.sha256(s.encode()).hexdigest()[:16]
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+
+def _ensure_geowizard_on_path() -> None:
+    """Add ``$GEOWIZARD_ROOT/geowizard`` to sys.path for upstream imports.
+
+    Upstream has no PyPI distribution; it's a CLI repo. Callers set
+    ``$GEOWIZARD_ROOT`` to the cloned repo root; the pipeline class
+    is at ``<root>/geowizard/models/geowizard_pipeline.py`` and its
+    internal imports are relative to ``<root>/geowizard``.
+    """
+    root = os.environ.get("GEOWIZARD_ROOT", "/workspace/deps/geowizard")
+    subdir = os.path.join(root, "geowizard")
+    if os.path.isdir(subdir) and subdir not in sys.path:
+        sys.path.insert(0, subdir)

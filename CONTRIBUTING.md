@@ -79,9 +79,20 @@ arrays; outputs are floats or dicts. Put them in `src/plumbline/metrics/`.
 
 See [REPRODUCTIONS.md](./REPRODUCTIONS.md). A reproduction PR should include:
 
-- The YAML config.
-- A pinned sample list (if not already full-split).
-- The exact paper citation and table/row.
+- The YAML config — ideally declaring `protocol: <name>` instead of
+  inlining dataset-prep fields. Available presets live at `protocols/*.yaml`
+  (currently: `nyu_eigen_2014`, `kitti_eigen_garg`). New presets
+  require a paper citation in their header — see
+  `protocols/nyu_eigen_2014.yaml` as a template.
+- A pinned sample list committed **in the repo** (not under the
+  dataset root), for reproductions where the loader doesn't already
+  have a deterministic default. See `docs/SAMPLE_LISTS.md` for the
+  per-dataset policy.
+- The exact paper citation with **table + column + row** names. Verify
+  against the arXiv PDF (arxiv.org/html/…), not a WebFetch summary.
+  The `paper_reference.source_confidence` field must be
+  `verified_pdf` — any looser trust level keeps the row out of the
+  `REPRODUCTIONS.md` match count.
 - A first-run value with tolerance, committed to the YAML.
 
 ## Code style
