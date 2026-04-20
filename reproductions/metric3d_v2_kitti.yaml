@@ -15,8 +15,8 @@ model:
 dataset:
   name: kitti
   kwargs:
-    # Supply a pinned sample list — see da_v2_small_kitti.yaml notes.
-    # sample_list: /path/to/kitti_eigen_test_files_with_gt.txt
+    # Eigen benchmark subset — see da_v2_small_kitti.yaml for details.
+    sample_list: eigen_benchmark_test_files.txt
     camera: image_02
     apply_garg_crop: true
 
@@ -32,9 +32,8 @@ depth_clip: [0.001, 80.0]
 paper_reference:
   primary_metric: abs_rel
   # Metric3Dv2 paper (Yin et al. 2024, arXiv:2404.15506), Table I, KITTI
-  # zero-shot row, ViT-L CSTM_label. PLACEHOLDER — pin from the paper
-  # once running.
-  value: 0.0  # TODO: pin from Metric3Dv2 paper Table I, KITTI row, ViT-L ZS.
+  # zero-shot row, ViT-L CSTM_label.
+  value: 0.052
   tolerance_relative: 0.10
   citation: "Yin et al. 2024, Metric3D v2, Table I. KITTI Eigen test, ViT-L CSTM_label ZS."
 
