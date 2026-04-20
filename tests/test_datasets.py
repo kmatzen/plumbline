@@ -483,6 +483,17 @@ class TestKITTI:
         assert len(samples) == 2
         assert samples[0].metadata["frame_id"].startswith("000000")
 
+    def test_sample_list_relative_path_resolves_against_root(self, tmp_path: Path) -> None:
+        # Committed reproduction yamls name the sample list as a bare
+        # filename so they stay portable; the loader resolves it against
+        # KITTI_ROOT.
+        entries = _write_fake_kitti(tmp_path, frames=2)
+        (tmp_path / "eigen_list.txt").write_text(
+            "".join(f"2011_09_26/{drive} {frame_id} l\n" for drive, frame_id, _ in entries)
+        )
+        ds = KITTIDataset(root=tmp_path, sample_list="eigen_list.txt")
+        assert len(list(ds)) == 2
+
     def test_sample_list_requires_matching_camera(self, tmp_path: Path) -> None:
         entries = _write_fake_kitti(tmp_path, frames=1)
         list_path = tmp_path / "list.txt"
