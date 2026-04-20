@@ -21,7 +21,8 @@ model:
 dataset:
   name: kitti
   kwargs:
-    # sample_list: /path/to/kitti_eigen_test_files_with_gt.txt
+    # Eigen benchmark subset — see da_v2_small_kitti.yaml for details.
+    sample_list: eigen_benchmark_test_files.txt
     camera: image_02
     apply_garg_crop: true
 
