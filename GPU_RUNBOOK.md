@@ -4,6 +4,12 @@ Everything you need to run `plumbline` against real weights + real data on
 a rented GPU. Optimized for a "spin up → run → tear down" workflow under
 an hourly billing clock.
 
+> **Running this autonomously?** If a Claude Code agent is driving the
+> rental box (rather than a human in front of a terminal), point the
+> agent at [`docs/AGENT_GPU_RUNBOOK.md`](./docs/AGENT_GPU_RUNBOOK.md)
+> instead. That doc is denser, ordered for execution, and explicit
+> about what the agent must NOT do.
+
 ## Provider-agnostic box setup
 
 Two paths:
