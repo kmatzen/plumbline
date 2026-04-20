@@ -1,0 +1,47 @@
+# Marigold (v1-1) on KITTI Eigen benchmark
+#
+# KITTI counterpart of marigold-v1-1-nyuv2. Same paper protocol
+# (4 inference steps × 10 ensemble × fp16) and the same depth-space
+# alignment as NYU — Marigold outputs affine-invariant depth, so the
+# fit is gt ≈ s*pred + b in depth space, not disparity.
+
+name: marigold-v1-1-kitti
+
+model:
+  name: marigold
+  kwargs:
+    variant: v1-1
+    num_inference_steps: 4
+    ensemble_size: 10
+    dtype: float16
+    seed: 2024
+
+dataset:
+  name: kitti
+  kwargs:
+    sample_list: eigen_benchmark_test_files.txt
+    camera: image_02
+    apply_garg_crop: true
+
+tasks:
+  - mono_depth
+
+scale_alignment: scale_shift_depth
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 80.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # Marigold paper (Ke et al. 2024, arXiv:2312.02145), Table 1, KITTI
+  # "Ours (w/ ensemble)": AbsRel 9.9, δ₁ 91.6 (= AbsRel 0.099,
+  # δ₁ 0.916). Paper protocol: least-squares align in disparity space
+  # per the implementation — but the checkpoint outputs affine-invariant
+  # DEPTH [0, 1] that the paper inverts; scale_shift_depth matches the
+  # public implementation's eval.py.
+  value: 0.099
+  tolerance_relative: 0.15
+  citation: "Ke et al. 2024, Marigold, Table 1. KITTI Eigen test, w/ 10-ensemble."
+
+notes: >
+  Placeholder — observed recorded in follow-up commit.
