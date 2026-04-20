@@ -24,6 +24,7 @@ import yaml
 from plumbline.cache import PredictionCache
 from plumbline.datasets.registry import DATASET_REGISTRY
 from plumbline.models.registry import MODEL_REGISTRY
+from plumbline.protocols import apply_protocol
 from plumbline.report import Report
 from plumbline.runner import evaluate
 
@@ -82,6 +83,10 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
     register_builtin_adapters()
 
     cfg = load_reproduction_config(name)
+    # Resolve `protocol:` if set — merges the protocol's fixed fields
+    # into the reproduction config and raises on conflict. Identity op
+    # for YAMLs that don't declare a protocol.
+    cfg = apply_protocol(cfg)
 
     model_name = cfg["model"]["name"]
     dataset_name = cfg["dataset"]["name"]

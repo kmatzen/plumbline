@@ -8,6 +8,7 @@
 # scale_shift rather than no-alignment.
 
 name: moge2-vitl-nyuv2
+protocol: nyu_eigen_2014
 
 model:
   name: moge
@@ -16,18 +17,9 @@ model:
 
 dataset:
   name: nyuv2
-  split: test
-  kwargs:
-    apply_eigen_crop: true
-
-tasks:
-  - mono_depth
 
 scale_alignment: scale_shift_robust
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 10.0]
-
 paper_reference:
   primary_metric: abs_rel
   # No target pinned — MoGe-2 update paper's NYU row needs to be

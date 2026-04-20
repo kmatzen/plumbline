@@ -15,6 +15,7 @@
 # tolerance is loose (±10%).
 
 name: moge-vitl-nyuv2
+protocol: nyu_eigen_2014
 
 model:
   name: moge
@@ -23,32 +24,26 @@ model:
 
 dataset:
   name: nyuv2
-  split: test
-  kwargs:
-    apply_eigen_crop: true
-
-tasks:
-  - mono_depth
 
 scale_alignment: scale_shift_robust
-max_views: 1
 device: cuda:0
 # Eigen 2014 NYU protocol: clip aligned depth to the GT-valid range.
-depth_clip: [0.001, 10.0]
-
 paper_reference:
   primary_metric: abs_rel
-  # MoGe paper (Wang et al. 2024), Table 2 "Depth Map Estimation"
+  # MoGe paper (Wang et al. 2024, arXiv:2410.19115), Table 3 "Depth
+  # Map Estimation" (NOT Table 2 — Table 2 is point-map estimation).
   # NYU row, three alignment columns:
   #     scale-invariant depth:     Reld 3.48 / δ₁ 98.4
   #     affine-invariant depth:    Reld 2.97 / δ₁ 98.6
   #     affine-invariant disparity: Reld 3.41 / δ₁ 98.6   ← plumbline's scale_shift
   # plumbline's scale_shift / scale_shift_robust fits scale+shift in
   # INVERSE-DEPTH (disparity) space, so the apples-to-apples column
-  # is "affine-invariant disparity" = 0.0341.
+  # is "affine-invariant disparity" = 0.0341. Audit 2026-04-20
+  # corrected the citation from "Table 2" to "Table 3".
   value: 0.0341
   tolerance_relative: 0.05
-  citation: "Wang et al. 2024, MoGe, Table 2 (Depth Map Est.), NYU column, affine-invariant disparity row, ViT-L."
+  citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), NYU column, affine-invariant disparity row, ViT-L."
+  source_confidence: verified_pdf
 
 notes: >
   ROE run (RTX 3090 Ti, 2026-04-19, 654-sample Eigen test split,

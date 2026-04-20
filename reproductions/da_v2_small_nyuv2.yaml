@@ -4,29 +4,19 @@
 # Runs on CPU or Apple Silicon MPS in ~4 minutes.
 
 name: da-v2-small-nyuv2
+protocol: nyu_eigen_2014
 
 model:
   name: depth-anything-v2
   kwargs:
     variant: small
 
-dataset:
-  name: nyuv2
-  split: test
-  kwargs:
-    apply_eigen_crop: true
-
-tasks:
-  - mono_depth
-
 # DA-V2 predicts relative disparity; the MiDaS protocol fits scale + shift
 # in inverse-depth space. That's what `scale_shift` does under the hood.
+# (Dataset prep, depth_clip, max_views, tasks: inherited from the
+# nyu_eigen_2014 protocol preset; see protocols/nyu_eigen_2014.yaml.)
 scale_alignment: scale_shift
-max_views: 1
 device: cuda:0
-# Eigen 2014 NYU protocol: clip aligned depth to the same range as the valid GT
-# mask so outlier alignments don't dominate the mean AbsRel.
-depth_clip: [0.001, 10.0]
 
 paper_reference:
   primary_metric: abs_rel
@@ -42,6 +32,7 @@ paper_reference:
   value: 0.053
   tolerance_relative: 0.05
   citation: "Yang et al. 2024, Depth Anything V2, Table 2. NYUv2 Eigen test, ViT-S (relative)."
+  source_confidence: verified_pdf
 
 notes: >
   Paper-match anchor for the end-to-end mono-depth pipeline. Drifting more

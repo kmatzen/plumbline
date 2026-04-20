@@ -192,10 +192,22 @@ class KITTIDataset(Dataset):
 
         sample_list_path = Path(sample_list) if sample_list else None
         if sample_list_path is not None and not sample_list_path.is_absolute():
-            # Portability: yamls can name the list file relatively (e.g.
-            # `eigen_benchmark_test_files.txt`) and we resolve it against
-            # KITTI_ROOT so committed reproductions work on any machine.
-            sample_list_path = self.root / sample_list_path
+            # Resolve relative `sample_list` in two places, in order:
+            # 1. The in-repo ``reproductions/`` directory (authoritative for
+            #    committed reproductions — e.g. ``kitti_eigen_benchmark_652.txt``
+            #    lives there so every host evaluates the same 652 frames).
+            # 2. ``$KITTI_ROOT`` (legacy, pre-2026-04: users placed the sample
+            #    list alongside the data).
+            # Commit-in-repo takes precedence because it eliminates silent
+            # cross-host divergence.
+            from plumbline.paths import REPRODUCTIONS_DIR
+
+            repo_candidate = REPRODUCTIONS_DIR / sample_list_path
+            host_candidate = self.root / sample_list_path
+            if repo_candidate.exists():
+                sample_list_path = repo_candidate
+            else:
+                sample_list_path = host_candidate
         list_tag = sample_list_path.stem if sample_list_path else "scan"
 
         manifest_path = self.root / ".plumbline_manifest" / f"kitti_{list_tag}_{camera}.jsonl"

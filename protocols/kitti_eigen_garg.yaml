@@ -1,0 +1,39 @@
+# KITTI Eigen-benchmark protocol (Garg crop).
+#
+# The canonical outdoor-depth evaluation protocol. Defined by Eigen
+# et al. 2014 for KITTI raw; modernised by Garg 2016 (left-colour
+# crop to focus evaluation on the road scene, not the vehicle hood
+# or image borders). Every modern mono-depth paper that reports a
+# KITTI row (DA-V2, Metric3D-v2, MoGe, Depth Pro, Marigold, DA3)
+# evaluates under this exact combination of sample list, crop, and
+# post-alignment clip.
+#
+# The 652-frame sample list (Monodepth2's splits/eigen_benchmark)
+# ships in-repo at reproductions/kitti_eigen_benchmark_652.txt; the
+# loader resolves it against the repo's reproductions/ dir
+# preferentially over the dataset root.
+
+name: kitti_eigen_garg
+description: >
+  KITTI Eigen-benchmark test split (652 frames from Monodepth2's
+  splits/eigen_benchmark), left rectified camera (image_02), Garg
+  crop for evaluation, post-alignment clip to [1e-3, 80] m against
+  the annotated-depth GT (Uhrig et al. 2017 dense maps — NOT the
+  original sparse LiDAR reprojections).
+
+reference:
+  paper: "Eigen, Puhrsch, Fergus 2014 (arXiv:1406.2283)"
+  gt_source: "Uhrig et al. 2017, KITTI Depth-Prediction Benchmark (annotated dense depth)"
+  crop: "Garg 2016, row in [0.408 H, 0.992 H), col in [0.036 W, 0.964 W)"
+  split_source: "Monodepth2 (Godard et al. 2019), splits/eigen_benchmark/test_files.txt (652 frames)"
+
+fixed:
+  dataset:
+    name: kitti
+    kwargs:
+      sample_list: kitti_eigen_benchmark_652.txt
+      camera: image_02
+      apply_garg_crop: true
+  depth_clip: [0.001, 80.0]
+  max_views: 1
+  tasks: [mono_depth]

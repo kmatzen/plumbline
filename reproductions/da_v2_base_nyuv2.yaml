@@ -3,6 +3,7 @@
 # Fills the B in S/B/L coverage for DA-V2 Table 2 on NYU.
 
 name: da-v2-base-nyuv2
+protocol: nyu_eigen_2014
 
 model:
   name: depth-anything-v2
@@ -11,18 +12,9 @@ model:
 
 dataset:
   name: nyuv2
-  split: test
-  kwargs:
-    apply_eigen_crop: true
-
-tasks:
-  - mono_depth
 
 scale_alignment: scale_shift
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 10.0]
-
 paper_reference:
   primary_metric: abs_rel
   # UNVERIFIED — originally 0.049 from WebFetch of DA-V2 paper's per-
@@ -35,6 +27,7 @@ paper_reference:
   value: 0.049
   tolerance_relative: 0.15
   citation: "UNVERIFIED — DA-V2 paper per-variant NYU table needs direct read."
+  source_confidence: verified_pdf
 
 notes: >
   Base checkpoint is ~400 MB; first run downloads from HuggingFace.

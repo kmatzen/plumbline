@@ -485,13 +485,43 @@ class TestKITTI:
 
     def test_sample_list_relative_path_resolves_against_root(self, tmp_path: Path) -> None:
         # Committed reproduction yamls name the sample list as a bare
-        # filename so they stay portable; the loader resolves it against
-        # KITTI_ROOT.
+        # filename so they stay portable. The loader checks the in-repo
+        # ``reproductions/`` dir first; if the name isn't there it falls
+        # back to $KITTI_ROOT (this test exercises the fallback).
         entries = _write_fake_kitti(tmp_path, frames=2)
         (tmp_path / "eigen_list.txt").write_text(
             "".join(f"2011_09_26/{drive} {frame_id} l\n" for drive, frame_id, _ in entries)
         )
         ds = KITTIDataset(root=tmp_path, sample_list="eigen_list.txt")
+        assert len(list(ds)) == 2
+
+    def test_sample_list_relative_path_prefers_repo_reproductions_dir(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        # Relative ``sample_list`` resolves against the in-repo
+        # ``reproductions/`` dir in preference to $KITTI_ROOT. This is
+        # what makes cross-host reproduction deterministic: the sample
+        # list lives in git, not under the dataset root where users may
+        # have outdated or diverging copies.
+        entries = _write_fake_kitti(tmp_path, frames=2)
+
+        repro_dir = tmp_path / "_fake_repro"
+        repro_dir.mkdir()
+        (repro_dir / "sample_list.txt").write_text(
+            "".join(f"2011_09_26/{drive} {frame_id} l\n" for drive, frame_id, _ in entries)
+        )
+
+        # Put a sabotaged copy in $KITTI_ROOT to prove the repo version wins.
+        (tmp_path / "sample_list.txt").write_text("THIS SHOULD NOT BE READ\n")
+
+        import plumbline.datasets.kitti as kitti_mod
+
+        monkeypatch.setattr(kitti_mod, "__name__", kitti_mod.__name__)  # no-op placeholder
+        import plumbline.paths as paths_mod
+
+        monkeypatch.setattr(paths_mod, "REPRODUCTIONS_DIR", repro_dir)
+
+        ds = KITTIDataset(root=tmp_path, sample_list="sample_list.txt")
         assert len(list(ds)) == 2
 
     def test_sample_list_requires_matching_camera(self, tmp_path: Path) -> None:

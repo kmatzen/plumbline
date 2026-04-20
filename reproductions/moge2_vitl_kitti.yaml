@@ -6,6 +6,7 @@
 # corresponds to the paper's "affine-invariant disparity" column.
 
 name: moge2-vitl-kitti
+protocol: kitti_eigen_garg
 
 model:
   name: moge
@@ -14,27 +15,23 @@ model:
 
 dataset:
   name: kitti
-  kwargs:
-    sample_list: eigen_benchmark_test_files.txt
-    camera: image_02
-    apply_garg_crop: true
-
-tasks:
-  - mono_depth
 
 scale_alignment: scale_shift_robust
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 80.0]
-
 paper_reference:
   primary_metric: abs_rel
-  # MoGe paper (Wang et al. 2025, arXiv:2507.02546), Table B.4
-  # Map Estimation", KITTI column, "Affine-invariant disparity" row,
-  # ViT-L: Reld 3.92 / δ₁ 98.1 (= AbsRel 0.0392, δ₁ 0.981).
-  value: 0.0392
-  tolerance_relative: 0.10
-  citation: "Wang et al. 2024, MoGe-2, Table B.4 (appendix per-dataset), KITTI, affine-invariant disparity row, ViT-L."
+  # Audit 2026-04-20: MoGe-2 paper (Wang et al. 2025, arXiv:2507.02546)
+  # does NOT publish a ViT-L per-dataset KITTI cell. Table 1 is
+  # averaged across 10 datasets for the full ViT-L model; Table B.4
+  # (appendix) shows per-dataset values ONLY for the ViT-Base ablation
+  # variant. The previous 0.0392 pin came from the Table B.4
+  # ViT-Base ablation block applied (wrongly) to a ViT-L run.
+  # Leaving this YAML in-place as an informational ViT-L run; no
+  # apples-to-apples paper cell exists yet.
+  value: null
+  tolerance_relative: null
+  citation: "Informational only. MoGe-2 paper publishes ViT-L KITTI only as part of a 10-dataset average (Table 1); no per-dataset ViT-L KITTI cell exists."
+  source_confidence: null
 
 notes: >
   Placeholder — observed recorded in follow-up commit.

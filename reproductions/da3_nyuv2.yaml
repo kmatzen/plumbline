@@ -10,6 +10,7 @@
 # scale+shift alignment, same protocol that works for DA-V2.
 
 name: da3-nyuv2
+protocol: nyu_eigen_2014
 
 model:
   name: depth-anything-3
@@ -22,24 +23,16 @@ model:
 
 dataset:
   name: nyuv2
-  split: test
-  kwargs:
-    apply_eigen_crop: true
-
-tasks:
-  - mono_depth
 
 scale_alignment: scale_shift
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 10.0]
-
 paper_reference:
   primary_metric: delta_1
   # DA3 paper, Table 4: NYU δ₁ = 97.4 (= 0.974). No AbsRel reported there.
   value: 0.974
   tolerance_relative: 0.02
   citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. NYUv2 Eigen test, δ₁ (scale+shift aligned)."
+  source_confidence: verified_pdf
 
 notes: >
   depth_anything_3 package needed (`uv pip install depth-anything-3`).

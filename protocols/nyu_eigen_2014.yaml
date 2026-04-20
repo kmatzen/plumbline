@@ -1,0 +1,47 @@
+# NYUv2 Eigen-2014 test-split protocol.
+#
+# The single most-cited monocular-depth evaluation protocol. Defined
+# by Eigen, Puhrsch, Fergus 2014 ("Depth Map Prediction from a Single
+# Image using a Multi-Scale Deep Network"); every modern zero-shot
+# mono-depth paper (DA-V2, Metric3D-v2, MoGe, Depth Pro, Marigold,
+# DA3) reports a NYUv2 row under this protocol.
+#
+# Paper-match cells under this protocol are collectively what
+# REPRODUCTIONS.md's NYUv2 column tracks.
+#
+# Fields below marked `fixed` are protocol-invariant: any reproduction
+# YAML declaring `protocol: nyu_eigen_2014` must not set them to a
+# different value (runner raises with a clear error).
+#
+# Fields NOT listed in `fixed` stay the reproduction's to choose —
+# notably scale_alignment (model-dependent) and paper_reference
+# (varies per model/row).
+
+name: nyu_eigen_2014
+description: >
+  NYUv2 Eigen-2014 test split. 654 RGB-D pairs sampled by
+  Eigen/Puhrsch/Fergus splits.mat::testNdxs (0-indexed). rawDepths
+  field (sparse Kinect measurements ~24% holes), Eigen crop mask,
+  post-alignment clip to [1e-3, 10] m. Single-view monocular.
+
+# Reference: Eigen et al. 2014, arXiv:1406.2283. Canonical splits
+# are Silberman 2012's labeled set (1449 pairs) restricted by
+# testNdxs (654 samples) — see src/plumbline/datasets/_nyuv2_eigen_test.txt
+# for the indexed 0-based list committed to the repo.
+reference:
+  paper: "Eigen, Puhrsch, Fergus 2014 (arXiv:1406.2283)"
+  split_source: "Silberman 2012 splits.mat, testNdxs (0-indexed 654 indices)"
+
+# Fields the runner must apply verbatim. Any reproduction YAML that
+# sets one of these to a different value triggers an error at load
+# time — preventing silent protocol drift between reproductions.
+fixed:
+  dataset:
+    name: nyuv2
+    split: test
+    kwargs:
+      apply_eigen_crop: true
+      depth_field: raw
+  depth_clip: [0.001, 10.0]
+  max_views: 1
+  tasks: [mono_depth]

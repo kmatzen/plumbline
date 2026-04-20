@@ -9,6 +9,7 @@
 # lands or we wire the NYU-finetuned checkpoint.
 
 name: da-v2-metric-indoor-large-nyuv2
+protocol: nyu_eigen_2014
 
 model:
   name: depth-anything-v2
@@ -17,12 +18,6 @@ model:
 
 dataset:
   name: nyuv2
-  split: test
-  kwargs:
-    apply_eigen_crop: true
-
-tasks:
-  - mono_depth
 
 # The HuggingFace port of the metric checkpoint and the *author's own*
 # checkpoint agree per-pixel to within 0.2% (2026-04-18 diagnostic), but
@@ -31,10 +26,7 @@ tasks:
 # Median alignment gives ~0.061 on the full 654-sample split; unaligned
 # is ~0.33.
 scale_alignment: median
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 10.0]
-
 paper_reference:
   # Intentionally no numeric target. Closest published number from the
   # DA-V2 paper is Table 4a's 0.056 for the *NYU-finetuned* ViT-L, which

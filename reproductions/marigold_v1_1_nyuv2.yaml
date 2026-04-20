@@ -17,6 +17,7 @@
 # wall time than DA-V2 due to the 4×10=40 UNet passes per sample.
 
 name: marigold-v1-1-nyuv2
+protocol: nyu_eigen_2014
 
 model:
   name: marigold
@@ -29,27 +30,24 @@ model:
 
 dataset:
   name: nyuv2
-  split: test
-  kwargs:
-    apply_eigen_crop: true
-
-tasks:
-  - mono_depth
 
 # Marigold outputs affine-invariant depth in [0, 1] — the paper
 # protocol fits scale+shift in DEPTH space (gt ≈ s*pred + b), not the
 # disparity-space fit DA-V2 / MoGe use. scale_shift_depth is the
 # matching alignment mode.
 scale_alignment: scale_shift_depth
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 10.0]
-
 paper_reference:
   primary_metric: abs_rel
+  # Marigold paper (Ke et al. 2024, arXiv:2312.02145), Table 1
+  # (quantitative zero-shot comparison, NOT Table 2 — Table 2 is
+  # training-noise ablation). NYUv2 AbsRel col, "Ours (w/ ensemble)"
+  # row = 5.5 → 0.055. Audit 2026-04-20 corrected citation from
+  # "Table 2" to "Table 1".
   value: 0.055
   tolerance_relative: 0.15
-  citation: "Ke et al. 2024, Marigold, Table 2. NYUv2 Eigen test, v1-0 (affine-invariant)."
+  citation: "Ke et al. 2024, Marigold (arXiv:2312.02145), Table 1 (Quantitative Comparison), NYUv2 AbsRel column, 'Ours (w/ ensemble)' row."
+  source_confidence: verified_pdf
 
 notes: >
   First GPU run (RTX 3090 Ti, 2026-04-19, 654-sample Eigen test,
