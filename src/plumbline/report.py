@@ -75,6 +75,7 @@ class Report:
     scale_alignment: str
     aggregate_metrics: dict[str, float]
     per_sample: list[SampleResult] = field(default_factory=list)
+    per_scene_metrics: dict[str, dict[str, float]] = field(default_factory=dict)
     n_total: int = 0
     n_evaluated: int = 0
     n_skipped: int = 0
@@ -94,6 +95,7 @@ class Report:
             "tasks": list(self.tasks),
             "scale_alignment": self.scale_alignment,
             "aggregate_metrics": dict(self.aggregate_metrics),
+            "per_scene_metrics": {s: dict(m) for s, m in self.per_scene_metrics.items()},
             "per_sample": [s.to_dict() for s in self.per_sample],
             "n_total": self.n_total,
             "n_evaluated": self.n_evaluated,
@@ -130,6 +132,9 @@ class Report:
             tasks=list(data.get("tasks", [])),
             scale_alignment=data.get("scale_alignment", "none"),
             aggregate_metrics=dict(data.get("aggregate_metrics", {})),
+            per_scene_metrics={
+                s: dict(m) for s, m in data.get("per_scene_metrics", {}).items()
+            },
             per_sample=[
                 SampleResult(
                     sample_id=s["sample_id"],
@@ -178,6 +183,18 @@ class Report:
             for name in sorted(self.aggregate_metrics):
                 val = self.aggregate_metrics[name]
                 lines.append(f"| {name} | {_fmt(val)} |")
+            lines.append("")
+
+        if self.per_scene_metrics:
+            lines.append("## Per-scene metrics")
+            lines.append("")
+            metric_names = sorted({k for m in self.per_scene_metrics.values() for k in m})
+            lines.append("| Scene | " + " | ".join(metric_names) + " |")
+            lines.append("| " + " | ".join(["---"] * (len(metric_names) + 1)) + " |")
+            for scene in sorted(self.per_scene_metrics):
+                row = self.per_scene_metrics[scene]
+                cells = [_fmt(row.get(k, float("nan"))) for k in metric_names]
+                lines.append(f"| {scene} | " + " | ".join(cells) + " |")
             lines.append("")
 
         lines.append("## Environment")

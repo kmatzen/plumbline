@@ -135,6 +135,8 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
         mask_boundaries=bool(cfg.get("mask_boundaries", False)),
         boundary_thickness=int(cfg.get("boundary_thickness", 1)),
         boundary_tol=float(cfg.get("boundary_tol", 0.1)),
+        aggregation=cfg.get("aggregation", "sample"),
+        scene_voxel_size=float(cfg.get("scene_voxel_size", 0.01)),
     )
 
     paper = cfg.get("paper_reference", {})
