@@ -193,6 +193,18 @@ differ by paper; plumbline does not bundle one, so reproduction YAMLs
 should point at an explicit `sample_list` file (e.g. from Monodepth2's
 `splits/eigen`) to avoid silent divergence.
 
+**Disk footprint — the 652-frame list only touches ~24 frames per
+drive.** The Eigen benchmark spans **28 raw drives** with 24–25 listed
+frames each (six drives have 25, the rest 24). Each full
+`2011_XX_XX_drive_XXXX_sync` archive contains thousands of frames but
+the benchmark only evaluates ~24 of them, so the raw archives are
+aggressively prunable if `$KITTI_ROOT` runs tight on disk: keep only
+the per-drive frames listed in `eigen_benchmark_test_files.txt` (plus
+the matching `velodyne_points` / `oxts` for poses if needed) and drop
+the rest of each drive. Full raw drives total ~65 GB at
+`~/data/kitti/raw`; the pruned footprint is an order of magnitude
+smaller.
+
 ## Adding a new reproduction
 
 1. Read the target paper's evaluation section carefully. Note:
