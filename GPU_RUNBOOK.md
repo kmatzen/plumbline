@@ -58,6 +58,63 @@ uv run python -c "import torch; assert torch.cuda.is_available(); print(torch.cu
 uv run plumbline list-models
 ```
 
+## S3 cache (`plumbline-bench` bucket, us-west-2)
+
+Slow-to-fetch datasets (DTU SampleSet, KITTI pruned per-drive subsets,
+etc.) are cached in a personal S3 bucket so each new rental box can
+rehydrate from S3 rather than redoing the hours of upstream downloads.
+Storage footprint is small (~15-20 GB); the bucket is scoped to one
+IAM user with least-privilege access.
+
+### Once, on your laptop
+
+Configure an AWS profile with the long-lived IAM-user credentials
+(from the `plumbline-gpu-cache` user; see `infrastructure notes`
+below for how it was provisioned):
+
+```bash
+aws configure --profile plumbline-gpu-cache
+# AWS Access Key ID:     AKIA...
+# AWS Secret Access Key: ...
+# Default region name:   us-west-2
+# Default output format: json
+```
+
+### Before each rental
+
+Mint a 12-hour session token:
+
+```bash
+scripts/gpu_box_session_token.sh
+```
+
+…which prints `export` lines. Paste them into the rental box's shell.
+
+### On the rental box
+
+```bash
+# After pasting the exported session creds:
+aws s3 ls s3://plumbline-bench/                 # smoke test
+aws s3 sync s3://plumbline-bench/datasets/ ~/data/   # pull cached datasets
+# ... run reproductions ...
+aws s3 sync ~/data/ s3://plumbline-bench/datasets/ --exclude '*/.plumbline_manifest/*'  # push fresh ones back
+```
+
+### Infrastructure notes
+
+- Bucket `plumbline-bench` — `us-west-2`, SSE-S3 default encryption
+  (AES-256), no versioning (cache; overwrite is the intent).
+- IAM policy `plumbline-cache-access` (customer-managed) grants only:
+  - `s3:ListBucket`, `s3:ListBucketMultipartUploads` on the bucket
+  - `s3:GetObject`, `s3:PutObject`, `s3:AbortMultipartUpload`,
+    `s3:ListMultipartUploadParts` on `plumbline-bench/*`
+  - **No delete.** Remove stale objects from your laptop with root
+    creds if you need to.
+- IAM user `plumbline-gpu-cache` — policy above attached, programmatic
+  access only (no console login).
+- Session-token shape (`aws sts get-session-token --duration-seconds 43200`)
+  means leaked creds on the rental box auto-expire in ≤12h.
+
 ## HuggingFace login (for DA-V2, DA3, Metric3Dv2)
 
 Rate-limited downloads for anonymous users. Log in once:
