@@ -1,0 +1,40 @@
+# MoGe (ViT-L) on KITTI Eigen benchmark
+#
+# Outdoor KITTI counterpart of moge-vitl-nyuv2. MoGe-1 is
+# affine-invariant (relative depth) — plumbline aligns in
+# inverse-depth (disparity) space via scale_shift_robust / ROE, which
+# corresponds to the paper's "affine-invariant disparity" column.
+
+name: moge-vitl-kitti
+
+model:
+  name: moge
+  kwargs:
+    variant: vitl
+
+dataset:
+  name: kitti
+  kwargs:
+    sample_list: eigen_benchmark_test_files.txt
+    camera: image_02
+    apply_garg_crop: true
+
+tasks:
+  - mono_depth
+
+scale_alignment: scale_shift_robust
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 80.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # MoGe paper (Wang et al. 2024, arXiv:2410.19115), Table 2 "Depth
+  # Map Estimation", KITTI column, "Affine-invariant disparity" row,
+  # ViT-L: Reld 4.05 / δ₁ 98.1 (= AbsRel 0.0405, δ₁ 0.981).
+  value: 0.0405
+  tolerance_relative: 0.10
+  citation: "Wang et al. 2024, MoGe, Table 2 (Depth Map Est.), KITTI column, affine-invariant disparity row, ViT-L."
+
+notes: >
+  Placeholder — observed recorded in follow-up commit.

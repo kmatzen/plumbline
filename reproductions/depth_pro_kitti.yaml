@@ -1,0 +1,46 @@
+# Depth Pro (Apple) on KITTI Eigen benchmark — informational
+#
+# Depth Pro's paper (Bochkovskii et al. 2024, arXiv:2410.02073) does
+# NOT evaluate on KITTI; Table 1 and Table 4 cover Booster, ETH3D,
+# Middlebury, NuScenes, Sintel, Sun-RGBD. This yaml is informational
+# — it pairs the KITTI loader with the metric-zero-shot Depth Pro
+# adapter to see how the model transfers to an outdoor driving scene
+# it wasn't evaluated against in the paper.
+#
+# Third-party reference point: MoGe-2's appendix Table B.4 runs Depth
+# Pro on KITTI (affine-invariant disparity alignment) and reports
+# AbsRel 0.051 / δ₁ 0.970. Our protocol is metric (no alignment), so
+# that isn't directly comparable.
+
+name: depth-pro-kitti
+
+model:
+  name: depth-pro
+  kwargs:
+    dtype: float16
+
+dataset:
+  name: kitti
+  kwargs:
+    sample_list: eigen_benchmark_test_files.txt
+    camera: image_02
+    apply_garg_crop: true
+
+tasks:
+  - mono_depth
+
+# Metric zero-shot — no per-scene scale fit. See depth-pro-nyuv2 for
+# the paper-protocol NYU match.
+scale_alignment: none
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 80.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  # No paper target (Depth Pro paper doesn't evaluate KITTI).
+  tolerance_relative: 1.0
+  citation: "No direct paper reference for Depth Pro on KITTI (Bochkovskii et al. 2024 evaluates Booster / ETH3D / Middlebury / NuScenes / Sintel / Sun-RGBD, not KITTI)."
+
+notes: >
+  Placeholder — observed recorded in follow-up commit.
