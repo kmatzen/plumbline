@@ -1,13 +1,21 @@
-# VGGT multi-scene ETH3D chamfer (ICP alignment)
+# VGGT multi-scene ETH3D — paper-protocol Acc/Comp/Overall
 #
-# Closer analogue to the VGGT paper's cross-scene ETH3D chamfer than the
-# courtyard-only config. Paper Table 3 reports chamfer (and accuracy /
-# completeness) averaged across the full training+test ETH3D split;
-# plumbline runs on whatever scenes the user has unpacked under
-# $ETH3D_ROOT, so this YAML just enumerates them explicitly.
+# Reproduces VGGT paper Table 3's ETH3D cross-scene evaluation
+# protocol: run VGGT on sliding windows of each scene's views,
+# ICP-align each window's predicted point cloud into the GT laser-scan
+# frame, MERGE all aligned windows per scene, voxel-downsample the
+# merged cloud (1 cm, the ETH3D tool's default), then compute
 #
-# Scenes chosen for the first cross-scene validation: courtyard,
-# delivery_area, facade. Each has a GT laser scan + DSLR imagery.
+#   accuracy     = mean(pred_point → nearest GT point) in metres
+#   completeness = mean(GT_point  → nearest pred point) in metres
+#   overall      = (accuracy + completeness) / 2
+#
+# Paper values (Wang et al. 2025, VGGT, Table 3, ETH3D row, full
+# cross-scene average): Acc 0.901, Comp 0.518, Overall 0.709. We
+# evaluate on a subset (courtyard + delivery_area + facade) so the
+# exact numbers aren't directly comparable — the subset is chosen
+# for apples-to-apples cross-scene behaviour without the 80 GB
+# archive.
 
 name: vggt-eth3d-multiscene-chamfer
 
@@ -27,27 +35,44 @@ dataset:
 tasks:
   - mvs_depth
 
+# ICP 7-DoF similarity per window into the GT scene frame, then
+# merge across windows. ETH3D's multi-view-evaluation tool uses a
+# 1 cm voxel for density normalisation before chamfer.
 pointcloud_alignment: icp
+aggregation: scene
+scene_voxel_size: 0.01
+
 max_views: 8
 device: cuda:0
 
 paper_reference:
-  primary_metric: chamfer
-  tolerance_relative: 1.0
-  citation: "Wang et al. 2025, VGGT, Table 3 (ETH3D) — multi-scene aggregate approaches paper mean."
+  primary_metric: overall
+  value: 0.709
+  tolerance_relative: 1.0  # subset of scenes; paper value is full split
+  citation: "Wang et al. 2025, VGGT, Table 3 (ETH3D) — Overall = (Acc + Comp)/2, full cross-scene average."
 
 notes: >
-  Multi-scene extension of vggt-eth3d-courtyard-chamfer. The
-  single-scene courtyard config (ICP + mask=0.5) landed F@5cm=1.13%,
-  precision=2.16%, recall=0.82%, chamfer=5.87 — still ~50x below
-  paper-level (VGGT Table 3: cross-scene F-scores 60-90%). Paper
-  protocol is cross-scene aggregate, so running courtyard +
-  delivery_area + facade is a closer apples-to-apples signal without
-  needing the full ~80 GB ETH3D archive.
+  Observed (3 scenes merged per paper protocol, 137 8-view windows,
+  1 cm voxel):
 
-  This config does NOT currently set chamfer_outlier_distance, so
-  results are comparable to the unmasked courtyard row (F=0.67%,
-  chamfer=6.84), not the masked 1.13% headline.
+      scene          Acc      Comp     Overall
+      courtyard      1.3101   0.5206   0.9153
+      delivery_area  0.7161   0.3917   0.5539
+      facade         1.4972   0.4712   0.9842
+      aggregate      1.1745   0.4612   0.8178
 
-  Observed (3 scenes, 8-view windows): TBD — recorded in follow-up
-  commit.
+  Aggregate Overall 0.8178 m vs paper 0.709 m — 15% higher, well
+  within the subset-vs-full-split caveat. Completeness aggregate
+  (0.461) is actually *below* paper (0.518). delivery_area alone
+  beats the paper average at Overall 0.554 m.
+
+  Protocol: aggregation: scene (new in plumbline ~2026-04-20) fuses
+  per-window ICP-aligned point clouds per scene, voxel-downsamples
+  at 1 cm (ETH3D tool default), then computes Acc/Comp/Overall in
+  meters. Replaces the earlier per-window F@5cm which was a ~100x
+  protocol mismatch (see prior commits for the diagnostic).
+
+  Predecessor per-window run under the old F@5cm protocol:
+  F@5cm=0.82%, chamfer=6.27 m — those numbers remain valid for the
+  old protocol but aren't comparable to the paper; kept in the git
+  history (commit d696284) for reference.
