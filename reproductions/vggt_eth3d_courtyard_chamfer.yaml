@@ -68,21 +68,29 @@ notes: >
       icp               0.67%   0.69%  0.82%    6.84
       icp + mask=0.5    1.13%   2.16%  0.82%    5.87   (this config)
 
-  Paper (VGGT Table 3) reports cross-scene ETH3D F-scores in the
-  60-90% range — our 1-2% is ~50x below. Real remaining gaps we
-  haven't resolved:
+  CORRECTED AGAIN ON 2026-04-20 — the "paper reports F-scores in the
+  60-90% range" comparison that used to live here was fabricated.
+  VGGT Table 3 does NOT report F-score on ETH3D; it reports Accuracy
+  0.901, Completeness 0.518, Overall 0.709 — DISTANCE metrics in
+  metres, lower-is-better, with ↓ arrows. The "60-90%" range came
+  from a prior misremembering; it does not appear in the paper.
 
-    1. Paper evaluates on the FULL test-set mesh, not a per-sample
-       sliding-window laser-scan subset. Their chamfer/F-score
-       aggregates differently (likely fuse all predictions before
-       comparing to a single scene-level GT mesh).
-    2. ICP's outlier trim (top 10%) may be too aggressive or too
-       lenient for MVS-scale data — paper protocols often do a
-       Procrustes fit with different robustification.
-    3. VGGT at 518-width produces ~1.5M points that don't cover the
-       full courtyard; GT mesh spans more. Unmasked GT→pred recall
-       is recall-limited by this.
+  Additionally, F@5cm is an indoor T&T-convention threshold. ETH3D
+  outdoor scenes have paper-level mean distances ~0.5-1 m, so at a
+  5 cm threshold, even paper-level output lands in the low single
+  digits of percent. The numbers in the table above are technically
+  correct under plumbline's per-window F@5cm protocol, but that
+  protocol is not comparable to anything in the paper.
 
-  Infrastructure is in place (ICP + outlier masking + back-projection
-  from depth+K+E). The protocol details that close the remaining
-  50x gap stay on the v0.2 list.
+  The paper-protocol reproduction of this scene now lives in
+  vggt-eth3d-multiscene-chamfer (aggregation: scene, Acc/Comp/Overall
+  in metres, 1 cm voxel, merged across 8-view windows). courtyard
+  under that protocol: Acc 1.310, Comp 0.521, Overall 0.915 —
+  comparable to VGGT paper Table 3's full-split Overall 0.709.
+
+  Kept this yaml as-is (per-window ICP chamfer + F@5cm) because:
+    - it's useful as an A/B against da3-eth3d-courtyard-chamfer
+      under the same protocol (both measure per-window behaviour)
+    - it exercises the chamfer_outlier_distance path that the
+      scene-merge yaml doesn't use
+    - removing it would rewrite git history of prior learnings

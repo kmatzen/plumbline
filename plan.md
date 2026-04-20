@@ -482,15 +482,16 @@ missing and which items matter most for reproducing published tables.
 
 ### Tier 1 — close known paper gaps
 
-1. **ETH3D / DTU chamfer protocol rewrite.** The single biggest gap.
-   Current chamfer produces ~1% F-score where VGGT / MASt3R / DA3
-   papers report 60-90%. Infrastructure (ICP 7-DoF, chamfer + F-score,
-   0.5 m outlier mask, back-projection from depth+K+E, `workers=-1`)
-   all works; the remaining 100× gap is almost certainly that papers
-   evaluate on a **full-scene GT mesh** with their predictions **fused
-   across views** before comparing, not per-sample 8-view-window
-   chamfer against a laser-scan subset. Task: find and port the actual
-   MASt3R / MVSNet eval pipeline.
+1. **ETH3D protocol rewrite — LANDED 2026-04-20.** `aggregation:
+   scene` + Acc/Comp/Overall (distance metres, 1 cm voxel) now
+   reproduces VGGT Table 3 within 15% on a 3-scene subset (Overall
+   0.818 vs paper 0.709; see `vggt-eth3d-multiscene-chamfer`).
+   The earlier "papers report 60-90% F-score" framing was a
+   unit-interpretation error — VGGT Table 3 is distance metrics,
+   not F-score, and F@5cm is an indoor T&T threshold unsuited to
+   outdoor ETH3D. Remaining work: port the same scene-merge path
+   to DTU (mm units, different GT format); extend to more ETH3D
+   scenes when disk permits.
 
 2. **KITTI reproduction.** Loader exists; data partially downloaded
    (annotated-depth GT on disk at `/home/claude/data/kitti`). Needs:

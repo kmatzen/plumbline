@@ -44,16 +44,20 @@ notes: >
       precision      0.69%   0.84%
       recall         0.82%   0.77%
 
-  Paper (DA3 + VGGT tables) reports ETH3D F-scores in the 60-90%
-  range — our sub-1% numbers are ~50-100x too low. The gap isn't
-  model-specific (DA3 and VGGT land within 15% of each other) —
-  it's a remaining protocol / aggregation issue. See
-  vggt_eth3d_courtyard_chamfer.yaml notes for the diagnostic list.
+  CORRECTED AGAIN ON 2026-04-20 — the "paper reports ETH3D F-scores
+  in the 60-90% range" comparison above was fabricated. Neither the
+  DA3 nor the VGGT paper reports F-score on ETH3D; VGGT Table 3 is
+  distance-metric (Acc 0.901, Comp 0.518, Overall 0.709 m, lower is
+  better). F@5cm is an indoor T&T threshold that doesn't fit
+  outdoor ETH3D; these per-window sub-1% numbers aren't comparable
+  to anything in the paper.
 
-  Added value of the DA3 run even with the corrected numbers:
+  Paper-protocol ETH3D reproduction: see vggt-eth3d-multiscene-
+  chamfer (aggregation: scene, Overall metric in metres). DA3 would
+  need its own multi-scene yaml to get a paper-comparable number.
+
+  Added value of this yaml even with the corrected numbers:
   validates the runner's depth→point-map back-projection fallback.
   DA3 doesn't return a dense point_map directly; without the
-  fallback (added alongside), chamfer here would be NaN.
-
-  v0.2 work: the actual ETH3D paper protocol (full-scene mesh
-  aggregation, not per-sample laser-scan chamfer).
+  fallback (added alongside), chamfer here would be NaN. Also
+  useful as a per-window A/B against VGGT on the same slice.
