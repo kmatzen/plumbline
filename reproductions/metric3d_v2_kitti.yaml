@@ -38,6 +38,15 @@ paper_reference:
   citation: "Yin et al. 2024, Metric3D v2, Table I. KITTI Eigen test, ViT-L CSTM_label ZS."
 
 notes: >
-  Same upstream-install caveats as metric3d-v2-nyuv2 (mmengine + mmcv-lite;
-  xformers must be ABI-matched or absent). Blocked on user-supplied KITTI
-  data; both required archives are public.
+  ✅ MATCH (2026-04-20, RTX 3090 Ti, 652 Eigen benchmark frames with
+  Uhrig 2017 annotated GT, Garg crop, no scale alignment — metric):
+
+      abs_rel   delta_1   delta_2   rmse    log10
+      0.0495    0.9785    0.9962    2.262   0.0214
+
+  Paper target 0.052 — observed 0.0495 is 4.8% below (within ±10%).
+  Metric3Dv2's canonical-camera trick recovers metric scale from the
+  focal length, so no scale_alignment is applied.
+
+  Same upstream-install caveats as metric3d-v2-nyuv2 (mmengine +
+  mmcv-lite; xformers must be ABI-matched or absent).
