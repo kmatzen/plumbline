@@ -251,6 +251,18 @@ class TestETH3D:
         assert s.num_views == 3
         np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-5)
 
+    def test_cache_is_scene_filter_independent(self, tmp_path: Path) -> None:
+        # Regression: prior revision cached the scene-filtered scan, so a
+        # single-scene open left a manifest that hid other scenes from a
+        # later multi-scene open with the same split+vps.
+        _write_fake_eth3d(tmp_path, scenes=3, views=4)
+        # First call filters to one scene — must not restrict the cache.
+        ETH3DDataset(root=tmp_path, views_per_sample=3, scenes=["scene_0"])
+        # Second call requesting all scenes must see samples from all 3.
+        ds_all = ETH3DDataset(root=tmp_path, views_per_sample=3)
+        scenes_seen = {rec["scene"] for rec in ds_all._records}
+        assert scenes_seen == {"scene_0", "scene_1", "scene_2"}
+
     def test_parse_colmap_cameras_pinhole(self, tmp_path: Path) -> None:
         p = tmp_path / "cameras.txt"
         p.write_text("# comment\n1 PINHOLE 64 48 400 400 32 24\n")

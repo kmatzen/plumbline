@@ -106,13 +106,19 @@ class ETH3DDataset(Dataset):
         self.split = split
         self.views_per_sample = max(1, int(views_per_sample))
 
+        # Manifest caches the full on-disk scan (all scenes under root), and
+        # the `scenes` whitelist is applied after load. An earlier revision
+        # keyed the cache only on split+vps but saved a scene-filtered scan,
+        # so a prior single-scene run left a cache that silently hid other
+        # scenes from later multi-scene calls. Filename bumped to _v2 to
+        # invalidate those stale caches on upgrade.
         manifest_path = (
-            self.root / ".plumbline_manifest" / f"eth3d_{split}_vps{self.views_per_sample}.jsonl"
+            self.root / ".plumbline_manifest" / f"eth3d_{split}_vps{self.views_per_sample}_v2.jsonl"
         )
         if manifest_path.exists():
             records = load_manifest(manifest_path)
         else:
-            records = list(self._scan(scenes))
+            records = list(self._scan(None))
             save_manifest(manifest_path, records)
         if scenes:
             records = [r for r in records if r["scene"] in scenes]
