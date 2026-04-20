@@ -12,6 +12,7 @@
 # model produce NYU-scale metric depth out of the box" test.
 
 name: moge2-vitl-nyuv2-metric
+protocol: nyu_eigen_2014
 
 model:
   name: moge
@@ -20,19 +21,10 @@ model:
 
 dataset:
   name: nyuv2
-  split: test
-  kwargs:
-    apply_eigen_crop: true
-
-tasks:
-  - mono_depth
 
 # NO alignment — MoGe-2 is metric by design.
 scale_alignment: none
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 10.0]
-
 paper_reference:
   primary_metric: abs_rel
   # No direct paper value; informational metric-eval of MoGe-2 on NYU.

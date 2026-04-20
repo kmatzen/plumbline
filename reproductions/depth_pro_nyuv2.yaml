@@ -15,6 +15,7 @@
 # (approximate from the paper's ZS NYU row; pin exact on first run.)
 
 name: depth-pro-nyuv2
+protocol: nyu_eigen_2014
 
 model:
   name: depth-pro
@@ -23,29 +24,30 @@ model:
 
 dataset:
   name: nyuv2
-  split: test
-  kwargs:
-    apply_eigen_crop: true
-
-tasks:
-  - mono_depth
 
 # Metric out of the box — no alignment by default. Runs without
 # per-sample scale+shift fitting, which is the headline capability
 # Depth Pro is designed for.
 scale_alignment: none
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 10.0]
-
 paper_reference:
-  # Depth Pro paper only reports δ₁ on NYUv2 (no AbsRel in that row).
-  # The paper reports other metrics on other datasets, but for NYU
-  # the comparable number is δ₁ = 0.961.
+  # Audit 2026-04-20: Depth Pro paper (Bochkovskii et al. 2024,
+  # arXiv:2410.02073) does **NOT** evaluate on NYUv2. Table 1 reports
+  # results on Booster, ETH3D, Middlebury, NuScenes, Sintel, Sun-RGBD
+  # only — the paper explicitly states these were chosen because "to
+  # our knowledge, they were never used in training any of the
+  # evaluated systems." No Depth Pro row on NYU exists under any
+  # metric; no 0.961 / 96.1 cell exists for Depth Pro anywhere in the
+  # paper. The earlier 0.961 pin was fabricated.
+  #
+  # Kept as an informational OOD run: Depth Pro predicts metric depth
+  # from RGB alone with no alignment, so its NYU performance is
+  # interesting even though the paper doesn't report it.
   primary_metric: delta_1
-  value: 0.961
-  tolerance_relative: 0.05
-  citation: "Bochkovskii et al. 2024, Depth Pro. NYUv2, δ₁ only (paper does not report AbsRel on NYU)."
+  value: null
+  tolerance_relative: null
+  citation: "Informational only. Depth Pro paper (arXiv:2410.02073) does not evaluate NYUv2."
+  source_confidence: null
 
 notes: >
   First GPU run (RTX 3090 Ti, 2026-04-19, 654-sample Eigen test,

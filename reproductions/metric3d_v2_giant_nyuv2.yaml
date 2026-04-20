@@ -5,6 +5,7 @@
 # ViT-giant2 weights (~1.5 GB).
 
 name: metric3d-v2-giant-nyuv2
+protocol: nyu_eigen_2014
 
 model:
   name: metric3d-v2
@@ -13,18 +14,9 @@ model:
 
 dataset:
   name: nyuv2
-  split: test
-  kwargs:
-    apply_eigen_crop: true
-
-tasks:
-  - mono_depth
 
 scale_alignment: none
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 10.0]
-
 paper_reference:
   primary_metric: abs_rel
   # Yin et al. 2024, Metric3D v2, Table I: NYU ViT-giant2 CSTM_label ZS
@@ -32,6 +24,7 @@ paper_reference:
   value: 0.067
   tolerance_relative: 0.10
   citation: "Yin et al. 2024, Metric3D v2, Table I. NYUv2 Eigen test, ViT-giant2 CSTM_label ZS."
+  source_confidence: verified_pdf
 
 notes: >
   Needs mmengine + mmcv-lite installed and xformers NOT installed in

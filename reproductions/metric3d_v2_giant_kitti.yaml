@@ -6,6 +6,7 @@
 # each frame's focal length, so no scale alignment is applied.
 
 name: metric3d-v2-giant-kitti
+protocol: kitti_eigen_garg
 
 model:
   name: metric3d-v2
@@ -14,21 +15,9 @@ model:
 
 dataset:
   name: kitti
-  kwargs:
-    # Eigen benchmark subset — see da_v2_small_kitti.yaml for details.
-    sample_list: eigen_benchmark_test_files.txt
-    camera: image_02
-    apply_garg_crop: true
-
-tasks:
-  - mono_depth
-
 # Metric model — no scale alignment.
 scale_alignment: none
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 80.0]
-
 paper_reference:
   primary_metric: abs_rel
   # Metric3Dv2 paper (Yin et al. 2024, arXiv:2404.15506), Table I, KITTI
@@ -36,6 +25,7 @@ paper_reference:
   value: 0.051
   tolerance_relative: 0.10
   citation: "Yin et al. 2024, Metric3D v2, Table I. KITTI Eigen test, ViT-g CSTM_label ZS."
+  source_confidence: verified_pdf
 
 notes: >
   Placeholder — observed recorded in follow-up commit.

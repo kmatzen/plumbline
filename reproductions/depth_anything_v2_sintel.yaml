@@ -28,12 +28,19 @@ device: cuda:0
 
 paper_reference:
   primary_metric: abs_rel
-  # DA-V2 Table 2 lists Sintel AbsRel around 0.075 with scale-and-shift
-  # alignment. Kept here as a rough sanity value; verify against upstream
-  # before declaring it the reference.
-  value: 0.075
-  tolerance_relative: 0.15
-  citation: "DepthAnything V2, Yang et al. 2024. Sintel subset, scale-shift alignment."
+  # Audit 2026-04-20: the previous 0.075 pin was fabricated. DA-V2
+  # Table 2 (Yang et al. 2024, arXiv:2406.09414) reports ViT-L Sintel
+  # AbsRel = 0.487 under its own zero-shot protocol — which is over 6×
+  # the 0.075 value this YAML previously claimed. The paper does not
+  # specify exactly which Sintel pass (clean/final/albedo) or which
+  # scale alignment mode, so a paper-match reproduction requires first
+  # reading the DA-V2 paper's "Section B. Benchmarks" for the protocol.
+  # Until that's pinned, this YAML stays a smoke test — not a
+  # paper-match.
+  value: null
+  tolerance_relative: null
+  citation: "Informational smoke test. DA-V2 Table 2 reports ViT-L Sintel AbsRel=0.487 (protocol not fully specified); not reproduced here."
+  source_confidence: null
 
 notes: >
   Use this as the CPU-free pipeline shakedown: small HF checkpoint + small

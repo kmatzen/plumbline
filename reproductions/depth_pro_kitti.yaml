@@ -13,6 +13,7 @@
 # that isn't directly comparable.
 
 name: depth-pro-kitti
+protocol: kitti_eigen_garg
 
 model:
   name: depth-pro
@@ -21,21 +22,11 @@ model:
 
 dataset:
   name: kitti
-  kwargs:
-    sample_list: eigen_benchmark_test_files.txt
-    camera: image_02
-    apply_garg_crop: true
-
-tasks:
-  - mono_depth
 
 # Metric zero-shot — no per-scene scale fit. See depth-pro-nyuv2 for
 # the paper-protocol NYU match.
 scale_alignment: none
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 80.0]
-
 paper_reference:
   primary_metric: abs_rel
   # No paper target (Depth Pro paper doesn't evaluate KITTI).

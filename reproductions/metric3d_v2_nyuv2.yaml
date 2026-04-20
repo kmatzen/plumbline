@@ -6,6 +6,7 @@
 # δ₁=0.975 for the ViT-L CSTM_label variant.
 
 name: metric3d-v2-nyuv2
+protocol: nyu_eigen_2014
 
 model:
   name: metric3d-v2
@@ -14,26 +15,18 @@ model:
 
 dataset:
   name: nyuv2
-  split: test
-  kwargs:
-    apply_eigen_crop: true
-
-tasks:
-  - mono_depth
 
 # Metric model — its canonical-camera trick recovers metric scale from fx.
 # No scale alignment; clip to the same range as the NYU valid mask.
 scale_alignment: none
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 10.0]
-
 paper_reference:
   primary_metric: abs_rel
   # Metric3Dv2 paper, Table I (zero-shot NYU): ViT-L AbsRel=0.063, δ₁=0.975.
   value: 0.063
   tolerance_relative: 0.10
   citation: "Yin et al. 2024, Metric3D v2, Table I. NYUv2 Eigen test, ViT-L CSTM_label ZS."
+  source_confidence: verified_pdf
 
 notes: >
   Needs torch.hub access to YvanYin/Metric3D plus transitive deps (mmengine,

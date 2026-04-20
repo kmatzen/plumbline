@@ -20,6 +20,8 @@ dataset:
   kwargs:
     domain: indoors
 
+sample_ids_file: diode_val_indoor.samples.txt
+
 tasks:
   - mono_depth
 
@@ -35,19 +37,19 @@ depth_clip: [0.001, 50.0]
 
 paper_reference:
   primary_metric: abs_rel
-  # DA-V2 (or MoGe-paper Table 2 which reports DA-V2 as a baseline)
-  # DIODE row, alignment columns (Reld = AbsRel × 100):
-  #     scale depth:      Reld 7.89 / δ₁ 90.3 → 0.0789
-  #     affine disparity: Reld 5.33 / δ₁ 96.1 → 0.0533 ← plumbline match
-  # plumbline's scale_shift aligns in disparity → compare to 0.0533.
-  # Caveat: paper value is on DIODE COMBINED val (325 indoor + 446
-  # outdoor); this YAML runs indoor-only so the 35% gap below is
-  # not a direct apples-to-apples. See `da-v2-small-diode-both`
-  # (if created) for a direct paper match.
-  value: 0.0533
-  tolerance_relative: 0.20
-  citation: "Paper Table 2, DIODE column, affine-invariant disparity row, DA-V2 ViT-S (combined val)."
-  citation: "Yang et al. 2024, Depth Anything V2, Table 2. DIODE (combined val), ViT-S (relative)."
+  # Audit 2026-04-20: the MoGe Table 3 DIODE cell (Reld 5.33 = 0.0533)
+  # cited by the earlier pin is for DA-V2 **ViT-L**, not ViT-S — MoGe
+  # Table 3 is labeled "all methods utilize ViT-Large as backbone."
+  # DA-V2's own Table 2 reports ViT-S DIODE AbsRel=0.073 under a
+  # different (non-affine-invariant-disparity) protocol.
+  # No published ViT-S DIODE number exists under the affine-invariant
+  # disparity protocol this YAML uses. Paper-match pivots to the
+  # ViT-L variant (see moge-vitl-diode-both for the closest apples-
+  # to-apples run on the same protocol).
+  value: null
+  tolerance_relative: null
+  citation: "Informational only. No published ViT-S DIODE number under affine-invariant disparity protocol. Paper-match variant is ViT-L (see moge-vitl-diode-both)."
+  source_confidence: null
 
 notes: >
   First GPU run (RTX 3090 Ti, 2026-04-19, 325 indoor samples only):

@@ -12,6 +12,7 @@
 # runner can produce AbsRel cleanly.
 
 name: da-v2-metric-outdoor-large-kitti
+protocol: kitti_eigen_garg
 
 model:
   name: depth-anything-v2
@@ -20,25 +21,13 @@ model:
 
 dataset:
   name: kitti
-  kwargs:
-    # Eigen benchmark subset — see da_v2_small_kitti.yaml for details.
-    sample_list: eigen_benchmark_test_files.txt
-    camera: image_02
-    apply_garg_crop: true
-
-tasks:
-  - mono_depth
-
 # The checkpoint predicts depth in meters directly. A paper match against
 # an in-domain (KITTI-finetuned) ViT-L would require no alignment, but
 # the VKITTI-trained port carries a domain bias similar to what the
 # Hypersim-trained indoor checkpoint shows on NYU. Median-align per
 # sample and treat as informational until the first GPU run lands.
 scale_alignment: median
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 80.0]
-
 paper_reference:
   primary_metric: abs_rel
   # No directly-published number for the *VKITTI-finetuned* ViT-L on

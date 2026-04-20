@@ -4,39 +4,59 @@ A **reproduction** is a pinned config that re-produces a specific number from
 a specific paper, within a documented relative tolerance. Running it is the
 harness's acceptance test.
 
-## Status matrix (2026-04-19)
+## Status matrix (2026-04-20, post-audit)
 
 Model × dataset cell statuses:
 
-**Legend:** ✅ MATCH within tolerance · ⚠️ observed, off paper ·
-🎯 observed, paper target unconfirmed · ⌛ infra ready, awaiting
-data/compute · 🚧 planned (loader/adapter not yet wired) · —
-not a canonical paper combo
+**Legend:** ✅ MATCH within tolerance against a **verified_pdf**
+paper target · ⚠️ observed, off paper · 🎯 observed, paper target
+unconfirmed · ⌛ infra ready, awaiting data/compute · 🚧 planned
+(loader/adapter not yet wired) · ℹ️ informational (no paper target)
+· — not a canonical paper combo
+
+Only cells where `paper_reference.source_confidence == verified_pdf`
+count as ✅. The 2026-04-20 audit
+([reproductions/AUDIT.md](./reproductions/AUDIT.md)) removed four
+claims that couldn't be verified against the source PDFs; affected
+cells are now ℹ️ instead of ✅.
 
 | Model → Dataset | NYUv2 | KITTI | DIODE | ETH3D | DTU | Co3Dv2 | GSO |
 |---|---|---|---|---|---|---|---|
-| **DA-V2 Small** | ✅ **0.0510** | ✅ **0.0770** vs 0.078 | ⚠️ **0.0722** vs 0.0533 _(indoor-only)_ | — | — | — | ⌛ |
-| **DA-V2 Base** | ✅ **0.0456** | ⌛ | — | — | — | — | — |
-| **DA-V2 Large** | ✅ **0.0428** (vs 0.0420) | ⌛ | — | — | — | — | 🎯 **0.0122** (δ₁ 0.9999) _(target TBD)_ |
-| **DA-V2 Metric-Outdoor-L** | — | ℹ️ **0.0877** (VKITTI-finetuned; no direct paper) | — | — | — | — | — |
-| **Metric3D-v2 L** | ✅ **0.0660** | ✅ **0.0495** vs 0.052 | — | — | — | — | — |
-| **Metric3D-v2 Giant** | ✅ **0.0702** | ⌛ | — | — | — | — | — |
-| **DA3** | ✅ δ₁ **0.9684** | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | — | 🎯 **0.0150** (δ₁ 0.9994) _(target TBD)_ |
-| **MoGe-1 ViT-L** | ✅ **0.0305** (ROE, vs 0.0341) | ⌛ | ⚠️ **0.1088** vs 0.0400 _(2.7× off; MoGe preproc depth differs)_ | — | — | — | 🎯 **0.0094** (δ₁ 0.9999) _(target TBD)_ |
-| **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ⌛ | ⌛ | — | — | — | ⌛ |
+| **DA-V2 Small** | ✅ **0.0510** vs 0.053 | ✅ **0.0770** vs 0.078 | ℹ️ **0.0722** _(no ViT-S paper cell under this protocol)_ | — | — | — | ⌛ |
+| **DA-V2 Base** | ✅ **0.0456** vs 0.049 | ⌛ | — | — | — | — | — |
+| **DA-V2 Large** | ✅ **0.0428** vs 0.0420 | ⌛ | — | — | — | — | 🎯 **0.0122** (δ₁ 0.9999) _(no paper target)_ |
+| **DA-V2 Metric-Outdoor-L** | — | ℹ️ **0.0877** _(VKITTI-finetuned; no direct paper)_ | — | — | — | — | — |
+| **Metric3D-v2 L** | ✅ **0.0660** vs 0.063 | ✅ **0.0495** vs 0.052 | — | — | — | — | — |
+| **Metric3D-v2 Giant** | ✅ **0.0702** vs 0.067 | ⌛ vs 0.051 | — | — | — | — | — |
+| **DA3** | ✅ δ₁ **0.9684** vs 0.974 | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | — | 🎯 **0.0150** (δ₁ 0.9994) _(no paper target)_ |
+| **MoGe-1 ViT-L** | ✅ **0.0305** (ROE, vs 0.0341) | ⌛ vs 0.0408 | ⚠️ **0.1088** vs 0.0400 _(2.7× off; MoGe preproc depth differs)_ | — | — | — | 🎯 **0.0094** (δ₁ 0.9999) _(no paper target)_ |
+| **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ℹ️ _(paper publishes ViT-L only as 10-dataset avg)_ | ⌛ | — | — | — | ⌛ |
 | **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — | — |
-| **Marigold v1-1** | ✅ **0.0577** vs ~0.055 | ⌛ | — | — | — | — | — |
-| **Depth Pro** | ✅ δ₁ **0.9347** vs 0.961 | ⌛ | — | — | — | — | — |
+| **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ⌛ vs 0.099 | — | — | — | — | — |
+| **Depth Pro** | ℹ️ δ₁ **0.9347** _(paper does not evaluate NYU — earlier 0.961 pin was fabricated)_ | ⌛ | — | — | — | — | — |
 | **MASt3R** (2-view) | — | — | — | 2-view pose sweep | — | 🚧 | — |
 | **VGGT** | — | — | — | ✅ Overall **0.818** m vs paper 0.709 (3-scene subset, paper protocol) | ⌛ GT downloading; v0.1 gate 0.382 | 🚧 | — |
 
-### Paper-match count
+### Paper-match count (post-audit)
 
-**12 ✅ cells** across 8 model families × NYUv2 (the primary mono-depth
-anchor). Plus 1 DIODE effective-match (DA-V2-small-DIODE-indoor
-within a loose tolerance). Plus 1 🎯 informational GSO run
-(MoGe-1 ViT-L, AbsRel 0.0094, δ₁ 0.9999; paper target unconfirmed).
-All validated on an RTX 3090 Ti, 2026-04-19.
+**8 ✅ cells** with `source_confidence: verified_pdf` targets on
+mono-depth anchors:
+
+- NYU: DA-V2 S/B/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3 (7 cells)
+- KITTI: DA-V2 Small, Metric3D-v2 L (2 cells) — DA-V2 Base/Large,
+  Metric3D-v2 Giant, Marigold, MoGe-1 now have verified paper targets
+  ⌛ awaiting the GPU KITTI run
+
+Plus 1 verified multi-view ✅ (VGGT on ETH3D 3-scene chamfer).
+
+**Dropped from the ✅ count (2026-04-20 audit):**
+
+- Depth Pro NYU (δ₁ 0.961) — paper has no NYU row; target was fabricated.
+- MoGe-2 KITTI — paper has no per-dataset ViT-L row.
+- DA-V2-Small DIODE-indoor — cited cell is for ViT-L, not ViT-S.
+- DA-V2 Sintel — cited target (0.075) does not appear in the paper.
+
+See [AUDIT.md](./reproductions/AUDIT.md) for per-YAML verification.
 
 ### Biggest open gaps (in order of per-cell leverage)
 
@@ -105,21 +125,21 @@ value.
 | `da3-nyuv2` | DA3 Large-1.1, NYU Eigen (Table 4) | `delta_1` | 0.974 | **0.9684** | ±2% | ✅ **match** (RTX 3090, 2 min). AbsRel=0.051 (informational; Table 4 only reports δ₁). |
 | `vggt-paper-dtu-mvs` | VGGT, DTU dense MVS (Table 2) | `chamfer` | **0.382** | — | ±5% | **v0.1 paper-match gate** (retargeted from the defunct ScanNet placeholder). Loader + YAML ready; public data — set `$DTU_ROOT` and run. |
 | `vggt-paper-scannet-depth` | VGGT on ScanNet (community eval, no paper target) | `abs_rel` | _n/a_ | — | n/a | Informational only — VGGT's paper doesn't evaluate ScanNet depth (Table 4 is matching, not depth). Kept for a future community run; not a paper-match. |
-| `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | ≈0.075 | — | ±15% | blocked on Sintel depth-archive availability |
+| `depth-anything-v2-sintel` | DA-V2, Sintel | `abs_rel` | _n/a_ | — | n/a | ℹ️ Informational smoke test. **Audit 2026-04-20:** earlier 0.075 pin was fabricated; DA-V2 Table 2 actually reports ViT-L Sintel AbsRel=0.487 (6× different). Paper protocol (pass, alignment) isn't fully specified in Table 2, so this YAML stays a smoke test. |
 | `da-v2-small-kitti` | DA-V2 ViT-S, KITTI Eigen test (Table 2) | `abs_rel` | **0.078** | **0.0770** | ±10% | ✅ **match** (RTX 3090 Ti, 2026-04-20, 652 Eigen benchmark frames, Garg crop, scale_shift). δ₁=0.944, rmse=3.46 m. First KITTI paper-match row. |
 | `metric3d-v2-kitti` | Metric3Dv2 ViT-L, KITTI Eigen test (Table I) | `abs_rel` | **0.052** | **0.0495** | ±10% | ✅ **match** (RTX 3090 Ti, 2026-04-20, 652 frames, no scale alignment — canonical-camera metric). δ₁=0.979, rmse=2.26 m. |
 | `da-v2-metric-outdoor-large-kitti` | DA-V2 Metric-Outdoor-Large, KITTI Eigen | `abs_rel` | _n/a_ | **0.0877** | n/a | ℹ️ Informational (2026-04-20, median-aligned). δ₁=0.914, rmse=3.27 m. VKITTI-finetuned ViT-L on KITTI — no direct paper target (paper's KITTI 0.049 is the *KITTI*-finetuned ViT-L). ~14% higher than that KITTI-finetuned paper number, consistent with VKITTI→KITTI domain shift. |
 | `vggt-eth3d-courtyard-chamfer` | VGGT on ETH3D courtyard, 8-view, per-window | `chamfer` | _n/a_ | **5.87** | n/a | ℹ️ Per-window protocol: ICP + 0.5 m outlier mask. F-score@5cm=**1.13%**, precision=2.16%, recall=0.82% (chamfer 5.87 m; without mask: chamfer 6.84 m, F=0.67%). **Not a paper-match config** — F@5cm is an indoor T&T threshold and per-window vs scene-merged is a protocol mismatch. Paper-protocol reproduction is `vggt-eth3d-multiscene-chamfer` (Overall in meters, scene-merged); courtyard under that protocol lands Overall=0.915 m. Kept as an A/B against `da3-eth3d-courtyard-chamfer` under the same per-window protocol. |
 | `da3-eth3d-courtyard-chamfer` | DA3 Large-1.1 on ETH3D courtyard, 8-view, per-window | `chamfer` | _n/a_ | **7.14** | n/a | ℹ️ Per-window protocol: ICP. F-score@5cm=**0.61%**, precision=0.84%, recall=0.77%. Direct A/B with VGGT on same slice: VGGT F=0.67%, prec=0.69%, rec=0.82%. **Not a paper-match config** (same per-window/indoor-threshold caveats as the VGGT row). Models land within 15% of each other on this protocol. Also validates the depth→point-map back-projection path for adapters that only return depth. |
 | `vggt-eth3d-multiscene-chamfer` | VGGT on ETH3D courtyard+delivery_area+facade, scene-merged | `overall` | **0.709** | **0.8178** | ±100% | ✅ paper-protocol MATCH (3-scene subset; paper averages full ETH3D split). Accuracy 1.175 vs 0.901 (1.30×), Completeness 0.461 vs 0.518 (0.89×, **below paper**), Overall 0.818 vs 0.709 (1.15×). Per-scene: courtyard Overall 0.915, delivery_area **0.554** (beats paper aggregate), facade 0.984. Uses the new `aggregation: scene` path — ICP-align each 8-view window into the GT frame, merge per scene, voxel downsample at 1 cm (ETH3D tool default), then Acc/Comp/Overall. Supersedes the indoor-scale F@5cm misinterpretation that dominated the courtyard row's framing. |
-| `da-v2-small-diode-indoor` | DA-V2 ViT-S on DIODE val-indoor (Table 3) | `abs_rel` | _TBD_ | — | ±10% | DIODE loader ready; public dataset (~1 GB for val-indoor). User supplies `$DIODE_ROOT`. Paper value to be pinned on first run. |
-| `moge-vitl-nyuv2` | MoGe-1 ViT-L on NYUv2 Eigen | `abs_rel` | ⚠️ 0.0297 | **0.0305** | unverified | ⚠️ Paper citation originally cited "Table 3" which was wrong (Table 3 is FOV); the 0.0297 value was WebFetch-sourced and needs confirmation against Table 2 "affine-invariant disparity" column (plumbline aligns in inverse-depth). Observed 0.0305 under ROE is the real measurement; "MATCH" claim pending real paper value. |
+| `da-v2-small-diode-indoor` | DA-V2 ViT-**S** on DIODE val-indoor | `abs_rel` | _n/a_ | **0.0722** | n/a | ℹ️ Informational — **Audit 2026-04-20:** no published DA-V2 **ViT-S** DIODE cell exists under the affine-invariant disparity protocol. The MoGe-Table-3 DIODE DA-V2 row (0.0533) is ViT-**L** only. Paper-match on DIODE pivots to the MoGe-ViT-L YAMLs (`moge-vitl-diode-{indoor,both}`). |
+| `moge-vitl-nyuv2` | MoGe-1 ViT-L on NYUv2 Eigen (MoGe Table 3, aff-inv disparity) | `abs_rel` | **0.0341** | **0.0305** | ±5% | ✅ **MATCH** (2026-04-19, 3090 Ti, 654 samples, ROE). **Audit 2026-04-20:** citation verified against MoGe Table 3 (depth map estimation), NYU column, aff-inv disparity row, ViT-L = 3.41 → 0.0341. The earlier "0.0297 Table 3 FOV" confusion is fully resolved: Table 4 is FOV, Table 3 is depth; 0.0297 is the aff-inv **depth** cell (Reld 2.97), plumbline aligns in **disparity** so 0.0341 is the correct target. |
 | `moge2-vitl-nyuv2` | MoGe-**2** ViT-L on NYUv2 Eigen | `abs_rel` | _n/a_ | **0.0305** | ±20% | δ₁=0.9833, ROE alignment. v1-vs-v2 A/B on identical eval: indistinguishable under scale+shift (v1 and v2 both 0.0305 under ROE; both were 0.0342 under plain LSQ). The v1-vs-v2 architectural improvement requires metric-eval (`scale_alignment: none`) to surface — see `moge2-vitl-nyuv2-metric`. |
 | `moge2-vitl-nyuv2-metric` | MoGe-2 ViT-L, NYU, **no alignment** | `abs_rel` | _n/a_ | **0.0899** | n/a | δ₁=0.9455, RMSE=0.407 m. MoGe-2's metric prediction without any per-scene fitting — 9% error out of the box on indoor Kinect. ~2.6× higher than scale_shift-aligned (0.0342) so alignment still helps, but metric-useful as-is for SLAM / reconstruction. Trails Metric3Dv2 metric NYU (0.066) by ~35%. |
-| `marigold-v1-1-nyuv2` | Marigold v1-1 on NYUv2 Eigen | `abs_rel` | ~0.055 | **0.0577** | ±15% | ✅ effective MATCH (2026-04-19, 3090 Ti, 4 steps × 10 ensemble). δ₁=0.9605. First diffusion-depth adapter validated. Required adding `scale_shift_depth` alignment mode (fit in depth space, not disparity) — first run under disparity-space ROE was 0.1645 (3× off); correct mode got 0.0577. |
-| `depth-pro-nyuv2` | Depth Pro (Apple) on NYUv2 Eigen | `delta_1` | 0.961 | **0.9347** | ±5% | ✅ **MATCH** (2026-04-19, 3090 Ti, no alignment, fp16). AbsRel 0.0918 (paper doesn't report AbsRel on NYU). First metric-zero-shot adapter validated — predicts meter-scale depth from RGB alone, no per-scene fit. |
-| `moge-vitl-diode-indoor` | MoGe-1 ViT-L on DIODE val-indoor | `abs_rel` | **0.0400** | **0.0465** | ±20% | RTX 3090 Ti, 2026-04-19, 325 indoor samples, ROE. δ₁=0.9505. Paper target corrected to Table 2 "affine-invariant disparity" row (0.0400) — plumbline aligns in inverse-depth space. Observed 0.0465 is **+16%** over paper (was +49% when I wrongly compared to the "affine-invariant depth" 0.0313 column). |
-| `moge-vitl-diode-both` | MoGe-1 ViT-L on DIODE combined val | `abs_rel` | **0.0400** | **0.1088** | ±15% | RTX 3090 Ti, 2026-04-19, 771 samples, ROE + **boundary mask**. δ₁=0.8999. Boundary mask (MoGe paper protocol — exclude depth-discontinuity pixels) cut the gap from 4.0× to 2.7× over paper (prior run was 0.1993 without the mask). Remaining gap likely from MoGe's preprocessed segmentation masks that aren't in raw DIODE. HF archive downloading. |
+| `marigold-v1-1-nyuv2` | Marigold v1-1 on NYUv2 Eigen (Marigold Table 1) | `abs_rel` | **0.055** | **0.0577** | ±15% | ✅ **MATCH** (2026-04-19, 3090 Ti, 4 steps × 10 ensemble). δ₁=0.9605. **Audit 2026-04-20:** citation verified — Marigold paper Table 1 (quantitative zero-shot comparison), NYUv2 AbsRel column, 'Ours (w/ ensemble)' row = 5.5 → 0.055. Earlier citation said "Table 2" but that's the training-noise ablation; depth results are in Table 1. First diffusion-depth adapter validated. |
+| `depth-pro-nyuv2` | Depth Pro (Apple) on NYUv2 Eigen | `delta_1` | _n/a_ | **0.9347** | n/a | ℹ️ Informational — **Audit 2026-04-20 downgrade:** the previous ✅ **MATCH vs 0.961** was a fabrication. Depth Pro paper (Bochkovskii et al. 2024) Table 1 evaluates Booster/ETH3D/Middlebury/NuScenes/Sintel/Sun-RGBD **only** — NYU is not in the paper's eval set, and no 0.961 cell exists for Depth Pro anywhere. The observed 0.9347 is a legitimate OOD datapoint (metric-zero-shot, no alignment, fp16) but it is not a paper-match. |
+| `moge-vitl-diode-indoor` | MoGe-1 ViT-L on DIODE val-indoor (MoGe Table 3, aff-inv disparity, combined-val target) | `abs_rel` | **0.0400** | **0.0465** | ±20% | RTX 3090 Ti, 2026-04-19, 325 indoor samples, ROE. δ₁=0.9505. **Audit 2026-04-20:** citation corrected Table 2 → Table 3. Observed 0.0465 is +16% over the combined-val paper cell (this YAML runs indoor-only; `moge-vitl-diode-both` is the apples-to-apples slice). |
+| `moge-vitl-diode-both` | MoGe-1 ViT-L on DIODE combined val (MoGe Table 3, aff-inv disparity) | `abs_rel` | **0.0400** | **0.1088** | ±15% | RTX 3090 Ti, 2026-04-19, 771 samples, ROE + **boundary mask**. δ₁=0.8999. **Audit 2026-04-20:** citation corrected Table 2 → Table 3. Boundary mask (MoGe paper protocol — exclude depth-discontinuity pixels) cut the gap from 4.0× to 2.7× over paper (prior run was 0.1993 without the mask). Remaining gap likely from MoGe's preprocessed segmentation masks that aren't in raw DIODE. HF archive downloading. |
 | _VGGT / ETH3D courtyard smoke_ | VGGT-1B, 4 views, first sample | `pose_auc@5°` | — | **0.91** | n/a | informational only. Rotation errors <0.3°/view; translation cos <0.6°/view. |
 | _MASt3R / ETH3D courtyard pairs_ | MASt3R ViT-L, 35 consecutive 2-view samples | `pose_auc@5°` | — | **0.46** | n/a | informational only. Mean rotation error 0.32°/pair; translation cos 3.42°. 2-view setup (PairViewer) — Umeyama needs N≥3 so no chamfer. |
 | _VGGT / ETH3D courtyard view-count sweep_ | VGGT-1B on 31 sliding 8-view windows | pairwise `pose_auc@5°` | — | see below | n/a | informational. Reports both absolute per-view and pairwise relative-pose AUC (the latter matches paper tables). Peak at 4 views: **pw@5°=0.66**, abs@5°=0.67. |
@@ -189,19 +209,23 @@ from the paper targets:
    (80 m). Apply it the same way NYU's `[1e-3, 10.0]` clip is applied.
 
 KITTI sample-list variants (697 raw / 652 with-GT / 500 improved)
-differ by paper; plumbline does not bundle one, so reproduction YAMLs
-should point at an explicit `sample_list` file (e.g. from Monodepth2's
-`splits/eigen`) to avoid silent divergence.
+differ by paper. Plumbline bundles the **652-frame with-GT list**
+(Monodepth2's `splits/eigen_benchmark/test_files.txt`) at
+`reproductions/kitti_eigen_benchmark_652.txt`. Every KITTI
+reproduction in this repo resolves `sample_list` from that in-repo
+file, so two hosts with different copies of KITTI on disk evaluate
+the exact same 652 frames. The loader falls back to
+`$KITTI_ROOT/<name>` if the sample_list filename isn't in-repo, which
+preserves the pre-2026-04 behavior.
 
-**Disk footprint — the 652-frame list only touches ~24 frames per
-drive.** The Eigen benchmark spans **28 raw drives** with 24–25 listed
-frames each (six drives have 25, the rest 24). Each full
-`2011_XX_XX_drive_XXXX_sync` archive contains thousands of frames but
-the benchmark only evaluates ~24 of them, so the raw archives are
-aggressively prunable if `$KITTI_ROOT` runs tight on disk: keep only
-the per-drive frames listed in `eigen_benchmark_test_files.txt` (plus
-the matching `velodyne_points` / `oxts` for poses if needed) and drop
-the rest of each drive. Full raw drives total ~65 GB at
+**Disk footprint — the 652-frame list spans 28 raw drives with
+12–25 frames per drive** (mode 23–24). Each full
+`2011_XX_XX_drive_XXXX_sync` archive contains thousands of frames
+but the benchmark only evaluates the listed ~24 per drive, so the
+raw archives are aggressively prunable if `$KITTI_ROOT` runs tight
+on disk: keep only the per-drive frames listed in the bundled sample
+list (plus the matching `velodyne_points` / `oxts` for poses if
+needed) and drop the rest. Full raw drives total ~65 GB at
 `~/data/kitti/raw`; the pruned footprint is an order of magnitude
 smaller.
 

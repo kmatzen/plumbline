@@ -6,6 +6,7 @@
 # fit is gt ≈ s*pred + b in depth space, not disparity.
 
 name: marigold-v1-1-kitti
+protocol: kitti_eigen_garg
 
 model:
   name: marigold
@@ -18,19 +19,9 @@ model:
 
 dataset:
   name: kitti
-  kwargs:
-    sample_list: eigen_benchmark_test_files.txt
-    camera: image_02
-    apply_garg_crop: true
-
-tasks:
-  - mono_depth
 
 scale_alignment: scale_shift_depth
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 80.0]
-
 paper_reference:
   primary_metric: abs_rel
   # Marigold paper (Ke et al. 2024, arXiv:2312.02145), Table 1, KITTI
@@ -42,6 +33,7 @@ paper_reference:
   value: 0.099
   tolerance_relative: 0.15
   citation: "Ke et al. 2024, Marigold, Table 1. KITTI Eigen test, w/ 10-ensemble."
+  source_confidence: verified_pdf
 
 notes: >
   Placeholder — observed recorded in follow-up commit.
