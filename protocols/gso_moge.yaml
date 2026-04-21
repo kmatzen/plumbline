@@ -1,0 +1,34 @@
+# GSO synthetic-clean evaluation — MoGe-paper variant.
+#
+# Google Scanned Objects (1030 single-object renders, 512×512) is
+# MoGe Table 1's "synthetic clean GT" slot. plumbline loads GSO via
+# MoGe's preprocessed HF bundle (Ruicheng/monocular-geometry-evaluation,
+# GSO.zip ~2 GB).
+#
+# Protocol:
+# - All 1030 objects (no whitelist).
+# - depth_clip [1e-3, 100] m (GSO depths are <100 m by render setup;
+#   permissive cap catches alignment outliers).
+# - scale_shift_robust alignment in inverse-depth (matches MoGe paper's
+#   "affine-invariant disparity" protocol).
+# - Single-view, mono_depth.
+#
+# Note: paper-target values per model are still being pinned (see
+# REPRODUCTIONS.md status matrix — most are 🎯 informational).
+
+name: gso_moge
+description: >
+  GSO 1030-object synthetic-clean evaluation under MoGe Table 1
+  protocol: scale_shift_robust + [1e-3, 100] m clip.
+
+reference:
+  paper: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 1 (Synthetic clean GT)"
+  source_bundle: "Ruicheng/monocular-geometry-evaluation (HuggingFace), GSO.zip"
+
+fixed:
+  dataset:
+    name: gso
+  depth_clip: [0.001, 100.0]
+  scale_alignment: scale_shift_robust
+  max_views: 1
+  tasks: [mono_depth]

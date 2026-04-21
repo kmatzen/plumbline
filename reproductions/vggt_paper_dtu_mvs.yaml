@@ -14,32 +14,15 @@
 # Protocol: "follows MASt3R" per paper section 4.2.
 
 name: vggt-paper-dtu-mvs
+protocol: dtu_vggt_table2
 
 model:
   name: vggt
   kwargs:
     dtype: bfloat16
 
-dataset:
-  name: dtu
-  # The MASt3R/VGGT protocol uses the standard DTU MVS 22-scan test set.
-  # Exact view count per scan is set by max_views below.
-  kwargs:
-    split: test
-
-tasks:
-  - mvs_depth  # fires the chamfer + F-score runner path
-
-# VGGT predicts a dense point map without GT extrinsics; the predicted
-# frame is set by VGGT's first-view convention. DTU's GT clouds live
-# in a scanner frame. Fit 7-DoF similarity on predicted camera centres
-# → GT centres, then apply to the dense point map before chamfer. This
-# is the same protocol used for ETH3D chamfer reproductions.
-# ICP 7-DoF similarity — the paper's alignment protocol. Camera-centres
-# Umeyama (the prior default) under-aligns the dense cloud by ~500x on
-# the ETH3D courtyard reproduction; see commit 565230c for the diagnostic.
-pointcloud_alignment: icp
-max_views: 8
+# (dataset/views_per_sample/light, scale_alignment=none, pointcloud_alignment=icp,
+#  max_views, tasks: inherited from protocols/dtu_vggt_table2.yaml.)
 device: cuda:0
 
 paper_reference:

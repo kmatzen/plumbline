@@ -1,0 +1,44 @@
+# DTU MVS evaluation — VGGT Table 2 protocol.
+#
+# VGGT Table 2 "Dense MVS on DTU" reports chamfer (Acc / Comp / Overall)
+# on the standard 22-scan MVSNet test subset. Protocol:
+#
+# - 22 test scans (DTU_MVS_TEST_SCANS in src/plumbline/datasets/dtu.py).
+# - 8 views per sample at the canonical DTU rectified resolution.
+# - Lighting condition L=3 (canonical MVSNet eval).
+# - GT point cloud is per-scan ``stl<NNN>_total.ply`` from DTU's
+#   official Points archive (~6.97 GB), restricted to test-scan IDs.
+# - The plumbline loader subsamples the GT cloud to ``max_gt_points``
+#   (default 200 000) for tractable chamfer; this does not change the
+#   value materially vs the full ~1-10 M points per scan.
+# - Pred-to-GT alignment uses ICP within the world-from-camera-0
+#   frame (the DTU loader's convention).
+# - Chamfer in millimetres (DTU's native unit).
+#
+# Paper target: Overall = 0.382 (Acc 0.389, Comp 0.374). plumbline's
+# v0.1 acceptance criterion is reproducing this within ±5 % under
+# scale_alignment=none (VGGT is metric-trained).
+
+name: dtu_vggt_table2
+description: >
+  DTU 22-scan MVSNet test set, 8-view samples at light=3, ICP align
+  to GT point cloud, chamfer in mm. v0.1 paper-match gate
+  (Overall=0.382 ±5 %).
+
+reference:
+  paper: "Wang et al. 2025, VGGT (arXiv:2503.11651), Table 2 (Dense MVS on DTU)"
+  test_scans: "DTU_MVS_TEST_SCANS in src/plumbline/datasets/dtu.py (22 scans)"
+  alignment: "ICP within world-from-camera-0 frame; GT clouds in mm"
+
+# Fixed by this protocol:
+fixed:
+  dataset:
+    name: dtu
+    split: test
+    kwargs:
+      views_per_sample: 8
+      light: 3
+  scale_alignment: none
+  pointcloud_alignment: icp
+  max_views: 8
+  tasks: [mvs_depth, pose]

@@ -10,6 +10,7 @@
 # this is informational until the value is confirmed.
 
 name: da3-gso
+protocol: gso_moge
 
 model:
   name: depth-anything-3
@@ -17,17 +18,8 @@ model:
     variant: large
     checkpoint: depth-anything/DA3-LARGE-1.1
 
-dataset:
-  name: gso
-
-tasks:
-  - mono_depth
-
-scale_alignment: scale_shift_robust
-max_views: 1
+# (dataset/depth_clip/scale_alignment/max_views/tasks: inherited from protocols/gso_moge.yaml)
 device: cuda:0
-# GSO objects render at ~0.3-1.0 m; keep clip wide but positive.
-depth_clip: [0.001, 100.0]
 
 paper_reference:
   primary_metric: abs_rel

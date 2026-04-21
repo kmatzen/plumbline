@@ -10,22 +10,15 @@
 # Informational-only until the user pins a target.
 
 name: da-v2-large-gso
+protocol: gso_moge
 
 model:
   name: depth-anything-v2
   kwargs:
     variant: large
 
-dataset:
-  name: gso
-
-tasks:
-  - mono_depth
-
-scale_alignment: scale_shift_robust
-max_views: 1
+# (dataset/depth_clip/scale_alignment/max_views/tasks: inherited from protocols/gso_moge.yaml)
 device: cuda:0
-depth_clip: [0.001, 100.0]
 
 paper_reference:
   primary_metric: abs_rel

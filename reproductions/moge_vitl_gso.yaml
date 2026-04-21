@@ -16,24 +16,16 @@
 # user reads off the paper number.
 
 name: moge-vitl-gso
+protocol: gso_moge
 
 model:
   name: moge
   kwargs:
     variant: vitl
 
-dataset:
-  name: gso
-
-tasks:
-  - mono_depth
-
-scale_alignment: scale_shift_robust
-max_views: 1
+# (dataset.name=gso, depth_clip, scale_alignment, max_views, tasks:
+#  inherited from protocols/gso_moge.yaml.)
 device: cuda:0
-# GSO is single-object at ~0.3-1.0 m depth; render far-plane varies
-# per-object. Keep clip wide but positive.
-depth_clip: [0.001, 100.0]
 
 paper_reference:
   primary_metric: abs_rel

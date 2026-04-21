@@ -1,0 +1,44 @@
+# DIODE evaluation protocol — MoGe-paper variant.
+#
+# DIODE (Vasiljevic et al. 2019, arXiv:1908.00463) is a high-res
+# RGB-D dataset captured with a FARO laser scanner. Multiple papers
+# evaluate on it; the protocol that matters for plumbline's current
+# reproductions is the one MoGe (Wang et al. 2024) uses for Table 3
+# "Depth Map Estimation":
+#
+# - boundary mask: exclude pixels near depth discontinuities
+#   (~1-pixel band, depth-jump-tolerance 0.1) — corresponds to MoGe's
+#   ``moge.utils.geometry_numpy.depth_occlusion_edge_numpy``.
+# - depth_clip [1e-3, 50] m: catches alignment-induced outliers at
+#   the high end of DIODE's range (indoor ~0-15 m, outdoor up to ~300 m).
+#   Note: DIODE outdoor depths can exceed 50 m; the MoGe-published
+#   numbers are on COMBINED val under this clip — extrapolating to
+#   pure-outdoor needs a wider clip and is a known v0.2 follow-up
+#   (see plan.md § Tier 1 #3 "DIODE outdoor protocol").
+# - val split, single-view, mono_depth task.
+#
+# domain (indoors/outdoor/both) and the sample_ids_file (which IDs
+# under the val split) are NOT fixed by this protocol — different
+# reproductions target different slices of val.
+
+name: diode_moge
+description: >
+  DIODE val-split mono-depth evaluation under the MoGe Table 3
+  protocol: boundary mask + [1e-3, 50] m clip on aligned predictions.
+  Compatible with the affine-invariant disparity column under
+  scale_shift_robust alignment.
+
+reference:
+  paper: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), DIODE column"
+  boundary_protocol: "moge.utils.geometry_numpy.depth_occlusion_edge_numpy (1-pixel band, jump-tolerance 0.1)"
+
+fixed:
+  dataset:
+    name: diode
+    split: val
+  depth_clip: [0.001, 50.0]
+  mask_boundaries: true
+  boundary_thickness: 1
+  boundary_tol: 0.1
+  max_views: 1
+  tasks: [mono_depth]
