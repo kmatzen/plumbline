@@ -42,6 +42,13 @@ import urllib.request
 import zipfile
 from collections import defaultdict
 
+# Minimum free space we require on the drive zip's temp directory before
+# attempting a download. Each drive zip is ~320 MB; aria2 with 16 parallel
+# splits transiently writes more, and macOS Spotlight / Time Machine can
+# reclaim freshly-freed space concurrently. 1 GB is a conservative safety
+# margin that has cleared the disk-full failure mode in practice.
+_MIN_FREE_BYTES_PER_DRIVE: int = 1 * 1024 * 1024 * 1024
+
 S3_BASE = "https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data"
 
 
@@ -229,6 +236,10 @@ def main() -> int:
         print(f"  [{date}] calib installed", file=sys.stderr)
 
     # Drive zips: per-drive selective extract + delete.
+    # Continue-on-failure: a single drive failing (disk-full, network, etc.)
+    # shouldn't abort the whole run. We log the failure and move on; the
+    # fetcher is idempotent so a re-run picks up where this one left off.
+    failed: list[tuple[str, str, Exception]] = []
     for (date, drive), frames in sorted(per_drive.items()):
         # Already-complete check: every listed frame present under every wanted cam.
         drive_dir = raw_root / date / drive
@@ -254,13 +265,36 @@ def main() -> int:
                 wanted_prefixes.append(f"{date}/{drive}/{cam}/data/{frame}.png")
         wanted_prefixes = tuple(wanted_prefixes)
 
-        with tempfile.TemporaryDirectory() as td:
-            zpath = pathlib.Path(td) / f"{drive}.zip"
-            download_to(drive_zip_url(drive), zpath)
-            n = extract_selected(zpath, raw_root, wanted_prefixes)
-        print(f"  [{drive}] extracted {n} file(s)", file=sys.stderr)
+        try:
+            with tempfile.TemporaryDirectory() as td:
+                td_path = pathlib.Path(td)
+                free = shutil.disk_usage(td_path).free
+                if free < _MIN_FREE_BYTES_PER_DRIVE:
+                    raise OSError(
+                        f"only {free/1e9:.2f} GB free at {td_path}; "
+                        f"need >= {_MIN_FREE_BYTES_PER_DRIVE/1e9:.1f} GB per drive"
+                    )
+                zpath = td_path / f"{drive}.zip"
+                download_to(drive_zip_url(drive), zpath)
+                n = extract_selected(zpath, raw_root, wanted_prefixes)
+            print(f"  [{drive}] extracted {n} file(s)", file=sys.stderr)
+        except (OSError, subprocess.CalledProcessError) as exc:
+            # Record and continue — partial progress is still progress.
+            # Re-running is idempotent: already-complete drives are skipped
+            # and this drive will be re-attempted next run.
+            failed.append((date, drive, exc))
+            print(f"  [{drive}] FAILED: {exc}", file=sys.stderr)
 
-    print("\ndone.", file=sys.stderr)
+    print(file=sys.stderr)
+    if failed:
+        print(
+            f"done with {len(failed)} failure(s); re-run this script to retry:",
+            file=sys.stderr,
+        )
+        for date, drive, exc in failed:
+            print(f"  {drive}: {type(exc).__name__}", file=sys.stderr)
+        return 2
+    print("done.", file=sys.stderr)
     return 0
 
 
