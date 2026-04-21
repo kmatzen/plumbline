@@ -6,7 +6,7 @@
 # corresponds to the paper's "affine-invariant disparity" column.
 
 name: moge-vitl-kitti
-protocol: kitti_eigen_garg
+protocol: kitti_eigen_crop
 
 model:
   name: moge
