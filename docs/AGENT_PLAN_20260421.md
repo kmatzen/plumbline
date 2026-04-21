@@ -5,6 +5,29 @@ rows ⚠️ OFF-PAPER and 2 ❌ SKIPPED (geowizard). This plan organizes the
 fixes by effort + risk, cheap-first. Two of the four OFF-PAPER rows likely
 clear with a 15-minute change; one is a multi-hour dataset-loader rewrite.
 
+**Progress (2026-04-21 rental run, live):**
+
+- [x] **Item 1** done — DA-V2 paper Table 2 cross-read via subagent;
+  Base 0.049 citation verified, Large citation (0.0420 from MoGe vs
+  0.045 from DA-V2 paper) clarified.
+- [x] **Item 2** done — `scale_shift_robust` inspected,
+  `alignment.py:241` uses `space="inv_depth"` (disparity-space). The
+  moge-vitl-nyuv2 0.0305 result is a real "plumbline ROE > MoGe ROE"
+  finding, not a bug.
+- [x] **Item 3** done — `moge-vitl-diode-indoor` demoted to
+  `source_confidence: approximate`, `value: null`. Drops out of the
+  `verified_pdf` queue (now 20 rows). The combined-val paper-match
+  lives solely in `moge-vitl-diode-both`.
+- [x] **Item 4, part 1** done — diffusers-compat shim written in
+  `src/plumbline/models/geowizard.py::_shim_diffusers_for_geowizard`
+  (aliases `PositionNet` → `GLIGENTextBoundingboxProjection` and
+  `diffusers.models.dual_transformer_2d` → the same module under
+  `diffusers.models.transformers.`). Upstream pipeline now imports
+  cleanly under diffusers 0.37.1. Pending: GPU re-run to confirm the
+  full inference path works end-to-end + paper-match verdict.
+- [ ] **Item 5** (DIODE loader rewrite) — not started.
+- [ ] **Item 6** (VGGT-ETH3D clean re-run) — blocked on GPU queue.
+
 ## Priorities
 
 Ordered to maximize "fixes per hour":
