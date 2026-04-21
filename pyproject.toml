@@ -46,6 +46,14 @@ models = [
 scipy = [
     "scipy>=1.11",
 ]
+# Sparse-archive fetch support for scripts/fetch_kitti.py (whale drives
+# where only a handful of frames are needed out of a 10+ GB zip).
+# Installing this extra skips the full-zip download and instead issues
+# HTTP range requests per entry.
+scripts = [
+    "remotezip>=0.12",
+    "gdown>=5.1",
+]
 
 [project.scripts]
 plumbline = "plumbline.cli:app"

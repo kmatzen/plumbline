@@ -49,6 +49,15 @@ from collections import defaultdict
 # margin that has cleared the disk-full failure mode in practice.
 _MIN_FREE_BYTES_PER_DRIVE: int = 1 * 1024 * 1024 * 1024
 
+# Drive zips above this size get extracted via HTTP range requests
+# (remotezip) instead of being downloaded fully. A handful of KITTI
+# drives — notably the long 2011_10_03 residential sequences — exceed
+# 10 GB each, and the Eigen-benchmark only needs 24 frames (~24 MB
+# extracted) per drive, so a sparse-range fetch is dramatically cheaper
+# than downloading + extracting the full zip. Threshold 2 GB catches
+# the whales without hitting every normal 300 MB drive.
+_WHALE_ZIP_THRESHOLD_BYTES: int = 2 * 1024 * 1024 * 1024
+
 S3_BASE = "https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data"
 
 
@@ -130,6 +139,45 @@ def _download_with_aria2(url: str, tmp: pathlib.Path) -> None:
         ],
         check=True,
     )
+
+
+def _head_content_length(url: str) -> int | None:
+    """HEAD the URL and return Content-Length (or None if unavailable)."""
+    req = urllib.request.Request(url, method="HEAD")
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            cl = resp.headers.get("Content-Length")
+            return int(cl) if cl else None
+    except Exception:
+        return None
+
+
+def _extract_via_remotezip(url: str, wanted_names: list[str], out_root: pathlib.Path) -> int:
+    """Stream-extract only the listed zip entries via HTTP range requests.
+
+    Pulls individual files' bytes directly from the remote zip without
+    downloading the whole archive. Requires the ``remotezip`` package
+    and a server that supports HTTP Range (KITTI's S3 mirror does).
+    Returns the number of entries extracted.
+    """
+    try:
+        from remotezip import RemoteZip  # type: ignore[import-not-found]
+    except ImportError as exc:  # pragma: no cover
+        raise ImportError(
+            "remotezip is needed for whale-drive extraction. Install with "
+            "`uv pip install remotezip` or pass smaller drives only."
+        ) from exc
+
+    n = 0
+    with RemoteZip(url) as zf:
+        names_in_zip = {info.filename for info in zf.infolist()}
+        for name in wanted_names:
+            if name not in names_in_zip:
+                print(f"    skipping (not in zip): {name}", file=sys.stderr)
+                continue
+            zf.extract(name, path=out_root)
+            n += 1
+    return n
 
 
 def _download_with_urllib(url: str, tmp: pathlib.Path) -> None:
@@ -266,17 +314,31 @@ def main() -> int:
         wanted_prefixes = tuple(wanted_prefixes)
 
         try:
-            with tempfile.TemporaryDirectory() as td:
-                td_path = pathlib.Path(td)
-                free = shutil.disk_usage(td_path).free
-                if free < _MIN_FREE_BYTES_PER_DRIVE:
-                    raise OSError(
-                        f"only {free/1e9:.2f} GB free at {td_path}; "
-                        f"need >= {_MIN_FREE_BYTES_PER_DRIVE/1e9:.1f} GB per drive"
-                    )
-                zpath = td_path / f"{drive}.zip"
-                download_to(drive_zip_url(drive), zpath)
-                n = extract_selected(zpath, raw_root, wanted_prefixes)
+            zip_url = drive_zip_url(drive)
+            # Route whale drives (>2 GB) through remotezip HTTP range
+            # extraction — downloading the full zip just to throw away 99%
+            # of it is wasteful + doesn't fit on small disks. Normal
+            # drives (~300 MB) use the aria2/urllib download-then-extract
+            # path because that's faster for entries we keep mostly-all-of.
+            size = _head_content_length(zip_url)
+            if size is not None and size > _WHALE_ZIP_THRESHOLD_BYTES:
+                print(
+                    f"  [{drive}] {size/1e9:.1f} GB zip — using remotezip range extraction",
+                    file=sys.stderr,
+                )
+                n = _extract_via_remotezip(zip_url, list(wanted_prefixes), raw_root)
+            else:
+                with tempfile.TemporaryDirectory() as td:
+                    td_path = pathlib.Path(td)
+                    free = shutil.disk_usage(td_path).free
+                    if free < _MIN_FREE_BYTES_PER_DRIVE:
+                        raise OSError(
+                            f"only {free/1e9:.2f} GB free at {td_path}; "
+                            f"need >= {_MIN_FREE_BYTES_PER_DRIVE/1e9:.1f} GB per drive"
+                        )
+                    zpath = td_path / f"{drive}.zip"
+                    download_to(zip_url, zpath)
+                    n = extract_selected(zpath, raw_root, wanted_prefixes)
             print(f"  [{drive}] extracted {n} file(s)", file=sys.stderr)
         except (OSError, subprocess.CalledProcessError) as exc:
             # Record and continue — partial progress is still progress.
