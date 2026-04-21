@@ -23,7 +23,7 @@ paper_reference:
   # Metric3Dv2 paper (Yin et al. 2024, arXiv:2404.15506), Table I, KITTI
   # zero-shot row, ViT-L CSTM_label.
   value: 0.052
-  tolerance_relative: 0.10
+  tolerance_relative: 0.05
   citation: "Yin et al. 2024, Metric3D v2, Table I. KITTI Eigen test, ViT-L CSTM_label ZS."
   source_confidence: verified_pdf
 

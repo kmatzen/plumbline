@@ -26,7 +26,7 @@ paper_reference:
   # KITTI column, GeoWizard (Ours) row: AbsRel = 9.7 → 0.097,
   # δ₁ = 92.1 → 0.921. Values ×100 in the paper.
   value: 0.097
-  tolerance_relative: 0.10
+  tolerance_relative: 0.05
   citation: "Fu et al. 2024, GeoWizard (arXiv:2403.12013), Table 1 (6 zero-shot affine-invariant depth benchmarks), KITTI AbsRel column, 'GeoWizard (Ours)' row."
   source_confidence: verified_pdf
 

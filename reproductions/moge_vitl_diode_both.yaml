@@ -39,7 +39,7 @@ paper_reference:
   # MoGe's eval uses a uint16-encoded depth.png (different transform)
   # + per-sample segmentation.png via their HF dataset
   # `Ruicheng/monocular-geometry-evaluation`. Tracking in v0.2.
-  tolerance_relative: 2.0
+  tolerance_relative: 0.05
   citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), DIODE column (combined val, 771 samples), affine-invariant disparity row, ViT-L."
   source_confidence: verified_pdf
 

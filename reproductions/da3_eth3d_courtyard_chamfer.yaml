@@ -29,7 +29,7 @@ device: cuda:0
 
 paper_reference:
   primary_metric: chamfer
-  tolerance_relative: 1.0
+  tolerance_relative: 0.05
   citation: "DA3 Large-1.1, ETH3D courtyard sweep — informational."
 
 notes: >

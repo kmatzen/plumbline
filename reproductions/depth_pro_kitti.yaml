@@ -30,7 +30,7 @@ device: cuda:0
 paper_reference:
   primary_metric: abs_rel
   # No paper target (Depth Pro paper doesn't evaluate KITTI).
-  tolerance_relative: 1.0
+  tolerance_relative: 0.05
   citation: "No direct paper reference for Depth Pro on KITTI (Bochkovskii et al. 2024 evaluates Booster / ETH3D / Middlebury / NuScenes / Sintel / Sun-RGBD, not KITTI)."
 
 notes: >

@@ -23,7 +23,7 @@ device: cuda:0
 paper_reference:
   primary_metric: abs_rel
   value: 0.0  # PLACEHOLDER
-  tolerance_relative: 1.0
+  tolerance_relative: 0.05
   citation: "Yang et al. 2024, Depth Anything V2 (no native GSO). UNVERIFIED — informational row."
 
 notes: >

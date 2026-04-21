@@ -38,7 +38,7 @@ paper_reference:
   # wire; claiming 0.0313 as the target was a citation error.
   # Audit 2026-04-20 corrected citation from "Table 2" to "Table 3".
   value: 0.0400
-  tolerance_relative: 0.20
+  tolerance_relative: 0.05
   citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), DIODE column, affine-invariant disparity row, ViT-L (combined val 771 samples — this YAML runs indoor-only, see notes)."
   source_confidence: verified_pdf
 
