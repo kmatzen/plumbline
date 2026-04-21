@@ -20,7 +20,27 @@ S3_BASE="s3://plumbline-bench"
 DATA_ROOT="$HOME/data"
 HF_HOME_ROOT="$HOME/.cache/huggingface"
 
-echo "=== plumbline stage_all_data ==="
+# Transfer tool: s5cmd parallelizes far better than `aws s3 sync` (10-30×
+# faster on the 54-GB plumbline-bench total at 3090-rental bandwidth).
+# Install from https://github.com/peak/s5cmd/releases into $HOME/.local/bin,
+# or fall back to `aws s3 sync` if s5cmd isn't available.
+if command -v s5cmd >/dev/null 2>&1; then
+    _s3_sync() {
+        # s5cmd sync needs a trailing '*' on the source for recursive copy.
+        local src="${1%/}/*"
+        local dst="$2"
+        # Exclude manifest files the way `aws s3 sync --exclude` did.
+        s5cmd sync --exclude '*/.plumbline_manifest/*' "$src" "$dst" 2>&1 | tail -3
+    }
+    _xfer_tool="s5cmd"
+else
+    _s3_sync() {
+        aws s3 sync "$1" "$2" --exclude '*/.plumbline_manifest/*' --no-progress 2>&1 | tail -3
+    }
+    _xfer_tool="aws-s3-sync"
+fi
+
+echo "=== plumbline stage_all_data (tool: ${_xfer_tool}) ==="
 echo
 
 # Pre-flight: AWS session creds present?
@@ -44,9 +64,7 @@ echo
 # Sync datasets
 mkdir -p "$DATA_ROOT"
 echo "=== syncing s3://plumbline-bench/datasets/ → $DATA_ROOT/ ==="
-aws s3 sync "$S3_BASE/datasets/" "$DATA_ROOT/" \
-    --exclude '*/.plumbline_manifest/*' \
-    --no-progress 2>&1 | tail -3 || {
+_s3_sync "$S3_BASE/datasets/" "$DATA_ROOT/" || {
     echo "WARN: dataset sync failed; partial cache may still be usable" >&2
 }
 echo "Dataset tree summary:"
@@ -56,8 +74,7 @@ echo
 # Sync HF model weights
 mkdir -p "$HF_HOME_ROOT"
 echo "=== syncing s3://plumbline-bench/hf-cache/ → $HF_HOME_ROOT/ ==="
-aws s3 sync "$S3_BASE/hf-cache/" "$HF_HOME_ROOT/" \
-    --no-progress 2>&1 | tail -3 || {
+_s3_sync "$S3_BASE/hf-cache/" "$HF_HOME_ROOT/" || {
     echo "WARN: hf-cache sync failed; per-model fetches will fall back to HF Hub" >&2
 }
 echo "HF cache summary:"
@@ -70,8 +87,7 @@ echo
 TORCH_HUB_ROOT="$HOME/.cache/torch/hub"
 mkdir -p "$TORCH_HUB_ROOT"
 echo "=== syncing s3://plumbline-bench/torch-hub-cache/hub/ → $TORCH_HUB_ROOT/ ==="
-aws s3 sync "$S3_BASE/torch-hub-cache/hub/" "$TORCH_HUB_ROOT/" \
-    --no-progress 2>&1 | tail -3 || {
+_s3_sync "$S3_BASE/torch-hub-cache/hub/" "$TORCH_HUB_ROOT/" || {
     echo "WARN: torch-hub-cache sync failed; metric3d will re-download on first use" >&2
 }
 echo "torch.hub cache summary:"

@@ -68,6 +68,15 @@ export HF_HUB_DISABLE_XET=1
 # 1e. Disk: need ≥ 80 GB free for full Tier-1 sweep.
 df -BG --output=avail / | tail -1
 # If < 80 GB available, skip phases that need extra data (DTU, ETH3D).
+
+# 1f. s5cmd for fast S3 transfers (10-30× faster than `aws s3 sync` on
+# the 54-GB plumbline-bench cache). Optional but strongly recommended.
+if ! command -v s5cmd >/dev/null; then
+    curl -sSL https://github.com/peak/s5cmd/releases/download/v2.3.0/s5cmd_2.3.0_Linux-64bit.tar.gz \
+        -o /tmp/s5cmd.tgz
+    tar -xzf /tmp/s5cmd.tgz -C /tmp s5cmd
+    mv /tmp/s5cmd $HOME/.local/bin/
+fi
 ```
 
 ---
