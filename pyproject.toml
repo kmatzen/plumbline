@@ -32,8 +32,8 @@ dependencies = [
 
 [project.optional-dependencies]
 torch = [
-    "torch>=2.1",
-    "torchvision>=0.16",
+    "torch==2.6.0",
+    "torchvision==0.21.0",
 ]
 models = [
     "plumbline-bench[torch]",
@@ -62,6 +62,15 @@ plumbline = "plumbline.cli:app"
 Homepage = "https://plumbline-bench.org"
 Repository = "https://github.com/kmatzen/plumbline"
 Issues = "https://github.com/kmatzen/plumbline/issues"
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu124" }
+torchvision = { index = "pytorch-cu124" }
+
+[[tool.uv.index]]
+name = "pytorch-cu124"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
 
 [build-system]
 requires = ["hatchling"]
