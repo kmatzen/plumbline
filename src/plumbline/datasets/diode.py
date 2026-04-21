@@ -73,8 +73,10 @@ from plumbline.datasets.registry import register_dataset
 __all__ = [
     "DIODE_INTRINSIC",
     "DIODEDataset",
+    "DIODEMogeEvalLoader",
     "load_diode_depth_m",
     "load_diode_depth_mask",
+    "load_moge_depth_png",
 ]
 
 # DIODE devkit's demo intrinsic. Per-scan calibration may differ by a
@@ -293,6 +295,197 @@ def load_diode_depth_mask(path: Path) -> NDArray[np.bool_]:
     if arr.ndim != 2:
         raise ValueError(f"expected 2D mask from {path}; got shape {arr.shape}")
     return np.ascontiguousarray(arr.astype(bool))
+
+
+def load_moge_depth_png(path: Path) -> tuple[NDArray[np.float32], NDArray[np.bool_]]:
+    """Decode MoGe's log-encoded 16-bit depth.png into (depth_m, valid_mask).
+
+    MoGe's `Ruicheng/monocular-geometry-evaluation` dataset re-encodes
+    DIODE depth as a 16-bit PNG where pixel values map to log-spaced
+    depth in meters:
+
+        t      = (uint16_val - 1) / 65533
+        depth  = near ** (1 - t) * far ** t
+
+    with two sentinels:
+
+        v = 0      → invalid (NaN)
+        v = 65535  → unbounded / sky (+inf)
+
+    `near` and `far` are stored as PNG text metadata. The valid mask is
+    simply ``np.isfinite(depth)`` — this is what the paper's
+    ``compute_metrics`` uses (see ``moge/test/dataloader.py``
+    ``_process_instance``). Sky pixels and invalid pixels are both
+    excluded from scoring.
+
+    Returns ``(depth_m, valid)`` where ``depth_m`` has NaN/+inf for
+    invalid/sky and ``valid = np.isfinite(depth_m)``.
+    """
+    from PIL import Image
+
+    img = Image.open(path)
+    if img.mode != "I;16":
+        raise ValueError(
+            f"expected 16-bit PNG (mode I;16) from {path}; got mode {img.mode!r}"
+        )
+    near = img.info.get("near")
+    far = img.info.get("far")
+    if near is None or far is None:
+        raise ValueError(
+            f"{path} missing PNG text metadata 'near'/'far' — is this the MoGe "
+            "re-encoded depth.png from Ruicheng/monocular-geometry-evaluation?"
+        )
+    near_f = float(near)
+    far_f = float(far)
+    v = np.asarray(img, dtype=np.int32)  # int32 to avoid uint16 wraparound in math
+    # t in [0, 1]; the 0 and 65535 sentinels are handled AFTER decoding
+    # so we don't divide by 0 here.
+    t = (v - 1).astype(np.float64) / 65533.0
+    depth = (near_f ** (1.0 - t)) * (far_f ** t)
+    depth = depth.astype(np.float32)
+    depth[v == 0] = np.float32("nan")
+    depth[v == 65535] = np.float32("inf")
+    valid = np.isfinite(depth)
+    return depth, valid
+
+
+@register_dataset("diode-moge-eval")
+class DIODEMogeEvalLoader(Dataset):
+    """DIODE loader matching MoGe's evaluation pipeline.
+
+    Reads from the preprocessed HF bundle
+    ``Ruicheng/monocular-geometry-evaluation``'s ``DIODE.zip`` — NOT the
+    raw DIODE devkit. The bundle re-encodes depth as log-spaced 16-bit
+    PNG where sky pixels become ``+inf`` and invalid pixels become
+    ``NaN``; the evaluation mask is simply ``isfinite(depth)`` with no
+    additional clip. See ``load_moge_depth_png`` docstring for format
+    details.
+
+    Expected layout (pointed at by ``--data-root`` or
+    ``$DIODE_MOGE_ROOT``)::
+
+        <root>/DIODE/
+          .index.txt                           # 770 sample paths, line-wise
+          val/indoors/scene_*/scan_*/<id>/
+              image.jpg, depth.png,
+              segmentation.png, meta.json
+          val/outdoor/scene_*/scan_*/<id>/...
+
+    Stage via::
+
+        hf download Ruicheng/monocular-geometry-evaluation \\
+            DIODE.zip --repo-type dataset --local-dir /tmp/moge_dl
+        unzip /tmp/moge_dl/DIODE.zip -d $DIODE_MOGE_ROOT
+
+    Parameters
+    ----------
+    root
+        Points at a directory containing the unzipped ``DIODE/`` tree.
+        Falls back to ``$DIODE_MOGE_ROOT``.
+    domain
+        ``"indoors"``, ``"outdoor"``, or ``"both"``. ``"both"``
+        preserves the ``.index.txt`` order (770 lines).
+    """
+
+    split: str = "val"
+
+    def __init__(
+        self,
+        *,
+        root: Path | str | None = None,
+        domain: str = "both",
+    ) -> None:
+        root_path = Path(root) if root else env_path("DIODE_MOGE_ROOT")
+        if root_path is None or not (root_path / "DIODE").exists():
+            raise DatasetNotAvailable(
+                "DIODE MoGe-eval bundle not found. Set --data-root or "
+                "$DIODE_MOGE_ROOT to a directory containing DIODE/.index.txt "
+                "plus the unzipped DIODE/val/{indoors,outdoor}/... tree. "
+                "Stage via: hf download Ruicheng/monocular-geometry-evaluation "
+                "DIODE.zip --repo-type dataset --local-dir <tmp> && "
+                "unzip <tmp>/DIODE.zip -d $DIODE_MOGE_ROOT"
+            )
+        if domain not in ("indoors", "outdoor", "both", "indoor", "outdoors"):
+            raise ValueError(
+                f"domain must be 'indoors' | 'outdoor' | 'both'; got {domain!r}"
+            )
+        # Normalize alias forms to the on-disk names.
+        domain = {"indoor": "indoors", "outdoors": "outdoor"}.get(domain, domain)
+
+        self.root = root_path
+        self.domain = domain
+
+        index_path = root_path / "DIODE" / ".index.txt"
+        lines = [
+            ln.strip()
+            for ln in index_path.read_text().splitlines()
+            if ln.strip() and not ln.startswith("#")
+        ]
+        if domain != "both":
+            needle = f"val/{domain}/"
+            lines = [ln for ln in lines if ln.startswith(needle)]
+        self._records: list[dict[str, Any]] = [
+            {"sample_path": ln, "sample_id": ln.replace("/", "_")} for ln in lines
+        ]
+
+    # -- iteration -------------------------------------------------------
+
+    def __iter__(self) -> Iterator[Sample]:
+        for rec in self._records:
+            yield self._load_sample(rec)
+
+    def __len__(self) -> int:
+        return len(self._records)
+
+    # -- per-sample ------------------------------------------------------
+
+    def _load_sample(self, rec: dict[str, Any]) -> Sample:
+        sample_root = self.root / "DIODE" / rec["sample_path"]
+        image = read_rgb_uint8(sample_root / "image.jpg")
+        images = image[None]
+        assert_valid_image(images, name=f"diode_moge/{rec['sample_id']}/image")
+
+        depth, valid = load_moge_depth_png(sample_root / "depth.png")
+        # Depth array may contain NaN / +inf for invalid/sky pixels. Our
+        # assert_valid_depth requires finite values, so replace the
+        # sentinels with a dummy (1.0 m) — they will be excluded from the
+        # metric anyway via `depth_valid`.
+        depth_clean = np.where(valid, depth, np.float32(1.0))
+        depth_gt = depth_clean[None]
+        depth_valid = valid[None]
+
+        # meta.json has normalized intrinsics (K_norm with cx=0.5, cy=0.5
+        # as fractions of the image size). Denormalize to pixel units.
+        import json
+        meta = json.loads((sample_root / "meta.json").read_text())
+        K_norm = np.asarray(meta["intrinsics"], dtype=np.float32)
+        h, w, _ = image.shape
+        K_pix = K_norm.copy()
+        K_pix[0, :] *= w  # fx, 0, cx rows scaled by image width
+        K_pix[1, :] *= h  # 0, fy, cy rows scaled by image height
+        K_stack = K_pix[None]
+        E_eye = np.eye(4, dtype=np.float32)[None]
+
+        assert_valid_intrinsics(K_stack, name=f"diode_moge/{rec['sample_id']}/intrinsics")
+        assert_valid_extrinsics(E_eye, name=f"diode_moge/{rec['sample_id']}/extrinsics")
+        assert_valid_depth(depth_gt, name=f"diode_moge/{rec['sample_id']}/depth")
+
+        # Parse domain from the sample path.
+        domain = "indoors" if "/indoors/" in rec["sample_path"] else "outdoor"
+        return Sample(
+            sample_id=rec["sample_id"],
+            images=images,
+            intrinsics=K_stack,
+            extrinsics_gt=E_eye,
+            depth_gt=depth_gt,
+            depth_valid=depth_valid,
+            metadata={
+                "domain": domain,
+                "split": self.split,
+                "source": "moge_hf_bundle",
+                "sample_path": rec["sample_path"],
+            },
+        )
 
 
 # ---------------------------------------------------------------------------
