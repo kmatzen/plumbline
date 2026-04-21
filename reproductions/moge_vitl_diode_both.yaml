@@ -1,11 +1,15 @@
 # MoGe-1 (ViT-L) on DIODE val — combined indoor + outdoor
 #
-# The direct paper-match slice: 220 indoor + 392 outdoor = 612 samples
-# per the DIODE-devkit diode_meta.json (authoritative enumeration of
-# val/indoors + val/outdoor). MoGe Table 3 DIODE cell: AbsRel 0.0400
-# under affine-invariant disparity alignment. Sister config to
-# moge-vitl-diode-indoor (which runs the 220-sample indoor-only slice
-# and landed 0.0465 under ROE against the devkit enumeration).
+# Targets MoGe Table 3 DIODE cell (AbsRel 0.0400, affine-invariant
+# disparity row). Now reads from the HF bundle `Ruicheng/
+# monocular-geometry-evaluation` via `DIODEMogeEvalLoader` — which
+# matches MoGe's own eval preprocessing (log-encoded 16-bit depth.png
+# with sky as +inf, isfinite-based mask, no spurious depth clip).
+#
+# Alignment is plain scale+shift LSQ in disparity space to match
+# MoGe's `align_affine_lstsq` (no Huber, no MAD — plumbline's
+# scale_shift_robust is strictly stronger than paper's solver and
+# would overfit the number).
 
 name: moge-vitl-diode-both
 protocol: diode_moge
@@ -16,57 +20,41 @@ model:
     variant: vitl
 
 dataset:
-  name: diode
+  name: diode-moge-eval
   kwargs:
     domain: both
 
-sample_ids_file: diode_val_both.samples.txt
-
-scale_alignment: scale_shift_robust
+scale_alignment: scale_shift
 device: cuda:0
 
 paper_reference:
   primary_metric: abs_rel
-  # MoGe paper (Wang et al. 2024, arXiv:2410.19115), Table 3 "Depth
-  # Map Estimation" (NOT Table 2 — that's point-map). DIODE column,
-  # "affine-invariant disparity" row (matches plumbline's
-  # scale_shift_robust alignment which fits in inverse-depth space):
-  #     Reld = 4.00 → AbsRel 0.0400, δ₁ = 97.3
-  # Audit 2026-04-20 corrected citation from "Table 2" to "Table 3".
+  # MoGe paper (Wang et al. 2024, arXiv:2410.19115), Table 3
+  # (Depth Map Estimation), DIODE column, affine-invariant disparity
+  # row, ViT-L: Reld = 4.00 → AbsRel 0.0400, δ₁ = 97.3. The paper's
+  # eval is on the HF bundle (771 samples, combined val) with MoGe's
+  # plain-LSQ align_affine_lstsq solver in disparity space — which
+  # this YAML now mirrors.
   value: 0.0400
-  # Loose tolerance until MoGe's depth preprocessing is reverse-
-  # engineered. Raw DIODE .npy depth + our boundary mask gets 0.1088;
-  # MoGe's eval uses a uint16-encoded depth.png (different transform)
-  # + per-sample segmentation.png via their HF dataset
-  # `Ruicheng/monocular-geometry-evaluation`. Tracking in v0.2.
   tolerance_relative: 0.05
-  citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), DIODE column (combined val, 771 samples), affine-invariant disparity row, ViT-L."
+  citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), DIODE column (HF bundle 771 samples), affine-invariant disparity row, ViT-L."
   source_confidence: verified_pdf
 
 notes: >
-  RTX 3090 Ti, 2026-04-19, ~771-sample val split (earlier plumbline
-  scan; devkit enumeration is 612 — see diode_val_both.samples.txt
-  header for the discrepancy), ROE alignment:
-      AbsRel   0.1993
-      delta_1  0.8544
-      RMSE    ~28 m  (DIODE outdoor has 300+ m returns)
+  Historical runs (plumbline pre-2026-04-21, ROE alignment against the
+  raw DIODE devkit .npy depth with [1e-3, 50] m clip): AbsRel 0.1993
+  on combined val. 188 % over paper. Root-caused to three simultaneous
+  issues in the old DIODE loader:
+      1. Raw .npy keeps sky as finite large values (>300 m); HF bundle
+         recodes sky to +inf so `isfinite` is a clean sky mask.
+      2. Plumbline's [1e-3, 50] m clip truncated legitimate outdoor
+         returns, blowing up AbsRel. MoGe applies no such clip.
+      3. Devkit enumeration is 612 samples; HF bundle is 771. Different
+         populations — paper is on the 771.
 
-  Indoor-only was 0.0465 under ROE; combined landed 4.3x worse.
-  Outdoor — NOT indoor — is the hard slice for MoGe on DIODE. Paper
-  Table 3 reports 0.0313 on combined val; we're 6.4x over. The
-  remaining gap is almost certainly protocol-level on the outdoor
-  samples:
-    - Depth cap: our depth_clip [1e-3, 50] is probably wrong; DIODE
-      outdoor GT ranges to 300 m. Paper may clip to 80 m (KITTI
-      convention) or even 30 m (a NYU-style cap that would trim
-      the hardest outdoor samples).
-    - Sky masking: many outdoor pixels are sky (GT is 300 m / invalid);
-      paper probably masks them. plumbline's current DIODE loader
-      uses the bundled depth_mask which should reject invalid sky
-      but may keep very far true returns that trip up scale_shift.
-
-  Indoor-only (moge-vitl-diode-indoor) is the closer-to-paper number
-  at 0.0465 under ROE; treat that as the primary DIODE reproduction
-  until the outdoor protocol is nailed down.
+  Staging the HF bundle:
+      hf download Ruicheng/monocular-geometry-evaluation \
+          DIODE.zip --repo-type dataset --local-dir <tmp>
+      unzip <tmp>/DIODE.zip -d $DIODE_MOGE_ROOT
 
   Needs `pip install 'git+https://github.com/microsoft/MoGe.git'`.

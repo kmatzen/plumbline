@@ -34,11 +34,14 @@ reference:
 
 fixed:
   dataset:
-    name: diode
+    name: diode-moge-eval
     split: val
-  depth_clip: [0.001, 50.0]
-  mask_boundaries: true
-  boundary_thickness: 1
-  boundary_tol: 0.1
+  # MoGe's eval applies NO depth_clip. Its mask is simply
+  # np.isfinite(depth) on the log-encoded PNG where sky is baked in as
+  # +inf and invalid pixels as NaN. Boundary artifacts are pre-filtered
+  # at HF-bundle creation time (README: "Boundary artifacts filtered"),
+  # so mask_boundaries=false here.
+  depth_clip: null
+  mask_boundaries: false
   max_views: 1
   tasks: [mono_depth]
