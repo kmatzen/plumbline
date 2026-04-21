@@ -8,33 +8,99 @@ This document is the spec. Work through it section by section. Ask before
 deviating from the architecture; feel free to deviate on implementation
 details within each section.
 
-> **Status banner (2026-04-19, after GPU session)** —
+> **Status banner (2026-04-21, after multi-day laptop-prep session)** —
 >
-> v0.1 gate `reproduce vggt-paper-dtu-mvs` retargeted from the
-> defunct ScanNet placeholder; DTU GT download running in
-> background (SampleSet.zip, 6.9 GB at ~680 KB/s). Spent a GPU
-> session (RTX 3090 Ti) pinning real numbers across 6 model
-> adapters and 5 datasets.
+> The GPU rental session is fully staged. Every laptop-doable piece
+> of the "flesh out the catalog + pre-fetch everything" work has
+> landed; the remaining gate is booking the rental box.
 >
-> | Family | Paper-match rows |
-> |---|---|
-> | NYU mono-depth | **7** (DA-V2 S/B/L + Metric-Indoor-L, Metric3Dv2 L/Giant2, DA3) |
-> | DIODE mono-depth | **2** (DA-V2-small indoor, MoGe-1-ROE indoor) |
-> | MoGe NYU (ROE) | **1** (MoGe-1 0.0305 vs paper 0.0297) |
-> | ETH3D / DTU chamfer | **0** (infrastructure works but ~100× off paper — protocol gap) |
-> | KITTI depth | **0** (data partial, downloading) |
-> | Sintel / ScanNet | **deprioritized 2026-04-19** — auth-gated, substitute with GSO / iBims-1 for synthetic + Co3Dv2 / 7Scenes for pose |
-> | VGGT/MASt3R/DA3 paper pose tables | **0** (Co3Dv2 / 7Scenes loaders on Tier-2 queue; ScanNet-1500 loader wired but data blocked) |
+> **What's ready to run on the rental box:**
 >
-> Major session wins: ROE alignment (`scale_shift_robust`) closed
-> MoGe NYU to paper; ICP alignment mode + chamfer outlier-mask +
-> depth→point-map back-projection all shipped as infrastructure;
-> 16 GPU reproductions pinned with zero regressions on the 7-row
-> NYU matrix. Major session find: an earlier celebration of a
-> "500× ETH3D F-score improvement" was a unit misread (f_score
-> returns percent, not fraction); the real improvement was 5.6×.
-> See [REPRODUCTIONS.md](./REPRODUCTIONS.md) for the live status;
-> see § 10 below for the revised v0.2 roadmap.
+> - **21 verified-PDF paper-match reproductions** in the validation
+>   queue (`scripts/list_validation_targets.py`), covering DA-V2 S/B/L
+>   on NYU+KITTI, Metric3D-v2 L+Giant on NYU+KITTI, MoGe-1 on NYU+
+>   KITTI+DIODE (indoor+both), Marigold v1-1 on NYU+KITTI, DA3 on NYU,
+>   GeoWizard on NYU+KITTI, VGGT Table 2 DTU (the v0.1 gate), VGGT
+>   Table 3 ETH3D 3-scene.
+> - **Two informational multi-view smoke YAMLs** for π³ on DTU +
+>   ETH3D (unpinned — first-run observation becomes the basis for
+>   later paper-cell pinning once Pi3's unit convention is confirmed).
+> - **S3 cache** at `s3://plumbline-bench/` (us-west-2) with
+>   7,287 objects / 54 GB total: datasets (12 GB: NYUv2, KITTI
+>   Eigen-652 pruned, DTU 22-scan test + GT Points, ETH3D 3-scene,
+>   iBims-1, GSO), hf-cache (35 GB: 7 model repos with `-hf` suffixes
+>   where the adapter expects them), torch-hub-cache (7.4 GB: all
+>   3 Metric3D-v2 ViT variants + the YvanYin repo tree). Agent
+>   pulls everything with `scripts/stage_all_data.sh`.
+> - **Protocol presets** (`protocols/*.yaml`) encode every published
+>   protocol this harness touches (NYU Eigen-2014, KITTI Eigen-Garg,
+>   DIODE MoGe, ETH3D VGGT Table 3, DTU VGGT Table 2, GSO MoGe).
+>   Reproductions declare `protocol: <name>` and inherit the fixed
+>   fields; the runner raises `ProtocolConflictError` on drift.
+> - **Trust hardening from the 2026-04-20 audit
+>   (`reproductions/AUDIT.md`)**: every pinned `paper_reference.value`
+>   tagged `source_confidence: verified_pdf` only if the cell was
+>   confirmed against the arXiv PDF. Four fabricated/wrong-row claims
+>   were downgraded to `value: null` (depth_pro_nyuv2,
+>   depth_anything_v2_sintel, moge2_vitl_kitti, da_v2_small_diode_indoor);
+>   five wrong-table citations were corrected; one wrong-value
+>   (moge_vitl_kitti 0.0405 → 0.0408) was corrected. The
+>   `REPRODUCTIONS.md` status matrix now counts only verified_pdf
+>   cells as ✅.
+> - **Autonomous-agent runbook** at `docs/AGENT_GPU_RUNBOOK.md` with
+>   a hard-constraints list (never modify YAMLs, never commit, never
+>   invent numbers, never delete the S3 cache). The agent's
+>   validation loop pushes JSON per reproduction + a markdown report
+>   to `s3://plumbline-bench/runs/<ts>/`.
+>
+> **Known gates before the GPU session:**
+>
+> 1. Three adapters require a clone (no PyPI): GeoWizard at
+>    `$GEOWIZARD_ROOT`, π³ at `$PI3_ROOT`, MASt3R at `$MAST3R_ROOT`.
+>    The agent runbook documents all three in § "Per-adapter
+>    first-run notes" via the human `GPU_RUNBOOK.md`.
+> 2. Metric3D-v2 needs `mmengine` + `mmcv-lite` in the venv (see
+>    `GPU_RUNBOOK.md § Metric3Dv2`) — torch.hub weights are cached
+>    but the code deps aren't on PyPI's `models` extra.
+> 3. HF auth is optional but recommended (`HF_TOKEN` env var +
+>    `hf auth login`) — anonymous downloads work but rate-limit.
+>    The agent's pre-flight picks this up.
+>
+> **Out-of-scope for this session (v0.2+ items deferred):**
+>
+> - Paper-row pinning for Pi3 multi-view chamfer (Pi3's Table 3
+>   DTU/ETH3D metrics differ ~4× from VGGT's — units/normalization
+>   need first-run observation).
+> - Depth Pro paper rows: paper evaluates Booster/ETH3D/Middlebury/
+>   NuScenes/Sintel/Sun-RGBD only — NYU/KITTI Depth Pro YAMLs are
+>   informational. Would require a new dataset loader.
+> - 7-Scenes / Co3Dv2 pose benchmarks: loaders wired, data not
+>   staged (7-Scenes 12 GB, Co3Dv2 needs a pinned sequence subset
+>   first).
+> - MoGe-2 variants, MASt3R, Pi3 HF weights: none cached to S3
+>   (all informational-only reproductions currently).
+>
+> See [`REPRODUCTIONS.md`](./REPRODUCTIONS.md) for the per-YAML
+> status matrix and [`docs/AGENT_GPU_RUNBOOK.md`](./docs/AGENT_GPU_RUNBOOK.md)
+> for the autonomous-agent playbook. § 10 below has the revised
+> v0.2 roadmap.
+>
+> ----
+>
+> **Historical note — earlier 2026-04-19 session (first real GPU
+> validation)**: spent an RTX 3090 Ti session pinning real numbers
+> across 6 model adapters × 5 datasets. Landed 7 NYU paper-matches
+> (DA-V2 S/B/L + Metric-Indoor-L, Metric3Dv2 L/Giant2, DA3),
+> 2 DIODE indoor effective-matches (DA-V2-small, MoGe-1 ROE), the
+> MoGe NYU row under ROE alignment (0.0305 vs paper 0.0297), and
+> first KITTI paper-match (DA-V2-small 0.077 vs 0.078). Major session
+> wins: `scale_shift_robust` (ROE) alignment closed MoGe NYU to paper;
+> ICP alignment mode + chamfer outlier-mask + depth→point-map
+> back-projection all shipped as infrastructure. Major session find:
+> an earlier celebration of a "500× ETH3D F-score improvement" was a
+> unit misread (f_score returns percent, not fraction); the real
+> improvement was 5.6×. See `git log origin/main -- REPRODUCTIONS.md`
+> for the exact commits from that run.
 
 ---
 
