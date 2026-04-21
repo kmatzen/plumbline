@@ -34,7 +34,7 @@ paper_reference:
   # affine-invariant depth / affine-invariant disparity); plumbline's
   # scale_shift_robust matches the "affine-invariant disparity" column.
   value: 0.0  # PLACEHOLDER — do not gate on this
-  tolerance_relative: 1.0  # 100% — effectively informational-only
+  tolerance_relative: 0.05
   citation: "Wang et al. 2024, MoGe, Table 2/3 GSO column (exact row TBD). UNVERIFIED."
 
 notes: >

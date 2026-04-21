@@ -41,7 +41,7 @@ device: cuda:0
 paper_reference:
   primary_metric: overall
   value: 0.709
-  tolerance_relative: 1.0  # subset of scenes; paper value is full split
+  tolerance_relative: 0.05  # subset of scenes; paper value is full split
   citation: "Wang et al. 2025, VGGT, Table 3 (ETH3D) — Overall = (Acc + Comp)/2, full cross-scene average."
   source_confidence: verified_pdf
 

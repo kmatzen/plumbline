@@ -33,7 +33,7 @@ paper_reference:
   # No directly-published number for the *VKITTI-finetuned* ViT-L on
   # KITTI; the paper's KITTI 0.049 is for a *KITTI-finetuned* ViT-L
   # (Table 4b). Keeping tolerance permissive until the first run.
-  tolerance_relative: 1.0
+  tolerance_relative: 0.05
   citation: "No direct paper reference for VKITTI-finetuned ViT-L on KITTI (DA-V2 Table 4b targets the KITTI-finetuned variant)."
 
 notes: >

@@ -31,7 +31,7 @@ paper_reference:
   # affine-depth-space) column. Keeping 0.0420 as the verified target.
   # Audit 2026-04-20 corrected the citation from "Table 2" to "Table 3".
   value: 0.0420
-  tolerance_relative: 0.10
+  tolerance_relative: 0.05
   citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), NYU column, affine-invariant disparity row, DA-V2 ViT-L baseline."
   source_confidence: verified_pdf
 

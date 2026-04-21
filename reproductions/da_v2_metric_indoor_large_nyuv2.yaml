@@ -34,7 +34,7 @@ paper_reference:
   # reports AbsRel cleanly; tolerance is permissive because there's no
   # reference to compare against.
   primary_metric: abs_rel
-  tolerance_relative: 1.0
+  tolerance_relative: 0.05
   citation: "No direct paper reference for Hypersim-finetuned ViT-L on NYUv2."
 
 notes: >

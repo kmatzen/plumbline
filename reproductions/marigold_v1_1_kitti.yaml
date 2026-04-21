@@ -31,7 +31,7 @@ paper_reference:
   # DEPTH [0, 1] that the paper inverts; scale_shift_depth matches the
   # public implementation's eval.py.
   value: 0.099
-  tolerance_relative: 0.15
+  tolerance_relative: 0.05
   citation: "Ke et al. 2024, Marigold, Table 1. KITTI Eigen test, w/ 10-ensemble."
   source_confidence: verified_pdf
 

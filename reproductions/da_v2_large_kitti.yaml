@@ -26,7 +26,7 @@ paper_reference:
   # DA-V2 paper (Yang et al. 2024, arXiv:2406.09414), Table 2 "Zero-shot
   # relative depth estimation", KITTI column, ViT-L row.
   value: 0.074
-  tolerance_relative: 0.10
+  tolerance_relative: 0.05
   citation: "Yang et al. 2024, Depth Anything V2, Table 2 (zero-shot relative depth). KITTI, ViT-L."
   source_confidence: verified_pdf
 

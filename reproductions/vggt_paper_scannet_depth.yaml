@@ -55,7 +55,7 @@ paper_reference:
   primary_metric: abs_rel
   # No paper value to pin; VGGT's paper doesn't evaluate on ScanNet depth.
   # Tolerance permissive so any observed number is treated as informational.
-  tolerance_relative: 1.0
+  tolerance_relative: 0.05
   citation: "No direct VGGT paper target — see header note. Community eval only."
 
 notes: >

@@ -28,7 +28,7 @@ paper_reference:
   # under scale_shift_robust; indistinguishable from MoGe-1's 0.0305
   # because under disparity-space alignment the metric vs affine-
   # invariant distinction is absorbed.
-  tolerance_relative: 1.0
+  tolerance_relative: 0.05
   citation: "UNVERIFIED — needs direct paper read for MoGe-2 NYU affine-invariant disparity row."
 
 notes: >

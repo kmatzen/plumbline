@@ -28,7 +28,7 @@ device: cuda:0
 paper_reference:
   primary_metric: abs_rel
   # No direct paper value; informational metric-eval of MoGe-2 on NYU.
-  tolerance_relative: 1.0
+  tolerance_relative: 0.05
   citation: "Informational metric eval; MoGe-2 paper targets are under affine-invariant alignment."
 
 notes: >
