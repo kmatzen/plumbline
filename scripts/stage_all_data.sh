@@ -64,6 +64,20 @@ echo "HF cache summary:"
 du -sh "$HF_HOME_ROOT"/* 2>/dev/null | head -10 || true
 echo
 
+# Sync torch.hub cache (Metric3D-v2 uses torch.hub.load_state_dict_from_url,
+# which caches to ~/.cache/torch/hub/checkpoints/ and the repo tree to
+# ~/.cache/torch/hub/<org>_<repo>_<branch>/ — bypasses HF cache entirely).
+TORCH_HUB_ROOT="$HOME/.cache/torch/hub"
+mkdir -p "$TORCH_HUB_ROOT"
+echo "=== syncing s3://plumbline-bench/torch-hub-cache/hub/ → $TORCH_HUB_ROOT/ ==="
+aws s3 sync "$S3_BASE/torch-hub-cache/hub/" "$TORCH_HUB_ROOT/" \
+    --no-progress 2>&1 | tail -3 || {
+    echo "WARN: torch-hub-cache sync failed; metric3d will re-download on first use" >&2
+}
+echo "torch.hub cache summary:"
+du -sh "$TORCH_HUB_ROOT"/* 2>/dev/null | head -10 || true
+echo
+
 # Persist env vars
 ENV_FILE="$HOME/.bashrc-plumbline"
 cat > "$ENV_FILE" <<EOF
