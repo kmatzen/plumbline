@@ -1,7 +1,7 @@
 """Depth Anything V2 adapter.
 
 Upstream: https://github.com/DepthAnything/Depth-Anything-V2
-Paper: "Depth Anything V2" (Yang et al. 2024).
+Paper: "Depth Anything V2" (Yang et al. 2024, arXiv:2406.09414).
 
 Depth Anything V2 ships as two model families with the same DPT backbone:
 
@@ -12,19 +12,32 @@ Depth Anything V2 ships as two model families with the same DPT backbone:
   (outdoor) with metric supervision, and predict depth in meters directly.
   No alignment at eval time. ``alignment_hint="none"``.
 
-We use the HuggingFace Transformers integration
-(``DepthAnythingForDepthEstimation``) because it's the closest thing to a
-stable, pip-installable, non-CLI surface. HF post-processing
-(``post_process_depth_estimation``) resizes ``predicted_depth`` to the
-target size but does *not* change its units — so the adapter must branch
-on the variant to decide whether to invert (relative) or pass through
-(metric).
+Two ways to load weights, selected via the ``source`` kwarg:
+
+- ``source="paper"`` (default for relative variants): load the paper's
+  original ``.pth`` checkpoint from the ``depth-anything/Depth-Anything-V2-*``
+  HF repo (NOT the ``*-hf`` one) and construct the model via the paper's
+  own ``depth_anything_v2.dpt.DepthAnythingV2`` class cloned into
+  ``$DAV2_ROOT`` (default ``/workspace/deps/depth-anything-v2``). This is
+  what the paper tables were computed on, so it's the right path for
+  reproducibility against Table 2.
+- ``source="hf"``: load via HF transformers ``AutoModelForDepthEstimation``
+  from the ``*-hf`` re-exports. Handy for quick smoke tests and required
+  for all metric variants (the paper only released `.pth` for the three
+  relative ones). Metric variants force this path.
+
+Earlier plumbline versions only supported the HF path; the paper's own
+checkpoints produce a small (~0.002 AbsRel) but systematic shift relative
+to the HF re-exports on NYU, enough to tip the Base variant outside the
+5 % paper-match gate. See ``docs/AGENT_RUN_20260421.md § da-v2-base-nyuv2``.
 """
 
 from __future__ import annotations
 
 import hashlib
 import math
+import os
+import sys
 from typing import Any
 
 import numpy as np
@@ -37,6 +50,16 @@ from plumbline.models.registry import register_model
 
 __all__ = ["DepthAnythingV2Adapter"]
 
+# HF repos that ship the paper's original `.pth` alongside a README. The
+# filename is always `depth_anything_v2_{encoder}.pth`.
+_PAPER_REPOS = {
+    "small": ("depth-anything/Depth-Anything-V2-Small", "depth_anything_v2_vits.pth"),
+    "base":  ("depth-anything/Depth-Anything-V2-Base",  "depth_anything_v2_vitb.pth"),
+    "large": ("depth-anything/Depth-Anything-V2-Large", "depth_anything_v2_vitl.pth"),
+}
+
+# HF transformers-format re-exports. Small / Base / Large and all metric
+# variants live here.
 _HF_CHECKPOINTS = {
     # Relative (zero-shot) disparity models.
     "small": "depth-anything/Depth-Anything-V2-Small-hf",
@@ -52,10 +75,28 @@ _HF_CHECKPOINTS = {
     "metric-outdoor-large": "depth-anything/Depth-Anything-V2-Metric-Outdoor-Large-hf",
 }
 
+# Per-variant DPT head config (from the paper repo's run.py).
+_MODEL_CONFIGS = {
+    "small": {"encoder": "vits", "features": 64,  "out_channels": [48, 96, 192, 384]},
+    "base":  {"encoder": "vitb", "features": 128, "out_channels": [96, 192, 384, 768]},
+    "large": {"encoder": "vitl", "features": 256, "out_channels": [256, 512, 1024, 1024]},
+}
+
 
 def _is_metric_variant(variant: str) -> bool:
     """True if the DA-V2 variant outputs depth in meters directly."""
     return variant.startswith("metric-")
+
+
+def _ensure_dav2_on_path() -> None:
+    """Add ``$DAV2_ROOT`` to ``sys.path`` so `depth_anything_v2.dpt` imports.
+
+    Default: ``/workspace/deps/depth-anything-v2``. Clone via
+    ``git clone https://github.com/DepthAnything/Depth-Anything-V2 <root>``.
+    """
+    root = os.environ.get("DAV2_ROOT", "/workspace/deps/depth-anything-v2")
+    if os.path.isdir(root) and root not in sys.path:
+        sys.path.insert(0, root)
 
 
 @register_model("depth-anything-v2")
@@ -67,11 +108,20 @@ class DepthAnythingV2Adapter(Model):
     device
         torch device string, e.g. ``"cuda:0"`` or ``"cpu"``.
     variant
-        One of ``"small"``, ``"base"``, ``"large"``. Default: ``"large"`` matches
-        the paper table.
+        One of ``"small"``, ``"base"``, ``"large"`` for relative; or
+        ``"metric-{indoor,outdoor}-{small,base,large}"`` for metric.
+        Default: ``"large"`` matches the paper Table 2 anchor.
     input_size
-        Transformer patch size multiple; 518 is the DA2 default. Higher
-        resolutions improve fine detail at quadratic cost.
+        Square input the network consumes; 518 is the DA-V2 default. Must
+        be a multiple of 14 (ViT patch size).
+    source
+        ``"paper"`` → load from the paper's original ``.pth`` checkpoints
+        via ``depth-anything/Depth-Anything-V2-{S,B,L}`` (requires
+        ``$DAV2_ROOT`` pointing at the github clone). ``"hf"`` → load via
+        HF transformers ``AutoModelForDepthEstimation`` from the ``-hf``
+        re-exports. Metric variants always use ``"hf"`` — the paper
+        checkpoints don't cover them. Default: ``"paper"`` for relative,
+        forced to ``"hf"`` for metric.
     """
 
     version = "2.0"
@@ -90,20 +140,64 @@ class DepthAnythingV2Adapter(Model):
         device: str = "cuda:0",
         variant: str = "large",
         input_size: int = 518,
+        source: str = "paper",
     ) -> None:
         if variant not in _HF_CHECKPOINTS:
             raise ValueError(f"variant must be one of {list(_HF_CHECKPOINTS)}; got {variant!r}")
+        if input_size % 14 != 0 or input_size < 14:
+            raise ValueError(f"input_size must be a positive multiple of 14; got {input_size}")
+        if source not in ("paper", "hf"):
+            raise ValueError(f"source must be 'paper' or 'hf'; got {source!r}")
+        # Metric variants only have HF checkpoints.
+        if _is_metric_variant(variant):
+            source = "hf"
         self.device = device
         self.variant = variant
         self.input_size = int(input_size)
+        self.source = source
         self._model: Any = None
-        self._processor: Any = None
+        self._processor: Any = None  # only for source="hf"
 
     # -- lazy load -------------------------------------------------------
 
     def _load(self) -> None:
         if self._model is not None:
             return
+        if self.source == "paper":
+            self._load_paper()
+        else:
+            self._load_hf()
+
+    def _load_paper(self) -> None:
+        """Instantiate the paper's DPT and load its ``.pth`` state_dict."""
+        torch = ensure_torch()
+        _ensure_dav2_on_path()
+        try:
+            from depth_anything_v2.dpt import DepthAnythingV2
+        except ImportError as exc:
+            raise ImportError(
+                "DepthAnythingV2Adapter(source='paper') needs the paper's "
+                "repo. Clone https://github.com/DepthAnything/Depth-Anything-V2 "
+                "and point $DAV2_ROOT at it (default "
+                "/workspace/deps/depth-anything-v2)."
+            ) from exc
+        try:
+            from huggingface_hub import hf_hub_download
+        except ImportError as exc:  # pragma: no cover
+            raise ImportError(
+                "DepthAnythingV2Adapter(source='paper') needs huggingface_hub. "
+                "Install with `uv pip install -e '.[models]'`."
+            ) from exc
+
+        repo_id, filename = _PAPER_REPOS[self.variant]
+        ckpt_path = hf_hub_download(repo_id, filename=filename)
+        model = DepthAnythingV2(**_MODEL_CONFIGS[self.variant])
+        model.load_state_dict(torch.load(ckpt_path, map_location="cpu"))
+        model.to(self.device).eval()
+        self._model = model
+
+    def _load_hf(self) -> None:
+        """Load via HF transformers for the `-hf` re-exports + metric variants."""
         torch = ensure_torch()
         try:
             from transformers import (
@@ -116,10 +210,9 @@ class DepthAnythingV2Adapter(Model):
                 "`uv pip install -e '.[models]'`."
             ) from exc
         checkpoint = _HF_CHECKPOINTS[self.variant]
-        # transformers' auto classes are not fully typed; ignore untyped-call.
         self._processor = AutoImageProcessor.from_pretrained(checkpoint)  # type: ignore[no-untyped-call]
         self._model = AutoModelForDepthEstimation.from_pretrained(checkpoint).to(self.device).eval()
-        _ = torch  # used lazily in predict()
+        _ = torch
 
     # -- predict ---------------------------------------------------------
 
@@ -130,39 +223,60 @@ class DepthAnythingV2Adapter(Model):
     ) -> Prediction:
         assert_valid_image(images, name="da-v2/input")
         self._load()
-        torch = ensure_torch()
+        if self.source == "paper":
+            return self._predict_paper(images)
+        return self._predict_hf(images)
 
+    def _predict_paper(self, images: NDArray[np.uint8]) -> Prediction:
+        """Paper's infer_image path — takes BGR uint8, returns disparity HxW."""
+        torch = ensure_torch()
         n, h, w, _ = images.shape
-        # HF processor expects a list of (H, W, 3) uint8 arrays or PIL images.
+        disp = np.empty((n, h, w), dtype=np.float32)
+        # Paper's infer_image expects BGR (OpenCV convention) because it
+        # does `image = cv2.cvtColor(raw_image, cv2.COLOR_BGR2RGB)` internally.
+        # plumbline's inputs are RGB, so we pre-swap.
+        for i in range(n):
+            bgr = images[i][..., ::-1].copy()  # RGB → BGR
+            with torch.inference_mode():
+                d = self._model.infer_image(bgr, self.input_size)
+            disp[i] = d.astype(np.float32)
+        # Convert disparity → depth with EPS floor (matching the `-hf` path).
+        depth = (1.0 / np.maximum(disp, EPS)).astype(np.float32)
+        assert_valid_depth(depth, name="da-v2/output")
+        repo_id, filename = _PAPER_REPOS[self.variant]
+        return Prediction(
+            depth=depth,
+            metadata={
+                "variant": self.variant,
+                "source": "paper",
+                "space": "depth",
+                "native_space": "disparity",
+                "alignment_hint": "scale_shift",
+                "checkpoint": f"{repo_id}/{filename}",
+                "input_size": self.input_size,
+            },
+        )
+
+    def _predict_hf(self, images: NDArray[np.uint8]) -> Prediction:
+        torch = ensure_torch()
+        n, h, w, _ = images.shape
         batch = [images[i] for i in range(n)]
         with torch.inference_mode():
             inputs = self._processor(images=batch, return_tensors="pt").to(self.device)
             outputs = self._model(**inputs)
-            # DepthAnythingForDepthEstimation returns "predicted_depth" as the
-            # disparity prediction at the model's native feature resolution;
-            # HF's post_process_depth_estimation resizes to input-image size.
             resized = self._processor.post_process_depth_estimation(
                 outputs,
                 target_sizes=[(h, w)] * n,
             )
-
-        # post_process_depth_estimation returns a list of dicts with
-        # "predicted_depth" as (H, W) torch tensor. For *relative* variants
-        # this is disparity (higher=closer); for *metric* variants it is
-        # depth in meters (lower=closer).
         raw = np.stack(
             [r["predicted_depth"].detach().cpu().numpy().astype(np.float32) for r in resized],
             axis=0,
         )
         if _is_metric_variant(self.variant):
-            # Metric variant: output is depth in meters. Clamp non-finite /
-            # non-positive pixels to 0 (canonical invalid marker).
             depth = np.where(np.isfinite(raw) & (raw > 0), raw, 0.0).astype(np.float32)
             native_space = "depth"
             alignment_hint = "none"
         else:
-            # Relative variant: output is disparity. Invert to depth with a
-            # floor to avoid division by zero at sky / texture-less regions.
             depth = (1.0 / np.maximum(raw, EPS)).astype(np.float32)
             native_space = "disparity"
             alignment_hint = "scale_shift"
@@ -171,6 +285,7 @@ class DepthAnythingV2Adapter(Model):
             depth=depth,
             metadata={
                 "variant": self.variant,
+                "source": "hf",
                 "space": "depth",
                 "native_space": native_space,
                 "alignment_hint": alignment_hint,
@@ -179,5 +294,8 @@ class DepthAnythingV2Adapter(Model):
         )
 
     def config_hash(self) -> str:
-        s = f"{self.name}@{self.version}/variant={self.variant}/input={self.input_size}"
+        s = (
+            f"{self.name}@{self.version}/variant={self.variant}"
+            f"/input={self.input_size}/source={self.source}"
+        )
         return hashlib.sha256(s.encode()).hexdigest()[:16]

@@ -25,7 +25,7 @@ model:
 dataset:
   name: nyuv2
 
-scale_alignment: scale_shift_robust
+scale_alignment: scale_shift
 device: cuda:0
 # Eigen 2014 NYU protocol: clip aligned depth to the GT-valid range.
 paper_reference:
