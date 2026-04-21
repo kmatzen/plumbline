@@ -394,7 +394,14 @@ class DIODEMogeEvalLoader(Dataset):
         *,
         root: Path | str | None = None,
         domain: str = "both",
+        split: str = "val",
     ) -> None:
+        # `split` is accepted for protocol-YAML compatibility with the
+        # devkit DIODEDataset, but the HF bundle only ships val.
+        if split != "val":
+            raise ValueError(
+                f"DIODEMogeEvalLoader only exposes the val split; got {split!r}"
+            )
         root_path = Path(root) if root else env_path("DIODE_MOGE_ROOT")
         if root_path is None or not (root_path / "DIODE").exists():
             raise DatasetNotAvailable(
