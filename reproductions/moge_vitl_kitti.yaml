@@ -16,7 +16,7 @@ model:
 dataset:
   name: kitti
 
-scale_alignment: scale_shift_robust
+scale_alignment: scale_shift
 device: cuda:0
 paper_reference:
   primary_metric: abs_rel
