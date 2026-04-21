@@ -9,8 +9,9 @@
 # - All 1030 objects (no whitelist).
 # - depth_clip [1e-3, 100] m (GSO depths are <100 m by render setup;
 #   permissive cap catches alignment outliers).
-# - scale_shift_robust alignment in inverse-depth (matches MoGe paper's
-#   "affine-invariant disparity" protocol).
+# - scale_shift alignment in inverse-depth (plain LSQ, matching MoGe's
+#   own eval at moge/utils/alignment.py::align_affine_lstsq under the
+#   "affine-invariant disparity" row — no IRLS / Huber).
 # - Single-view, mono_depth.
 #
 # Note: paper-target values per model are still being pinned (see
@@ -19,7 +20,7 @@
 name: gso_moge
 description: >
   GSO 1030-object synthetic-clean evaluation under MoGe Table 1
-  protocol: scale_shift_robust + [1e-3, 100] m clip.
+  protocol: scale_shift + [1e-3, 100] m clip.
 
 reference:
   paper: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 1 (Synthetic clean GT)"
@@ -29,6 +30,6 @@ fixed:
   dataset:
     name: gso
   depth_clip: [0.001, 100.0]
-  scale_alignment: scale_shift_robust
+  scale_alignment: scale_shift
   max_views: 1
   tasks: [mono_depth]
