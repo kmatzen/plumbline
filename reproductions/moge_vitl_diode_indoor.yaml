@@ -17,13 +17,11 @@ model:
     variant: vitl
 
 dataset:
-  name: diode
+  name: diode-moge-eval
   kwargs:
     domain: indoors
 
-sample_ids_file: diode_val_indoor.samples.txt
-
-scale_alignment: scale_shift_robust
+scale_alignment: scale_shift
 device: cuda:0
 
 paper_reference:

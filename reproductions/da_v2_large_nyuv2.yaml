@@ -20,24 +20,25 @@ device: cuda:0
 paper_reference:
   primary_metric: abs_rel
   # Two legitimate paper numbers exist for DA-V2 ViT-L on NYU — they
-  # disagree because the papers use different alignment solvers on
-  # the SAME protocol (affine-invariant inverse depth):
+  # disagree because the two papers use different alignment solvers
+  # on the same "affine-invariant inverse depth" protocol:
   #
   # - DA-V2's own paper (Yang et al. 2024, arXiv:2406.09414),
-  #   Table 2 p. 8: ViT-L NYU AbsRel = 0.045, δ₁ = 0.979.
-  # - MoGe paper (Wang et al. 2024, arXiv:2410.19115), Table 3 (Depth
-  #   Map Est.) DA-V2-L baseline row under "affine-invariant
-  #   disparity": AbsRel = 0.0420. MoGe re-ran DA-V2 with their ROE
-  #   solver, which is stronger than DA-V2's own eval.
+  #   Table 2 p. 8: ViT-L NYU AbsRel = 0.045, δ₁ = 0.979. LSQ.
+  # - MoGe paper (Wang et al. 2024, arXiv:2410.19115), Table 3
+  #   (Depth Map Est.), DA-V2-L baseline row under "affine-invariant
+  #   disparity": AbsRel = 0.0420. MoGe re-ran DA-V2 with their own
+  #   (stronger) solver.
   #
-  # Plumbline's `scale_shift` is LSQ in inverse-depth space — closer
-  # to DA-V2 paper's own protocol than to MoGe's ROE. Keeping the
-  # MoGe-reported 0.0420 as the pin because it's the tighter of the
-  # two and the observed 0.0428 lands at 1.9 % — within tolerance.
-  # 2026-04-21 cross-verified both values directly against the PDFs.
-  value: 0.0420
+  # Plumbline's `scale_shift` is plain LSQ in inverse-depth space —
+  # the same solver DA-V2's own paper uses — so the apples-to-apples
+  # pin is DA-V2's 0.045. (Historical pin at 0.0420 from MoGe-eval
+  # was a leftover from plumbline's earlier scale_shift_robust /
+  # Huber-IRLS alignment, which behaved more like MoGe's stronger
+  # ROE solver than DA-V2's LSQ.)
+  value: 0.045
   tolerance_relative: 0.05
-  citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), NYU column, affine-invariant disparity row, DA-V2 ViT-L baseline. DA-V2 paper Table 2 p. 8 reports 0.045 for the same model under their own alignment."
+  citation: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 p. 8, NYUv2 Eigen, ViT-L zero-shot relative."
   source_confidence: verified_pdf
 
 notes: >

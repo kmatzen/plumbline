@@ -85,6 +85,7 @@ cat > "$ENV_FILE" <<EOF
 export NYUV2_ROOT=$DATA_ROOT/nyuv2
 export KITTI_ROOT=$DATA_ROOT/kitti
 export DIODE_ROOT=$DATA_ROOT/diode
+export DIODE_MOGE_ROOT=$DATA_ROOT/diode_moge
 export ETH3D_ROOT=$DATA_ROOT/eth3d
 export DTU_ROOT=$DATA_ROOT/dtu
 export GSO_ROOT=$DATA_ROOT/gso
