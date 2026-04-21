@@ -8,6 +8,7 @@
 # and landed 0.0465 under ROE against the devkit enumeration).
 
 name: moge-vitl-diode-both
+protocol: diode_moge
 
 model:
   name: moge
@@ -16,26 +17,13 @@ model:
 
 dataset:
   name: diode
-  split: val
   kwargs:
     domain: both
 
 sample_ids_file: diode_val_both.samples.txt
 
-tasks:
-  - mono_depth
-
 scale_alignment: scale_shift_robust
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 50.0]
-
-# MoGe paper's DIODE protocol (from moge/utils/geometry_numpy.py::
-# depth_occlusion_edge_numpy): mask out pixels near GT depth
-# discontinuities before evaluation. Same defaults the paper uses.
-mask_boundaries: true
-boundary_thickness: 1
-boundary_tol: 0.1
 
 paper_reference:
   primary_metric: abs_rel

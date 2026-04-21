@@ -1,0 +1,41 @@
+# ETH3D high-res multi-view evaluation — VGGT Table 3 protocol.
+#
+# VGGT (Wang et al. 2025) Table 3 reports point-map estimation on
+# ETH3D as Acc/Comp/Overall in metres. The protocol:
+#
+# - Multi-view input (8-view sliding windows from each scene's image
+#   stack, sorted by COLMAP image_id).
+# - ICP-align each window's predicted point cloud into the GT
+#   (laser-scan) frame within the world-from-camera-0 convention.
+# - Merge per-scene: all aligned per-window point clouds for the
+#   same scene → one merged point cloud per scene.
+# - Voxel-downsample at 1 cm (ETH3D evaluation tool default).
+# - Compute Acc (pred → GT), Comp (GT → pred), Overall = mean.
+#
+# This protocol is single-scene-aggregating (``aggregation: scene``)
+# rather than sample-level (``aggregation: sample``). The sample-level
+# variant (``vggt_eth3d_courtyard_chamfer.yaml``) reports per-window
+# F-score and is informational only — not paper-comparable.
+#
+# Per-view depth is NOT used directly; the metric is on point clouds.
+
+name: eth3d_vggt_table3
+description: >
+  ETH3D multi-view point-map evaluation under VGGT Table 3 protocol.
+  Scene-merged Acc/Comp/Overall in metres after ICP alignment +
+  1 cm voxel downsample.
+
+reference:
+  paper: "Wang et al. 2025, VGGT (arXiv:2503.11651), Table 3 (Point Map on ETH3D)"
+  voxel_size: "1 cm (ETH3D evaluation tool default)"
+
+# scenes whitelist is NOT fixed — full ETH3D-train sweep would touch
+# 13 scenes (~50 GB on disk); a 3-scene subset (courtyard+delivery_area
+# +facade) reproduces the paper's Overall within 15% on a 7 GB footprint.
+fixed:
+  dataset:
+    name: eth3d
+  pointcloud_alignment: icp
+  aggregation: scene
+  scene_voxel_size: 0.01
+  tasks: [mvs_depth, pose]

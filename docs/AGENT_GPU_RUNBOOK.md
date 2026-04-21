@@ -108,11 +108,24 @@ mkdir -p $NYUV2_ROOT $KITTI_ROOT $DIODE_ROOT $ETH3D_ROOT $DTU_ROOT \
 when the cache misses. Push back to S3 after every successful fetch
 so the next session inherits the work.
 
+**Preferred path — one command does it all:**
+
 ```bash
-# Sync everything cached. May be empty on the very first GPU session.
+scripts/stage_all_data.sh
+```
+
+This wrapper syncs both `s3://plumbline-bench/datasets/` → `~/data/`
+**and** `s3://plumbline-bench/hf-cache/` → `~/.cache/huggingface/`
+(model weights), then writes the dataset-root env vars to
+`~/.bashrc-plumbline`. Source that file and you're ready to run.
+
+**Manual path** (if `stage_all_data.sh` is unavailable for some reason):
+
+```bash
 aws s3 sync s3://plumbline-bench/datasets/ ~/data/ \
     --exclude '*/.plumbline_manifest/*' \
     --exclude '*/__pycache__/*'
+aws s3 sync s3://plumbline-bench/hf-cache/ ~/.cache/huggingface/
 ```
 
 For each dataset, check what's present and fetch what's missing. The

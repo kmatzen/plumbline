@@ -9,6 +9,7 @@
 # domain=both is in moge-vitl-diode-both.
 
 name: moge-vitl-diode-indoor
+protocol: diode_moge
 
 model:
   name: moge
@@ -17,24 +18,13 @@ model:
 
 dataset:
   name: diode
-  split: val
   kwargs:
     domain: indoors
 
 sample_ids_file: diode_val_indoor.samples.txt
 
-tasks:
-  - mono_depth
-
 scale_alignment: scale_shift_robust
-max_views: 1
 device: cuda:0
-depth_clip: [0.001, 50.0]
-
-# MoGe paper protocol: exclude pixels near GT depth discontinuities.
-mask_boundaries: true
-boundary_thickness: 1
-boundary_tol: 0.1
 
 paper_reference:
   primary_metric: abs_rel

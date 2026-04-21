@@ -18,6 +18,7 @@
 # archive.
 
 name: vggt-eth3d-multiscene-chamfer
+protocol: eth3d_vggt_table3
 
 model:
   name: vggt
@@ -32,16 +33,8 @@ dataset:
     views_per_sample: 8
     max_gt_points: 100000
 
-tasks:
-  - mvs_depth
-
-# ICP 7-DoF similarity per window into the GT scene frame, then
-# merge across windows. ETH3D's multi-view-evaluation tool uses a
-# 1 cm voxel for density normalisation before chamfer.
-pointcloud_alignment: icp
-aggregation: scene
-scene_voxel_size: 0.01
-
+# (pointcloud_alignment=icp, aggregation=scene, scene_voxel_size=0.01,
+#  tasks: inherited from protocols/eth3d_vggt_table3.yaml.)
 max_views: 8
 device: cuda:0
 
