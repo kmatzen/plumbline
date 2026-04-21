@@ -1,0 +1,37 @@
+# GeoWizard (Fu et al. 2024) on KITTI Eigen-benchmark — paper-match.
+#
+# Outdoor counterpart to geowizard-nyuv2. GeoWizard's `domain` kwarg
+# toggles an embedding that trades near-field detail vs far-field
+# range; outdoor is the correct setting for KITTI.
+
+name: geowizard-kitti
+protocol: kitti_eigen_garg
+
+model:
+  name: geowizard
+  kwargs:
+    domain: outdoor
+    num_inference_steps: 10
+    ensemble_size: 10
+    processing_res: 768
+    dtype: float16
+    seed: 2024
+
+scale_alignment: scale_shift_depth
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  # GeoWizard paper (Fu et al. 2024, arXiv:2403.12013), Table 1
+  # KITTI column, GeoWizard (Ours) row: AbsRel = 9.7 → 0.097,
+  # δ₁ = 92.1 → 0.921. Values ×100 in the paper.
+  value: 0.097
+  tolerance_relative: 0.10
+  citation: "Fu et al. 2024, GeoWizard (arXiv:2403.12013), Table 1 (6 zero-shot affine-invariant depth benchmarks), KITTI AbsRel column, 'GeoWizard (Ours)' row."
+  source_confidence: verified_pdf
+
+notes: >
+  Outdoor mode. GeoWizard's KITTI AbsRel (0.097) is higher than
+  DA-V2-small's (0.078) and Marigold's (0.099) on the same
+  Eigen-benchmark protocol — in-line expectation for a diffusion
+  model at outdoor scale.
