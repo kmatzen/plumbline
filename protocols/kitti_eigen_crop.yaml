@@ -1,0 +1,45 @@
+# KITTI Eigen-benchmark protocol (Eigen crop, NOT Garg).
+#
+# Sibling of `kitti_eigen_garg`. The 652-frame sample list, GT source,
+# camera choice, and depth_clip are identical; only the evaluation crop
+# differs: this protocol applies the Eigen 2014 crop
+# (row ∈ [0.3324 H, 0.9135 H), col ∈ [0.0359 W, 0.9641 W)) instead of
+# Garg 2016's tighter crop (row ∈ [0.4081 H, 0.9919 H)).
+#
+# Empirically, some papers evaluate KITTI Eigen under the Garg crop and
+# some under the Eigen crop. Using the wrong crop systematically shifts
+# AbsRel by ~5–10% — confirmed for MoGe-1 and Marigold on the
+# 2026-04-21 agent run, which both missed their paper cells by ~10%
+# under the Garg crop, then matched once switched to Eigen:
+#
+# - Marigold (Ke et al. 2024, arXiv:2312.02145): public eval repo uses
+#   `valid_mask_crop: eigen` in kitti_dataset.py — confirmed by reading
+#   the github.com/prs-eth/Marigold eval script.
+# - MoGe (Wang et al. 2024): uses the same Eigen crop in the disparity-
+#   row protocol (inferred; matches the residual ~5 % delta).
+#
+# Apps evaluated under Garg (DA-V2, Metric3D-v2, DA3, Depth Pro) should
+# continue to use `kitti_eigen_garg`.
+
+name: kitti_eigen_crop
+description: >
+  KITTI Eigen-benchmark test split (652 frames), left image_02, Eigen
+  2014 evaluation crop, post-alignment clip to [1e-3, 80] m against
+  Uhrig annotated-depth GT.
+
+reference:
+  paper: "Eigen, Puhrsch, Fergus 2014 (arXiv:1406.2283)"
+  gt_source: "Uhrig et al. 2017, KITTI Depth-Prediction Benchmark"
+  crop: "Eigen 2014, row in [0.3324 H, 0.9135 H), col in [0.0359 W, 0.9641 W)"
+  split_source: "Monodepth2, splits/eigen_benchmark/test_files.txt (652 frames)"
+
+fixed:
+  dataset:
+    name: kitti
+    kwargs:
+      sample_list: kitti_eigen_benchmark_652.txt
+      camera: image_02
+      apply_eigen_crop: true
+  depth_clip: [0.001, 80.0]
+  max_views: 1
+  tasks: [mono_depth]
