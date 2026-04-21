@@ -138,6 +138,7 @@ class GeoWizardAdapter(Model):
         if self._pipe is not None:
             return
         torch = ensure_torch()
+        _shim_diffusers_for_geowizard()
         _ensure_geowizard_on_path()
         try:
             # Upstream's pipeline class; discovered at runtime from
@@ -240,3 +241,36 @@ def _ensure_geowizard_on_path() -> None:
     subdir = os.path.join(root, "geowizard")
     if os.path.isdir(subdir) and subdir not in sys.path:
         sys.path.insert(0, subdir)
+
+
+def _shim_diffusers_for_geowizard() -> None:
+    """Patch diffusers' public surface for upstream GeoWizard compat.
+
+    Upstream GeoWizard was forked from a diffusers version several
+    releases older than what plumbline runs. Two spots drifted:
+
+    1. ``diffusers.models.embeddings.PositionNet`` was renamed to
+       ``GLIGENTextBoundingboxProjection`` — same class body, same
+       ``__init__(positive_len, out_dim, feature_type, fourier_freqs)``
+       signature.
+    2. ``diffusers.models.dual_transformer_2d`` moved under the
+       ``diffusers.models.transformers`` subpackage. Aliased via
+       ``sys.modules`` so the old import path resolves.
+
+    Idempotent; no-op if either name is already where GeoWizard expects.
+    """
+    import diffusers.models.embeddings as _dme
+
+    if not hasattr(_dme, "PositionNet"):
+        replacement = getattr(_dme, "GLIGENTextBoundingboxProjection", None)
+        if replacement is not None:
+            _dme.PositionNet = replacement
+
+    try:
+        import diffusers.models.dual_transformer_2d  # noqa: F401
+    except ModuleNotFoundError:
+        try:
+            import diffusers.models.transformers.dual_transformer_2d as _dt
+            sys.modules["diffusers.models.dual_transformer_2d"] = _dt
+        except ModuleNotFoundError:  # pragma: no cover
+            pass
