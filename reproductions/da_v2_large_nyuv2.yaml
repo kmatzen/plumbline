@@ -19,24 +19,29 @@ scale_alignment: scale_shift
 device: cuda:0
 paper_reference:
   primary_metric: abs_rel
-  # Verified against MoGe paper (Wang et al. 2024, arXiv:2410.19115)
-  # Table 3 "Depth Map Estimation" (NOT Table 2 — that's point-map
-  # estimation). DA-V2 is reported as a baseline on NYU: DA-V2 ViT-L
-  # affine-invariant disparity = Reld 4.20 → 0.0420, δ₁ 98.2.
-  # plumbline's scale_shift fits in inverse-depth space, matching this
-  # column.
+  # Two legitimate paper numbers exist for DA-V2 ViT-L on NYU — they
+  # disagree because the papers use different alignment solvers on
+  # the SAME protocol (affine-invariant inverse depth):
   #
-  # The original 0.045 pin came from WebFetch of the DA-V2 paper's own
-  # table and may be from a different (e.g. alignment-free, or
-  # affine-depth-space) column. Keeping 0.0420 as the verified target.
-  # Audit 2026-04-20 corrected the citation from "Table 2" to "Table 3".
+  # - DA-V2's own paper (Yang et al. 2024, arXiv:2406.09414),
+  #   Table 2 p. 8: ViT-L NYU AbsRel = 0.045, δ₁ = 0.979.
+  # - MoGe paper (Wang et al. 2024, arXiv:2410.19115), Table 3 (Depth
+  #   Map Est.) DA-V2-L baseline row under "affine-invariant
+  #   disparity": AbsRel = 0.0420. MoGe re-ran DA-V2 with their ROE
+  #   solver, which is stronger than DA-V2's own eval.
+  #
+  # Plumbline's `scale_shift` is LSQ in inverse-depth space — closer
+  # to DA-V2 paper's own protocol than to MoGe's ROE. Keeping the
+  # MoGe-reported 0.0420 as the pin because it's the tighter of the
+  # two and the observed 0.0428 lands at 1.9 % — within tolerance.
+  # 2026-04-21 cross-verified both values directly against the PDFs.
   value: 0.0420
   tolerance_relative: 0.05
-  citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), NYU column, affine-invariant disparity row, DA-V2 ViT-L baseline."
+  citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), NYU column, affine-invariant disparity row, DA-V2 ViT-L baseline. DA-V2 paper Table 2 p. 8 reports 0.045 for the same model under their own alignment."
   source_confidence: verified_pdf
 
 notes: >
   First GPU run against the filled `depths` field (pre-raw-default,
   RTX 3090 2026-04-18): AbsRel=0.0554. After switching the loader default
-  to rawDepths the observed value drops into the ±10% window around the
-  paper's 0.045.
+  to rawDepths the observed value drops into the ±5 % window around the
+  MoGe-reported 0.0420. Observed 0.0428 on 2026-04-21 rental.
