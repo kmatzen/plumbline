@@ -35,6 +35,7 @@ import argparse
 import os
 import pathlib
 import shutil
+import subprocess
 import sys
 import tempfile
 import urllib.request
@@ -86,11 +87,46 @@ def calib_zip_url(date: str) -> str:
 def download_to(url: str, dest: pathlib.Path) -> None:
     """Download ``url`` to ``dest`` with a visible progress indicator.
 
-    Atomic: writes to ``dest.part`` first, renames on success.
+    Atomic: writes to ``dest.part`` first, renames on success. Prefers
+    ``aria2c`` (16 parallel connections per server) when available —
+    each KITTI drive zip is ~300 MB and a single TCP stream from
+    eu-central-1 to a residential US line caps at ~1.3 MB/s; aria2's
+    parallel chunks reach 5-10x that. Falls back to urllib when aria2
+    isn't installed.
     """
     dest.parent.mkdir(parents=True, exist_ok=True)
     tmp = dest.with_suffix(dest.suffix + ".part")
     print(f"  fetching {url}", file=sys.stderr)
+    if shutil.which("aria2c"):
+        _download_with_aria2(url, tmp)
+    else:
+        _download_with_urllib(url, tmp)
+    tmp.rename(dest)
+
+
+def _download_with_aria2(url: str, tmp: pathlib.Path) -> None:
+    """Run aria2c with parallel range requests; let it print its own progress."""
+    subprocess.run(
+        [
+            "aria2c",
+            "--max-connection-per-server=16",
+            "--split=16",
+            "--min-split-size=1M",
+            "--file-allocation=none",
+            "--console-log-level=warn",
+            "--summary-interval=5",
+            "--auto-file-renaming=false",
+            "--allow-overwrite=true",
+            "--dir", str(tmp.parent),
+            "--out", tmp.name,
+            url,
+        ],
+        check=True,
+    )
+
+
+def _download_with_urllib(url: str, tmp: pathlib.Path) -> None:
+    """Single-stream urllib fallback — slower but no extra dependency."""
     with urllib.request.urlopen(url, timeout=30) as resp:
         total = int(resp.headers.get("Content-Length") or 0)
         done = 0
@@ -103,10 +139,12 @@ def download_to(url: str, dest: pathlib.Path) -> None:
                 done += len(chunk)
                 if total:
                     pct = 100.0 * done / total
-                    print(f"\r    {done/1e6:7.1f} / {total/1e6:7.1f} MB ({pct:5.1f}%)",
-                          end="", file=sys.stderr)
+                    print(
+                        f"\r    {done/1e6:7.1f} / {total/1e6:7.1f} MB ({pct:5.1f}%)",
+                        end="",
+                        file=sys.stderr,
+                    )
         print(file=sys.stderr)
-    tmp.rename(dest)
 
 
 def extract_selected(zip_path: pathlib.Path, out_root: pathlib.Path,
