@@ -228,19 +228,56 @@ class DepthAnythingV2Adapter(Model):
         return self._predict_hf(images)
 
     def _predict_paper(self, images: NDArray[np.uint8]) -> Prediction:
-        """Paper's infer_image path — takes BGR uint8, returns disparity HxW."""
+        """Paper's inference path with explicit device handling.
+
+        The paper repo's `infer_image` hardcodes DEVICE=cuda-if-available
+        inside `image2tensor`, which breaks CPU eval and fights with
+        plumbline's own `self.device`. We replicate their preprocessing
+        (BGR input, MiDaS Resize + ImageNet normalize + PrepareForNet)
+        but move tensors to `self.device` ourselves, then run the model
+        via its ``forward`` directly and interpolate back to the input
+        resolution.
+        """
         torch = ensure_torch()
+        import torch.nn.functional as F
+
         n, h, w, _ = images.shape
         disp = np.empty((n, h, w), dtype=np.float32)
-        # Paper's infer_image expects BGR (OpenCV convention) because it
-        # does `image = cv2.cvtColor(raw_image, cv2.COLOR_BGR2RGB)` internally.
-        # plumbline's inputs are RGB, so we pre-swap.
         for i in range(n):
             bgr = images[i][..., ::-1].copy()  # RGB → BGR
+            # Paper's image2tensor does BGR2RGB then /255. Inline:
+            rgb = bgr[..., ::-1].astype(np.float32) / 255.0
+            # Paper's Resize + Normalize + PrepareForNet pipeline. We import
+            # from the paper repo so any future tweak they ship is picked up.
+            from depth_anything_v2.util.transform import (
+                NormalizeImage,
+                PrepareForNet,
+                Resize,
+            )
+            from torchvision.transforms import Compose
+
+            transform = Compose(
+                [
+                    Resize(
+                        width=self.input_size,
+                        height=self.input_size,
+                        resize_target=False,
+                        keep_aspect_ratio=True,
+                        ensure_multiple_of=14,
+                        resize_method="lower_bound",
+                        image_interpolation_method=3,  # cv2.INTER_CUBIC
+                    ),
+                    NormalizeImage(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+                    PrepareForNet(),
+                ]
+            )
+            prepared = transform({"image": rgb})["image"]
+            tensor = torch.from_numpy(prepared).unsqueeze(0).to(self.device)
             with torch.inference_mode():
-                d = self._model.infer_image(bgr, self.input_size)
-            disp[i] = d.astype(np.float32)
-        # Convert disparity → depth with EPS floor (matching the `-hf` path).
+                out = self._model.forward(tensor)  # (1, H', W') disparity
+                # Resize back to input (h, w).
+                out = F.interpolate(out[:, None], (h, w), mode="bilinear", align_corners=True)
+            disp[i] = out[0, 0].cpu().numpy().astype(np.float32)
         depth = (1.0 / np.maximum(disp, EPS)).astype(np.float32)
         assert_valid_depth(depth, name="da-v2/output")
         repo_id, filename = _PAPER_REPOS[self.variant]
