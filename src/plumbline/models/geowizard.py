@@ -157,7 +157,9 @@ class GeoWizardAdapter(Model):
             torch_dtype=torch_dtype,
         ).to(self.device)
         self._pipe.set_progress_bar_config(disable=True)
-        self._generator = torch.Generator(device=self.device).manual_seed(self.seed)
+        # Upstream's __call__ does NOT accept a `generator` kwarg; seed the
+        # global RNG right before each sample instead (see predict()).
+        self._generator = None
 
     # -- predict ---------------------------------------------------------
 
@@ -170,14 +172,17 @@ class GeoWizardAdapter(Model):
         self._load()
         from PIL import Image as PImage
 
+        torch = ensure_torch()
         n, h, w, _ = images.shape
         depths = np.empty((n, h, w), dtype=np.float32)
         for i in range(n):
             pil = PImage.fromarray(images[i])
-            # Upstream's __call__ signature (run_infer.py):
-            #   pipe(input_image, denoising_steps, ensemble_size,
-            #        processing_res, match_input_res, domain,
-            #        color_map, show_progress_bar, generator)
+            # Upstream's __call__ (geowizard_pipeline.py::__call__) does not
+            # accept a `generator` kwarg. Seed the global RNG per-sample for
+            # determinism — upstream samples torch's default RNG internally.
+            torch.manual_seed(self.seed + i)
+            if torch.cuda.is_available():
+                torch.cuda.manual_seed_all(self.seed + i)
             out = self._pipe(
                 pil,
                 denoising_steps=self.num_inference_steps,
@@ -186,7 +191,6 @@ class GeoWizardAdapter(Model):
                 match_input_res=True,
                 domain=self.domain,
                 show_progress_bar=False,
-                generator=self._generator,
             )
             # Upstream emits `depth_np` as float in [0, 1], affine-invariant.
             arr = np.asarray(out.depth_np).astype(np.float32)
