@@ -1,0 +1,47 @@
+# GeoWizard (Fu et al. 2024) on NYUv2 Eigen test split — paper-match.
+#
+# Diffusion-based depth+normals. Same shape as Marigold on NYU: affine-
+# invariant depth, paper's protocol fits scale+shift in DEPTH space.
+# GeoWizard's extra knob is `domain`: indoor for NYU.
+
+name: geowizard-nyuv2
+protocol: nyu_eigen_2014
+
+model:
+  name: geowizard
+  kwargs:
+    domain: indoor
+    num_inference_steps: 10
+    ensemble_size: 10
+    processing_res: 768
+    dtype: float16
+    seed: 2024
+
+scale_alignment: scale_shift_depth
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  # GeoWizard paper (Fu et al. 2024, arXiv:2403.12013), Table 1
+  # "Quantitative comparison on 6 zero-shot affine-invariant depth
+  # benchmarks", NYUv2 column, GeoWizard (Ours) row:
+  #     AbsRel = 5.2 → 0.052
+  #     δ₁     = 96.6 → 0.966
+  # Paper reports values scaled ×100.
+  value: 0.052
+  tolerance_relative: 0.10
+  citation: "Fu et al. 2024, GeoWizard (arXiv:2403.12013), Table 1 (6 zero-shot affine-invariant depth benchmarks), NYUv2 AbsRel column, 'GeoWizard (Ours)' row."
+  source_confidence: verified_pdf
+
+notes: >
+  First diffusion-based depth+normals reproduction. Paper protocol:
+  denoising_steps=10, ensemble_size=10, domain conditioning per
+  dataset (indoor for NYU). Requires a clone of
+  https://github.com/fuxiao0719/GeoWizard at $GEOWIZARD_ROOT;
+  weights are pulled from `lemonaddie/Geowizard` on HF on first use.
+  Expect similar wall time to Marigold paper-protocol (~30 min per
+  500 samples on a 3090) due to the 10x10 ensemble.
+
+  Uses scale_shift_depth alignment (fit in depth space), matching
+  GeoWizard's "affine-invariant depth" protocol — NOT the
+  inverse-depth fit DA-V2 / MoGe use.
