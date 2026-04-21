@@ -49,16 +49,23 @@ aws sts get-caller-identity || {
   exit 1
 }
 
-# 1c. HuggingFace login (rate-limited downloads otherwise).
-huggingface-cli whoami 2>/dev/null || {
+# 1c. HuggingFace login (rate-limited downloads otherwise). The CLI
+# is now called `hf`; `huggingface-cli` is deprecated in hf-hub >=1.10.
+hf auth whoami 2>/dev/null || {
   if [ -n "$HF_TOKEN" ]; then
-    huggingface-cli login --token "$HF_TOKEN" --add-to-git-credential
+    hf auth login --token "$HF_TOKEN" --add-to-git-credential
   else
     echo "WARN: no HF login. DA-V2 / DA3 / Metric3D may rate-limit."
   fi
 }
 
-# 1d. Disk: need ≥ 80 GB free for full Tier-1 sweep.
+# 1d. Workaround for an HF xet-downloader multiprocess cleanup crash
+# (hit during laptop-side weight staging on 2026-04-20). Always set
+# this env var for the whole agent session — the non-xet path is
+# just as fast on modern connections.
+export HF_HUB_DISABLE_XET=1
+
+# 1e. Disk: need ≥ 80 GB free for full Tier-1 sweep.
 df -BG --output=avail / | tail -1
 # If < 80 GB available, skip phases that need extra data (DTU, ETH3D).
 ```
@@ -136,8 +143,8 @@ unblock the most reproductions per GB.
 |---|---|---|
 | 1 | NYUv2 (3 GB) | `curl -L -O https://horatio.cs.nyu.edu/mit/silberman/nyu_depth_v2/nyu_depth_v2_labeled.mat` into `$NYUV2_ROOT` |
 | 2 | KITTI raw + annotated depth (~6 GB) | `scripts/fetch_kitti.py --kitti-root $KITTI_ROOT` then unzip annotated-depth (see GPU_RUNBOOK § KITTI) |
-| 3 | iBims-1 (40 MB) | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'iBims-1*' --local-dir /tmp/moge && unzip /tmp/moge/iBims-1.zip -d $IBIMS1_ROOT/..` |
-| 4 | GSO (2 GB) | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'GSO*' --local-dir /tmp/moge && unzip /tmp/moge/GSO.zip -d $GSO_ROOT/..` |
+| 3 | iBims-1 (40 MB) | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'iBims-1.zip' --local-dir /tmp/moge && unzip /tmp/moge/iBims-1.zip -d $IBIMS1_ROOT/..` |
+| 4 | GSO (2 GB) | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'GSO.zip' --local-dir /tmp/moge && unzip /tmp/moge/GSO.zip -d $GSO_ROOT/..` |
 | 5 | DIODE val (2.8 GB) | `curl -L -O http://diode-dataset.s3.amazonaws.com/val.tar.gz && tar xzf val.tar.gz -C $DIODE_ROOT/..` |
 | 6 | ETH3D 3-scene subset (8 GB) | See GPU_RUNBOOK § ETH3D for the per-scene loop (3 scenes: courtyard, delivery_area, facade) |
 | 7 | DTU test + Points (7.5 GB across two archives) | See GPU_RUNBOOK § DTU — `gdown` for the 554 MB MVSNet test zip + `aria2c` for the 6.97 GB Points.zip. Do NOT fetch `SampleSet.zip` — that's a 2-scan demo, NOT the eval set. |
@@ -153,6 +160,46 @@ aws s3 sync $<DATASET>_ROOT/ s3://plumbline-bench/datasets/<dataset>/ \
 **Skip a dataset if its fetch fails or the disk is tight.** Move on;
 its dependent reproductions will be flagged "skipped — data missing"
 in the report.
+
+### 3.1 Model weights — lessons-learned gotchas
+
+Most weights come down for free via the `hf-cache/` S3 sync. If a
+model is NOT in the cache and you need to fetch it from HF Hub,
+watch out for these (all hit during the initial cache population):
+
+**(a) Many HF repos ship both `model.pt` AND `model.safetensors`.**
+A plain `hf download <repo>` pulls both — doubling disk usage. For
+repos that just store a single checkpoint in two formats (VGGT-1B,
+some older DUSt3R-era repos), use a selective fetch:
+
+```bash
+hf download facebook/VGGT-1B \
+    --include 'model.safetensors' --include '*.json' --include 'README.md'
+```
+
+`PyTorchModelHubMixin` (used by VGGT and similar) prefers
+`model.safetensors` over `pytorch_model.bin` — `model.pt` won't
+be loaded even if present.
+
+**(b) `hf download` with HF's xet parallel-chunk downloader can
+crash in a multiprocessing cleanup edge case** (Python 3.12 +
+hf-hub 1.11, resource-tracker `__del__` failure mid-transfer).
+The pre-flight in § 1 sets `HF_HUB_DISABLE_XET=1` globally which
+forces the classical hf-hub downloader path. Keep it set.
+
+**(c) Diffusers-style repos (Marigold, GeoWizard, etc.) split
+weights across subfolders** — `unet/`, `vae/`, `text_encoder/`,
+`scheduler/` — each with its own safetensors. `--include '*.safetensors' '*.json'`
+matches all of them. Don't exclude the text_encoder even if you
+don't think you need it — some pipeline classes fail to
+instantiate without it.
+
+**(d) After an interrupted `hf download`, delete leftover
+`.incomplete` blobs before retrying:**
+
+```bash
+find ~/.cache/huggingface/hub -name '*.incomplete' -delete
+```
 
 ---
 
