@@ -121,10 +121,12 @@ so the next session inherits the work.
 scripts/stage_all_data.sh
 ```
 
-This wrapper syncs both `s3://plumbline-bench/datasets/` → `~/data/`
-**and** `s3://plumbline-bench/hf-cache/` → `~/.cache/huggingface/`
-(model weights), then writes the dataset-root env vars to
-`~/.bashrc-plumbline`. Source that file and you're ready to run.
+This wrapper syncs three things: `s3://plumbline-bench/datasets/` →
+`~/data/`, `s3://plumbline-bench/hf-cache/` → `~/.cache/huggingface/`
+(for HF-backed adapters), and `s3://plumbline-bench/torch-hub-cache/hub/`
+→ `~/.cache/torch/hub/` (for Metric3D-v2, which uses `torch.hub.load`).
+Then writes the dataset-root env vars to `~/.bashrc-plumbline`.
+Source that file and you're ready to run.
 
 **Manual path** (if `stage_all_data.sh` is unavailable for some reason):
 
@@ -133,6 +135,7 @@ aws s3 sync s3://plumbline-bench/datasets/ ~/data/ \
     --exclude '*/.plumbline_manifest/*' \
     --exclude '*/__pycache__/*'
 aws s3 sync s3://plumbline-bench/hf-cache/ ~/.cache/huggingface/
+aws s3 sync s3://plumbline-bench/torch-hub-cache/hub/ ~/.cache/torch/hub/
 ```
 
 For each dataset, check what's present and fetch what's missing. The
