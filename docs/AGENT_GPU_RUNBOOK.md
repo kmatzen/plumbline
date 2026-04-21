@@ -127,7 +127,7 @@ unblock the most reproductions per GB.
 | 4 | GSO (2 GB) | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'GSO*' --local-dir /tmp/moge && unzip /tmp/moge/GSO.zip -d $GSO_ROOT/..` |
 | 5 | DIODE val (2.8 GB) | `curl -L -O http://diode-dataset.s3.amazonaws.com/val.tar.gz && tar xzf val.tar.gz -C $DIODE_ROOT/..` |
 | 6 | ETH3D 3-scene subset (8 GB) | See GPU_RUNBOOK § ETH3D for the per-scene loop (3 scenes: courtyard, delivery_area, facade) |
-| 7 | DTU SampleSet (7 GB) | See GPU_RUNBOOK § DTU |
+| 7 | DTU test + Points (7.5 GB across two archives) | See GPU_RUNBOOK § DTU — `gdown` for the 554 MB MVSNet test zip + `aria2c` for the 6.97 GB Points.zip. Do NOT fetch `SampleSet.zip` — that's a 2-scan demo, NOT the eval set. |
 | 8 | 7-Scenes (12 GB) | See GPU_RUNBOOK § 7-Scenes |
 
 After each successful fetch:

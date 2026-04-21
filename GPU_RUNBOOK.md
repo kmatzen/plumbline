@@ -66,7 +66,7 @@ uv run plumbline list-models
 
 ## S3 cache (`plumbline-bench` bucket, us-west-2)
 
-Slow-to-fetch datasets (DTU SampleSet, KITTI pruned per-drive subsets,
+Slow-to-fetch datasets (DTU, KITTI pruned per-drive subsets,
 etc.) are cached in a personal S3 bucket so each new rental box can
 rehydrate from S3 rather than redoing the hours of upstream downloads.
 Storage footprint is small (~15-20 GB); the bucket is scoped to one
@@ -274,6 +274,44 @@ export IBIMS1_ROOT=$HOME/data/moge_eval/iBims-1
 The TUM upstream release (https://www.asg.ed.tum.de/lmf/ibims1/) is
 the canonical source but ships a .mat-based layout that this loader
 does not speak. Stick with the MoGe bundle.
+
+### DTU (public, no ToS; ~7.5 GB across two archives)
+
+The full 22-scan MVS test set needs TWO archives. Do NOT confuse
+either with DTU's `SampleSet.zip` (6.9 GB on the same server) —
+that's a format-demo with scans 1 & 6 only, not the eval set.
+
+```bash
+mkdir -p ~/data/dtu && cd ~/data/dtu
+
+# 1. MVSNet preprocessed test set (~554 MB): images + cameras + pair.txt
+#    across all 22 test scans. Google Drive, public. Uses gdown.
+pip install gdown
+gdown "135oKPefcPTsdtLRzoDAQtPpHuoIrpRI_" -O dtu_test.zip
+unzip dtu_test.zip && rm dtu_test.zip
+
+# 2. DTU GT point clouds (~6.97 GB): Points/stl/stl*_total.ply per scan.
+#    Use aria2 for parallel ranges (single-stream from this server caps
+#    at ~680 KB/s; aria2 -x 16 reaches 8 MB/s).
+brew install aria2   # if not already installed
+aria2c --max-connection-per-server=16 --split=16 --min-split-size=1M \
+    --out Points.zip \
+    "https://roboimagedata2.compute.dtu.dk/data/MVS/Points.zip"
+unzip Points.zip && rm Points.zip
+
+export DTU_ROOT=$HOME/data/dtu
+```
+
+Resulting layout matches `DTUDataset`'s auto-detected test format:
+
+```
+$DTU_ROOT/dtu/scan1/{cams,images,pair.txt}
+$DTU_ROOT/dtu/scan4/...
+...
+$DTU_ROOT/Points/stl/stl001_total.ply
+$DTU_ROOT/Points/stl/stl004_total.ply
+...
+```
 
 ### 7-Scenes (Microsoft, public, no auth; ~12 GB for all 7 scenes)
 

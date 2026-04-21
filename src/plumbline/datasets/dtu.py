@@ -25,13 +25,33 @@ Expected layout (MVSNet-repacked, the de facto community format)::
         stl001_total.ply          # GT laser scan for scan 1
         stl004_total.ply
 
-Download (public, no ToS; MVSNet format):
-- MVSNet's preprocessed DTU training split (~115 GB):
-  https://roboimagedata.compute.dtu.dk/?page_id=36 +
-  https://github.com/YoYo000/MVSNet
-- Or the smaller test-only repack used by MASt3R / DUSt3R repos. Either
-  works; the loader scans whatever is under ``Rectified/`` and picks up
-  matching GT from ``Points/stl/``.
+Download (public, no ToS):
+Two archives together give the full 22-scan paper-match setup:
+
+1. **MVSNet preprocessed test set** (~554 MB). Provides all 22 test
+   scans' images + cameras + per-scan pair.txt in the ``dtu/scanN/
+   {cams,images}/`` layout (no GT point clouds). Hosted on Google
+   Drive; fetch with `gdown`::
+
+       pip install gdown
+       gdown "135oKPefcPTsdtLRzoDAQtPpHuoIrpRI_" -O dtu_test.zip
+       unzip dtu_test.zip -d $DTU_ROOT
+
+2. **DTU GT point clouds** (~6.97 GB). The ``Points/`` subtree with
+   ``stl*_total.ply`` per scan is what chamfer eval compares against::
+
+       curl -L -o Points.zip \\
+           https://roboimagedata2.compute.dtu.dk/data/MVS/Points.zip
+       unzip Points.zip -d $DTU_ROOT
+
+Do NOT confuse the above with DTU's ``SampleSet.zip`` (also ~6.9 GB
+on the same server) — that is a **format-demo with scans 1 & 6 only**,
+not the eval set. The plumbline v0.1 gate (VGGT Table 2 chamfer=0.382
+on 22-scan test) requires both of the two archives above.
+
+Also available: MVSNet's full preprocessed training/validation split
+(~115 GB) at https://roboimagedata.compute.dtu.dk/?page_id=36 +
+https://github.com/YoYo000/MVSNet — overkill for eval-only needs.
 
 Conventions
 -----------
