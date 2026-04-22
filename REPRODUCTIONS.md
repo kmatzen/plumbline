@@ -4,6 +4,12 @@ A **reproduction** is a pinned config that re-produces a specific number from
 a specific paper, within a documented relative tolerance. Running it is the
 harness's acceptance test.
 
+> **Note (2026-04-22):** this matrix reflects the 2026-04-20 laptop-side
+> audit. For the current paper-match queue — including the 2026-04-21
+> GPU-rental run, solver fixes, `DIODEMogeEvalLoader`, and open items
+> like the MoGe-KITTI structural protocol mismatch — see
+> `docs/AGENT_RUN_20260421.md` + `docs/AGENT_PLAN_20260421.md`.
+
 ## Status matrix (2026-04-20, post-audit)
 
 Model × dataset cell statuses:
