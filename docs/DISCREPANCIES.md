@@ -288,6 +288,70 @@ suspects: NYU Eigen-crop convention, rawDepths-field filter interaction,
 or small protocol detail in DA-V2's own eval we're not replicating.
 Below the priority threshold for v0.1 — **document and move on**.
 
+### D17 · GeoWizard NYU 10 % off paper   🔎 SUSPECTED
+
+Symptom: with D1 (generator) + D2 (shim) fixed and the adapter now
+running end-to-end, observed `geowizard-nyuv2` AbsRel = 0.0573 vs
+paper 0.052 — 10.2 % off.
+
+Candidates:
+
+1. **RNG divergence from paper.** Plumbline now seeds
+   `torch.manual_seed(seed + sample_index)` before each ensemble
+   call (D1 fix). The paper may use a single fixed seed for the
+   ensemble latents; per-sample re-seeding samples a different
+   latent-chain distribution and can shift mean AbsRel 10 % on
+   diffusion eval (ensemble converges in expectation but finite-
+   ensemble variance is non-trivial).
+2. **Paper protocol alignment**: plumbline uses `scale_shift_depth`
+   (depth-space LSQ) per GeoWizard YAML. Need to confirm from the
+   public GeoWizard eval script that this matches — subagent
+   didn't read this one.
+3. **Protocol resolution**: paper uses processing_res=768, same as
+   plumbline's YAML.
+
+Priority: low. Unlike D8/D9 (MoGe/Marigold KITTI), this one's only
+10 % off and on the "informational-smoke" side. Defer to v0.2 with
+D9 investigation.
+
+### D18 · GeoWizard KITTI 35 % off paper   🔎 SUSPECTED (same family as D8/D9)
+
+Symptom: `geowizard-kitti` AbsRel = 0.131 vs paper 0.097 — 35.2 %
+off. Much worse than NYU (10 %).
+
+Almost certainly the same structural KITTI protocol mismatch as D8
+(MoGe-KITTI) and D9 (Marigold-KITTI): all three diffusion / prior-
+depth adapters reproduce on NYU within 5-10 % but miss KITTI by
+10-35 % under plumbline's Monodepth2-Eigen-benchmark-652 +
+Garg-crop + [1e-3, 80] m clip. The KITTI eval these papers use is
+bespoke (MoGe's 750×375 center-warp, no crop, no cap) — and
+GeoWizard paper likely cites a similar eval since the three papers
+are era-peers with overlapping baseline tables.
+
+Resolution: same as D8/D9 — a `KITTIMogeEvalLoader` + protocol.
+Probably also matches GeoWizard's eval enough to close this row.
+v0.2.
+
+### D19 · MoGe-DIODE-both still 2481 after `drop_max_depth`   🔎 SUSPECTED
+
+Symptom: fix landed (commit `7fd6ff6`), re-ran `moge-vitl-diode-both`
+cache-hit. Median AbsRel still 0.025 (on paper), mean still 2481.
+
+Root cause (revised from D5): MoGe's `drop_max_depth` filters **GT**
+— doesn't catch **predicted** post-alignment depths blowing up. MoGe
+also applies `clamp_min(1 / gt_depth[mask].max())` on the predicted
+disparity BEFORE inverting to depth (per subagent read of
+`moge/test/metrics.py:210`). This is the missing piece — caps
+per-sample predicted depth at `max(gt_depth)`.
+
+Plumbline's `scale_shift` alignment path doesn't do this per-sample
+disparity clamp. Fix would be a new alignment variant or a
+post-alignment per-sample cap; not a 5-min change.
+
+Resolution: v0.2. Median continues to land bullseye on paper, so
+the adapter + loader + solver are fundamentally correct; just one
+more clamp away from the full paper-match.
+
 ### D16 · MoGe-DIODE-indoor cited combined-val paper value   ✅ FIXED
 
 The YAML cited MoGe's 0.0400 (combined val, 771 samples) but ran
