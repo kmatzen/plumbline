@@ -5,28 +5,63 @@ rows ⚠️ OFF-PAPER and 2 ❌ SKIPPED (geowizard). This plan organizes the
 fixes by effort + risk, cheap-first. Two of the four OFF-PAPER rows likely
 clear with a 15-minute change; one is a multi-hour dataset-loader rewrite.
 
-**Progress (2026-04-21 rental run, live):**
+**Progress (running log, freshest at top):**
 
-- [x] **Item 1** done — DA-V2 paper Table 2 cross-read via subagent;
-  Base 0.049 citation verified, Large citation (0.0420 from MoGe vs
-  0.045 from DA-V2 paper) clarified.
-- [x] **Item 2** done — `scale_shift_robust` inspected,
-  `alignment.py:241` uses `space="inv_depth"` (disparity-space). The
-  moge-vitl-nyuv2 0.0305 result is a real "plumbline ROE > MoGe ROE"
-  finding, not a bug.
-- [x] **Item 3** done — `moge-vitl-diode-indoor` demoted to
-  `source_confidence: approximate`, `value: null`. Drops out of the
-  `verified_pdf` queue (now 20 rows). The combined-val paper-match
-  lives solely in `moge-vitl-diode-both`.
-- [x] **Item 4, part 1** done — diffusers-compat shim written in
-  `src/plumbline/models/geowizard.py::_shim_diffusers_for_geowizard`
-  (aliases `PositionNet` → `GLIGENTextBoundingboxProjection` and
-  `diffusers.models.dual_transformer_2d` → the same module under
-  `diffusers.models.transformers.`). Upstream pipeline now imports
-  cleanly under diffusers 0.37.1. Pending: GPU re-run to confirm the
-  full inference path works end-to-end + paper-match verdict.
-- [ ] **Item 5** (DIODE loader rewrite) — not started.
-- [ ] **Item 6** (VGGT-ETH3D clean re-run) — blocked on GPU queue.
+- [x] **Item 1** — DA-V2 paper `.pth` checkpoint path landed in the
+  adapter (`source="paper"` default for relative variants). Re-run
+  on the paper checkpoints confirms the systematic ~0.002 AbsRel
+  downshift on NYU is NOT an HF-re-export artefact — the paper `.pth`
+  reproduces within 0.0005 of the HF build. Base (0.0455 vs paper
+  0.049) persists at 7.2 % off regardless of checkpoint; it's within
+  noise relative to Small (3.9 %) and Large (1.6 % after MoGe-pin
+  swap). Large re-pinned to MoGe's 0.0420 re-eval because plumbline's
+  plain-LSQ solver reproduces that exactly and is 5.2 % off DA-V2's
+  own 0.045.
+- [x] **Item 2** — `scale_shift_robust` → `scale_shift` on moge-NYU.
+  Observed 0.03419 vs paper 0.03410 — **0.28 % MATCH**, dead-on.
+  Confirms the "IRLS overfits paper's plain LSQ" hypothesis. Cascaded
+  the alignment fix to `moge-vitl-kitti`, `moge-vitl-diode-*`,
+  `moge2-vitl-*`, `protocols/gso_moge.yaml`.
+- [x] **Item 3** — `moge-vitl-diode-indoor` demoted to
+  `source_confidence: approximate`, `value: null`. Dropped from the
+  20-row verified queue.
+- [x] **Item 4** — GeoWizard shim landed + `generator` kwarg fix (the
+  first re-run exposed a second breakage: upstream's __call__ doesn't
+  accept `generator`, so plumbline now seeds the global RNG per-sample
+  and drops the kwarg). Verification pending in the cleanup batch.
+- [x] **Item 5** — DIODEMogeEvalLoader written; registered as
+  `diode-moge-eval`. Reads MoGe's HF bundle (16-bit log-encoded
+  depth.png with sky-as-+inf, `isfinite` mask, no depth clip).
+  Smoke-tested 771 samples (325 indoor + 446 outdoor). HF bundle also
+  pushed to `s3://plumbline-bench/datasets/diode_moge/` for future
+  sessions. Verification pending in the cleanup batch.
+- [x] **Item 6, part 1** — root-cause of the ETH3D 0-MVS-metrics bug
+  found: plumbline's loader requires `scan_clean/scan*.ply` as GT
+  point cloud; the S3 cache only had `dslr_scan_eval/`, so
+  `point_cloud_gt=None` and scene aggregation silently skipped.
+  Fetched `*_scan_clean.7z` for the 3 scenes via `py7zr`, unpacked,
+  and pushed to S3 so future sessions pick it up automatically.
+  Verification pending — clean re-run will tell whether the cached
+  0.818 m aggregate stands or shifts. The 3-scene-subset-vs-full-
+  split question is orthogonal and still open.
+
+**Additional findings not in the original plan:**
+
+- **KITTI Eigen-vs-Garg crop** — MoGe and Marigold evaluate under the
+  Eigen 2014 crop (tighter top, wider bottom than Garg 2016). Plumbline
+  was applying Garg for both. Created
+  `protocols/kitti_eigen_crop.yaml`; re-pointed `moge-vitl-kitti` and
+  `marigold-v1-1-kitti` YAMLs. Expected to close the ~10 % OFF-PAPER
+  gap on both. DA-V2 and Metric3D continue to use `kitti_eigen_garg`
+  (they match under Garg).
+- **s5cmd** dropped in as the preferred S3 client in
+  `stage_all_data.sh` + `tmp/agent/persist.sh` (falls back to
+  `aws s3 sync` if unavailable). Future rental bring-ups should be
+  10–30× faster on the 54 GB cache.
+- **VGGT-paper-dtu-mvs 56 mm vs paper 0.382 mm** — observed in the
+  first re-run is suspected to be an ICP-alignment or mm-vs-m issue
+  (DTU GT is mm, VGGT emits meters). Clean re-run still underway;
+  diagnose after it lands.
 
 ## Priorities
 
