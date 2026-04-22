@@ -40,5 +40,13 @@ fixed:
       light: 3
   scale_alignment: none
   pointcloud_alignment: icp
+  # Paper's 0.382 mm Overall is per-scan chamfer on the fused + voxel-
+  # downsampled prediction cloud, not a per-sample mean. Scene
+  # aggregation + 1 cm voxel matches the ETH3D tool's convention the
+  # VGGT paper follows; without it, plumbline's per-sample chamfer is
+  # ~100× paper (confirmed 2026-04-22 scan1 probe: 43 mm/sample vs
+  # paper 0.382 mm/scan). See docs/DISCREPANCIES.md § D3.
+  aggregation: scene
+  scene_voxel_size: 0.01
   max_views: 8
   tasks: [mvs_depth, pose]
