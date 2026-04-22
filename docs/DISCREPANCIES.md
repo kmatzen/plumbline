@@ -190,20 +190,25 @@ protocol mismatch as D8 + D9 — all three diffusion / prior-depth adapters
 by 10–35 % under plumbline's Monodepth2-Eigen + Garg-crop + [1e-3, 80] m
 clip. Resolution: same `KITTIMogeEvalLoader` + protocol as D8. v0.2.
 
-### D19 · MoGe-DIODE-both mean AbsRel=2481 after `drop_max_depth`   🔎 SUSPECTED
+### D19 · MoGe-DIODE-both mean AbsRel=2481 after `drop_max_depth`   🧪 FIX-PENDING-VERIFY
 
-Fix landed (D5 = commit `7fd6ff6`); median AbsRel still 0.025 (on
-paper's 0.040), mean still 2481.
+Median AbsRel was 0.025 (bullseye vs paper 0.040) but mean was 2481 —
+outdoor outliers with near-zero post-alignment disparity inverted to
+enormous depths. Root cause: MoGe's `drop_max_depth` filters **GT**, not
+predictions; they also apply `clamp_min(1 / gt_depth[mask].max())` on
+predicted disparity before inverting to depth (`moge/test/metrics.py`
+~line 210).
 
-Revised root cause: MoGe's `drop_max_depth` filters **GT** — doesn't
-catch **predicted** post-alignment depths blowing up. MoGe also applies
-`clamp_min(1 / gt_depth[mask].max())` on the predicted disparity BEFORE
-inverting to depth (`moge/test/metrics.py:210`). Per-sample disparity
-clamp is the missing piece.
+Fix (this commit): new `scale_shift_clamped` alignment mode in
+`src/plumbline/metrics/alignment.py` — same LSQ fit as `scale_shift`,
+plus a per-sample disparity floor at `1/gt.max()` before inverting.
+`moge_vitl_diode_{both,indoor}.yaml` opt in. Unit test in
+`tests/test_metrics.py::TestAlignment::test_scale_shift_clamped_caps_at_gt_max`
+constructs an outlier-pixel scenario and asserts plain lets it diverge
+while clamped caps at `gt.max()`.
 
-Resolution: add a per-sample predicted-disparity clamp in the alignment
-path, or a post-alignment per-sample depth cap. Median lands on paper,
-so adapter + loader + solver are fundamentally correct. v0.2.
+GPU verification pending — the next rental re-runs both DIODE YAMLs
+(cache-hit on prediction; metrics-only re-score).
 
 ---
 
@@ -232,16 +237,16 @@ next-session gate.
 
 Laptop-side prep (do before booking GPU):
 
-1. **D19** — per-sample predicted-disparity clamp for MoGe-DIODE
-   alignment path.
-2. **D8 / D9 / D18** — `KITTIMogeEvalLoader` + `kitti_moge_eval`
+1. **D8 / D9 / D18** — `KITTIMogeEvalLoader` + `kitti_moge_eval`
    protocol. Closes MoGe/Marigold/GeoWizard KITTI in one shot.
 
-GPU-side verification (D20 fix landed; unblocks these):
+GPU-side verification (fixes already on `main`):
 
-3. **D3** — VGGT-DTU chamfer under `aggregation: scene` on all 22 scans.
-4. **D4** — VGGT-ETH3D multiscene chamfer under the new once-per-scene
-   ICP path.
+2. **D3** — VGGT-DTU chamfer under `aggregation: scene` on all 22 scans.
+3. **D4** — VGGT-ETH3D multiscene chamfer under the new once-per-scene
+   ICP path (D20 fix).
+4. **D19** — MoGe-DIODE-{both,indoor} re-score under `scale_shift_clamped`.
+   Prediction cache-hits; metrics-only pass.
 
 Nice-to-have (low priority):
 
