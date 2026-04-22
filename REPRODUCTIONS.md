@@ -4,11 +4,10 @@ A **reproduction** is a pinned config that re-produces a specific number from
 a specific paper, within a documented relative tolerance. Running it is the
 harness's acceptance test.
 
-> **Note (2026-04-22):** this matrix reflects the 2026-04-20 laptop-side
-> audit. For the current paper-match queue — including the 2026-04-21
-> GPU-rental run, solver fixes, `DIODEMogeEvalLoader`, and open items
-> like the MoGe-KITTI structural protocol mismatch — see
-> `docs/AGENT_RUN_20260421.md` + `docs/AGENT_PLAN_20260421.md`.
+> **Note (2026-04-22):** status matrix below reflects the 2026-04-21
+> GPU-rental run. Full per-row observed/paper numbers, env deviations,
+> and off-paper diagnoses are in `docs/runs/20260421.md`. Open discrepancies
+> and next-session priorities are in `docs/DISCREPANCIES.md`.
 
 ## Status matrix (2026-04-20, post-audit)
 
@@ -29,31 +28,37 @@ cells are now ℹ️ instead of ✅.
 | Model → Dataset | NYUv2 | KITTI | DIODE | ETH3D | DTU | Co3Dv2 | GSO |
 |---|---|---|---|---|---|---|---|
 | **DA-V2 Small** | ✅ **0.0510** vs 0.053 | ✅ **0.0770** vs 0.078 | ℹ️ **0.0722** _(no ViT-S paper cell under this protocol)_ | — | — | — | ⌛ |
-| **DA-V2 Base** | ✅ **0.0456** vs 0.049 | ⌛ | — | — | — | — | — |
-| **DA-V2 Large** | ✅ **0.0428** vs 0.0420 | ⌛ | — | — | — | — | 🎯 **0.0122** (δ₁ 0.9999) _(no paper target)_ |
+| **DA-V2 Base** | ✅ **0.0456** vs 0.049 | ✅ **0.0756** vs 0.078 | — | — | — | — | — |
+| **DA-V2 Large** | ✅ **0.0428** vs 0.0420 | ✅ **0.0710** vs 0.074 | — | — | — | — | 🎯 **0.0122** (δ₁ 0.9999) _(no paper target)_ |
 | **DA-V2 Metric-Outdoor-L** | — | ℹ️ **0.0877** _(VKITTI-finetuned; no direct paper)_ | — | — | — | — | — |
 | **Metric3D-v2 L** | ✅ **0.0660** vs 0.063 | ✅ **0.0495** vs 0.052 | — | — | — | — | — |
-| **Metric3D-v2 Giant** | ✅ **0.0702** vs 0.067 | ⌛ vs 0.051 | — | — | — | — | — |
+| **Metric3D-v2 Giant** | ✅ **0.0702** vs 0.067 | ✅ **0.0503** vs 0.051 | — | — | — | — | — |
 | **DA3** | ✅ δ₁ **0.9684** vs 0.974 | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | — | 🎯 **0.0150** (δ₁ 0.9994) _(no paper target)_ |
-| **MoGe-1 ViT-L** | ✅ **0.0305** (ROE, vs 0.0341) | ⌛ vs 0.0408 | ⚠️ **0.1088** vs 0.0400 _(2.7× off; MoGe preproc depth differs)_ | — | — | — | 🎯 **0.0094** (δ₁ 0.9999) _(no paper target)_ |
+| **MoGe-1 ViT-L** | ✅ **0.0342** vs 0.0341 | ⚠️ **0.0447** vs 0.0408 _(9.4% off; D8 structural protocol)_ | ⚠️ mean 2481 / median 0.025 vs 0.040 _(D19 pred-disparity clamp)_ | — | — | — | 🎯 **0.0094** (δ₁ 0.9999) _(no paper target)_ |
 | **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ℹ️ _(paper publishes ViT-L only as 10-dataset avg)_ | ⌛ | — | — | — | ⌛ |
 | **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — | — |
-| **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ⌛ vs 0.099 | — | — | — | — | — |
+| **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ⚠️ **0.1090** vs 0.099 _(10.1% off; D9)_ | — | — | — | — | — |
+| **GeoWizard** | ⚠️ **0.0573** vs 0.052 _(10.2% off; D17)_ | ⚠️ **0.131** vs 0.097 _(35.2% off; D18)_ | — | — | — | — | — |
 | **Depth Pro** | ℹ️ δ₁ **0.9347** _(paper does not evaluate NYU — earlier 0.961 pin was fabricated)_ | ⌛ | — | — | — | — | — |
 | **MASt3R** (2-view) | — | — | — | 2-view pose sweep | — | 🚧 | — |
-| **VGGT** | — | — | — | ✅ Overall **0.818** m vs paper 0.709 (3-scene subset, paper protocol) | ⌛ GT downloading; v0.1 gate 0.382 | 🚧 | — |
+| **VGGT** | — | — | — | ⚠️ 0.818 m vs 0.709 _(D4 fix landed; awaiting D20 verification)_ | 🧪 D3 fix landed; awaiting D20 verification (v0.1 gate 0.382) | 🚧 | — |
 
-### Paper-match count (post-audit)
+### Paper-match count (post 2026-04-21 run)
 
-**8 ✅ cells** with `source_confidence: verified_pdf` targets on
-mono-depth anchors:
+**13 ✅ mono-depth cells** with `source_confidence: verified_pdf`:
 
-- NYU: DA-V2 S/B/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3 (7 cells)
-- KITTI: DA-V2 Small, Metric3D-v2 L (2 cells) — DA-V2 Base/Large,
-  Metric3D-v2 Giant, Marigold, MoGe-1 now have verified paper targets
-  ⌛ awaiting the GPU KITTI run
+- NYU (8): DA-V2 S/B/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3
+- KITTI (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
 
-Plus 1 verified multi-view ✅ (VGGT on ETH3D 3-scene chamfer).
+**6 ⚠️ off-paper cells** (each root-caused in `docs/DISCREPANCIES.md`):
+
+- MoGe-1 KITTI (D8), MoGe-1 DIODE (D19), Marigold KITTI (D9),
+  GeoWizard NYU (D17), GeoWizard KITTI (D18), VGGT ETH3D (D4 fix
+  landed, awaiting D20-perf verification).
+
+**Multi-view ✅ cells**: 0. VGGT ETH3D previously counted is now ⚠️
+pending D20; VGGT DTU has a protocol fix on `main` (D3) awaiting the
+same D20 unblock.
 
 **Dropped from the ✅ count (2026-04-20 audit):**
 
@@ -66,18 +71,17 @@ See [AUDIT.md](./reproductions/AUDIT.md) for per-YAML verification.
 
 ### Biggest open gaps (in order of per-cell leverage)
 
-1. **ETH3D chamfer aggregation protocol** — hits DA3 + VGGT
-   simultaneously, ~100× off paper F-score. Highest-leverage single
-   fix. Requires understanding the paper's full-scene-mesh
-   aggregation, not our per-sample 8-view-window chamfer.
-2. **KITTI raw data on disk** — unblocks 6+ cells (all mono-depth
-   families). Annotated-depth GT is already downloaded; need the
-   ~28 Eigen-test drives (~14 GB) + a pinned sample list.
-3. **DIODE MoGe-preprocessed depth encoding** — closes the MoGe +
-   DA-V2 DIODE residual. MoGe uses a uint16-encoded depth.png per
-   sample (structurally different from raw DIODE float32 .npy).
-4. **DTU GT download** — finishes the v0.1 gate (VGGT paper
-   chamfer=0.382). In progress; slow but viable.
+1. **D20 · scene-aggregation chamfer perf** — blocks GPU verification
+   of VGGT-DTU (D3 fix) and VGGT-ETH3D (D4 fix). Lift per-sample ICP to
+   once-per-scene. 1–2 h laptop fix.
+2. **D8 / D9 / D18 · `KITTIMogeEvalLoader` + protocol** — closes MoGe,
+   Marigold, and GeoWizard KITTI cells under a shared structural protocol
+   delta. 4–6 h laptop fix.
+3. **D19 · MoGe-DIODE per-sample disparity clamp** — median lands on
+   paper; mean is blown up by outdoor outliers. ~1 h laptop fix.
+4. **D10 · VGGT-ETH3D full 13-scene split** — 3-scene subset can't
+   match the 13-scene aggregate. Either stage the remaining scenes
+   (~14 GB) or demote to informational.
 5. **Co3Dv2 data** — unblocks pose benchmarks for VGGT / MASt3R /
    DA3. Loader already landed 2026-04-19 post-ScanNet-1500 pivot.
 
