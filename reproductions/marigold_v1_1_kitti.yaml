@@ -6,7 +6,7 @@
 # fit is gt ≈ s*pred + b in depth space, not disparity.
 
 name: marigold-v1-1-kitti
-protocol: kitti_eigen_garg
+protocol: kitti_moge_eval
 
 model:
   name: marigold
@@ -16,9 +16,6 @@ model:
     ensemble_size: 10
     dtype: float16
     seed: 2024
-
-dataset:
-  name: kitti
 
 scale_alignment: scale_shift_depth
 device: cuda:0

@@ -1,22 +1,22 @@
-# MoGe (ViT-L) on KITTI Eigen benchmark
+# MoGe (ViT-L) on KITTI Eigen benchmark — MoGe-paper protocol
 #
-# Outdoor KITTI counterpart of moge-vitl-nyuv2. MoGe-1 is
-# affine-invariant (relative depth) — plumbline aligns in
-# inverse-depth (disparity) space via scale_shift_robust / ROE, which
-# corresponds to the paper's "affine-invariant disparity" column.
+# Outdoor KITTI counterpart of moge-vitl-nyuv2. MoGe-1 is affine-
+# invariant (relative depth); alignment is plain LSQ in disparity
+# space plus MoGe's per-sample disparity floor at 1/gt.max()
+# (scale_shift_clamped) to match `moge/test/metrics.py`. Uses
+# MoGe's HF-bundle KITTI data + the kitti_moge_eval protocol —
+# closes D8 in docs/DISCREPANCIES.md (the prior Monodepth2-Eigen +
+# Garg + 80 m clip setup landed 9.4 % off the paper's 0.0408).
 
 name: moge-vitl-kitti
-protocol: kitti_eigen_garg
+protocol: kitti_moge_eval
 
 model:
   name: moge
   kwargs:
     variant: vitl
 
-dataset:
-  name: kitti
-
-scale_alignment: scale_shift
+scale_alignment: scale_shift_clamped
 device: cuda:0
 paper_reference:
   primary_metric: abs_rel
