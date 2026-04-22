@@ -453,6 +453,20 @@ class DIODEMogeEvalLoader(Dataset):
         assert_valid_image(images, name=f"diode_moge/{rec['sample_id']}/image")
 
         depth, valid = load_moge_depth_png(sample_root / "depth.png")
+        # MoGe's eval applies a `drop_max_depth` filter in addition to the
+        # isfinite mask: any pixel whose GT depth exceeds
+        # `nanquantile(depth, 0.01) * 1000` is also excluded. Its effect
+        # is small for well-behaved indoor samples (1%-of-max * 1000 is
+        # usually 100× the scene max and so a no-op) but critical for
+        # outdoor samples where a few aligned predictions can otherwise
+        # explode to 1e6 AbsRel and drag the per-split mean skyward.
+        # See microsoft/MoGe moge/test/dataloader.py::_process_instance.
+        finite_d = depth[valid]
+        if finite_d.size:
+            p01 = float(np.nanquantile(finite_d, 0.01))
+            if p01 > 0:
+                max_allowed = p01 * 1000.0
+                valid = valid & (depth <= max_allowed)
         # Depth array may contain NaN / +inf for invalid/sky pixels. Our
         # assert_valid_depth requires finite values, so replace the
         # sentinels with a dummy (1.0 m) — they will be excluded from the
