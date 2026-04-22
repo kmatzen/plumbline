@@ -51,7 +51,34 @@ Fix: commit `a35c4f5` — `_shim_diffusers_for_geowizard()` aliases both
 via attribute assignment and `sys.modules` injection before the
 upstream import.
 
-### D3 · VGGT + DTU — suspected m↔mm scale mishandle   🔎 SUSPECTED
+### D3 · VGGT + DTU — per-sample vs scene-aggregated chamfer   ✅ FIXED (config)
+
+**Root cause identified 2026-04-22 probe** (script at
+`/tmp/probe_dtu_alignment.py`, results below). Not a scale bug, not
+an ICP bug — aggregation mode.
+
+scan1 chamfer over 15 cached VGGT predictions, three alignment modes:
+
+| mode | mean (mm) | median (mm) | vs ICP |
+|---|---:|---:|---:|
+| `none` | 1147 | 1147 | 27× |
+| `camera_centers` | 81 | 76 | 2× |
+| `icp` | 43 | 31 | 1× |
+
+ICP works (27× improvement over raw). Camera-centers Umeyama alone
+works (14× improvement). The residual vs paper's 0.382 mm isn't
+alignment — it's **per-sample chamfer instead of scene-merged +
+voxel-downsampled Acc/Comp**.
+
+`protocols/dtu_vggt_table2.yaml` didn't set `aggregation: scene`; the
+runner defaulted to sample-level. The VGGT paper (and every MVS-tool
+convention) reports per-scan chamfer on the fused prediction cloud
+after 1-cm voxel downsample — which plumbline has in the ETH3D path
+via `aggregation: scene`, but wasn't wired on DTU.
+
+Fix (this session): protocol now pins `aggregation: scene` and
+`scene_voxel_size: 0.01`. Re-run on a fresh GPU should land close to
+paper's 0.382 mm. v0.2 verification.
 
 Symptom: partial re-run landed chamfer 56.37 mm vs paper 0.382 mm —
 147 × off. (Partial because 715/924 samples had skipped on the first
