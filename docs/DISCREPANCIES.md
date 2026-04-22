@@ -388,6 +388,34 @@ of the verified queue. Commit `603e717`.
 
 ---
 
+### D20 · Scene-aggregation chamfer is slow   🔎 PERF
+
+Symptom: `vggt-eth3d-multiscene-chamfer` clean run (scan_clean now
+present) spent >39 min in scene-aggregation before I killed it at
+the 4 h 25 m rental threshold. Same compute path timed out in two
+D3-verification probe scripts this session (15 min and 8 min
+timeouts both exceeded on scan1 alone).
+
+Likely cause: `_aligned_point_map` is called per-sample with
+`pointcloud_alignment=icp`, which runs a full ICP refine against the
+scan's GT cloud on every sample. ETH3D has ~137 samples / 3 scenes
+= ~45 ICP refines per scene; DTU has ~42 samples / scan × 22 scans =
+~924 ICP refines. On GT clouds of 200 K+ points this dominates.
+
+Optimizations (in order of blast-radius):
+
+1. Do the ICP refine ONCE per scene, on the fused + voxel-downsampled
+   PREDICTION cloud, instead of per-sample. The warm-start from
+   `camera_centers` Umeyama already puts each sample close to the
+   correct pose; per-sample ICP was over-engineered.
+2. Subsample GT to fewer points for ICP (say 50 K), keep full for
+   chamfer.
+3. Switch the KD-tree library to one with faster bulk queries
+   (scipy cKDTree is already fast; maybe pykdtree).
+
+Priority: blocking D3 + vggt-eth3d verification. 1–2 h to fix +
+verify. v0.2.
+
 ## Priorities for the next session
 
 Cheap-first sequencing (assuming a fresh GPU rental):
