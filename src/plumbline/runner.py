@@ -289,13 +289,30 @@ def evaluate(
     # with an unweighted mean — matches the per-scene-then-average
     # convention in MVS benchmark tables.
     if aggregation == "scene" and scene_points:
+        scene_progress = Progress(
+            TextColumn("[bold blue]scene-agg"),
+            BarColumn(),
+            MofNCompleteColumn(),
+            TimeElapsedColumn(),
+            TextColumn("  {task.fields[status]}"),
+            console=Console(stderr=True),
+            disable=not show_progress,
+            transient=False,
+        )
+        scene_task = scene_progress.add_task(
+            "chamfer", total=len(scene_points), status=""
+        )
+        scene_progress.start()
         per_scene: dict[str, dict[str, float]] = {}
         for scene, chunks in scene_points.items():
+            scene_progress.update(scene_task, status=f"scene={scene}")
             merged = np.vstack(chunks).astype(np.float32)
             gt = scene_gt[scene]
             per_scene[scene] = accuracy_completeness(
                 merged, gt, voxel_size=scene_voxel_size
             )
+            scene_progress.advance(scene_task, 1)
+        scene_progress.stop()
         report.per_scene_metrics = per_scene
         keys = sorted({k for m in per_scene.values() for k in m})
         report.aggregate_metrics = {
