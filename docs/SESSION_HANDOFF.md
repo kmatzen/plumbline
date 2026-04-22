@@ -24,25 +24,24 @@ Status matrix: `REPRODUCTIONS.md`.
 `docs/DISCREPANCIES.md § Priorities for the next session` lists open work
 in cheap-first order. Summary:
 
-### Highest-leverage laptop prep (not yet implemented)
+### Highest-leverage laptop prep
 
-These are blocking future GPU verification — doing them on the laptop
-before the next rental avoids burning a second timeout.
-
-1. **D20 · scene-aggregation chamfer perf.** Lift per-sample ICP in
-   `src/plumbline/runner.py:465 _aligned_point_map` to once-per-scene on
-   the fused+voxel-downsampled prediction cloud. Blocks verification of
-   D3 (VGGT-DTU) and D4 (VGGT-ETH3D) — the 2026-04-21 run timed out in
-   this path. 1–2 h CPU-only work.
-2. **D19 · MoGe-DIODE per-sample disparity clamp.** Add MoGe's
+1. **D19 · MoGe-DIODE per-sample disparity clamp.** Add MoGe's
    `clamp_min(1 / gt_depth.max())` to the predicted disparity before
    inversion (ref: `moge/test/metrics.py:210`). Median already lands on
    paper; mean is blown up by a handful of outdoor outliers. ~1 h.
-3. **D8/D9/D18 · KITTIMogeEvalLoader + kitti_moge_eval protocol.**
+2. **D8/D9/D18 · KITTIMogeEvalLoader + kitti_moge_eval protocol.**
    MoGe/Marigold/GeoWizard all miss KITTI by 10–35 % under plumbline's
    Monodepth2-Eigen + Garg protocol; they publish under MoGe's bespoke
    750×375 center-warp eval. One loader + protocol closes all three.
    4–6 h.
+
+### Landed, awaiting next-GPU verification
+
+- **D20 · scene-aggregation chamfer perf** — per-sample ICP lifted to
+  once-per-scene on the fused+voxel-downsampled prediction cloud
+  (`src/plumbline/runner.py` scene-merge loop). Unblocks D3/D4
+  verification that timed out on 2026-04-21.
 
 ### Verify-on-next-GPU (fixes already on `main`)
 

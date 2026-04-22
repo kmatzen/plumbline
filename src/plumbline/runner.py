@@ -55,6 +55,7 @@ from plumbline.metrics.pointmap import (
     accuracy_completeness,
     chamfer_distance,
     f_score,
+    voxel_downsample,
 )
 from plumbline.metrics.pose import auc as pose_auc_fn
 from plumbline.metrics.pose import (
@@ -225,10 +226,20 @@ def evaluate(
             ),
         )
         if aggregation == "scene" and trimmed_sample.point_cloud_gt is not None:
+            # Per-sample alignment in scene mode is a cheap warm-start only:
+            # camera_centers Umeyama puts each chunk in roughly the right
+            # neighbourhood of the GT frame. Any user-requested ICP refine
+            # is deferred to a single scene-level pass below, on the fused +
+            # voxel-downsampled cloud. Running ICP per sample against a
+            # 200 K-point GT scan was O(N_samples × 30 iters × KDTree query)
+            # and dominated the rental-run wall time on ETH3D + DTU.
+            per_sample_align = (
+                "camera_centers" if pointcloud_alignment == "icp" else pointcloud_alignment
+            )
             aligned = _aligned_point_map(
                 prediction=prediction,
                 sample=trimmed_sample,
-                pointcloud_alignment=pointcloud_alignment,
+                pointcloud_alignment=per_sample_align,
             )
             if aligned is not None:
                 scene = sample.sample_id.split("/", 1)[0]
@@ -308,6 +319,15 @@ def evaluate(
             scene_progress.update(scene_task, status=f"scene={scene}")
             merged = np.vstack(chunks).astype(np.float32)
             gt = scene_gt[scene]
+            if pointcloud_alignment == "icp":
+                # Single scene-level ICP refine, on the fused + voxel-
+                # downsampled prediction cloud. Camera-centres Umeyama
+                # already put each per-sample chunk in the right neighbourhood
+                # above; this tightens the global fit against the GT scan.
+                merged_ds = voxel_downsample(merged, scene_voxel_size).astype(np.float32)
+                if merged_ds.shape[0] >= 3 and gt.shape[0] >= 3:
+                    s, R, t, _info = icp_similarity(merged_ds, gt)
+                    merged = apply_similarity(merged, s, R, t).astype(np.float32)
             per_scene[scene] = accuracy_completeness(
                 merged, gt, voxel_size=scene_voxel_size
             )
