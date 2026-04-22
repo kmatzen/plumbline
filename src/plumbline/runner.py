@@ -22,11 +22,23 @@ import math
 import random
 import time
 import traceback
+from collections.abc import Iterator
 from dataclasses import dataclass
 from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
+
+from rich.console import Console
+from rich.progress import (
+    BarColumn,
+    MofNCompleteColumn,
+    Progress,
+    TaskProgressColumn,
+    TextColumn,
+    TimeElapsedColumn,
+    TimeRemainingColumn,
+)
 
 from plumbline import _version
 from plumbline.cache import PredictionCache
@@ -94,6 +106,7 @@ def evaluate(
     boundary_tol: float = 0.1,
     aggregation: str = "sample",
     scene_voxel_size: float = 0.01,
+    show_progress: bool = True,
 ) -> Report:
     """Evaluate a model on a dataset and return a :class:`Report`.
 
@@ -136,7 +149,44 @@ def evaluate(
     scene_points: dict[str, list[NDArray[np.float32]]] = {}
     scene_gt: dict[str, NDArray[Any]] = {}
 
-    for sample in dataset:
+    # Progress bar on the main sample loop. Writes to stderr so stdout
+    # (the final Report markdown) stays clean. Set show_progress=False
+    # for programmatic callers that render their own UI.
+    progress = Progress(
+        TextColumn("[bold blue]{task.description}"),
+        BarColumn(),
+        MofNCompleteColumn(),
+        TaskProgressColumn(),
+        TimeElapsedColumn(),
+        TextColumn("<"),
+        TimeRemainingColumn(),
+        TextColumn("  {task.fields[status]}"),
+        console=Console(stderr=True),
+        disable=not show_progress,
+        transient=False,
+    )
+    task_total = total if total is not None else None
+    task_desc = f"{model.name}/{dataset.name}"
+    progress_task = progress.add_task(task_desc, total=task_total, status="")
+
+    def _iter_with_progress(ds: Dataset) -> Iterator[Sample]:
+        """Advance the progress bar AFTER each iteration regardless of
+        whether the loop body `continue`d or fell through."""
+        for s in ds:
+            yield s
+            # Running status: one primary metric's mean, if any were
+            # computed. Choose first metric alphabetically for stability.
+            status = ""
+            if per_metric_values:
+                key = sorted(per_metric_values.keys())[0]
+                vals = [v for v in per_metric_values[key] if np.isfinite(v)]
+                if vals:
+                    status = f"{key}={float(np.mean(vals)):.4f}  skipped={report.n_skipped}"
+            progress.update(progress_task, advance=1, status=status)
+
+    progress.start()
+
+    for sample in _iter_with_progress(dataset):
         report.n_total = max(report.n_total, len(report.per_sample) + 1)
         t0 = time.perf_counter()
         prediction = _predict_with_cache(
@@ -231,6 +281,8 @@ def evaluate(
         report.n_evaluated += 1
         for key, value in sample_metrics.items():
             per_metric_values.setdefault(key, []).append(value)
+
+    progress.stop()
 
     # Scene-merge post-processing: merge per-scene, voxel downsample,
     # compute Acc/Comp/Overall against scene GT. Aggregate across scenes
