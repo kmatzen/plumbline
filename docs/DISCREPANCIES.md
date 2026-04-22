@@ -1,171 +1,62 @@
-# Discrepancies — 2026-04-21 rental run and before
+# Discrepancies
 
-Catalog of every adapter / loader / protocol / solver mismatch surfaced
-this session, with resolution plan. Grouped by layer so a reader can
-triage: is this an **adapter bug**, a **loader** issue, a **protocol**
-mismatch, an **alignment-solver** choice, or a **citation** error?
+Catalog of every adapter / loader / protocol / solver / citation mismatch
+surfaced to date, grouped by layer. Triage: is this an **adapter bug**, a
+**loader** issue, a **protocol** mismatch, an **alignment-solver** choice,
+or a **citation** error?
 
 Status legend:
 
-- ✅ **FIXED** — change landed on `main`, verification complete.
+- ✅ **FIXED** — change landed on `main`.
 - 🧪 **FIX-PENDING-VERIFY** — change landed, waiting on a GPU re-run.
 - 🔎 **SUSPECTED** — hypothesis + diagnosis path; not yet reproduced.
 - 📅 **DEFERRED** — known root cause, scoped for v0.2+.
 - 📝 **EXPLAINED-NOT-A-BUG** — discrepancy is real but expected given
   the papers / solvers involved; documented to prevent rediscovery.
 
+Fixed entries are one-liners with commit SHAs — the full diagnosis lives
+in the commit message. Open entries keep context because future readers
+need it to act.
+
 ---
 
 ## Adapter bugs
 
-### D1 · GeoWizard — `generator` kwarg not accepted upstream   ✅ FIXED
+### D1 · GeoWizard — `generator` kwarg not accepted upstream   ✅ FIXED (`c50201e`)
 
-Symptom: every sample raised `TypeError:
-DepthNormalEstimationPipeline.__call__() got an unexpected keyword
-argument 'generator'` → 654/654 skipped.
+### D2 · GeoWizard — upstream diffusers API drift (`PositionNet`, `dual_transformer_2d`)   ✅ FIXED (`a35c4f5`, shim)
 
-Root cause: `src/plumbline/models/geowizard.py::predict` passed
-`generator=self._generator` to the upstream pipeline, but
-`/workspace/deps/geowizard/geowizard/models/geowizard_pipeline.py:73`'s
-`__call__` signature doesn't accept it. Never exercised end-to-end
-since diffusers' public API shifted under the adapter.
+### D3 · VGGT + DTU — per-sample vs scene-aggregated chamfer   ✅ FIXED (`ad924e9`, `2c140b3`)
 
-Fix: commit `c50201e` — drop the kwarg; seed `torch.manual_seed(seed +
-sample_index)` before each call so per-sample determinism still holds
-via torch's global RNG (which upstream samples internally).
-
-Verification: re-run in the current cleanup batch.
-
-### D2 · GeoWizard — upstream diffusers API drift   ✅ FIXED (shim)
-
-Symptom: `ImportError: cannot import name 'PositionNet' from
-'diffusers.models.embeddings'` followed by `ModuleNotFoundError: No
-module named 'diffusers.models.dual_transformer_2d'`.
-
-Root cause: upstream `GeoWizard` repo was forked from an older diffusers
-(≤ 0.25-ish). `PositionNet` was renamed to
-`GLIGENTextBoundingboxProjection`; `dual_transformer_2d` moved under
-`diffusers.models.transformers.`.
-
-Fix: commit `a35c4f5` — `_shim_diffusers_for_geowizard()` aliases both
-via attribute assignment and `sys.modules` injection before the
-upstream import.
-
-### D3 · VGGT + DTU — per-sample vs scene-aggregated chamfer   ✅ FIXED (config)
-
-**Root cause identified 2026-04-22 probe** (script at
-`/tmp/probe_dtu_alignment.py`, results below). Not a scale bug, not
-an ICP bug — aggregation mode.
-
-scan1 chamfer over 15 cached VGGT predictions, three alignment modes:
-
-| mode | mean (mm) | median (mm) | vs ICP |
-|---|---:|---:|---:|
-| `none` | 1147 | 1147 | 27× |
-| `camera_centers` | 81 | 76 | 2× |
-| `icp` | 43 | 31 | 1× |
-
-ICP works (27× improvement over raw). Camera-centers Umeyama alone
-works (14× improvement). The residual vs paper's 0.382 mm isn't
-alignment — it's **per-sample chamfer instead of scene-merged +
-voxel-downsampled Acc/Comp**.
-
-`protocols/dtu_vggt_table2.yaml` didn't set `aggregation: scene`; the
-runner defaulted to sample-level. The VGGT paper (and every MVS-tool
-convention) reports per-scan chamfer on the fused prediction cloud
-after 1-cm voxel downsample — which plumbline has in the ETH3D path
-via `aggregation: scene`, but wasn't wired on DTU.
-
-Fix (this session): protocol now pins `aggregation: scene` and
-`scene_voxel_size: 0.01`. Re-run on a fresh GPU should land close to
-paper's 0.382 mm. v0.2 verification.
-
-Symptom: partial re-run landed chamfer 56.37 mm vs paper 0.382 mm —
-147 × off. (Partial because 715/924 samples had skipped on the first
-re-run before `vggt` was pip-installed.)
-
-Hypothesis: VGGT emits depth in metres; DTU loader keeps
-GT in mm (see `src/plumbline/datasets/dtu.py:145`). Runner aligns
-prediction→GT via `_aligned_point_map` → ICP → Umeyama (which SHOULD
-absorb a uniform scale factor cleanly). A 147 × residual suggests ICP
-converged on a partial match — maybe a rotation-only branch, or a
-scale-clipped result. Not 1000 × (no conversion) and not 1 × (correct)
-— something in between.
-
-Fix plan: trigger a clean re-run with the full 22 scans (need to not
-time out — the first attempt hit 4 h 25 m without landing). Options:
-
-1. Run a 1-scan subset first to get a number with `pointcloud_alignment
-   = icp` vs `= umeyama` vs `= none` to see where the 147 × lands. That
-   isolates ICP vs scale-handling from dataset-size.
-2. Add per-scene timing logs to the scene-aggregation path in
-   `src/plumbline/runner.py::_aligned_point_map` so next run tells us
-   WHICH scene eats hours.
-3. If ICP is the culprit, swap to `umeyama` on DTU (paper reports
-   under "VGGT's own MASt3R-style recipe" — see YAML notes).
-
-Effort estimate: 30 min single-scan probe + re-run.
+Protocol now pins `aggregation: scene` + `scene_voxel_size: 0.01`.
+2026-04-22 probe (scan1, 15 cached VGGT predictions): ICP 43 mm, Umeyama
+81 mm, none 1147 mm — alignment works; the 147× residual vs paper's
+0.382 mm was per-sample chamfer instead of scene-merged Acc/Comp. GPU
+verification blocked on **D20** (per-sample ICP is too slow to finish a
+full-scan sweep).
 
 ---
 
 ## Loader / dataset issues
 
-### D4 · ETH3D scene_aggregation empty metrics   ✅ FIXED
+### D4 · ETH3D scene_aggregation empty metrics (missing `scan_clean` GT)   ✅ FIXED (`f89cdc4`)
 
-Symptom: `vggt-eth3d-multiscene-chamfer` produced 137 per-sample pose
-metrics but empty `aggregate_metrics` / `per_scene_metrics` — the MVS
-chamfer never computed.
+S3 cache only had `dslr_scan_eval`; `scan_clean/scan*.ply` is the point
+cloud the loader needs to populate `Sample.point_cloud_gt`. Fetched via
+`py7zr`, pushed to S3. GPU verification blocked on **D20**.
 
-Root cause: the ETH3D loader requires `scan_clean/scan*.ply` to
-populate `Sample.point_cloud_gt`. The S3 cache only had
-`dslr_scan_eval/` (laser GT in eval coordinate frame), so
-`point_cloud_gt=None` and the scene-aggregation code at
-`runner.py:177` silently skipped the MVS branch.
+### D5 · DIODE outdoor prediction outliers (MoGe `drop_max_depth`)   ✅ FIXED (`7fd6ff6`)
 
-Fix: commit `f89cdc4` — fetched `*_scan_clean.7z` for the 3 scenes via
-`py7zr` (no `p7zip-full` binary on rental; no sudo), unpacked,
-flattened the nested `scene/scene/scan_clean` directory, pushed to
-`s3://plumbline-bench/datasets/eth3d/<scene>/scan_clean/`. Invalidated
-the dataset manifest.
+See D19 for the residual mean-blowup after this fix — the `drop_max_depth`
+filter is on GT, not predictions.
 
-Verification: pending in the current cleanup batch.
+### D6 · DIODE Moge-eval loader `split` kwarg   ✅ FIXED (`ae046ab`)
 
-### D5 · DIODE outdoor prediction outliers   🧪 FIX-PENDING-VERIFY
+### D7 · KITTI annotated-depth not in S3 cache   ✅ FIXED
 
-Symptom: first `moge-vitl-diode-both` run under the new HF-bundle loader
-landed mean AbsRel = **2481** across 771 samples. Median was 0.025
-(dead on paper's 0.040), but a handful of outdoor samples produced
-post-alignment depths with per-sample AbsRel in the 40 K — 1.4 M range.
-
-Root cause: MoGe's eval applies a secondary GT mask
-(`dataloader.py::_process_instance`):
-`max_depth = nanquantile(gt, 0.01) * 1000`, then
-`depth_valid &= gt ≤ max_depth`. For outdoor samples with degenerate
-predictions this collapses the mean. Plumbline's first loader didn't
-mirror it.
-
-Fix: commit `7fd6ff6` — added the `drop_max_depth` filter to
-`DIODEMogeEvalLoader`. Re-run pending.
-
-### D6 · DIODE Moge-eval loader `split` kwarg   ✅ FIXED
-
-Symptom: protocol pinned `dataset.split: val`, runner forwarded
-`split` to the dataset constructor, new loader's `__init__` didn't
-accept it → `TypeError`.
-
-Fix: commit `ae046ab` — `DIODEMogeEvalLoader.__init__` now takes
-`split="val"` (raises on anything else).
-
-### D7 · KITTI annotated-depth not in S3 cache   ✅ FIXED (retroactively)
-
-Symptom: all three `da-v2-{S,B,L}-kitti` rows crashed with
-`DatasetNotAvailable: KITTI annotated-depth tree not found at
-~/data/kitti/depth_annotated`. S3 cache only had
-`kitti/raw/` (RGB), not the `data_depth_annotated` tree.
-
-Fix: fetched `data_depth_annotated.zip` (14 GB) from avg-kitti,
-unpacked, pushed to `s3://plumbline-bench/datasets/kitti/depth_annotated/`.
-Future sessions' `stage_all_data.sh` pulls it automatically.
+Retroactive: fetched `data_depth_annotated.zip` (14 GB) from avg-kitti,
+pushed to `s3://plumbline-bench/datasets/kitti/depth_annotated/`.
+Future `stage_all_data.sh` runs pull it automatically.
 
 ---
 
@@ -228,178 +119,107 @@ repo-wide 5 % cap encoded that intent.
 
 ## Alignment / solver choice
 
-### D11 · Plumbline's `scale_shift_robust` beats MoGe's own LSQ   📝 EXPLAINED
+### D11 · Plumbline's `scale_shift_robust` beats MoGe's own LSQ on NYU   📝 EXPLAINED (`c14d776`)
 
-Observed AbsRel on `moge-vitl-nyuv2` under `scale_shift_robust` was
-0.0305 vs MoGe-paper 0.0341 under what they also call
-"affine-invariant disparity" — 10.6 % **better** than paper. Looked
-like a bug.
-
-Root cause (subagent read of `moge/utils/alignment.py`): MoGe's own
-eval uses **plain** `torch.linalg.lstsq` with uniform weights — no
-IRLS, no Huber, no MAD. Plumbline's `scale_shift_robust` is Huber-IRLS
-with MAD-scale (k=1.345). On NYU's long-tailed disparity-residual
-distribution, Huber downweights outlier pixels LSQ gets pulled by, so
-plumbline's ROE genuinely outperforms MoGe's LSQ on the *same*
-predictions.
-
-Fix: commit `c14d776` — switch `moge-vitl-nyuv2` YAML from
-`scale_shift_robust` to `scale_shift` (plain LSQ) to match paper. New
-observed 0.03419 vs paper 0.03410 = 0.28 % MATCH.
-
-Cascade: same alignment change to `moge-vitl-kitti`,
-`moge-vitl-diode-both`, `moge-vitl-diode-indoor`, `moge2-vitl-*`,
+MoGe's own eval uses plain `torch.linalg.lstsq`; plumbline's Huber-IRLS
+solver downweights NYU's long-tailed disparity-residual outliers. YAMLs
+switched to `scale_shift` (plain LSQ) to match paper protocol. Fix
+cascaded through moge-vitl-{kitti,diode-both,diode-indoor}, moge2-vitl-*,
 `protocols/gso_moge.yaml`.
 
-### D12 · KITTI Eigen-crop hypothesis (rejected)   📝 EXPLAINED
+### D12 · KITTI Eigen-crop hypothesis   📝 EXPLAINED (rejected empirically, `fb58b90`)
 
-Hypothesis: plumbline applies the Garg crop on KITTI; Marigold and
-MoGe use Eigen. Switching would fix the ~10 % gap on both.
-
-Result: **rejected empirically** (commit `fb58b90`). Under Eigen crop
-`moge-vitl-kitti` went from 9.4 % off to 20.4 %; Marigold went from
-10.1 % to 17.8 %. Reverted both YAMLs to `kitti_eigen_garg`.
-`protocols/kitti_eigen_crop.yaml` preserved for a paper that genuinely
-uses it.
-
-The real delta on MoGe-KITTI is D8 (structural protocol); Marigold-
-KITTI is D9.
+Switching to Eigen crop made both MoGe-KITTI and Marigold-KITTI *worse*.
+Real deltas are D8 + D9 (structural protocol). `protocols/kitti_eigen_crop.yaml`
+preserved for a paper that genuinely uses it.
 
 ---
 
 ## Citations
 
-### D13 · DA-V2 Large NYU — two competing paper numbers   ✅ FIXED
+### D13 · DA-V2 Large NYU — two competing paper numbers   ✅ FIXED (`58fc159`)
 
-Two legitimate citations exist:
+DA-V2 paper says 0.045, MoGe Table 3 re-eval says 0.0420. Plumbline
+reproduces 0.0427 under plain LSQ (1.6 % off MoGe, 5.2 % off DA-V2).
+Pinned at MoGe's 0.0420; citation records both.
 
-- DA-V2 paper (arXiv:2406.09414), Table 2 p. 8: ViT-L NYU AbsRel =
-  0.045 under "the paper's own eval".
-- MoGe paper (arXiv:2410.19115), Table 3 DA-V2-L baseline row: AbsRel
-  = 0.0420 under MoGe's `align_affine_lstsq`.
+### D14 · DA-V2 Base NYU citation UNVERIFIED → verified 0.049   ✅ FIXED (`603e717`)
 
-Same model, same protocol name, two different numbers. Plumbline
-reproduces 0.0427 under plain LSQ — 1.6 % off MoGe's 0.0420, 5.2 %
-off DA-V2's 0.045.
+### D15 · DA-V2 NYU ~0.002 AbsRel systematic downshift   📝 EXPLAINED
 
-Fix: commit `58fc159` — pin at MoGe's 0.0420 (tighter, achievable)
-with a citation that records both so the ~7 % cross-paper gap is
-documented.
-
-### D14 · DA-V2 Base NYU citation originally UNVERIFIED   ✅ FIXED
-
-Citation was tagged `UNVERIFIED — DA-V2 paper per-variant NYU table
-needs direct read.` Subagent fetched the arXiv PDF and confirmed 0.049
-is correct (Table 2, p. 8). Commit `603e717` dropped the tag.
-
-See D15 for the remaining Base-specific ~7 % gap — separate issue.
-
-### D15 · DA-V2 Base NYU 7.2 % off paper   📝 EXPLAINED
-
-Plumbline observes 0.0455 on DA-V2-B NYU vs paper 0.049 — 7.2 % off.
-NOT a Base-specific issue:
-
-| Variant | Observed | Paper | Δabs | Δrel |
-|---|---:|---:|---:|---:|
-| Small | 0.0510 | 0.053 | −0.002 | −3.8 % |
-| Base  | 0.0455 | 0.049 | −0.003 | −7.2 % |
-| Large | 0.0427 | 0.045 | −0.002 | −5.2 % *(vs MoGe-reported 0.042: 1.6 %)* |
-
-All three variants are 0.002 — 0.003 AbsRel *below* paper. Base only
-looks worst because the paper denominator is smaller. Per-sample
-cross-variant Pearson is 0.89 — 0.97 — the models agree on which
-samples are hard; they just all score uniformly lower than paper.
+Plumbline observes 0.002 — 0.003 AbsRel *below* paper across all three
+variants (S/B/L). Not Base-specific — Base just looks worst because the
+paper denominator is smaller. Per-sample cross-variant Pearson 0.89–0.97
+(models agree on hard samples, just score uniformly lower).
 
 Paper-vs-HF checkpoint swap had ~0 effect (<0.0005 delta). Real
 suspects: NYU Eigen-crop convention, rawDepths-field filter interaction,
 or small protocol detail in DA-V2's own eval we're not replicating.
 Below the priority threshold for v0.1 — **document and move on**.
 
+### D16 · MoGe-DIODE-indoor cited combined-val paper value   ✅ FIXED (`603e717`)
+
+Demoted to `source_confidence: approximate`, `value: null`; drops out
+of the verified queue.
+
 ### D17 · GeoWizard NYU 10 % off paper   🔎 SUSPECTED
 
-Symptom: with D1 (generator) + D2 (shim) fixed and the adapter now
-running end-to-end, observed `geowizard-nyuv2` AbsRel = 0.0573 vs
-paper 0.052 — 10.2 % off.
+Observed `geowizard-nyuv2` AbsRel = 0.0573 vs paper 0.052 — 10.2 % off,
+after D1 (generator) + D2 (shim) fixes.
 
 Candidates:
 
-1. **RNG divergence from paper.** Plumbline now seeds
-   `torch.manual_seed(seed + sample_index)` before each ensemble
-   call (D1 fix). The paper may use a single fixed seed for the
-   ensemble latents; per-sample re-seeding samples a different
-   latent-chain distribution and can shift mean AbsRel 10 % on
-   diffusion eval (ensemble converges in expectation but finite-
-   ensemble variance is non-trivial).
+1. **RNG divergence from paper.** Plumbline seeds
+   `torch.manual_seed(seed + sample_index)` per-sample (D1 fix). Paper
+   may use a single fixed seed for the ensemble latents; per-sample
+   re-seeding samples a different latent-chain distribution and can
+   shift mean AbsRel ~10 % on diffusion eval.
 2. **Paper protocol alignment**: plumbline uses `scale_shift_depth`
-   (depth-space LSQ) per GeoWizard YAML. Need to confirm from the
-   public GeoWizard eval script that this matches — subagent
-   didn't read this one.
+   (depth-space LSQ) per YAML. Need to confirm from the public
+   GeoWizard eval script that this matches.
 3. **Protocol resolution**: paper uses processing_res=768, same as
-   plumbline's YAML.
+   plumbline's YAML. Unlikely to be the source.
 
-Priority: low. Unlike D8/D9 (MoGe/Marigold KITTI), this one's only
-10 % off and on the "informational-smoke" side. Defer to v0.2 with
-D9 investigation.
+Priority: low — informational-smoke side. Defer to v0.2 with D9.
 
 ### D18 · GeoWizard KITTI 35 % off paper   🔎 SUSPECTED (same family as D8/D9)
 
-Symptom: `geowizard-kitti` AbsRel = 0.131 vs paper 0.097 — 35.2 %
-off. Much worse than NYU (10 %).
+AbsRel = 0.131 vs paper 0.097. Almost certainly the same structural KITTI
+protocol mismatch as D8 + D9 — all three diffusion / prior-depth adapters
+(MoGe, Marigold, GeoWizard) reproduce on NYU within 5–10 % but miss KITTI
+by 10–35 % under plumbline's Monodepth2-Eigen + Garg-crop + [1e-3, 80] m
+clip. Resolution: same `KITTIMogeEvalLoader` + protocol as D8. v0.2.
 
-Almost certainly the same structural KITTI protocol mismatch as D8
-(MoGe-KITTI) and D9 (Marigold-KITTI): all three diffusion / prior-
-depth adapters reproduce on NYU within 5-10 % but miss KITTI by
-10-35 % under plumbline's Monodepth2-Eigen-benchmark-652 +
-Garg-crop + [1e-3, 80] m clip. The KITTI eval these papers use is
-bespoke (MoGe's 750×375 center-warp, no crop, no cap) — and
-GeoWizard paper likely cites a similar eval since the three papers
-are era-peers with overlapping baseline tables.
+### D19 · MoGe-DIODE-both mean AbsRel=2481 after `drop_max_depth`   🔎 SUSPECTED
 
-Resolution: same as D8/D9 — a `KITTIMogeEvalLoader` + protocol.
-Probably also matches GeoWizard's eval enough to close this row.
-v0.2.
+Fix landed (D5 = commit `7fd6ff6`); median AbsRel still 0.025 (on
+paper's 0.040), mean still 2481.
 
-### D19 · MoGe-DIODE-both still 2481 after `drop_max_depth`   🔎 SUSPECTED
+Revised root cause: MoGe's `drop_max_depth` filters **GT** — doesn't
+catch **predicted** post-alignment depths blowing up. MoGe also applies
+`clamp_min(1 / gt_depth[mask].max())` on the predicted disparity BEFORE
+inverting to depth (`moge/test/metrics.py:210`). Per-sample disparity
+clamp is the missing piece.
 
-Symptom: fix landed (commit `7fd6ff6`), re-ran `moge-vitl-diode-both`
-cache-hit. Median AbsRel still 0.025 (on paper), mean still 2481.
-
-Root cause (revised from D5): MoGe's `drop_max_depth` filters **GT**
-— doesn't catch **predicted** post-alignment depths blowing up. MoGe
-also applies `clamp_min(1 / gt_depth[mask].max())` on the predicted
-disparity BEFORE inverting to depth (per subagent read of
-`moge/test/metrics.py:210`). This is the missing piece — caps
-per-sample predicted depth at `max(gt_depth)`.
-
-Plumbline's `scale_shift` alignment path doesn't do this per-sample
-disparity clamp. Fix would be a new alignment variant or a
-post-alignment per-sample cap; not a 5-min change.
-
-Resolution: v0.2. Median continues to land bullseye on paper, so
-the adapter + loader + solver are fundamentally correct; just one
-more clamp away from the full paper-match.
-
-### D16 · MoGe-DIODE-indoor cited combined-val paper value   ✅ FIXED
-
-The YAML cited MoGe's 0.0400 (combined val, 771 samples) but ran
-indoor-only (325 samples). Structurally mismatched populations.
-Demoted to `source_confidence: approximate`, `value: null`; drops out
-of the verified queue. Commit `603e717`.
+Resolution: add a per-sample predicted-disparity clamp in the alignment
+path, or a post-alignment per-sample depth cap. Median lands on paper,
+so adapter + loader + solver are fundamentally correct. v0.2.
 
 ---
 
-### D20 · Scene-aggregation chamfer is slow   🔎 PERF
+## Performance
 
-Symptom: `vggt-eth3d-multiscene-chamfer` clean run (scan_clean now
-present) spent >39 min in scene-aggregation before I killed it at
-the 4 h 25 m rental threshold. Same compute path timed out in two
-D3-verification probe scripts this session (15 min and 8 min
-timeouts both exceeded on scan1 alone).
+### D20 · Scene-aggregation chamfer is slow   🔎 PERF — blocks D3 + D4 verification
+
+Symptom: `vggt-eth3d-multiscene-chamfer` clean run (scan_clean present)
+spent >39 min in scene-aggregation before the 4 h 25 m rental threshold
+hit. Same compute path timed out in two D3-verification probe scripts
+(15 min and 8 min budgets both exceeded on scan1 alone).
 
 Likely cause: `_aligned_point_map` is called per-sample with
 `pointcloud_alignment=icp`, which runs a full ICP refine against the
-scan's GT cloud on every sample. ETH3D has ~137 samples / 3 scenes
-= ~45 ICP refines per scene; DTU has ~42 samples / scan × 22 scans =
+scan's GT cloud on every sample. ETH3D has ~137 samples / 3 scenes =
+~45 ICP refines per scene; DTU has ~42 samples / scan × 22 scans =
 ~924 ICP refines. On GT clouds of 200 K+ points this dominates.
 
 Optimizations (in order of blast-radius):
@@ -413,28 +233,33 @@ Optimizations (in order of blast-radius):
 3. Switch the KD-tree library to one with faster bulk queries
    (scipy cKDTree is already fast; maybe pykdtree).
 
-Priority: blocking D3 + vggt-eth3d verification. 1–2 h to fix +
-verify. v0.2.
+Priority: top of the next-session laptop queue. 1–2 h to fix + verify.
+
+---
 
 ## Priorities for the next session
 
-Cheap-first sequencing (assuming a fresh GPU rental):
+Laptop-side prep (do before booking GPU):
 
-1. **VERIFY** the in-flight cleanup batch lands the 6 expected rows
-   (moge-diode-both, moge-vitl-kitti Garg, marigold-kitti Garg,
-   geowizard × 2, vggt-eth3d). If the geowizard + diode + eth3d
-   numbers all come back MATCH, the adapter bugs + loader bug + missing
-   GT are closed out.
-2. **D3 VGGT-DTU scale diagnosis**: 30-min single-scan probe with
-   `pointcloud_alignment ∈ {icp, umeyama, none}` to isolate the 147 ×
-   issue. This is the one open adapter-side suspect.
-3. **D8 + D9 KITTI-MoGe/Marigold loader**: 4–6 h to write
-   `KITTIMogeEvalLoader` + protocol + verification. Closes the two
-   remaining ~10 % KITTI gaps. Defer unless this is a v0.1 blocker.
-4. **D10 VGGT-ETH3D full split**: stage the 10 missing scenes + re-run.
-   Or demote. Low priority.
-5. **D15 DA-V2 NYU ~0.002 bias**: nice-to-have. Inspect the NYU
-   loader's Eigen-crop + rawDepths interaction. Not a blocker.
+1. **D20** — lift per-sample ICP to once-per-scene in
+   `src/plumbline/runner.py::_aligned_point_map`. Unblocks D3 + D4 GPU
+   verification.
+2. **D19** — per-sample predicted-disparity clamp for MoGe-DIODE
+   alignment path.
+3. **D8 / D9 / D18** — `KITTIMogeEvalLoader` + `kitti_moge_eval`
+   protocol. Closes MoGe/Marigold/GeoWizard KITTI in one shot.
+
+GPU-side verification (after D20 lands):
+
+4. **D3** — VGGT-DTU chamfer under `aggregation: scene` on all 22 scans.
+5. **D4** — VGGT-ETH3D multiscene chamfer under the new once-per-scene
+   ICP path.
+
+Nice-to-have (low priority):
+
+6. **D10** — VGGT-ETH3D full 13-scene split, or demote to informational.
+7. **D15** — DA-V2 NYU ~0.002 bias. Inspect Eigen-crop + rawDepths
+   interaction.
 
 ## Rollback
 
