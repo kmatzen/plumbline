@@ -259,6 +259,73 @@ class TestMVSPipeline:
         )
         assert "chamfer" not in report.aggregate_metrics
 
+    def test_scene_aggregation_with_icp_runs_once_per_scene(self, tmp_path: Path) -> None:
+        """D20 regression: in aggregation='scene' mode, ICP refine must happen
+        on the fused+voxel-downsampled prediction cloud once per scene — not
+        per sample against the scene's full GT cloud. Prior code path ran
+        N_samples × ICP refines and dominated wall time on ETH3D + DTU runs.
+
+        This test counts icp_similarity calls: with two fake samples sharing
+        a scene prefix and aggregation='scene' + pointcloud_alignment='icp',
+        we expect exactly ONE icp_similarity call (scene-level), not two.
+        """
+        import plumbline.runner as runner_mod
+
+        # Shared-scene dataset: both samples belong to 'shared_scene/*' so
+        # they aggregate into one bucket.
+        class _SharedSceneDataset(_FakeMVSDataset):
+            def __init__(self) -> None:
+                super().__init__()
+                for i, s in enumerate(self._samples[:2]):
+                    s.sample_id = f"shared_scene/window_{i}"
+                self._samples = self._samples[:2]
+
+            def __len__(self) -> int:
+                return 2
+
+        # Non-degenerate predictions: the default FakeMVSAdapter returns an
+        # all-zero point_map, which collapses to a single point after voxel
+        # downsample and skips the ICP branch. Use a spread-out pmap so the
+        # refined code path actually fires.
+        class _SpreadPointMapAdapter(_FakeMVSAdapter):
+            name = "fake-spread"
+
+            def predict(self, images: np.ndarray, intrinsics: np.ndarray | None = None):
+                p = super().predict(images, intrinsics)
+                n, h, w, _ = images.shape
+                rng = np.random.default_rng(42)
+                p.point_map = rng.uniform(-1.0, 1.0, size=(n, h, w, 3)).astype(np.float32)
+                return p
+
+        call_count = {"n": 0}
+        original_icp = runner_mod.icp_similarity
+
+        def counted_icp(*args, **kwargs):
+            call_count["n"] += 1
+            return original_icp(*args, **kwargs)
+
+        runner_mod.icp_similarity = counted_icp  # type: ignore[assignment]
+        try:
+            report = evaluate(
+                model=_SpreadPointMapAdapter(),
+                dataset=_SharedSceneDataset(),
+                tasks=["mvs_depth"],
+                scale_alignment="none",
+                pointcloud_alignment="icp",
+                aggregation="scene",
+                scene_voxel_size=0.1,  # coarse for the tiny fake cloud
+                cache=PredictionCache(tmp_path),
+            )
+        finally:
+            runner_mod.icp_similarity = original_icp  # type: ignore[assignment]
+
+        assert call_count["n"] == 1, (
+            f"expected exactly one scene-level icp_similarity call, got {call_count['n']}"
+        )
+        # Aggregate metrics still land (Acc/Comp/Overall on merged cloud).
+        assert "overall" in report.aggregate_metrics
+        assert np.isfinite(report.aggregate_metrics["overall"])
+
     def test_view_count_is_capped_at_max_views(self, tmp_path: Path) -> None:
         """Runner's ``max_views`` trims samples before the adapter sees them."""
         captured: list[int] = []

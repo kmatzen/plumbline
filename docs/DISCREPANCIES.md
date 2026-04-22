@@ -209,31 +209,22 @@ so adapter + loader + solver are fundamentally correct. v0.2.
 
 ## Performance
 
-### D20 · Scene-aggregation chamfer is slow   🔎 PERF — blocks D3 + D4 verification
+### D20 · Scene-aggregation chamfer slow   🧪 FIX-PENDING-VERIFY
 
-Symptom: `vggt-eth3d-multiscene-chamfer` clean run (scan_clean present)
-spent >39 min in scene-aggregation before the 4 h 25 m rental threshold
-hit. Same compute path timed out in two D3-verification probe scripts
-(15 min and 8 min budgets both exceeded on scan1 alone).
+Per-sample `_aligned_point_map` with `pointcloud_alignment=icp` ran a
+full ICP refine against the scene's ~200 K-point GT cloud on every
+sample (~45 refines/scene on ETH3D, ~42/scan × 22 scans on DTU), which
+dominated wall time on the 2026-04-21 rental run.
 
-Likely cause: `_aligned_point_map` is called per-sample with
-`pointcloud_alignment=icp`, which runs a full ICP refine against the
-scan's GT cloud on every sample. ETH3D has ~137 samples / 3 scenes =
-~45 ICP refines per scene; DTU has ~42 samples / scan × 22 scans =
-~924 ICP refines. On GT clouds of 200 K+ points this dominates.
+Fix (this commit): in `aggregation='scene'` mode, per-sample alignment
+is downgraded to cheap `camera_centers` Umeyama; a single scene-level
+ICP refine runs on the fused + voxel-downsampled prediction cloud in
+the merge loop. Regression test in `tests/test_mvs_pipeline.py` counts
+`icp_similarity` calls and asserts exactly one per scene.
 
-Optimizations (in order of blast-radius):
-
-1. Do the ICP refine ONCE per scene, on the fused + voxel-downsampled
-   PREDICTION cloud, instead of per-sample. The warm-start from
-   `camera_centers` Umeyama already puts each sample close to the
-   correct pose; per-sample ICP was over-engineered.
-2. Subsample GT to fewer points for ICP (say 50 K), keep full for
-   chamfer.
-3. Switch the KD-tree library to one with faster bulk queries
-   (scipy cKDTree is already fast; maybe pykdtree).
-
-Priority: top of the next-session laptop queue. 1–2 h to fix + verify.
+GPU verification (D3 VGGT-DTU, D4 VGGT-ETH3D) still pending — the fix
+only changes wall time; correctness against paper chamfer is the
+next-session gate.
 
 ---
 
@@ -241,18 +232,15 @@ Priority: top of the next-session laptop queue. 1–2 h to fix + verify.
 
 Laptop-side prep (do before booking GPU):
 
-1. **D20** — lift per-sample ICP to once-per-scene in
-   `src/plumbline/runner.py::_aligned_point_map`. Unblocks D3 + D4 GPU
-   verification.
-2. **D19** — per-sample predicted-disparity clamp for MoGe-DIODE
+1. **D19** — per-sample predicted-disparity clamp for MoGe-DIODE
    alignment path.
-3. **D8 / D9 / D18** — `KITTIMogeEvalLoader` + `kitti_moge_eval`
+2. **D8 / D9 / D18** — `KITTIMogeEvalLoader` + `kitti_moge_eval`
    protocol. Closes MoGe/Marigold/GeoWizard KITTI in one shot.
 
-GPU-side verification (after D20 lands):
+GPU-side verification (D20 fix landed; unblocks these):
 
-4. **D3** — VGGT-DTU chamfer under `aggregation: scene` on all 22 scans.
-5. **D4** — VGGT-ETH3D multiscene chamfer under the new once-per-scene
+3. **D3** — VGGT-DTU chamfer under `aggregation: scene` on all 22 scans.
+4. **D4** — VGGT-ETH3D multiscene chamfer under the new once-per-scene
    ICP path.
 
 Nice-to-have (low priority):
