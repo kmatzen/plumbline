@@ -62,43 +62,35 @@ Future `stage_all_data.sh` runs pull it automatically.
 
 ## Protocol mismatches
 
-### D8 · MoGe KITTI — structural protocol delta   📅 DEFERRED (v0.2)
+### D8 · MoGe KITTI — structural protocol delta   🧪 FIX-PENDING-VERIFY
 
-Symptom: `moge-vitl-kitti` lands 9.4 % off paper (0.0408) under the
-Monodepth2 Eigen / Garg protocol. Switching to Eigen crop made it
-*worse* (20.4 % off).
+Symptom: `moge-vitl-kitti` landed 9.4 % off paper (0.0408) under the
+Monodepth2 Eigen / Garg protocol; Eigen crop was worse (20.4 % off).
 
-Root cause (from subagent read of `microsoft/MoGe` @ HEAD):
+Root cause (subagent read of `microsoft/MoGe` @ HEAD): paper eval uses a
+bespoke HF-bundle sample list (`KITTI/.index.txt`, 652 pre-warped frames
+at ~750×375), no crop, no `[1e-3, 80]` m clip, depth encoded in MoGe's
+log-PNG format, and a disparity-space LSQ with the `1/gt.max()` floor
+(D19). Nothing matches Monodepth2-Eigen-Garg.
 
-| Knob | Plumbline | MoGe paper |
-|---|---|---|
-| Sample list | Monodepth2 `eigen_benchmark` 652 frames | HF bundle `KITTI/.index.txt` (custom) |
-| Depth cap | `[1e-3, 80]` m | none (per-scene `clamp_min(1/max_gt)` only) |
-| GT source | Uhrig dense depth | MoGe's re-encoded `depth.png` |
-| Crop | Garg | none; they center-warp to 750×375 |
-| Resolution | native | warped 750×375 |
-| Alignment | full-res LSQ | 64×64-downsample LSQ then apply full-res |
+Fix (this commit): new `KITTIMogeEvalLoader` + `kitti_moge_eval` protocol
+mirroring `DIODEMogeEvalLoader` / `diode_moge`. `moge-vitl-kitti` opts
+in (alignment: `scale_shift_clamped`); D9 (Marigold) and D18 (GeoWizard)
+share the same loader/protocol but keep their own `scale_shift_depth`
+fit. GPU verification pending (needs the HF bundle staged to
+`$KITTI_MOGE_ROOT`).
 
-Resolution path: write `KITTIMogeEvalLoader` (sister of
-`DIODEMogeEvalLoader`) reading MoGe's HF bundle KITTI data + a new
-`kitti_moge_eval` protocol. 4–6 h of loader + protocol + verification
-work. Scoped v0.2.
+### D9 · Marigold KITTI — probable same-protocol delta   🧪 FIX-PENDING-VERIFY
 
-### D9 · Marigold KITTI — probable same-protocol delta   🔎 SUSPECTED
+Symptom: 10.1 % off paper under `kitti_eigen_garg` (17.8 % off under
+Eigen crop).
 
-Symptom: 10.1 % off paper under plumbline's `kitti_eigen_garg`
-protocol (and 17.8 % off under Eigen crop — worse, same as MoGe).
-
-Hypothesis: Marigold uses a similar bespoke eval to MoGe — the two
-papers publish on matching rows, their eval repos overlap (same-era
-SD-UNet depth adapters). Subagent confirmed Marigold uses Eigen crop
-in its public eval config, but our Eigen-crop attempt was worse, so
-either a secondary knob differs (the `alignment_max_res` resolution
-the subagent flagged, or depth-cap) or the crop is wrong.
-
-Resolution path: write `KITTIMarigoldEvalLoader` (or share with
-`KITTIMogeEvalLoader` if their HF eval bundles overlap). Defer to
-v0.2 alongside D8.
+`marigold-v1-1-kitti` now points at the shared `kitti_moge_eval` protocol
++ `kitti-moge-eval` loader (D8 fix); keeps its own
+`scale_shift_depth` alignment (Marigold's eval.py fits in depth space,
+not disparity). GPU verification will confirm whether the shared
+loader/protocol closes the 10 % gap, or whether Marigold has a
+secondary knob (e.g., `alignment_max_res`) that still differs.
 
 ### D10 · VGGT-ETH3D — 3-scene subset vs full-split paper target   📅 DEFERRED
 
@@ -182,13 +174,14 @@ Candidates:
 
 Priority: low — informational-smoke side. Defer to v0.2 with D9.
 
-### D18 · GeoWizard KITTI 35 % off paper   🔎 SUSPECTED (same family as D8/D9)
+### D18 · GeoWizard KITTI 35 % off paper   🧪 FIX-PENDING-VERIFY
 
-AbsRel = 0.131 vs paper 0.097. Almost certainly the same structural KITTI
-protocol mismatch as D8 + D9 — all three diffusion / prior-depth adapters
-(MoGe, Marigold, GeoWizard) reproduce on NYU within 5–10 % but miss KITTI
-by 10–35 % under plumbline's Monodepth2-Eigen + Garg-crop + [1e-3, 80] m
-clip. Resolution: same `KITTIMogeEvalLoader` + protocol as D8. v0.2.
+AbsRel = 0.131 vs paper 0.097, 35.2 % off under the old Monodepth2-Eigen
++ Garg setup. `geowizard-kitti` now points at the shared
+`kitti_moge_eval` protocol + `kitti-moge-eval` loader (D8 fix), with
+`scale_shift_depth` alignment (unchanged). GPU verification will show
+whether sharing the loader/protocol closes the 35 % gap or GeoWizard has
+a secondary protocol detail that still differs.
 
 ### D19 · MoGe-DIODE-both mean AbsRel=2481 after `drop_max_depth`   🧪 FIX-PENDING-VERIFY
 
@@ -235,18 +228,22 @@ next-session gate.
 
 ## Priorities for the next session
 
-Laptop-side prep (do before booking GPU):
-
-1. **D8 / D9 / D18** — `KITTIMogeEvalLoader` + `kitti_moge_eval`
-   protocol. Closes MoGe/Marigold/GeoWizard KITTI in one shot.
+Laptop-side prep: **none open.** All previously-queued laptop work (D20,
+D19, D8/D9/D18) has landed on `main`. Any further laptop work is
+research-scoped (D15 NYU bias, D10 ETH3D full split) rather than
+paper-match-blocking.
 
 GPU-side verification (fixes already on `main`):
 
-2. **D3** — VGGT-DTU chamfer under `aggregation: scene` on all 22 scans.
-3. **D4** — VGGT-ETH3D multiscene chamfer under the new once-per-scene
+1. **D3** — VGGT-DTU chamfer under `aggregation: scene` on all 22 scans.
+2. **D4** — VGGT-ETH3D multiscene chamfer under the new once-per-scene
    ICP path (D20 fix).
-4. **D19** — MoGe-DIODE-{both,indoor} re-score under `scale_shift_clamped`.
+3. **D19** — MoGe-DIODE-{both,indoor} re-score under `scale_shift_clamped`.
    Prediction cache-hits; metrics-only pass.
+4. **D8** — `moge-vitl-kitti` under the new `kitti_moge_eval` protocol.
+   Needs HF-bundle `KITTI.zip` staged to `$KITTI_MOGE_ROOT`.
+5. **D9** — `marigold-v1-1-kitti` under the same protocol.
+6. **D18** — `geowizard-kitti` under the same protocol.
 
 Nice-to-have (low priority):
 

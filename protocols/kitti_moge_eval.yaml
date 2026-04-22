@@ -1,0 +1,43 @@
+# KITTI evaluation protocol — MoGe-paper variant.
+#
+# KITTI (Geiger et al. 2013) is the canonical outdoor monocular-depth
+# benchmark. The Monodepth2/Eigen-benchmark 652-frame list + Garg crop +
+# [1e-3, 80] m clip is the "standard" eval; MoGe (Wang et al. 2024) uses
+# a different protocol on the same data that three papers in its era
+# (MoGe, Marigold, GeoWizard) all miss reproducing under the standard
+# one. This protocol captures the MoGe variant:
+#
+# - Sample list: MoGe's HF-bundle KITTI/.index.txt (652 center-warped
+#   frames). NOT Monodepth2's `eigen_benchmark/test_files.txt`.
+# - Resolution: frames are pre-warped to ~750×375 at bundle creation.
+#   Loader reads them as-is; model does its own canonical-camera resize.
+# - Crop: none. MoGe evaluates over the full warped frame.
+# - Depth cap: none. MoGe applies no fixed-range clip; relies on the
+#   per-sample disparity floor in `scale_shift_clamped` (for disparity-
+#   space LSQ alignments) or the nature of depth-space LSQ (for Marigold
+#   / GeoWizard).
+# - GT: MoGe's re-encoded 16-bit log-depth PNG with sky-as-+inf and
+#   invalid-as-NaN sentinels. Loader uses isfinite(depth) + MoGe's
+#   `drop_max_depth` filter (a no-op on well-behaved KITTI outdoor).
+#
+# Closes D8 / D9 / D18 in docs/DISCREPANCIES.md.
+
+name: kitti_moge_eval
+description: >
+  KITTI Eigen-test mono-depth evaluation under the MoGe Table 3
+  protocol: HF-bundle sample list (652), no crop, no [1e-3, 80] m clip.
+  Compatible with scale_shift_clamped (MoGe disparity + 1/gt.max() floor)
+  for MoGe-family reproductions and scale_shift_depth for Marigold /
+  GeoWizard (depth-space LSQ per their respective papers).
+
+reference:
+  paper: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), KITTI column"
+
+fixed:
+  dataset:
+    name: kitti-moge-eval
+    split: test
+  depth_clip: null
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]

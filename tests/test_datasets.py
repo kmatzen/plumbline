@@ -34,6 +34,7 @@ from plumbline.datasets.eth3d import (
 )
 from plumbline.datasets.kitti import (
     KITTIDataset,
+    KITTIMogeEvalLoader,
     eigen_crop_mask,
     garg_crop_mask,
     load_kitti_calib,
@@ -393,6 +394,37 @@ class TestKITTI:
         (tmp_path / "depth_annotated").mkdir()
         with pytest.raises(ValueError, match="image_02"):
             KITTIDataset(root=tmp_path, camera="rgb")
+
+
+class TestKITTIMogeEvalLoader:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable, match="KITTI MoGe-eval"):
+            KITTIMogeEvalLoader(root=tmp_path / "nope")
+
+    def test_missing_kitti_subdir(self, tmp_path: Path) -> None:
+        # Root exists but no KITTI/ child — should surface the same
+        # DatasetNotAvailable so the error tells the user to stage.
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable, match="KITTI MoGe-eval"):
+            KITTIMogeEvalLoader(root=tmp_path)
+
+    def test_non_test_split_rejected(self, tmp_path: Path) -> None:
+        # Splits other than "test" aren't in the bundle; rejecting early
+        # gives a clearer error than a file-not-found down the line.
+        (tmp_path / "KITTI").mkdir()
+        (tmp_path / "KITTI" / ".index.txt").write_text("")
+        with pytest.raises(ValueError, match="test split"):
+            KITTIMogeEvalLoader(root=tmp_path, split="val")
+
+    def test_registered(self) -> None:
+        # Regression guard: register_dataset decorator wires the name
+        # used by the kitti_moge_eval protocol + three reproduction YAMLs.
+        from plumbline.datasets.registry import DATASET_REGISTRY
+
+        assert DATASET_REGISTRY["kitti-moge-eval"] is KITTIMogeEvalLoader
 
     def test_scan_basic_load(self, tmp_path: Path) -> None:
         _write_fake_kitti(tmp_path, frames=3)

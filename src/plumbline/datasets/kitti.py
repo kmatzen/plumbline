@@ -97,6 +97,7 @@ from plumbline.datasets.registry import register_dataset
 
 __all__ = [
     "KITTIDataset",
+    "KITTIMogeEvalLoader",
     "eigen_crop_mask",
     "garg_crop_mask",
     "load_kitti_calib",
@@ -554,3 +555,137 @@ def _make_record(
         "depth_path": str(depth_path.relative_to(root)),
         "calib_path": str(calib_path.relative_to(root)),
     }
+
+
+@register_dataset("kitti-moge-eval")
+class KITTIMogeEvalLoader(Dataset):
+    """KITTI loader matching MoGe's evaluation pipeline.
+
+    Reads from the preprocessed HF bundle
+    ``Ruicheng/monocular-geometry-evaluation``'s ``KITTI.zip`` — NOT the
+    raw KITTI tree. MoGe's bundle ships 652 Eigen-test samples already
+    center-warped (~750×375), with depth re-encoded as log-spaced 16-bit
+    PNG plus a per-sample ``meta.json`` carrying normalised intrinsics.
+    Same on-disk shape as ``DIODEMogeEvalLoader``; only the index path
+    and the absence of a domain split differ.
+
+    This loader closes D8 / D9 / D18 in ``docs/DISCREPANCIES.md`` — the
+    structural MoGe-KITTI protocol delta that Monodepth2-Eigen + Garg +
+    80 m clip doesn't capture (no crop, no cap, bespoke resolution).
+
+    Expected layout (pointed at by ``--data-root`` or ``$KITTI_MOGE_ROOT``)::
+
+        <root>/KITTI/
+          .index.txt                           # 652 sample paths, line-wise
+          <sample_path>/
+              image.jpg, depth.png, meta.json
+
+    Stage via::
+
+        hf download Ruicheng/monocular-geometry-evaluation \\
+            KITTI.zip --repo-type dataset --local-dir /tmp/moge_dl
+        unzip /tmp/moge_dl/KITTI.zip -d $KITTI_MOGE_ROOT
+
+    Parameters
+    ----------
+    root
+        Points at a directory containing the unzipped ``KITTI/`` tree.
+        Falls back to ``$KITTI_MOGE_ROOT``.
+    """
+
+    split: str = "test"
+
+    def __init__(
+        self,
+        *,
+        root: Path | str | None = None,
+        split: str = "test",
+    ) -> None:
+        # Accepted for protocol-YAML compatibility; the bundle only ships
+        # one split (MoGe evaluates on the Eigen test 652).
+        if split != "test":
+            raise ValueError(
+                f"KITTIMogeEvalLoader only exposes the test split; got {split!r}"
+            )
+        root_path = Path(root) if root else env_path("KITTI_MOGE_ROOT")
+        if root_path is None or not (root_path / "KITTI").exists():
+            raise DatasetNotAvailable(
+                "KITTI MoGe-eval bundle not found. Set --data-root or "
+                "$KITTI_MOGE_ROOT to a directory containing KITTI/.index.txt "
+                "plus the unzipped KITTI/<sample_path>/... tree. Stage via: "
+                "hf download Ruicheng/monocular-geometry-evaluation "
+                "KITTI.zip --repo-type dataset --local-dir <tmp> && "
+                "unzip <tmp>/KITTI.zip -d $KITTI_MOGE_ROOT"
+            )
+
+        self.root = root_path
+
+        index_path = root_path / "KITTI" / ".index.txt"
+        lines = [
+            ln.strip()
+            for ln in index_path.read_text().splitlines()
+            if ln.strip() and not ln.startswith("#")
+        ]
+        self._records: list[dict[str, Any]] = [
+            {"sample_path": ln, "sample_id": ln.replace("/", "_")} for ln in lines
+        ]
+
+    def __iter__(self) -> Iterator[Sample]:
+        for rec in self._records:
+            yield self._load_sample(rec)
+
+    def __len__(self) -> int:
+        return len(self._records)
+
+    def _load_sample(self, rec: dict[str, Any]) -> Sample:
+        # load_moge_depth_png lives in diode.py since that's where the
+        # format was first wired; same PNG encoding applies here.
+        from plumbline.datasets.diode import load_moge_depth_png
+
+        sample_root = self.root / "KITTI" / rec["sample_path"]
+        image = read_rgb_uint8(sample_root / "image.jpg")
+        images = image[None]
+        assert_valid_image(images, name=f"kitti_moge/{rec['sample_id']}/image")
+
+        depth, valid = load_moge_depth_png(sample_root / "depth.png")
+        # Mirror MoGe's `_process_instance` drop_max_depth filter: any pixel
+        # above ``nanquantile(depth, 0.01) * 1000`` is excluded. On KITTI
+        # this is usually a no-op (p01 ~1-5 m × 1000 ≫ scene max ~80 m) but
+        # applied for consistency with the paper's eval.
+        finite_d = depth[valid]
+        if finite_d.size:
+            p01 = float(np.nanquantile(finite_d, 0.01))
+            if p01 > 0:
+                max_allowed = p01 * 1000.0
+                valid = valid & (depth <= max_allowed)
+        depth_clean = np.where(valid, depth, np.float32(1.0))
+        depth_gt = depth_clean[None]
+        depth_valid = valid[None]
+
+        import json
+        meta = json.loads((sample_root / "meta.json").read_text())
+        K_norm = np.asarray(meta["intrinsics"], dtype=np.float32)
+        h, w, _ = image.shape
+        K_pix = K_norm.copy()
+        K_pix[0, :] *= w
+        K_pix[1, :] *= h
+        K_stack = K_pix[None]
+        E_eye = np.eye(4, dtype=np.float32)[None]
+
+        assert_valid_intrinsics(K_stack, name=f"kitti_moge/{rec['sample_id']}/intrinsics")
+        assert_valid_extrinsics(E_eye, name=f"kitti_moge/{rec['sample_id']}/extrinsics")
+        assert_valid_depth(depth_gt, name=f"kitti_moge/{rec['sample_id']}/depth")
+
+        return Sample(
+            sample_id=rec["sample_id"],
+            images=images,
+            intrinsics=K_stack,
+            extrinsics_gt=E_eye,
+            depth_gt=depth_gt,
+            depth_valid=depth_valid,
+            metadata={
+                "split": self.split,
+                "source": "moge_hf_bundle",
+                "sample_path": rec["sample_path"],
+            },
+        )

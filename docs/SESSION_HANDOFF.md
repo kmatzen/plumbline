@@ -24,13 +24,9 @@ Status matrix: `REPRODUCTIONS.md`.
 `docs/DISCREPANCIES.md § Priorities for the next session` lists open work
 in cheap-first order. Summary:
 
-### Highest-leverage laptop prep
+### Laptop queue
 
-1. **D8/D9/D18 · KITTIMogeEvalLoader + kitti_moge_eval protocol.**
-   MoGe/Marigold/GeoWizard all miss KITTI by 10–35 % under plumbline's
-   Monodepth2-Eigen + Garg protocol; they publish under MoGe's bespoke
-   750×375 center-warp eval. One loader + protocol closes all three.
-   4–6 h.
+Empty. All paper-match-blocking laptop work has landed.
 
 ### Landed, awaiting next-GPU verification
 
@@ -42,6 +38,16 @@ in cheap-first order. Summary:
   alignment mode applies MoGe's `1/gt.max()` disparity floor
   (`src/plumbline/metrics/alignment.py`); `moge_vitl_diode_{both,indoor}.yaml`
   opt in. Prediction cache-hits — next-session re-scores in seconds.
+- **D8 / D9 / D18 · KITTI MoGe-eval protocol** — new
+  `KITTIMogeEvalLoader` + `kitti_moge_eval` protocol
+  (`src/plumbline/datasets/kitti.py`, `protocols/kitti_moge_eval.yaml`).
+  `moge-vitl-kitti` + `marigold-v1-1-kitti` + `geowizard-kitti` opt in.
+  Needs the HF-bundle KITTI data staged to `$KITTI_MOGE_ROOT`:
+  ```
+  hf download Ruicheng/monocular-geometry-evaluation \
+      KITTI.zip --repo-type dataset --local-dir <tmp>
+  unzip <tmp>/KITTI.zip -d $KITTI_MOGE_ROOT
+  ```
 
 ### Verify-on-next-GPU (fixes already on `main`)
 
