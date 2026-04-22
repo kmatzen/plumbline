@@ -26,11 +26,7 @@ in cheap-first order. Summary:
 
 ### Highest-leverage laptop prep
 
-1. **D19 · MoGe-DIODE per-sample disparity clamp.** Add MoGe's
-   `clamp_min(1 / gt_depth.max())` to the predicted disparity before
-   inversion (ref: `moge/test/metrics.py:210`). Median already lands on
-   paper; mean is blown up by a handful of outdoor outliers. ~1 h.
-2. **D8/D9/D18 · KITTIMogeEvalLoader + kitti_moge_eval protocol.**
+1. **D8/D9/D18 · KITTIMogeEvalLoader + kitti_moge_eval protocol.**
    MoGe/Marigold/GeoWizard all miss KITTI by 10–35 % under plumbline's
    Monodepth2-Eigen + Garg protocol; they publish under MoGe's bespoke
    750×375 center-warp eval. One loader + protocol closes all three.
@@ -42,6 +38,10 @@ in cheap-first order. Summary:
   once-per-scene on the fused+voxel-downsampled prediction cloud
   (`src/plumbline/runner.py` scene-merge loop). Unblocks D3/D4
   verification that timed out on 2026-04-21.
+- **D19 · MoGe-DIODE disparity clamp** — new `scale_shift_clamped`
+  alignment mode applies MoGe's `1/gt.max()` disparity floor
+  (`src/plumbline/metrics/alignment.py`); `moge_vitl_diode_{both,indoor}.yaml`
+  opt in. Prediction cache-hits — next-session re-scores in seconds.
 
 ### Verify-on-next-GPU (fixes already on `main`)
 

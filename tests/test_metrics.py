@@ -219,6 +219,41 @@ class TestAlignment:
         # Aligned prediction should be close to GT.
         assert np.mean(np.abs(out - gt) / gt) < 0.05
 
+    def test_scale_shift_clamped_caps_at_gt_max(self) -> None:
+        """D19 regression: scale_shift_clamped must bound aligned depth
+        above by ``gt[valid].max()`` per sample via a disparity floor at
+        ``1/gt.max()``. Plain scale_shift lets a pixel with tiny post-fit
+        disparity invert to an enormous depth and dominate mean AbsRel on
+        DIODE outdoor. MoGe's eval applies this clamp; plumbline did not
+        until this mode.
+        """
+        from plumbline.metrics.alignment import align_depth
+
+        # Varied pred_inv on the valid mask makes the LSQ fit well-posed
+        # (rank-2) and converge to identity since gt_inv = pred_inv there.
+        # One outlier pred-pixel with ~zero inv then lands at ~zero aligned
+        # disparity; plain scale_shift inverts it through the EPS floor to
+        # a huge depth, while clamped uses 1/gt.max() as a tighter floor.
+        p_inv = np.linspace(0.3, 0.7, 64)
+        p_inv[0] = 1e-9  # outlier — excluded from fit via valid mask
+        pred = 1.0 / p_inv
+        gt = 1.0 / p_inv.copy()  # identity fit on valid rows
+        gt[0] = 2.0  # doesn't matter; row 0 is not in valid
+        valid = np.ones(64, dtype=bool)
+        valid[0] = False
+
+        plain = align_depth(pred, gt, valid=valid, mode="scale_shift")
+        clamped = align_depth(pred, gt, valid=valid, mode="scale_shift_clamped")
+
+        gt_max = float(gt[valid].max())
+        # Plain scale_shift lets the outlier blow up orders of magnitude
+        # past gt.max() (depth goes to ~1/EPS with EPS=1e-8).
+        assert plain[0] > gt_max * 1000, f"plain[0]={plain[0]} not >> gt_max={gt_max}"
+        # Clamped caps at gt.max() (within float tolerance).
+        assert clamped[0] <= gt_max + 1e-6, f"clamped[0]={clamped[0]} > gt_max={gt_max}"
+        # Non-outlier pixels essentially unchanged between the two modes.
+        assert np.allclose(plain[1:], clamped[1:], rtol=1e-9, atol=1e-9)
+
 
 # ---------------------------------------------------------------------------
 # Pose

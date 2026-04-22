@@ -213,6 +213,11 @@ def align_depth(
             disparity" protocol.
           - ``"scale_shift_robust"`` — same as scale_shift but IRLS +
             Huber weights (MoGe paper's ROE).
+          - ``"scale_shift_clamped"`` — same LSQ as scale_shift, plus
+            MoGe's per-sample disparity floor at ``1/gt.max()`` before
+            inverting to depth. Use on datasets with extreme-outlier
+            depths (DIODE outdoor) where plain scale_shift lets a single
+            pixel dominate mean AbsRel.
           - ``"scale_shift_depth"`` — scale+shift fit in DEPTH space.
             Matches Marigold / Depth Pro / "affine-invariant depth"
             protocols. The model output is a depth value where
@@ -243,6 +248,27 @@ def align_depth(
         if np.isfinite(s) and np.isfinite(b):
             inv = 1.0 / np.maximum(out, EPS)
             inv = s * inv + b
+            out = 1.0 / np.maximum(inv, EPS)
+        return out
+    if mode == "scale_shift_clamped":
+        # MoGe's disparity-space eval protocol (`moge/test/metrics.py`
+        # ~line 210): same LSQ fit as ``scale_shift``, but after
+        # ``s * inv + b``, clamp the minimum aligned disparity at
+        # ``1 / gt_depth[mask].max()`` before inverting to depth. Bounds
+        # the per-sample aligned depth above by the largest valid GT
+        # depth — without this, a tiny or negative post-fit disparity
+        # inverts to an enormous depth and a single pixel dominates mean
+        # AbsRel. On DIODE, where outdoor returns legitimately reach
+        # hundreds of metres, this is what keeps the mean from diverging
+        # even while the median is bullseye-on-paper.
+        s, b = align_scale_and_shift(pred, gt, valid, space="inv_depth")
+        if np.isfinite(s) and np.isfinite(b):
+            inv = 1.0 / np.maximum(out, EPS)
+            inv = s * inv + b
+            _, gt_masked, _ = _valid_pairs(pred, gt, valid)
+            if gt_masked.size:
+                disp_floor = 1.0 / float(gt_masked.max())
+                inv = np.maximum(inv, disp_floor)
             out = 1.0 / np.maximum(inv, EPS)
         return out
     if mode == "scale_shift_depth":

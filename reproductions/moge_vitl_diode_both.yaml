@@ -9,7 +9,12 @@
 # Alignment is plain scale+shift LSQ in disparity space to match
 # MoGe's `align_affine_lstsq` (no Huber, no MAD — plumbline's
 # scale_shift_robust is strictly stronger than paper's solver and
-# would overfit the number).
+# would overfit the number), PLUS MoGe's per-sample disparity floor at
+# ``1/gt_depth.max()`` (`moge/test/metrics.py` ~line 210). The clamp
+# bounds the aligned depth above by the largest valid GT depth per
+# sample — on DIODE outdoor, where a handful of post-alignment
+# outliers were producing 1e4-1e6 metre depths and blowing up mean
+# AbsRel while the median was on paper (D19 in DISCREPANCIES.md).
 
 name: moge-vitl-diode-both
 protocol: diode_moge
@@ -24,7 +29,7 @@ dataset:
   kwargs:
     domain: both
 
-scale_alignment: scale_shift
+scale_alignment: scale_shift_clamped
 device: cuda:0
 
 paper_reference:
