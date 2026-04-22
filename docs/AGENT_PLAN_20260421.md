@@ -45,23 +45,64 @@ clear with a 15-minute change; one is a multi-hour dataset-loader rewrite.
   0.818 m aggregate stands or shifts. The 3-scene-subset-vs-full-
   split question is orthogonal and still open.
 
-**Additional findings not in the original plan:**
+**Additional findings (running list):**
 
-- **KITTI Eigen-vs-Garg crop** — MoGe and Marigold evaluate under the
-  Eigen 2014 crop (tighter top, wider bottom than Garg 2016). Plumbline
-  was applying Garg for both. Created
-  `protocols/kitti_eigen_crop.yaml`; re-pointed `moge-vitl-kitti` and
-  `marigold-v1-1-kitti` YAMLs. Expected to close the ~10 % OFF-PAPER
-  gap on both. DA-V2 and Metric3D continue to use `kitti_eigen_garg`
-  (they match under Garg).
+- **KITTI Eigen-vs-Garg crop hypothesis REJECTED.** Tested both
+  protocols empirically:
+
+  | | Garg | Eigen |
+  |---|---:|---:|
+  | `moge-vitl-kitti`      | 9.4 % off  | 20.4 % off |
+  | `marigold-v1-1-kitti`  | 10.1 % off | 17.8 % off |
+
+  Eigen is worse. Reverted both YAMLs to `kitti_eigen_garg`.
+  `protocols/kitti_eigen_crop.yaml` kept in the repo for future use.
+
+- **Actual MoGe KITTI protocol** (subagent read of microsoft/MoGe
+  @HEAD, 2026-04-22): they evaluate on a custom HF-bundle
+  `data/eval/KITTI/.index.txt` sample list, center-warp the image to
+  **750×375** (homographic reframe in
+  `moge/test/dataloader.py::_process_instance`), apply **no Garg or
+  Eigen crop**, and use **no [1e-3, 80] depth cap** — only MoGe's
+  generic `drop_max_depth = nanquantile(gt, 0.01) * 1000` filter plus
+  a per-scene `clamp_min(1 / gt_depth[mask].max())` on predicted
+  disparity (`metrics.py:210`). Alignment is done on a 64×64
+  downsampled grid then applied to full-res. This is materially
+  different from Monodepth2's Eigen test protocol that plumbline's
+  `kitti_eigen_garg` implements.
+
+  **Resolution path for paper-match on MoGe-KITTI** would be a new
+  `KITTIMogeEvalLoader` (sister of `DIODEMogeEvalLoader`) reading
+  MoGe's HF bundle and a new `kitti_moge_eval` protocol wired around
+  it. Scoped for v0.2 — not a same-session fix.
+
+  Marigold's KITTI (same ~10 % gap) probably has a similar protocol
+  delta; not yet investigated.
+
 - **s5cmd** dropped in as the preferred S3 client in
   `stage_all_data.sh` + `tmp/agent/persist.sh` (falls back to
-  `aws s3 sync` if unavailable). Future rental bring-ups should be
-  10–30× faster on the 54 GB cache.
-- **VGGT-paper-dtu-mvs 56 mm vs paper 0.382 mm** — observed in the
-  first re-run is suspected to be an ICP-alignment or mm-vs-m issue
-  (DTU GT is mm, VGGT emits meters). Clean re-run still underway;
-  diagnose after it lands.
+  `aws s3 sync`). Future rental bring-ups ~10–30× faster on the 54 GB
+  cache.
+
+- **VGGT-paper-dtu-mvs killed at 4 h 25 m** — no clean number. Partial
+  first re-run hit 56 mm vs paper 0.382 mm. Hypothesis: ICP-alignment
+  failed to absorb the m↔mm unit delta (DTU GT is mm, VGGT emits
+  meters). Not yet diagnosed; see `src/plumbline/runner.py::
+  _aligned_point_map` for the ICP path.
+
+- **DIODE outlier fix landed.** MoGe's eval applies
+  `max_depth = nanquantile(depth, 0.01) * 1000` on top of the
+  isfinite mask. Plumbline's `DIODEMogeEvalLoader` now matches
+  (`src/plumbline/datasets/diode.py`). Initial cleanup-batch run had
+  mean AbsRel 2481 because one indoor + several outdoor samples
+  produced post-alignment depths in the 1e4–1e6 range; median was
+  0.025 (dead on paper). `drop_max_depth` should collapse the mean.
+  Re-run pending.
+
+- **Stale index entries to refresh after cleanup batch:**
+  `moge-vitl-diode-both` (pre-fix), `moge-vitl-kitti` (latest under
+  Eigen), `marigold-v1-1-kitti` (latest under Eigen). Need one final
+  mini-batch under the correct protocol + fix.
 
 ## Priorities
 
