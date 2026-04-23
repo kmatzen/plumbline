@@ -402,19 +402,21 @@ A run that violates them is worse than a run that bails early.
    you don't get to renegotiate.
 2. **Never invent paper numbers.** If a paper value seems wrong, raise
    it in the report — don't "correct" it.
-3. **Never `git commit`, `git push`, or `gh pr create`.** Code changes
-   come from the laptop, not from this box.
-4. **Never delete the S3 cache** or anything in `s3://plumbline-bench/`
+3. **Never delete the S3 cache** or anything in `s3://plumbline-bench/`
    that pre-dates this session.
-5. **Never use credentials other than the session token the user
+4. **Never use credentials other than the session token the user
    provided.** No copying long-lived keys onto the box; no
    instance-profile fallbacks.
-6. **Never bypass `pre-commit` / lint / test failures with `--no-verify`
-   or similar.** You are not committing in the first place; if a hook
-   would block you, that's evidence something is wrong upstream that
-   needs the user's attention.
-7. **Never re-download a dataset that's already on disk.** Always
+5. **Never bypass `pre-commit` / lint / test failures with `--no-verify`
+   or similar.** If a hook fails, diagnose the underlying cause and
+   fix it — don't paper over it.
+6. **Never re-download a dataset that's already on disk.** Always
    check first; the prediction cache + dataset cache are precious.
+
+Editing source, committing, pushing, and opening PRs from the GPU box
+are all fine. Treat the box like any dev environment; the rules above
+cover the load-bearing concerns (YAML/citation integrity, secrets,
+shared state).
 
 If you find yourself wanting to do any of these — stop, write what you
 were about to do into the report, and end the session for the user to
