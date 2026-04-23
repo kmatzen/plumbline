@@ -42,6 +42,8 @@ models = [
     "timm>=1.0",
     "einops>=0.7",
     "safetensors>=0.4",
+    "diffusers>=0.27",
+    "accelerate>=0.28",
 ]
 scipy = [
     "scipy>=1.11",
