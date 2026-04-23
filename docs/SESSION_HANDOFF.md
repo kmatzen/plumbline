@@ -77,14 +77,17 @@ Unchanged from the prior session:
 
 1. **Never modify reproduction YAMLs.** If a paper number doesn't
    reproduce, that's a finding, not a parameter to tune.
-2. **Never commit, push, or open PRs from the rental box.** Code
-   changes come from the laptop.
-3. **Never invent paper numbers.** `source_confidence: verified_pdf`
+2. **Never invent paper numbers.** `source_confidence: verified_pdf`
    is a contract with the paper's PDF.
-4. **Never delete S3 cache contents.** Shared across future sessions.
-5. **Never use credentials other than the session token.** No
+3. **Never delete S3 cache contents.** Shared across future sessions.
+4. **Never use credentials other than the session token.** No
    copying long-lived keys onto the rental box.
-6. **Never bypass hooks with `--no-verify`.**
+5. **Never bypass hooks with `--no-verify`.**
+
+Source edits, commits, pushes, and PRs from the rental/GPU box are
+fine — treat the box like any other dev environment. The constraints
+above cover the real concerns (YAML/citation integrity, secrets,
+shared state); workflow hygiene is not worth its own gate.
 
 The 2026-04-20 audit codifying these rules is `reproductions/AUDIT.md`;
 long-term agent memory has `feedback_paper_citations.md`.
