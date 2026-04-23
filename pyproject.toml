@@ -45,6 +45,25 @@ models = [
     "diffusers>=0.27",
     "accelerate>=0.28",
 ]
+# GeoWizard's upstream pipeline (cloned to $GEOWIZARD_ROOT) imports
+# xformers directly in its attention.py. xformers is not needed by any
+# other adapter and pulls a non-trivial nvidia-* stack; kept out of
+# the base `models` extra so DA-V2 / MoGe / VGGT / Marigold users
+# don't pay for it. Pin: 0.0.29.post3 is the last release compatible
+# with torch==2.6.0+cu124 (later xformers force-bumps torch to 2.11+
+# which needs CUDA-driver >= 12.3, breaking older rental boxes).
+#
+# Known-good install order on a fresh box:
+#   uv sync --extra models --extra geowizard
+#   uv pip install --force-reinstall 'nvidia-cudnn-cu12==9.1.0.70'
+# The force-reinstall step fixes a cudnn load-order clash that only
+# surfaces when xformers is grafted onto an already-installed torch
+# env (observed 2026-04-23 GPU session — conv silently returned
+# CUDNN_STATUS_NOT_INITIALIZED until cudnn was re-laid-down).
+geowizard = [
+    "plumbline-bench[models]",
+    "xformers==0.0.29.post3",
+]
 scipy = [
     "scipy>=1.11",
 ]
