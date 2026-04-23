@@ -1353,6 +1353,18 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+geowizard = [
+    { name = "accelerate" },
+    { name = "diffusers" },
+    { name = "einops" },
+    { name = "huggingface-hub" },
+    { name = "safetensors" },
+    { name = "timm" },
+    { name = "torch" },
+    { name = "torchvision" },
+    { name = "transformers" },
+    { name = "xformers" },
+]
 models = [
     { name = "accelerate" },
     { name = "diffusers" },
@@ -1401,6 +1413,7 @@ requires-dist = [
     { name = "imageio", specifier = ">=2.30" },
     { name = "numpy", specifier = ">=1.24" },
     { name = "pillow", specifier = ">=10.0" },
+    { name = "plumbline-bench", extras = ["models"], marker = "extra == 'geowizard'" },
     { name = "plumbline-bench", extras = ["torch"], marker = "extra == 'models'" },
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "remotezip", marker = "extra == 'scripts'", specifier = ">=0.12" },
@@ -1413,8 +1426,9 @@ requires-dist = [
     { name = "tqdm", specifier = ">=4.65" },
     { name = "transformers", marker = "extra == 'models'", specifier = ">=4.40" },
     { name = "typer", specifier = ">=0.12" },
+    { name = "xformers", marker = "extra == 'geowizard'", specifier = "==0.0.29.post3" },
 ]
-provides-extras = ["torch", "models", "scipy", "scripts"]
+provides-extras = ["torch", "models", "geowizard", "scipy", "scripts"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -2259,6 +2273,25 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/0c/98/3a7e644e19cb26133488caff231be390579860bbbb3da35913c49a1d0a46/virtualenv-21.2.4.tar.gz", hash = "sha256:b294ef68192638004d72524ce7ef303e9d0cf5a44c95ce2e54a7500a6381cada", size = 5850742, upload-time = "2026-04-14T22:15:31.438Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/27/8d/edd0bd910ff803c308ee9a6b7778621af0d10252219ad9f19ef4d4982a61/virtualenv-21.2.4-py3-none-any.whl", hash = "sha256:29d21e941795206138d0f22f4e45ff7050e5da6c6472299fb7103318763861ac", size = 5831232, upload-time = "2026-04-14T22:15:29.342Z" },
+]
+
+[[package]]
+name = "xformers"
+version = "0.0.29.post3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "numpy", version = "2.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "torch" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c1/fd/e9201fbee6a1a6d7a9c67c24a256ad4c2377bc67a634f7dbeaea23bd668a/xformers-0.0.29.post3.tar.gz", hash = "sha256:0b77c67ecc3c9fdd8a0e4399e675adf12e2ff40285e00974cca2d09108157f60", size = 8461348, upload-time = "2025-02-10T18:33:04.046Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/55/4f/ef63f866ec7d3a23f78629604deaf379cd833fa4fd0cf7e6f8a77906f125/xformers-0.0.29.post3-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:59c64379c015f36eb69947f1ee559a0ac8742159ef3d9b8e5a6d1519806d2101", size = 43339848, upload-time = "2025-02-10T18:31:09.688Z" },
+    { url = "https://files.pythonhosted.org/packages/a5/6f/036bfe1fa98f0c48cc38b389dd808f01b34a017f62afcb6cf4bb5177cd5d/xformers-0.0.29.post3-cp310-cp310-win_amd64.whl", hash = "sha256:34f13d69ad9404e44ae11169e99842c3fccdc2c75b1fc4831a70c78392d990db", size = 167739592, upload-time = "2025-02-10T18:31:25.263Z" },
+    { url = "https://files.pythonhosted.org/packages/55/05/9c9faf1c7b3b7b986bbf7a488a185eb67670a8435d0eae94aa59f56181cd/xformers-0.0.29.post3-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:bbf2f500dfdbcf4649bf568cc2c9f434399f704dc4064fd1fbdbef2b524a8139", size = 43362399, upload-time = "2025-02-10T18:31:38.988Z" },
+    { url = "https://files.pythonhosted.org/packages/e0/9f/8195d17a5ad1b601bb487f24e54331d102df7f1649e2ced6375eef272e28/xformers-0.0.29.post3-cp311-cp311-win_amd64.whl", hash = "sha256:00f2dfd94c894ff6372e21bee3f09e96bce75b55649df366649c43f049eb7a1e", size = 167742633, upload-time = "2025-02-10T18:31:54.42Z" },
+    { url = "https://files.pythonhosted.org/packages/2d/4a/20b2d9ac50efa0d40fbdb13283fd168cc2db28a2f21a159abbdd17a24213/xformers-0.0.29.post3-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:08fa92f3e06372c4ce2a5306c54ae3d4a3a399fc7e24e02aac3761112ec3aeed", size = 43364118, upload-time = "2025-02-10T18:32:10.063Z" },
+    { url = "https://files.pythonhosted.org/packages/d9/ec/7846937d26b2601e40cd6e64583657f753415b94ad318e4ca350270e77d2/xformers-0.0.29.post3-cp312-cp312-win_amd64.whl", hash = "sha256:3706eca371767ff9709595185910d809fc817ec3cf4234ef44d70d2b8844d7e2", size = 167743565, upload-time = "2025-02-10T18:32:25.148Z" },
 ]
 
 [[package]]
