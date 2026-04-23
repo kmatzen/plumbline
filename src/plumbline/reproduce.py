@@ -147,8 +147,13 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
     paper = cfg.get("paper_reference", {})
     primary_metric = paper.get("primary_metric") or next(iter(report.aggregate_metrics))
     observed = float(report.aggregate_metrics.get(primary_metric, float("nan")))
-    published = float(paper.get("value", float("nan")))
-    tolerance = float(paper.get("tolerance_relative", 0.05))
+    # value / tolerance_relative may be null (intentionally — e.g. D16: indoor-only run,
+    # paper cites combined-val). Treat null / missing as NaN / default so paper_match
+    # becomes None (informational) rather than crashing.
+    published_raw = paper.get("value")
+    published = float(published_raw) if published_raw is not None else float("nan")
+    tolerance_raw = paper.get("tolerance_relative")
+    tolerance = float(tolerance_raw) if tolerance_raw is not None else 0.05
 
     match: bool | None
     if published == published and observed == observed:  # both non-NaN
