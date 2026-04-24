@@ -327,11 +327,30 @@ def quat_to_rot(q: NDArray[Any]) -> NDArray[np.float64]:
 def _resolve_scan_clean_plys(scene_dir: Path) -> list[Path]:
     """Find the ground-truth laser scan ply files for a scene.
 
-    ETH3D archives ship ``scan_clean`` as a directory with one or more
-    ``scan*.ply`` files; older, manually-prepared mirrors sometimes place
-    a single ``scan_clean.ply`` at the scene root. Return a sorted list of
-    paths, or an empty list if neither is present.
+    ETH3D ships two GT scan variants per scene:
+
+    - ``scan_clean/`` — the raw laser scan, broader spatial extent than
+      what the DSLR cameras could possibly see.
+    - ``dslr_scan_eval/`` — the same scan clipped to the DSLR-visible
+      frustum. This is what ETH3D's official evaluation protocol uses,
+      and it matches the coverage of monocular-depth predictions.
+
+    For MVS / chamfer evaluation, ``dslr_scan_eval`` is correct —
+    otherwise GT points outside the camera frustum inflate completeness
+    (GT→pred nearest-distance), which is how D4 landed 2× worse vs the
+    prior run on 2026-04-24 when the loader was swapped to ``scan_clean``
+    without this clipping.
+
+    Prefer ``dslr_scan_eval`` when present; fall back to ``scan_clean``
+    (subdir or single-file) for older layouts. Older manually-prepared
+    mirrors sometimes placed a single ``scan_clean.ply`` at the scene
+    root. Return a sorted list of paths, or an empty list.
     """
+    dslr = scene_dir / "dslr_scan_eval"
+    if dslr.is_dir():
+        plys = sorted(dslr.glob("scan*.ply"))
+        if plys:
+            return plys
     direct = scene_dir / "scan_clean.ply"
     if direct.exists():
         return [direct]

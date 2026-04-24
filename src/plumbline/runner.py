@@ -340,7 +340,9 @@ def evaluate(
                     s, R, t, _info = icp_similarity(merged_ds, gt)
                     merged = apply_similarity(merged, s, R, t).astype(np.float32)
             per_scene[scene] = accuracy_completeness(
-                merged, gt, voxel_size=scene_voxel_size
+                merged, gt,
+                voxel_size=scene_voxel_size,
+                outlier_distance=chamfer_outlier_distance,
             )
             scene_progress.advance(scene_task, 1)
         scene_progress.stop()
