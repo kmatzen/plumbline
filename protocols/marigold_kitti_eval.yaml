@@ -1,0 +1,54 @@
+# KITTI Eigen-benchmark protocol for Marigold / GeoWizard / DA-V2 —
+# Marigold-style eval pipeline.
+#
+# This is the protocol the Marigold paper actually uses for its Table 1
+# KITTI cell, and by extension (via shared eval lineage) the GeoWizard
+# paper's Table 1 KITTI cell. It is NOT MoGe's eval pipeline — MoGe uses
+# a separate HF bundle at 750×375 with a homographic FoV crop
+# (see ``kitti_moge_eval.yaml`` for that one).
+#
+# The critical pieces, matching
+# ``prs-eth/Marigold/config/dataset_depth/data_kitti_eigen_test.yaml``
+# and ``src/dataset/kitti_dataset.py``:
+#
+#   1. ``kitti_bm_crop: true``  → 1216×352 centered crop of the raw
+#      KITTI image + depth + intrinsics. Bottom-aligned
+#      (``top_margin = H - 352``), horizontally centered.
+#   2. ``valid_mask_crop: eigen`` → additionally restrict the
+#      evaluation mask to the Eigen rect inside the 1216×352 frame
+#      (row ∈ [0.33 H, 0.91 H), col ∈ [0.036 W, 0.964 W)).
+#   3. Alignment: depth-space LSQ (``scale * pred + shift ≈ gt``, no
+#      disparity clamp), pinned via ``scale_alignment: scale_shift_depth``
+#      in the reproduction YAML.
+#   4. Depth clip: Marigold hard-codes ``min_depth=1e-5, max_depth=80``
+#      in its KITTI dataset class.
+#
+# Used by: ``marigold-v1-1-kitti``, ``geowizard-kitti``. MoGe-KITTI stays
+# on ``kitti_moge_eval`` because MoGe's own paper uses the HF bundle.
+
+name: marigold_kitti_eval
+description: >
+  KITTI Eigen-benchmark test split (652 frames from Monodepth2's
+  splits/eigen_benchmark), left rectified camera (image_02), KITTI
+  benchmark 1216×352 centered crop applied first, then the Eigen
+  valid-mask crop inside that. Post-alignment depth clip to
+  [1e-5, 80] m. Matches Marigold / GeoWizard paper eval exactly.
+
+reference:
+  paper: "Ke et al. 2024, Marigold (arXiv:2312.02145)"
+  eval_impl: "prs-eth/Marigold, config/dataset_depth/data_kitti_eigen_test.yaml + src/dataset/kitti_dataset.py::kitti_benchmark_crop"
+  gt_source: "Uhrig et al. 2017, KITTI Depth-Prediction Benchmark (annotated dense depth)"
+  crop: "KITTI benchmark 1216×352 + Eigen valid-mask crop (row in [0.33 H, 0.91 H), col in [0.036 W, 0.964 W) of the post-bm-crop frame)"
+  split_source: "Monodepth2 (Godard et al. 2019), splits/eigen_benchmark/test_files.txt (652 frames)"
+
+fixed:
+  dataset:
+    name: kitti
+    kwargs:
+      sample_list: kitti_eigen_benchmark_652.txt
+      camera: image_02
+      apply_kitti_bm_crop: true
+      apply_eigen_crop: true
+  depth_clip: [1.0e-5, 80.0]
+  max_views: 1
+  tasks: [mono_depth]
