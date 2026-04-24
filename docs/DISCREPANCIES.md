@@ -17,8 +17,8 @@ Status legend:
 |---|---|---|
 | D3 | VGGT-DTU scene-aggregation OOMs (exit 137) on 22-scan chamfer | 🧪 loader fix landed; mem bug exposed 2026-04-23 |
 | D4 | VGGT-ETH3D multiscene verify (needs D20 + scan_clean GT) | 🧪 pending GPU |
-| D8 | MoGe-KITTI — root-caused: loader skips MoGe's homographic FoV crop to 750×375 | 🧪 fix path identified |
-| D9 | Marigold-KITTI — same root cause as D8 (shared loader) | 🧪 closes with D8 fix |
+| D9 | Marigold-KITTI — shares D8 loader; awaiting verify with cache cleared | 🧪 closes with D8 fix |
+| D21 | Prediction cache key ignores loader-preprocessing changes — stale hits across loader refactors | 🔎 new 2026-04-24 |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
 | D17 | GeoWizard NYU 10 % off — RNG or secondary protocol detail | 🔎 suspected |
 | D18 | GeoWizard KITTI — under new protocol, awaiting GPU verify | 🧪 pending GPU |
@@ -49,65 +49,26 @@ a peak-RSS assertion.
 reads from it. GPU verification blocked on D20 (same OOM pattern
 likely — ETH3D has fewer scenes so may fit; unverified).
 
-### D8 · MoGe-KITTI — secondary protocol delta   🧪 OPEN — ROOT-CAUSED 2026-04-24
+### D9 · Marigold-KITTI — same root cause as D8   🧪 SHARED LOADER FIX
 
-Structural fix (round 1, 2026-04-22) landed: new `KITTIMogeEvalLoader` +
-`kitti_moge_eval` protocol mirroring MoGe's own eval file I/O
-(HF-bundle 652 samples, log-PNG depth, disparity-space LSQ +
-`1/gt.max()` floor, `drop_max_depth=1000` filter).
-`moge-vitl-kitti` opts in with `scale_shift_clamped`.
+Observed 15.8 % off paper on 2026-04-23. Shares `KITTIMogeEvalLoader`
+with D8. The warp fix landed for D8 (2026-04-24) applies to D9
+directly. Needs a fresh inference run (stale prediction cache must be
+cleared — see D21). D18 sits in the same bucket.
 
-GPU verify 2026-04-23: AbsRel 0.0475 vs paper 0.0408 — 16.4 % off.
-Worse than the pre-fix 9.4 % off under Monodepth2-Eigen-Garg.
+### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 
-**Root cause (2026-04-24, read of `moge/test/dataloader.py`
-`_process_instance` in the pip-installed `moge` package):** MoGe's
-loader does a **homographic FoV-crop + warp** to the eval config's
-`(width, height)` target, in addition to the format conversions
-plumbline already mirrored. The HF bundle stores KITTI at its
-original 1242×375 with the source intrinsics; the KITTI benchmark
-config (`configs/eval/all_benchmarks.json`) sets `width: 750,
-height: 375`. MoGe's `_process_instance` then:
-
-1. Computes target FoV as `min(raw_horizontal, raw_vertical × tgt_aspect)`
-   which for a KITTI sample is 54.9° (vs 81.4° raw) — keeping only
-   60 % of the horizontal FoV.
-2. Builds target intrinsics matching the new 2:1 aspect.
-3. Remaps image + depth to 750×375 with ray-length conversion
-   (Z-depth → distance → Z-depth in target frame).
-4. Reapplies `drop_max_depth` filter on the warped depth.
-
-Plumbline's loader skips all of (1)-(4) — it hands MoGe the raw
-1242×375 3.3:1 wide strip. MoGe the model was trained/evaluated at
-narrower aspect ratios, so its predictions on the wide strip are
-off-distribution and the LSQ alignment (on the full 1242×375 GT
-mask) is fitting to a wider spatial prior than the paper reports.
-
-This explains why the fix made things *worse* than the pre-fix
-Monodepth2-Eigen-Garg setup: Garg's center-crop accidentally
-approximated the narrow-aspect crop, while the no-crop HF-bundle
-loader without MoGe's homography feeds the model a wider strip.
-
-**Fix path for next session:** port `_process_instance`'s warp into
-`KITTIMogeEvalLoader`, or import and call the upstream
-`EvalDataLoaderPipeline._process_instance` directly so the loader
-stays in sync with MoGe HEAD. Same fix applies to D9 + D18 — they
-share the loader.
-
-DIODE is not affected: DIODE bundle images are already at the target
-1024×768 (config: `width: 1024, height: 768`), so MoGe's homography
-reduces to identity. Verified by reading a bundle sample
-(`diode_moge/DIODE/val/.../image.jpg` → 1024×768).
-
-### D9 · Marigold-KITTI — same protocol delta   🧪 OPEN — ROOT-CAUSED 2026-04-24
-
-Same loader + protocol as D8, but `scale_shift_depth` alignment
-(Marigold fits in depth space per `eval.py`).
-
-GPU verify 2026-04-23: AbsRel 0.1146 vs paper 0.099 — 15.8 % off.
-Same root cause as D8 — the shared `KITTIMogeEvalLoader` skips MoGe's
-homographic FoV-crop + warp. Fix will cascade: once `KITTIMogeEvalLoader`
-does the warp, D9 should close without Marigold-specific changes.
+Cache key in `src/plumbline/runner.py` `_predict_with_cache` is
+`(model.name, model.config_hash(), dataset_name, sample.sample_id)`.
+It ignores the actual bytes / shape of the input tensor the loader
+produces. Observed 2026-04-24: after porting MoGe's homographic warp
+into `KITTIMogeEvalLoader`, a re-run of `moge-vitl-kitti`
+cache-hit on the previous shard (1242×375 predictions) against the
+new 750×375 GT, silently producing nonsense metrics (AbsRel 0.1895,
+4 × the pre-fix value). Worked around by `rm -rf` of the stale
+shard; a proper fix hashes the first-sample tensor shape + a small
+byte sample into the cache key, or invalidates on `dataset.__class__`
+fingerprint changes.
 
 ### D10 · VGGT-ETH3D 3-scene vs 13-scene split   📅 DEFERRED
 
@@ -169,14 +130,15 @@ rather than building a full in-memory dict keyed by sample.
 1. D3 — VGGT-DTU chamfer under `aggregation: scene` on all 22 scans.
 2. D4 — VGGT-ETH3D multiscene chamfer under the same path.
 
-**Laptop-side fix (root-caused 2026-04-24):**
-- D8 / D9 / D18 — port MoGe's `_process_instance` homographic
-  FoV-crop + ray-length conversion into `KITTIMogeEvalLoader`, or
-  delegate to the upstream `EvalDataLoaderPipeline._process_instance`.
-  The KITTI HF bundle is at the source 1242×375; MoGe warps to
-  750×375 (2:1 aspect, center-cropped FoV) at eval time. Plumbline
-  currently feeds the model the raw wide strip. After the fix,
-  GPU-verify all three at once.
+**Landed 2026-04-24:**
+- D8 — MoGe-KITTI AbsRel 0.0404 vs paper 0.0408 (0.9 % off) ✅
+  `KITTIMogeEvalLoader` now delegates to MoGe's own
+  `EvalDataLoaderPipeline._process_instance` for the homographic
+  FoV-crop. D9 + D18 share the same loader — D9 pending GPU verify,
+  D18 pending xformers install + verify.
+- D21 — prediction cache stale-hit bug exposed en route to D8;
+  workaround is `rm -rf` of the shard before re-run. Proper fix
+  deferred.
 
 **Nice-to-have (v0.2):**
 - D10 — VGGT-ETH3D 13-scene full split, or demote to informational.
@@ -203,6 +165,7 @@ One-line reference; full diagnosis in the linked commit message.
 | D15 | DA-V2 NYU ~0.002 AbsRel systematic downshift (S/B/L) | 📝 below-threshold |
 | D16 | MoGe-DIODE-indoor combined-val citation demoted | ✅ `603e717` |
 | D19 | MoGe-DIODE-both `scale_shift_clamped` alignment | ✅ 2026-04-23 verify: 0.0406 vs paper 0.0400 (1.5 % off) |
+| D8 | MoGe-KITTI — port MoGe's homographic FoV-crop to `KITTIMogeEvalLoader` | ✅ 2026-04-24 verify: 0.0404 vs paper 0.0408 (0.9 % off) |
 
 ---
 
