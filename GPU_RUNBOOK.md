@@ -10,6 +10,51 @@ an hourly billing clock.
 > instead. That doc is denser, ordered for execution, and explicit
 > about what the agent must NOT do.
 
+## Bootstrapping a fresh rental image
+
+Most rentals drop you in as root on a barebones Ubuntu-ish image with
+no user account, no `sudo`, no `gh`, no Claude Code. Before any
+plumbline setup, do this once per box:
+
+```bash
+# --- as root ---
+
+# Create the operator user + shell.
+useradd -m -s /bin/bash myuser
+passwd myuser
+
+# Give them sudo (install it first on minimal images).
+apt-get update && apt-get install -y sudo
+usermod -aG sudo myuser
+
+su - myuser
+
+# --- as myuser ---
+
+# GitHub CLI + auth. `gh auth login` walks through OAuth device flow.
+sudo apt install -y gh
+gh auth login
+
+# Clone the repo.
+gh repo clone kmatzen/plumbline
+cd plumbline
+
+# Install Claude Code (needed so an agent can drive the run from here;
+# skip if you're going to run plumbline commands by hand).
+curl -fsSL https://claude.ai/install.sh | bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
+
+# Launch Claude Code. --dangerously-skip-permissions is the rental-box
+# convention — the box is ephemeral and there's no human gating tool
+# approvals interactively.
+claude --dangerously-skip-permissions
+```
+
+Once Claude Code is running, paste the AWS session-token `export`
+lines (from `scripts/gpu_box_session_token.sh` on your laptop) into
+the session. That's the entire laptop-side setup — the agent handles
+everything else per `docs/AGENT_GPU_RUNBOOK.md`.
+
 ## Provider-agnostic box setup
 
 Two paths:

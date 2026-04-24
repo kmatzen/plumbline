@@ -12,6 +12,28 @@ in friendly prose; this doc is denser and ordered for execution.
 
 ---
 
+## Hard constraints (load-bearing — do not relax)
+
+1. **Never modify reproduction YAMLs.** If a paper number doesn't
+   reproduce, that's a finding, not a parameter to tune. Not the
+   paper value, tolerance, protocol, citation, or `source_confidence`.
+2. **Never invent paper numbers.** If a paper value seems wrong, raise
+   it in the report — don't "correct" it.
+3. **Never delete the S3 cache.** Shared across future sessions.
+4. **Never use credentials other than the session token the user
+   provided.** No long-lived keys on the rental box; no
+   instance-profile fallbacks.
+5. **Never bypass `pre-commit` / lint / test failures with
+   `--no-verify` or similar.** Diagnose and fix.
+6. **Never re-download a dataset that's already on disk.**
+
+Editing source, committing, pushing, and opening PRs from the GPU box
+are fine — treat the box like any dev environment. The rules above
+cover the real concerns (YAML/citation integrity, secrets, shared
+state).
+
+---
+
 ## What "validated" means
 
 A reproduction `<name>` is **validated** when:
@@ -106,15 +128,74 @@ re-shells:
 ```bash
 export NYUV2_ROOT=$HOME/data/nyuv2
 export KITTI_ROOT=$HOME/data/kitti
+export KITTI_MOGE_ROOT=$HOME/data/kitti_moge   # HF-bundle KITTI for kitti_moge_eval protocol
 export DIODE_ROOT=$HOME/data/diode
+export DIODE_MOGE_ROOT=$HOME/data/diode_moge
 export ETH3D_ROOT=$HOME/data/eth3d
 export DTU_ROOT=$HOME/data/dtu
 export GSO_ROOT=$HOME/data/gso
 export SEVEN_SCENES_ROOT=$HOME/data/7scenes
 export IBIMS1_ROOT=$HOME/data/ibims1
-mkdir -p $NYUV2_ROOT $KITTI_ROOT $DIODE_ROOT $ETH3D_ROOT $DTU_ROOT \
-         $GSO_ROOT $SEVEN_SCENES_ROOT $IBIMS1_ROOT
+mkdir -p $NYUV2_ROOT $KITTI_ROOT $KITTI_MOGE_ROOT $DIODE_ROOT \
+         $DIODE_MOGE_ROOT $ETH3D_ROOT $DTU_ROOT $GSO_ROOT \
+         $SEVEN_SCENES_ROOT $IBIMS1_ROOT
 ```
+
+### 2.1 Per-adapter extras (install only what you need)
+
+`--extra models` covers torch/diffusers/transformers, which is enough
+for DA-V2, DA3, Marigold, Depth Pro, Metric3D-v2. Three adapters need
+extra work beyond that:
+
+**MoGe** (needs the upstream `moge` package; not on PyPI):
+
+```bash
+uv pip install 'git+https://github.com/microsoft/MoGe.git'
+```
+
+**VGGT** (needs the upstream `vggt` package; not on PyPI):
+
+```bash
+uv pip install 'git+https://github.com/facebookresearch/vggt'
+```
+
+If either git fetch dies with `curl 92 HTTP/2 stream ... CANCEL`,
+retry — transient GitHub HTTP/2 flakiness. Pause any s5cmd / large
+concurrent downloads first so the git clone isn't bandwidth-starved.
+
+**GeoWizard** (clone upstream + xformers + cudnn fix):
+
+```bash
+# 1. Clone upstream (no PyPI dist; adapter imports from $GEOWIZARD_ROOT).
+git clone --depth 1 https://github.com/fuxiao0719/GeoWizard $HOME/deps/geowizard
+export GEOWIZARD_ROOT=$HOME/deps/geowizard
+
+# 2. xformers (pinned to torch==2.6.0+cu124 compatibility).
+uv sync --extra geowizard
+
+# 3. Re-lay-down cudnn — xformers install reorders symbols and the
+#    first conv silently returns CUDNN_STATUS_NOT_INITIALIZED without
+#    this. Observed 2026-04-23 GPU session.
+uv pip install --force-reinstall 'nvidia-cudnn-cu12==9.1.0.70'
+```
+
+### 2.2 KITTI MoGe-eval bundle
+
+Not yet in the S3 cache layout. If your queue includes `moge-vitl-kitti`,
+`marigold-v1-1-kitti`, or `geowizard-kitti` (all use the
+`kitti_moge_eval` protocol), stage the HF bundle:
+
+```bash
+mkdir -p /tmp/moge_dl $KITTI_MOGE_ROOT
+hf download Ruicheng/monocular-geometry-evaluation \
+    KITTI.zip --repo-type dataset --local-dir /tmp/moge_dl
+unzip -q /tmp/moge_dl/KITTI.zip -d $KITTI_MOGE_ROOT
+# Push to S3 so the next session cache-hits:
+aws s3 sync $KITTI_MOGE_ROOT/ s3://plumbline-bench/datasets/kitti_moge/ --no-progress
+```
+
+Expect 652 sample directories under `$KITTI_MOGE_ROOT/KITTI/`, each
+with `image.jpg`, `depth.png`, `meta.json`.
 
 ---
 
@@ -136,6 +217,27 @@ This wrapper syncs three things: `s3://plumbline-bench/datasets/` →
 → `~/.cache/torch/hub/` (for Metric3D-v2, which uses `torch.hub.load`).
 Then writes the dataset-root env vars to `~/.bashrc-plumbline`.
 Source that file and you're ready to run.
+
+**The script is all-or-nothing (~54 GB total).** If your queue only
+needs a subset of models/datasets, selectively s5cmd the prefixes you
+want instead — the script's `_s3_sync` helper is a one-line wrapper
+around `s5cmd sync`.
+
+**`stage_all_data.sh` does NOT pull `predictions/`.** The prediction
+cache lives at `s3://plumbline-bench/predictions/<model>/<hash>/<dataset>/`
+and is ~55 GB total. Only pull the shards you need. For a verify-only
+session (re-scoring under a new alignment/protocol), the relevant
+predictions cache-hit and save minutes-to-hours of inference:
+
+```bash
+# Example: pull just VGGT + MoGe shards for a DTU / ETH3D / DIODE queue.
+mkdir -p ~/.cache/plumbline/predictions
+s5cmd sync 's3://plumbline-bench/predictions/vggt/*' ~/.cache/plumbline/predictions/vggt/
+s5cmd sync 's3://plumbline-bench/predictions/moge/*' ~/.cache/plumbline/predictions/moge/
+```
+
+Push new predictions back after each run so the next session inherits
+them (see §5).
 
 **Manual path** (if `stage_all_data.sh` is unavailable for some reason):
 
@@ -389,42 +491,11 @@ Stop work and report when:
 - A pre-flight assumption broke mid-run (e.g. AWS session expired —
   ask the user to mint a new token; do NOT use other credentials).
 
----
-
-## 9. What you must NEVER do
-
-These rules are **not** "best practices" — they are hard constraints.
-A run that violates them is worse than a run that bails early.
-
-1. **Never modify reproduction YAMLs.** Not the paper value, not the
-   tolerance, not the protocol, not the citation, not the
-   `source_confidence`. The YAMLs are the agreement with the paper;
-   you don't get to renegotiate.
-2. **Never invent paper numbers.** If a paper value seems wrong, raise
-   it in the report — don't "correct" it.
-3. **Never delete the S3 cache** or anything in `s3://plumbline-bench/`
-   that pre-dates this session.
-4. **Never use credentials other than the session token the user
-   provided.** No copying long-lived keys onto the box; no
-   instance-profile fallbacks.
-5. **Never bypass `pre-commit` / lint / test failures with `--no-verify`
-   or similar.** If a hook fails, diagnose the underlying cause and
-   fix it — don't paper over it.
-6. **Never re-download a dataset that's already on disk.** Always
-   check first; the prediction cache + dataset cache are precious.
-
-Editing source, committing, pushing, and opening PRs from the GPU box
-are all fine. Treat the box like any dev environment; the rules above
-cover the load-bearing concerns (YAML/citation integrity, secrets,
-shared state).
-
-If you find yourself wanting to do any of these — stop, write what you
-were about to do into the report, and end the session for the user to
-review.
+(Hard constraints are at the top of this doc.)
 
 ---
 
-## 10. Communication back to the user
+## 9. Communication back to the user
 
 This box has no chat connection back to the user. Two channels:
 
