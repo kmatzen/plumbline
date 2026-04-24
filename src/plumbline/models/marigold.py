@@ -103,6 +103,7 @@ class MarigoldAdapter(Model):
         ensemble_size: int = 10,
         dtype: str = "float16",
         seed: int = 0,
+        processing_res: int | None = None,
     ) -> None:
         if variant not in _HF_CHECKPOINTS:
             raise ValueError(
@@ -114,12 +115,26 @@ class MarigoldAdapter(Model):
             raise ValueError(f"ensemble_size must be >= 1; got {ensemble_size}")
         if dtype not in ("float16", "float32"):
             raise ValueError(f"dtype must be 'float16' or 'float32'; got {dtype!r}")
+        if processing_res is not None and processing_res < 0:
+            raise ValueError(
+                f"processing_res must be >= 0 (0 = native resolution) or None; "
+                f"got {processing_res}"
+            )
         self.device = device
         self.variant = variant
         self.num_inference_steps = int(num_inference_steps)
         self.ensemble_size = int(ensemble_size)
         self.dtype = dtype
         self.seed = int(seed)
+        # ``processing_res`` mirrors prs-eth/Marigold's CLI flag:
+        #   - None → use the diffusers pipeline default (768 long-edge).
+        #   - 0 → no resize, feed the pipeline at native input resolution
+        #         (the paper's eval convention for KITTI + NYU; otherwise
+        #         a 1216×352 benchmark-cropped input gets squished to
+        #         768×222 before denoising and produces visibly different
+        #         predictions).
+        #   - int > 0 → explicit long-edge resize target.
+        self.processing_res = processing_res
         self._pipe: Any = None
         self._generator: Any = None
 
@@ -173,12 +188,17 @@ class MarigoldAdapter(Model):
             # denoising loop, and returns the prediction remapped to the
             # input resolution.
             pil = PImage.fromarray(images[i])
-            out = self._pipe(
-                pil,
-                num_inference_steps=self.num_inference_steps,
-                ensemble_size=self.ensemble_size,
-                generator=self._generator,
-            )
+            pipe_kwargs: dict[str, Any] = {
+                "num_inference_steps": self.num_inference_steps,
+                "ensemble_size": self.ensemble_size,
+                "generator": self._generator,
+            }
+            if self.processing_res is not None:
+                # Diffusers' MarigoldDepthPipeline accepts ``processing_resolution``
+                # (long-edge target). 0 = native (no resize) — matches
+                # prs-eth/Marigold CLI's ``--processing_res 0``.
+                pipe_kwargs["processing_resolution"] = self.processing_res
+            out = self._pipe(pil, **pipe_kwargs)
             pred = out.prediction  # shape (1, H, W, 1) typically
             arr = np.asarray(pred).squeeze()
             if arr.shape != (h, w):
@@ -214,5 +234,6 @@ class MarigoldAdapter(Model):
             f"{self.name}@{self.version}/variant={self.variant}"
             f"/steps={self.num_inference_steps}/ens={self.ensemble_size}"
             f"/dtype={self.dtype}/seed={self.seed}"
+            f"/processing_res={self.processing_res}"
         )
         return hashlib.sha256(s.encode()).hexdigest()[:16]
