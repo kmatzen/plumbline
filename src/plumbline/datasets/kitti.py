@@ -98,6 +98,7 @@ from plumbline.datasets.registry import register_dataset
 __all__ = [
     "KITTIDataset",
     "KITTIMogeEvalLoader",
+    "kitti_benchmark_crop",
     "eigen_crop_mask",
     "garg_crop_mask",
     "load_kitti_calib",
@@ -107,6 +108,50 @@ __all__ = [
 
 # KITTI annotated depth PNG scale: depth_m = png_value / 256.
 _DEPTH_SCALE_PNG_PER_M = 256.0
+
+# KITTI Benchmark center crop — used by Marigold's official eval
+# (``src/dataset/kitti_dataset.py::kitti_benchmark_crop`` @ prs-eth/Marigold
+# HEAD) and the KITTI-depth-benchmark image size convention.
+_KITTI_BM_CROP_HEIGHT = 352
+_KITTI_BM_CROP_WIDTH = 1216
+
+
+def kitti_benchmark_crop(
+    image: NDArray[Any],
+    depth: NDArray[Any],
+    K: NDArray[Any],
+) -> tuple[NDArray[Any], NDArray[Any], NDArray[Any]]:
+    """Apply the KITTI-benchmark 1216×352 centered crop used by Marigold/
+    GeoWizard/DA-V2 evaluation pipelines.
+
+    Bottom-aligned (``top_margin = H - 352``), horizontally centered. Same
+    crop is applied to the RGB image, the depth GT, and the intrinsics —
+    shifting the principal point by ``(-left_margin, -top_margin)``.
+
+    Mirrors ``KITTIDepthDataset.kitti_benchmark_crop`` in prs-eth/Marigold
+    (Apache-2.0). Callers should apply this BEFORE the evaluation-time
+    ``garg`` / ``eigen`` valid-mask crop so the mask fractions (0.33–0.91
+    for eigen, 0.41–0.99 for garg) operate on the 352-tall benchmark
+    frame rather than the raw 375-tall image.
+
+    Returns ``(image_cropped, depth_cropped, K_adjusted)``. The image is
+    HWC or HW; depth is HW. Raises ``ValueError`` if the input is smaller
+    than the target crop.
+    """
+    H, W = image.shape[:2]
+    if H < _KITTI_BM_CROP_HEIGHT or W < _KITTI_BM_CROP_WIDTH:
+        raise ValueError(
+            f"image too small for KITTI benchmark crop: got {H}x{W}, need "
+            f">= {_KITTI_BM_CROP_HEIGHT}x{_KITTI_BM_CROP_WIDTH}"
+        )
+    top = H - _KITTI_BM_CROP_HEIGHT
+    left = (W - _KITTI_BM_CROP_WIDTH) // 2
+    img_c = image[top : top + _KITTI_BM_CROP_HEIGHT, left : left + _KITTI_BM_CROP_WIDTH]
+    dep_c = depth[top : top + _KITTI_BM_CROP_HEIGHT, left : left + _KITTI_BM_CROP_WIDTH]
+    K_c = K.copy()
+    K_c[0, 2] -= left
+    K_c[1, 2] -= top
+    return img_c, dep_c, K_c
 
 
 @register_dataset("kitti")
@@ -138,6 +183,13 @@ class KITTIDataset(Dataset):
         mask). Mirrors the NYUv2 loader's ``apply_eigen_crop`` kwarg so a
         reproduction YAML can opt in with a single flag. The two are
         mutually exclusive; set at most one.
+    apply_kitti_bm_crop
+        If set, the loader applies the KITTI-benchmark 1216×352 centered
+        crop (``kitti_benchmark_crop``) to the image, depth, and
+        intrinsics before any valid-mask crop. This matches Marigold's
+        official eval (``kitti_bm_crop: true`` in the KITTI dataset
+        config) and is the right setting for paper-match on
+        Marigold / GeoWizard / DA-V2 KITTI cells.
     """
 
     split: str = "test"
@@ -152,6 +204,7 @@ class KITTIDataset(Dataset):
         camera: str = "image_02",
         apply_garg_crop: bool = False,
         apply_eigen_crop: bool = False,
+        apply_kitti_bm_crop: bool = False,
     ) -> None:
         if apply_garg_crop and apply_eigen_crop:
             raise ValueError(
@@ -178,6 +231,7 @@ class KITTIDataset(Dataset):
         self.camera = camera
         self.apply_garg_crop = bool(apply_garg_crop)
         self.apply_eigen_crop = bool(apply_eigen_crop)
+        self.apply_kitti_bm_crop = bool(apply_kitti_bm_crop)
 
         if not self.raw_root.exists():
             raise DatasetNotAvailable(
@@ -329,13 +383,20 @@ class KITTIDataset(Dataset):
 
     def _load_sample(self, rec: dict[str, Any]) -> Sample:
         image = read_rgb_uint8(self.root / rec["image_path"])
+        depth = load_kitti_depth_png_to_m(self.root / rec["depth_path"])
+        K = load_kitti_calib(self.root / rec["calib_path"], camera=rec["camera"])
+
+        # KITTI Benchmark crop runs first — must happen before the
+        # valid-mask crop so the crop-mask fractions operate on the 352-tall
+        # frame, matching Marigold's official eval ordering.
+        if self.apply_kitti_bm_crop:
+            image, depth, K = kitti_benchmark_crop(image, depth, K)
+
         images = image[None]  # (1, H, W, 3)
         assert_valid_image(images, name=f"kitti/{rec['sample_id']}/image")
 
-        depth = load_kitti_depth_png_to_m(self.root / rec["depth_path"])
         depth_gt = depth[None]  # (1, H, W)
 
-        K = load_kitti_calib(self.root / rec["calib_path"], camera=rec["camera"])
         K_stack = K[None].astype(np.float32)  # (1, 3, 3)
         E_eye = np.eye(4, dtype=np.float32)[None]  # (1, 4, 4)
 
@@ -366,6 +427,7 @@ class KITTIDataset(Dataset):
                 "frame_id": rec["frame_id"],
                 "camera": rec["camera"],
                 "depth_scale_png_per_m": _DEPTH_SCALE_PNG_PER_M,
+                "kitti_bm_crop": self.apply_kitti_bm_crop,
                 "crop": (
                     "garg" if self.apply_garg_crop else ("eigen" if self.apply_eigen_crop else None)
                 ),

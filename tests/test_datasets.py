@@ -516,6 +516,46 @@ class TestKITTIMogeEvalLoader:
         with pytest.raises(ValueError, match="mutually exclusive"):
             KITTIDataset(root=tmp_path, apply_garg_crop=True, apply_eigen_crop=True)
 
+    def test_kitti_benchmark_crop_shape_and_intrinsics(self) -> None:
+        # Unit test for the standalone helper. 2026-04-24 finding:
+        # Marigold / GeoWizard / DA-V2 KITTI eval centers a 1216×352 crop
+        # bottom-aligned (top = H - 352) on the 1242×375 raw image. Anything
+        # else means a paper-protocol mismatch.
+        from plumbline.datasets.kitti import kitti_benchmark_crop
+
+        image = np.zeros((375, 1242, 3), dtype=np.uint8)
+        depth = np.zeros((375, 1242), dtype=np.float32)
+        K = np.array([[720.0, 0.0, 600.0], [0.0, 720.0, 180.0], [0.0, 0.0, 1.0]], dtype=np.float32)
+        img_c, dep_c, K_c = kitti_benchmark_crop(image, depth, K)
+        assert img_c.shape == (352, 1216, 3)
+        assert dep_c.shape == (352, 1216)
+        # Expected margins for 375×1242 → 352×1216: top = 23, left = 13.
+        assert float(K_c[0, 2]) == 600.0 - 13.0
+        assert float(K_c[1, 2]) == 180.0 - 23.0
+        # Focal lengths unchanged by a pure crop.
+        assert float(K_c[0, 0]) == 720.0
+        assert float(K_c[1, 1]) == 720.0
+
+    def test_apply_kitti_bm_crop_produces_benchmark_shape(self, tmp_path: Path) -> None:
+        # 2026-04-24 regression guard for the Marigold / GeoWizard
+        # paper-match pipeline. After apply_kitti_bm_crop=True, the loader
+        # must emit a (1, 352, 1216, 3) image — anything else means the
+        # crop was skipped and the downstream LSQ alignment will run on
+        # an off-protocol extent.
+        _write_fake_kitti(tmp_path, frames=1, H=375, W=1242)
+        ds = KITTIDataset(root=tmp_path, apply_kitti_bm_crop=True, apply_eigen_crop=True)
+        s = next(iter(ds))
+        assert s.images.shape == (1, 352, 1216, 3), (
+            f"expected (1, 352, 1216, 3) after kitti_bm_crop; got {s.images.shape}"
+        )
+        assert s.depth_gt.shape == (1, 352, 1216)
+        # The eigen valid-mask crop must apply inside the 352-tall frame,
+        # not the raw 375 — so the mask height equals the bm-crop height.
+        assert s.depth_valid is not None
+        assert s.depth_valid.shape == (1, 352, 1216)
+        assert s.metadata["kitti_bm_crop"] is True
+        assert s.metadata["crop"] == "eigen"
+
     def test_scan_picks_up_multiple_drives(self, tmp_path: Path) -> None:
         _write_fake_kitti(tmp_path, drive_ids=(2, 5), frames=2)
         ds = KITTIDataset(root=tmp_path)
