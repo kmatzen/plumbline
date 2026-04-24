@@ -15,46 +15,91 @@ Status legend:
 
 | ID | One-liner | Status |
 |---|---|---|
-| D3 | VGGT-DTU scene-aggregation OOMs (exit 137) on 22-scan chamfer | 🧪 loader fix landed; mem bug exposed 2026-04-23 |
-| D4 | VGGT-ETH3D multiscene verify (needs D20 + scan_clean GT) | 🧪 pending GPU |
-| D9 | Marigold-KITTI — shares D8 loader; awaiting verify with cache cleared | 🧪 closes with D8 fix |
-| D21 | Prediction cache key ignores loader-preprocessing changes — stale hits across loader refactors | 🔎 new 2026-04-24 |
+| D3 | VGGT-DTU chamfer 134× off paper (OOM fixed; correctness open) | 🔎 correctness |
+| D4 | VGGT-ETH3D multiscene Overall 147 % off; completeness regressed 3–4× vs prior run on scan_clean GT swap | 🔎 correctness |
+| D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
 | D17 | GeoWizard NYU 10 % off — RNG or secondary protocol detail | 🔎 suspected |
-| D18 | GeoWizard KITTI — under new protocol, awaiting GPU verify | 🧪 pending GPU |
-| D20 | Scene-aggregation chamfer OOM (mem bug, not perf) | 🧪 re-opened 2026-04-23 |
+| D18 | GeoWizard-KITTI — OFF-PAPER under both protocols (closest 14 % under kitti_moge_eval, 45 % under marigold_kitti_eval) | 🔎 secondary-delta |
+| D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 new 2026-04-24 |
 
 ---
 
 ## Open issues
 
-### D3 · VGGT-DTU scene-aggregation OOMs   🧪 MEM-BUG
+### D3 · VGGT-DTU chamfer — correctness   🔎 OPEN
 
-Per-scene fix (aggregation=scene, 1 cm voxel) landed in `ad924e9` +
-`2c140b3` and closed the protocol/alignment question (2026-04-22
-scan1 probe: ICP 43 mm, Umeyama 81 mm; paper 0.382 mm). Blocks on a
-new issue found 2026-04-23: scene-aggregation loads all 924 cached
-predictions + full GT clouds into memory at once, OOM-killed (exit 137)
-at ~28 GB RSS on a 31 GB box. Two runs, same symptom. Inference
-completes; failure is in the aggregation / chamfer step.
+OOM issue fixed 2026-04-24 (`1fc0f9c`, scene_voxel_size unit-mixup:
+DTU is mm, protocol had 0.01 copy-pasted from ETH3D's meters → 10 μm
+cells, making per-chunk voxel_downsample a no-op). First clean GPU
+run: Overall = **51.34 mm vs paper 0.382 mm (134× off)**, n=924,
+per-scan Acc 6-19 mm, Comp 44-90 mm. Completeness is 10-15× Acc —
+strongly suggests pred cloud covers a narrower region than GT scan;
+per-sample camera_centers Umeyama + scene-level ICP may be mis-scaling
+the scene.
 
-Fix path: stream predictions per scene in the scene-merge loop instead
-of holding all 22 scans' worth of predictions in memory. See
-`src/plumbline/runner.py` scene-merge loop. Regression should include
-a peak-RSS assertion.
+YAML also has a metric-key mismatch: `primary_metric: chamfer`, but
+the runner emits `accuracy` / `completeness` / `overall`. Match check
+reports NaN (no chamfer key). Either rename `overall` → `chamfer` in
+the runner or fix the YAML.
 
-### D4 · VGGT-ETH3D multiscene chamfer   🧪 PENDING GPU
+### D4 · VGGT-ETH3D multiscene — regression on scan_clean GT   🔎 OPEN
 
-`scan_clean/scan*.ply` GT fetched + pushed to S3 (`f89cdc4`). Loader
-reads from it. GPU verification blocked on D20 (same OOM pattern
-likely — ETH3D has fewer scenes so may fit; unverified).
+Overall 1.7512 m vs paper 0.709 (147 % off). YAML's prior-run note
+had 0.8178 m (15 % off) under the `dslr_scan_eval` GT — today's
+result on the new `scan_clean` GT is 2× worse. Per-scene
+completeness degraded 3-4× (0.46 → 1.43 m mean). `scan_clean` GT
+probably has broader point coverage than `dslr_scan_eval`, inflating
+GT→pred NN distance. A/B the two GT sources on one scene to confirm.
 
-### D9 · Marigold-KITTI — same root cause as D8   🧪 SHARED LOADER FIX
+### D9 · Marigold-KITTI — OFF-PAPER under both candidate protocols   🔎 OPEN
 
-Observed 15.8 % off paper on 2026-04-23. Shares `KITTIMogeEvalLoader`
-with D8. The warp fix landed for D8 (2026-04-24) applies to D9
-directly. Needs a fresh inference run (stale prediction cache must be
-cleared — see D21). D18 sits in the same bucket.
+Tested under three protocols; paper value 0.099 doesn't reproduce under any:
+
+| Protocol | AbsRel | vs paper |
+|---|---|---|
+| `kitti_eigen_garg` (pre-session) | 0.1146 | +15.8 % |
+| `kitti_moge_eval` | 0.0865 | −12.7 % |
+| `marigold_kitti_eval` | 0.1179 | +19.1 % |
+
+`marigold_kitti_eval` implements Marigold's own paper code (`kitti_bm_crop`
++ `valid_mask_crop: eigen` + `scale_shift_depth`, per
+`prs-eth/Marigold/src/dataset/kitti_dataset.py`). That it's *further*
+from paper than `kitti_moge_eval` means the paper cell didn't come
+from Marigold's public eval pipeline — probably a private config or
+different checkpoint.
+
+YAML stays on `marigold_kitti_eval` (the literal paper-code pipeline)
+per "never modify YAMLs to fit a number". Closing this requires finding
+the paper's actual eval config — upstream issue, not a plumbline bug.
+
+### D18 · GeoWizard-KITTI — same pattern as D9   🔎 OPEN
+
+| Protocol | AbsRel | vs paper |
+|---|---|---|
+| `kitti_eigen_garg` (pre-session) | 0.131 | +35 % |
+| `kitti_moge_eval` | 0.1103 | +13.7 % |
+| `marigold_kitti_eval` | 0.1406 | +45 % |
+
+Same as D9: `marigold_kitti_eval` is worse than `kitti_moge_eval`.
+GeoWizard shares the diffusion-depth lineage with Marigold; D22
+(paper-private-eval hypothesis) most likely applies to both.
+
+### D22 · Marigold / GeoWizard KITTI paper cells don't reproduce   🔎 NEW 2026-04-24
+
+Neither the literal paper-code pipeline (`marigold_kitti_eval`) nor
+the MoGe bundle pipeline (`kitti_moge_eval`) reproduces
+Marigold 0.099 or GeoWizard 0.097 on KITTI. Both are consistently
+off by 13-45 % in various directions. Under `marigold_kitti_eval`
+(the paper-code pipeline), the harness is *further* from paper than
+under `kitti_moge_eval` — which rules out "we just need to use the
+paper's code". Suggests the paper-reported cells come from a private
+eval config (unreleased resolution setting, checkpoint version, or
+pre-processing step).
+
+Not paper-match-blocking in the sense that we can't close the gap —
+it's a finding about the ground truth being recorded. Document and
+move on until Marigold / GeoWizard authors clarify.
 
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 
@@ -95,40 +140,23 @@ off, after D1 + D2 fixes. Candidates:
 
 Priority: low. Defer to v0.2 with D9.
 
-### D18 · GeoWizard KITTI   🧪 PENDING GPU — LIKELY D8 ROOT CAUSE
-
-Pre-fix: AbsRel 0.131 vs paper 0.097 (35.2 % off). `geowizard-kitti`
-now points at the shared `kitti_moge_eval` protocol + loader with
-`scale_shift_depth` alignment. Verify after D8 warp fix lands — if
-D8/D9 close, D18 likely closes with them. If D18 stays off by
->20 %, there's a GeoWizard-specific delta beyond the shared loader.
-
-### D20 · Scene-aggregation memory-bloat   🧪 RE-OPENED
-
-Perf fix landed (`693f70c`) — once-per-scene ICP on fused+voxel-
-downsampled prediction cloud instead of per-sample ICP. But the
-2026-04-23 D3 re-run exposed a separate bug: the aggregation path
-holds all per-sample predictions in memory simultaneously. DTU's
-924 × 28 MB predictions ≈ 26 GB of point maps alone, plus 22 GT
-clouds. Box ran out of RAM twice (exit 137, 22 GB RSS, 31 GB total).
-
-Regression test in `tests/test_mvs_pipeline.py` asserts ICP-call
-count but not peak RSS; it doesn't catch this.
-
-Fix path: stream predictions per scene (load + merge + discard)
-rather than building a full in-memory dict keyed by sample.
+(D20 closed 2026-04-24, see bottom table.)
 
 ---
 
 ## Priorities for the next session
 
-**Laptop-side prep (blocks GPU work):**
-- D20 — stream predictions per scene in aggregation path. D3 and D4
-  will OOM again without this.
+**Completed 2026-04-24:**
+- D8 — MATCH (`KITTIMogeEvalLoader` delegates to MoGe's `_process_instance`).
+- D20 — scene-agg memory bug fixed: eager per-chunk voxel_downsample (`8827a87`) + unit-mixup fix (`1fc0f9c`, DTU mm vs ETH3D m). D3 now completes without OOM.
+- D21 — prediction cache key now mixes input-tensor fingerprint (`8827a87`).
+- Marigold-style protocol + YAML repoint landed (`ce4183e`, `6d24c73`). Verify surfaced D22.
 
-**GPU-side verification (after D20 memory fix):**
-1. D3 — VGGT-DTU chamfer under `aggregation: scene` on all 22 scans.
-2. D4 — VGGT-ETH3D multiscene chamfer under the same path.
+**Open correctness investigations:**
+1. **D3 — VGGT-DTU chamfer Overall 134× off** (51 mm vs paper 0.382 mm). No OOM. Per-sample Acc 6-19 mm, Comp 44-90 mm — suggests scale / alignment issue, not just voxel density. Also fix YAML metric-key mismatch (`chamfer` vs emitted `overall`).
+2. **D4 — VGGT-ETH3D regression vs prior run** (1.75 m vs prior 0.82 m, 2× worse). A/B `scan_clean` vs `dslr_scan_eval` GT to isolate.
+3. **D22 — Marigold + GeoWizard KITTI paper cells** don't reproduce under either candidate protocol. Needs upstream clarification on paper's actual eval config.
+4. **D17** — GeoWizard NYU 10 % off. Possibly same family as D22.
 
 **Landed 2026-04-24:**
 - D8 — MoGe-KITTI AbsRel 0.0404 vs paper 0.0408 (0.9 % off) ✅
@@ -166,6 +194,8 @@ One-line reference; full diagnosis in the linked commit message.
 | D16 | MoGe-DIODE-indoor combined-val citation demoted | ✅ `603e717` |
 | D19 | MoGe-DIODE-both `scale_shift_clamped` alignment | ✅ 2026-04-23 verify: 0.0406 vs paper 0.0400 (1.5 % off) |
 | D8 | MoGe-KITTI — port MoGe's homographic FoV-crop to `KITTIMogeEvalLoader` | ✅ 2026-04-24 verify: 0.0404 vs paper 0.0408 (0.9 % off) |
+| D20 | Scene-aggregation memory bloat — eager per-chunk voxel_downsample + DTU voxel_size unit fix | ✅ `8827a87` + `1fc0f9c`: D3 completes without OOM (51 mm, 8 GB peak RSS vs 28 GB prior) |
+| D21 | Prediction cache key → stale hits on loader preprocessing change — fingerprint input tensor | ✅ `8827a87`, regression test `test_input_fingerprint_invalidates_on_change` |
 
 ---
 
