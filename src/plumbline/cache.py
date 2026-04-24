@@ -87,19 +87,43 @@ class PredictionCache:
         self.predictions_dir = self.root / "predictions"
 
     def path_for(
-        self, model_name: str, config_hash: str, dataset_name: str, sample_id: str
+        self,
+        model_name: str,
+        config_hash: str,
+        dataset_name: str,
+        sample_id: str,
+        input_fingerprint: str = "",
     ) -> Path:
-        """Return the on-disk path for a prediction entry."""
+        """Return the on-disk path for a prediction entry.
+
+        ``input_fingerprint`` is a short hash of the loader's actual
+        preprocessing output (see ``runner._sample_input_fingerprint``).
+        Mixing it into the path means a loader refactor — e.g. a new
+        image resolution or warp — stores to a distinct file so stale
+        predictions can't be served against fresh GT (D21, 2026-04-24).
+        Empty string preserves the pre-fingerprint cache layout for
+        callers that predate the fingerprint (e.g. ``clear``, tests).
+        """
+        suffix = f"_{input_fingerprint}" if input_fingerprint else ""
         return (
             self.predictions_dir
             / _slug(model_name)
             / _slug(config_hash)
             / _slug(dataset_name)
-            / f"{sanitize_id(sample_id)}.npz"
+            / f"{sanitize_id(sample_id)}{suffix}.npz"
         )
 
-    def has(self, model_name: str, config_hash: str, dataset_name: str, sample_id: str) -> bool:
-        return self.path_for(model_name, config_hash, dataset_name, sample_id).exists()
+    def has(
+        self,
+        model_name: str,
+        config_hash: str,
+        dataset_name: str,
+        sample_id: str,
+        input_fingerprint: str = "",
+    ) -> bool:
+        return self.path_for(
+            model_name, config_hash, dataset_name, sample_id, input_fingerprint
+        ).exists()
 
     def save(
         self,
@@ -108,12 +132,16 @@ class PredictionCache:
         dataset_name: str,
         sample_id: str,
         prediction: Prediction,
+        *,
+        input_fingerprint: str = "",
     ) -> Path:
         """Persist a prediction to disk as compressed NPZ.
 
         Only non-None array fields are stored; ``metadata`` becomes a JSON blob.
         """
-        path = self.path_for(model_name, config_hash, dataset_name, sample_id)
+        path = self.path_for(
+            model_name, config_hash, dataset_name, sample_id, input_fingerprint
+        )
         path.parent.mkdir(parents=True, exist_ok=True)
 
         arrays: dict[str, np.ndarray] = {}
@@ -134,9 +162,16 @@ class PredictionCache:
         return path
 
     def load(
-        self, model_name: str, config_hash: str, dataset_name: str, sample_id: str
+        self,
+        model_name: str,
+        config_hash: str,
+        dataset_name: str,
+        sample_id: str,
+        input_fingerprint: str = "",
     ) -> Prediction:
-        path = self.path_for(model_name, config_hash, dataset_name, sample_id)
+        path = self.path_for(
+            model_name, config_hash, dataset_name, sample_id, input_fingerprint
+        )
         if not path.exists():
             raise FileNotFoundError(path)
         with np.load(path, allow_pickle=False) as data:
