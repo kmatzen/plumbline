@@ -38,4 +38,10 @@ fixed:
   pointcloud_alignment: icp
   aggregation: scene
   scene_voxel_size: 0.01
+  # MVS convention (ETH3D eval tool, MASt3R, VGGT) drops prediction
+  # points whose nearest-GT distance exceeds an outlier threshold so
+  # a few far-outlier rays don't dominate Acc. Paper Acc on ETH3D is
+  # ~0.9 m (VGGT Table 3); 0.2 m is generous enough to keep all good
+  # predictions, tight enough to drop the tail.
+  chamfer_outlier_distance: 0.2
   tasks: [mvs_depth, pose]
