@@ -46,7 +46,15 @@ fixed:
   # VGGT paper follows; without it, plumbline's per-sample chamfer is
   # ~100× paper (confirmed 2026-04-22 scan1 probe: 43 mm/sample vs
   # paper 0.382 mm/scan). See docs/DISCREPANCIES.md § D3.
+  #
+  # UNITS: DTU GT clouds + extrinsics are in millimetres (scanner's
+  # native unit, preserved by the plumbline DTU loader). The 1 cm voxel
+  # intent therefore maps to scene_voxel_size=10.0 here. ETH3D uses
+  # 0.01 because it stores scans in metres — don't copy ETH3D's value
+  # verbatim. An earlier copy-paste set this to 0.01 (= 10 μm cells in
+  # mm) and made the per-chunk downsample a no-op, OOM-killing D3 in
+  # scene-aggregation on 2026-04-23 / 2026-04-24.
   aggregation: scene
-  scene_voxel_size: 0.01
+  scene_voxel_size: 10.0
   max_views: 8
   tasks: [mvs_depth, pose]
