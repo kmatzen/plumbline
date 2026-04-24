@@ -6,7 +6,7 @@
 # fit is gt ≈ s*pred + b in depth space, not disparity.
 
 name: marigold-v1-1-kitti
-protocol: kitti_moge_eval
+protocol: marigold_kitti_eval
 
 model:
   name: marigold
