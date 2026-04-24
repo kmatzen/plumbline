@@ -23,6 +23,7 @@ model:
     ensemble_size: 10
     dtype: float32
     seed: 1234
+    processing_res: 0  # native resolution (no resize); paper default
 
 scale_alignment: scale_shift_depth
 device: cuda:0
