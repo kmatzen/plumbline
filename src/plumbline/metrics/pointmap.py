@@ -182,14 +182,30 @@ def accuracy_completeness(
     gt: NDArray[Any],
     *,
     voxel_size: float = 0.01,
+    outlier_distance: float | None = None,
 ) -> dict[str, float]:
-    """Paper-protocol ETH3D-style Acc/Comp/Overall, all in meters.
+    """Paper-protocol ETH3D-style Acc/Comp/Overall, all in input units.
 
     - ``accuracy``     — mean pred→GT nearest-neighbor distance (after
       voxel-downsampling the prediction to uniform density)
     - ``completeness`` — mean GT→pred nearest-neighbor distance
     - ``overall``      — (accuracy + completeness) / 2, matches VGGT paper
       Table 3 "Overall (Chamfer distance)" convention.
+
+    Parameters
+    ----------
+    voxel_size
+        Cell size for ``voxel_downsample`` of the prediction cloud
+        (matches the ETH3D tool convention). Units match ``pred`` / ``gt``.
+    outlier_distance
+        If set, drop pred_ds points whose nearest-GT distance exceeds
+        this threshold BEFORE computing either Acc or Comp. Matches the
+        MVS convention (e.g. MASt3R DTU eval) where wild outlier
+        predictions — rays that project to arbitrary depths outside the
+        scene volume — are excluded; without it Acc is dominated by a
+        handful of far-outlier points while Comp is unaffected, giving
+        the Acc ≫ Comp asymmetry characteristic of un-filtered MVS eval.
+        Units match ``pred`` / ``gt``.
 
     All three values share units with ``pred`` / ``gt`` — for ETH3D scans
     the ETH3D tool default voxel_size is 0.01 (i.e. metres, 1 cm cell).
@@ -202,6 +218,16 @@ def accuracy_completeness(
         nan = float("nan")
         return {"accuracy": nan, "completeness": nan, "overall": nan}
     pred_ds = voxel_downsample(pred, voxel_size)
-    acc = float(_nn_distances(pred_ds, gt).mean())
+    d_pg = _nn_distances(pred_ds, gt)
+    if outlier_distance is not None:
+        if outlier_distance <= 0:
+            raise ValueError(f"outlier_distance must be > 0; got {outlier_distance}")
+        inlier = d_pg < outlier_distance
+        if not inlier.any():
+            nan = float("nan")
+            return {"accuracy": nan, "completeness": nan, "overall": nan}
+        pred_ds = pred_ds[inlier]
+        d_pg = d_pg[inlier]
+    acc = float(d_pg.mean())
     comp = float(_nn_distances(gt, pred_ds).mean())
     return {"accuracy": acc, "completeness": comp, "overall": 0.5 * (acc + comp)}

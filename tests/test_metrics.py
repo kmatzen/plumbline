@@ -450,6 +450,44 @@ class TestAccuracyCompleteness:
         assert np.isnan(out["completeness"])
         assert np.isnan(out["overall"])
 
+    def test_outlier_distance_drops_far_pred_points(self) -> None:
+        # D3 regression guard (2026-04-24). Un-filtered MVS chamfer on
+        # DTU had a few-percent of far-outlier pred points (predictions
+        # at extreme depths beyond the scene volume) that dominated
+        # accuracy, producing Acc ≫ Comp asymmetry. The MASt3R / VGGT
+        # convention filters those out. Without this filter, our scan1
+        # probe showed Acc 78-128 mm at various voxel sizes; with a
+        # 20 mm threshold, the handful of outlier pred points drops out
+        # and Acc falls sharply.
+        #
+        # Synthetic fixture: GT line 0→0.9 (10 pts). Pred has 10 near-line
+        # (d ≈ 0.05 from nearest GT) and 2 far-outliers at z=100.
+        gt = np.stack([np.linspace(0, 0.9, 10), np.zeros(10), np.zeros(10)], axis=1)
+        inliers = gt + np.array([0.0, 0.0, 0.05])
+        outliers = np.array([[0.0, 0.0, 100.0], [1.0, 0.0, 100.0]])
+        pred = np.vstack([inliers, outliers]).astype(np.float32)
+
+        out_raw = accuracy_completeness(pred, gt, voxel_size=0.01)
+        assert out_raw["accuracy"] > 10.0, (
+            f"without outlier filter, expected outlier-dominated Acc; "
+            f"got {out_raw['accuracy']}"
+        )
+        out_flt = accuracy_completeness(
+            pred, gt, voxel_size=0.01, outlier_distance=1.0
+        )
+        assert out_flt["accuracy"] == pytest.approx(0.05, abs=1e-5), (
+            f"with outlier filter, expected inlier-only Acc ≈ 0.05; "
+            f"got {out_flt['accuracy']}"
+        )
+
+    def test_outlier_distance_all_rejected_returns_nan(self) -> None:
+        gt = np.array([[0.0, 0.0, 0.0]])
+        pred = np.array([[10.0, 0.0, 0.0]]).astype(np.float32)
+        out = accuracy_completeness(
+            pred, gt, voxel_size=0.01, outlier_distance=0.1
+        )
+        assert np.isnan(out["accuracy"])
+
 
 class TestUmeyamaSimilarity:
     def test_recovers_identity(self) -> None:

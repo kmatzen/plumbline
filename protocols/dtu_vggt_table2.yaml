@@ -56,5 +56,15 @@ fixed:
   # scene-aggregation on 2026-04-23 / 2026-04-24.
   aggregation: scene
   scene_voxel_size: 10.0
+  # MVS eval (MASt3R / MVSNet / VGGT) drops prediction points whose
+  # nearest-GT distance exceeds an outlier threshold before computing
+  # Acc / Comp. Without this, a handful of far-outlier pred points
+  # (rays at extreme depths beyond the scene volume) dominate Acc and
+  # make it 100× the inlier mean. Paper-reported Acc on DTU is ~0.4 mm
+  # (VGGT 0.389, MASt3R 0.403); a 20 mm threshold is generous enough
+  # to keep ~all correct predictions, tight enough to drop the tail.
+  # Observed 2026-04-24 scan1 probe: un-filtered Acc = 78-128 mm at
+  # various voxel sizes, vs filtered << 1 mm.
+  chamfer_outlier_distance: 20.0
   max_views: 8
   tasks: [mvs_depth, pose]
