@@ -573,6 +573,18 @@ class KITTIMogeEvalLoader(Dataset):
     structural MoGe-KITTI protocol delta that Monodepth2-Eigen + Garg +
     80 m clip doesn't capture (no crop, no cap, bespoke resolution).
 
+    The loader delegates to MoGe's own
+    ``moge.test.dataloader.EvalDataLoaderPipeline._process_instance``
+    so it stays in lockstep with upstream. MoGe's eval applies a
+    homographic FoV-crop from the source 1242×375 KITTI bundle down to
+    the ``configs/eval/all_benchmarks.json`` KITTI target of
+    ``(width=750, height=375)`` — a 2:1 aspect centered in the 3.3:1
+    source, keeping ~60 % of the horizontal FoV (54.9° vs 81.4°). The
+    intrinsics on the warped frame match the new FoV; depth is ray-
+    length-adjusted through the warp so Z-axis depth stays consistent.
+    Needs the ``moge`` package (``uv pip install 'git+https://github.com/
+    microsoft/MoGe.git'``).
+
     Expected layout (pointed at by ``--data-root`` or ``$KITTI_MOGE_ROOT``)::
 
         <root>/KITTI/
@@ -592,6 +604,13 @@ class KITTIMogeEvalLoader(Dataset):
         Points at a directory containing the unzipped ``KITTI/`` tree.
         Falls back to ``$KITTI_MOGE_ROOT``.
     """
+
+    # MoGe's configs/eval/all_benchmarks.json KITTI target.
+    # https://github.com/microsoft/MoGe/blob/main/configs/eval/all_benchmarks.json
+    TARGET_WIDTH: int = 750
+    TARGET_HEIGHT: int = 375
+    DEPTH_UNIT: float = 1.0
+    DROP_MAX_DEPTH: float = 1000.0
 
     split: str = "test"
 
@@ -620,14 +639,30 @@ class KITTIMogeEvalLoader(Dataset):
 
         self.root = root_path
 
-        index_path = root_path / "KITTI" / ".index.txt"
-        lines = [
-            ln.strip()
-            for ln in index_path.read_text().splitlines()
-            if ln.strip() and not ln.startswith("#")
-        ]
+        # Build a MoGe EvalDataLoaderPipeline for KITTI. Instantiation reads
+        # ``.index.txt`` but doesn't launch the pipeline's worker processes
+        # (that happens in .start()) — we use it as a handle to the upstream
+        # ``_load_instance`` / ``_process_instance`` methods.
+        try:
+            from moge.test.dataloader import EvalDataLoaderPipeline
+        except ModuleNotFoundError as exc:
+            raise ImportError(
+                "KITTIMogeEvalLoader needs the `moge` package for its "
+                "homographic warp (matches the paper's eval pipeline). "
+                "Install with `uv pip install "
+                "'git+https://github.com/microsoft/MoGe.git'`."
+            ) from exc
+        self._moge_pipe = EvalDataLoaderPipeline(
+            path=str(root_path / "KITTI"),
+            width=self.TARGET_WIDTH,
+            height=self.TARGET_HEIGHT,
+            split=".index.txt",
+            drop_max_depth=self.DROP_MAX_DEPTH,
+            depth_unit=self.DEPTH_UNIT,
+        )
         self._records: list[dict[str, Any]] = [
-            {"sample_path": ln, "sample_id": ln.replace("/", "_")} for ln in lines
+            {"sample_path": fn, "sample_id": fn.replace("/", "_"), "idx": i}
+            for i, fn in enumerate(self._moge_pipe.filenames)
         ]
 
     def __iter__(self) -> Iterator[Sample]:
@@ -638,33 +673,51 @@ class KITTIMogeEvalLoader(Dataset):
         return len(self._records)
 
     def _load_sample(self, rec: dict[str, Any]) -> Sample:
-        # load_moge_depth_png lives in diode.py since that's where the
-        # format was first wired; same PNG encoding applies here.
-        from plumbline.datasets.diode import load_moge_depth_png
+        # Build the input dict that MoGe's ``_process_instance`` expects.
+        # We don't call its ``_load_instance`` because upstream references an
+        # undefined ``read_meta`` symbol (stale after a refactor — raw bug in
+        # MoGe HEAD). The build below replicates ``_load_instance`` exactly.
+        import json as _json
+
+        from moge.utils.io import read_depth as _moge_read_depth
+        from moge.utils.io import read_image as _moge_read_image
 
         sample_root = self.root / "KITTI" / rec["sample_path"]
-        image = read_rgb_uint8(sample_root / "image.jpg")
-        images = image[None]
-        assert_valid_image(images, name=f"kitti_moge/{rec['sample_id']}/image")
+        image_np = _moge_read_image(sample_root / "image.jpg")
+        depth_np = _moge_read_depth(sample_root / "depth.png")
+        meta = _json.loads((sample_root / "meta.json").read_text())
+        raw = {
+            "filename": rec["sample_path"],
+            "width": self.TARGET_WIDTH,
+            "height": self.TARGET_HEIGHT,
+            "image": image_np,
+            "depth": np.nan_to_num(depth_np, nan=1, posinf=1, neginf=1),
+            "depth_mask": np.isfinite(depth_np),
+            "depth_mask_inf": np.isinf(depth_np),
+            "intrinsics": np.array(meta["intrinsics"], dtype=np.float32),
+        }
+        inst = self._moge_pipe._process_instance(raw)
 
-        depth, valid = load_moge_depth_png(sample_root / "depth.png")
-        # Mirror MoGe's `_process_instance` drop_max_depth filter: any pixel
-        # above ``nanquantile(depth, 0.01) * 1000`` is excluded. On KITTI
-        # this is usually a no-op (p01 ~1-5 m × 1000 ≫ scene max ~80 m) but
-        # applied for consistency with the paper's eval.
-        finite_d = depth[valid]
-        if finite_d.size:
-            p01 = float(np.nanquantile(finite_d, 0.01))
-            if p01 > 0:
-                max_allowed = p01 * 1000.0
-                valid = valid & (depth <= max_allowed)
+        # MoGe returns torch tensors in CHW / HWC. Plumbline wants
+        # uint8 HWC image + float32 HW depth + bool HW mask as numpy.
+        img_t = inst["image"]  # (3, H, W) float in [0,1]
+        image = (img_t.permute(1, 2, 0).numpy() * 255.0).clip(0, 255).astype(np.uint8)
+        depth = inst["depth"].numpy().astype(np.float32)
+        valid = inst["depth_mask"].numpy().astype(bool)
+        # MoGe zeros out invalid pixels (line 169 of dataloader.py); plumbline
+        # uses 1.0 as a safe placeholder so depth-as-metric tensors never hit
+        # 0 or NaN. Restore that convention here.
         depth_clean = np.where(valid, depth, np.float32(1.0))
+
+        images = image[None]
         depth_gt = depth_clean[None]
         depth_valid = valid[None]
+        assert_valid_image(images, name=f"kitti_moge/{rec['sample_id']}/image")
+        assert_valid_depth(depth_gt, name=f"kitti_moge/{rec['sample_id']}/depth")
 
-        import json
-        meta = json.loads((sample_root / "meta.json").read_text())
-        K_norm = np.asarray(meta["intrinsics"], dtype=np.float32)
+        # MoGe's target intrinsics are normalized in its own convention:
+        # fx_norm = fx_pix / W, fy_norm = fy_pix / H, cx/cy in [0,1].
+        K_norm = inst["intrinsics"].numpy().astype(np.float32)
         h, w, _ = image.shape
         K_pix = K_norm.copy()
         K_pix[0, :] *= w
@@ -674,7 +727,6 @@ class KITTIMogeEvalLoader(Dataset):
 
         assert_valid_intrinsics(K_stack, name=f"kitti_moge/{rec['sample_id']}/intrinsics")
         assert_valid_extrinsics(E_eye, name=f"kitti_moge/{rec['sample_id']}/extrinsics")
-        assert_valid_depth(depth_gt, name=f"kitti_moge/{rec['sample_id']}/depth")
 
         return Sample(
             sample_id=rec["sample_id"],
