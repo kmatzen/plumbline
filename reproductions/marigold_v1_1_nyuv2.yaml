@@ -23,10 +23,17 @@ model:
   name: marigold
   kwargs:
     variant: v1-1
-    num_inference_steps: 4
+    # Match prs-eth/Marigold's official eval for NYUv2
+    # (script/depth/eval/11_infer_nyu.sh):
+    # --denoise_steps 1 --ensemble_size 10 --seed 1234, no --fp16.
+    # v1-1 is a 1-step distilled checkpoint; higher denoise_steps
+    # change the prediction distribution. 2026-04-24: fixed to match
+    # paper infer. Prior config (4 steps, fp16, seed 2024) matched an
+    # informal ablation note, not the Table 1 cell the YAML pins.
+    num_inference_steps: 1
     ensemble_size: 10
-    dtype: float16
-    seed: 2024
+    dtype: float32
+    seed: 1234
 
 dataset:
   name: nyuv2
