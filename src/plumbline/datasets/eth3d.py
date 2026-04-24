@@ -125,6 +125,15 @@ class ETH3DDataset(Dataset):
         self._records = records
         self.max_gt_points = max_gt_points
         self.gt_subsample_seed = int(gt_subsample_seed)
+        # Per-scene GT point cloud cache. Populated lazily on first sample
+        # of a scene; subsequent samples reuse the same array. Without this,
+        # _load_sample re-loads + re-parses the multi-PLY GT (~34M pts for
+        # ETH3D courtyard / facade) on *every* sample — 137 samples × two
+        # 200 MB PLY files = 45 GB of I/O + a Python-side heap-fragmentation
+        # pattern that OOM-killed D4's scene-aggregation on 2026-04-24.
+        # Keyed by (scene_name, tuple-of-relative-paths) so a scene that
+        # somehow appears under two GT sources within one run still works.
+        self._gt_cache: dict[tuple, NDArray[np.float32]] = {}
 
     def __iter__(self) -> Iterator[Sample]:
         for rec in self._records:
@@ -212,21 +221,25 @@ class ETH3DDataset(Dataset):
         if ply_rels is None and rec.get("point_cloud_ply"):
             ply_rels = [rec["point_cloud_ply"]]
         if ply_rels:
-            chunks: list[NDArray[np.float32]] = []
-            for rel in ply_rels:
-                p = self.root / rel
-                if p.exists():
-                    chunks.append(load_ply_xyz(p))
-            if chunks:
-                pcd = np.concatenate(chunks, axis=0)
-                # ETH3D scan_clean is ~38M points/scene; chamfer on that is
-                # minutes per sample. Opt-in subsample makes smoke evals
-                # practical. Deterministic seed + per-sample stable choice
-                # so the same sample always gets the same subset.
-                if self.max_gt_points is not None and pcd.shape[0] > self.max_gt_points:
-                    rng = np.random.default_rng(self.gt_subsample_seed)
-                    idx = rng.choice(pcd.shape[0], size=self.max_gt_points, replace=False)
-                    pcd = pcd[idx]
+            cache_key = (rec["scene"], tuple(ply_rels))
+            pcd = self._gt_cache.get(cache_key)
+            if pcd is None:
+                chunks: list[NDArray[np.float32]] = []
+                for rel in ply_rels:
+                    p = self.root / rel
+                    if p.exists():
+                        chunks.append(load_ply_xyz(p))
+                if chunks:
+                    pcd = np.concatenate(chunks, axis=0)
+                    # ETH3D scan_clean is ~38M points/scene; chamfer on that is
+                    # minutes per sample. Opt-in subsample makes smoke evals
+                    # practical. Deterministic seed + per-sample stable choice
+                    # so the same sample always gets the same subset.
+                    if self.max_gt_points is not None and pcd.shape[0] > self.max_gt_points:
+                        rng = np.random.default_rng(self.gt_subsample_seed)
+                        idx = rng.choice(pcd.shape[0], size=self.max_gt_points, replace=False)
+                        pcd = pcd[idx]
+                    self._gt_cache[cache_key] = pcd
 
         return Sample(
             sample_id=rec["sample_id"],

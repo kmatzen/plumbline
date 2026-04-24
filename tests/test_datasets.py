@@ -260,6 +260,54 @@ class TestETH3D:
         assert s.num_views == 3
         np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-5)
 
+    def test_gt_point_cloud_is_cached_per_scene(self, tmp_path: Path, monkeypatch) -> None:
+        # D4 regression guard (2026-04-24). ETH3DDataset previously re-loaded
+        # + re-parsed the multi-PLY GT cloud on every sample, which at 34M pts
+        # per PLY on real ETH3D scenes triggered a Python-heap-fragmentation
+        # OOM during 137-sample scene-aggregation. Fix: per-scene GT cache
+        # keyed by (scene_name, tuple(ply_rels)). For a 4-view / 3-window
+        # fake dataset with one scene and one GT ply, load_ply_xyz must be
+        # called at most once across the 2 samples.
+        _write_fake_eth3d(tmp_path, scenes=1, views=4)
+        # Hand-write a GT ply under dslr_scan_eval (preferred over scan_clean
+        # per the D4 source-resolver patch). Minimal valid ASCII PLY.
+        scene_dir = tmp_path / "scene_0"
+        gt_dir = scene_dir / "dslr_scan_eval"
+        gt_dir.mkdir(parents=True)
+        ply = gt_dir / "scan1.ply"
+        ply.write_text(
+            "ply\nformat ascii 1.0\n"
+            "element vertex 3\n"
+            "property float x\nproperty float y\nproperty float z\n"
+            "end_header\n"
+            "0.0 0.0 0.0\n1.0 0.0 0.0\n0.0 1.0 0.0\n"
+        )
+        ds = ETH3DDataset(root=tmp_path, views_per_sample=3)
+        # Tag the rec with the GT path so _load_sample finds it.
+        for rec in ds._records:
+            rec["point_cloud_plys"] = [str(ply.relative_to(tmp_path))]
+
+        # Spy on load_ply_xyz — the whole-file parse happens inside it.
+        import plumbline.datasets.eth3d as eth3d_mod
+        call_count = {"n": 0}
+        original = eth3d_mod.load_ply_xyz
+
+        def counted(*args, **kwargs):
+            call_count["n"] += 1
+            return original(*args, **kwargs)
+
+        monkeypatch.setattr(eth3d_mod, "load_ply_xyz", counted)
+
+        samples = list(ds)
+        assert len(samples) == 2, f"expected 2 samples, got {len(samples)}"
+        assert samples[0].point_cloud_gt is not None
+        assert samples[1].point_cloud_gt is not None
+        # Both samples share a scene — GT must have loaded ONCE, not twice.
+        assert call_count["n"] == 1, (
+            f"expected per-scene GT cache (1 load for 2 same-scene samples); "
+            f"got {call_count['n']} calls"
+        )
+
     def test_cache_is_scene_filter_independent(self, tmp_path: Path) -> None:
         # Regression: prior revision cached the scene-filtered scan, so a
         # single-scene open left a manifest that hid other scenes from a
