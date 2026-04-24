@@ -27,30 +27,56 @@ Status legend:
 
 ## Open issues
 
-### D3 · VGGT-DTU chamfer — correctness   🔎 OPEN
+### D3 · VGGT-DTU chamfer — correctness   🔎 OPEN (Acc closed, Comp coverage)
 
-OOM issue fixed 2026-04-24 (`1fc0f9c`, scene_voxel_size unit-mixup:
-DTU is mm, protocol had 0.01 copy-pasted from ETH3D's meters → 10 μm
-cells, making per-chunk voxel_downsample a no-op). First clean GPU
-run: Overall = **51.34 mm vs paper 0.382 mm (134× off)**, n=924,
-per-scan Acc 6-19 mm, Comp 44-90 mm. Completeness is 10-15× Acc —
-strongly suggests pred cloud covers a narrower region than GT scan;
-per-sample camera_centers Umeyama + scene-level ICP may be mis-scaling
-the scene.
+OOM issue fixed 2026-04-24 (`1fc0f9c`, scene_voxel_size unit mixup,
+DTU is mm not m). Acc root-caused 2026-04-24 to missing MVS outlier
+filter (`1ef3c04`): pred points beyond the scan volume dominated
+un-filtered Acc. With `chamfer_outlier_distance=20 mm` in protocol:
 
-YAML also has a metric-key mismatch: `primary_metric: chamfer`, but
-the runner emits `accuracy` / `completeness` / `overall`. Match check
-reports NaN (no chamfer key). Either rename `overall` → `chamfer` in
-the runner or fix the YAML.
+| Metric | Un-filtered | Outlier filter | Paper |
+|---|---|---|---|
+| Acc  | 51 mm | **8.2 mm**  | 0.389 mm |
+| Comp | 91 mm | 91 mm (unchanged) | 0.374 mm |
+| Overall | 51 mm | 50 mm | 0.382 mm |
 
-### D4 · VGGT-ETH3D multiscene — regression on scan_clean GT   🔎 OPEN
+Acc 20× paper (was 130× before filter) — the remaining 20× is likely
+per-chunk Umeyama inconsistency across samples; each 8-view
+Umeyama estimates a slightly different scale in its own frame, and
+the merged cloud has many overlapping surfaces at subtly different
+scales. Paper's ICP on the fused cloud (single scale) should help;
+the scene-level ICP we apply doesn't fully resolve per-window
+scale drift.
 
-Overall 1.7512 m vs paper 0.709 (147 % off). YAML's prior-run note
-had 0.8178 m (15 % off) under the `dslr_scan_eval` GT — today's
-result on the new `scan_clean` GT is 2× worse. Per-scene
-completeness degraded 3-4× (0.46 → 1.43 m mean). `scan_clean` GT
-probably has broader point coverage than `dslr_scan_eval`, inflating
-GT→pred NN distance. A/B the two GT sources on one scene to confirm.
+**Comp unchanged at 91 mm** — outlier filter can't add coverage.
+Root cause: `views_per_sample: 8` windowing + 45 samples per scan
+doesn't cover the same views-per-scene the paper uses. VGGT paper
+likely feeds many more views per forward pass (VGGT supports up to
+thousands). Reproduction YAML's 8-view pinning is a constraint we
+can't relax without editing the YAML.
+
+YAML metric-key mismatch also open: `primary_metric: chamfer` but
+runner emits `accuracy/completeness/overall` (no `chamfer` key →
+match-check reports NaN).
+
+### D4 · VGGT-ETH3D multiscene — regression on scan_clean GT   🔎 OPEN (fix landed, verify blocked)
+
+A/B confirmed 2026-04-24: `scan_clean` has 2-4× the spatial extent of
+`dslr_scan_eval` on facade (80×183×51 m vs 44×96×23 m), fewer points
+inside the DSLR-visible region. Committed `1ef3c04` makes
+`_resolve_scan_clean_plys` prefer `dslr_scan_eval/` when present.
+
+Verify run OOM-killed at scene-aggregation (17 GB peak RSS) — but
+NOT because of the GT change. Root cause of OOM:
+`ETH3DDataset._load_sample` re-loads the multi-PLY GT cloud (34M pts
+for courtyard) from disk on **every sample**, 137 samples for the
+3-scene subset. Python GC fragmentation over 137 iterations +
+concurrent scene-agg accumulation → OOM. GT is scene-level; should
+be cached per-scene in the loader. Separate fix from the `scan_clean`
+swap.
+
+Next session: add `ETH3DDataset` GT-cache (LRU keyed by scene name)
+so the PLY re-parse is O(scenes) not O(samples), then re-verify D4.
 
 ### D9 · Marigold-KITTI — OFF-PAPER under both candidate protocols   🔎 OPEN
 
