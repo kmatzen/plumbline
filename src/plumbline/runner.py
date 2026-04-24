@@ -243,7 +243,18 @@ def evaluate(
             )
             if aligned is not None:
                 scene = sample.sample_id.split("/", 1)[0]
-                scene_points.setdefault(scene, []).append(aligned.reshape(-1, 3))
+                # Voxel-downsample each per-sample chunk BEFORE accumulating.
+                # Without this, DTU's 22 × ~42 predictions × ~1 M points each
+                # balloon to 10-20 GB of in-memory chunks and the aggregation
+                # OOM-kills on boxes with <32 GB RAM (D20 in DISCREPANCIES,
+                # exit 137 observed 2026-04-23). The fused-cloud downsample at
+                # the merge step (line ~340) was doing exactly this per-voxel
+                # unification already; moving it earlier just bounds peak RSS
+                # to ~O(N_scenes × scene_voxels) with no algorithmic change.
+                chunk_pts = aligned.reshape(-1, 3)
+                if chunk_pts.shape[0] > 0:
+                    chunk_pts = voxel_downsample(chunk_pts, scene_voxel_size).astype(np.float32)
+                scene_points.setdefault(scene, []).append(chunk_pts)
                 # GT is the same across samples of a scene (subsampled
                 # laser scan); keep the first one we see.
                 scene_gt.setdefault(scene, trimmed_sample.point_cloud_gt)
@@ -355,6 +366,35 @@ def evaluate(
 # ---------------------------------------------------------------------------
 
 
+def _sample_input_fingerprint(sample: Sample) -> str:
+    """Short stable hash of the loader's actual output for this sample.
+
+    Mixed into the prediction-cache key so a loader refactor that changes
+    preprocessing (resolution, cropping, color conversion, etc.) auto-
+    invalidates the cache. Before this, the cache key was just
+    ``(model, model_config, dataset_name, sample_id)`` — a loader change
+    that kept ``sample_id`` stable but altered the tensor shape would
+    serve stale predictions against fresh GT and silently produce wrong
+    metrics (D21 in docs/DISCREPANCIES.md, observed 2026-04-24 on the
+    MoGe-KITTI warp fix where a pre-warp 1242×375 prediction was scored
+    against a post-warp 750×375 GT).
+
+    The fingerprint is a sha1 over the full image shape + dtype + the
+    intrinsics + the first 1 KB of image bytes. O(μs) per sample and
+    ≤8 hex chars added to the cache filename.
+    """
+    import hashlib
+
+    h = hashlib.sha1()
+    h.update(str(sample.images.shape).encode())
+    h.update(str(sample.images.dtype).encode())
+    h.update(sample.intrinsics.tobytes())
+    # A few KB of raw pixel bytes catches subtler changes (resampling
+    # kernel, colour-space flip) that shape + intrinsics alone miss.
+    h.update(sample.images.tobytes()[:1024])
+    return h.hexdigest()[:8]
+
+
 def _predict_with_cache(
     *,
     model: Model,
@@ -363,10 +403,16 @@ def _predict_with_cache(
     max_views: int,
     cache: PredictionCache,
 ) -> Prediction | None:
-    cache_args = (model.name, model.config_hash(), dataset_name, sample.sample_id)
-    if cache.has(*cache_args):
+    fingerprint = _sample_input_fingerprint(sample)
+    cache_args = (
+        model.name,
+        model.config_hash(),
+        dataset_name,
+        sample.sample_id,
+    )
+    if cache.has(*cache_args, input_fingerprint=fingerprint):
         try:
-            return cache.load(*cache_args)
+            return cache.load(*cache_args, input_fingerprint=fingerprint)
         except Exception:
             log.warning("Cache load failed for %s; re-running", sample.sample_id, exc_info=True)
 
@@ -408,7 +454,7 @@ def _predict_with_cache(
         return None
 
     try:
-        cache.save(*cache_args, prediction=prediction)
+        cache.save(*cache_args, prediction=prediction, input_fingerprint=fingerprint)
     except OSError:
         log.warning("Failed to cache prediction for %s", sample.sample_id, exc_info=True)
 

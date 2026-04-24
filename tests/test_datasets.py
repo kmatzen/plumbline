@@ -426,6 +426,54 @@ class TestKITTIMogeEvalLoader:
 
         assert DATASET_REGISTRY["kitti-moge-eval"] is KITTIMogeEvalLoader
 
+    def test_warp_output_shape_and_square_pixels(self) -> None:
+        # D8 (2026-04-24) regression guard. The loader MUST apply MoGe's
+        # homographic FoV-crop from the 1242×375 HF-bundle source down to
+        # the paper's 750×375 target. Without this warp, MoGe is fed a
+        # wider 3.3:1 strip instead of the 2:1 aspect it was evaluated on,
+        # and AbsRel jumps from 0.040 (paper) to ~0.048 (16% off).
+        #
+        # The loader delegates to upstream ``EvalDataLoaderPipeline.
+        # _process_instance``; this test catches both (a) plumbline
+        # mistakenly bypassing the delegate and (b) an upstream MoGe
+        # change that alters the target shape / intrinsics.
+        import os
+
+        root_env = os.environ.get("KITTI_MOGE_ROOT")
+        if not root_env or not Path(root_env, "KITTI", ".index.txt").exists():
+            pytest.skip(
+                "KITTI MoGe-eval bundle not staged (set $KITTI_MOGE_ROOT)"
+            )
+
+        ld = KITTIMogeEvalLoader()
+        s = next(iter(ld))
+
+        # Warped image: (N, H, W, 3) = (1, 375, 750, 3). Source bundle is
+        # 1242×375; anything else means the warp was skipped.
+        assert s.images.shape == (1, 375, 750, 3), (
+            f"expected warped (1, 375, 750, 3); got {s.images.shape}. "
+            "Loader probably skipped MoGe's _process_instance."
+        )
+        assert s.depth_gt.shape == (1, 375, 750)
+        assert s.depth_valid.shape == (1, 375, 750)
+
+        # The 2:1 target with matched pixel scale gives square pixels —
+        # fx ≈ fy in pixels. If the warp is wrong or intrinsics aren't
+        # rebuilt for the target, these diverge by ~4× (source KITTI has
+        # fx/fy ≈ 720/720 in pixels on 1242×375, but normalized ≈ 0.58/1.92).
+        fx = float(s.intrinsics[0, 0, 0])
+        fy = float(s.intrinsics[0, 1, 1])
+        assert fx > 0 and fy > 0
+        assert abs(fx - fy) / max(fx, fy) < 0.01, (
+            f"expected square-pixel intrinsics after warp; got fx={fx} fy={fy}"
+        )
+
+        # Principal point should be dead-center on the warped target.
+        cx = float(s.intrinsics[0, 0, 2])
+        cy = float(s.intrinsics[0, 1, 2])
+        assert abs(cx - 375.0) < 1e-3, f"cx={cx}, expected 375"
+        assert abs(cy - 187.5) < 1e-3, f"cy={cy}, expected 187.5"
+
     def test_scan_basic_load(self, tmp_path: Path) -> None:
         _write_fake_kitti(tmp_path, frames=3)
         ds = KITTIDataset(root=tmp_path)

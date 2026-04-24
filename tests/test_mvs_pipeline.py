@@ -326,6 +326,74 @@ class TestMVSPipeline:
         assert "overall" in report.aggregate_metrics
         assert np.isfinite(report.aggregate_metrics["overall"])
 
+    def test_scene_aggregation_downsamples_chunks_before_accumulating(self, tmp_path: Path) -> None:
+        """D20 memory-bloat regression guard (2026-04-24).
+
+        In aggregation='scene' mode, each per-sample aligned point chunk
+        must be voxel-downsampled BEFORE being appended to the
+        ``scene_points`` dict. Otherwise DTU's 22 × ~42 × ~1 M-point
+        chunks balloon to 10-20 GB of in-memory points and the aggregation
+        OOM-kills on boxes with <32 GB RAM.
+
+        Counted behaviour: with 2 samples sharing a scene, we expect
+        voxel_downsample to be called at least once per sample (the
+        per-chunk downsample) plus once at the scene level (pre-ICP).
+        Old code path only called it at the scene level — exactly 1 call
+        for this 2-sample fixture. New code path: >=3.
+        """
+        import plumbline.runner as runner_mod
+
+        class _SharedSceneDataset(_FakeMVSDataset):
+            def __init__(self) -> None:
+                super().__init__()
+                for i, s in enumerate(self._samples[:2]):
+                    s.sample_id = f"shared_scene/window_{i}"
+                self._samples = self._samples[:2]
+
+            def __len__(self) -> int:
+                return 2
+
+        class _SpreadPointMapAdapter(_FakeMVSAdapter):
+            name = "fake-spread"
+
+            def predict(self, images: np.ndarray, intrinsics: np.ndarray | None = None):
+                p = super().predict(images, intrinsics)
+                n, h, w, _ = images.shape
+                rng = np.random.default_rng(42)
+                p.point_map = rng.uniform(-1.0, 1.0, size=(n, h, w, 3)).astype(np.float32)
+                return p
+
+        call_count = {"n": 0}
+        original_vxd = runner_mod.voxel_downsample
+
+        def counted_vxd(*args, **kwargs):
+            call_count["n"] += 1
+            return original_vxd(*args, **kwargs)
+
+        runner_mod.voxel_downsample = counted_vxd  # type: ignore[assignment]
+        try:
+            report = evaluate(
+                model=_SpreadPointMapAdapter(),
+                dataset=_SharedSceneDataset(),
+                tasks=["mvs_depth"],
+                scale_alignment="none",
+                pointcloud_alignment="icp",
+                aggregation="scene",
+                scene_voxel_size=0.1,
+                cache=PredictionCache(tmp_path),
+            )
+        finally:
+            runner_mod.voxel_downsample = original_vxd  # type: ignore[assignment]
+
+        # 2 per-chunk downsamples + 1 pre-ICP scene downsample = 3 minimum.
+        assert call_count["n"] >= 3, (
+            f"expected per-chunk voxel_downsample before accumulation "
+            f"(>=3 calls for 2 samples in 1 scene); got {call_count['n']}. "
+            "If this drops back to 1, the memory-bloat bug reappeared."
+        )
+        assert "overall" in report.aggregate_metrics
+        assert np.isfinite(report.aggregate_metrics["overall"])
+
     def test_view_count_is_capped_at_max_views(self, tmp_path: Path) -> None:
         """Runner's ``max_views`` trims samples before the adapter sees them."""
         captured: list[int] = []

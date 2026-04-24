@@ -62,6 +62,27 @@ class TestCacheRoundTrip:
         with pytest.raises(FileNotFoundError):
             cache.load("m", "cfg", "ds", "nope")
 
+    def test_input_fingerprint_invalidates_on_change(self, tmp_path: Path) -> None:
+        # D21 (2026-04-24) regression guard. A loader refactor that alters
+        # preprocessing — e.g. a new image resolution — but preserves
+        # sample_id must NOT serve the stale prediction: the cache key
+        # mixes in an input-fingerprint string that the runner derives
+        # from the sample's actual tensor contents.
+        cache = PredictionCache(tmp_path)
+        pred_old = _make_prediction(seed=1)
+        cache.save("m", "cfg", "ds", "s0", pred_old, input_fingerprint="abc")
+        # Same identity tuple but a different fingerprint (simulates a
+        # loader preprocessing change) must not hit:
+        assert cache.has("m", "cfg", "ds", "s0", input_fingerprint="abc")
+        assert not cache.has("m", "cfg", "ds", "s0", input_fingerprint="xyz")
+        # The two variants coexist on disk keyed by fingerprint:
+        pred_new = _make_prediction(seed=2)
+        cache.save("m", "cfg", "ds", "s0", pred_new, input_fingerprint="xyz")
+        loaded_old = cache.load("m", "cfg", "ds", "s0", input_fingerprint="abc")
+        loaded_new = cache.load("m", "cfg", "ds", "s0", input_fingerprint="xyz")
+        assert loaded_old.depth is not None and loaded_new.depth is not None
+        assert not np.array_equal(loaded_old.depth, loaded_new.depth)
+
     def test_missing_fields_stay_none(self, tmp_path: Path) -> None:
         cache = PredictionCache(tmp_path)
         pred = Prediction(depth=np.zeros((1, 2, 2), dtype=np.float32))
