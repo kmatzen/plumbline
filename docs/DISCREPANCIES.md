@@ -17,8 +17,8 @@ Status legend:
 |---|---|---|
 | D3 | VGGT-DTU scene-aggregation OOMs (exit 137) on 22-scan chamfer | 🧪 loader fix landed; mem bug exposed 2026-04-23 |
 | D4 | VGGT-ETH3D multiscene verify (needs D20 + scan_clean GT) | 🧪 pending GPU |
-| D8 | MoGe-KITTI — structural protocol fix landed, observed 16 % off paper | 🧪 secondary-delta open |
-| D9 | Marigold-KITTI — same protocol fix, observed 16 % off paper | 🧪 secondary-delta open |
+| D8 | MoGe-KITTI — root-caused: loader skips MoGe's homographic FoV crop to 750×375 | 🧪 fix path identified |
+| D9 | Marigold-KITTI — same root cause as D8 (shared loader) | 🧪 closes with D8 fix |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
 | D17 | GeoWizard NYU 10 % off — RNG or secondary protocol detail | 🔎 suspected |
 | D18 | GeoWizard KITTI — under new protocol, awaiting GPU verify | 🧪 pending GPU |
@@ -49,33 +49,65 @@ a peak-RSS assertion.
 reads from it. GPU verification blocked on D20 (same OOM pattern
 likely — ETH3D has fewer scenes so may fit; unverified).
 
-### D8 · MoGe-KITTI — secondary protocol delta   🧪 OPEN
+### D8 · MoGe-KITTI — secondary protocol delta   🧪 OPEN — ROOT-CAUSED 2026-04-24
 
-Structural fix landed: new `KITTIMogeEvalLoader` + `kitti_moge_eval`
-protocol mirroring MoGe's own eval (HF-bundle 652 samples, no crop,
-no 80 m clip, log-PNG depth, disparity-space LSQ + `1/gt.max()` floor).
+Structural fix (round 1, 2026-04-22) landed: new `KITTIMogeEvalLoader` +
+`kitti_moge_eval` protocol mirroring MoGe's own eval file I/O
+(HF-bundle 652 samples, log-PNG depth, disparity-space LSQ +
+`1/gt.max()` floor, `drop_max_depth=1000` filter).
 `moge-vitl-kitti` opts in with `scale_shift_clamped`.
 
-GPU verify 2026-04-23: observed AbsRel 0.0475 vs paper 0.0408 —
-**16.4 % off, worse than the pre-fix 9.4 %.** Secondary delta remains:
-either the disparity-clamp interaction is different for KITTI than
-DIODE, or there's a protocol detail in the MoGe eval script we're
-still missing. Candidates to investigate next:
+GPU verify 2026-04-23: AbsRel 0.0475 vs paper 0.0408 — 16.4 % off.
+Worse than the pre-fix 9.4 % off under Monodepth2-Eigen-Garg.
 
-- MoGe-specific resolution / padding quirk on the 750×375 bundle
-- Whether the clamp should apply to the median or the max
-- `drop_max_depth` applied to KITTI (MoGe's eval code is dataset-gated)
+**Root cause (2026-04-24, read of `moge/test/dataloader.py`
+`_process_instance` in the pip-installed `moge` package):** MoGe's
+loader does a **homographic FoV-crop + warp** to the eval config's
+`(width, height)` target, in addition to the format conversions
+plumbline already mirrored. The HF bundle stores KITTI at its
+original 1242×375 with the source intrinsics; the KITTI benchmark
+config (`configs/eval/all_benchmarks.json`) sets `width: 750,
+height: 375`. MoGe's `_process_instance` then:
 
-### D9 · Marigold-KITTI — same protocol delta   🧪 OPEN
+1. Computes target FoV as `min(raw_horizontal, raw_vertical × tgt_aspect)`
+   which for a KITTI sample is 54.9° (vs 81.4° raw) — keeping only
+   60 % of the horizontal FoV.
+2. Builds target intrinsics matching the new 2:1 aspect.
+3. Remaps image + depth to 750×375 with ray-length conversion
+   (Z-depth → distance → Z-depth in target frame).
+4. Reapplies `drop_max_depth` filter on the warped depth.
+
+Plumbline's loader skips all of (1)-(4) — it hands MoGe the raw
+1242×375 3.3:1 wide strip. MoGe the model was trained/evaluated at
+narrower aspect ratios, so its predictions on the wide strip are
+off-distribution and the LSQ alignment (on the full 1242×375 GT
+mask) is fitting to a wider spatial prior than the paper reports.
+
+This explains why the fix made things *worse* than the pre-fix
+Monodepth2-Eigen-Garg setup: Garg's center-crop accidentally
+approximated the narrow-aspect crop, while the no-crop HF-bundle
+loader without MoGe's homography feeds the model a wider strip.
+
+**Fix path for next session:** port `_process_instance`'s warp into
+`KITTIMogeEvalLoader`, or import and call the upstream
+`EvalDataLoaderPipeline._process_instance` directly so the loader
+stays in sync with MoGe HEAD. Same fix applies to D9 + D18 — they
+share the loader.
+
+DIODE is not affected: DIODE bundle images are already at the target
+1024×768 (config: `width: 1024, height: 768`), so MoGe's homography
+reduces to identity. Verified by reading a bundle sample
+(`diode_moge/DIODE/val/.../image.jpg` → 1024×768).
+
+### D9 · Marigold-KITTI — same protocol delta   🧪 OPEN — ROOT-CAUSED 2026-04-24
 
 Same loader + protocol as D8, but `scale_shift_depth` alignment
 (Marigold fits in depth space per `eval.py`).
 
-GPU verify 2026-04-23: observed AbsRel 0.1146 vs paper 0.099 —
-**15.8 % off, similar to the pre-fix 10.1 %.** Parallels D8: the
-new loader didn't close the gap. Likely a secondary knob specific to
-Marigold's `eval.py` (e.g., `alignment_max_res`, ensemble-alignment
-strategy).
+GPU verify 2026-04-23: AbsRel 0.1146 vs paper 0.099 — 15.8 % off.
+Same root cause as D8 — the shared `KITTIMogeEvalLoader` skips MoGe's
+homographic FoV-crop + warp. Fix will cascade: once `KITTIMogeEvalLoader`
+does the warp, D9 should close without Marigold-specific changes.
 
 ### D10 · VGGT-ETH3D 3-scene vs 13-scene split   📅 DEFERRED
 
@@ -102,12 +134,13 @@ off, after D1 + D2 fixes. Candidates:
 
 Priority: low. Defer to v0.2 with D9.
 
-### D18 · GeoWizard KITTI   🧪 PENDING GPU
+### D18 · GeoWizard KITTI   🧪 PENDING GPU — LIKELY D8 ROOT CAUSE
 
 Pre-fix: AbsRel 0.131 vs paper 0.097 (35.2 % off). `geowizard-kitti`
 now points at the shared `kitti_moge_eval` protocol + loader with
-`scale_shift_depth` alignment. Given D8/D9 both landed 16 % off under
-the same protocol, expect similar secondary-delta behaviour.
+`scale_shift_depth` alignment. Verify after D8 warp fix lands — if
+D8/D9 close, D18 likely closes with them. If D18 stays off by
+>20 %, there's a GeoWizard-specific delta beyond the shared loader.
 
 ### D20 · Scene-aggregation memory-bloat   🧪 RE-OPENED
 
@@ -136,11 +169,14 @@ rather than building a full in-memory dict keyed by sample.
 1. D3 — VGGT-DTU chamfer under `aggregation: scene` on all 22 scans.
 2. D4 — VGGT-ETH3D multiscene chamfer under the same path.
 
-**Open investigations (not blocking paper-match queue):**
-- D8 / D9 — root-cause the 16 % secondary delta on KITTI MoGe-eval
-  protocol. Start with `drop_max_depth` applied to KITTI (likely
-  dataset-gated in MoGe's eval code).
-- D18 — GPU verify GeoWizard-KITTI once D8/D9 are understood.
+**Laptop-side fix (root-caused 2026-04-24):**
+- D8 / D9 / D18 — port MoGe's `_process_instance` homographic
+  FoV-crop + ray-length conversion into `KITTIMogeEvalLoader`, or
+  delegate to the upstream `EvalDataLoaderPipeline._process_instance`.
+  The KITTI HF bundle is at the source 1242×375; MoGe warps to
+  750×375 (2:1 aspect, center-cropped FoV) at eval time. Plumbline
+  currently feeds the model the raw wide strip. After the fix,
+  GPU-verify all three at once.
 
 **Nice-to-have (v0.2):**
 - D10 — VGGT-ETH3D 13-scene full split, or demote to informational.
