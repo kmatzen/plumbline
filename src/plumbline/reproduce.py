@@ -142,6 +142,8 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
         boundary_tol=float(cfg.get("boundary_tol", 0.1)),
         aggregation=cfg.get("aggregation", "sample"),
         scene_voxel_size=float(cfg.get("scene_voxel_size", 0.01)),
+        per_view_masked=bool(cfg.get("per_view_masked", False)),
+        per_view_crop=int(cfg.get("per_view_crop", 224)),
     )
 
     paper = cfg.get("paper_reference", {})
