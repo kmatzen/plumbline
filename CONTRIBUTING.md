@@ -86,8 +86,8 @@ See [REPRODUCTIONS.md](./REPRODUCTIONS.md). A reproduction PR should include:
   `protocols/nyu_eigen_2014.yaml` as a template.
 - A pinned sample list committed **in the repo** (not under the
   dataset root), for reproductions where the loader doesn't already
-  have a deterministic default. See `docs/SAMPLE_LISTS.md` for the
-  per-dataset policy.
+  have a deterministic default. See `docs/ARCHITECTURE.md § 9` for the
+  policy.
 - The exact paper citation with **table + column + row** names. Verify
   against the arXiv PDF (arxiv.org/html/…), not a WebFetch summary.
   The `paper_reference.source_confidence` field must be
