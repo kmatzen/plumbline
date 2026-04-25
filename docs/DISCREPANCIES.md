@@ -219,6 +219,69 @@ scan49, scan75, scan77 being the tail.
 is **not yet met** but the protocol is now structurally correct and
 the remaining gap is per-scene tail / GT density, not metric shape.
 
+#### 2026-04-25 — finding: we ported the WRONG reference protocol
+
+Cross-repo audit (MASt3R, DUSt3R, MVSNet, CUT3R clones at /tmp/) of
+how each one's official code computes DTU chamfer:
+
+- **MASt3R + DUSt3R**: ship NO DTU eval code (`grep -r DTU|chamfer|
+  ObsMask|registration_icp`: zero hits in either repo). The §4.2
+  protocol described in the MASt3R paper that VGGT cites was never
+  released as code.
+- **MVSNet**: ships fusion-to-PLY only (`mvsnet/test.py`); chamfer
+  itself is computed by an **external Jensen et al. DTU MATLAB
+  toolkit** (`BaseEvalMain_web.m` / `ComputeStat_web.m`) that lives
+  with the DTU SampleSet, not in this repo.
+- **CUT3R**: only has the dead `if "DTU" in name_data` branch in
+  `eval/mv_recon/launch.py:251` plus the unused `DTU` loader in
+  `eval/mv_recon/data.py:192`. `datasets_all` in `launch.py:57-71`
+  registers only `7scenes` + `NRGBD` — **CUT3R does not actually
+  evaluate on DTU.**
+
+The canonical DTU chamfer protocol — what VGGT Table 2 0.382 mm,
+MASt3R Table 2, DUSt3R Table 6, and MVSNet Table 1 all share — is the
+**Jensen MATLAB toolkit**, not CUT3R's per-view-masked code. The
+Jensen protocol is structurally different from the CUT3R-shape
+protocol we ported:
+
+| axis | Jensen (canonical) | CUT3R (what we ported) |
+|---|---|---|
+| GT  | raw `stl{N}_total.ply` laser PLY | 2D rendered per-view depth + binary mask |
+| Mask | 3D `ObsMask{N}.mat` voxel grid + plane cull | 2D per-view mask + 224×224 center crop |
+| Outlier cap | **MaxDist=20 mm** before mean | none |
+| Pred prep  | Fuse predicted depths into a single per-scan PLY, downsample at 0.2 mm | per-view points, concat after 224×224 crop |
+| Alignment | none (pred + GT in same metric world from SfM/calib) | Regr3D scale+shift then 6-DoF rigid ICP |
+| Aggregation | per-scan mean (capped) → mean-of-scans | per-scan mean (uncapped) → mean-of-scans |
+| Output unit | mm | mm |
+
+Implications for the remaining 2× gap:
+
+1. The **20 mm MaxDist cap** alone likely closes most of the gap. Our
+   mean Acc 0.874 mm is dominated by a long tail of pred outliers
+   (mean-vs-median spread is 0.874 / 0.534 = 1.64×, exactly what an
+   outlier cap would compress). With a 20 mm cap, mean → near
+   median → near paper.
+2. CUT3R's `Regr3D_t_ScaleShiftInv` + 6-DoF rigid ICP and the
+   224×224 center crop are CUT3R-specific, not paper. Removing them
+   in favour of "fuse pred PLY, no alignment, ObsMask filter, 20 mm
+   cap mean" is the higher-fidelity port.
+3. ObsMask is per-scan 3D voxel grids gating which surface region
+   counts. Bundled in DTU's `SampleSet.zip` (~6.9 GB; ObsMask itself
+   is ~30 MB inside that archive, not directly downloadable).
+
+**Cheap next step** (one-line YAML edit):
+``chamfer_outlier_distance: 20.0`` under the protocol. Existing
+``accuracy_completeness(outlier_distance=...)`` path already
+implements the cap. Re-run the 22-scan reproduction; expect mean
+Overall to drop from 0.758 mm toward 0.4-0.5 mm.
+
+**Higher-fidelity port** (medium effort, deferred to a future
+session): fetch ObsMask, fuse VGGT's per-view predictions into a
+per-scan PLY, replicate Jensen's `ComputeStat_web.m` end-to-end. At
+that point ICP + 224×224 crop come out; the Sim(3) we currently fit
+becomes unnecessary because Jensen assumes pred and GT are already in
+the same metric world (DTU calibration directly).
+
 ### D4 · VGGT-ETH3D multiscene — STRUCTURAL PROTOCOL MISMATCH   🔎 OPEN
 
 Same root cause as D3: paper protocol is per-view-masked chamfer
