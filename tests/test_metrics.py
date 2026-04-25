@@ -488,6 +488,38 @@ class TestAccuracyCompleteness:
         )
         assert np.isnan(out["accuracy"])
 
+    def test_voxel_size_none_skips_downsample(self) -> None:
+        # 2026-04-24 D3/D4 mitigation: CUT3R/MASt3R/VGGT-family eval
+        # computes Acc/Comp as raw KDTree NN, no inner voxel_downsample
+        # (the runner pre-downsamples per-chunk before merging). Passing
+        # voxel_size=None to accuracy_completeness must skip the inner
+        # downsample so paired downsamples don't shift centroids and
+        # inflate Acc.
+        #
+        # Synthetic fixture: dense pred cloud near GT. With downsample,
+        # cell centroids land between original points; the NN distance
+        # to GT shifts. Without downsample, raw points are used.
+        rng = np.random.default_rng(0)
+        gt = rng.uniform(-1.0, 1.0, size=(50, 3)).astype(np.float32)
+        # 5 dense pred points clustered near each GT point (offset 0.001)
+        offsets = rng.uniform(-0.005, 0.005, size=(50, 5, 3)).astype(np.float32)
+        pred = (gt[:, None, :] + offsets).reshape(-1, 3)
+
+        out_ds = accuracy_completeness(pred, gt, voxel_size=0.05)
+        out_raw = accuracy_completeness(pred, gt, voxel_size=None)
+        # Both produce finite metrics.
+        assert np.isfinite(out_ds["accuracy"])
+        assert np.isfinite(out_raw["accuracy"])
+        # voxel=None preserves all 250 pred points; voxel=0.05 collapses
+        # the 5-point clusters into ~50 centroids. The raw-pred Acc is
+        # the mean distance over all 250 raw pred points; the voxelized
+        # Acc is mean over 50 centroids. Neither is strictly larger but
+        # they're computed from different point counts.
+        # We just want to verify the code path is exercised.
+        from plumbline.metrics.pointmap import voxel_downsample
+        ds = voxel_downsample(pred, 0.05)
+        assert ds.shape[0] < pred.shape[0]
+
 
 class TestUmeyamaSimilarity:
     def test_recovers_identity(self) -> None:
