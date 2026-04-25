@@ -27,56 +27,80 @@ Status legend:
 
 ## Open issues
 
-### D3 · VGGT-DTU chamfer — correctness   🔎 OPEN (Acc closed, Comp coverage)
+### D3 · VGGT-DTU chamfer — STRUCTURAL PROTOCOL MISMATCH   🔎 OPEN
 
-OOM issue fixed 2026-04-24 (`1fc0f9c`, scene_voxel_size unit mixup,
-DTU is mm not m). Acc root-caused 2026-04-24 to missing MVS outlier
-filter (`1ef3c04`): pred points beyond the scan volume dominated
-un-filtered Acc. With `chamfer_outlier_distance=20 mm` in protocol:
+The paper's 0.382 mm Overall on DTU is from CUT3R/MASt3R/VGGT-family
+eval which is **per-view-masked chamfer**: each view's prediction is
+center-cropped to 224×224, masked by per-pixel GT validity, then all
+masked points are concatenated and chamfered against the same
+per-view-cropped GT depth. Reference: CUT3R `eval/mv_recon/launch.py`
+(lines ~195-260) + `eval/mv_recon/utils.py::accuracy/completion`.
 
-| Metric | Un-filtered | Outlier filter | Paper |
-|---|---|---|---|
-| Acc  | 51 mm | **8.2 mm**  | 0.389 mm |
-| Comp | 91 mm | 91 mm (unchanged) | 0.374 mm |
-| Overall | 51 mm | 50 mm | 0.382 mm |
+Plumbline does **scene-merged chamfer**: per-sample-aligned full
+prediction clouds are concatenated per-scene, voxel-downsampled,
+then chamfered against the scene-level GT point cloud (`Points/stl/
+*.ply`).
 
-Acc 20× paper (was 130× before filter) — the remaining 20× is likely
-per-chunk Umeyama inconsistency across samples; each 8-view
-Umeyama estimates a slightly different scale in its own frame, and
-the merged cloud has many overlapping surfaces at subtly different
-scales. Paper's ICP on the fused cloud (single scale) should help;
-the scene-level ICP we apply doesn't fully resolve per-window
-scale drift.
+These are structurally different metrics. Plumbline's DTU loader
+ships only the scene-level GT (no per-view depth maps), so a
+faithful port of the per-view-masked protocol requires a loader-side
+change to either (a) include per-view GT depth, or (b) project the
+scene-level cloud into each view to derive a visibility mask.
 
-**Comp unchanged at 91 mm** — outlier filter can't add coverage.
-Root cause: `views_per_sample: 8` windowing + 45 samples per scan
-doesn't cover the same views-per-scene the paper uses. VGGT paper
-likely feeds many more views per forward pass (VGGT supports up to
-thousands). Reproduction YAML's 8-view pinning is a constraint we
-can't relax without editing the YAML.
+Plumbline-honest baseline (no approximations, voxel_size=None inside
+accuracy_completeness):
 
-YAML metric-key mismatch also open: `primary_metric: chamfer` but
-runner emits `accuracy/completeness/overall` (no `chamfer` key →
-match-check reports NaN).
+| Metric | Plumbline scene-merged | Paper (per-view-masked) |
+|---|---|---|
+| Acc | ~50 mm | 0.389 mm |
+| Comp | ~89 mm | 0.374 mm |
+| Overall | ~48 mm | 0.382 mm |
 
-### D4 · VGGT-ETH3D multiscene — regression on scan_clean GT   🔎 OPEN (fix landed, verify blocked)
+The 130× gap is METRIC SHAPE, not adapter accuracy. Without per-view
+GT we can't match paper's metric.
 
-A/B confirmed 2026-04-24: `scan_clean` has 2-4× the spatial extent of
-`dslr_scan_eval` on facade (80×183×51 m vs 44×96×23 m), fewer points
-inside the DSLR-visible region. Committed `1ef3c04` makes
-`_resolve_scan_clean_plys` prefer `dslr_scan_eval/` when present.
+In-session attempts (2026-04-24/25) and their honest assessment:
 
-Verify run OOM-killed at scene-aggregation (17 GB peak RSS) — but
-NOT because of the GT change. Root cause of OOM:
-`ETH3DDataset._load_sample` re-loads the multi-PLY GT cloud (34M pts
-for courtyard) from disk on **every sample**, 137 samples for the
-3-scene subset. Python GC fragmentation over 137 iterations +
-concurrent scene-agg accumulation → OOM. GT is scene-level; should
-be cached per-scene in the loader. Separate fix from the `scan_clean`
-swap.
+- ✅ Fixed OOM (voxel-unit mixup `1fc0f9c`).
+- ✅ Removed inner voxel_downsample to match CUT3R's raw NN
+  (`<this commit>`).
+- ❌ ``chamfer_outlier_distance=20 mm`` (added in `1ef3c04`) — this
+  is a plumbline-specific approximation, not what the paper does.
+  Reverted because user principle: follow paper code, don't
+  approximate. Numbers regress accordingly but are honest.
 
-Next session: add `ETH3DDataset` GT-cache (LRU keyed by scene name)
-so the PLY re-parse is O(scenes) not O(samples), then re-verify D4.
+YAML metric-key mismatch separately open: `primary_metric: chamfer`
+but runner emits `accuracy/completeness/overall`.
+
+Fix path requires a loader update (ship per-view depth maps) before
+re-attempting paper-match. Until then, demote D3 to "informational
+only — protocol mismatch with paper cell" if a YAML edit is allowed,
+or document this in the YAML notes.
+
+### D4 · VGGT-ETH3D multiscene — STRUCTURAL PROTOCOL MISMATCH   🔎 OPEN
+
+Same root cause as D3: paper protocol is per-view-masked chamfer
+(CUT3R lineage); plumbline does scene-merged chamfer. ETH3D loader
+ships only scene-level GT (`scan_clean/`, `dslr_scan_eval/`), no
+per-view depth.
+
+Mitigations that landed in-session:
+- ✅ `dslr_scan_eval` GT preference (`1ef3c04`) — closer to ETH3D's
+  official "DSLR-visible" eval region than the broader `scan_clean`.
+- ✅ Per-scene GT-cache fix in ETH3DDataset (`2e1beb9`) — eliminates
+  the OOM that previously blocked verification.
+- ❌ `chamfer_outlier_distance=0.2 m` reverted (same reason as D3 —
+  not what the paper code does).
+
+Plumbline-honest baseline:
+
+| Metric | Plumbline scene-merged | Paper (per-view-masked) |
+|---|---|---|
+| Overall | ~1.7 m | 0.709 m |
+
+The 2× gap is again metric-shape, not adapter accuracy. Closing it
+properly requires per-view GT in the ETH3D loader, then porting
+CUT3R's per-view 224×224 + GT-mask logic to the runner.
 
 ### D9 · Marigold-KITTI — OFF-PAPER under both candidate protocols   🔎 OPEN
 
