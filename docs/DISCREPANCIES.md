@@ -15,7 +15,7 @@ Status legend:
 
 | ID | One-liner | Status |
 |---|---|---|
-| D3 | VGGT-DTU chamfer — was 130× off, now 2× (per-view-masked landed); ±5% gate not yet met | 🔎 correctness |
+| D3 | VGGT-DTU chamfer — 2× off paper; chamfer protocol confirmed not the source (Jensen ref 0.868 vs PVM 0.758); gap is VGGT pred quality | 🔎 correctness |
 | D4 | VGGT-ETH3D multiscene Overall 147 % off; completeness regressed 3–4× vs prior run on scan_clean GT swap | 🔎 correctness |
 | D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
@@ -281,6 +281,81 @@ per-scan PLY, replicate Jensen's `ComputeStat_web.m` end-to-end. At
 that point ICP + 224×224 crop come out; the Sim(3) we currently fit
 becomes unnecessary because Jensen assumes pred and GT are already in
 the same metric world (DTU calibration directly).
+
+#### 2026-04-25 — ran the canonical Jensen toolkit; **chamfer protocol is NOT the gap**
+
+Pulled `jzhangbs/DTUeval-python` (the community Python port of the
+Jensen MATLAB toolkit, "negligible gap to MATLAB" per its README,
+1 min/scan) plus DTU's `ObsMask{N}_10.mat` + `Plane{N}.mat` from
+`SampleSet.zip`'s `MVS Data/ObsMask/` (~140 MB extracted). Fused
+VGGT's per-view scan1 prediction into a single PLY in DTU scanner
+frame using plumbline's per-view-masked ICP transform (final inlier
+0.97 mm, identical alignment to the per-view-masked path). Ran both
+protocols on the **same** prediction.
+
+**scan1 numbers (same VGGT prediction, same alignment):**
+
+| Protocol | Acc | Comp | Overall |
+|---|---|---|---|
+| Plumbline per-view-masked | 2.10 | 1.31 | 1.71 |
+| Jensen DTUeval-python (no align) | 2.40 | 1.91 | 2.16 |
+| Jensen DTUeval-python (PVM-aligned) | 2.82 | 1.56 | 2.19 |
+
+**22-scan mean (Jensen on plumbline-fused PLYs):** Acc 1.039 / Comp
+0.696 / **Overall 0.868 mm**.
+
+**22-scan mean (plumbline per-view-masked, commit 8592db9):** Acc
+0.874 / Comp 0.642 / **Overall 0.758 mm**.
+
+The two protocols agree within 15 % across the 22-scan mean. Both are
+~2× off paper (0.382 mm). The chamfer protocol — which-points-to-
+include, mask-shape, outlier-cap, alignment — is **not** the dominant
+source of the gap.
+
+**What is left to explain the 2× gap:**
+
+1. VGGT-on-DTU prediction quality. The public `facebook/VGGT-1B` HF
+   checkpoint at bf16 produces depth/poses with per-pixel error in the
+   ~1 mm range after Sim(3) ICP (final inlier 0.4-1.6 mm across the
+   22 scans). Paper's 0.382 mm Overall would require ~2× tighter
+   predictions than we observe.
+2. Possible drift sources to investigate before declaring the gap
+   irreducible:
+   - Inference dtype (fp32 vs bf16). The protocol YAML pins bf16
+     for VGGT; the paper may have used fp32. Cheap to test.
+   - View selection (first 32 of 49 vs evenly-spaced 32). Our
+     contiguous slice misses the back of the arc.
+   - Image preprocessing details (BICUBIC vs LANCZOS resize, padding
+     policy). VGGT's `load_and_preprocess_images` has a few knobs.
+   - Whether paper's 0.382 includes any post-processing (TSDF fusion,
+     pose refinement) absent from a raw VGGT forward pass.
+
+**Per-stage diff vs Jensen** (full table in
+`/tmp/diff/STAGE_DIFF.md`, summary):
+
+| Stage | Plumbline per-view-masked | Jensen (canonical) | Functional diff |
+|---|---|---|---|
+| GT source | per-view rasterized depth | raw `stl{N}_total.ply` | rendered-per-view vs single-3D |
+| Region select | per-view 224×224 + mask | 3D `ObsMask` voxel + `Plane` cull | 2D image-center vs 3D voxel |
+| Pred subset | per-view 224×224 of pred map | full PLY → 0.2 mm radius dedup | crop vs dedup |
+| Alignment | bbox-warm-start Sim(3) ICP | none (pre-aligned input) | 7-DoF vs identity |
+| Outlier cap | none | drop NN ≥ 20 mm | unbounded vs capped |
+| Aggregation | per-scan mean → mean-of-scans | identical | none |
+
+Both protocols use the same inference + same alignment in this
+experiment, so the eval-protocol portion of the gap is a 0.11 mm
+delta on the 22-scan mean (0.758 → 0.868 mm). The other 0.49 mm
+between us and paper is attributable to VGGT's outputs themselves,
+not the eval shape.
+
+Artifacts on this box (will be lost when teardown):
+- `/tmp/dtueval/eval.py` — Jensen Python port.
+- `/home/myuser/data/dtu/ObsMask/{ObsMask*_10.mat,Plane*.mat}` — eval
+  support data, 134 MB.
+- `/tmp/diff/jensen_inputs/scan{N}_pred.ply` — fused & PVM-aligned
+  pred PLYs for all 22 scans.
+- `/tmp/diff/jensen_22.tsv` — per-scan Jensen results.
+- `/tmp/diff/STAGE_DIFF.md` — full stage-by-stage diff.
 
 ### D4 · VGGT-ETH3D multiscene — STRUCTURAL PROTOCOL MISMATCH   🔎 OPEN
 
