@@ -15,7 +15,7 @@ Status legend:
 
 | ID | One-liner | Status |
 |---|---|---|
-| D3 | VGGT-DTU chamfer 134× off paper (OOM fixed; correctness open) | 🔎 correctness |
+| D3 | VGGT-DTU chamfer — was 130× off, now 2× (per-view-masked landed); ±5% gate not yet met | 🔎 correctness |
 | D4 | VGGT-ETH3D multiscene Overall 147 % off; completeness regressed 3–4× vs prior run on scan_clean GT swap | 🔎 correctness |
 | D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
@@ -154,6 +154,71 @@ Artifacts from this session (outside the repo):
 `/tmp/diff/stage1_cut3r.py` (CUT3R-loader probe), CUT3R clone at
 `/tmp/cut3r`.
 
+#### 2026-04-25 — fix landed (loader + runner + protocol)
+
+User asked for the actual fix rather than the loader-blocker writeup,
+so the loader change above was implemented in-session. Three pieces:
+
+1. `DTUDataset(with_per_view_gt=True)` renders per-view depth + valid
+   mask by **z-buffering the laser PLY** through each view's GT
+   camera (`render_pv_depth_zbuffer`). Splat radius 1 (3×3 disk per
+   point) gives ~57% pixel coverage at 1200×1600 native, matching
+   the density MVSNet's preprocessed `depths/*.npy` derive from. No
+   external download needed — derives from `Points/stl/*.ply` we
+   already ship. Cache: `<root>/.plumbline_manifest/dtu_pv_depth_
+   scan{N}_HxW{H}x{W}_r{r}.npz`, ~190 MB/scan / ~4 GB/22-scans.
+2. `runner.evaluate(per_view_masked=True, per_view_crop=224)` enables
+   the CUT3R-protocol path: per view, NN-downsample GT depth +
+   validity to processed res, unproject with rescaled-K + GT pose,
+   center-crop to 224×224, mask, accumulate per scene. Scene-merge
+   does Sim(3) ICP (with bbox-similarity warm start so the
+   m-vs-mm scale gap doesn't collapse it) + raw KDTree-NN both
+   directions. Reports both mean and median variants of acc/comp/
+   overall (CUT3R protocol's companion median.)
+3. `dtu_vggt_table2.yaml`: views_per_sample 8→49 (one sample/scan,
+   matching CUT3R's `full_video=True`), max_views 8→32 (VGGT cap),
+   `per_view_masked: true`, `per_view_crop: 224`,
+   `with_per_view_gt: true`. Reproduction YAML's
+   `primary_metric: chamfer` retargeted to `overall` so the
+   reproduction-check stops emitting NaN.
+
+**Full 22-scan reproduction (`plumbline reproduce vggt-paper-dtu-mvs`):**
+
+| Metric | plumbline (mean) | plumbline (median) | paper |
+|---|---|---|---|
+| Acc      | 0.874 mm | 0.534 mm | 0.389 mm |
+| Comp     | 0.642 mm | 0.350 mm | 0.374 mm |
+| Overall  | 0.758 mm | 0.442 mm | 0.382 mm |
+
+Mean Overall is **2.0× off paper** (0.758 vs 0.382, +98 %, outside
+±5 %). Median Overall is **1.16× off** (0.442 vs 0.382, +16 %,
+plausible if paper's "Overall" implicitly aggregates per-scan medians
+or if the paper's GT is dense-enough that mean-vs-median gap is
+smaller than ours). Per-scene range 0.40 mm (scan11) — 2.00 mm
+(scan77); 11 of 22 scans land under 0.65 mm, with scan1, scan33,
+scan49, scan75, scan77 being the tail.
+
+**Outstanding gap candidates (not yet investigated this session):**
+
+- Splat density. We splat the raw laser PLY at radius=1; paper's
+  preprocessed depths come from a Poisson-mesh render of the same
+  cloud. Going to a Poisson-mesh-based renderer would densify GT
+  inside silhouettes and likely tighten Acc on small-textured scans
+  like scan1.
+- VGGT view cap. We use first 32 of 49 rig views (VGGT's
+  `max_views=32`). Paper protocol may use all 49 (or evenly-spaced
+  32, not first-32), affecting surface coverage on scans where the
+  first 32 views miss part of the object.
+- Aspect-ratio drift. scan1 post-ICP pred bbox X-extent is 80% of
+  GT's; suggests VGGT's predicted geometry has a small non-isotropic
+  scaling that Sim(3) can't fix (it's 1 scale, not 3). Worth
+  diffing further at the per-pixel level if we want to push under
+  ±5 %.
+
+130× → 2× is the headline; ±5 % requires the three above. v0.1 gate
+is **not yet met** but the protocol is now structurally correct and
+the remaining gap is per-scene tail / GT density, not metric shape.
+
 ### D4 · VGGT-ETH3D multiscene — STRUCTURAL PROTOCOL MISMATCH   🔎 OPEN
 
 Same root cause as D3: paper protocol is per-view-masked chamfer
@@ -280,14 +345,20 @@ Priority: low. Defer to v0.2 with D9.
 - Marigold-style protocol + YAML repoint landed (`ce4183e`, `6d24c73`). Verify surfaced D22.
 
 **Open correctness investigations:**
-1. **D3 — VGGT-DTU chamfer Overall 133× off** (50.7 mm vs paper 0.382 mm).
-   2026-04-25 single-record diff against CUT3R `eval/mv_recon/` on
-   scan1 confirmed stage-1 (sample-loading) structural divergence:
-   plumbline ships scene-level `Points/stl/*.ply` only; CUT3R loader
-   requires per-view `depths/*.npy` + `binary_masks/*.png` per scan,
-   which plumbline's S3-staged DTU does not contain. Loader-side
-   change required (see D3 § "Suggested loader-side fix"). Also fix
-   YAML metric-key mismatch (`chamfer` vs emitted `overall`).
+1. **D3 — VGGT-DTU chamfer Overall 2× off** (0.758 mm mean / 0.442 mm
+   median vs paper 0.382 mm). 2026-04-25 single-record diff against
+   CUT3R `eval/mv_recon/` exposed stage-1 loader-side structural
+   divergence (plumbline shipped scene-level `Points/stl/*.ply` only;
+   CUT3R loader expects per-view `depths/*.npy` + `binary_masks/
+   *.png` per scan); fix landed same session — `DTUDataset(
+   with_per_view_gt=True)` derives per-view GT by z-buffering the
+   laser PLY through each GT pose and the runner now has a
+   `per_view_masked` path that ports the CUT3R 224×224-crop +
+   GT-mask + KDTree-NN protocol. Numbers went 130× → 2× off paper,
+   structurally correct, but ±5 % v0.1 gate not yet met. Remaining
+   gap candidates: Poisson-mesh-rendered GT (vs splat), all 49 rig
+   views (vs first 32), per-pixel aspect-ratio diagnosis.
+   YAML metric-key mismatch (`chamfer` → `overall`) fixed.
 2. **D4 — VGGT-ETH3D regression vs prior run** (1.75 m vs prior 0.82 m, 2× worse). A/B `scan_clean` vs `dslr_scan_eval` GT to isolate.
 3. **D22 — Marigold + GeoWizard KITTI paper cells** don't reproduce under either candidate protocol. Needs upstream clarification on paper's actual eval config.
 4. **D17** — GeoWizard NYU 10 % off. Possibly same family as D22.
