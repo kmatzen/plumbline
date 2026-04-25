@@ -77,6 +77,83 @@ re-attempting paper-match. Until then, demote D3 to "informational
 only — protocol mismatch with paper cell" if a YAML edit is allowed,
 or document this in the YAML notes.
 
+#### 2026-04-25 single-record diff (scan1) — stage-1 confirmed
+
+Stage 1 (sample loading) divergence verified on scan1 against the
+canonical CUT3R reference loader (`eval/mv_recon/data.py::DTU`,
+which is the same loader shape MASt3R/VGGT/CUT3R-family papers use
+for DTU per-view-masked chamfer):
+
+- **plumbline** `DTUDataset` returns one `Sample` per 8-view window
+  with `images=(8,1200,1600,3) uint8`, `intrinsics=(8,3,3)`,
+  `extrinsics_gt=(8,4,4) world_from_cam`, `point_cloud_gt=(200000,3)
+  float32 mm` (subsampled `Points/stl/stl001_total.ply`),
+  **`depth_gt=None`**, **`depth_valid=None`**.
+- **CUT3R `DTU._get_views`** opens `<ROOT>/scan{N}/depths/<view>.npy`
+  + `<ROOT>/scan{N}/binary_masks/<view>.png` per view, then derives
+  `pts3d=(H,W,3) world` and `valid_mask=(H,W) bool` via
+  `depthmap_to_absolute_camera_coordinates(depthmap, K, world_from_cam)`.
+- Concrete failure when CUT3R loader is pointed at the plumbline
+  staging: `FileNotFoundError: ~/data/dtu/dtu/scan1/depths/00000048.npy`.
+  The `depths/` and `binary_masks/` subdirs simply do not exist —
+  plumbline's S3-staged DTU under `s3://plumbline-bench/datasets/dtu/`
+  contains `cams/`, `images/`, `pair.txt`, and a separate
+  `Points/stl/*.ply` per scan; nothing per-view.
+
+Diff stops at stage 1; downstream stages (preprocess/model
+input/output/postprocess/GT-prep/per-pixel-error) cannot be compared
+because CUT3R has no GT to consume.
+
+scan1 numbers (plumbline scene-merged, this session):
+
+| metric | scan1 | paper |
+|---|---|---|
+| Acc  | 1.27 mm | 0.389 mm |
+| Comp | 100.14 mm | 0.374 mm |
+| Overall | 50.71 mm | 0.382 mm |
+
+The Acc/Comp asymmetry (1.3 mm vs 100 mm) reproduces the diagnosis:
+predicted cloud only covers the camera-visible portion of the object,
+but the laser PLY also contains the occluded backside, so GT→pred NN
+distance (Comp) is dominated by points the views never see. Acc
+(pred→GT NN distance) is in the right ballpark for VGGT — the model
+is fine; the metric is the wrong shape.
+
+#### Suggested loader-side fix
+
+Extend `DTUDataset` to ship per-view GT depth + binary mask, matching
+CUT3R's expected layout `<root>/scan{N}/{depths,binary_masks}/`.
+Two viable sources:
+
+1. **MVSNet preprocessed training dump** (Yao et al., the canonical
+   community source for `depths/*.npy` + `binary_masks/*.png`).
+   ~115 GB for the full split; a 22-test-scan slice is ~2.9 GB
+   (49 views × ~2.6 MB × 22 scans + masks). Stage to
+   `s3://plumbline-bench/datasets/dtu/` next to `dtu/scan{N}/`.
+2. **Original DTU release** `Cleaned/Rectified/.../Depths_raw/` PFM +
+   `Masks/` PNG per view (the source MVSNet preprocessed from). Same
+   data, different format; needs a small PFM reader.
+
+After loader update, port the per-view-masked chamfer:
+- Add `Sample.depth_gt`, `Sample.depth_valid` for DTU (loader sets
+  these from the per-view files).
+- In the runner's `mvs_depth` path under `aggregation=scene`, when
+  per-view GT is available switch to: per view → 224×224 center crop
+  on both pred-pts3d and GT-pts3d (after GT shift+ICP align) → mask
+  by `valid_mask` → concat → KDTree NN both directions per
+  CUT3R `eval/mv_recon/utils.py::accuracy/completion`.
+- Gate on dataset capability: scenes whose loader emits per-view GT
+  use the per-view-masked path; others fall back to scene-merged.
+
+This is a v0.2 loader change, not a runner-only fix. Per session
+ground rule "Don't try to invent per-view GT", stopping here.
+
+Artifacts from this session (outside the repo):
+`/tmp/diff/plumbline/stage1.npz` (plumbline Sample tensors),
+`/tmp/diff/plumbline_scan1.json` (full scan1 report),
+`/tmp/diff/stage1_cut3r.py` (CUT3R-loader probe), CUT3R clone at
+`/tmp/cut3r`.
+
 ### D4 · VGGT-ETH3D multiscene — STRUCTURAL PROTOCOL MISMATCH   🔎 OPEN
 
 Same root cause as D3: paper protocol is per-view-masked chamfer
@@ -203,7 +280,14 @@ Priority: low. Defer to v0.2 with D9.
 - Marigold-style protocol + YAML repoint landed (`ce4183e`, `6d24c73`). Verify surfaced D22.
 
 **Open correctness investigations:**
-1. **D3 — VGGT-DTU chamfer Overall 134× off** (51 mm vs paper 0.382 mm). No OOM. Per-sample Acc 6-19 mm, Comp 44-90 mm — suggests scale / alignment issue, not just voxel density. Also fix YAML metric-key mismatch (`chamfer` vs emitted `overall`).
+1. **D3 — VGGT-DTU chamfer Overall 133× off** (50.7 mm vs paper 0.382 mm).
+   2026-04-25 single-record diff against CUT3R `eval/mv_recon/` on
+   scan1 confirmed stage-1 (sample-loading) structural divergence:
+   plumbline ships scene-level `Points/stl/*.ply` only; CUT3R loader
+   requires per-view `depths/*.npy` + `binary_masks/*.png` per scan,
+   which plumbline's S3-staged DTU does not contain. Loader-side
+   change required (see D3 § "Suggested loader-side fix"). Also fix
+   YAML metric-key mismatch (`chamfer` vs emitted `overall`).
 2. **D4 — VGGT-ETH3D regression vs prior run** (1.75 m vs prior 0.82 m, 2× worse). A/B `scan_clean` vs `dslr_scan_eval` GT to isolate.
 3. **D22 — Marigold + GeoWizard KITTI paper cells** don't reproduce under either candidate protocol. Needs upstream clarification on paper's actual eval config.
 4. **D17** — GeoWizard NYU 10 % off. Possibly same family as D22.
