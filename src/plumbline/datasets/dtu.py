@@ -205,6 +205,7 @@ class DTUDataset(Dataset):
         gt_subsample_seed: int = 0,
         points_root: Path | str | None = None,
         with_per_view_gt: bool = False,
+        pv_splat_radius: int = 1,
     ) -> None:
         root_path = Path(root) if root else env_path("DTU_ROOT")
         if root_path is None or not root_path.exists():
@@ -240,6 +241,7 @@ class DTUDataset(Dataset):
         self.max_gt_points = max_gt_points
         self.gt_subsample_seed = int(gt_subsample_seed)
         self.with_per_view_gt = bool(with_per_view_gt)
+        self.pv_splat_radius = int(pv_splat_radius)
 
         # Auto-detect layout. Prefer the training-format repack when both are
         # present (it has shared Cameras_1 that's more authoritative).
@@ -433,10 +435,11 @@ class DTUDataset(Dataset):
             H, W = images.shape[1], images.shape[2]
             cache_path = (
                 self.root / ".plumbline_manifest"
-                / f"dtu_pv_depth_scan{rec['scan_id']}_HxW{H}x{W}.npz"
+                / f"dtu_pv_depth_scan{rec['scan_id']}_HxW{H}x{W}_r{self.pv_splat_radius}.npz"
             )
             depths_per_scan_view, valids_per_scan_view = self._load_or_render_pv_depth(
-                cache_path, rec["scan_id"], pcd_full, H, W
+                cache_path, rec["scan_id"], pcd_full, H, W,
+                splat_radius=self.pv_splat_radius,
             )
             view_indices = rec["view_indices"]
             depth_gt = depths_per_scan_view[view_indices].astype(np.float32, copy=False)
@@ -466,6 +469,8 @@ class DTUDataset(Dataset):
         xyz: NDArray[np.float32],
         H: int,
         W: int,
+        *,
+        splat_radius: int = 1,
     ) -> tuple[NDArray[np.float32], NDArray[np.bool_]]:
         """Render z-buffered per-view depth for every view of this scan.
 
@@ -492,7 +497,9 @@ class DTUDataset(Dataset):
         valids = np.zeros((len(cam_paths), H, W), dtype=np.bool_)
         for i, cp in enumerate(cam_paths):
             K_v, E_cw_v = load_dtu_cam(cp)
-            d, v = render_pv_depth_zbuffer(xyz, K_v, E_cw_v, H, W)
+            d, v = render_pv_depth_zbuffer(
+                xyz, K_v, E_cw_v, H, W, splat_radius=splat_radius
+            )
             depths[i] = d
             valids[i] = v
         cache_path.parent.mkdir(parents=True, exist_ok=True)
@@ -511,12 +518,15 @@ def render_pv_depth_zbuffer(
     cam_from_world: NDArray[np.floating],
     height: int,
     width: int,
+    *,
+    splat_radius: int = 1,
 ) -> tuple[NDArray[np.float32], NDArray[np.bool_]]:
     """Z-buffer-render a point cloud through a pinhole camera.
 
-    Each PLY point projects to a single pixel; per pixel we keep the
-    nearest depth. Output ``depth`` is float32 with zeros where no point
-    landed; ``valid`` is the corresponding boolean mask. Used by
+    Each PLY point splats to a square neighbourhood of size
+    ``(2*splat_radius+1)^2`` and per-pixel we keep the nearest depth.
+    Output ``depth`` is float32 with zeros where no point landed;
+    ``valid`` is the corresponding boolean mask. Used by
     :class:`DTUDataset` to derive per-view depth + visibility from
     DTU's scene-level laser PLY (matches the canonical
     "render-the-laser-surface" provenance of MVSNet's preprocessed
@@ -524,10 +534,11 @@ def render_pv_depth_zbuffer(
 
     Notes
     -----
-    Sparse splat (no disk radius) — each PLY point lands in one pixel.
-    DTU PLYs ship with ~3 M points per scan, which gives ~40-50 %
-    pixel coverage at 1200x1600 native res — denser than required for
-    chamfer NN evaluation, sparser than a Poisson-mesh render.
+    DTU PLYs ship with ~3 M points per scan; at native 1200x1600 res
+    that gives ~50% pixel coverage with ``splat_radius=0`` (single
+    pixel) and ~95%+ with ``splat_radius=1`` (3x3 disk). Default 1
+    matches the density of MVSNet's Poisson-mesh-rendered depth maps
+    that the CUT3R/MASt3R/VGGT-family DTU eval consumes.
     """
     xyz = np.asarray(xyz, dtype=np.float64)
     K = np.asarray(K, dtype=np.float64)
@@ -545,31 +556,36 @@ def render_pv_depth_zbuffer(
     z = z[front]
     u = K[0, 0] * p_cam[:, 0] / z + K[0, 2]
     v = K[1, 1] * p_cam[:, 1] / z + K[1, 2]
-    ui = np.floor(u).astype(np.int64)
-    vi = np.floor(v).astype(np.int64)
-    in_image = (ui >= 0) & (ui < width) & (vi >= 0) & (vi < height)
-    ui = ui[in_image]
-    vi = vi[in_image]
+    ui_c = np.floor(u).astype(np.int64)
+    vi_c = np.floor(v).astype(np.int64)
+    if splat_radius > 0:
+        # Tile each (vi_c, ui_c) over a (2r+1)^2 square, expanding
+        # the index arrays by that factor in lock-step with z.
+        offsets = np.arange(-splat_radius, splat_radius + 1, dtype=np.int64)
+        dy, dx = np.meshgrid(offsets, offsets, indexing="ij")
+        dy = dy.reshape(-1)
+        dx = dx.reshape(-1)
+        ui_all = (ui_c[:, None] + dx[None, :]).reshape(-1)
+        vi_all = (vi_c[:, None] + dy[None, :]).reshape(-1)
+        z_all = np.broadcast_to(z[:, None], (z.shape[0], dx.shape[0])).reshape(-1)
+        ui_c, vi_c, z = ui_all, vi_all, z_all
+    in_image = (ui_c >= 0) & (ui_c < width) & (vi_c >= 0) & (vi_c < height)
+    ui_c = ui_c[in_image]
+    vi_c = vi_c[in_image]
     z = z[in_image]
-    if ui.size == 0:
+    if ui_c.size == 0:
         return np.zeros((height, width), dtype=np.float32), np.zeros(
             (height, width), dtype=np.bool_
         )
-    flat = vi * width + ui
-    # Per-pixel min-z: sort by depth ascending, then unique-by-pixel
-    # keeps the first (nearest) hit. ``np.unique`` returns sorted-by-key
-    # so we sort by the composite (flat, z) lexicographically with a
-    # stable sort.
-    order = np.argsort(z, kind="stable")
-    flat_s = flat[order]
-    z_s = z[order]
-    _, first_idx = np.unique(flat_s, return_index=True)
-    flat_u = flat_s[first_idx]
-    z_u = z_s[first_idx]
+    flat = vi_c * width + ui_c
+    # Per-pixel min-z via ``np.minimum.at`` — atomic min reduction, one
+    # pass over all (flat, z) pairs. Faster than sort+unique when the
+    # splat radius blows ``len(z)`` up to tens of millions.
+    depth_buf = np.full(height * width, np.inf, dtype=np.float64)
+    np.minimum.at(depth_buf, flat, z)
+    valid = depth_buf < np.inf
     depth = np.zeros(height * width, dtype=np.float32)
-    depth[flat_u] = z_u.astype(np.float32)
-    valid = np.zeros(height * width, dtype=np.bool_)
-    valid[flat_u] = True
+    depth[valid] = depth_buf[valid].astype(np.float32)
     return depth.reshape(height, width), valid.reshape(height, width)
 
 

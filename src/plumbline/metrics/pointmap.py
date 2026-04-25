@@ -231,6 +231,20 @@ def accuracy_completeness(
             return {"accuracy": nan, "completeness": nan, "overall": nan}
         pred_ds = pred_ds[inlier]
         d_pg = d_pg[inlier]
+    d_gp = _nn_distances(gt, pred_ds)
     acc = float(d_pg.mean())
-    comp = float(_nn_distances(gt, pred_ds).mean())
-    return {"accuracy": acc, "completeness": comp, "overall": 0.5 * (acc + comp)}
+    comp = float(d_gp.mean())
+    # Median variants — CUT3R's ``eval/mv_recon/utils.py::accuracy`` reports
+    # both mean and median; some MVS papers use the median to discount
+    # outliers. Cheap to compute (both NN distance arrays are already
+    # materialised) so we always emit them under distinct keys.
+    acc_med = float(np.median(d_pg))
+    comp_med = float(np.median(d_gp))
+    return {
+        "accuracy": acc,
+        "completeness": comp,
+        "overall": 0.5 * (acc + comp),
+        "accuracy_median": acc_med,
+        "completeness_median": comp_med,
+        "overall_median": 0.5 * (acc_med + comp_med),
+    }
