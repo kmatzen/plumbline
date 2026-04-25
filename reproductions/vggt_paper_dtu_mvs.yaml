@@ -26,7 +26,12 @@ model:
 device: cuda:0
 
 paper_reference:
-  primary_metric: chamfer
+  # Runner's per-view-masked path emits ``accuracy/completeness/overall``
+  # (and the ``_median`` variants); ``overall`` is the chamfer-distance
+  # row VGGT Table 2 reports. Earlier ``primary_metric: chamfer`` made
+  # the reproduction-check log NaN since no key by that name was emitted
+  # — fixed.
+  primary_metric: overall
   value: 0.382
   tolerance_relative: 0.05
   citation: "Wang et al. 2025, VGGT, Table 2. DTU dense MVS, VGGT (no-GT-camera block). Acc=0.389, Comp=0.374, Overall=0.382."
