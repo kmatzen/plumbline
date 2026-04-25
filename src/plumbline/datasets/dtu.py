@@ -110,6 +110,7 @@ __all__ = [
     "DTU_MVS_TEST_SCANS",
     "DTUDataset",
     "load_dtu_cam",
+    "render_pv_depth_zbuffer",
 ]
 
 # The 22-scan MVS test set adopted by MVSNet / MASt3R / VGGT. See module
@@ -177,6 +178,17 @@ class DTUDataset(Dataset):
         If set, deterministically subsample the GT point cloud to this
         many points. DTU scans are ~1-10M points — a 200k subsample
         keeps chamfer tractable without changing the value meaningfully.
+    with_per_view_gt
+        When ``True``, render per-view GT depth + validity masks by
+        z-buffering the full laser PLY through each view's GT camera.
+        This unlocks the **per-view-masked chamfer** protocol the VGGT
+        paper follows (CUT3R/MASt3R lineage, see
+        ``/tmp/cut3r/eval/mv_recon/data.py::DTU._get_views``). Adds
+        ``Sample.depth_gt`` ``(N,H,W) float32 mm`` and
+        ``Sample.depth_valid`` ``(N,H,W) bool``. Rendered depth is
+        cached per scan as ``<root>/.plumbline_manifest/dtu_pv_depth_
+        scan{N}.npz`` so the cost is one-time. Off by default to
+        preserve the legacy scene-merged path.
     """
 
     split: str = "test"
@@ -192,6 +204,7 @@ class DTUDataset(Dataset):
         max_gt_points: int | None = 200_000,
         gt_subsample_seed: int = 0,
         points_root: Path | str | None = None,
+        with_per_view_gt: bool = False,
     ) -> None:
         root_path = Path(root) if root else env_path("DTU_ROOT")
         if root_path is None or not root_path.exists():
@@ -226,6 +239,7 @@ class DTUDataset(Dataset):
         self.light = int(light)
         self.max_gt_points = max_gt_points
         self.gt_subsample_seed = int(gt_subsample_seed)
+        self.with_per_view_gt = bool(with_per_view_gt)
 
         # Auto-detect layout. Prefer the training-format repack when both are
         # present (it has shared Cameras_1 that's more authoritative).
@@ -397,20 +411,44 @@ class DTUDataset(Dataset):
         assert_valid_extrinsics(extrinsics, name=f"dtu/{rec['sample_id']}/extrinsics")
 
         pcd: NDArray[np.float32] | None = None
+        pcd_full: NDArray[np.float32] | None = None
         if rec.get("gt_ply"):
             pcd_path = self.root / rec["gt_ply"]
             if pcd_path.exists():
-                pcd = load_ply_xyz(pcd_path)
-                if self.max_gt_points is not None and pcd.shape[0] > self.max_gt_points:
+                pcd_full = load_ply_xyz(pcd_path)
+                if self.max_gt_points is not None and pcd_full.shape[0] > self.max_gt_points:
                     rng = np.random.default_rng(self.gt_subsample_seed)
-                    idx = rng.choice(pcd.shape[0], size=self.max_gt_points, replace=False)
-                    pcd = pcd[idx]
+                    idx = rng.choice(pcd_full.shape[0], size=self.max_gt_points, replace=False)
+                    pcd = pcd_full[idx]
+                else:
+                    pcd = pcd_full
+
+        depth_gt: NDArray[np.float32] | None = None
+        depth_valid: NDArray[np.bool_] | None = None
+        if self.with_per_view_gt and pcd_full is not None:
+            # Per-scan cache. Render once at native (1200, 1600) and slice
+            # to whatever views this sample needs. The render is purely a
+            # function of (full PLY, all-49 cam files, image dims), so the
+            # cache key is the scan id alone.
+            H, W = images.shape[1], images.shape[2]
+            cache_path = (
+                self.root / ".plumbline_manifest"
+                / f"dtu_pv_depth_scan{rec['scan_id']}_HxW{H}x{W}.npz"
+            )
+            depths_per_scan_view, valids_per_scan_view = self._load_or_render_pv_depth(
+                cache_path, rec["scan_id"], pcd_full, H, W
+            )
+            view_indices = rec["view_indices"]
+            depth_gt = depths_per_scan_view[view_indices].astype(np.float32, copy=False)
+            depth_valid = valids_per_scan_view[view_indices].astype(np.bool_, copy=False)
 
         return Sample(
             sample_id=rec["sample_id"],
             images=images,
             intrinsics=intrinsics,
             extrinsics_gt=extrinsics,
+            depth_gt=depth_gt,
+            depth_valid=depth_valid,
             point_cloud_gt=pcd,
             metadata={
                 "scan_id": rec["scan_id"],
@@ -420,6 +458,119 @@ class DTUDataset(Dataset):
                 "units": "mm",
             },
         )
+
+    def _load_or_render_pv_depth(
+        self,
+        cache_path: Path,
+        scan_id: int,
+        xyz: NDArray[np.float32],
+        H: int,
+        W: int,
+    ) -> tuple[NDArray[np.float32], NDArray[np.bool_]]:
+        """Render z-buffered per-view depth for every view of this scan.
+
+        Returns ``(depths, valids)`` shaped ``(V_total, H, W)`` where
+        ``V_total`` is the count of cam files belonging to this scan
+        (49 for the canonical DTU rig). Caches to ``cache_path``.
+        """
+        if cache_path.exists():
+            with np.load(cache_path) as f:
+                return f["depths"].astype(np.float32), f["valids"].astype(np.bool_)
+
+        # Discover all cam files for this scan in cam-file order.
+        if self.layout == "training":
+            assert self.cameras_dir is not None
+            cam_paths = sorted(self.cameras_dir.glob("*_cam.txt"))
+        else:
+            scan_dir = self._scans_root / f"scan{scan_id}"  # type: ignore[operator]
+            cam_paths = sorted((scan_dir / "cams").glob("*_cam.txt"))
+        if not cam_paths:
+            raise FileNotFoundError(
+                f"no cam files found while rendering per-view GT for scan{scan_id}"
+            )
+        depths = np.zeros((len(cam_paths), H, W), dtype=np.float32)
+        valids = np.zeros((len(cam_paths), H, W), dtype=np.bool_)
+        for i, cp in enumerate(cam_paths):
+            K_v, E_cw_v = load_dtu_cam(cp)
+            d, v = render_pv_depth_zbuffer(xyz, K_v, E_cw_v, H, W)
+            depths[i] = d
+            valids[i] = v
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        np.savez_compressed(cache_path, depths=depths, valids=valids)
+        return depths, valids
+
+
+# ---------------------------------------------------------------------------
+# Per-view GT rendering
+# ---------------------------------------------------------------------------
+
+
+def render_pv_depth_zbuffer(
+    xyz: NDArray[np.floating],
+    K: NDArray[np.floating],
+    cam_from_world: NDArray[np.floating],
+    height: int,
+    width: int,
+) -> tuple[NDArray[np.float32], NDArray[np.bool_]]:
+    """Z-buffer-render a point cloud through a pinhole camera.
+
+    Each PLY point projects to a single pixel; per pixel we keep the
+    nearest depth. Output ``depth`` is float32 with zeros where no point
+    landed; ``valid`` is the corresponding boolean mask. Used by
+    :class:`DTUDataset` to derive per-view depth + visibility from
+    DTU's scene-level laser PLY (matches the canonical
+    "render-the-laser-surface" provenance of MVSNet's preprocessed
+    ``depths/<view>.npy`` + ``binary_masks/<view>.png``).
+
+    Notes
+    -----
+    Sparse splat (no disk radius) — each PLY point lands in one pixel.
+    DTU PLYs ship with ~3 M points per scan, which gives ~40-50 %
+    pixel coverage at 1200x1600 native res — denser than required for
+    chamfer NN evaluation, sparser than a Poisson-mesh render.
+    """
+    xyz = np.asarray(xyz, dtype=np.float64)
+    K = np.asarray(K, dtype=np.float64)
+    E = np.asarray(cam_from_world, dtype=np.float64)
+    R = E[:3, :3]
+    t = E[:3, 3]
+    p_cam = xyz @ R.T + t
+    z = p_cam[:, 2]
+    front = z > 0.0
+    if not front.any():
+        return np.zeros((height, width), dtype=np.float32), np.zeros(
+            (height, width), dtype=np.bool_
+        )
+    p_cam = p_cam[front]
+    z = z[front]
+    u = K[0, 0] * p_cam[:, 0] / z + K[0, 2]
+    v = K[1, 1] * p_cam[:, 1] / z + K[1, 2]
+    ui = np.floor(u).astype(np.int64)
+    vi = np.floor(v).astype(np.int64)
+    in_image = (ui >= 0) & (ui < width) & (vi >= 0) & (vi < height)
+    ui = ui[in_image]
+    vi = vi[in_image]
+    z = z[in_image]
+    if ui.size == 0:
+        return np.zeros((height, width), dtype=np.float32), np.zeros(
+            (height, width), dtype=np.bool_
+        )
+    flat = vi * width + ui
+    # Per-pixel min-z: sort by depth ascending, then unique-by-pixel
+    # keeps the first (nearest) hit. ``np.unique`` returns sorted-by-key
+    # so we sort by the composite (flat, z) lexicographically with a
+    # stable sort.
+    order = np.argsort(z, kind="stable")
+    flat_s = flat[order]
+    z_s = z[order]
+    _, first_idx = np.unique(flat_s, return_index=True)
+    flat_u = flat_s[first_idx]
+    z_u = z_s[first_idx]
+    depth = np.zeros(height * width, dtype=np.float32)
+    depth[flat_u] = z_u.astype(np.float32)
+    valid = np.zeros(height * width, dtype=np.bool_)
+    valid[flat_u] = True
+    return depth.reshape(height, width), valid.reshape(height, width)
 
 
 # ---------------------------------------------------------------------------

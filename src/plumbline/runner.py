@@ -107,6 +107,8 @@ def evaluate(
     boundary_tol: float = 0.1,
     aggregation: str = "sample",
     scene_voxel_size: float = 0.01,
+    per_view_masked: bool = False,
+    per_view_crop: int = 224,
     show_progress: bool = True,
 ) -> Report:
     """Evaluate a model on a dataset and return a :class:`Report`.
@@ -149,6 +151,11 @@ def evaluate(
         raise ValueError(f"unknown aggregation '{aggregation}'; use 'sample' or 'scene'")
     scene_points: dict[str, list[NDArray[np.float32]]] = {}
     scene_gt: dict[str, NDArray[Any]] = {}
+    # Per-view-masked path (CUT3R/MASt3R/VGGT-family DTU eval): we
+    # additionally accumulate per-view-masked GT pts3d alongside the
+    # masked predictions. ICP + chamfer at scene-merge time then run
+    # against the accumulated GT, NOT against sample.point_cloud_gt.
+    scene_gt_masked: dict[str, list[NDArray[np.float32]]] = {}
 
     # Progress bar on the main sample loop. Writes to stderr so stdout
     # (the final Report markdown) stays clean. Set show_progress=False
@@ -225,6 +232,50 @@ def evaluate(
                 else sample.images.shape[0]
             ),
         )
+        if (
+            aggregation == "scene"
+            and per_view_masked
+            and trimmed_sample.depth_gt is not None
+            and trimmed_sample.depth_valid is not None
+        ):
+            # Per-view-masked chamfer (CUT3R/MASt3R/VGGT DTU lineage):
+            # build per-view masked pred+GT pts3d clouds at the model's
+            # processed resolution, center-crop to ``per_view_crop``,
+            # mask by GT validity, and accumulate per scene. Scene-merge
+            # below does ICP + KDTree NN against the accumulated GT, NOT
+            # against ``sample.point_cloud_gt``. Reference:
+            # ``CUT3R/eval/mv_recon/launch.py`` lines ~195-260 +
+            # ``utils.py::accuracy/completion``.
+            pv = _per_view_masked_clouds(
+                prediction=prediction,
+                sample=trimmed_sample,
+                per_view_crop=per_view_crop,
+            )
+            if pv is not None:
+                pred_pts, gt_pts = pv
+                scene = sample.sample_id.split("/", 1)[0]
+                scene_points.setdefault(scene, []).append(pred_pts)
+                scene_gt_masked.setdefault(scene, []).append(gt_pts)
+                report.per_sample.append(
+                    SampleResult(
+                        sample_id=sample.sample_id,
+                        metrics={"n_pred_points": float(pred_pts.shape[0])},
+                        runtime_ms=runtime_ms,
+                    )
+                )
+                report.n_evaluated += 1
+            else:
+                report.n_skipped += 1
+                report.per_sample.append(
+                    SampleResult(
+                        sample_id=sample.sample_id,
+                        metrics={},
+                        skipped=True,
+                        skip_reason="per-view-masked: missing pred point_map/depth or GT depth",
+                    )
+                )
+            continue
+
         if aggregation == "scene" and trimmed_sample.point_cloud_gt is not None:
             # Per-sample alignment in scene mode is a cheap warm-start only:
             # camera_centers Umeyama puts each chunk in roughly the right
@@ -329,6 +380,33 @@ def evaluate(
         for scene, chunks in scene_points.items():
             scene_progress.update(scene_task, status=f"scene={scene}")
             merged = np.vstack(chunks).astype(np.float32)
+            if per_view_masked and scene in scene_gt_masked:
+                # Per-view-masked path: GT is the accumulated per-view
+                # masked GT pts3d (in rebased GT world frame). ICP align
+                # pred → GT, then KDTree NN both directions on the raw
+                # masked clouds (no extra voxel_downsample).
+                gt = np.vstack(scene_gt_masked[scene]).astype(np.float32)
+                if pointcloud_alignment == "icp" and merged.shape[0] >= 3 and gt.shape[0] >= 3:
+                    # Warm-start with the cloud-bbox-centroid + bbox-
+                    # diagonal scale ratio so ICP doesn't collapse to s=0
+                    # when pred and GT are in different units (VGGT
+                    # outputs ≈ metres while DTU GT is in mm). Without a
+                    # warm start, the first Umeyama with mostly-noise
+                    # correspondences picks s ≈ 0 and the iterations are
+                    # stuck. Bbox-diagonal is the simplest similarity
+                    # match that's symmetric and unit-aware.
+                    s0, R0, t0 = _bbox_similarity_warm_start(merged, gt)
+                    s, R, t, _info = icp_similarity(
+                        merged, gt, init_s=s0, init_R=R0, init_t=t0
+                    )
+                    merged = apply_similarity(merged, s, R, t).astype(np.float32)
+                per_scene[scene] = accuracy_completeness(
+                    merged, gt,
+                    voxel_size=None,
+                    outlier_distance=chamfer_outlier_distance,
+                )
+                scene_progress.advance(scene_task, 1)
+                continue
             gt = scene_gt[scene]
             if pointcloud_alignment == "icp":
                 # Single scene-level ICP refine, on the fused + voxel-
@@ -595,6 +673,143 @@ def _aligned_point_map(
             "use 'none', 'camera_centers', or 'icp'"
         )
     return pmap
+
+
+def _bbox_similarity_warm_start(
+    src: NDArray[Any], dst: NDArray[Any]
+) -> tuple[float, NDArray[np.float64], NDArray[np.float64]]:
+    """Coarse Sim(3) warm start matching bbox centre + diagonal ratio.
+
+    For ICP between clouds in different units (e.g. VGGT predicts in
+    metres, DTU GT is in mm), the per-iteration Umeyama-on-noisy-NN-
+    correspondences collapses to s≈0 unless seeded with a sensible
+    scale. Bbox-diagonal ratio is unit-aware and rotation-free, which
+    is enough to bring the two clouds into the same neighbourhood.
+    Returns (s, R=I, t).
+    """
+    src = np.asarray(src, dtype=np.float64)
+    dst = np.asarray(dst, dtype=np.float64)
+    if src.shape[0] == 0 or dst.shape[0] == 0:
+        return 1.0, np.eye(3), np.zeros(3)
+    src_min, src_max = src.min(axis=0), src.max(axis=0)
+    dst_min, dst_max = dst.min(axis=0), dst.max(axis=0)
+    src_diag = float(np.linalg.norm(src_max - src_min))
+    dst_diag = float(np.linalg.norm(dst_max - dst_min))
+    s = dst_diag / max(src_diag, 1e-12)
+    src_mid = 0.5 * (src_min + src_max)
+    dst_mid = 0.5 * (dst_min + dst_max)
+    t = dst_mid - s * src_mid
+    return s, np.eye(3), t
+
+
+def _per_view_masked_clouds(
+    *,
+    prediction: Prediction,
+    sample: Sample,
+    per_view_crop: int,
+) -> tuple[NDArray[np.float32], NDArray[np.float32]] | None:
+    """Build per-view 3D clouds for the CUT3R per-view-masked chamfer.
+
+    For each of the ``V`` views:
+
+    - Pred pts3d come from ``prediction.point_map`` (already world-frame)
+      or by lifting ``prediction.depth`` with ``prediction.intrinsics`` +
+      ``prediction.extrinsics``.
+    - GT depth is NN-downsampled to the prediction's processed resolution
+      (``H_p, W_p``); GT pts3d are unprojected with sample's intrinsics
+      *rescaled to (H_p, W_p)* and ``sample.extrinsics_gt`` (rebased to
+      view 0).
+    - A per_view_crop x per_view_crop center crop is taken on both;
+      pixels failing the GT validity mask are dropped.
+
+    Returns flat ``(M, 3)`` pred + GT clouds, OR ``None`` when essential
+    data is missing.
+
+    The two clouds end up in *different* world frames (pred world vs
+    rebased-GT world) — the scene-merge step's ICP aligns them.
+    """
+    if sample.depth_gt is None or sample.depth_valid is None:
+        return None
+    pmap = prediction.point_map
+    if pmap is None:
+        if (
+            prediction.depth is None
+            or prediction.intrinsics is None
+            or prediction.extrinsics is None
+        ):
+            return None
+        pmap = _back_project_depth(
+            prediction.depth, prediction.intrinsics, prediction.extrinsics
+        )
+    V_p, H_p, W_p, _ = pmap.shape
+    V_gt, H, W = sample.depth_gt.shape
+    if V_p != V_gt:
+        log.warning(
+            "per-view-masked: pred view count %d != GT view count %d", V_p, V_gt
+        )
+        return None
+    # NN-downsample GT depth + valid to (H_p, W_p).
+    yi = (np.arange(H_p) * (H / H_p)).astype(np.int64)
+    xi = (np.arange(W_p) * (W / W_p)).astype(np.int64)
+    gt_depth_p = sample.depth_gt[:, yi[:, None], xi[None, :]].astype(np.float64)  # (V, H_p, W_p)
+    gt_valid_p = sample.depth_valid[:, yi[:, None], xi[None, :]] & (gt_depth_p > 0)
+
+    # Rescale sample.intrinsics from native (H, W) to processed (H_p, W_p).
+    K = sample.intrinsics.astype(np.float64).copy()  # (V, 3, 3)
+    sx = W_p / W
+    sy = H_p / H
+    K[:, 0, :] *= sx
+    K[:, 1, :] *= sy
+    E_world_from_cam = sample.extrinsics_gt.astype(np.float64)  # (V, 4, 4) rebased
+
+    # Vectorised unproject of GT depth at pred resolution. Same arithmetic
+    # as runner._back_project_depth but skipping invalid pixels.
+    u = np.arange(W_p, dtype=np.float64)
+    v = np.arange(H_p, dtype=np.float64)
+    uu, vv = np.meshgrid(u, v, indexing="xy")  # (H_p, W_p)
+    gt_pts_world = np.empty((V_p, H_p, W_p, 3), dtype=np.float64)
+    for i in range(V_p):
+        d = gt_depth_p[i]
+        fx = K[i, 0, 0]
+        fy = K[i, 1, 1]
+        cx = K[i, 0, 2]
+        cy = K[i, 1, 2]
+        x_cam = (uu - cx) * d / max(fx, 1e-12)
+        y_cam = (vv - cy) * d / max(fy, 1e-12)
+        z_cam = d
+        p_cam = np.stack([x_cam, y_cam, z_cam], axis=-1)  # (H_p, W_p, 3)
+        R = E_world_from_cam[i, :3, :3]
+        t = E_world_from_cam[i, :3, 3]
+        gt_pts_world[i] = p_cam @ R.T + t
+
+    # Center crop both pred + GT to per_view_crop x per_view_crop. Crop is
+    # in pred-pixel coordinates (where the model "sees" 224x224 of detail);
+    # if the prediction is smaller than the crop, the crop falls back to
+    # the full image with a warning so the run continues.
+    side = int(per_view_crop)
+    if side > min(H_p, W_p):
+        log.warning(
+            "per_view_crop %d larger than processed resolution (%d, %d); using full image",
+            side,
+            H_p,
+            W_p,
+        )
+        crop = (slice(None), slice(None))
+    else:
+        cy_p = H_p // 2
+        cx_p = W_p // 2
+        half = side // 2
+        crop = (slice(cy_p - half, cy_p + half), slice(cx_p - half, cx_p + half))
+
+    pred_crop = pmap[:, crop[0], crop[1], :]
+    gt_crop = gt_pts_world[:, crop[0], crop[1], :]
+    valid_crop = gt_valid_p[:, crop[0], crop[1]]
+
+    pred_concat = pred_crop[valid_crop].astype(np.float32, copy=False)
+    gt_concat = gt_crop[valid_crop].astype(np.float32, copy=False)
+    if pred_concat.shape[0] == 0 or gt_concat.shape[0] == 0:
+        return None
+    return pred_concat, gt_concat
 
 
 def _trim_sample_to_views(sample: Sample, n: int) -> Sample:

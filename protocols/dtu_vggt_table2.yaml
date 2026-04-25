@@ -36,43 +36,37 @@ fixed:
     name: dtu
     split: test
     kwargs:
-      views_per_sample: 8
+      # ONE sample per scan covering the full 49-view ring. Matches
+      # CUT3R's ``eval/mv_recon/data.py::DTU._get_views`` with
+      # ``kf_every=1`` and ``full_video=True`` — accumulate per-view
+      # masked clouds across all rig views into a single chamfer per
+      # scan, NOT a sliding window of small N-view tuples (the latter
+      # produces 42x duplication and times out on commodity GPUs).
+      # max_views below trims to VGGT's 32-view inference cap; the
+      # rendered GT covers all 49 views regardless.
+      views_per_sample: 49
       light: 3
+      # Render per-view GT depth + valid mask by z-buffering the laser
+      # PLY through each view's GT camera (matches MVSNet's preprocessing
+      # of the same ground-truth surface). Required by the per-view-
+      # masked chamfer path below.
+      with_per_view_gt: true
   scale_alignment: none
   pointcloud_alignment: icp
-  # Paper's 0.382 mm Overall is per-scan chamfer on the fused + voxel-
-  # downsampled prediction cloud, not a per-sample mean. Scene
-  # aggregation + 1 cm voxel matches the ETH3D tool's convention the
-  # VGGT paper follows; without it, plumbline's per-sample chamfer is
-  # ~100× paper (confirmed 2026-04-22 scan1 probe: 43 mm/sample vs
-  # paper 0.382 mm/scan). See docs/DISCREPANCIES.md § D3.
-  #
-  # UNITS: DTU GT clouds + extrinsics are in millimetres (scanner's
-  # native unit, preserved by the plumbline DTU loader). The 1 cm voxel
-  # intent therefore maps to scene_voxel_size=10.0 here. ETH3D uses
-  # 0.01 because it stores scans in metres — don't copy ETH3D's value
-  # verbatim. An earlier copy-paste set this to 0.01 (= 10 μm cells in
-  # mm) and made the per-chunk downsample a no-op, OOM-killing D3 in
-  # scene-aggregation on 2026-04-23 / 2026-04-24.
+  # Per-view-masked chamfer (CUT3R/MASt3R/VGGT-family DTU eval). For
+  # each view: pred and GT pts3d are taken at the model's processed
+  # resolution, center-cropped to 224×224, restricted to per-pixel GT
+  # validity, then accumulated per scene. Scene-merge does ICP align +
+  # KDTree NN both directions on the masked clouds. Reference:
+  # ``CUT3R/eval/mv_recon/launch.py`` lines ~195-260 +
+  # ``utils.py::accuracy/completion``. See ``docs/DISCREPANCIES.md`` D3
+  # for the structural-mismatch history.
   aggregation: scene
-  # Per-chunk voxel_downsample at this scale is the OOM-bounding step
-  # (D20). 2026-04-25: probe showed scan1 Comp=1.5 mm (raw) vs 87 mm
-  # (10 mm voxel) — paper-comparable Comp needs density preserved, so
-  # use a much finer voxel here. 1 mm (1/10 of paper Acc 0.4 mm) keeps
-  # chunks ~10× denser than 10 mm; ~6 GB peak RSS for the 22-scan run.
+  per_view_masked: true
+  per_view_crop: 224
+  # scene_voxel_size is unused on the per-view-masked path (no inner
+  # voxel_downsample); kept here so a future demote to the
+  # legacy scene-merged path remains a one-line YAML edit.
   scene_voxel_size: 1.0
-  # NOTE: chamfer_outlier_distance was set to 20.0 mm during the
-  # 2026-04-24 D3 mitigation work but is NOT what the reference (CUT3R
-  # eval/mv_recon — same eval lineage as MASt3R/VGGT) does. CUT3R
-  # filters predictions via a per-view 224×224 *center crop* of the
-  # depth map plus a per-pixel GT validity mask, then chamfers the
-  # masked cloud. Plumbline's distance-to-GT outlier filter is a
-  # different (and arguably circular) approximation. Removed — accept
-  # the regression in observed Acc as honest per the "follow paper
-  # code, don't approximate" principle. Plumbline's DTU loader doesn't
-  # ship per-view GT depth maps (only the scene-level Points/stl PLY),
-  # so a faithful port of CUT3R's per-view mask isn't possible without
-  # a loader change. Until then, plumbline reports scene-merged
-  # chamfer — structurally different metric from the paper cell.
-  max_views: 8
+  max_views: 32
   tasks: [mvs_depth, pose]
