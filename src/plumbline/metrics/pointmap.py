@@ -181,34 +181,37 @@ def accuracy_completeness(
     pred: NDArray[Any],
     gt: NDArray[Any],
     *,
-    voxel_size: float = 0.01,
+    voxel_size: float | None = 0.01,
     outlier_distance: float | None = None,
 ) -> dict[str, float]:
-    """Paper-protocol ETH3D-style Acc/Comp/Overall, all in input units.
+    """Paper-protocol Acc/Comp/Overall, all in input units.
 
-    - ``accuracy``     — mean pred→GT nearest-neighbor distance (after
-      voxel-downsampling the prediction to uniform density)
-    - ``completeness`` — mean GT→pred nearest-neighbor distance
+    - ``accuracy``     — mean pred→GT nearest-neighbor distance.
+    - ``completeness`` — mean GT→pred nearest-neighbor distance.
     - ``overall``      — (accuracy + completeness) / 2, matches VGGT paper
       Table 3 "Overall (Chamfer distance)" convention.
 
     Parameters
     ----------
     voxel_size
-        Cell size for ``voxel_downsample`` of the prediction cloud
-        (matches the ETH3D tool convention). Units match ``pred`` / ``gt``.
-    outlier_distance
-        If set, drop pred_ds points whose nearest-GT distance exceeds
-        this threshold BEFORE computing either Acc or Comp. Matches the
-        MVS convention (e.g. MASt3R DTU eval) where wild outlier
-        predictions — rays that project to arbitrary depths outside the
-        scene volume — are excluded; without it Acc is dominated by a
-        handful of far-outlier points while Comp is unaffected, giving
-        the Acc ≫ Comp asymmetry characteristic of un-filtered MVS eval.
+        Cell size for ``voxel_downsample`` of the prediction cloud before
+        computing chamfer. ``None`` skips the downsample (matches the
+        DUSt3R-/MASt3R-/VGGT-family convention — see CUT3R's
+        ``eval/mv_recon/utils.py`` which calls KDTree on the raw masked
+        cloud directly). The plumbline scene-aggregation path already
+        voxel-downsamples each per-sample chunk before accumulating
+        (see ``runner._scene_aggregation``), so passing ``None`` here
+        avoids a redundant second downsample at the cost of slightly
+        more work in the KDTree query. Default ``0.01`` mirrors the
+        ETH3D evaluation tool when chunks are NOT pre-downsampled.
         Units match ``pred`` / ``gt``.
-
-    All three values share units with ``pred`` / ``gt`` — for ETH3D scans
-    the ETH3D tool default voxel_size is 0.01 (i.e. metres, 1 cm cell).
+    outlier_distance
+        If set, drop pred points whose nearest-GT distance exceeds this
+        threshold BEFORE computing either Acc or Comp. Matches the MVS
+        convention (e.g. CUT3R's ``conf_thresh`` + 224×224 center crop)
+        where wild outlier predictions are excluded; without it Acc is
+        dominated by a handful of far-outlier points while Comp is
+        unaffected. Units match ``pred`` / ``gt``.
     """
     if pred.ndim != 2 or pred.shape[-1] != 3:
         raise ValueError(f"pred must be (N, 3); got {pred.shape}")
@@ -217,7 +220,7 @@ def accuracy_completeness(
     if pred.size == 0 or gt.size == 0:
         nan = float("nan")
         return {"accuracy": nan, "completeness": nan, "overall": nan}
-    pred_ds = voxel_downsample(pred, voxel_size)
+    pred_ds = voxel_downsample(pred, voxel_size) if voxel_size is not None else pred
     d_pg = _nn_distances(pred_ds, gt)
     if outlier_distance is not None:
         if outlier_distance <= 0:

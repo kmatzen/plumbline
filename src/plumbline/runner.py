@@ -339,9 +339,19 @@ def evaluate(
                 if merged_ds.shape[0] >= 3 and gt.shape[0] >= 3:
                     s, R, t, _info = icp_similarity(merged_ds, gt)
                     merged = apply_similarity(merged, s, R, t).astype(np.float32)
+            # Per-chunk voxel_downsample already ran in the per-sample loop
+            # at scene_voxel_size resolution. Skip the second downsample
+            # inside ``accuracy_completeness`` — CUT3R/MASt3R/VGGT-family
+            # eval (CUT3R's ``eval/mv_recon/utils.py``) computes Acc/Comp
+            # as raw KDTree NN distances on the masked cloud, no
+            # additional downsample. A re-downsample of an already-
+            # voxel-downsampled cloud unifies per-chunk grids by
+            # averaging centroids, which tends to push points slightly
+            # further from any individual surface measurement and inflate
+            # Acc relative to the paper convention.
             per_scene[scene] = accuracy_completeness(
                 merged, gt,
-                voxel_size=scene_voxel_size,
+                voxel_size=None,
                 outlier_distance=chamfer_outlier_distance,
             )
             scene_progress.advance(scene_task, 1)
