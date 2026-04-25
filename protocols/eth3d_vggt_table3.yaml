@@ -38,10 +38,12 @@ fixed:
   pointcloud_alignment: icp
   aggregation: scene
   scene_voxel_size: 0.01
-  # MVS convention (ETH3D eval tool, MASt3R, VGGT) drops prediction
-  # points whose nearest-GT distance exceeds an outlier threshold so
-  # a few far-outlier rays don't dominate Acc. Paper Acc on ETH3D is
-  # ~0.9 m (VGGT Table 3); 0.2 m is generous enough to keep all good
-  # predictions, tight enough to drop the tail.
-  chamfer_outlier_distance: 0.2
+  # NOTE: removed chamfer_outlier_distance (was 0.2 m). It's a
+  # plumbline approximation, not what CUT3R / MASt3R / VGGT reference
+  # eval does — they use per-view 224×224 center crop + per-pixel GT
+  # validity mask, which we can't replicate without per-view GT depth
+  # in the ETH3D loader. Until that loader-side work, plumbline
+  # reports scene-merged chamfer; the paper cell is per-view-masked
+  # chamfer. The two are structurally different metrics; numerical
+  # off-paper isn't paper-fail, it's protocol-mismatch.
   tasks: [mvs_depth, pose]

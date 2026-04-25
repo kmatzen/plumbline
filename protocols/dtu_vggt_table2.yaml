@@ -56,15 +56,18 @@ fixed:
   # scene-aggregation on 2026-04-23 / 2026-04-24.
   aggregation: scene
   scene_voxel_size: 10.0
-  # MVS eval (MASt3R / MVSNet / VGGT) drops prediction points whose
-  # nearest-GT distance exceeds an outlier threshold before computing
-  # Acc / Comp. Without this, a handful of far-outlier pred points
-  # (rays at extreme depths beyond the scene volume) dominate Acc and
-  # make it 100× the inlier mean. Paper-reported Acc on DTU is ~0.4 mm
-  # (VGGT 0.389, MASt3R 0.403); a 20 mm threshold is generous enough
-  # to keep ~all correct predictions, tight enough to drop the tail.
-  # Observed 2026-04-24 scan1 probe: un-filtered Acc = 78-128 mm at
-  # various voxel sizes, vs filtered << 1 mm.
-  chamfer_outlier_distance: 20.0
+  # NOTE: chamfer_outlier_distance was set to 20.0 mm during the
+  # 2026-04-24 D3 mitigation work but is NOT what the reference (CUT3R
+  # eval/mv_recon — same eval lineage as MASt3R/VGGT) does. CUT3R
+  # filters predictions via a per-view 224×224 *center crop* of the
+  # depth map plus a per-pixel GT validity mask, then chamfers the
+  # masked cloud. Plumbline's distance-to-GT outlier filter is a
+  # different (and arguably circular) approximation. Removed — accept
+  # the regression in observed Acc as honest per the "follow paper
+  # code, don't approximate" principle. Plumbline's DTU loader doesn't
+  # ship per-view GT depth maps (only the scene-level Points/stl PLY),
+  # so a faithful port of CUT3R's per-view mask isn't possible without
+  # a loader change. Until then, plumbline reports scene-merged
+  # chamfer — structurally different metric from the paper cell.
   max_views: 8
   tasks: [mvs_depth, pose]
