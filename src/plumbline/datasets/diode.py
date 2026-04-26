@@ -361,6 +361,15 @@ class DIODEMogeEvalLoader(Dataset):
     additional clip. See ``load_moge_depth_png`` docstring for format
     details.
 
+    The loader **delegates to MoGe's own
+    ``EvalDataLoaderPipeline._process_instance``** so the homographic
+    FoV-warp (``configs/eval/benchmarks/diode.json``: 1024x768) is
+    applied bit-identically to the paper-eval pipeline. This is the
+    same pattern as ``KITTIMogeEvalLoader`` (which closed D8); skipping
+    it on DIODE was the open D19/MoGe-DIODE-both gap (paper 0.040 vs
+    plumbline 0.108, 2.7x off — the model was running on the raw DIODE
+    image, paper runs it on the FoV-warped frame).
+
     Expected layout (pointed at by ``--data-root`` or
     ``$DIODE_MOGE_ROOT``)::
 
@@ -388,6 +397,15 @@ class DIODEMogeEvalLoader(Dataset):
     """
 
     split: str = "val"
+
+    # MoGe's diode.json benchmark config. include_segmentation is on
+    # in the paper config but the global depth metric (abs_rel) doesn't
+    # consume the seg mask — only the local-points metric does — so we
+    # keep it off to avoid a per-sample read of a 1024x768 PNG that
+    # we'd discard anyway.
+    TARGET_WIDTH = 1024
+    TARGET_HEIGHT = 768
+    DROP_MAX_DEPTH = 1000.0
 
     def __init__(
         self,
@@ -422,6 +440,27 @@ class DIODEMogeEvalLoader(Dataset):
         self.root = root_path
         self.domain = domain
 
+        # Build a MoGe EvalDataLoaderPipeline handle for its
+        # ``_process_instance`` method; we don't ``.start()`` the
+        # pipeline since we don't need the worker processes — we only
+        # need the per-sample warp logic. Mirrors KITTIMogeEvalLoader.
+        try:
+            from moge.test.dataloader import EvalDataLoaderPipeline
+        except ModuleNotFoundError as exc:
+            raise ImportError(
+                "DIODEMogeEvalLoader needs the `moge` package for its "
+                "homographic warp (matches the paper's eval pipeline). "
+                "Install with `uv pip install "
+                "'git+https://github.com/microsoft/MoGe.git'`."
+            ) from exc
+        self._moge_pipe = EvalDataLoaderPipeline(
+            path=str(root_path / "DIODE"),
+            width=self.TARGET_WIDTH,
+            height=self.TARGET_HEIGHT,
+            split=".index.txt",
+            drop_max_depth=self.DROP_MAX_DEPTH,
+        )
+
         index_path = root_path / "DIODE" / ".index.txt"
         lines = [
             ln.strip()
@@ -447,49 +486,62 @@ class DIODEMogeEvalLoader(Dataset):
     # -- per-sample ------------------------------------------------------
 
     def _load_sample(self, rec: dict[str, Any]) -> Sample:
-        sample_root = self.root / "DIODE" / rec["sample_path"]
-        image = read_rgb_uint8(sample_root / "image.jpg")
-        images = image[None]
-        assert_valid_image(images, name=f"diode_moge/{rec['sample_id']}/image")
+        # Build the input dict that MoGe's ``_process_instance`` expects.
+        # We don't call its ``_load_instance`` because upstream references
+        # an undefined ``read_meta`` symbol there (stale after a refactor
+        # — same upstream bug as on the KITTI path). Replicate the
+        # ``_load_instance`` body inline.
+        import json as _json
 
-        depth, valid = load_moge_depth_png(sample_root / "depth.png")
-        # MoGe's eval applies a `drop_max_depth` filter in addition to the
-        # isfinite mask: any pixel whose GT depth exceeds
-        # `nanquantile(depth, 0.01) * 1000` is also excluded. Its effect
-        # is small for well-behaved indoor samples (1%-of-max * 1000 is
-        # usually 100× the scene max and so a no-op) but critical for
-        # outdoor samples where a few aligned predictions can otherwise
-        # explode to 1e6 AbsRel and drag the per-split mean skyward.
-        # See microsoft/MoGe moge/test/dataloader.py::_process_instance.
-        finite_d = depth[valid]
-        if finite_d.size:
-            p01 = float(np.nanquantile(finite_d, 0.01))
-            if p01 > 0:
-                max_allowed = p01 * 1000.0
-                valid = valid & (depth <= max_allowed)
-        # Depth array may contain NaN / +inf for invalid/sky pixels. Our
-        # assert_valid_depth requires finite values, so replace the
-        # sentinels with a dummy (1.0 m) — they will be excluded from the
-        # metric anyway via `depth_valid`.
+        from moge.utils.io import read_depth as _moge_read_depth
+        from moge.utils.io import read_image as _moge_read_image
+
+        sample_root = self.root / "DIODE" / rec["sample_path"]
+        image_np = _moge_read_image(sample_root / "image.jpg")
+        depth_np = _moge_read_depth(sample_root / "depth.png")
+        meta = _json.loads((sample_root / "meta.json").read_text())
+        raw = {
+            "filename": rec["sample_path"],
+            "width": self.TARGET_WIDTH,
+            "height": self.TARGET_HEIGHT,
+            "image": image_np,
+            "depth": np.nan_to_num(depth_np, nan=1, posinf=1, neginf=1),
+            "depth_mask": np.isfinite(depth_np),
+            "depth_mask_inf": np.isinf(depth_np),
+            "intrinsics": np.array(meta["intrinsics"], dtype=np.float32),
+        }
+        inst = self._moge_pipe._process_instance(raw)
+
+        # MoGe returns torch tensors in CHW / HW. Plumbline wants
+        # uint8 HWC image + float32 HW depth + bool HW mask as numpy.
+        img_t = inst["image"]  # (3, H, W) float in [0,1]
+        image = (img_t.permute(1, 2, 0).numpy() * 255.0).clip(0, 255).astype(np.uint8)
+        depth = inst["depth"].numpy().astype(np.float32)
+        valid = inst["depth_mask"].numpy().astype(bool)
+        # MoGe zeros out invalid pixels (line 169 of its dataloader.py);
+        # plumbline's assert_valid_depth requires finite > 0. Restore a
+        # safe placeholder for the masked-out pixels.
         depth_clean = np.where(valid, depth, np.float32(1.0))
+
+        images = image[None]
         depth_gt = depth_clean[None]
         depth_valid = valid[None]
+        assert_valid_image(images, name=f"diode_moge/{rec['sample_id']}/image")
+        assert_valid_depth(depth_gt, name=f"diode_moge/{rec['sample_id']}/depth")
 
-        # meta.json has normalized intrinsics (K_norm with cx=0.5, cy=0.5
-        # as fractions of the image size). Denormalize to pixel units.
-        import json
-        meta = json.loads((sample_root / "meta.json").read_text())
-        K_norm = np.asarray(meta["intrinsics"], dtype=np.float32)
+        # MoGe's target intrinsics are normalized (fx_norm = fx_pix / W,
+        # fy_norm = fy_pix / H, cx/cy in [0, 1]). Denormalize to pixel
+        # units on the warped frame.
+        K_norm = inst["intrinsics"].numpy().astype(np.float32)
         h, w, _ = image.shape
         K_pix = K_norm.copy()
-        K_pix[0, :] *= w  # fx, 0, cx rows scaled by image width
-        K_pix[1, :] *= h  # 0, fy, cy rows scaled by image height
+        K_pix[0, :] *= w
+        K_pix[1, :] *= h
         K_stack = K_pix[None]
         E_eye = np.eye(4, dtype=np.float32)[None]
 
         assert_valid_intrinsics(K_stack, name=f"diode_moge/{rec['sample_id']}/intrinsics")
         assert_valid_extrinsics(E_eye, name=f"diode_moge/{rec['sample_id']}/extrinsics")
-        assert_valid_depth(depth_gt, name=f"diode_moge/{rec['sample_id']}/depth")
 
         # Parse domain from the sample path.
         domain = "indoors" if "/indoors/" in rec["sample_path"] else "outdoor"
