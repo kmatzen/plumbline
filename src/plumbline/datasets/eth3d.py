@@ -97,6 +97,9 @@ class ETH3DDataset(Dataset):
         views_per_sample: int = 4,
         max_gt_points: int | None = None,
         gt_subsample_seed: int = 0,
+        with_per_view_gt: bool = False,
+        pv_splat_radius: int = 1,
+        pv_render_max_dim: int | None = 2048,
     ) -> None:
         root_path = Path(root) if root else env_path("ETH3D_ROOT")
         if root_path is None or not root_path.exists():
@@ -140,6 +143,18 @@ class ETH3DDataset(Dataset):
         # Keyed by (scene_name, tuple-of-relative-paths) so a scene that
         # somehow appears under two GT sources within one run still works.
         self._gt_cache: dict[tuple, NDArray[np.float32]] = {}
+        self.with_per_view_gt = bool(with_per_view_gt)
+        self.pv_splat_radius = int(pv_splat_radius)
+        # Cap rendering resolution; ETH3D native is 6048x4032 which makes
+        # both rendering time (per-view ~30 sec at native) and on-disk cache
+        # (3.7 GB / scene) painful. 2048 max-dim keeps per-view cost ~3 sec
+        # and per-scene cache ~400 MB while staying well above any typical
+        # pred resolution (518 for VGGT).
+        self.pv_render_max_dim = (
+            int(pv_render_max_dim) if pv_render_max_dim is not None else None
+        )
+        # Per-scene rendered (depth, valid, image_id_to_idx) cache.
+        self._pv_depth_cache: dict[str, dict[str, Any]] = {}
 
     def __iter__(self) -> Iterator[Sample]:
         for rec in self._records:
@@ -268,18 +283,223 @@ class ETH3DDataset(Dataset):
                         pcd = pcd[idx]
                     self._gt_cache[cache_key] = pcd
 
+        depth_gt: NDArray[np.float32] | None = None
+        depth_valid: NDArray[np.bool_] | None = None
+        gt_sizes: list[tuple[int, int]] | None = None
+        if self.with_per_view_gt and ply_rels:
+            scene_pv = self._load_or_render_scene_pv_depth(
+                scene=rec["scene"],
+                ply_rels=ply_rels,
+            )
+            if scene_pv is not None:
+                depth_gt, depth_valid, gt_sizes = self._stack_per_view_depth_for_sample(
+                    scene_pv=scene_pv,
+                    image_records=rec["image_records"],
+                    canvas_h=max_h,
+                    canvas_w=max_w,
+                )
+
+        metadata: dict[str, Any] = {
+            "scene": rec["scene"],
+            "native_sizes": [(img.shape[0], img.shape[1]) for img in images],
+            "split": self.split,
+        }
+        if gt_sizes is not None:
+            metadata["gt_sizes"] = gt_sizes
         return Sample(
             sample_id=rec["sample_id"],
             images=padded,
             intrinsics=intrinsics,
             extrinsics_gt=extrinsics,
+            depth_gt=depth_gt,
+            depth_valid=depth_valid,
             point_cloud_gt=pcd,
-            metadata={
-                "scene": rec["scene"],
-                "native_sizes": [(img.shape[0], img.shape[1]) for img in images],
-                "split": self.split,
-            },
+            metadata=metadata,
         )
+
+    def _load_or_render_scene_pv_depth(
+        self,
+        *,
+        scene: str,
+        ply_rels: list[str],
+    ) -> dict[str, Any] | None:
+        """Render per-view GT depth for every image in a scene, once.
+
+        Concatenates the (MLP-aligned) laser PLY into a single scene
+        cloud, then for each image in the scene's `images.txt`
+        z-buffers the cloud through that image's camera at the image's
+        native resolution (capped at ``pv_render_max_dim``). Saves to
+        disk as one npz per scene. Returns a dict shaped::
+
+            {
+              "depths":  (V_scene, max_H_render, max_W_render) float32,
+              "valids":  (V_scene, max_H_render, max_W_render) bool,
+              "render_sizes": [(H_render, W_render), ...] per image,
+              "image_id_to_idx": {colmap_image_id: index},
+            }
+        """
+        if scene in self._pv_depth_cache:
+            return self._pv_depth_cache[scene]
+
+        cache_path = (
+            self.root / ".plumbline_manifest"
+            / f"eth3d_pv_depth_{scene}_max{self.pv_render_max_dim}_r{self.pv_splat_radius}.npz"
+        )
+        if cache_path.exists():
+            with np.load(cache_path, allow_pickle=True) as f:
+                cached = {
+                    "depths": f["depths"].astype(np.float32),
+                    "valids": f["valids"].astype(np.bool_),
+                    "render_sizes": [tuple(map(int, x)) for x in f["render_sizes"]],
+                    "image_id_to_idx": {int(k): int(v) for k, v in f["image_ids"]},
+                }
+                self._pv_depth_cache[scene] = cached
+                return cached
+
+        # Need to render. Locate the scene dir + parse calibration.
+        scene_dir = self.root / scene
+        calib = scene_dir / "dslr_calibration_undistorted"
+        if not (calib / "images.txt").exists():
+            return None
+        cameras = parse_colmap_cameras(calib / "cameras.txt")
+        images_info = sorted(
+            parse_colmap_images(calib / "images.txt"),
+            key=lambda x: x["image_id"],
+        )
+
+        # Load + MLP-transform the scene PLY (full density; do NOT
+        # subsample here — sparse GT renders give bad coverage).
+        scan_alignment: dict[str, NDArray[np.float64]] = {}
+        if ply_rels:
+            mlp_dir = (self.root / ply_rels[0]).parent
+            mlp_path = mlp_dir / "scan_alignment.mlp"
+            if mlp_path.exists():
+                scan_alignment = parse_scan_alignment_mlp(mlp_path)
+        chunks: list[NDArray[np.float32]] = []
+        for rel in ply_rels:
+            p = self.root / rel
+            if not p.exists():
+                continue
+            pts = load_ply_xyz(p)
+            M = scan_alignment.get(p.name)
+            if M is not None and pts.size > 0:
+                R = M[:3, :3]
+                t = M[:3, 3]
+                pts = (pts.astype(np.float64) @ R.T + t).astype(np.float32)
+            chunks.append(pts)
+        if not chunks:
+            return None
+        xyz = np.concatenate(chunks, axis=0)
+
+        # Per-view render. Each image's native size is in
+        # ``images.txt``'s associated cameras.txt entry; we use its
+        # native (H, W) from cameras and scale to render_max_dim.
+        from plumbline.datasets.dtu import render_pv_depth_zbuffer
+
+        # For each image: K_native, world_from_cam, native (H, W).
+        # cameras.txt provides per-camera-id (H, W) and K — we already
+        # parse it. Fetch the (H, W) by re-reading raw lines.
+        cam_native_hw = _parse_colmap_cameras_hw(calib / "cameras.txt")
+        depths_list: list[NDArray[np.float32]] = []
+        valids_list: list[NDArray[np.bool_]] = []
+        render_sizes: list[tuple[int, int]] = []
+        image_id_to_idx: dict[int, int] = {}
+        max_render_h = 0
+        max_render_w = 0
+        for idx, ir in enumerate(images_info):
+            cam_id = ir["camera_id"]
+            H_native, W_native = cam_native_hw[cam_id]
+            scale = 1.0
+            if self.pv_render_max_dim is not None:
+                scale = min(1.0, self.pv_render_max_dim / max(H_native, W_native))
+            H_render = max(1, int(round(H_native * scale)))
+            W_render = max(1, int(round(W_native * scale)))
+            K_native = cameras[cam_id].astype(np.float64)
+            K_render = K_native.copy()
+            K_render[0, :] *= W_render / W_native
+            K_render[1, :] *= H_render / H_native
+            q = np.array([ir["qw"], ir["qx"], ir["qy"], ir["qz"]], dtype=np.float64)
+            t = np.array([ir["tx"], ir["ty"], ir["tz"]], dtype=np.float64)
+            cam_from_world = np.eye(4, dtype=np.float64)
+            cam_from_world[:3, :3] = quat_to_rot(q)
+            cam_from_world[:3, 3] = t
+            d, v = render_pv_depth_zbuffer(
+                xyz, K_render, cam_from_world, H_render, W_render,
+                splat_radius=self.pv_splat_radius,
+            )
+            depths_list.append(d)
+            valids_list.append(v)
+            render_sizes.append((H_render, W_render))
+            image_id_to_idx[ir["image_id"]] = idx
+            max_render_h = max(max_render_h, H_render)
+            max_render_w = max(max_render_w, W_render)
+
+        # Pad to common (max_render_h, max_render_w) canvas; padding is
+        # zero depth / False valid, matching the per-view-masked path's
+        # masking expectation.
+        V = len(depths_list)
+        depths = np.zeros((V, max_render_h, max_render_w), dtype=np.float32)
+        valids = np.zeros((V, max_render_h, max_render_w), dtype=np.bool_)
+        for i, (d, v, (H_r, W_r)) in enumerate(zip(depths_list, valids_list, render_sizes, strict=True)):
+            depths[i, :H_r, :W_r] = d
+            valids[i, :H_r, :W_r] = v
+
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        np.savez_compressed(
+            cache_path,
+            depths=depths,
+            valids=valids,
+            render_sizes=np.asarray(render_sizes, dtype=np.int32),
+            image_ids=np.asarray(list(image_id_to_idx.items()), dtype=np.int64),
+        )
+        cached = {
+            "depths": depths,
+            "valids": valids,
+            "render_sizes": render_sizes,
+            "image_id_to_idx": image_id_to_idx,
+        }
+        self._pv_depth_cache[scene] = cached
+        return cached
+
+    def _stack_per_view_depth_for_sample(
+        self,
+        *,
+        scene_pv: dict[str, Any],
+        image_records: list[dict[str, Any]],
+        canvas_h: int,
+        canvas_w: int,
+    ) -> tuple[NDArray[np.float32], NDArray[np.bool_], list[tuple[int, int]]]:
+        """Slice the scene-level rendered depth into per-sample tensors
+        padded to ``sample.images``' canvas. Returns ``(depth, valid,
+        gt_sizes)`` where ``gt_sizes`` records each view's actual
+        depth-render extent within the canvas (which can differ from
+        the view's image-native size when the loader rendered at a
+        capped resolution); the runner uses it to NN-sample correctly
+        while still rescaling K from image-native."""
+        depths_scene: NDArray[np.float32] = scene_pv["depths"]
+        valids_scene: NDArray[np.bool_] = scene_pv["valids"]
+        render_sizes: list[tuple[int, int]] = scene_pv["render_sizes"]
+        image_id_to_idx: dict[int, int] = scene_pv["image_id_to_idx"]
+
+        V = len(image_records)
+        out_d = np.zeros((V, canvas_h, canvas_w), dtype=np.float32)
+        out_v = np.zeros((V, canvas_h, canvas_w), dtype=np.bool_)
+        gt_sizes: list[tuple[int, int]] = []
+        for i, ir in enumerate(image_records):
+            idx = image_id_to_idx.get(int(ir["image_id"]))
+            if idx is None:
+                gt_sizes.append((0, 0))
+                continue
+            H_r, W_r = render_sizes[idx]
+            # If render is larger than image canvas (shouldn't happen with
+            # pv_render_max_dim ≤ image native), clip to canvas to avoid
+            # an index error; loses peripheral coverage but doesn't crash.
+            H_r_eff = min(H_r, canvas_h)
+            W_r_eff = min(W_r, canvas_w)
+            out_d[i, :H_r_eff, :W_r_eff] = depths_scene[idx, :H_r_eff, :W_r_eff]
+            out_v[i, :H_r_eff, :W_r_eff] = valids_scene[idx, :H_r_eff, :W_r_eff]
+            gt_sizes.append((H_r_eff, W_r_eff))
+        return out_d, out_v, gt_sizes
 
 
 # ---------------------------------------------------------------------------
@@ -362,6 +582,29 @@ def quat_to_rot(q: NDArray[Any]) -> NDArray[np.float64]:
         ],
         dtype=np.float64,
     )
+
+
+def _parse_colmap_cameras_hw(path: Path) -> dict[int, tuple[int, int]]:
+    """Read just (H, W) per camera_id from a COLMAP ``cameras.txt``.
+
+    Format: ``CAMERA_ID MODEL WIDTH HEIGHT PARAMS[]``. Used by the
+    per-view-GT renderer to size each view's output before scaling
+    to ``pv_render_max_dim``. Returns ``{camera_id: (H, W)}``.
+    """
+    out: dict[int, tuple[int, int]] = {}
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split()
+            if len(parts) < 4:
+                continue
+            cam_id = int(parts[0])
+            W = int(parts[2])
+            H = int(parts[3])
+            out[cam_id] = (H, W)
+    return out
 
 
 def parse_scan_alignment_mlp(path: Path) -> dict[str, NDArray[np.float64]]:

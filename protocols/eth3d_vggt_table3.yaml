@@ -22,8 +22,10 @@
 name: eth3d_vggt_table3
 description: >
   ETH3D multi-view point-map evaluation under VGGT Table 3 protocol.
-  Scene-merged Acc/Comp/Overall in metres after ICP alignment +
-  1 cm voxel downsample.
+  Per-view-masked chamfer (CUT3R/MASt3R/VGGT-family): pred + GT pts3d
+  per view, center-cropped + GT-masked, accumulated per scene, ICP-
+  aligned, KDTree NN both directions in metres. Same protocol as
+  DTU's ``dtu_vggt_table2``.
 
 reference:
   paper: "Wang et al. 2025, VGGT (arXiv:2503.11651), Table 3 (Point Map on ETH3D)"
@@ -35,15 +37,22 @@ reference:
 fixed:
   dataset:
     name: eth3d
+    kwargs:
+      # Render per-view GT depth from the (MLP-aligned) laser PLY through
+      # each view's GT camera; cap the render resolution at 2048 max-dim
+      # to keep the per-scene cache reasonable (~400 MB / scene at 38
+      # views, vs 3.7 GB if rendered at full 6048×4032 native). Required
+      # by per_view_masked below.
+      with_per_view_gt: true
   pointcloud_alignment: icp
+  # Per-view-masked chamfer (CUT3R/MASt3R/VGGT-family). Same as DTU's
+  # protocol — see ``protocols/dtu_vggt_table2.yaml`` for the canonical
+  # reasoning. ETH3D wrinkle: the per-view crop must be larger than
+  # 224 because the model's processed resolution for ETH3D's wider
+  # aspect ratios may give pred maps where the smaller dim < 224
+  # (e.g. ETH3D ~6048x4135 → VGGT ~518x352 → cap crop at 352).
   aggregation: scene
+  per_view_masked: true
+  per_view_crop: 352
   scene_voxel_size: 0.01
-  # NOTE: removed chamfer_outlier_distance (was 0.2 m). It's a
-  # plumbline approximation, not what CUT3R / MASt3R / VGGT reference
-  # eval does — they use per-view 224×224 center crop + per-pixel GT
-  # validity mask, which we can't replicate without per-view GT depth
-  # in the ETH3D loader. Until that loader-side work, plumbline
-  # reports scene-merged chamfer; the paper cell is per-view-masked
-  # chamfer. The two are structurally different metrics; numerical
-  # off-paper isn't paper-fail, it's protocol-mismatch.
   tasks: [mvs_depth, pose]

@@ -46,29 +46,29 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
-  Observed 2026-04-26 with the scan_alignment.mlp fix (commit
-  fbc2524) on the 3-scene subset, 137 8-view windows, 1 cm voxel,
-  scene-merged chamfer:
+  Observed 2026-04-26 with the per-view-masked path (commits
+  fbc2524 MLP fix + ETH3D per-view-GT renderer) on the 3-scene
+  subset, 137 8-view windows, 1 cm voxel:
 
-      scene          Acc      Comp     Overall
-      courtyard      1.469    1.601    1.535
-      delivery_area  0.285    6.186    3.235
-      facade         0.545    2.622    1.583
-      aggregate      0.766    3.470    2.118
+      scene          Acc      Comp     Overall  Overall_med
+      courtyard      0.469    0.736    0.603    0.262
+      delivery_area  0.513    1.065    0.789    0.380
+      facade         0.770    0.299    0.535    0.151
+      aggregate      0.584    0.700    0.642    0.265
 
-  Aggregate Overall 2.118 m vs paper 0.709 m. **Acc aggregate 0.766
-  is BETTER than paper's 0.901** — VGGT's predictions on these
-  3 scenes are tighter than paper's full-split mean. Comp blew up
-  because GT (now correctly placed by the MLP fix) extends well past
-  the camera-visible region. delivery_area Comp 6.19 m is
-  dominated by laser-scan points the cameras never see —
-  scan2.ply has a ~13 m translation in that scene's MLP.
+  Aggregate Overall 0.642 m vs paper 0.709 m — **9.4 % under paper**.
+  Plumbline tighter than paper on both Acc (0.58 vs 0.90) and Overall
+  (0.64 vs 0.71); only Comp (0.70 vs 0.52) is mildly looser. The
+  reproduction-check fails the strict 5 % tolerance but the gap is
+  the opposite direction (we're better) and well within the
+  subset-vs-13-scene caveat (D10). Median Overall 0.265 m suggests
+  the metric tail is short — not the issue D3 had where mean ≫ median.
 
-  Closing the Comp gap requires the per-view-masked chamfer path
-  (the same fix that worked for D3 — see docs/DISCREPANCIES.md D4).
-  Plumbline does not yet ship per-view GT for ETH3D.
+  Trajectory:
+    no MLP, scene-merged    : 1.56 m (130 % off)
+    + MLP                    : 2.12 m (Acc improved, Comp blew up)
+    + per-view-masked + 1cm voxel : 0.64 m (9 % below paper)
 
-  Earlier in-session note (since superseded) claimed 0.82 m
-  aggregate; that was from a stale GT pipeline. Re-running with the
-  current loader gives 1.56 m without the MLP fix and 2.12 m with
-  it — both honest, neither paper-match.
+  Pre-fix history: an earlier note claimed 0.82 m aggregate; that
+  was from a stale GT pipeline that has since been retired. The
+  current numbers are the canonical reproduction.

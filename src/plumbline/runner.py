@@ -253,6 +253,16 @@ def evaluate(
             )
             if pv is not None:
                 pred_pts, gt_pts = pv
+                # Per-chunk voxel_downsample BEFORE accumulating, mirroring
+                # the legacy scene-merged path. ETH3D clouds (millions of
+                # points / scene) make scene-agg ICP + chamfer untractable
+                # without this; DTU clouds (~800 K / scan) don't strictly
+                # need it but the cost is negligible. Honors the configured
+                # ``scene_voxel_size``; gating on > 0 keeps a "no
+                # downsample" escape valve via ``scene_voxel_size: 0``.
+                if scene_voxel_size and scene_voxel_size > 0:
+                    pred_pts = voxel_downsample(pred_pts, scene_voxel_size).astype(np.float32)
+                    gt_pts = voxel_downsample(gt_pts, scene_voxel_size).astype(np.float32)
                 scene = sample.sample_id.split("/", 1)[0]
                 scene_points.setdefault(scene, []).append(pred_pts)
                 scene_gt_masked.setdefault(scene, []).append(gt_pts)
@@ -742,45 +752,66 @@ def _per_view_masked_clouds(
             prediction.depth, prediction.intrinsics, prediction.extrinsics
         )
     V_p, H_p, W_p, _ = pmap.shape
-    V_gt, H, W = sample.depth_gt.shape
+    V_gt, H_gt_canvas, W_gt_canvas = sample.depth_gt.shape
     if V_p != V_gt:
         log.warning(
             "per-view-masked: pred view count %d != GT view count %d", V_p, V_gt
         )
         return None
-    # NN-downsample GT depth + valid to (H_p, W_p).
-    yi = (np.arange(H_p) * (H / H_p)).astype(np.int64)
-    xi = (np.arange(W_p) * (W / W_p)).astype(np.int64)
-    gt_depth_p = sample.depth_gt[:, yi[:, None], xi[None, :]].astype(np.float64)  # (V, H_p, W_p)
-    gt_valid_p = sample.depth_valid[:, yi[:, None], xi[None, :]] & (gt_depth_p > 0)
 
-    # Rescale sample.intrinsics from native (H, W) to processed (H_p, W_p).
-    K = sample.intrinsics.astype(np.float64).copy()  # (V, 3, 3)
-    sx = W_p / W
-    sy = H_p / H
-    K[:, 0, :] *= sx
-    K[:, 1, :] *= sy
+    # Per-view native sizes — datasets with varying-native-size views (ETH3D)
+    # populate ``metadata['native_sizes']`` as a list of (H_i, W_i) at *image*
+    # native; datasets with uniform views (DTU) leave it unset and the GT
+    # canvas IS native. ``metadata['gt_sizes']`` separately describes the
+    # depth_gt's per-view actual extent within the canvas, useful when the
+    # loader renders at a smaller-than-native resolution to keep cache size
+    # bounded (e.g. ETH3D rendered at max-dim 2048 vs 6048 image native).
+    # When unset, gt_sizes defaults to native_sizes.
+    native_sizes = sample.metadata.get("native_sizes") if sample.metadata else None
+    if native_sizes is None:
+        native_sizes = [(H_gt_canvas, W_gt_canvas)] * V_p
+    gt_sizes = sample.metadata.get("gt_sizes") if sample.metadata else None
+    if gt_sizes is None:
+        gt_sizes = native_sizes
+
+    K_native = sample.intrinsics.astype(np.float64)  # (V, 3, 3) in per-view native px
     E_world_from_cam = sample.extrinsics_gt.astype(np.float64)  # (V, 4, 4) rebased
-
-    # Vectorised unproject of GT depth at pred resolution. Same arithmetic
-    # as runner._back_project_depth but skipping invalid pixels.
     u = np.arange(W_p, dtype=np.float64)
     v = np.arange(H_p, dtype=np.float64)
-    uu, vv = np.meshgrid(u, v, indexing="xy")  # (H_p, W_p)
+    uu, vv = np.meshgrid(u, v, indexing="xy")
+
     gt_pts_world = np.empty((V_p, H_p, W_p, 3), dtype=np.float64)
+    gt_depth_p = np.empty((V_p, H_p, W_p), dtype=np.float64)
+    gt_valid_p = np.zeros((V_p, H_p, W_p), dtype=np.bool_)
     for i in range(V_p):
-        d = gt_depth_p[i]
-        fx = K[i, 0, 0]
-        fy = K[i, 1, 1]
-        cx = K[i, 0, 2]
-        cy = K[i, 1, 2]
+        H_n, W_n = int(native_sizes[i][0]), int(native_sizes[i][1])
+        H_g, W_g = int(gt_sizes[i][0]), int(gt_sizes[i][1])
+        # NN-sample GT depth at the depth_gt-render resolution. depth_gt is
+        # stored at canvas size with the actual data in [..., :H_g, :W_g];
+        # the rest is padding (zero depth / False valid).
+        yi = (np.arange(H_p) * H_g / H_p).astype(np.int64)
+        xi = (np.arange(W_p) * W_g / W_p).astype(np.int64)
+        d = sample.depth_gt[i, yi[:, None], xi[None, :]].astype(np.float64)
+        valid = sample.depth_valid[i, yi[:, None], xi[None, :]] & (d > 0)
+        # Per-view K rescaled image-native → pred res. K_native is in image
+        # native px (matches sample.images for view i); pred_pixel
+        # corresponds to image_native_pixel × (H_p/H_n, W_p/W_n) by
+        # construction of the model adapter's resize.
+        sx_i = W_p / max(W_n, 1)
+        sy_i = H_p / max(H_n, 1)
+        fx = K_native[i, 0, 0] * sx_i
+        fy = K_native[i, 1, 1] * sy_i
+        cx = K_native[i, 0, 2] * sx_i
+        cy = K_native[i, 1, 2] * sy_i
         x_cam = (uu - cx) * d / max(fx, 1e-12)
         y_cam = (vv - cy) * d / max(fy, 1e-12)
         z_cam = d
-        p_cam = np.stack([x_cam, y_cam, z_cam], axis=-1)  # (H_p, W_p, 3)
+        p_cam = np.stack([x_cam, y_cam, z_cam], axis=-1)
         R = E_world_from_cam[i, :3, :3]
         t = E_world_from_cam[i, :3, 3]
         gt_pts_world[i] = p_cam @ R.T + t
+        gt_depth_p[i] = d
+        gt_valid_p[i] = valid
 
     # Center crop both pred + GT to per_view_crop x per_view_crop. Crop is
     # in pred-pixel coordinates (where the model "sees" 224x224 of detail);
