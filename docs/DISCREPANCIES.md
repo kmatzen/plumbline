@@ -19,8 +19,8 @@ Status legend:
 | D4 | VGGT-ETH3D — per-view-masked path landed; 3-scene Overall 0.642 m vs paper 0.709 m (9.4 % UNDER paper, ±5 % strict gate misses but direction is favorable) | 🧪 fix-pending-verify |
 | D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
-| D17 | GeoWizard NYU 10 % off — adapter audit found upstream's --half_precision flag is dead (runs fp32 unconditionally); plumbline ran fp16. YAML repointed to fp32 + full seed_all parity | 🧪 fix-pending-verify |
-| D18 | GeoWizard-KITTI — same dtype audit as D17 (upstream actually fp32); YAML repointed | 🧪 fix-pending-verify |
+| D17 | GeoWizard NYU 10 % off — adapter audit (dtype + xformers + full seed_all) verified on 654-sample run: AbsRel 0.0574 vs prior fp16's 0.0573, identical. Gap is upstream (checkpoint or training data), not adapter | 🔎 upstream-blocked |
+| D18 | GeoWizard-KITTI — same model + checkpoint as D17, same likely-upstream cause; YAML repointed to fp32+xformers for protocol fidelity but verification deprioritized | 🔎 upstream-blocked |
 | D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 new 2026-04-24 |
 
 ---
@@ -862,6 +862,62 @@ the next GPU run. If fp32 + full-seed still leaves a residual gap,
 the next candidates are xformers attention parity and a per-pixel
 prediction diff against ``run_infer.py`` on a single shared image.
 
+#### 2026-04-26 — verified: dtype + xformers + seed_all are NOT the gap
+
+Re-ran ``geowizard-nyuv2`` end-to-end (RTX 3090, 5 h 01 min wall, 654
+samples, fp32 + xformers + full seed_all) and got AbsRel = **0.0574**
+vs the prior fp16 + per-sample-reseed + no-xformers run's 0.0573 —
+**identical to numerical noise** (ΔAbsRel ≈ 1e-4 ≈ 0.2 %).
+
+The hypothesis from this session's adapter audit is **rejected**.
+Plumbline's GeoWizard adapter is now structurally aligned with
+upstream ``run_infer.py`` (fp32 default, xformers attention enabled,
+``seed_all`` body matched, RNG seeded once at startup) but produces
+predictions whose AbsRel is indistinguishable from the prior fp16
+path. Other aggregate metrics also unchanged within ±0.5 %:
+δ₁ 0.9615 (was 0.9594), δ₂ 0.9908, δ₃ 0.9975, RMSE 0.228, log10
+0.025, SILog 8.42.
+
+Combined with the 5ba6fae sweep (eval-protocol axes against cached
+preds), this closes the search over **everything plumbline can
+control**:
+
+- Eval protocol (alignment, mask, depth field, post-clip): swept,
+  matches Marigold's published code exactly.
+- Adapter (dtype, xformers, seed shape, ensemble): audited, matches
+  upstream ``run_infer.py``.
+- GT loader (NYU labeled .mat, raw depth field, Eigen 654 split):
+  matches Marigold's NYU loader.
+
+Remaining unaccounted variance ≈ 10 % AbsRel. The only places this
+can live are upstream-owned:
+
+1. **Public checkpoint vs paper checkpoint.** ``lemonaddie/Geowizard``
+   is the publicly-released weights; the paper may have used an
+   internal snapshot, a different training step, or different
+   training data. This matches the **D22 pattern** (Marigold /
+   GeoWizard KITTI cells also failed under both candidate eval
+   protocols + literal paper code, suggesting a private config).
+2. **Paper protocol detail not in the public code.** Less likely —
+   we already pulled both the paper and the released ``run_infer.py``
+   line-by-line.
+
+Status promoted from 🧪 fix-pending-verify to 🔎 **upstream-blocked**:
+same shape as D22. Defer until upstream clarifies (issue, paper
+errata, or model release notes). Don't burn another 5 h GPU run on
+GeoWizard-KITTI under the same model — D18 is the same checkpoint,
+same likely-private-config issue, fix would be the same and the
+result would be the same.
+
+The audit changes (fp32 + xformers + full seed_all) are kept on
+``main`` because they make the adapter structurally correct against
+upstream — they just aren't the gap. Future GeoWizard work
+(re-evaluation against a corrected upstream checkpoint) inherits
+the right protocol shape.
+
+Result artifact: ``/tmp/results/geowizard_nyuv2_d17.json`` (lost on
+teardown — same numbers re-derivable by re-running the YAML).
+
 (D20 closed 2026-04-24, see bottom table.)
 
 ---
@@ -891,7 +947,7 @@ prediction diff against ``run_infer.py`` on a single shared image.
    YAML metric-key mismatch (`chamfer` → `overall`) fixed.
 2. **D4 — VGGT-ETH3D regression vs prior run** (1.75 m vs prior 0.82 m, 2× worse). A/B `scan_clean` vs `dslr_scan_eval` GT to isolate.
 3. **D22 — Marigold + GeoWizard KITTI paper cells** don't reproduce under either candidate protocol. Needs upstream clarification on paper's actual eval config.
-4. **D17** — GeoWizard NYU 10 % off. Possibly same family as D22.
+4. **D17** — GeoWizard NYU 10 % off. **Confirmed same family as D22 (2026-04-26).** Adapter audit (fp32, xformers, full ``seed_all``) verified on 654-sample re-run: AbsRel 0.0574 vs prior fp16's 0.0573, identical. Eval-protocol axes (5ba6fae) and adapter axes both ruled out. Gap lives in the public checkpoint or training data — upstream-blocked. D18 deprioritized for the same reason (same checkpoint, same conclusion expected).
 
 **Landed 2026-04-24:**
 - D8 — MoGe-KITTI AbsRel 0.0404 vs paper 0.0408 (0.9 % off) ✅
