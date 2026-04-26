@@ -46,27 +46,29 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
-  Observed (3 scenes merged per paper protocol, 137 8-view windows,
-  1 cm voxel):
+  Observed 2026-04-26 with the scan_alignment.mlp fix (commit
+  fbc2524) on the 3-scene subset, 137 8-view windows, 1 cm voxel,
+  scene-merged chamfer:
 
       scene          Acc      Comp     Overall
-      courtyard      1.3101   0.5206   0.9153
-      delivery_area  0.7161   0.3917   0.5539
-      facade         1.4972   0.4712   0.9842
-      aggregate      1.1745   0.4612   0.8178
+      courtyard      1.469    1.601    1.535
+      delivery_area  0.285    6.186    3.235
+      facade         0.545    2.622    1.583
+      aggregate      0.766    3.470    2.118
 
-  Aggregate Overall 0.8178 m vs paper 0.709 m — 15% higher, well
-  within the subset-vs-full-split caveat. Completeness aggregate
-  (0.461) is actually *below* paper (0.518). delivery_area alone
-  beats the paper average at Overall 0.554 m.
+  Aggregate Overall 2.118 m vs paper 0.709 m. **Acc aggregate 0.766
+  is BETTER than paper's 0.901** — VGGT's predictions on these
+  3 scenes are tighter than paper's full-split mean. Comp blew up
+  because GT (now correctly placed by the MLP fix) extends well past
+  the camera-visible region. delivery_area Comp 6.19 m is
+  dominated by laser-scan points the cameras never see —
+  scan2.ply has a ~13 m translation in that scene's MLP.
 
-  Protocol: aggregation: scene (new in plumbline ~2026-04-20) fuses
-  per-window ICP-aligned point clouds per scene, voxel-downsamples
-  at 1 cm (ETH3D tool default), then computes Acc/Comp/Overall in
-  meters. Replaces the earlier per-window F@5cm which was a ~100x
-  protocol mismatch (see prior commits for the diagnostic).
+  Closing the Comp gap requires the per-view-masked chamfer path
+  (the same fix that worked for D3 — see docs/DISCREPANCIES.md D4).
+  Plumbline does not yet ship per-view GT for ETH3D.
 
-  Predecessor per-window run under the old F@5cm protocol:
-  F@5cm=0.82%, chamfer=6.27 m — those numbers remain valid for the
-  old protocol but aren't comparable to the paper; kept in the git
-  history (commit d696284) for reference.
+  Earlier in-session note (since superseded) claimed 0.82 m
+  aggregate; that was from a stale GT pipeline. Re-running with the
+  current loader gives 1.56 m without the MLP fix and 2.12 m with
+  it — both honest, neither paper-match.

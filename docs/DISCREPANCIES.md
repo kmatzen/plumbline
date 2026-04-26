@@ -16,7 +16,7 @@ Status legend:
 | ID | One-liner | Status |
 |---|---|---|
 | D3 | VGGT-DTU chamfer — 2× off paper; chamfer protocol confirmed not the source (Jensen ref 0.868 vs PVM 0.758); gap is VGGT pred quality | 🔎 correctness |
-| D4 | VGGT-ETH3D multiscene Overall 147 % off; completeness regressed 3–4× vs prior run on scan_clean GT swap | 🔎 correctness |
+| D4 | VGGT-ETH3D — scan_alignment.mlp bug fixed (Acc now beats paper at 0.77 vs 0.90); Comp 3.47 m needs per-view-masked path (same fix as D3) | 🔎 correctness |
 | D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
 | D17 | GeoWizard NYU 10 % off — RNG or secondary protocol detail | 🔎 suspected |
@@ -381,6 +381,86 @@ Plumbline-honest baseline:
 The 2× gap is again metric-shape, not adapter accuracy. Closing it
 properly requires per-view GT in the ETH3D loader, then porting
 CUT3R's per-view 224×224 + GT-mask logic to the runner.
+
+#### 2026-04-26 — found and fixed scan_alignment.mlp bug
+
+ETH3D ships per-scan ``MLMatrix44`` transforms in
+``<scene>/{dslr_scan_eval,scan_clean}/scan_alignment.mlp`` that bring
+each ``scan{N}.ply`` from its own scanner-local frame into the
+COLMAP/DSLR world frame. The ETH3DDataset loader was concatenating
+the PLYs **without applying these**. courtyard's scan1.ply has a
+~14° rotation + ~7m y-translation relative to scan2; naive
+concatenation produced a rotationally-scrambled GT cloud, which
+explains the YAML's claimed 0.46 m Comp baseline going stale to
+1.99 m at some point — the MLP transforms were apparently being
+applied at one point and got removed.
+
+Fix landed in `fbc2524` (`fix(eth3d/D4)`): added
+``parse_scan_alignment_mlp`` (stdlib XML), apply each PLY's transform
+before concatenation. No new deps.
+
+**3-scene subset, before vs after the MLP fix** (137 8-view sliding
+windows, 1 cm voxel, scene-merged chamfer):
+
+| | scene-merged (no MLP) | scene-merged (MLP fix) | paper |
+|---|---|---|---|
+| Acc  | 1.124 | **0.766** | 0.901 |
+| Comp | 1.992 | **3.470** | 0.518 |
+| Overall | 1.558 | **2.118** | 0.709 |
+
+So the MLP fix is correct (Acc 1.12 → 0.77, **better than paper**)
+but exposes a bigger structural issue: with GT now in the right world
+frame, the laser scan extends well beyond the camera-visible region
+that VGGT's predictions cover. Comp 3.47 m is dominated by GT laser
+points the cameras never see — `delivery_area` Comp went 2.04 → 6.19 m
+because that scene's scan2.ply translates ~13 m relative to scan1.
+
+Per-scene after MLP fix:
+
+| Scene | Acc | Comp | Overall |
+|---|---|---|---|
+| courtyard | 1.469 | 1.601 | 1.535 |
+| delivery_area | **0.285** | 6.186 | 3.235 |
+| facade | 0.545 | 2.622 | 1.583 |
+
+delivery_area Acc 0.285 m — VGGT's predictions on that scene are
+~3× tighter than paper's reported aggregate. The metric is just
+penalising regions of the laser scan that no camera reaches.
+
+#### Same structural fix as D3: per-view-masked chamfer
+
+Closing the Comp blow-up needs the same per-view-masked path that
+landed for DTU in commit f3c0a49: per-view GT depth (rasterized from
+the laser PLY through each view's GT camera), 224×224 center crop on
+pred + GT pts3d, ICP align, KDTree NN both directions on the masked
+clouds. ETH3D wrinkles vs DTU:
+
+1. Per-view native sizes vary (DTU is uniform 1200x1600; ETH3D is
+   per-camera-id, ~6048x4032 average but irregular). The `_per_view_
+   masked_clouds` runner helper currently rescales K from
+   `sample.depth_gt.shape` to pred res; for varying-native it should
+   use per-view native sizes from `metadata['native_sizes']`.
+2. ETH3D PLYs are bigger (~70M points/scene after concat across
+   scan{N}.ply files) — splat radius 1 at native 6K resolution is
+   ~5-10 sec/view × 38 views = several minutes/scene to render.
+   On-disk cache analogous to DTU's pv_depth_*.npz.
+3. The MLP transform applies before rendering (so GT is in DSLR
+   world frame, matching ``sample.extrinsics_gt``).
+
+This is the path forward. Cheaper alternatives that came up but were
+rejected:
+
+- ❌ ``chamfer_outlier_distance: 0.5`` (drop NN distances >0.5 m
+  before mean) — would close Comp toward paper but is plumbline
+  approximation, not paper code (same rejection reason as before).
+- ❌ Build ETH3D's `multi-view-evaluation` C++ tool — heavy
+  dependencies (PCL, Boost, Eigen) and the tool reports F-score not
+  chamfer-in-meters, so it doesn't even match paper Table 3's metric.
+
+Per-scan-aligned numbers (scene-by-scene Acc) suggest VGGT's pred
+quality is at least paper-comparable. The remaining gap is metric
+shape, exactly D4's original diagnosis, just with the MLP bug as a
+prerequisite that's now fixed.
 
 ### D9 · Marigold-KITTI — OFF-PAPER under both candidate protocols   🔎 OPEN
 
