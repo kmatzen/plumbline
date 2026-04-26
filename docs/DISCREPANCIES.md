@@ -984,6 +984,7 @@ One-line reference; full diagnosis in the linked commit message.
 | D15 | DA-V2 NYU ~0.002 AbsRel systematic downshift (S/B/L) | 📝 below-threshold |
 | D16 | MoGe-DIODE-indoor combined-val citation demoted | ✅ `603e717` |
 | D19 | MoGe-DIODE-both `scale_shift_clamped` alignment | ✅ 2026-04-23 verify: 0.0406 vs paper 0.0400 (1.5 % off) |
+| D19* | MoGe-DIODE-both regression (loader missing FoV-warp; observed 0.1088 vs paper 0.0400, 2.7× off) | ✅ 2026-04-26: ported MoGe's `EvalDataLoaderPipeline._process_instance` (1024×768 homographic FoV-warp) into `DIODEMogeEvalLoader`; verified 0.0407, 1.7 % off paper |
 | D8 | MoGe-KITTI — port MoGe's homographic FoV-crop to `KITTIMogeEvalLoader` | ✅ 2026-04-24 verify: 0.0404 vs paper 0.0408 (0.9 % off) |
 | D20 | Scene-aggregation memory bloat — eager per-chunk voxel_downsample + DTU voxel_size unit fix | ✅ `8827a87` + `1fc0f9c`: D3 completes without OOM (51 mm, 8 GB peak RSS vs 28 GB prior) |
 | D21 | Prediction cache key → stale hits on loader preprocessing change — fingerprint input tensor | ✅ `8827a87`, regression test `test_input_fingerprint_invalidates_on_change` |

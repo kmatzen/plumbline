@@ -34,7 +34,7 @@ cells are now ℹ️ instead of ✅.
 | **Metric3D-v2 L** | ✅ **0.0660** vs 0.063 | ✅ **0.0495** vs 0.052 | — | — | — | — | — |
 | **Metric3D-v2 Giant** | ✅ **0.0702** vs 0.067 | ✅ **0.0503** vs 0.051 | — | — | — | — | — |
 | **DA3** | ✅ δ₁ **0.9684** vs 0.974 | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | — | 🎯 **0.0150** (δ₁ 0.9994) _(no paper target)_ |
-| **MoGe-1 ViT-L** | ✅ **0.0342** vs 0.0341 | ⚠️ **0.0447** vs 0.0408 _(9.4% off; D8 structural protocol)_ | ⚠️ mean 2481 / median 0.025 vs 0.040 _(D19 pred-disparity clamp)_ | — | — | — | 🎯 **0.0094** (δ₁ 0.9999) _(no paper target)_ |
+| **MoGe-1 ViT-L** | ✅ **0.0342** vs 0.0341 | ⚠️ **0.0447** vs 0.0408 _(9.4% off; D8 structural protocol)_ | ✅ **0.0407** vs 0.0400 _(1.7% off; FoV-warp port 2026-04-26)_ | — | — | — | 🎯 **0.0094** (δ₁ 0.9999) _(no paper target)_ |
 | **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ℹ️ _(paper publishes ViT-L only as 10-dataset avg)_ | ⌛ | — | — | — | ⌛ |
 | **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — | — |
 | **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ⚠️ **0.1090** vs 0.099 _(10.1% off; D9)_ | — | — | — | — | — |
@@ -45,15 +45,16 @@ cells are now ℹ️ instead of ✅.
 
 ### Paper-match count (post 2026-04-21 run)
 
-**13 ✅ mono-depth cells** with `source_confidence: verified_pdf`:
+**14 ✅ mono-depth cells** with `source_confidence: verified_pdf`:
 
 - NYU (8): DA-V2 S/B/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3
 - KITTI (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
+- DIODE (1): MoGe-1 ViT-L (combined val) — landed 2026-04-26 via FoV-warp port
 
-**6 ⚠️ off-paper cells** (each root-caused in `docs/DISCREPANCIES.md`):
+**5 ⚠️ off-paper cells** (each root-caused in `docs/DISCREPANCIES.md`):
 
-- MoGe-1 KITTI (D8), MoGe-1 DIODE (D19), Marigold KITTI (D9),
-  GeoWizard NYU (D17), GeoWizard KITTI (D18), VGGT ETH3D (D4 fix
+- MoGe-1 KITTI (D8), Marigold KITTI (D9), GeoWizard NYU (D17, upstream-
+  blocked), GeoWizard KITTI (D18, upstream-blocked), VGGT ETH3D (D4 fix
   landed, awaiting D20-perf verification).
 
 **Multi-view ✅ cells**: 0. VGGT ETH3D previously counted is now ⚠️
@@ -77,7 +78,11 @@ See [AUDIT.md](./reproductions/AUDIT.md) for per-YAML verification.
 2. **D8 / D9 / D18 · `KITTIMogeEvalLoader` + protocol** — closes MoGe,
    Marigold, and GeoWizard KITTI cells under a shared structural protocol
    delta. 4–6 h laptop fix.
-3. **D19 · MoGe-DIODE per-sample disparity clamp** — median lands on
+3. **D19 · MoGe-DIODE FoV-warp** — ✅ closed 2026-04-26 by porting
+   MoGe's `_process_instance` to `DIODEMogeEvalLoader` (1.7% off paper).
+   The historical entry below is left for reference.
+
+   **D19 historical (pre-fix)** · MoGe-DIODE per-sample disparity clamp — median lands on
    paper; mean is blown up by outdoor outliers. ~1 h laptop fix.
 4. **D10 · VGGT-ETH3D full 13-scene split** — 3-scene subset can't
    match the 13-scene aggregate. Either stage the remaining scenes
@@ -148,8 +153,8 @@ value.
 | `moge2-vitl-nyuv2-metric` | MoGe-2 ViT-L, NYU, **no alignment** | `abs_rel` | _n/a_ | **0.0899** | n/a | δ₁=0.9455, RMSE=0.407 m. MoGe-2's metric prediction without any per-scene fitting — 9% error out of the box on indoor Kinect. ~2.6× higher than scale_shift-aligned (0.0342) so alignment still helps, but metric-useful as-is for SLAM / reconstruction. Trails Metric3Dv2 metric NYU (0.066) by ~35%. |
 | `marigold-v1-1-nyuv2` | Marigold v1-1 on NYUv2 Eigen (Marigold Table 1) | `abs_rel` | **0.055** | **0.0577** | ±15% | ✅ **MATCH** (2026-04-19, 3090 Ti, 4 steps × 10 ensemble). δ₁=0.9605. **Audit 2026-04-20:** citation verified — Marigold paper Table 1 (quantitative zero-shot comparison), NYUv2 AbsRel column, 'Ours (w/ ensemble)' row = 5.5 → 0.055. Earlier citation said "Table 2" but that's the training-noise ablation; depth results are in Table 1. First diffusion-depth adapter validated. |
 | `depth-pro-nyuv2` | Depth Pro (Apple) on NYUv2 Eigen | `delta_1` | _n/a_ | **0.9347** | n/a | ℹ️ Informational — **Audit 2026-04-20 downgrade:** the previous ✅ **MATCH vs 0.961** was a fabrication. Depth Pro paper (Bochkovskii et al. 2024) Table 1 evaluates Booster/ETH3D/Middlebury/NuScenes/Sintel/Sun-RGBD **only** — NYU is not in the paper's eval set, and no 0.961 cell exists for Depth Pro anywhere. The observed 0.9347 is a legitimate OOD datapoint (metric-zero-shot, no alignment, fp16) but it is not a paper-match. |
-| `moge-vitl-diode-indoor` | MoGe-1 ViT-L on DIODE val-indoor (MoGe Table 3, aff-inv disparity, combined-val target) | `abs_rel` | **0.0400** | **0.0465** | ±20% | RTX 3090 Ti, 2026-04-19, 325 indoor samples, ROE. δ₁=0.9505. **Audit 2026-04-20:** citation corrected Table 2 → Table 3. Observed 0.0465 is +16% over the combined-val paper cell (this YAML runs indoor-only; `moge-vitl-diode-both` is the apples-to-apples slice). |
-| `moge-vitl-diode-both` | MoGe-1 ViT-L on DIODE combined val (MoGe Table 3, aff-inv disparity) | `abs_rel` | **0.0400** | **0.1088** | ±15% | RTX 3090 Ti, 2026-04-19, 771 samples, ROE + **boundary mask**. δ₁=0.8999. **Audit 2026-04-20:** citation corrected Table 2 → Table 3. Boundary mask (MoGe paper protocol — exclude depth-discontinuity pixels) cut the gap from 4.0× to 2.7× over paper (prior run was 0.1993 without the mask). Remaining gap likely from MoGe's preprocessed segmentation masks that aren't in raw DIODE. HF archive downloading. |
+| `moge-vitl-diode-indoor` | MoGe-1 ViT-L on DIODE val-indoor (MoGe Table 3, aff-inv disparity, combined-val target) | `abs_rel` | _n/a_ | **0.0324** | n/a | ℹ️ Informational (no per-domain paper cell — paper reports combined val). RTX 3090, 2026-04-26, 325 indoor samples, scale_shift_clamped, post FoV-warp port. δ₁=0.9762. Beats DA-V2-S DIODE-indoor (0.0722) and the combined-val paper cell (0.0400) — indoor is the easier slice. |
+| `moge-vitl-diode-both` | MoGe-1 ViT-L on DIODE combined val (MoGe Table 3, aff-inv disparity) | `abs_rel` | **0.0400** | **0.0407** | ±5% | ✅ **MATCH** (RTX 3090, 2026-04-26, 771 samples, scale_shift_clamped). δ₁=0.9716, RMSE=2.04 m. Closed by porting MoGe's `EvalDataLoaderPipeline._process_instance` (homographic FoV-warp to 1024×768) into `DIODEMogeEvalLoader` — same fix that closed D8 (KITTI-MoGe). The prior 0.1088 was the model running on the raw DIODE image rather than the FoV-warped frame the paper evaluates. |
 | _VGGT / ETH3D courtyard smoke_ | VGGT-1B, 4 views, first sample | `pose_auc@5°` | — | **0.91** | n/a | informational only. Rotation errors <0.3°/view; translation cos <0.6°/view. |
 | _MASt3R / ETH3D courtyard pairs_ | MASt3R ViT-L, 35 consecutive 2-view samples | `pose_auc@5°` | — | **0.46** | n/a | informational only. Mean rotation error 0.32°/pair; translation cos 3.42°. 2-view setup (PairViewer) — Umeyama needs N≥3 so no chamfer. |
 | _VGGT / ETH3D courtyard view-count sweep_ | VGGT-1B on 31 sliding 8-view windows | pairwise `pose_auc@5°` | — | see below | n/a | informational. Reports both absolute per-view and pairwise relative-pose AUC (the latter matches paper tables). Peak at 4 views: **pw@5°=0.66**, abs@5°=0.67. |
