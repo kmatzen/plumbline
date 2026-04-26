@@ -37,6 +37,7 @@ from __future__ import annotations
 import hashlib
 import math
 import os
+import random
 import sys
 from typing import Any
 
@@ -157,6 +158,17 @@ class GeoWizardAdapter(Model):
             torch_dtype=torch_dtype,
         ).to(self.device)
         self._pipe.set_progress_bar_config(disable=True)
+        # Match upstream ``run_infer.py``: try to enable xformers memory-
+        # efficient attention; silently fall back to vanilla SDP if the
+        # xformers wheel isn't compatible. Upstream gates inference behind
+        # this call (best-effort), so for paper-protocol parity we do the
+        # same. Numerics differ slightly from vanilla SDP but the
+        # paper-row was produced with xformers enabled. Speed: ~4-5× for
+        # the 10×10 ensemble at processing_res=768 on a 3090.
+        try:
+            self._pipe.enable_xformers_memory_efficient_attention()
+        except Exception:
+            pass
         # Upstream's __call__ does NOT accept a `generator` kwarg; seed the
         # global RNG right before each sample instead (see predict()).
         self._generator = None
@@ -176,13 +188,19 @@ class GeoWizardAdapter(Model):
         # Plumbline previously reseeded per-sample (``manual_seed(seed +
         # i)``) which guaranteed per-sample reproducibility but produced
         # different ensemble denoising trajectories than upstream — D17
-        # diagnosis.
-        first_call = self._model is None
+        # diagnosis. Also matches upstream's ``seed_all`` body: random,
+        # numpy, torch, and torch.cuda. ``ensemble_depths`` calls
+        # ``scipy.optimize.minimize(BFGS)`` whose convergence path is
+        # deterministic given the input but the helper imports
+        # ``random``/``np.random`` upstream — match for paranoia.
+        first_call = self._pipe is None
         self._load()
         from PIL import Image as PImage
 
         torch = ensure_torch()
         if first_call:
+            random.seed(self.seed)
+            np.random.seed(self.seed)
             torch.manual_seed(self.seed)
             if torch.cuda.is_available():
                 torch.cuda.manual_seed_all(self.seed)
@@ -233,9 +251,12 @@ class GeoWizardAdapter(Model):
             f"/res={self.processing_res}/dtype={self.dtype}/seed={self.seed}"
             # rng_mode tracks the per-sample RNG seeding scheme; bumped
             # 2026-04-26 to match upstream ``run_infer.py``'s "seed once
-            # at startup" pattern (D17). Old cache entries stay intact
-            # under the previous hash; the new path runs fresh.
-            "/rng_mode=once_at_startup"
+            # at startup" pattern (D17). v2 adds random+numpy seeding
+            # for full ``seed_all`` parity. v3 enables xformers
+            # attention (changes attention numerics — paper-protocol).
+            # Old cache entries stay intact under the previous hash;
+            # the new path runs fresh.
+            "/rng_mode=once_at_startup_v3_xformers"
         )
         return hashlib.sha256(s.encode()).hexdigest()[:16]
 
