@@ -38,7 +38,7 @@ cells are now ℹ️ instead of ✅.
 | **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ℹ️ _(paper publishes ViT-L only as 10-dataset avg)_ | ⌛ | — | — | — | ⌛ |
 | **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — | — |
 | **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ⚠️ **0.1090** vs 0.099 _(10.1% off; D9)_ | — | — | — | — | — |
-| **GeoWizard** | ⚠️ **0.0573** vs 0.052 _(10.2% off; D17)_ | ⚠️ **0.131** vs 0.097 _(35.2% off; D18)_ | — | — | — | — | — |
+| **GeoWizard** | ⚠️ **0.0574** vs 0.052 _(10.5% off; D17 upstream-blocked, fp32+xformers verified 2026-04-26)_ | ⚠️ **0.131** vs 0.097 _(35.2% off; D18 same upstream-blocked cause)_ | — | — | — | — | — |
 | **Depth Pro** | ℹ️ δ₁ **0.9347** _(paper does not evaluate NYU — earlier 0.961 pin was fabricated)_ | ⌛ | — | — | — | — | — |
 | **MASt3R** (2-view) | — | — | — | 2-view pose sweep | — | 🚧 | — |
 | **VGGT** | — | — | — | ⚠️ 0.818 m vs 0.709 _(D4 fix landed; awaiting D20 verification)_ | 🧪 D3 fix landed; awaiting D20 verification (v0.1 gate 0.382) | 🚧 | — |
