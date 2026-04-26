@@ -67,6 +67,17 @@ fixed:
   # scene_voxel_size is unused on the per-view-masked path (no inner
   # voxel_downsample); kept here so a future demote to the
   # legacy scene-merged path remains a one-line YAML edit.
-  scene_voxel_size: 1.0
+  # No per-chunk voxel downsample on the per-view-masked DTU path —
+  # 1 mm voxel collapses pred (in pred-frame ≈ metres) when gt is in
+  # mm, since the voxel size is interpreted in the cloud's native
+  # frame. Per-sample camera-centres Umeyama before voxel can fix
+  # this but didn't improve over the voxel-free path on a 22-scan
+  # sweep (0.85 vs 0.76 m Overall). DTU clouds are tractable without
+  # the voxel (~800 K masked points / scan total).
+  scene_voxel_size: 0
+  # 32 views is the verified baseline (8592db9: 0.758 m Overall on
+  # 22 scans). 2026-04-26 sweep with all 49 views gave 0.85 m — no
+  # improvement. The adapter cap was bumped to 49 in case future
+  # protocols can use more, but DTU stays at 32.
   max_views: 32
   tasks: [mvs_depth, pose]

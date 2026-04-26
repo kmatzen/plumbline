@@ -257,9 +257,13 @@ def evaluate(
                 # the legacy scene-merged path. ETH3D clouds (millions of
                 # points / scene) make scene-agg ICP + chamfer untractable
                 # without this; DTU clouds (~800 K / scan) don't strictly
-                # need it but the cost is negligible. Honors the configured
-                # ``scene_voxel_size``; gating on > 0 keeps a "no
-                # downsample" escape valve via ``scene_voxel_size: 0``.
+                # need it. CAUTION: this voxel applies to pred AND gt at
+                # their per-sample frames — if pred and gt are in different
+                # units (VGGT-DTU: pred ≈ metres, gt = mm), a single
+                # ``scene_voxel_size`` would collapse one side. The cleanest
+                # escape is ``scene_voxel_size: 0`` (DTU's choice) and let
+                # the scene-level ICP + chamfer absorb the larger clouds.
+                # ETH3D pred and gt happen to share metres so it works.
                 if scene_voxel_size and scene_voxel_size > 0:
                     pred_pts = voxel_downsample(pred_pts, scene_voxel_size).astype(np.float32)
                     gt_pts = voxel_downsample(gt_pts, scene_voxel_size).astype(np.float32)

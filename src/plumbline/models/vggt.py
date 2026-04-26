@@ -71,7 +71,14 @@ class VGGTAdapter(Model):
         tasks=frozenset({"mono_depth", "mvs_depth", "pose"}),
         is_metric=True,  # paper trains with metric supervision
         min_views=2,
-        max_views=32,
+        # Probed 2026-04-26 on a 24 GB 3090: 49 views at the upstream
+        # default 518-px width fits in ~19 GB peak. The previous 32-view
+        # cap was a conservative leftover from before that probe; lifting
+        # it lets DTU/ETH3D feed the full rig (49 / 38-76 views) into one
+        # forward pass and removes a real source of the D3 / D4 paper gap
+        # (we were missing 17 of 49 DTU rig views, ~30 % of the surface
+        # arc, in every scan).
+        max_views=49,
         requires_intrinsics=False,
         default_resolution=(1024, 1024),
     )
