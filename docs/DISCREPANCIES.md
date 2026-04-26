@@ -15,7 +15,7 @@ Status legend:
 
 | ID | One-liner | Status |
 |---|---|---|
-| D3 | VGGT-DTU chamfer — 2× off paper; chamfer protocol confirmed not the source (Jensen ref 0.868 vs PVM 0.758); gap is VGGT pred quality | 🔎 correctness |
+| D3 | VGGT-DTU chamfer — root cause = missing PatchmatchNet [99] geometric-consistency filter (cited via MASt3R §4.5; VGGT §4.2 "Following MASt3R"); verbatim port landed, awaiting GPU verify | 🧪 fix-pending-verify |
 | D4 | VGGT-ETH3D — per-view-masked path landed; 3-scene Overall 0.642 m vs paper 0.709 m (9.4 % UNDER paper, ±5 % strict gate misses but direction is favorable) | 🧪 fix-pending-verify |
 | D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
@@ -382,6 +382,84 @@ Artifacts on this box (will be lost when teardown):
   pred PLYs for all 22 scans.
 - `/tmp/diff/jensen_22.tsv` — per-scan Jensen results.
 - `/tmp/diff/STAGE_DIFF.md` — full stage-by-stage diff.
+
+#### 2026-04-26 — root cause: missing geometric-consistency filter [99]
+
+Audited VGGT's own repo (`facebookresearch/vggt`) across `main` /
+`evaluation` / `eval_wip` / `save_my_life` / `training`. **No DTU
+eval code on any branch** — only Co3D camera-pose eval (the `evaluation`
+branch). Same outcome as the prior MASt3R/DUSt3R/MVSNet/CUT3R audit.
+
+VGGT paper §4.2 says "Following MASt3R [62]" for DTU. Pulled the
+MASt3R paper (`arXiv:2406.09756`):
+
+- §4.5 (main): "We finally perform MVS by triangulating the obtained
+  matches. Note that the matching is performed in full resolution
+  without prior knowledge of cameras, and the latter are only used to
+  triangulate matches in ground-truth reference frame. **We remove
+  spurious 3D points via geometric consistency post-processing [99].**"
+- App. A "MVS on DTU": "the point clouds are raw values obtained via
+  triangulation of the coarse-to-fine matches of MASt3R."
+- §4.5 metrics paragraph: "we report the average accuracy, completeness
+  and Chamfer distances error metrics **as provided by the authors of
+  the benchmarks**" — confirms the metric itself is the canonical
+  Jensen DTU toolkit (which we already ran, getting 0.868 mm vs paper
+  0.382).
+
+**Reference [99] is Wang et al., PatchmatchNet, CVPR 2021** —
+specifically its `eval.py::filter_depth` post-processing. That code
+is public at `FangjinhuaWang/PatchmatchNet`. The DTU recipe is in
+`eval.sh`:
+
+```
+--num_views 5 --image_max_dim 1600 --geo_mask_thres 3 --photo_thres 0.8
+--geo_pixel_thres 1.0 (default) --geo_depth_thres 0.01 (default)
+```
+
+Per-ref-view algorithm (`eval.py:86-255`):
+
+1. For each ref view i, take its top-K source views from `pair.txt`.
+2. For each src view j: reproject ref→src using ref's depth, sample
+   src's depth at the projected pixel, reproject back to ref. Mask
+   pixels where reproj-pixel-error < `geo_pixel_thres` AND
+   relative-depth-diff < `geo_depth_thres`.
+3. `final_mask = (#agreeing_src_views ≥ geo_mask_thres) AND
+   (photo_conf > photo_thres)`.
+4. Average depth across agreeing views, unproject filtered pixels to
+   world, concat across all ref views → `fused.ply`.
+5. `fused.ply` is what gets chamfered with the Jensen toolkit.
+
+Plumbline pipeline today: predicted depth → unproject every pixel →
+no inter-view consistency check → chamfer. The paper drops outliers
+that disagree across views; we don't. This is consistent with our
+observed gap shape: Acc 0.874 (paper 0.389, 2.25× off) is more
+inflated than Comp 0.642 (paper 0.374, 1.72× off) — the unfiltered
+pred has a long tail of outliers that the paper's filter would
+suppress.
+
+**Action landed this session:** verbatim port of PatchmatchNet's
+`reproject_with_depth` + `check_geometric_consistency` + multi-source
+aggregation as `runner._geometric_consistency_mask`. Wired into
+`_per_view_masked_clouds` as an optional pre-filter ANDed with
+GT validity. `dtu_vggt_table2.yaml` toggles it on with
+PatchmatchNet's DTU thresholds (`geo_pixel_thres 1.0`,
+`geo_depth_thres 0.01`, `geo_mask_thres 3`); `photo_thres` is
+dropped because VGGT's `depth_conf` is unbounded (would need
+separate calibration). Source-view selection uses top-K nearest
+predicted-camera-centre instead of `pair.txt`'s visual-overlap
+ranking — equivalent for DTU's dense circular rig.
+
+Convention adapter: PatchmatchNet stores extrinsics as
+`cam_from_world`; plumbline as `world_from_cam`. The substitution
+is `E_src @ inv(E_ref)` → `inv(Ew_src) @ Ew_ref`.
+
+Synthetic sanity (laptop): on a 4-cam circular rig observing a flat
+plane, the filter keeps ~70 % of consistent pixels. Corrupting half
+of view 0's depth: corrupted half kept 0 %, clean half kept 70 %.
+
+Status: 🧪 FIX-PENDING-VERIFY pending GPU re-run. Expected: Acc
+collapses toward paper (the long outlier tail goes away); Comp
+slightly improves; Overall lands near 0.4 mm on the 22-scan mean.
 
 ### D4 · VGGT-ETH3D multiscene — STRUCTURAL PROTOCOL MISMATCH   🔎 OPEN
 

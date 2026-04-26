@@ -109,6 +109,11 @@ def evaluate(
     scene_voxel_size: float = 0.01,
     per_view_masked: bool = False,
     per_view_crop: int = 224,
+    geometric_consistency: bool = False,
+    geo_pixel_thres: float = 1.0,
+    geo_depth_thres: float = 0.01,
+    geo_mask_thres: int = 3,
+    geo_num_src_views: int = 4,
     show_progress: bool = True,
 ) -> Report:
     """Evaluate a model on a dataset and return a :class:`Report`.
@@ -246,10 +251,20 @@ def evaluate(
             # against ``sample.point_cloud_gt``. Reference:
             # ``CUT3R/eval/mv_recon/launch.py`` lines ~195-260 +
             # ``utils.py::accuracy/completion``.
+            geo_mask = None
+            if geometric_consistency:
+                geo_mask = _geometric_consistency_mask(
+                    prediction=prediction,
+                    num_src_views=geo_num_src_views,
+                    geo_pixel_thres=geo_pixel_thres,
+                    geo_depth_thres=geo_depth_thres,
+                    geo_mask_thres=geo_mask_thres,
+                )
             pv = _per_view_masked_clouds(
                 prediction=prediction,
                 sample=trimmed_sample,
                 per_view_crop=per_view_crop,
+                geo_mask=geo_mask,
             )
             if pv is not None:
                 pred_pts, gt_pts = pv
@@ -716,11 +731,141 @@ def _bbox_similarity_warm_start(
     return s, np.eye(3), t
 
 
+def _geometric_consistency_mask(
+    *,
+    prediction: Prediction,
+    num_src_views: int,
+    geo_pixel_thres: float,
+    geo_depth_thres: float,
+    geo_mask_thres: int,
+) -> NDArray[np.bool_] | None:
+    """Per-view geometric-consistency mask, ported from PatchmatchNet's eval.
+
+    For each ref view i, reproject ref→src→ref through every pred-cam pair
+    using ref's depth and src's depth (top-K nearest src views by camera
+    centre). A ref pixel agrees with a src view when reproj-pixel-error
+    < ``geo_pixel_thres`` AND relative-depth-diff < ``geo_depth_thres``.
+    Pixels that agree with at least ``geo_mask_thres`` source views are
+    kept.
+
+    This is the post-processing cited by MASt3R §4.5 ("we remove spurious
+    3D points via geometric consistency post-processing [99]") and inherited
+    by VGGT §4.2 ("Following MASt3R"). Reference [99] is Wang et al.,
+    PatchmatchNet, CVPR 2021. Verbatim port of
+    ``FangjinhuaWang/PatchmatchNet`` ``eval.py::reproject_with_depth`` +
+    ``check_geometric_consistency`` + ``filter_depth`` (lines 86-255).
+
+    Convention adapter: PatchmatchNet stores extrinsics as
+    ``cam_from_world``; plumbline as ``world_from_cam``. Substitute
+    ``E_src_cam_from_world @ E_world_from_ref_cam`` →
+    ``inv(Ew_src) @ Ew_ref``.
+
+    Returns a boolean ``(V, H, W)`` array, or ``None`` if essential
+    prediction fields are missing.
+    """
+    if (
+        prediction.depth is None
+        or prediction.intrinsics is None
+        or prediction.extrinsics is None
+    ):
+        return None
+    depth = prediction.depth.astype(np.float64)  # (V, H, W) — predicted z-depth
+    K = prediction.intrinsics.astype(np.float64)  # (V, 3, 3) at pred-pixel res
+    Ew = prediction.extrinsics.astype(np.float64)  # (V, 4, 4) world_from_cam
+    if depth.ndim != 3 or K.shape[0] != depth.shape[0] or Ew.shape[0] != depth.shape[0]:
+        return None
+    V, H, W = depth.shape
+    if V < 2 or num_src_views < 1:
+        return np.ones((V, H, W), dtype=np.bool_)
+
+    # Camera centres in world frame: c_w = Ew @ [0,0,0,1] = Ew[:,3].
+    centres = Ew[:, :3, 3]  # (V, 3)
+    # Pairwise distances; for each ref pick top-K closest other views.
+    # PatchmatchNet uses ``pair.txt`` (visual-overlap ranking from
+    # MVSNet preprocessing); we approximate with camera-centre k-NN.
+    D = np.linalg.norm(centres[:, None, :] - centres[None, :, :], axis=-1)
+    np.fill_diagonal(D, np.inf)
+    src_order = np.argsort(D, axis=1)[:, : int(num_src_views)]  # (V, k)
+
+    # Pre-build pixel grid once; reused for every (ref, src) pair.
+    x_grid, y_grid = np.meshgrid(np.arange(W), np.arange(H))
+    x_ref_flat = x_grid.reshape(-1).astype(np.float64)
+    y_ref_flat = y_grid.reshape(-1).astype(np.float64)
+    ones_flat = np.ones_like(x_ref_flat)
+
+    geo_sum = np.zeros((V, H, W), dtype=np.int32)
+    eps = 1e-12
+    for i in range(V):
+        K_ref = K[i]
+        K_ref_inv = np.linalg.inv(K_ref)
+        Ew_ref_inv = np.linalg.inv(Ew[i])  # cam_from_world for ref
+        d_ref = depth[i].reshape(-1)
+        valid_ref = d_ref > 0
+        if not valid_ref.any():
+            continue
+        # Ref pixels → ref-cam 3D
+        xyz_ref_cam = K_ref_inv @ np.vstack((x_ref_flat, y_ref_flat, ones_flat)) * d_ref
+        for j in src_order[i]:
+            K_src = K[j]
+            d_src = depth[j]
+            # cam_from_world @ world_from_ref_cam = src_cam_from_ref_cam
+            T_src_from_ref = np.linalg.inv(Ew[j]) @ Ew[i]
+            xyz_in_src = (
+                T_src_from_ref[:3, :3] @ xyz_ref_cam + T_src_from_ref[:3, 3:4]
+            )
+            uv_src_h = K_src @ xyz_in_src
+            z_src_proj = uv_src_h[2]
+            # Avoid div-by-zero at the rear half-space.
+            valid_proj = z_src_proj > eps
+            xy_src = np.where(valid_proj, uv_src_h[:2] / np.where(valid_proj, z_src_proj, 1.0), -1.0)
+            x_src = xy_src[0]
+            y_src = xy_src[1]
+            # Bilinear-ish: nearest-pixel sample (matches PatchmatchNet's
+            # cv2.remap default but using NN here for simplicity / no
+            # cv2 dependency; bilinear is straightforward to add later).
+            xi = np.round(x_src).astype(np.int64)
+            yi = np.round(y_src).astype(np.int64)
+            in_bounds = (xi >= 0) & (xi < W) & (yi >= 0) & (yi < H) & valid_proj
+            sampled = np.zeros_like(d_ref)
+            sampled[in_bounds] = d_src[yi[in_bounds], xi[in_bounds]]
+            # Reproject src → ref-cam → ref-pixel
+            xyz_src_cam = (
+                np.linalg.inv(K_src)
+                @ np.vstack((xy_src, ones_flat))
+                * sampled
+            )
+            T_ref_from_src = Ew_ref_inv @ Ew[j]
+            xyz_back_ref_cam = (
+                T_ref_from_src[:3, :3] @ xyz_src_cam + T_ref_from_src[:3, 3:4]
+            )
+            depth_reproj = xyz_back_ref_cam[2]
+            uv_back = K_ref @ xyz_back_ref_cam
+            z_back = uv_back[2]
+            valid_back = (z_back > eps) & in_bounds & (sampled > 0)
+            xy_back = np.where(valid_back, uv_back[:2] / np.where(valid_back, z_back, 1.0), 1e9)
+            dist_px = np.sqrt(
+                (xy_back[0] - x_ref_flat) ** 2 + (xy_back[1] - y_ref_flat) ** 2
+            )
+            rel_depth_diff = np.where(
+                d_ref > eps, np.abs(depth_reproj - d_ref) / np.maximum(d_ref, eps), 1e9
+            )
+            agree = (
+                (dist_px < geo_pixel_thres)
+                & (rel_depth_diff < geo_depth_thres)
+                & valid_back
+                & valid_ref
+            )
+            geo_sum[i] += agree.reshape(H, W).astype(np.int32)
+
+    return geo_sum >= int(geo_mask_thres)
+
+
 def _per_view_masked_clouds(
     *,
     prediction: Prediction,
     sample: Sample,
     per_view_crop: int,
+    geo_mask: NDArray[np.bool_] | None = None,
 ) -> tuple[NDArray[np.float32], NDArray[np.float32]] | None:
     """Build per-view 3D clouds for the CUT3R per-view-masked chamfer.
 
@@ -839,6 +984,19 @@ def _per_view_masked_clouds(
     pred_crop = pmap[:, crop[0], crop[1], :]
     gt_crop = gt_pts_world[:, crop[0], crop[1], :]
     valid_crop = gt_valid_p[:, crop[0], crop[1]]
+
+    # AND in the optional geometric-consistency mask (PatchmatchNet [99],
+    # cited by MASt3R §4.5 and inherited by VGGT §4.2 via "Following MASt3R").
+    # Mask is at pred-pixel resolution; crop the same window.
+    if geo_mask is not None:
+        if geo_mask.shape != pmap.shape[:3]:
+            log.warning(
+                "geo_mask shape %s != pred (V,H,W) %s; skipping",
+                geo_mask.shape,
+                pmap.shape[:3],
+            )
+        else:
+            valid_crop = valid_crop & geo_mask[:, crop[0], crop[1]]
 
     pred_concat = pred_crop[valid_crop].astype(np.float32, copy=False)
     gt_concat = gt_crop[valid_crop].astype(np.float32, copy=False)
