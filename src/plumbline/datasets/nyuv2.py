@@ -102,6 +102,7 @@ class NYUv2Dataset(Dataset):
         indices: list[int] | None = None,
         apply_eigen_crop: bool = False,
         depth_field: str = "raw",
+        max_gt_depth: float | None = None,
     ) -> None:
         root_path = Path(root) if root else env_path("NYUV2_ROOT")
         if root_path is None or not root_path.exists():
@@ -137,6 +138,18 @@ class NYUv2Dataset(Dataset):
                 f"depth_field must be 'raw' or 'filled'; got {depth_field!r}"
             )
         self.depth_field = depth_field
+        # Optional pre-fit GT upper bound, matching the Marigold /
+        # GeoWizard ``valid_mask = (depth > min) AND (depth < max) AND
+        # eigen_crop`` convention. On the NYU labeled set this is
+        # essentially a no-op — Kinect saturation pixels are written as
+        # 0 (already excluded by ``depth > 0``), not as values above
+        # 10 m — so it doesn't close D17's 10 % gap to paper. Kept as a
+        # structural knob for parity and for datasets where the
+        # equivalent matters (e.g. KITTI's 80 m bound). Default
+        # ``None`` preserves the prior behaviour.
+        self.max_gt_depth = (
+            float(max_gt_depth) if max_gt_depth is not None else None
+        )
 
     def __iter__(self) -> Iterator[Sample]:
         import h5py
@@ -180,6 +193,8 @@ class NYUv2Dataset(Dataset):
                     top, bot, left, right = EIGEN_CROP
                     mask[top:bot, left:right] = True
                     mask &= depth > 0
+                    if self.max_gt_depth is not None:
+                        mask &= depth < self.max_gt_depth
                     depth_valid = mask[None]
                 yield Sample(
                     sample_id=f"nyuv2_{idx:05d}",
