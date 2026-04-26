@@ -14,7 +14,11 @@ model:
     num_inference_steps: 10
     ensemble_size: 10
     processing_res: 768
-    dtype: float16
+    # Upstream's run_infer.py --half_precision flag is dead (dtype set
+    # but never applied to the pipeline). Canonical paper-protocol is
+    # fp32. Same fix as geowizard-nyuv2; carries D17's diagnosis to the
+    # parallel D18 KITTI cell.
+    dtype: float32
     seed: 2024
 
 scale_alignment: scale_shift_depth

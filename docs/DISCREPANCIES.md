@@ -19,8 +19,8 @@ Status legend:
 | D4 | VGGT-ETH3D — per-view-masked path landed; 3-scene Overall 0.642 m vs paper 0.709 m (9.4 % UNDER paper, ±5 % strict gate misses but direction is favorable) | 🧪 fix-pending-verify |
 | D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
-| D17 | GeoWizard NYU 10 % off — eval protocol confirmed correct (swept all alignment + mask combos against cached preds); gap is in the model output, not eval shape | 🔎 suspected |
-| D18 | GeoWizard-KITTI — OFF-PAPER under both protocols (closest 14 % under kitti_moge_eval, 45 % under marigold_kitti_eval) | 🔎 secondary-delta |
+| D17 | GeoWizard NYU 10 % off — adapter audit found upstream's --half_precision flag is dead (runs fp32 unconditionally); plumbline ran fp16. YAML repointed to fp32 + full seed_all parity | 🧪 fix-pending-verify |
+| D18 | GeoWizard-KITTI — same dtype audit as D17 (upstream actually fp32); YAML repointed | 🧪 fix-pending-verify |
 | D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 new 2026-04-24 |
 
 ---
@@ -800,6 +800,67 @@ equivalent matters (KITTI 80 m). Useful for D9 / D18 follow-ups.
 Per-pixel diagnostic at ``/tmp/diff/d17_probe.py`` (lost on
 teardown — same logic re-creatable from the cached predictions on
 S3 and the loader as of commit ``d4d6f68``).
+
+#### 2026-04-26 — adapter audit: ``--half_precision`` is dead in upstream
+
+Pulled GeoWizard's repo and read ``geowizard/run_infer.py`` +
+``run_infer_v2.py`` end-to-end against the plumbline adapter.
+Findings:
+
+1. **dtype mismatch (likely culprit).** Both upstream entrypoints
+   define a ``--half_precision`` CLI flag and assign
+   ``dtype = torch.float16`` to a local variable when it's set, but
+   they NEVER apply that dtype to the pipeline. The components are
+   loaded via ``from_pretrained(...)`` without ``torch_dtype=``
+   (default fp32), the ``DepthNormalEstimationPipeline`` is
+   constructed, and the only subsequent move is
+   ``pipe.to(device)`` — which moves to GPU but does not change
+   dtype. So upstream paper-protocol effectively runs **fp32
+   regardless of the flag**. Plumbline's adapter, however, threads
+   ``torch_dtype=torch.float16`` into ``from_pretrained()`` when
+   ``dtype="float16"``, and the YAML pinned ``dtype: float16`` —
+   so plumbline genuinely ran fp16. This is the first plausible
+   adapter-side explanation for the 10 % gap. Marigold (same
+   ancestor, same dead-flag pattern) ships
+   ``reproductions/marigold_v1_1_*.yaml`` with ``dtype: float32``
+   already and matches paper; GeoWizard's YAMLs were the outlier.
+2. **``seed_all`` parity.** Upstream's ``utils/seed_all.py`` seeds
+   ``random``, ``np.random``, ``torch.manual_seed``, and
+   ``torch.cuda.manual_seed_all``. Plumbline previously seeded
+   torch + cuda only. ``ensemble_depths`` calls scipy BFGS
+   (deterministic given inputs) but the helper imports ``random``
+   and ``np.random`` so we match for paranoia.
+3. **xformers attention.** Upstream tries
+   ``pipe.enable_xformers_memory_efficient_attention()`` if
+   available. Plumbline doesn't. Possible second-order numerics
+   delta but not the dominant source.
+4. **Pipeline body** (``geowizard_pipeline.py``) — read end-to-end:
+   image preprocessing (``resize_max_res`` PIL default + ``rgb/255 *
+   2 - 1``), ensemble construction (``stack`` × ensemble_size,
+   ``DataLoader`` with batch_size=1), denoising loop (DDIM, the
+   joint depth+normal repeat-2 trick), ``ensemble_depths``
+   defaults (``regularizer_strength=0.02, max_iter=2, tol=1e-3,
+   reduction='median'``), and final scale-to-[0,1] all match
+   plumbline's path.
+
+Fixes landed this session:
+
+- ``geowizard_nyuv2.yaml`` and ``geowizard_kitti.yaml``: pin
+  ``dtype: float32`` with an inline comment citing the dead-flag
+  audit (D17/D18).
+- ``GeoWizardAdapter.predict``: add ``random.seed`` +
+  ``np.random.seed`` so the seed call body matches upstream's
+  ``seed_all`` exactly. ``rng_mode`` bumped to ``once_at_startup_v2``
+  in ``config_hash`` so old fp16 cache entries don't shadow the new
+  fp32 + full-seed run.
+- ``GeoWizardAdapter.predict``: fixed an ``AttributeError`` shipped
+  in ``e5dcc29`` — the ``first_call`` guard checked
+  ``self._model`` (which doesn't exist), should be ``self._pipe``.
+
+Status: 🧪 FIX-PENDING-VERIFY for both D17 (NYU) and D18 (KITTI) on
+the next GPU run. If fp32 + full-seed still leaves a residual gap,
+the next candidates are xformers attention parity and a per-pixel
+prediction diff against ``run_infer.py`` on a single shared image.
 
 (D20 closed 2026-04-24, see bottom table.)
 

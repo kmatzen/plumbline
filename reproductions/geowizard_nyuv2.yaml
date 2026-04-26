@@ -14,7 +14,12 @@ model:
     num_inference_steps: 10
     ensemble_size: 10
     processing_res: 768
-    dtype: float16
+    # Upstream's run_infer.py defines a --half_precision flag but never
+    # applies it: dtype is set as a local variable, the pipeline is loaded
+    # without torch_dtype, and pipe.to(device) doesn't change dtype. The
+    # canonical paper-protocol therefore runs fp32. fp16 here was a
+    # plumbline-specific deviation contributing to D17's 10 % gap.
+    dtype: float32
     seed: 2024
 
 scale_alignment: scale_shift_depth
