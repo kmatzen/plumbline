@@ -61,7 +61,13 @@ from plumbline.datasets._common import (
 from plumbline.datasets.base import Dataset, Sample
 from plumbline.datasets.registry import register_dataset
 
-__all__ = ["ETH3DDataset", "parse_colmap_cameras", "parse_colmap_images", "quat_to_rot"]
+__all__ = [
+    "ETH3DDataset",
+    "parse_colmap_cameras",
+    "parse_colmap_images",
+    "parse_scan_alignment_mlp",
+    "quat_to_rot",
+]
 
 
 @register_dataset("eth3d")
@@ -224,11 +230,32 @@ class ETH3DDataset(Dataset):
             cache_key = (rec["scene"], tuple(ply_rels))
             pcd = self._gt_cache.get(cache_key)
             if pcd is None:
+                # Apply per-scan MLMatrix44 transforms from
+                # ``scan_alignment.mlp`` if present, so all scan{N}.ply
+                # files come out in the COLMAP / DSLR world frame
+                # before concatenation. Without this, scans live in
+                # individual scanner frames whose pairwise rotation
+                # is up to ~14° (e.g. courtyard scan1) — concatenated
+                # GT is then rotationally scrambled relative to pred,
+                # which inflates Comp by 3–4× (D4 regression).
+                scan_alignment: dict[str, NDArray[np.float64]] = {}
+                if ply_rels:
+                    mlp_dir = (self.root / ply_rels[0]).parent
+                    mlp_path = mlp_dir / "scan_alignment.mlp"
+                    if mlp_path.exists():
+                        scan_alignment = parse_scan_alignment_mlp(mlp_path)
                 chunks: list[NDArray[np.float32]] = []
                 for rel in ply_rels:
                     p = self.root / rel
-                    if p.exists():
-                        chunks.append(load_ply_xyz(p))
+                    if not p.exists():
+                        continue
+                    pts = load_ply_xyz(p)
+                    M = scan_alignment.get(p.name)
+                    if M is not None and pts.size > 0:
+                        R = M[:3, :3]
+                        t = M[:3, 3]
+                        pts = (pts.astype(np.float64) @ R.T + t).astype(np.float32)
+                    chunks.append(pts)
                 if chunks:
                     pcd = np.concatenate(chunks, axis=0)
                     # ETH3D scan_clean is ~38M points/scene; chamfer on that is
@@ -335,6 +362,47 @@ def quat_to_rot(q: NDArray[Any]) -> NDArray[np.float64]:
         ],
         dtype=np.float64,
     )
+
+
+def parse_scan_alignment_mlp(path: Path) -> dict[str, NDArray[np.float64]]:
+    """Parse an ETH3D ``scan_alignment.mlp`` (MeshLab project) file.
+
+    Returns ``{scan_filename: 4x4 transform}`` mapping each PLY's
+    filename to the 4x4 ``MLMatrix44`` that brings its points from
+    scanner-local coordinates into the scene's COLMAP/DSLR world
+    frame. ETH3D ships these per scene; without them, ``scan1.ply``
+    and ``scan2.ply`` live in different scanner frames and a naive
+    concatenation produces a rotationally-misaligned GT cloud.
+
+    The file is small XML; we use the stdlib parser instead of pulling
+    a dependency. Schema (per ETH3D)::
+
+        <MeshLabProject>
+          <MeshGroup>
+            <MLMesh label="scan2.ply" filename="scan2.ply">
+              <MLMatrix44>
+                m00 m01 m02 m03
+                m10 m11 m12 m13
+                m20 m21 m22 m23
+                0   0   0   1
+              </MLMatrix44>
+            </MLMesh>
+            ...
+    """
+    import xml.etree.ElementTree as ET
+
+    out: dict[str, NDArray[np.float64]] = {}
+    tree = ET.parse(path)
+    for mesh in tree.iterfind(".//MLMesh"):
+        fname = mesh.get("filename") or mesh.get("label") or ""
+        m_node = mesh.find("MLMatrix44")
+        if not fname or m_node is None or not m_node.text:
+            continue
+        nums = [float(x) for x in m_node.text.split()]
+        if len(nums) != 16:
+            continue
+        out[fname] = np.asarray(nums, dtype=np.float64).reshape(4, 4)
+    return out
 
 
 def _resolve_scan_clean_plys(scene_dir: Path) -> list[Path]:
