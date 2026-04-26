@@ -19,7 +19,7 @@ Status legend:
 | D4 | VGGT-ETH3D — per-view-masked path landed; 3-scene Overall 0.642 m vs paper 0.709 m (9.4 % UNDER paper, ±5 % strict gate misses but direction is favorable) | 🧪 fix-pending-verify |
 | D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
-| D17 | GeoWizard NYU 10 % off — RNG or secondary protocol detail | 🔎 suspected |
+| D17 | GeoWizard NYU 10 % off — likely Marigold-style pre-fit gt<10m mask (plumbline only does post-alignment clip on pred); fix described, not landed | 🔎 suspected |
 | D18 | GeoWizard-KITTI — OFF-PAPER under both protocols (closest 14 % under kitti_moge_eval, 45 % under marigold_kitti_eval) | 🔎 secondary-delta |
 | D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 new 2026-04-24 |
 
@@ -600,6 +600,68 @@ off, after D1 + D2 fixes. Candidates:
 3. Processing resolution — 768 matches paper; unlikely the source.
 
 Priority: low. Defer to v0.2 with D9.
+
+#### 2026-04-26 — cross-repo audit (no fix landed)
+
+Same approach that worked for D3 + D4: pulled GeoWizard's official
+repo (`fuxiao0719/GeoWizard`) and Marigold's (since GeoWizard's paper
+follows the diffusion-depth lineage and shares the eval shape). What
+each ships:
+
+- **GeoWizard repo:** ships `run_infer.py` for inference + a
+  training script that *imports* `align_scale_shift` but doesn't
+  invoke it in any released eval pipeline. The metrics calculation
+  for Table 1 NYU AbsRel is **not in the public repo** — same
+  situation as MASt3R / DUSt3R for D3.
+
+- **Marigold repo (likely shared protocol):** ships
+  `script/depth/eval.py` + `src/util/alignment.py::align_depth_least_
+  square` + `src/dataset/nyu_dataset.py`. Their NYU eval:
+
+    - GT: NYU labeled, raw depth field, mm → m via /1000.
+    - Eigen crop: ``eval_mask[45:471, 41:601] = 1`` (matches
+      plumbline's `EIGEN_CROP = (45, 471, 41, 601)`).
+    - **Valid mask: ``(depth > 1e-3) AND (depth < 10.0) AND
+      eigen_crop``.** Both lower AND upper bound are part of the
+      pre-fit mask, not just a post-clip.
+    - Alignment: lstsq fit in depth space (``[pred, 1] @ [s, b] ≈
+      gt`` masked) — same as plumbline `scale_shift_depth`.
+    - Post-alignment: ``np.clip(pred, min_depth, max_depth)`` then
+      ``np.clip(pred, 1e-6, None)``.
+    - Per-image abs_rel via ``mean(|pred-gt|/gt)`` over valid pixels;
+      mean across the 654-image test split.
+
+- **Plumbline NYU loader (current):** valid_mask =
+  ``eigen_crop AND depth > 0`` — **does NOT enforce ``depth < 10``**
+  in the pre-fit mask. The 10 m upper bound only enters via the
+  post-alignment ``depth_clip = [0.001, 10]`` on PRED (not GT).
+
+#### Hypothesis (untested in-session)
+
+The Marigold-eval pre-fit upper bound on GT (gt < 10 m) is the most
+likely source of the 0.0573 → 0.052 gap. Concretely: any NYU pixels
+with raw Kinect depth slightly above 10 m (saturation / noise on
+specular surfaces) enter plumbline's lstsq fit and abs_rel sum, but
+not Marigold's. Excluding them shrinks both fit-target and metric
+support, biasing AbsRel toward paper.
+
+#### Suggested fix (not landed)
+
+Add a per-loader ``max_depth`` filter to ``NYUDataset.depth_valid``
+when ``apply_eigen_crop=True``, defaulting to 10.0 m to match the
+Marigold/GeoWizard convention. Alternatively (cleaner harness-wide):
+add a ``max_gt_depth`` knob to the ``nyu_eigen_2014`` protocol
+itself, defaulting to 10.0 m, and have the runner intersect the GT
+valid mask with ``gt <= max_gt_depth`` before alignment + metric.
+
+The same fix likely also applies to **D9 / D18** (Marigold/GeoWizard
+KITTI off-paper), where Marigold's analogous KITTI eval enforces
+``depth < 80 m`` in its valid_mask.
+
+Not landed in this session due to time. The diagnosis is the work;
+the fix is small and would benefit from a focused session that can
+run the full 654-sample eval to verify (cache miss in this session
+prevented a one-shot validation).
 
 (D20 closed 2026-04-24, see bottom table.)
 
