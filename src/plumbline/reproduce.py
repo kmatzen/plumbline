@@ -144,6 +144,11 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
         scene_voxel_size=float(cfg.get("scene_voxel_size", 0.01)),
         per_view_masked=bool(cfg.get("per_view_masked", False)),
         per_view_crop=int(cfg.get("per_view_crop", 224)),
+        geometric_consistency=bool(cfg.get("geometric_consistency", False)),
+        geo_pixel_thres=float(cfg.get("geo_pixel_thres", 1.0)),
+        geo_depth_thres=float(cfg.get("geo_depth_thres", 0.01)),
+        geo_mask_thres=int(cfg.get("geo_mask_thres", 3)),
+        geo_num_src_views=int(cfg.get("geo_num_src_views", 4)),
     )
 
     paper = cfg.get("paper_reference", {})

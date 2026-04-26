@@ -64,6 +64,23 @@ fixed:
   aggregation: scene
   per_view_masked: true
   per_view_crop: 224
+  # Geometric-consistency post-processing — PatchmatchNet ``eval.py``
+  # ``check_geometric_consistency`` + multi-source aggregation.
+  # MASt3R §4.5 cites this as ref [99] ("we remove spurious 3D points
+  # via geometric consistency post-processing"); VGGT §4.2 inherits via
+  # "Following MASt3R". Pre-filter that drops ref-view pixels that don't
+  # reproject consistently into ≥ ``geo_mask_thres`` source views (px
+  # error < ``geo_pixel_thres``, relative depth diff < ``geo_depth_thres``).
+  # Thresholds match PatchmatchNet ``eval.sh`` DTU defaults; only
+  # ``photo_thres`` is dropped (VGGT's depth_conf is unbounded — would
+  # need separate calibration). Source views per ref are top-K by
+  # predicted-camera-centre distance (PatchmatchNet uses pair.txt's
+  # visual-overlap ranking; equivalent for DTU's dense ring rig).
+  geometric_consistency: true
+  geo_pixel_thres: 1.0
+  geo_depth_thres: 0.01
+  geo_mask_thres: 3
+  geo_num_src_views: 4
   # scene_voxel_size is unused on the per-view-masked path (no inner
   # voxel_downsample); kept here so a future demote to the
   # legacy scene-merged path remains a one-line YAML edit.
