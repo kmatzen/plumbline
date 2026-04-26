@@ -330,6 +330,32 @@ source of the gap.
    - Whether paper's 0.382 includes any post-processing (TSDF fusion,
      pose refinement) absent from a raw VGGT forward pass.
 
+#### 2026-04-26 — view count NOT the gap (49 ≈ 32)
+
+Probed VGGT inference on all 49 DTU rig views (lifted adapter cap
+from 32 to 49 in commit `5ba6fae`+ branch — fits in 19 GB on a 3090
+in 25 sec). Three 22-scan sweeps:
+
+| run | views | scene_voxel_size | per-sample Umeyama | Overall mean | Overall median |
+|---|---|---|---|---|---|
+| 8592db9 baseline | 32 | 1.0 (no-op pre-voxel-fix) | no | **0.758** | 0.442 |
+| this session v3 | 49 | 0 | yes | 0.849 | 0.488 |
+| (this session v2 | 49 | 1.0 | yes | 1.489 | 0.816) |
+
+So **adding views (32 → 49) does not help** on this configuration —
+the per-scan numbers are similar or marginally worse. The 17 missing
+back-of-arc views aren't the dominant gap source.
+
+Side finding: commit `5221b24`'s per-chunk voxel_downsample on the
+per-view-masked path is unsafe when pred and GT are in different
+units (DTU: pred ≈ m, GT = mm). 1 mm voxel works for ETH3D (both in
+m) but collapses DTU pred to a few centroids. Fix in this session:
+DTU YAML pins ``scene_voxel_size: 0`` to skip the voxel; runner
+comment warns about the unit-frame coupling.
+
+Adapter cap stays at 49 (no harm in supporting more views) but
+DTU's ``max_views`` is back at 32 since 49 didn't improve.
+
 **Per-stage diff vs Jensen** (full table in
 `/tmp/diff/STAGE_DIFF.md`, summary):
 

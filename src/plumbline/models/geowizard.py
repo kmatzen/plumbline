@@ -169,20 +169,27 @@ class GeoWizardAdapter(Model):
         intrinsics: NDArray[np.float32] | None = None,
     ) -> Prediction:
         assert_valid_image(images, name="geowizard/input")
+        # Seed the global RNG ONCE on first predict() call, then let the
+        # state advance through subsequent samples. Matches upstream
+        # ``run_infer.py``'s ``seed_all(seed)`` at startup followed by a
+        # for-loop over images that advances the global RNG implicitly.
+        # Plumbline previously reseeded per-sample (``manual_seed(seed +
+        # i)``) which guaranteed per-sample reproducibility but produced
+        # different ensemble denoising trajectories than upstream — D17
+        # diagnosis.
+        first_call = self._model is None
         self._load()
         from PIL import Image as PImage
 
         torch = ensure_torch()
+        if first_call:
+            torch.manual_seed(self.seed)
+            if torch.cuda.is_available():
+                torch.cuda.manual_seed_all(self.seed)
         n, h, w, _ = images.shape
         depths = np.empty((n, h, w), dtype=np.float32)
         for i in range(n):
             pil = PImage.fromarray(images[i])
-            # Upstream's __call__ (geowizard_pipeline.py::__call__) does not
-            # accept a `generator` kwarg. Seed the global RNG per-sample for
-            # determinism — upstream samples torch's default RNG internally.
-            torch.manual_seed(self.seed + i)
-            if torch.cuda.is_available():
-                torch.cuda.manual_seed_all(self.seed + i)
             out = self._pipe(
                 pil,
                 denoising_steps=self.num_inference_steps,
@@ -224,6 +231,11 @@ class GeoWizardAdapter(Model):
             f"{self.name}@{self.version}/domain={self.domain}"
             f"/steps={self.num_inference_steps}/ens={self.ensemble_size}"
             f"/res={self.processing_res}/dtype={self.dtype}/seed={self.seed}"
+            # rng_mode tracks the per-sample RNG seeding scheme; bumped
+            # 2026-04-26 to match upstream ``run_infer.py``'s "seed once
+            # at startup" pattern (D17). Old cache entries stay intact
+            # under the previous hash; the new path runs fresh.
+            "/rng_mode=once_at_startup"
         )
         return hashlib.sha256(s.encode()).hexdigest()[:16]
 
