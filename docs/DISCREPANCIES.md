@@ -19,7 +19,7 @@ Status legend:
 | D4 | VGGT-ETH3D — per-view-masked path landed; 3-scene Overall 0.642 m vs paper 0.709 m (9.4 % UNDER paper, ±5 % strict gate misses but direction is favorable) | 🧪 fix-pending-verify |
 | D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
-| D17 | GeoWizard NYU 10 % off — likely Marigold-style pre-fit gt<10m mask (plumbline only does post-alignment clip on pred); fix described, not landed | 🔎 suspected |
+| D17 | GeoWizard NYU 10 % off — eval protocol confirmed correct (swept all alignment + mask combos against cached preds); gap is in the model output, not eval shape | 🔎 suspected |
 | D18 | GeoWizard-KITTI — OFF-PAPER under both protocols (closest 14 % under kitti_moge_eval, 45 % under marigold_kitti_eval) | 🔎 secondary-delta |
 | D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 new 2026-04-24 |
 
@@ -636,32 +636,66 @@ each ships:
   in the pre-fit mask. The 10 m upper bound only enters via the
   post-alignment ``depth_clip = [0.001, 10]`` on PRED (not GT).
 
-#### Hypothesis (untested in-session)
+#### Hypothesis tested + REJECTED — eval protocol is fine, gap is the model
 
-The Marigold-eval pre-fit upper bound on GT (gt < 10 m) is the most
-likely source of the 0.0573 → 0.052 gap. Concretely: any NYU pixels
-with raw Kinect depth slightly above 10 m (saturation / noise on
-specular surfaces) enter plumbline's lstsq fit and abs_rel sum, but
-not Marigold's. Excluding them shrinks both fit-target and metric
-support, biasing AbsRel toward paper.
+Pulled the cached GeoWizard NYU predictions from S3 and swept the
+plumbline-side protocol axes against them, computing AbsRel directly
+without re-running inference. 654-sample mean AbsRel:
 
-#### Suggested fix (not landed)
+| field | alignment | post-clip | mean | median |
+|---|---|---|---|---|
+| raw | scale_shift_depth | (1e-3, 10) | **0.0573** | 0.0451 |
+| raw | scale_shift_depth | (1e-3, 10), gt<10 | 0.0570 | 0.0450 |
+| raw | scale_shift_depth | none | 0.0570 | 0.0450 |
+| filled | scale_shift_depth | (1e-3, 10) | 0.0689 | 0.0522 |
+| raw | lstsq (scale-only, depth) | (1e-3, 10) | 0.2576 | 0.2529 |
+| raw | scale_shift (disparity) | (1e-3, 10) | 0.2173 | 0.2083 |
+| raw | scale_shift_robust | (1e-3, 10) | 0.1562 | 0.1277 |
 
-Add a per-loader ``max_depth`` filter to ``NYUDataset.depth_valid``
-when ``apply_eigen_crop=True``, defaulting to 10.0 m to match the
-Marigold/GeoWizard convention. Alternatively (cleaner harness-wide):
-add a ``max_gt_depth`` knob to the ``nyu_eigen_2014`` protocol
-itself, defaulting to 10.0 m, and have the runner intersect the GT
-valid mask with ``gt <= max_gt_depth`` before alignment + metric.
+Findings:
 
-The same fix likely also applies to **D9 / D18** (Marigold/GeoWizard
-KITTI off-paper), where Marigold's analogous KITTI eval enforces
-``depth < 80 m`` in its valid_mask.
+- **The pre-fit ``gt < 10 m`` mask hypothesis is wrong.** It moves
+  AbsRel by 0.4 % (0.0573 → 0.0570), not the 10 % needed. Kinect
+  saturation in NYU's labeled raw-depths is encoded as ``0``
+  (already excluded by ``depth > 0``), not as values >10 m, so
+  there's nothing to mask.
+- **``raw`` beats ``filled``** for GeoWizard preds (0.057 vs 0.069);
+  plumbline's ``depth_field='raw'`` default is correct. Marigold's
+  pre-extracted PNGs likely also use raw.
+- **``scale_shift_depth`` is the only alignment that gets close.**
+  Disparity-space (``scale_shift``) blows up to 0.22; depth-space
+  scale-only (``lstsq``, ``median``) blows up to 0.26. Plumbline's
+  default for GeoWizard is right.
+- **Median AbsRel 0.0451** is *below* paper's 0.0520 mean — if the
+  paper happens to report median we'd have over-matched. Most papers
+  report mean though.
 
-Not landed in this session due to time. The diagnosis is the work;
-the fix is small and would benefit from a focused session that can
-run the full 654-sample eval to verify (cache miss in this session
-prevented a one-shot validation).
+So D17 is structurally a D3-clone: **the chamfer/AbsRel protocol is
+already correct**; the 10 % gap is in the GeoWizard predictions
+themselves, not how we evaluate them. Candidate sources:
+
+1. RNG / ensemble seed — paper may seed differently and average over
+   different denoising trajectories than plumbline's
+   ``torch.manual_seed(seed + idx)``.
+2. dtype — plumbline runs ``float16``; paper-stated config in
+   their README is also fp16, but xformers vs not + cuDNN paths
+   could change low-bit output.
+3. Inference pipeline subtleties — plumbline mirrors ``run_infer.py``
+   but may differ at the ensemble-mode boundary
+   (``geowizard_pipeline.DepthNormalEstimationPipeline`` has knobs
+   we may not have all matched).
+
+#### Tiny structural cleanup that landed
+
+Added a ``max_gt_depth: float | None = None`` kwarg to
+``NYUv2Dataset`` (default ``None`` preserves prior behaviour). For
+NYU it's a no-op (no pixel >10 m); kept as a structural knob for
+parity with Marigold's eval shape and for datasets where the
+equivalent matters (KITTI 80 m). Useful for D9 / D18 follow-ups.
+
+Per-pixel diagnostic at ``/tmp/diff/d17_probe.py`` (lost on
+teardown — same logic re-creatable from the cached predictions on
+S3 and the loader as of commit ``d4d6f68``).
 
 (D20 closed 2026-04-24, see bottom table.)
 
