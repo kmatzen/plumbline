@@ -16,7 +16,7 @@ Status legend:
 | ID | One-liner | Status |
 |---|---|---|
 | D3 | VGGT-DTU chamfer — 2× off paper; chamfer protocol confirmed not the source (Jensen ref 0.868 vs PVM 0.758); gap is VGGT pred quality | 🔎 correctness |
-| D4 | VGGT-ETH3D — scan_alignment.mlp bug fixed (Acc now beats paper at 0.77 vs 0.90); Comp 3.47 m needs per-view-masked path (same fix as D3) | 🔎 correctness |
+| D4 | VGGT-ETH3D — per-view-masked path landed; 3-scene Overall 0.642 m vs paper 0.709 m (9.4 % UNDER paper, ±5 % strict gate misses but direction is favorable) | 🧪 fix-pending-verify |
 | D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
 | D17 | GeoWizard NYU 10 % off — RNG or secondary protocol detail | 🔎 suspected |
@@ -461,6 +461,57 @@ Per-scan-aligned numbers (scene-by-scene Acc) suggest VGGT's pred
 quality is at least paper-comparable. The remaining gap is metric
 shape, exactly D4's original diagnosis, just with the MLP bug as a
 prerequisite that's now fixed.
+
+#### 2026-04-26 — per-view-masked path landed, beats paper Overall
+
+ETH3D ``with_per_view_gt`` rendering + per-view-masked chamfer with
+per-chunk voxel_downsample at 1 cm:
+
+| | scene-merged + MLP | per-view-masked + MLP + voxel | paper |
+|---|---|---|---|
+| Acc      | 0.766 | **0.584** | 0.901 |
+| Comp     | 3.470 | **0.700** | 0.518 |
+| Overall  | 2.118 | **0.642** | 0.709 |
+
+Per-scene results:
+
+| scene | Acc | Comp | Overall | Overall_median |
+|---|---|---|---|---|
+| courtyard | 0.469 | 0.736 | 0.603 | 0.262 |
+| delivery_area | 0.513 | 1.065 | 0.789 | 0.380 |
+| facade | 0.770 | 0.299 | 0.535 | 0.151 |
+
+**Plumbline 0.642 mean / 0.265 median Overall vs paper 0.709 — 9.4 %
+UNDER paper, mean.** Direction is opposite of D3 (which was 2× over
+paper). Since paper's value is on the full 13-scene cross-scene
+mean and ours is on the 3-scene subset, the ±5 % strict gate is not
+the right comparison; the result is consistent with VGGT-on-3-scene
+being slightly easier than VGGT-on-13-scene. D10 (full 13-scene
+sweep) would close the apples-to-apples question.
+
+Implementation pieces this session:
+
+- ``ETH3DDataset.with_per_view_gt`` — renders per-view depth from
+  MLP-aligned PLY at native size capped to ``pv_render_max_dim=2048``,
+  caches per scene to ``<root>/.plumbline_manifest/eth3d_pv_depth_
+  <scene>_max2048_r1.npz`` (~0.5–1.5 GB / scene).
+- Runner ``_per_view_masked_clouds`` — generalised to use per-view
+  native sizes from ``metadata['native_sizes']`` (DTU stays on the
+  uniform-shape fast path) plus a separate ``metadata['gt_sizes']``
+  for when depth_gt is rendered at a smaller-than-native resolution.
+- Runner per-chunk ``voxel_downsample`` BEFORE accumulation in the
+  per-view-masked branch under ``aggregation=scene`` — without it,
+  ETH3D-scale clouds (5M+ points / scene) made scene-agg ICP +
+  chamfer untractable (>1 h, abandoned). With ``scene_voxel_size:
+  0.01`` (1 cm voxel), full 3-scene run finishes in ~36 min.
+- ``protocols/eth3d_vggt_table3.yaml`` — switched aggregation knobs
+  to ``per_view_masked: true`` (and moved the dataset's
+  ``with_per_view_gt: true``).
+
+Status: 🧪 FIX-PENDING-VERIFY. The 9.4 % vs paper is best-case
+explained by the 3-vs-13-scene subset; the actual ±5 % gate
+properly attaches to D10 (full-split sweep), not to this 3-scene
+configuration.
 
 ### D9 · Marigold-KITTI — OFF-PAPER under both candidate protocols   🔎 OPEN
 
