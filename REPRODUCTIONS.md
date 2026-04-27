@@ -29,7 +29,7 @@ cells are now ℹ️ instead of ✅.
 |---|---|---|---|---|---|---|---|
 | **DA-V2 Small** | ✅ **0.0510** vs 0.053 | ✅ **0.0770** vs 0.078 | ℹ️ **0.0722** _(no ViT-S paper cell under this protocol)_ | — | — | — | ⌛ |
 | **DA-V2 Base** | ✅ **0.0456** vs 0.049 | ✅ **0.0756** vs 0.078 | — | — | — | — | — |
-| **DA-V2 Large** | ✅ **0.0428** vs 0.0420 | ✅ **0.0710** vs 0.074 | — | — | — | — | 🎯 **0.0122** (δ₁ 0.9999) _(no paper target)_ |
+| **DA-V2 Large** | ✅ **0.0428** vs 0.0420 | ✅ **0.0710** vs 0.074 | ✅ **0.0529** vs 0.0533 _(landed 2026-04-27 via DIODE FoV-warp loader)_ | — | — | — | 🎯 **0.0122** (δ₁ 0.9999) _(no paper target)_ |
 | **DA-V2 Metric-Outdoor-L** | — | ℹ️ **0.0877** _(VKITTI-finetuned; no direct paper)_ | — | — | — | — | — |
 | **Metric3D-v2 L** | ✅ **0.0660** vs 0.063 | ✅ **0.0495** vs 0.052 | — | — | — | — | — |
 | **Metric3D-v2 Giant** | ✅ **0.0702** vs 0.067 | ✅ **0.0503** vs 0.051 | — | — | — | — | — |
@@ -45,11 +45,11 @@ cells are now ℹ️ instead of ✅.
 
 ### Paper-match count (post 2026-04-21 run)
 
-**14 ✅ mono-depth cells** with `source_confidence: verified_pdf`:
+**15 ✅ mono-depth cells** with `source_confidence: verified_pdf`:
 
 - NYU (8): DA-V2 S/B/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3
 - KITTI (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
-- DIODE (1): MoGe-1 ViT-L (combined val) — landed 2026-04-26 via FoV-warp port
+- DIODE (2): MoGe-1 ViT-L, DA-V2 ViT-L (both via FoV-warp loader, 2026-04-26/27)
 
 **5 ⚠️ off-paper cells** (each root-caused in `docs/DISCREPANCIES.md`):
 
@@ -155,6 +155,7 @@ value.
 | `depth-pro-nyuv2` | Depth Pro (Apple) on NYUv2 Eigen | `delta_1` | _n/a_ | **0.9347** | n/a | ℹ️ Informational — **Audit 2026-04-20 downgrade:** the previous ✅ **MATCH vs 0.961** was a fabrication. Depth Pro paper (Bochkovskii et al. 2024) Table 1 evaluates Booster/ETH3D/Middlebury/NuScenes/Sintel/Sun-RGBD **only** — NYU is not in the paper's eval set, and no 0.961 cell exists for Depth Pro anywhere. The observed 0.9347 is a legitimate OOD datapoint (metric-zero-shot, no alignment, fp16) but it is not a paper-match. |
 | `moge-vitl-diode-indoor` | MoGe-1 ViT-L on DIODE val-indoor (MoGe Table 3, aff-inv disparity, combined-val target) | `abs_rel` | _n/a_ | **0.0324** | n/a | ℹ️ Informational (no per-domain paper cell — paper reports combined val). RTX 3090, 2026-04-26, 325 indoor samples, scale_shift_clamped, post FoV-warp port. δ₁=0.9762. Beats DA-V2-S DIODE-indoor (0.0722) and the combined-val paper cell (0.0400) — indoor is the easier slice. |
 | `moge-vitl-diode-both` | MoGe-1 ViT-L on DIODE combined val (MoGe Table 3, aff-inv disparity) | `abs_rel` | **0.0400** | **0.0407** | ±5% | ✅ **MATCH** (RTX 3090, 2026-04-26, 771 samples, scale_shift_clamped). δ₁=0.9716, RMSE=2.04 m. Closed by porting MoGe's `EvalDataLoaderPipeline._process_instance` (homographic FoV-warp to 1024×768) into `DIODEMogeEvalLoader` — same fix that closed D8 (KITTI-MoGe). The prior 0.1088 was the model running on the raw DIODE image rather than the FoV-warped frame the paper evaluates. |
+| `da-v2-large-diode` | DA-V2 ViT-L on DIODE combined val (MoGe Table 3, aff-inv disparity) | `abs_rel` | **0.0533** | **0.0529** | ±5% | ✅ **MATCH** (RTX 3090, 2026-04-27, 771 samples, scale_shift_clamped, paper `.pth`). δ₁=0.9614, RMSE=2.27 m. Same loader path as `moge-vitl-diode-both` (FoV-warp port). MoGe Table 3 caption notes "all methods utilize ViT-Large as backbone" so the DA-V2 row is unambiguously ViT-L. |
 | _VGGT / ETH3D courtyard smoke_ | VGGT-1B, 4 views, first sample | `pose_auc@5°` | — | **0.91** | n/a | informational only. Rotation errors <0.3°/view; translation cos <0.6°/view. |
 | _MASt3R / ETH3D courtyard pairs_ | MASt3R ViT-L, 35 consecutive 2-view samples | `pose_auc@5°` | — | **0.46** | n/a | informational only. Mean rotation error 0.32°/pair; translation cos 3.42°. 2-view setup (PairViewer) — Umeyama needs N≥3 so no chamfer. |
 | _VGGT / ETH3D courtyard view-count sweep_ | VGGT-1B on 31 sliding 8-view windows | pairwise `pose_auc@5°` | — | see below | n/a | informational. Reports both absolute per-view and pairwise relative-pose AUC (the latter matches paper tables). Peak at 4 views: **pw@5°=0.66**, abs@5°=0.67. |

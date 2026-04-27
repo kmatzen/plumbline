@@ -1,0 +1,50 @@
+# Depth Anything V2 (large) on DIODE val (combined indoor + outdoor)
+#
+# Companion to moge-vitl-diode-both. Uses the MoGe-paper Table 3
+# eval protocol — same loader (HF bundle + 1024x768 homographic
+# FoV-warp via DIODEMogeEvalLoader), same alignment
+# (scale_shift_clamped = MoGe's `align_affine_lstsq` + per-sample
+# disparity-floor clamp). DA-V2-L is one of the baselines in MoGe
+# Table 3, so the apples-to-apples paper cell is 0.0533.
+
+name: da-v2-large-diode
+protocol: diode_moge
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+dataset:
+  name: diode-moge-eval
+  kwargs:
+    domain: both
+
+scale_alignment: scale_shift_clamped
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  # MoGe paper (Wang et al. 2024, arXiv:2410.19115), Table 3
+  # (Depth Map Estimation), DIODE column, affine-invariant disparity
+  # row, DA-V2 baseline. Table 3 caption notes "all methods utilize
+  # ViT-Large as backbone." Reld = 5.33 -> AbsRel 0.0533.
+  value: 0.0533
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), DIODE column (HF bundle 771 samples), affine-invariant disparity row, DA-V2 baseline (ViT-L backbone per the table caption)."
+  source_confidence: verified_pdf
+
+notes: >
+  First DA-V2 reproduction on the DIODE bundle (post FoV-warp port to
+  DIODEMogeEvalLoader, 2026-04-26). Uses the same loader path as
+  moge-vitl-diode-both — both produce 1024x768 warped frames matching
+  microsoft/MoGe configs/eval/benchmarks/diode.json.
+
+  scale_shift_clamped mirrors MoGe's metrics.py disparity-affine-
+  invariant branch: lstsq fit in disparity space, then per-sample
+  disparity-floor clamp at 1/gt_depth[mask].max() before inverting
+  back to depth. Without the clamp, DIODE-outdoor's long-range
+  returns let a single near-zero post-fit disparity invert to an
+  enormous depth and dominate mean AbsRel.
+
+  Needs DIODE MoGe-eval bundle staged at $DIODE_MOGE_ROOT.
