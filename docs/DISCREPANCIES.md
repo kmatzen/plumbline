@@ -15,7 +15,7 @@ Status legend:
 
 | ID | One-liner | Status |
 |---|---|---|
-| D3 | VGGT-DTU chamfer — root cause = missing PatchmatchNet [99] geometric-consistency filter (cited via MASt3R §4.5; VGGT §4.2 "Following MASt3R"); verbatim port landed, awaiting GPU verify | 🧪 fix-pending-verify |
+| D3 | VGGT-DTU chamfer — PatchmatchNet geometric-consistency filter verified on 22-scan re-run (Overall 0.756 mm vs prior 0.758, ~no-op). fp32 probe also verified (0.750, also ~no-op). Adapter + protocol levers exhausted; ~1.98× residual gap is in public VGGT-1B output, not anything plumbline controls | 🔎 upstream-blocked |
 | D4 | VGGT-ETH3D — per-view-masked path landed; 3-scene Overall 0.642 m vs paper 0.709 m (9.4 % UNDER paper, ±5 % strict gate misses but direction is favorable) | 🧪 fix-pending-verify |
 | D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
@@ -460,6 +460,82 @@ of view 0's depth: corrupted half kept 0 %, clean half kept 70 %.
 Status: 🧪 FIX-PENDING-VERIFY pending GPU re-run. Expected: Acc
 collapses toward paper (the long outlier tail goes away); Comp
 slightly improves; Overall lands near 0.4 mm on the 22-scan mean.
+
+#### 2026-04-27 — verified: PatchmatchNet filter is NOT the gap
+
+Re-ran ``vggt-paper-dtu-mvs`` end-to-end on a 3090 (22 scans, 32
+views/scan, bf16, geometric-consistency filter on). Compared to the
+pre-filter baseline:
+
+| variant | Acc | Comp | Overall (mean) | Overall (median) |
+|---|---|---|---|---|
+| **paper** | 0.389 | 0.374 | **0.382** | — |
+| baseline (commit 8592db9, no PMN) | 0.874 | 0.642 | 0.758 | 0.442 |
+| **+ PatchmatchNet filter (this run)** | **0.819** | **0.692** | **0.756** | **0.473** |
+
+The expectation in the prior commit was: "Acc collapses toward paper
+(outlier tail goes away); Comp slightly improves; Overall ~0.4 mm."
+What actually happened: Acc improves modestly (-6 %, 0.874 → 0.819),
+Comp regresses slightly (+8 %, 0.642 → 0.692, fewer pred points →
+larger GT→pred NN), Overall ~unchanged (-0.4 %). The synthetic
+sanity (clean half kept 70 %, corrupted half kept 0 %) is correct,
+the port is faithful, and the filter does what it should — but the
+remaining ~1.98× gap is dominated by structural pred quality, not
+outlier pixels.
+
+#### 2026-04-27 — verified: dtype is NOT the gap either
+
+Added ``vggt-dtu-fp32-probe`` (parallel YAML, identical except
+``dtype: float32``) and re-ran on the 3090. Result:
+
+| variant | Acc | Comp | Overall (mean) | Overall (median) |
+|---|---|---|---|---|
+| + PatchmatchNet (bf16) | 0.819 | 0.692 | 0.756 | 0.473 |
+| **+ PatchmatchNet + fp32** | **0.816** | **0.684** | **0.750** | **0.464** |
+
+Δ < 1 % across all four metrics. Exactly the same shape as D17's
+fp32 probe on GeoWizard NYU (0.0573 vs 0.0574 — also a no-op). The
+bf16 autocast does not contribute meaningfully to the residual gap
+on either model.
+
+#### Conclusion: D3 is upstream-blocked
+
+Cumulative D3 levers tried over multiple sessions (numbers are 22-scan
+mean Overall in mm; paper 0.382):
+
+| lever | Overall | session |
+|---|---|---|
+| Per-view-masked chamfer (CUT3R protocol port, commit f3c0a49) | 0.758 | 2026-04-25 |
+| Jensen DTUeval-python toolkit (canonical Jensen ObsMask + Plane cull + 20 mm cap) | 0.868 | 2026-04-25 |
+| 49 vs 32 rig views | 0.849 | 2026-04-26 |
+| PatchmatchNet geometric-consistency filter | 0.756 | 2026-04-27 |
+| PatchmatchNet + fp32 inference | **0.750** | 2026-04-27 |
+
+All cluster in 0.75-0.87 mm — paper 0.382 mm is consistently ~2× off.
+Same shape as D17 (GeoWizard NYU): exhausted adapter + protocol +
+filter + dtype levers, and the public ``facebook/VGGT-1B`` HF
+checkpoint produces predictions that are ~2× looser than what the
+paper reports on DTU. Likely sources, none in plumbline's reach:
+
+1. Public weights ≠ paper weights (Apple Depth Pro precedent — its
+   own README says "the model in this repo has been re-trained,
+   performance close to but does not match the paper").
+2. Paper pipeline includes post-processing (TSDF fusion, pose
+   refinement, BA, etc.) that ``demo_colmap.py`` exposes via
+   ``--use_ba`` but isn't part of a raw ``model(images)`` forward
+   pass.
+3. Paper Table 2 footnote about "Following MASt3R" may include a
+   step neither MASt3R nor CUT3R has actually released as code.
+
+Status promoted to 🔎 **upstream-blocked** (same shape as D17 / D22).
+The PatchmatchNet port stays on ``main`` because it makes plumbline
+structurally correct against MASt3R's stated protocol — it just
+isn't where the paper-row gap lives. Future re-evaluation against an
+updated VGGT release inherits the right pipeline shape.
+
+Probe artifact: ``reproductions/vggt_dtu_fp32_probe.yaml`` (kept on
+``main`` as a documented diagnostic, similar to how the GeoWizard
+fp32-probe history lives in commit ``0995974``).
 
 ### D4 · VGGT-ETH3D multiscene — STRUCTURAL PROTOCOL MISMATCH   🔎 OPEN
 
