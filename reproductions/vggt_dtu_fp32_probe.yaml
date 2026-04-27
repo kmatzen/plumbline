@@ -1,0 +1,31 @@
+# VGGT-DTU fp32 probe (D3 dtype-rule-out experiment)
+#
+# Identical to vggt-paper-dtu-mvs except dtype: float32. Tests whether
+# the bf16 autocast is responsible for any of the residual ~2x gap to
+# paper after the PatchmatchNet geometric-consistency port. Analogous
+# to the GeoWizard fp32 probe in commit 0995974, which definitively
+# ruled out dtype as the source of D17. Informational only — not a
+# paper-match cell on its own.
+
+name: vggt-dtu-fp32-probe
+protocol: dtu_vggt_table2
+
+model:
+  name: vggt
+  kwargs:
+    dtype: float32
+
+device: cuda:0
+
+paper_reference:
+  primary_metric: overall
+  value: 0.382
+  tolerance_relative: 0.05
+  citation: "Same target as vggt-paper-dtu-mvs (VGGT Table 2). This YAML is a one-off dtype probe; result documented in DISCREPANCIES.md D3."
+  source_confidence: verified_pdf
+
+notes: >
+  D3 dtype probe. Compare to vggt-paper-dtu-mvs result (bf16) to
+  determine whether mixed-precision autocast contributes to the
+  residual ~2x gap. Cache key includes dtype so no manual cache
+  invalidation needed.

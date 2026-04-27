@@ -41,7 +41,7 @@ cells are now ℹ️ instead of ✅.
 | **GeoWizard** | ⚠️ **0.0574** vs 0.052 _(10.5% off; D17 upstream-blocked, fp32+xformers verified 2026-04-26)_ | ⚠️ **0.131** vs 0.097 _(35.2% off; D18 same upstream-blocked cause)_ | — | — | — | — | — |
 | **Depth Pro** | ℹ️ δ₁ **0.9347** _(paper does not evaluate NYU — earlier 0.961 pin was fabricated)_ | ⌛ | — | — | — | — | — |
 | **MASt3R** (2-view) | — | — | — | 2-view pose sweep | — | 🚧 | — |
-| **VGGT** | — | — | — | ⚠️ 0.818 m vs 0.709 _(D4 fix landed; awaiting D20 verification)_ | 🧪 D3 fix landed; awaiting D20 verification (v0.1 gate 0.382) | 🚧 | — |
+| **VGGT** | — | — | — | ⚠️ 0.642 m vs 0.709 _(D4 per-view-masked landed, 9.4% under paper on 3-scene; D10 needed for full split)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | 🚧 | — |
 
 ### Paper-match count (post 2026-04-21 run)
 
