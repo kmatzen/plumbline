@@ -1,0 +1,42 @@
+# Depth Anything V2 (large) on KITTI under MoGe's eval protocol
+#
+# Companion to da-v2-large-kitti (which pins DA-V2's own Table 2 KITTI
+# cell, 0.074, under Eigen+Garg crop) — this YAML pins MoGe Table 3's
+# DA-V2 cell (0.0561) under MoGe's homographic FoV-warp protocol. Same
+# checkpoint, same alignment, different eval pipeline. Both should
+# match within +/-5% of their respective paper cells.
+
+name: da-v2-large-kitti-moge
+protocol: kitti_moge_eval
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+scale_alignment: scale_shift_clamped
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  # MoGe paper (Wang et al. 2024, arXiv:2410.19115), Table 3
+  # (Depth Map Estimation), KITTI column, affine-invariant disparity
+  # row, DA-V2 baseline. Table 3 caption notes "all methods utilize
+  # ViT-Large as backbone." Reld = 5.61 -> AbsRel 0.0561.
+  value: 0.0561
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), KITTI column (HF bundle), affine-invariant disparity row, DA-V2 baseline (ViT-L per the table caption)."
+  source_confidence: verified_pdf
+
+notes: >
+  Direct extension of moge-vitl-kitti — same loader path
+  (KITTIMogeEvalLoader, MoGe's homographic FoV-warp from raw
+  1242x375 KITTI down to 750x375 with ~60% horizontal FoV retained),
+  same scale_shift_clamped alignment. Differs from da-v2-large-kitti
+  in dataset (kitti_moge bundle vs raw KITTI Eigen+Garg) and protocol
+  (warped 750x375 region with disparity-floor clamp vs Garg-cropped
+  full frame with [1e-3, 80] depth clip).
+
+  Needs KITTI-MoGe bundle staged at $KITTI_MOGE_ROOT (~250 MB on
+  s3://plumbline-bench/datasets/kitti_moge/) and paper DA-V2 .pth
+  at $DAV2_ROOT/checkpoints/depth_anything_v2_vitl.pth.

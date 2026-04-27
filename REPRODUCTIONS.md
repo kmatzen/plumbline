@@ -45,10 +45,11 @@ cells are now ℹ️ instead of ✅.
 
 ### Paper-match count (post 2026-04-21 run)
 
-**15 ✅ mono-depth cells** with `source_confidence: verified_pdf`:
+**16 ✅ mono-depth cells** with `source_confidence: verified_pdf`:
 
 - NYU (8): DA-V2 S/B/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3
-- KITTI (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
+- KITTI Eigen+Garg (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
+- KITTI MoGe-eval (1): DA-V2 ViT-L (MoGe Table 3 protocol; landed 2026-04-27)
 - DIODE (2): MoGe-1 ViT-L, DA-V2 ViT-L (both via FoV-warp loader, 2026-04-26/27)
 
 **5 ⚠️ off-paper cells** (each root-caused in `docs/DISCREPANCIES.md`):
@@ -156,6 +157,7 @@ value.
 | `moge-vitl-diode-indoor` | MoGe-1 ViT-L on DIODE val-indoor (MoGe Table 3, aff-inv disparity, combined-val target) | `abs_rel` | _n/a_ | **0.0324** | n/a | ℹ️ Informational (no per-domain paper cell — paper reports combined val). RTX 3090, 2026-04-26, 325 indoor samples, scale_shift_clamped, post FoV-warp port. δ₁=0.9762. Beats DA-V2-S DIODE-indoor (0.0722) and the combined-val paper cell (0.0400) — indoor is the easier slice. |
 | `moge-vitl-diode-both` | MoGe-1 ViT-L on DIODE combined val (MoGe Table 3, aff-inv disparity) | `abs_rel` | **0.0400** | **0.0407** | ±5% | ✅ **MATCH** (RTX 3090, 2026-04-26, 771 samples, scale_shift_clamped). δ₁=0.9716, RMSE=2.04 m. Closed by porting MoGe's `EvalDataLoaderPipeline._process_instance` (homographic FoV-warp to 1024×768) into `DIODEMogeEvalLoader` — same fix that closed D8 (KITTI-MoGe). The prior 0.1088 was the model running on the raw DIODE image rather than the FoV-warped frame the paper evaluates. |
 | `da-v2-large-diode` | DA-V2 ViT-L on DIODE combined val (MoGe Table 3, aff-inv disparity) | `abs_rel` | **0.0533** | **0.0529** | ±5% | ✅ **MATCH** (RTX 3090, 2026-04-27, 771 samples, scale_shift_clamped, paper `.pth`). δ₁=0.9614, RMSE=2.27 m. Same loader path as `moge-vitl-diode-both` (FoV-warp port). MoGe Table 3 caption notes "all methods utilize ViT-Large as backbone" so the DA-V2 row is unambiguously ViT-L. |
+| `da-v2-large-kitti-moge` | DA-V2 ViT-L on KITTI under MoGe protocol (MoGe Table 3, aff-inv disparity) | `abs_rel` | **0.0561** | **0.0569** | ±5% | ✅ **MATCH** (RTX 3090, 2026-04-27, 651 samples, scale_shift_clamped, paper `.pth`). δ₁=0.9665, RMSE=3.10 m. Same loader path as `moge-vitl-kitti` (KITTIMogeEvalLoader homographic FoV-warp 1242×375 → 750×375). Companion to `da-v2-large-kitti` (DA-V2's own protocol, 0.0710 vs 0.074); same checkpoint, different eval pipelines, both within ±5%. |
 | _VGGT / ETH3D courtyard smoke_ | VGGT-1B, 4 views, first sample | `pose_auc@5°` | — | **0.91** | n/a | informational only. Rotation errors <0.3°/view; translation cos <0.6°/view. |
 | _MASt3R / ETH3D courtyard pairs_ | MASt3R ViT-L, 35 consecutive 2-view samples | `pose_auc@5°` | — | **0.46** | n/a | informational only. Mean rotation error 0.32°/pair; translation cos 3.42°. 2-view setup (PairViewer) — Umeyama needs N≥3 so no chamfer. |
 | _VGGT / ETH3D courtyard view-count sweep_ | VGGT-1B on 31 sliding 8-view windows | pairwise `pose_auc@5°` | — | see below | n/a | informational. Reports both absolute per-view and pairwise relative-pose AUC (the latter matches paper tables). Peak at 4 views: **pw@5°=0.66**, abs@5°=0.67. |
