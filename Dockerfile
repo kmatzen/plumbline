@@ -51,11 +51,11 @@ WORKDIR /app
 # source changes.
 COPY pyproject.toml uv.lock README.md LICENSE ./
 
-# Install Python + dependencies (runtime + models extra) into /app/.venv.
+# Install Python + dependencies into /app/.venv.
 # --no-install-project so the plumbline package itself isn't installed yet
 # (source hasn't been copied); we'll do that in the next layer.
 RUN uv python install ${PYTHON_VERSION} \
-    && uv sync --frozen --extra models --no-install-project --no-dev
+    && uv sync --frozen --no-install-project --no-dev
 
 # Layer 2: source. Changing any .py file busts this layer and below, but
 # not the big dep layer above.
@@ -63,7 +63,7 @@ COPY src ./src
 COPY reproductions ./reproductions
 
 # Install the plumbline package itself into the venv.
-RUN uv sync --frozen --extra models --no-dev
+RUN uv sync --frozen --no-dev
 
 # Layer 3 (optional): fetch research repos not on PyPI. Skipped by default
 # to keep the base image slim; pass --build-arg WITH_GIT_DEPS=1 to include.

@@ -28,15 +28,14 @@ dependencies = [
     "pillow>=10.0",
     "imageio>=2.30",
     "h5py>=3.16.0",
-]
-
-[project.optional-dependencies]
-torch = [
+    # torch + HF stack are base deps so `pip install plumbline-bench` is
+    # enough to run any non-GeoWizard adapter. The CUDA flavor is *not*
+    # forced from here — pip resolves torch from whatever index it's
+    # configured for (PyPI default: cu124 on Linux, CPU/MPS on macOS).
+    # Devs running `uv sync` from this repo get cu124 via [tool.uv.sources]
+    # below; consumers of the published wheel are unaffected.
     "torch==2.6.0",
     "torchvision==0.21.0",
-]
-models = [
-    "plumbline-bench[torch]",
     "transformers>=4.40",
     "huggingface-hub>=0.23",
     "timm>=1.0",
@@ -45,23 +44,24 @@ models = [
     "diffusers>=0.27",
     "accelerate>=0.28",
 ]
+
+[project.optional-dependencies]
 # GeoWizard's upstream pipeline (cloned to $GEOWIZARD_ROOT) imports
 # xformers directly in its attention.py. xformers is not needed by any
-# other adapter and pulls a non-trivial nvidia-* stack; kept out of
-# the base `models` extra so DA-V2 / MoGe / VGGT / Marigold users
-# don't pay for it. Pin: 0.0.29.post3 is the last release compatible
-# with torch==2.6.0+cu124 (later xformers force-bumps torch to 2.11+
-# which needs CUDA-driver >= 12.3, breaking older rental boxes).
+# other adapter and pulls a non-trivial nvidia-* stack; kept as an opt-in
+# so DA-V2 / MoGe / VGGT / Marigold users don't pay for it. Pin:
+# 0.0.29.post3 is the last release compatible with torch==2.6.0+cu124
+# (later xformers force-bumps torch to 2.11+ which needs CUDA-driver
+# >= 12.3, breaking older rental boxes).
 #
 # Known-good install order on a fresh box:
-#   uv sync --extra models --extra geowizard
+#   uv sync --extra geowizard
 #   uv pip install --force-reinstall 'nvidia-cudnn-cu12==9.1.0.70'
 # The force-reinstall step fixes a cudnn load-order clash that only
 # surfaces when xformers is grafted onto an already-installed torch
 # env (observed 2026-04-23 GPU session — conv silently returned
 # CUDNN_STATUS_NOT_INITIALIZED until cudnn was re-laid-down).
 geowizard = [
-    "plumbline-bench[models]",
     "xformers==0.0.29.post3",
 ]
 scipy = [
@@ -85,8 +85,18 @@ Repository = "https://github.com/kmatzen/plumbline"
 Issues = "https://github.com/kmatzen/plumbline/issues"
 
 [tool.uv.sources]
-torch = { index = "pytorch-cu124" }
-torchvision = { index = "pytorch-cu124" }
+# Only force the cu124 index on Linux — macOS / Windows devs running
+# `uv sync` from this repo get torch from the default PyPI index (which
+# resolves to MPS-capable wheels on macOS arm64, CPU/CUDA wheels on
+# Windows). The published wheel never propagates these source pins to
+# end users, who get torch from whatever index their pip is configured
+# for.
+torch = [
+    { index = "pytorch-cu124", marker = "sys_platform == 'linux'" },
+]
+torchvision = [
+    { index = "pytorch-cu124", marker = "sys_platform == 'linux'" },
+]
 
 [[tool.uv.index]]
 name = "pytorch-cu124"
