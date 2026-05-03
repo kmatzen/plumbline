@@ -16,6 +16,7 @@ from numpy.typing import NDArray
 from plumbline.conventions import EPS
 
 __all__ = [
+    "accuracy_at_threshold",
     "auc",
     "pairwise_pose_errors",
     "pairwise_relative_poses",
@@ -57,11 +58,23 @@ def translation_error(t_pred: NDArray[Any], t_gt: NDArray[Any]) -> NDArray[Any]:
     return np.linalg.norm(tp - tg, axis=-1)
 
 
-def translation_cosine_error(t_pred: NDArray[Any], t_gt: NDArray[Any]) -> NDArray[Any]:
+def translation_cosine_error(
+    t_pred: NDArray[Any], t_gt: NDArray[Any], *, antipodal: bool = False
+) -> NDArray[Any]:
     """Angular error between translation directions, in degrees.
 
     Used for up-to-scale monocular pose evaluation, where the magnitude of ``t``
     is arbitrary but its direction is meaningful.
+
+    Parameters
+    ----------
+    antipodal
+        When ``True``, returns ``min(angle, 180 - angle)`` so a sign-flipped
+        prediction reads as 0° instead of 180°. This is the convention in
+        VGGT / PoseDiffusion / RelPose++ CO3Dv2 pose eval — pred translation
+        magnitude/sign is genuinely ambiguous up to scale, so antipodal pairs
+        are treated as equivalent. Default ``False`` preserves the
+        SuperGlue/MASt3R 7-Scenes-style raw direction error.
     """
     tp = _extract_trans(t_pred)
     tg = _extract_trans(t_gt)
@@ -70,22 +83,77 @@ def translation_cosine_error(t_pred: NDArray[Any], t_gt: NDArray[Any]) -> NDArra
     np_ = tp / np.maximum(np.linalg.norm(tp, axis=-1, keepdims=True), EPS)
     ng = tg / np.maximum(np.linalg.norm(tg, axis=-1, keepdims=True), EPS)
     cos = np.clip(np.sum(np_ * ng, axis=-1), -1.0, 1.0)
-    return np.degrees(np.arccos(cos))
+    angle = np.degrees(np.arccos(cos))
+    if antipodal:
+        angle = np.minimum(angle, 180.0 - angle)
+    return angle
 
 
-def auc(errors: NDArray[Any], thresholds: list[float]) -> dict[float, float]:
-    """Area under the accuracy-vs-threshold curve, in the SuperGlue style.
+def auc(
+    errors: NDArray[Any],
+    thresholds: list[float],
+    *,
+    mode: str = "analytic",
+) -> dict[float, float]:
+    """Area under the accuracy-vs-threshold curve.
 
     Given a 1D array of per-sample errors (lower is better) and a list of
     thresholds ``t``, each AUC is the area under the step function
     ``acc(x) = fraction of errors <= x`` integrated over ``x in [0, t]`` and
     normalized by ``t`` so the result lies in ``[0, 1]``.
 
-    Each error ``e_i <= t`` contributes a step of height ``1/N`` starting at
-    ``e_i`` and ending at ``t``, i.e. ``(t - e_i)/N`` to the area. Errors
-    exceeding ``t`` contribute nothing.
+    Parameters
+    ----------
+    mode
+        ``"analytic"`` (default): exact integral of the step function.
+        Each error ``e_i <= t`` contributes ``(t - e_i) / (N * t)``. This
+        is the SuperGlue / LoFTR / MASt3R 7-Scenes form.
 
-    Following the SuperGlue / LoFTR / MASt3R convention.
+        ``"vggt_co3d_histogram"``: Riemann approximation with 1°-wide bins,
+        cumulative-sum, mean. Matches VGGT's `evaluation/test_co3d.py
+        ::calculate_auc_np` and PoseDiffusion / RelPose++ exactly. Produces
+        ~1-3% higher values than analytic on realistic distributions due
+        to the upper-bin-edge convention. Use this when reproducing
+        CO3Dv2 / RealEstate10K pose-AUC paper cells.
+    """
+    errors = np.asarray(errors, dtype=np.float64)
+    errors = errors[np.isfinite(errors)]
+    out: dict[float, float] = {}
+    n = int(errors.size)
+    if mode == "analytic":
+        for t in thresholds:
+            if n == 0:
+                out[t] = float("nan")
+                continue
+            contributions = np.clip(t - errors, 0.0, t)
+            # Clamp to [0, 1]: the integral is bounded by construction,
+            # but floating-point can nudge it to 1 + eps.
+            out[t] = float(min(1.0, max(0.0, contributions.sum() / (n * t))))
+        return out
+    if mode == "vggt_co3d_histogram":
+        for t in thresholds:
+            if n == 0:
+                out[t] = float("nan")
+                continue
+            t_int = int(round(float(t)))
+            if t_int <= 0:
+                raise ValueError(f"vggt_co3d_histogram requires t > 0; got {t}")
+            bins = np.arange(t_int + 1, dtype=np.float64)
+            hist, _ = np.histogram(errors, bins=bins)
+            hist = hist.astype(np.float64) / float(n)
+            out[t] = float(min(1.0, max(0.0, float(np.mean(np.cumsum(hist))))))
+        return out
+    raise ValueError(f"unknown auc mode '{mode}' (use 'analytic' or 'vggt_co3d_histogram')")
+
+
+def accuracy_at_threshold(
+    errors: NDArray[Any], thresholds: list[float]
+) -> dict[float, float]:
+    """Fraction of errors at or below each threshold.
+
+    The shape VGGT / DUSt3R / MASt3R papers report as RRA@τ (rotation
+    accuracy) and RTA@τ (translation accuracy). Each threshold returns a
+    value in ``[0, 1]``. Non-finite errors are dropped, matching :func:`auc`.
     """
     errors = np.asarray(errors, dtype=np.float64)
     errors = errors[np.isfinite(errors)]
@@ -95,10 +163,7 @@ def auc(errors: NDArray[Any], thresholds: list[float]) -> dict[float, float]:
         if n == 0:
             out[t] = float("nan")
             continue
-        contributions = np.clip(t - errors, 0.0, t)
-        # Clamp to [0, 1]: the integral is bounded by construction, but
-        # floating-point can nudge it to 1 + eps when all errors are zero.
-        out[t] = float(min(1.0, max(0.0, contributions.sum() / (n * t))))
+        out[t] = float((errors <= t).sum() / n)
     return out
 
 
@@ -166,7 +231,10 @@ def pairwise_relative_poses(
 
 
 def pairwise_pose_errors(
-    E_pred: NDArray[Any], E_gt: NDArray[Any]
+    E_pred: NDArray[Any],
+    E_gt: NDArray[Any],
+    *,
+    translation_antipodal: bool = False,
 ) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
     """Per-pair rotation + translation-direction errors (degrees) over all (i, j), i < j.
 
@@ -174,6 +242,9 @@ def pairwise_pose_errors(
     assumption between pred and GT. This is what VGGT / MASt3R / DUSt3R
     papers report as "relative pose AUC". Returns ``(rot_deg, trans_cos_deg)``
     each of shape ``(N*(N-1)/2,)``.
+
+    ``translation_antipodal`` toggles VGGT/PoseDiffusion's
+    ``min(angle, 180 - angle)`` convention on the translation error.
     """
     E_pred = np.asarray(E_pred, dtype=np.float64)
     E_gt = np.asarray(E_gt, dtype=np.float64)
@@ -182,7 +253,7 @@ def pairwise_pose_errors(
     R_p, t_p = pairwise_relative_poses(E_pred)
     R_g, t_g = pairwise_relative_poses(E_gt)
     rot = rotation_error_degrees(R_p, R_g)
-    trans = translation_cosine_error(t_p, t_g)
+    trans = translation_cosine_error(t_p, t_g, antipodal=translation_antipodal)
     return np.asarray(rot, dtype=np.float64), np.asarray(trans, dtype=np.float64)
 
 

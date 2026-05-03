@@ -1,0 +1,34 @@
+# CO3Dv2 multi-view pose protocol — VGGT/PoseDiffusion canonical recipe.
+#
+# The protocol VGGT Table 1 (CO3Dv2 column) and MASt3R Table 3 (CO3Dv2
+# block) share. Code source: facebookresearch/vggt @ evaluation/test_co3d.py
+# + preprocess_co3d.py — the only public end-to-end implementation.
+#
+# Recipe pinned by this preset:
+# - 41 SEEN categories from RelPose++ (loader-side `CO3D_VGGT_SEEN_CATEGORIES`).
+# - viewpoint_quality_score > 0.5 sequence filter.
+# - min_num_images = 50 sequence filter.
+# - Random 10-frame sampling per sequence, seeded once at startup.
+# - All C(10,2)=45 unordered pairs, max(rot°, trans-cos°) error.
+# - Translation 180-flip ON (`translation_angle(..., ambiguity=True)`).
+# - VGGT histogram AUC mode (1°-bin cumsum mean) for paper-cell parity.
+# - No pose alignment at eval time (frame-invariant pairwise).
+
+name: co3dv2_vggt_pose
+description: >
+  CO3Dv2 N-view pose evaluation under VGGT/PoseDiffusion's canonical
+  protocol. Per-pair max(rot, trans) error, AUC and accuracy thresholds
+  in degrees. Loader: `co3dv2-vggt-pose-eval`.
+
+reference:
+  paper: "Wang et al. 2025, VGGT (arXiv:2503.11651), Table 1, CO3Dv2 column. Same protocol as Leroy et al. 2024, MASt3R (arXiv:2406.09756), Table 3."
+  eval_code: "facebookresearch/vggt @ evaluation/test_co3d.py + preprocess_co3d.py"
+
+fixed:
+  dataset:
+    name: co3dv2-vggt-pose-eval
+  tasks: [pose]
+  scale_alignment: none
+  pointcloud_alignment: none
+  pose_translation_antipodal: true
+  pose_auc_mode: vggt_co3d_histogram

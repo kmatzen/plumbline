@@ -1,0 +1,74 @@
+# VGGT N-view pose on CO3Dv2 — VGGT Table 1 paper-match
+#
+# Targets VGGT Table 1 (Wang et al. 2025, arXiv:2503.11651), CO3Dv2
+# column, "Ours (Feed-Forward)" row, AUC@30 = 0.882. The protocol
+# follows PoseDiffusion / RelPose++ / VGGT's public eval (the only
+# script in any of these repos that's executable end-to-end is VGGT's
+# `evaluation/test_co3d.py` + `preprocess_co3d.py`).
+
+name: vggt-co3dv2-pose
+protocol: co3dv2_vggt_pose
+
+model:
+  name: vggt
+  kwargs: {}
+
+dataset:
+  name: co3dv2-vggt-pose-eval
+  kwargs:
+    # 41 SEEN categories, 10 sequences/category (fast_eval), 10 frames/seq.
+    # All defaults — kept here for visibility:
+    num_frames: 10
+    min_num_images: 50
+    min_quality: 0.5
+    fast_eval: true
+    sequences_per_category: 10
+    seed: 0
+
+tasks: [pose]
+scale_alignment: none
+pointcloud_alignment: none
+max_views: 10
+device: cuda:0
+
+# Paper-canonical pose-eval shape:
+#   - Translation 180-flip (`min(angle, 180 - angle)`) — VGGT's
+#     `translation_angle(..., ambiguity=True)` and PoseDiffusion default.
+#   - VGGT's `calculate_auc_np` (1°-bin histogram, cumsum, mean) for AUC.
+#     This differs from plumbline's analytic AUC by ~1-2% on realistic
+#     distributions; using vggt_co3d_histogram for paper-cell parity.
+pose_translation_antipodal: true
+pose_auc_mode: vggt_co3d_histogram
+pose_auc_thresholds: [3.0, 5.0, 15.0, 30.0]
+pose_acc_thresholds: [5.0, 15.0]
+
+paper_reference:
+  primary_metric: pairwise_pose_auc@30
+  value: 0.882
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2025, VGGT (arXiv:2503.11651), Table 1, CO3Dv2 column, 'Ours (Feed-Forward)' row = 88.2 → AUC@30 0.882."
+  source_confidence: verified_pdf
+
+notes: >
+  First multi-view pose paper-match in plumbline.
+
+  Aggregation caveat: VGGT's eval computes one AUC per category from
+  the union of that category's pair errors, then averages 41 per-category
+  AUCs. plumbline's runner computes per-sample AUC across each sample's
+  45 pairs, then averages across samples. With fast_eval (10
+  sequences/category, uniform weight) the two converge within ~1-2%
+  on realistic distributions. If the run lands within ±5% of 0.882
+  declare match; if it lands in 5-10%, the aggregation gap is the
+  next thing to fix (post-process Report.per_sample by category).
+
+  Loader uses the canonical VGGT/PoseDiffusion recipe from the
+  `co3dv2-vggt-pose-eval` registry name (Co3Dv2VGGTPoseEvalLoader):
+  41 SEEN categories, viewpoint_quality_score > 0.5, min_num_images=50,
+  seeded random.sample (per category) + np.random.choice (per sequence).
+
+  Needs CO3Dv2 staged at $CO3DV2_ROOT. Either the raw dump
+  (frame_annotations.jgz + sequence_annotations.jgz + set_lists/) or
+  pre-built `<category>_test.jgz` files from VGGT's `preprocess_co3d.py`
+  alongside the per-sequence image dirs. The 41 SEEN categories'
+  test-set frames + thumbnails are ~30-50 GB combined (a small fraction
+  of the 5.5 TB full Co3Dv2).

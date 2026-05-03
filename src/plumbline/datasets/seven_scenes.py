@@ -3,9 +3,18 @@
 7-Scenes (Shotton et al. 2013) is a small RGB-D sequence dataset
 captured with Kinect v1 across 7 indoor rooms. It shipped with the
 paper "Scene Coordinate Regression Forests for Camera Relocalization
-in RGB-D Images" and remains a standard relocalization / two-view
-pose benchmark. MASt3R (§4.2 and Table 5) reports on it; so do every
-follow-up matching-and-pose paper in the DUSt3R era.
+in RGB-D Images" and remains a standard relocalization benchmark.
+
+NOTE on paper citations: an earlier version of this docstring claimed
+"MASt3R (§4.2 and Table 5) reports on it" — that is incorrect. The
+MASt3R paper (arXiv:2406.09756) has Tables 1-4 only, and "7-Scenes"
+appears zero times. MASt3R's only public 7-Scenes eval (in
+`naver/dust3r`'s `dust3r_visloc/datasets/sevenscenes.py`) is visual
+localization (PnP against retrieved map images, % at cm/deg
+thresholds) — not pairwise relative pose. Pairwise pose AUC on
+7-Scenes does appear in follow-ups (VGGT, CUT3R, Spann3R, Fast3R,
+S-VGGT, MonST3R) but each defines its own pair sampler — pin a
+specific paper before promoting any reproduction to verified_pdf.
 
 Each frame on disk::
 
@@ -27,8 +36,9 @@ pinhole for the factory-registered color/depth stream:
     fx = fy = 585.0
     cx, cy = 320.0, 240.0
 
-These are the values MASt3R's eval code uses; we adopt them as the
-default. Users can override via ``intrinsic=(fx, fy, cx, cy)``.
+These are the canonical Microsoft 7-Scenes Kinect-v1 SIMPLE_PINHOLE
+intrinsics (also what MASt3R's visual-localization eval consumes via
+kapture metadata). Users can override via ``intrinsic=(fx, fy, cx, cy)``.
 
 Test split
 ----------

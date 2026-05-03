@@ -8,6 +8,7 @@ from plumbline.metrics.alignment import (
 from plumbline.metrics.depth import abs_rel, delta_threshold, rmse, silog
 from plumbline.metrics.pointmap import chamfer_distance, f_score
 from plumbline.metrics.pose import (
+    accuracy_at_threshold,
     auc,
     pose_auc,
     rotation_error_degrees,
@@ -17,6 +18,7 @@ from plumbline.metrics.pose import (
 
 __all__ = [
     "abs_rel",
+    "accuracy_at_threshold",
     "align_scale_and_shift",
     "align_scale_lstsq",
     "align_scale_median",

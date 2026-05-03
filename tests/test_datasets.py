@@ -1945,3 +1945,276 @@ class TestIBims1:
         ds = IBims1Dataset(root=tmp_path)
         s = next(iter(ds))
         np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4))
+
+
+# ---------------------------------------------------------------------------
+# Co3Dv2 VGGT-protocol pose eval loader
+# ---------------------------------------------------------------------------
+
+
+def _write_fake_co3dv2_vggt(
+    root: Path,
+    *,
+    categories: tuple[str, ...] = ("apple", "backpack"),
+    sequences_per_category: int = 12,
+    frames_per_sequence: int = 60,
+    bad_quality_seqs: int = 1,
+    H: int = 32,
+    W: int = 48,
+) -> None:
+    """Write a minimal Co3Dv2-shaped tree in raw `frame_annotations.jgz` +
+    `sequence_annotations.jgz` + `set_lists/` form (the format the loader
+    accepts when no preprocessed `{cat}_test.jgz` is available).
+
+    Produces ``sequences_per_category`` sequences per category. The first
+    ``bad_quality_seqs`` of each category get ``viewpoint_quality_score`` =
+    0.4 (below the default 0.5 cutoff); the rest get 0.9.
+    """
+    import gzip
+    import json
+
+    for category in categories:
+        cat_dir = root / category
+        (cat_dir / "set_lists").mkdir(parents=True, exist_ok=True)
+        frame_data: list[dict[str, object]] = []
+        seq_data: list[dict[str, object]] = []
+        set_test: list[list[object]] = []
+
+        for s in range(sequences_per_category):
+            seq_name = f"{category}_seq_{s:04d}"
+            quality = 0.4 if s < bad_quality_seqs else 0.9
+            seq_data.append(
+                {"sequence_name": seq_name, "viewpoint_quality_score": quality}
+            )
+            images_dir = cat_dir / seq_name / "images"
+            images_dir.mkdir(parents=True, exist_ok=True)
+            for f in range(frames_per_sequence):
+                img_name = f"frame{f + 1:06d}.jpg"
+                img_path = images_dir / img_name
+                Image.fromarray(
+                    (np.random.rand(H, W, 3) * 255).astype(np.uint8)
+                ).save(img_path, quality=85)
+                rel_path = f"{category}/{seq_name}/images/{img_name}"
+                frame_data.append(
+                    {
+                        "sequence_name": seq_name,
+                        "frame_number": f + 1,
+                        "image": {"path": rel_path, "size": [H, W]},
+                        "viewpoint": {
+                            "R": np.eye(3).tolist(),
+                            "T": [0.0, 0.0, 0.5 + 0.05 * f],
+                            "focal_length": [2.0, 2.0 * H / W],
+                            "principal_point": [0.0, 0.0],
+                            "intrinsics_format": "ndc_norm_image_bounds",
+                        },
+                    }
+                )
+                set_test.append([seq_name, f + 1, rel_path])
+
+        with gzip.open(cat_dir / "frame_annotations.jgz", "wt", encoding="utf-8") as f:
+            json.dump(frame_data, f)
+        with gzip.open(cat_dir / "sequence_annotations.jgz", "wt", encoding="utf-8") as f:
+            json.dump(seq_data, f)
+        (cat_dir / "set_lists" / "set_lists_fewview_dev.json").write_text(
+            json.dumps({"train": [], "test": set_test}), encoding="utf-8"
+        )
+
+
+class TestCo3Dv2VGGTPoseEvalLoader:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+        from plumbline.datasets.co3dv2_vggt_eval import Co3Dv2VGGTPoseEvalLoader
+
+        with pytest.raises(DatasetNotAvailable):
+            Co3Dv2VGGTPoseEvalLoader(root=tmp_path / "nope")
+
+    def test_unknown_category_rejects(self, tmp_path: Path) -> None:
+        from plumbline.datasets.co3dv2_vggt_eval import Co3Dv2VGGTPoseEvalLoader
+
+        _write_fake_co3dv2_vggt(tmp_path, categories=("apple",))
+        with pytest.raises(ValueError, match="not in CO3D_VGGT_SEEN_CATEGORIES"):
+            Co3Dv2VGGTPoseEvalLoader(root=tmp_path, categories=["not-a-co3d-cat"])
+
+    def test_quality_threshold_filters_low_seqs(self, tmp_path: Path) -> None:
+        from plumbline.datasets.co3dv2_vggt_eval import Co3Dv2VGGTPoseEvalLoader
+
+        # 5 sequences, first 2 with quality 0.4 → only 3 should make it through.
+        _write_fake_co3dv2_vggt(
+            tmp_path,
+            categories=("apple",),
+            sequences_per_category=5,
+            frames_per_sequence=60,
+            bad_quality_seqs=2,
+        )
+        ds = Co3Dv2VGGTPoseEvalLoader(
+            root=tmp_path,
+            categories=["apple"],
+            num_frames=8,
+            min_num_images=10,
+            fast_eval=True,
+            sequences_per_category=10,  # disables the cap (5 < 10 anyway)
+        )
+        kept = {s.metadata["sequence"] for s in ds}
+        assert len(kept) == 3
+        # The two low-quality sequences are seq_0000 + seq_0001.
+        assert "apple_seq_0000" not in kept
+        assert "apple_seq_0001" not in kept
+
+    def test_min_num_images_filter(self, tmp_path: Path) -> None:
+        from plumbline.datasets.co3dv2_vggt_eval import Co3Dv2VGGTPoseEvalLoader
+
+        # All sequences have 30 frames, but min_num_images=50 → none pass.
+        _write_fake_co3dv2_vggt(
+            tmp_path,
+            categories=("apple",),
+            sequences_per_category=4,
+            frames_per_sequence=30,
+            bad_quality_seqs=0,
+        )
+        ds = Co3Dv2VGGTPoseEvalLoader(
+            root=tmp_path,
+            categories=["apple"],
+            num_frames=8,
+            min_num_images=50,
+        )
+        assert len(ds) == 0
+
+    def test_fast_eval_caps_sequences(self, tmp_path: Path) -> None:
+        from plumbline.datasets.co3dv2_vggt_eval import Co3Dv2VGGTPoseEvalLoader
+
+        _write_fake_co3dv2_vggt(
+            tmp_path,
+            categories=("apple",),
+            sequences_per_category=15,
+            frames_per_sequence=60,
+            bad_quality_seqs=0,
+        )
+        ds = Co3Dv2VGGTPoseEvalLoader(
+            root=tmp_path,
+            categories=["apple"],
+            num_frames=10,
+            min_num_images=10,
+            fast_eval=True,
+            sequences_per_category=10,
+        )
+        assert len(ds) == 10
+
+    def test_seeded_sampling_is_deterministic(self, tmp_path: Path) -> None:
+        from plumbline.datasets.co3dv2_vggt_eval import Co3Dv2VGGTPoseEvalLoader
+
+        _write_fake_co3dv2_vggt(
+            tmp_path,
+            categories=("apple", "backpack"),
+            sequences_per_category=12,
+            frames_per_sequence=60,
+            bad_quality_seqs=0,
+        )
+
+        def grab(seed: int) -> list[tuple[str, str, tuple[int, ...]]]:
+            ds = Co3Dv2VGGTPoseEvalLoader(
+                root=tmp_path,
+                categories=["apple", "backpack"],
+                num_frames=8,
+                min_num_images=10,
+                fast_eval=True,
+                sequences_per_category=10,
+                seed=seed,
+            )
+            return [
+                (s.metadata["category"], s.metadata["sequence"], s.metadata["frame_indices"])
+                for s in ds
+            ]
+
+        run_a = grab(seed=0)
+        run_b = grab(seed=0)
+        run_diff_seed = grab(seed=42)
+        assert run_a == run_b, "same seed must give identical samples"
+        assert run_a != run_diff_seed, "different seeds should produce different sampling"
+
+    def test_sample_shapes_match_protocol(self, tmp_path: Path) -> None:
+        from plumbline.datasets.co3dv2_vggt_eval import Co3Dv2VGGTPoseEvalLoader
+
+        _write_fake_co3dv2_vggt(
+            tmp_path,
+            categories=("apple",),
+            sequences_per_category=12,
+            frames_per_sequence=60,
+            bad_quality_seqs=0,
+        )
+        ds = Co3Dv2VGGTPoseEvalLoader(
+            root=tmp_path,
+            categories=["apple"],
+            num_frames=10,
+            min_num_images=10,
+            fast_eval=True,
+            sequences_per_category=10,
+        )
+        s = next(iter(ds))
+        assert s.images.shape == (10, 32, 48, 3)
+        assert s.intrinsics.shape == (10, 3, 3)
+        assert s.extrinsics_gt.shape == (10, 4, 4)
+        # First camera rebased to identity.
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-5)
+        assert s.metadata["category"] == "apple"
+        assert "sequence" in s.metadata
+        assert len(s.metadata["frame_indices"]) == 10
+
+    def test_preprocessed_jgz_takes_precedence(self, tmp_path: Path) -> None:
+        """When `{cat}_test.jgz` exists, the loader uses it instead of
+        the raw triplet — matches VGGT's `evaluation/test_co3d.py` consuming
+        files produced by `preprocess_co3d.py`."""
+        import gzip
+        import json
+
+        from plumbline.datasets.co3dv2_vggt_eval import Co3Dv2VGGTPoseEvalLoader
+
+        # Build a sham raw layout that would otherwise fail (no good seqs)
+        # — but its `_test.jgz` overrides will be used.
+        _write_fake_co3dv2_vggt(
+            tmp_path,
+            categories=("apple",),
+            sequences_per_category=2,
+            frames_per_sequence=10,  # below min_num_images via raw path
+            bad_quality_seqs=2,  # all raw seqs are low-quality
+        )
+
+        # Synthesize a preprocessed `apple_test.jgz` with 2 valid 60-frame seqs.
+        H, W = 32, 48
+        images_root = tmp_path / "apple"
+        seqs: dict[str, list[dict[str, object]]] = {}
+        for seq_idx in range(2):
+            seq_name = f"apple_pre_{seq_idx}"
+            (images_root / seq_name / "images").mkdir(parents=True, exist_ok=True)
+            seqs[seq_name] = []
+            for f in range(60):
+                img_name = f"frame{f + 1:06d}.jpg"
+                p = images_root / seq_name / "images" / img_name
+                Image.fromarray(
+                    (np.random.rand(H, W, 3) * 255).astype(np.uint8)
+                ).save(p, quality=85)
+                seqs[seq_name].append(
+                    {
+                        "filepath": f"apple/{seq_name}/images/{img_name}",
+                        "R": np.eye(3).tolist(),
+                        "T": [0.0, 0.0, 0.5 + 0.05 * f],
+                        "focal_length": [2.0, 2.0 * H / W],
+                        "principal_point": [0.0, 0.0],
+                        "intrinsics_format": "ndc_norm_image_bounds",
+                    }
+                )
+        with gzip.open(tmp_path / "apple_test.jgz", "wt", encoding="utf-8") as f:
+            json.dump(seqs, f)
+
+        ds = Co3Dv2VGGTPoseEvalLoader(
+            root=tmp_path,
+            categories=["apple"],
+            num_frames=10,
+            min_num_images=50,
+            fast_eval=True,
+            sequences_per_category=10,
+        )
+        # Raw path would yield 0 seqs (quality + min_num_images both fail);
+        # preprocessed path yields 2.
+        assert len(ds) == 2
+        seqs_seen = sorted({s.metadata["sequence"] for s in ds})
+        assert seqs_seen == ["apple_pre_0", "apple_pre_1"]
