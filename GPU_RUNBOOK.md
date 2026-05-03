@@ -221,13 +221,25 @@ aws s3 sync /tmp/logs/ "s3://plumbline-bench/runs/${ts}/logs/"
 
 ## v0.1 gate status
 
-`plumbline reproduce vggt-paper-dtu-mvs` (chamfer 0.382 m, VGGT Table
-2). Currently blocked by D3 (per-view-masked vs scene-merged metric
-shape) — see `docs/DISCREPANCIES.md` and use the single-record diff
-workflow against CUT3R `eval/mv_recon/`.
+Gate is **multi-cell**, replacing the original single-reproduction
+gate (`plumbline reproduce vggt-paper-dtu-mvs`) that was retired
+2026-04-27 when D3 hit upstream-block. See `plan.md` § 2.
 
-13 ✅ mono-depth cells (NYU + KITTI) are the de facto gate while D3 is
-open. See `REPRODUCTIONS.md` for the live status matrix.
+- **≥ 15 verified_pdf paper-match cells** across ≥ 3 datasets and ≥ 5
+  papers — **met 2026-04-27** (16 mono-depth cells across NYU + KITTI
+  + DIODE).
+- **≥ 1 pose paper-match** — *pending*. CO3Dv2 infra landed; GPU run
+  pending for `vggt-co3dv2-pose` (VGGT Table 1, AUC@30 = 0.882) and
+  `mast3r-co3dv2-pose` (MASt3R Table 3, mAA(30) = 0.818).
+- **No fabricated paper cells** — every `verified_pdf` YAML audited
+  against the source PDF (table + col + row). See
+  `reproductions/AUDIT.md` for the per-YAML log; the 2026-05-03
+  follow-up flags `mast3r_co3dv2_pose` as `WEBFETCH_INCOMPLETE`
+  (HTML render only served the appendix; PDF re-verification owed).
+
+D3 (VGGT-DTU) and D4 (VGGT-ETH3D) are no longer gate items —
+upstream-blocked / awaiting D10 respectively. See `REPRODUCTIONS.md`
+for the live matrix.
 
 ## S3 cache layout
 

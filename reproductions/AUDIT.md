@@ -100,3 +100,51 @@ Sources consulted for the paper cells above:
 - **VGGT** (Wang et al. 2025, arXiv:2503.11651) — arxiv.org/html/2503.11651.
   Table 2 (Dense MVS on DTU) VGGT row: Acc 0.389, Comp 0.374, Overall 0.382.
   Table 3 (Point Map on ETH3D) VGGT row: Acc 0.901, Comp 0.518, Overall 0.709.
+
+---
+
+## 2026-05-03 follow-up — 6 post-audit `verified_pdf` YAMLs
+
+Repo state: 44 reproduction YAMLs, 26 with `source_confidence: verified_pdf`.
+The 2026-04-20 audit covered 23 of those; six landed since and need to be
+audited against the source PDFs the same way.
+
+| YAML | Model | Dataset | Metric | Claimed | Paper cell | Verified? | Notes |
+|---|---|---|---|---|---|---|---|
+| da_v2_large_diode | DA-V2 ViT-L | DIODE val (combined) | abs_rel | 0.0533 | MoGe Table 3, affine-invariant disparity, DIODE col, **DA-V2 row = 5.33 → 0.0533** | VERIFIED | Same paper cell as above audit's `moge_vitl_diode_*` lineage; citation correctly says Table 3 (not the recurring Table-2 mistake). YAML observed 0.0529 (1.7 % off). |
+| da_v2_large_kitti_moge | DA-V2 ViT-L | KITTI (MoGe-eval bundle) | abs_rel | 0.0561 | MoGe Table 3, affine-invariant disparity, KITTI col, **DA-V2 row = 5.61 → 0.0561** | VERIFIED | Cross-checked against the prior audit's MoGe source-verification entry ("DA-V2 ViT-L NYUv2 4.20, KITTI 5.61, DIODE 5.33"). YAML observed 0.0569 (1.4 % off). |
+| moge_vitl_kitti | MoGe-1 ViT-L | KITTI (MoGe-eval bundle) | abs_rel | 0.0408 | MoGe Table 3, affine-invariant disparity, KITTI col, **MoGe row = 4.08 → 0.0408** | VERIFIED | Closes the prior audit's `WRONG_VALUE` entry — earlier YAML pinned 0.0405; current YAML pins 0.0408 with citation correctly pointing at Table 3 (not Table 2). YAML observed 0.0404 (D8 close, 0.9 % off). |
+| vggt_dtu_fp32_probe | VGGT (fp32) | DTU MVS | overall | 0.382 | Same target cell as `vggt_paper_dtu_mvs` (VGGT Table 2 Overall 0.382, prior-audit VERIFIED) | VERIFIED (probe inherits) | Diagnostic-only YAML for D3 dtype rule-out; reuses the existing `dtu_vggt_table2` protocol with `dtype: float32`. Result 0.750 mm Overall (within 1 % of bf16 baseline) → fp32 ruled out as a D3 lever. |
+| vggt_co3dv2_pose | VGGT | CO3Dv2 (multi-view pose) | pairwise_pose_auc@30 | 0.882 | **VGGT Table 1**, "Camera Pose Estimation on RealEstate10K and CO3Dv2 with 10 random frames", CO3Dv2 AUC@30 col, **"Ours (Feed-Forward)" row = 88.2 → 0.882** (also: Ours-with-BA = 91.8) | VERIFIED 2026-05-03 | First Table 1 cell to enter the audit. WebFetch of `arxiv.org/html/2503.11651` confirmed exact value. Pending GPU run. |
+| mast3r_co3dv2_pose | MASt3R | CO3Dv2 (multi-view pose) | pairwise_pose_auc@30 | 0.818 | Claimed: MASt3R Table 3, CO3Dv2 col, MASt3R row mAA(30) = 0.818 (companion: RRA@15 = 0.946, RTA@15 = 0.919) | **WEBFETCH_INCOMPLETE** | arxiv HTML render of `2406.09756` truncates to appendix only across multiple WebFetch attempts (v1 / ar5iv / abs all return appendix Tables 7-8 only). Cell value is **not WebFetch-verifiable** as of this audit. Per the project rule "webfetch_unverified is not a paper-match", this YAML should NOT count as ✅ in REPRODUCTIONS.md until verified by direct PDF read. Pending GPU run + PDF re-verification. |
+
+### Findings out of this pass
+
+1. **`mast3r_co3dv2_pose` is structurally `verified_pdf` in the YAML but
+   not WebFetch-confirmable from this session.** The HTML renders only
+   serve the appendix (Tables 7-8 visible). The cell value 0.818 may be
+   correct — MASt3R §4.3 does evaluate CO3Dv2 pose — but this audit
+   cannot independently confirm it. Action: open the PDF locally before
+   promoting the row to ✅.
+
+2. **`seven_scenes.py` docstring claim "MASt3R paper has Tables 1-4
+   only" is inaccurate.** The same WebFetch passes show Tables 7-8 in
+   the appendix, so total tables ≥ 8 (and Table 5/6 likely exist
+   between main-body Table 4 and appendix Table 7). The substantive
+   claim (MASt3R does not evaluate 7-Scenes for pairwise pose) is
+   unaffected — `7-Scenes` / `7Scenes` returned zero hits across all
+   WebFetch attempts. The docstring should be corrected to "MASt3R's
+   main-body tables go through Table 4; the paper does not evaluate
+   7-Scenes for pairwise pose under any table number".
+
+3. **No new systematic errors.** All four mono-depth/MVS YAMLs from
+   this batch cite tables correctly (no recurring `WRONG_TABLE` —
+   the earlier MoGe Table-2-vs-Table-3 confusion is gone).
+
+### Updated counts (2026-05-03)
+
+- YAMLs with a pinned, paper-comparable value: **29** (was 23).
+- VERIFIED: **14** (was 9; +5 from this pass — the MASt3R YAML stays
+  out pending PDF read).
+- WEBFETCH_INCOMPLETE: **1** (new state for this pass — `mast3r_co3dv2_pose`).
+- WRONG_TABLE / WRONG_VALUE / WRONG_ROW counts unchanged from 2026-04-20.

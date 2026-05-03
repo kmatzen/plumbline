@@ -46,13 +46,33 @@ Scope is defined by what's empirically demonstrated, not a pre-committed
 shortlist. See [REPRODUCTIONS.md](./REPRODUCTIONS.md) for the live status
 matrix; this section describes scope, that file describes state.
 
-**Demonstrated v0.1 surface (post 2026-04-19 pivot):**
+**Demonstrated v0.1 surface (as of 2026-05-03):**
 
-13 ✅ paper-match cells across NYU + KITTI mono depth (DA-V2 S/B/L,
-Metric3Dv2 L/Giant, MoGe-1 ViT-L, Marigold v1-1, DA3) plus a multi-view
-chamfer track (VGGT/DA3 on ETH3D + DTU) and a pose-sweep track
-(VGGT/DA3 on ETH3D). Adapters shipped: DA-V2, Metric3Dv2, MASt3R, VGGT,
-DA3, MoGe-1, MoGe-2, Marigold, GeoWizard, Depth Pro, π³.
+**16 ✅ paper-match cells** with `source_confidence: verified_pdf`,
+under ±5–10 % tolerance, across NYU + KITTI + DIODE mono-depth:
+
+- NYU (8): DA-V2 S/B/L, Metric3Dv2 L/Giant, MoGe-1 ViT-L,
+  Marigold v1-1, DA3.
+- KITTI Eigen+Garg (5): DA-V2 S/B/L, Metric3Dv2 L/Giant.
+- KITTI MoGe-eval (1): DA-V2 ViT-L.
+- DIODE (2): MoGe-1 ViT-L, DA-V2 ViT-L (FoV-warp port, 2026-04-26/27).
+
+Multi-view chamfer (VGGT-DTU, VGGT-ETH3D) is structurally-correct
+infra but **not paper-match** — D3 (DTU) hit upstream-block at ~2 ×
+off, D4 (ETH3D 3-scene) lands 9.4 % under paper but apples-to-apples
+needs the full 13-scene split (D10). Pose track (VGGT / MASt3R /
+DA3 on CO3Dv2) has loader + adapter infra + verified_pdf YAML
+targets but **no GPU validation yet** as of 2026-05-03.
+
+Adapters shipped: DA-V2 (6 variants), Metric3Dv2 (S/L/Giant), MASt3R
+(N-view via PointCloudOptimizer), VGGT, DA3, MoGe-1, MoGe-2, Marigold,
+GeoWizard, Depth Pro, π³ — **11 adapters total**.
+
+Models with adapter shipped but **no paper-match achieved (upstream-
+blocked)**: GeoWizard (NYU + KITTI, D17 / D18 / D22 — fp32 + xformers
++ seed_all + alignment all verified no-ops; gap is in the public
+checkpoint or a private eval config). Marigold-KITTI (D9 / D22, same
+pattern). VGGT-DTU (D3, ditto).
 
 **Datasets:**
 
@@ -72,21 +92,29 @@ pose.
 
 **Acceptance criterion for v0.1:**
 
-```
-$ plumbline reproduce vggt-paper-dtu-mvs
-```
+A multi-cell gate, replacing the original single-reproduction gate
+(`plumbline reproduce vggt-paper-dtu-mvs`) that was retired 2026-04-27
+when D3 was promoted to upstream-blocked:
 
-...runs VGGT on DTU MVS and produces chamfer (overall) within ±5 % of
-published 0.382 m (VGGT paper Table 2). Currently blocked by D3
-(per-view-masked vs scene-merged metric shape — needs CUT3R reference-
-code diff per § 12 to close). De facto gate while D3 is open: the 13 ✅
-mono-depth cells already landed. v0.1 ships when D3 (and the parallel
-D4 ETH3D track) match paper, or when both are explicitly demoted to
-"protocol mismatch — informational" with that reasoning recorded in the
-YAML.
+1. **≥ 15 verified_pdf paper-match cells** across at least 3 datasets
+   and 5 distinct papers, each within its declared tolerance. **Met
+   2026-04-27** (16 cells, 4 datasets, 6 papers).
+2. **At least one pose paper-match.** *Pending* — CO3Dv2 infra (VGGT
+   Table 1, MASt3R Table 3) landed 2026-04-27, GPU run pending.
+3. **No fabricated paper cells in `verified_pdf` YAMLs** — every cell
+   audited against the source PDF (table + col + row).
+   Tracked in `reproductions/AUDIT.md`.
 
-**Until D3/D4 close, no chamfer reproduction is launched on a full
-dataset.** Single-record diff (§ 12) is the only path forward.
+**Multi-view chamfer is no longer a v0.1 gate.** D3 (DTU) and D4
+(ETH3D) are documented as structurally-correct reproductions whose
+residual gap is upstream (D3 — public VGGT-1B output ~2 × looser than
+paper; same upstream-blocked pattern as D17/D18 GeoWizard). They stay
+on `main` because the protocol shape is right, and they inherit a
+real paper-match the moment an updated VGGT release lands.
+
+**Single-record diff (§ 12) remains the only path** for any new
+chamfer / off-paper reproduction. Don't burn full-dataset GPU hours
+to discover a 130 × discrepancy.
 
 ## 3. Canonical conventions (non-negotiable)
 
@@ -374,10 +402,23 @@ These are the parts that determine whether the harness is trusted.
 Open work, in rough priority. Each line is a pointer; `docs/DISCREPANCIES.md`
 has the live diagnosis state.
 
-**Tier 1 — close v0.1 gate:**
-- **D3** VGGT-DTU chamfer (per-view-masked vs scene-merged) — § 12 diff against CUT3R `eval/mv_recon/`.
-- **D4** VGGT-ETH3D multiscene — same root cause as D3, same fix.
-- **D10** ETH3D 13-scene full split (or demote to informational with larger tolerance).
+**Tier 1 — finish what landed but isn't yet GPU-verified:**
+- **CO3Dv2 pose** — VGGT Table 1 (AUC@30 = 0.882) + MASt3R Table 3
+  (mAA(30) = 0.818). Infra landed 2026-04-27; GPU run pending.
+- **D4** VGGT-ETH3D — per-view-masked path landed 9.4 % under paper
+  on the 3-scene subset; apples-to-apples needs **D10** (full
+  13-scene split).
+- **MASt3R Table 3 PDF re-verification** — the WebFetch HTML render
+  could not retrieve main-body Table 3 in the 2026-05-03 audit pass.
+  Direct PDF read needed before promoting `mast3r-co3dv2-pose` to ✅.
+
+**Tier 1 (closed-blocked, not on critical path):**
+- D3 VGGT-DTU — upstream-blocked. PatchmatchNet filter + fp32 + 49-view
+  + Jensen toolkit + per-view-masked all verified ~no-op; ~2 × residual
+  gap is in `facebook/VGGT-1B` weights, not in plumbline. Stays on
+  `main` as structurally-correct infra.
+- D17 / D18 / D22 GeoWizard NYU + KITTI, Marigold-KITTI — same pattern
+  (private eval config or public-checkpoint gap).
 
 **Tier 2 — paper-row unlocks (each is a single-record-diff sprint):**
 - DIODE outdoor protocol (clip + sky-mask).
