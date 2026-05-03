@@ -1,10 +1,10 @@
 """Weights-gated integration tests for the DepthAnythingV2 adapter.
 
-These tests require the ``[models]`` extra installed (torch, transformers)
-*and* network access to HuggingFace Hub on first run (weights are cached
-locally thereafter). They're skipped otherwise. Run explicitly with::
+These tests require network access to HuggingFace Hub on first run
+(weights are cached locally thereafter). They're skipped otherwise.
+Run explicitly with::
 
-    uv sync --extra models
+    uv sync
     uv run pytest -m weights
 
 Size: the ``small`` variant is ~25M parameters and fits on CPU. The test

@@ -27,10 +27,9 @@ No GPU required for unit tests — the model-adapter suite is smoke tests only.
 ### Weights-gated tests
 
 Some tests exercise real model weights (downloaded from HuggingFace on
-first run) and are marked `@pytest.mark.weights`. They're clean-skipped on
-machines without the `[models]` extra installed. To exercise them::
+first run) and are marked `@pytest.mark.weights`. To exercise them::
 
-    uv sync --extra models
+    uv sync
     uv run pytest -m weights
 
 DA-V2 small runs in ~200ms per frame on Apple Silicon MPS; ~300ms on CPU.

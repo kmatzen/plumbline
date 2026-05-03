@@ -30,8 +30,13 @@ will still change before 1.0.
 ## Install
 
 ```bash
-uv sync --extra models
+uv sync                       # from the repo
+pip install plumbline-bench   # from PyPI
 ```
+
+The base install pulls torch + the HF stack. CUDA flavor is whatever
+your pip resolves (PyPI default: cu124 on Linux, CPU/MPS on macOS); to
+override, install your preferred torch first and pip will reuse it.
 
 For Metric3Dv2 you also need the `mmengine` + `mmcv-lite` imports the
 upstream hub repo expects, and `xformers` must be absent (or exactly

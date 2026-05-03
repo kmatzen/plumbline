@@ -41,7 +41,7 @@ git clone https://github.com/kmatzen/plumbline.git ~/plumbline
 cd ~/plumbline
 curl -LsSf https://astral.sh/uv/install.sh | sh
 export PATH="$HOME/.local/bin:$PATH"
-uv sync --extra models
+uv sync
 uv run python -c "import torch; assert torch.cuda.is_available()"
 uv run plumbline list-models
 ```
@@ -59,8 +59,9 @@ export DTU_ROOT=$HOME/data/dtu
 
 ### Per-adapter extras (install only what you need)
 
-`--extra models` covers torch/diffusers/transformers — enough for DA-V2,
-DA3, Marigold, Depth Pro, Metric3Dv2.
+The base install (`uv sync` / `pip install plumbline-bench`) covers
+torch + diffusers + transformers — enough for DA-V2, DA3, Marigold,
+Depth Pro, Metric3Dv2.
 
 | Adapter | Extra setup |
 |---|---|
