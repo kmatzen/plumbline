@@ -1,0 +1,53 @@
+# DA3 N-view pose on CO3Dv2 — informational only, no paper target
+#
+# DA3 (Bytedance Seed 2025, arXiv:2511.10647) does NOT evaluate CO3Dv2
+# pose. Their pose Table 2 uses HiRoom / ETH3D / DTU / 7Scenes / ScanNet++.
+# This YAML runs the DA3-Large checkpoint under the same
+# VGGT/PoseDiffusion canonical CO3Dv2 protocol used by the
+# vggt-co3dv2-pose and mast3r-co3dv2-pose YAMLs, purely as an A/B
+# datapoint vs the two paper-match rows.
+
+name: da3-co3dv2-pose
+protocol: co3dv2_vggt_pose
+
+model:
+  name: depth-anything-3
+  kwargs:
+    variant: large
+    checkpoint: depth-anything/DA3-LARGE-1.1
+
+dataset:
+  name: co3dv2-vggt-pose-eval
+  kwargs:
+    num_frames: 10
+    min_num_images: 50
+    min_quality: 0.5
+    fast_eval: true
+    sequences_per_category: 10
+    seed: 0
+
+tasks: [pose]
+scale_alignment: none
+pointcloud_alignment: none
+max_views: 10
+device: cuda:0
+
+pose_translation_antipodal: true
+pose_auc_mode: vggt_co3d_histogram
+pose_auc_thresholds: [3.0, 5.0, 15.0, 30.0]
+pose_acc_thresholds: [5.0, 15.0]
+
+paper_reference:
+  primary_metric: pairwise_pose_auc@30
+  # No paper target. DA3's pose Table 2 does not include CO3Dv2; the
+  # paper uses CO3Dv2 only for training (per audit 2026-04-27).
+  value: null
+  tolerance_relative: null
+  citation: "DA3 paper does NOT evaluate CO3Dv2 pose; informational only. Cross-paper A/B against vggt-co3dv2-pose (verified VGGT Table 1 row) and mast3r-co3dv2-pose (verified MASt3R Table 3 row)."
+
+notes: >
+  Companion to vggt-co3dv2-pose and mast3r-co3dv2-pose under the same
+  protocol. Same loader, same metric shape, just no paper-match gate.
+
+  DA3's pose head is N-view native (max_views=inf in its capabilities)
+  so no adapter changes are needed.

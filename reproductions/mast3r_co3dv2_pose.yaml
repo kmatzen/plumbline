@@ -1,0 +1,70 @@
+# MASt3R N-view pose on CO3Dv2 — MASt3R Table 3 paper-match
+#
+# Targets MASt3R Table 3 (Leroy et al. 2024, arXiv:2406.09756), CO3Dv2
+# column block, MASt3R row: RRA@15 = 0.946, RTA@15 = 0.919,
+# **mAA(30) = 0.818** (= AUC@30 in plumbline's metric naming; MASt3R
+# paper §4.3 says "min(RRA@30, RTA@30)" = max(R°, t-cos°) AUC).
+#
+# Same 41-cat / 10-seq / 10-frame protocol as VGGT (paper §4.3 says
+# "Following [104]" = PoseDiffusion). MASt3R's only public eval that
+# uses this protocol is the one VGGT's `evaluation/test_co3d.py`
+# implements; MASt3R + DUSt3R repos don't ship a CO3Dv2 pose eval.
+
+name: mast3r-co3dv2-pose
+protocol: co3dv2_vggt_pose
+
+model:
+  name: mast3r
+  kwargs:
+    # PointCloudOptimizer hyperparams (paper §4.3 / DUSt3R defaults).
+    # ga_niter: 300, ga_lr: 0.01, ga_schedule: linear, ga_init: mst.
+    {}
+
+dataset:
+  name: co3dv2-vggt-pose-eval
+  kwargs:
+    num_frames: 10
+    min_num_images: 50
+    min_quality: 0.5
+    fast_eval: true
+    sequences_per_category: 10
+    seed: 0
+
+tasks: [pose]
+scale_alignment: none
+pointcloud_alignment: none
+max_views: 10
+device: cuda:0
+
+pose_translation_antipodal: true
+pose_auc_mode: vggt_co3d_histogram
+pose_auc_thresholds: [3.0, 5.0, 15.0, 30.0]
+# RRA@15 = 0.946, RTA@15 = 0.919 — both reported in the same paper row.
+pose_acc_thresholds: [5.0, 15.0]
+
+paper_reference:
+  primary_metric: pairwise_pose_auc@30
+  value: 0.818
+  tolerance_relative: 0.05
+  citation: "Leroy et al. 2024, MASt3R (arXiv:2406.09756), Table 3, CO3Dv2 column block, mAA(30) row, MASt3R baseline = 81.8 → AUC@30 0.818. Companion cells (same row): RRA@15 = 0.946, RTA@15 = 0.919."
+  source_confidence: verified_pdf
+
+notes: >
+  First multi-view paper-match attempt for MASt3R.
+
+  Adapter dispatch: at N=10 views the MASt3R adapter switches from
+  PairViewer (2-view feed-forward) to dust3r's PointCloudOptimizer
+  (iterative global alignment, init='mst', niter=300, lr=0.01,
+  schedule='linear'). This is the path MASt3R paper §4.3 specifies:
+  "MASt3R's predictions are post-processed via DUSt3R's global
+  alignment". Expected per-sample wall time ~20 s on a 3090, so
+  410 samples ≈ 2.5 h.
+
+  v0.3 follow-up: replace dust3r's PointCloudOptimizer with
+  mast3r.cloud_opt.sparse_ga.sparse_global_alignment if the paper-row
+  doesn't reproduce. sparse_GA is MASt3R's own optimizer, designed
+  to outperform DUSt3R's on MASt3R's outputs.
+
+  Same loader path as vggt-co3dv2-pose; same caveat about per-category
+  aggregation. Needs $CO3DV2_ROOT and $MAST3R_ROOT (with dust3r
+  submodule) on disk.

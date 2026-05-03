@@ -3,12 +3,21 @@
 Upstream: https://github.com/naver/mast3r
 Paper: "Grounding Image Matching in 3D with MASt3R" (Leroy et al. 2024).
 
-MASt3R is a pair-based (2-view) model that predicts per-pixel 3D point maps
-in a shared frame for a pair of images, plus a confidence + descriptor map.
-For v0.1 we treat it strictly as a **2-view** primitive: min_views = max_views
-= 2. Extension to N>2 via ``mast3r.cloud_opt.sparse_ga.sparse_global_alignment``
-is a v0.2 concern (it's an iterative optimizer, orders of magnitude slower
-than the feed-forward path).
+MASt3R is a pair-based model that predicts per-pixel 3D point maps in a
+shared frame for a pair of images, plus a confidence + descriptor map.
+The adapter dispatches based on view count:
+
+- ``N == 2``: feed-forward via dust3r's ``PairViewer`` global aligner.
+  Fast (no optimization), deterministic.
+- ``N >= 3``: dust3r's ``PointCloudOptimizer`` global aligner — iterative
+  optimization over the complete pairwise graph, ``init='mst'``,
+  ``niter=300``, ``lr=0.01``, ``schedule='linear'`` (paper §4.3 default).
+  This is the path MASt3R Table 3's CO3Dv2 row uses. ~20 s / scene at
+  N=10 on a 3090.
+
+A future v0.3 may swap PointCloudOptimizer for
+``mast3r.cloud_opt.sparse_ga.sparse_global_alignment`` (MASt3R's own
+sparse GA, designed to outperform DUSt3R's optimizer on its outputs).
 
 Install
 -------
@@ -85,9 +94,9 @@ class MASt3RAdapter(Model):
         tasks=frozenset({"mono_depth", "mvs_depth", "pose"}),
         is_metric=False,  # recovers a scale up to residual ambiguity
         min_views=2,
-        # v0.1 wires MASt3R via PairViewer (2-view only). N>2 requires
-        # sparse_global_alignment, which is iterative and a v0.2 concern.
-        max_views=2,
+        # N==2 → PairViewer (fast, no optimization).
+        # N>=3 → PointCloudOptimizer (iterative global alignment).
+        max_views=32,
         requires_intrinsics=False,
         default_resolution=(512, 512),
     )
@@ -98,10 +107,18 @@ class MASt3RAdapter(Model):
         device: str = "cuda:0",
         checkpoint: str = "naver/MASt3R_ViTLarge_BaseDecoder_512_catmlpdpt_metric",
         long_edge: int = 512,
+        ga_niter: int = 300,
+        ga_lr: float = 0.01,
+        ga_schedule: str = "linear",
+        ga_init: str = "mst",
     ) -> None:
         self.device = device
         self.checkpoint = checkpoint
         self.long_edge = int(long_edge)
+        self.ga_niter = int(ga_niter)
+        self.ga_lr = float(ga_lr)
+        self.ga_schedule = str(ga_schedule)
+        self.ga_init = str(ga_init)
         self._model: Any = None
 
     def _load(self) -> None:
@@ -130,15 +147,21 @@ class MASt3RAdapter(Model):
         n = images.shape[0]
         if n < 2:
             raise ValueError(f"MASt3R requires at least 2 views; got {n}")
-        if n != 2:
+        if n > self.capabilities.max_views:
             raise ValueError(
-                f"MASt3R v0.1 adapter supports exactly 2 views; got {n}. "
-                "N>2 requires sparse_global_alignment (v0.2)."
+                f"MASt3R adapter capped at {self.capabilities.max_views} views; got {n}"
             )
         self._load()
 
         out = _run_mast3r(
-            self._model, images, device=self.device, long_edge=self.long_edge
+            self._model,
+            images,
+            device=self.device,
+            long_edge=self.long_edge,
+            ga_niter=self.ga_niter,
+            ga_lr=self.ga_lr,
+            ga_schedule=self.ga_schedule,
+            ga_init=self.ga_init,
         )
 
         point_map = out["point_map"]  # (N, H, W, 3), world frame (view 0)
@@ -166,7 +189,12 @@ class MASt3RAdapter(Model):
         )
 
     def config_hash(self) -> str:
-        s = f"{self.name}@{self.version}/{self.checkpoint}"
+        # Include GA hyperparams: changing them changes predictions for N>=3.
+        s = (
+            f"{self.name}@{self.version}/{self.checkpoint}"
+            f"/le{self.long_edge}/ga_n{self.ga_niter}_lr{self.ga_lr}"
+            f"_sch{self.ga_schedule}_init{self.ga_init}"
+        )
         return hashlib.sha256(s.encode()).hexdigest()[:16]
 
 
@@ -232,14 +260,22 @@ def _images_to_dust3r_dicts(
 
 
 def _run_mast3r(
-    model: Any, images: NDArray[np.uint8], *, device: str, long_edge: int = 512
+    model: Any,
+    images: NDArray[np.uint8],
+    *,
+    device: str,
+    long_edge: int = 512,
+    ga_niter: int = 300,
+    ga_lr: float = 0.01,
+    ga_schedule: str = "linear",
+    ga_init: str = "mst",
 ) -> dict[str, NDArray[Any]]:
-    """Run MASt3R on an image pair; return plumbline-shaped arrays.
+    """Run MASt3R on N views; return plumbline-shaped arrays.
 
-    Uses dust3r's ``inference`` + ``global_aligner(mode=PairViewer)`` to
-    recover per-view depth, intrinsics, and world_from_camera poses from
-    MASt3R's raw pair predictions. Rebases poses + point map so view 0
-    is the canonical world frame.
+    Uses dust3r's ``inference`` over the complete pairwise graph, then
+    extracts depth, intrinsics, and world_from_camera poses via either
+    ``PairViewer`` (N==2) or ``PointCloudOptimizer`` (N>=3). Always
+    rebases poses + point map so view 0 is the canonical world frame.
     """
     import torch
     from dust3r.cloud_opt import GlobalAlignerMode, global_aligner
@@ -247,21 +283,33 @@ def _run_mast3r(
     from dust3r.inference import inference
     from dust3r.utils.geometry import geotrf
 
+    n = int(images.shape[0])
     dust3r_imgs = _images_to_dust3r_dicts(images, long_edge=long_edge)
     pairs = make_pairs(dust3r_imgs, scene_graph="complete", prefilter=None, symmetrize=True)
     output = inference(pairs, model, device, batch_size=1, verbose=False)
 
-    scene = global_aligner(output, device=device, mode=GlobalAlignerMode.PairViewer)
+    if n == 2:
+        scene = global_aligner(output, device=device, mode=GlobalAlignerMode.PairViewer)
+        conf_per_view = _extract_pairviewer_confidence(scene)
+    else:
+        scene = global_aligner(
+            output, device=device, mode=GlobalAlignerMode.PointCloudOptimizer
+        )
+        # Iterative optimization. Returns a final scalar loss; ignored.
+        scene.compute_global_alignment(
+            init=ga_init, niter=ga_niter, schedule=ga_schedule, lr=ga_lr
+        )
+        # Per-view confidence aggregation across edges is non-trivial for
+        # PointCloudOptimizer (per-pair, not per-view); leave None for now.
+        conf_per_view = None
 
-    # Per-view camera-frame depth (already camera-frame regardless of which
-    # view PairViewer chose as the scene origin).
+    # Per-view camera-frame depth.
     depthmaps = [d.detach().cpu().numpy() for d in scene.get_depthmaps()]
-    depth = np.stack(depthmaps).astype(np.float32)  # (2, H, W)
+    depth = np.stack(depthmaps).astype(np.float32)  # (n, H, W)
 
-    # Intrinsics from PairViewer: per-view focal + principal point.
+    # Intrinsics: per-view focal + principal point.
     focals = scene.get_focals().detach().cpu().numpy().reshape(-1)
-    pps = scene.pp.detach().cpu().numpy()  # (2, 2)
-    n = len(depthmaps)
+    pps = _get_principal_points(scene).reshape(n, 2)
     K = np.zeros((n, 3, 3), dtype=np.float32)
     for i in range(n):
         K[i] = np.array(
@@ -269,8 +317,7 @@ def _run_mast3r(
             dtype=np.float32,
         )
 
-    # World_from_camera poses. PairViewer may already have view 0 = identity
-    # (higher conf path) or view 1 = identity. Always rebase so view 0 wins.
+    # World_from_camera poses; rebase so view 0 = identity.
     E_scene = scene.get_im_poses().detach().cpu().numpy().astype(np.float64)
     if not world_from_camera_is_identity(E_scene):
         E_rebased = rebase_to_first_camera(E_scene)
@@ -280,14 +327,9 @@ def _run_mast3r(
     # Rebase the point map by the same transform:  X_new = inv(E_scene[0]) @ X_old.
     pts3d = [p.detach().cpu().numpy().astype(np.float64) for p in scene.get_pts3d()]
     T_rebase = invert_pose(E_scene[0])  # (4, 4); identity if no rebase happened
-    # Apply via dust3r's helper which handles the (H, W, 3) shape fluently.
     pts3d_world = [geotrf(torch.from_numpy(T_rebase), torch.from_numpy(p)).numpy() for p in pts3d]
-    point_map = np.stack(pts3d_world).astype(np.float32)  # (2, H, W, 3)
+    point_map = np.stack(pts3d_world).astype(np.float32)  # (n, H, W, 3)
 
-    # Per-view mean-confidence over its own-frame prediction edges.
-    conf_per_view = _extract_pairviewer_confidence(scene)
-
-    # Depth sanity: replace non-finite / non-positive with 0 (canonical invalid).
     depth = np.where(np.isfinite(depth) & (depth > 0), depth, 0.0).astype(np.float32)
 
     return {
@@ -297,6 +339,20 @@ def _run_mast3r(
         "point_map": point_map,
         "confidence": conf_per_view,
     }
+
+
+def _get_principal_points(scene: Any) -> NDArray[np.float64]:
+    """Pull the per-view principal-points array off either aligner type.
+
+    PairViewer exposes ``scene.pp``; PointCloudOptimizer exposes
+    ``scene.get_principal_points()``. Both return shape ``(N, 2)``.
+    """
+    if hasattr(scene, "get_principal_points"):
+        try:
+            return scene.get_principal_points().detach().cpu().numpy().astype(np.float64)
+        except Exception:  # pragma: no cover - fall through to .pp
+            pass
+    return scene.pp.detach().cpu().numpy().astype(np.float64)
 
 
 def _extract_pairviewer_confidence(scene: Any) -> NDArray[np.float32] | None:

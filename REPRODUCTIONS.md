@@ -33,15 +33,15 @@ cells are now ℹ️ instead of ✅.
 | **DA-V2 Metric-Outdoor-L** | — | ℹ️ **0.0877** _(VKITTI-finetuned; no direct paper)_ | — | — | — | — | — |
 | **Metric3D-v2 L** | ✅ **0.0660** vs 0.063 | ✅ **0.0495** vs 0.052 | — | — | — | — | — |
 | **Metric3D-v2 Giant** | ✅ **0.0702** vs 0.067 | ✅ **0.0503** vs 0.051 | — | — | — | — | — |
-| **DA3** | ✅ δ₁ **0.9684** vs 0.974 | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | — | 🎯 **0.0150** (δ₁ 0.9994) _(no paper target)_ |
+| **DA3** | ✅ δ₁ **0.9684** vs 0.974 | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | ⌛ informational only (paper does not evaluate CO3Dv2 pose; A/B vs VGGT/MASt3R) | 🎯 **0.0150** (δ₁ 0.9994) _(no paper target)_ |
 | **MoGe-1 ViT-L** | ✅ **0.0342** vs 0.0341 | ⚠️ **0.0447** vs 0.0408 _(9.4% off; D8 structural protocol)_ | ✅ **0.0407** vs 0.0400 _(1.7% off; FoV-warp port 2026-04-26)_ | — | — | — | 🎯 **0.0094** (δ₁ 0.9999) _(no paper target)_ |
 | **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ℹ️ _(paper publishes ViT-L only as 10-dataset avg)_ | ⌛ | — | — | — | ⌛ |
 | **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — | — |
 | **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ⚠️ **0.1090** vs 0.099 _(10.1% off; D9)_ | — | — | — | — | — |
 | **GeoWizard** | ⚠️ **0.0574** vs 0.052 _(10.5% off; D17 upstream-blocked, fp32+xformers verified 2026-04-26)_ | ⚠️ **0.131** vs 0.097 _(35.2% off; D18 same upstream-blocked cause)_ | — | — | — | — | — |
 | **Depth Pro** | ℹ️ δ₁ **0.9347** _(paper does not evaluate NYU — earlier 0.961 pin was fabricated)_ | ⌛ | — | — | — | — | — |
-| **MASt3R** (2-view) | — | — | — | 2-view pose sweep | — | 🚧 | — |
-| **VGGT** | — | — | — | ⚠️ 0.642 m vs 0.709 _(D4 per-view-masked landed, 9.4% under paper on 3-scene; D10 needed for full split)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | 🚧 | — |
+| **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ⌛ AUC@30 target **0.818** (Table 3 verified_pdf, awaiting GPU run) | — |
+| **VGGT** | — | — | — | ⚠️ 0.642 m vs 0.709 _(D4 per-view-masked landed, 9.4% under paper on 3-scene; D10 needed for full split)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ⌛ AUC@30 target **0.882** (Table 1 verified_pdf, awaiting GPU run) | — |
 
 ### Paper-match count (post 2026-04-21 run)
 
@@ -62,12 +62,33 @@ cells are now ℹ️ instead of ✅.
 pending D20; VGGT DTU has a protocol fix on `main` (D3) awaiting the
 same D20 unblock.
 
+**Pose-track infra landed 2026-04-27, 2 paper-targets pending GPU run:**
+
+- VGGT CO3Dv2 (Table 1, AUC@30 = 0.882) — `vggt_co3dv2_pose.yaml`,
+  `source_confidence: verified_pdf`.
+- MASt3R CO3Dv2 (Table 3, mAA(30) = 0.818, RRA@15 = 0.946,
+  RTA@15 = 0.919) — `mast3r_co3dv2_pose.yaml`, `verified_pdf`.
+  MASt3R adapter rewrite landed: PointCloudOptimizer for N>=3,
+  PairViewer kept for N=2.
+
+In place: `Co3Dv2VGGTPoseEvalLoader` (canonical 41-cat / 10-seq /
+10-frame seeded recipe per VGGT `evaluation/test_co3d.py`), pose
+metric extensions (`accuracy_at_threshold` for RRA/RTA, antipodal
+translation flag, `vggt_co3d_histogram` AUC mode). MASt3R `Table 5
+on 7-Scenes` claim from earlier docstrings was a fabrication —
+removed; MASt3R does not evaluate 7-Scenes pose. DA3 informational
+companion `da3_co3dv2_pose.yaml` runs the same protocol with no
+paper target.
+
 **Dropped from the ✅ count (2026-04-20 audit):**
 
 - Depth Pro NYU (δ₁ 0.961) — paper has no NYU row; target was fabricated.
 - MoGe-2 KITTI — paper has no per-dataset ViT-L row.
 - DA-V2-Small DIODE-indoor — cited cell is for ViT-L, not ViT-S.
 - DA-V2 Sintel — cited target (0.075) does not appear in the paper.
+- (2026-04-27) "MASt3R Table 5 on 7-Scenes" claim in
+  `seven_scenes.py` docstring — Table 5 doesn't exist; MASt3R only
+  evaluates 7-Scenes for visual localization, not pairwise pose.
 
 See [AUDIT.md](./reproductions/AUDIT.md) for per-YAML verification.
 

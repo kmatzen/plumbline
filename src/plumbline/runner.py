@@ -57,6 +57,7 @@ from plumbline.metrics.pointmap import (
     f_score,
     voxel_downsample,
 )
+from plumbline.metrics.pose import accuracy_at_threshold as pose_acc_fn
 from plumbline.metrics.pose import auc as pose_auc_fn
 from plumbline.metrics.pose import (
     pairwise_pose_errors,
@@ -97,6 +98,9 @@ def evaluate(
     cache: PredictionCache | None = None,
     seed: int = 0,
     pose_auc_thresholds: tuple[float, ...] = (5.0, 10.0, 30.0),
+    pose_acc_thresholds: tuple[float, ...] = (15.0,),
+    pose_auc_mode: str = "analytic",
+    pose_translation_antipodal: bool = False,
     delta_thresholds: tuple[float, ...] = (1.25, 1.25**2, 1.25**3),
     f_score_threshold: float = 0.05,
     depth_clip: tuple[float, float] | None = None,
@@ -364,6 +368,9 @@ def evaluate(
             tasks=tasks,
             scale_alignment=scale_alignment,
             pose_auc_thresholds=pose_auc_thresholds,
+            pose_acc_thresholds=pose_acc_thresholds,
+            pose_auc_mode=pose_auc_mode,
+            pose_translation_antipodal=pose_translation_antipodal,
             delta_thresholds=delta_thresholds,
             f_score_threshold=f_score_threshold,
             depth_clip=depth_clip,
@@ -587,6 +594,9 @@ def _compute_metrics(
     tasks: list[str],
     scale_alignment: str,
     pose_auc_thresholds: tuple[float, ...],
+    pose_acc_thresholds: tuple[float, ...],
+    pose_auc_mode: str,
+    pose_translation_antipodal: bool,
     delta_thresholds: tuple[float, ...],
     f_score_threshold: float,
     depth_clip: tuple[float, float] | None = None,
@@ -624,7 +634,16 @@ def _compute_metrics(
         )
 
     if "pose" in tasks and prediction.extrinsics is not None:
-        out.update(_pose_metrics(prediction.extrinsics, sample.extrinsics_gt, pose_auc_thresholds))
+        out.update(
+            _pose_metrics(
+                prediction.extrinsics,
+                sample.extrinsics_gt,
+                pose_auc_thresholds,
+                pose_acc_thresholds,
+                pose_auc_mode,
+                pose_translation_antipodal,
+            )
+        )
 
     # Point-cloud metrics fire whenever both are present; gated on
     # "mvs_depth" or "point_cloud" to keep mono-depth runs cheap.
@@ -1155,6 +1174,9 @@ def _pose_metrics(
     E_pred: NDArray[Any],
     E_gt: NDArray[Any],
     auc_thresholds: tuple[float, ...],
+    acc_thresholds: tuple[float, ...],
+    auc_mode: str,
+    translation_antipodal: bool,
 ) -> dict[str, float]:
     if E_pred.shape != E_gt.shape:
         raise ValueError(f"pose shape mismatch: {E_pred.shape} vs {E_gt.shape}")
@@ -1167,9 +1189,13 @@ def _pose_metrics(
         Ep = E_pred
         Eg = E_gt
     abs_rot = np.asarray(rotation_error_degrees(Ep, Eg)).reshape(-1)
-    abs_trans = np.asarray(translation_cosine_error(Ep[..., :3, 3], Eg[..., :3, 3])).reshape(-1)
+    abs_trans = np.asarray(
+        translation_cosine_error(
+            Ep[..., :3, 3], Eg[..., :3, 3], antipodal=translation_antipodal
+        )
+    ).reshape(-1)
     abs_combined = np.maximum(abs_rot, abs_trans)
-    abs_aucs = pose_auc_fn(abs_combined, list(auc_thresholds))
+    abs_aucs = pose_auc_fn(abs_combined, list(auc_thresholds), mode=auc_mode)
 
     out: dict[str, float] = {
         "rotation_error_deg_mean": float(np.nanmean(abs_rot)),
@@ -1182,13 +1208,21 @@ def _pose_metrics(
     # N*(N-1)/2 unordered pairs. This is the metric VGGT / MASt3R /
     # DUSt3R papers report — directly comparable to their tables.
     if E_pred.ndim == 3 and E_pred.shape[0] >= 2:
-        pw_rot, pw_trans = pairwise_pose_errors(E_pred, E_gt)
+        pw_rot, pw_trans = pairwise_pose_errors(
+            E_pred, E_gt, translation_antipodal=translation_antipodal
+        )
         pw_combined = np.maximum(pw_rot, pw_trans)
-        pw_aucs = pose_auc_fn(pw_combined, list(auc_thresholds))
+        pw_aucs = pose_auc_fn(pw_combined, list(auc_thresholds), mode=auc_mode)
+        pw_rra = pose_acc_fn(pw_rot, list(acc_thresholds))
+        pw_rta = pose_acc_fn(pw_trans, list(acc_thresholds))
         out["pairwise_rot_err_deg_mean"] = float(np.nanmean(pw_rot))
         out["pairwise_trans_cos_err_deg_mean"] = float(np.nanmean(pw_trans))
         for t, v in pw_aucs.items():
             out[f"pairwise_pose_auc@{t:g}"] = float(v)
+        for t, v in pw_rra.items():
+            out[f"pairwise_RRA@{t:g}"] = float(v)
+        for t, v in pw_rta.items():
+            out[f"pairwise_RTA@{t:g}"] = float(v)
 
     return out
 

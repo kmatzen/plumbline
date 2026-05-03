@@ -40,6 +40,7 @@ _BUILTIN_ADAPTER_MODULES: tuple[str, ...] = (
     "plumbline.datasets.dtu",
     "plumbline.datasets.scannet_1500",
     "plumbline.datasets.co3dv2",
+    "plumbline.datasets.co3dv2_vggt_eval",
     "plumbline.datasets.gso",
     "plumbline.datasets.seven_scenes",
     "plumbline.datasets.ibims1",

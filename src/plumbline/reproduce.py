@@ -126,6 +126,15 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
         (float(depth_clip_cfg[0]), float(depth_clip_cfg[1])) if depth_clip_cfg else None
     )
 
+    pose_auc_thresholds = tuple(
+        float(t) for t in cfg.get("pose_auc_thresholds", (5.0, 10.0, 30.0))
+    )
+    pose_acc_thresholds = tuple(
+        float(t) for t in cfg.get("pose_acc_thresholds", (15.0,))
+    )
+    pose_auc_mode = str(cfg.get("pose_auc_mode", "analytic"))
+    pose_translation_antipodal = bool(cfg.get("pose_translation_antipodal", False))
+
     report = evaluate(
         model=model,
         dataset=dataset,
@@ -134,6 +143,10 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
         max_views=int(cfg.get("max_views", 8)),
         device=cfg.get("device", "cuda:0"),
         cache=PredictionCache(cfg.get("cache_dir")) if cfg.get("cache_dir") else None,
+        pose_auc_thresholds=pose_auc_thresholds,
+        pose_acc_thresholds=pose_acc_thresholds,
+        pose_auc_mode=pose_auc_mode,
+        pose_translation_antipodal=pose_translation_antipodal,
         depth_clip=depth_clip,
         pointcloud_alignment=cfg.get("pointcloud_alignment", "none"),
         chamfer_outlier_distance=cfg.get("chamfer_outlier_distance"),

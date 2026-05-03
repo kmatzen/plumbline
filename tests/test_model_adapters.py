@@ -102,6 +102,42 @@ def test_mast3r_requires_two_views() -> None:
         model.predict(images_single)
 
 
+def test_mast3r_supports_multiview() -> None:
+    """MASt3R adapter should advertise N-view support (post-PointCloudOptimizer
+    rewrite). The 2-view-only capability cap was a v0.1 limitation."""
+    cls = MODEL_REGISTRY["mast3r"]
+    assert cls.capabilities.min_views == 2
+    assert cls.capabilities.max_views >= 10  # need at least 10 for CO3Dv2 protocol
+
+
+def test_mast3r_rejects_too_many_views() -> None:
+    import numpy as np
+
+    cls = MODEL_REGISTRY["mast3r"]
+    model = cls(device="cpu")  # type: ignore[call-arg]
+    over = np.zeros((cls.capabilities.max_views + 1, 8, 8, 3), dtype=np.uint8)
+    with pytest.raises(ValueError, match="capped at"):
+        model.predict(over)
+
+
+def test_mast3r_config_hash_depends_on_ga_hyperparams() -> None:
+    """Changing PointCloudOptimizer hyperparams changes predictions for
+    N>=3, so the prediction cache must invalidate when they change."""
+    cls = MODEL_REGISTRY["mast3r"]
+    base = cls(device="cpu")  # type: ignore[call-arg]
+    # Each hyperparam should produce a distinct hash.
+    variants = {
+        "default": base.config_hash(),
+        "niter": cls(device="cpu", ga_niter=50).config_hash(),  # type: ignore[call-arg]
+        "lr": cls(device="cpu", ga_lr=0.005).config_hash(),  # type: ignore[call-arg]
+        "schedule": cls(device="cpu", ga_schedule="cosine").config_hash(),  # type: ignore[call-arg]
+        "init": cls(device="cpu", ga_init="known_poses").config_hash(),  # type: ignore[call-arg]
+    }
+    assert len(set(variants.values())) == len(variants), (
+        f"hashes collided: {variants}"
+    )
+
+
 def test_metric3d_requires_intrinsics() -> None:
     import numpy as np
 
