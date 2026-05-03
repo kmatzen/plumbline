@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>plumbline · reproducible eval for 3D-vision foundation models</title>
+  <meta name="description" content="A Python evaluation harness for 3D-vision foundation models. Pinned, audited configs that reproduce the numbers reported in each paper." />
+  <meta property="og:title" content="plumbline" />
+  <meta property="og:description" content="Reproduce paper numbers from 3D-vision foundation models." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230a0a0a'/%3E%3Crect x='7.4' y='2' width='1.2' height='10' fill='%23d4f000'/%3E%3Cpolygon points='5,12 11,12 8,15' fill='%23d4f000'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ruler down the left edge: a quiet structural element, no project state -->
+  <aside class="plumb" aria-hidden="true">
+    <div class="plumb-tick major">000</div>
+    <div class="plumb-tick">010</div>
+    <div class="plumb-tick">020</div>
+    <div class="plumb-tick major">030</div>
+    <div class="plumb-tick">040</div>
+    <div class="plumb-tick">050</div>
+    <div class="plumb-tick major">060</div>
+    <div class="plumb-tick">070</div>
+    <div class="plumb-tick">080</div>
+    <div class="plumb-tick major">090</div>
+    <div class="plumb-mark">plumbline</div>
+  </aside>
+
+  <div class="page" id="top">
+
+    <header class="topbar">
+      <span class="mark"><span class="mark-name">plumbline</span></span>
+      <nav class="nav">
+        <a href="#why">why</a>
+        <a href="#install">install</a>
+        <a href="#supported">supported</a>
+        <a class="ext" href="https://github.com/kmatzen/plumbline">github↗</a>
+      </nav>
+    </header>
+
+    <!-- ─────────────────── HERO ─────────────────── -->
+    <section class="hero">
+      <h1 class="huge">plumbline<span class="acc">.</span></h1>
+      <p class="tagline">Reproduce paper numbers from 3D-vision foundation models.</p>
+
+      <div class="prose">
+        <p>
+          Plumbline is a Python evaluation harness for monocular depth, multi-view depth,
+          and pose-estimation models — <span class="acc">VGGT</span>,
+          <span class="acc">Depth&nbsp;Anything&nbsp;3</span>, <span class="acc">MASt3R</span>,
+          <span class="acc">Metric3D-v2</span>, <span class="acc">MoGe</span>,
+          <span class="acc">Marigold</span>, and others.
+        </p>
+        <p>
+          Each <em>reproduction</em> is a pinned, audited YAML config — model variant,
+          dataset split, metric, alignment, crops, depth clip — that hits the number
+          reported in the original paper. It exists because the published number is
+          rarely what you get when you clone the model repo and run its eval script.
+        </p>
+      </div>
+
+      <figure class="hero-shell" aria-label="Sample run">
+<pre class="code"><code><span class="prompt">$</span> pip install plumbline-bench
+<span class="prompt">$</span> plumbline reproduce <span class="hl">da-v2-large-nyuv2</span>
+
+<span class="com">→ AbsRel  0.0428    (paper 0.0420)    ✓ match</span>
+<span class="com">→ δ₁      0.9788    (paper 0.978)     ✓</span></code></pre>
+      </figure>
+    </section>
+
+    <!-- ─────────────────── WHY ─────────────────── -->
+    <section class="sec" id="why">
+      <header class="sec-head">
+        <span class="sec-num">why/</span>
+        <h2 class="head">why plumbline</h2>
+        <p class="sub">
+          Comparing modern 3D-vision models is harder than it should be: each repo
+          ships its own eval script, each paper uses its own quietly different
+          protocol, and just running a model produces numbers that don’t match the
+          ones published with it. Plumbline closes that loop.
+        </p>
+      </header>
+
+      <ol class="proto">
+        <li>
+          <span class="proto-num">01</span>
+          <div>
+            <h4>Reproducible by default.</h4>
+            <p>
+              Each entry is a pinned, audited YAML config that targets a specific
+              paper number — model variant, dataset split, metric, alignment, crops,
+              clips — and lands within a documented tolerance.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="proto-num">02</span>
+          <div>
+            <h4>One protocol across models.</h4>
+            <p>
+              The same loader, the same alignment, the same crops are used for every
+              model on every dataset. Differences in observed numbers stop being
+              noise from incompatible eval code.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="proto-num">03</span>
+          <div>
+            <h4>The right defaults baked in.</h4>
+            <p>
+              The silent protocol details that decide whether a number lands —
+              alignment space, depth clipping, the variant of the dataset that the
+              paper actually used — are pinned per config. You don’t have to
+              rediscover them.
+            </p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ─────────────────── INSTALL / USE ─────────────────── -->
+    <section class="sec" id="install">
+      <header class="sec-head">
+        <span class="sec-num">use/</span>
+        <h2 class="head">install &amp; use</h2>
+        <p class="sub">requires Python 3.10+ and a CUDA GPU for most models.</p>
+      </header>
+
+      <div class="qs-grid">
+        <figure class="codefig">
+          <figcaption>install</figcaption>
+<pre class="code"><code><span class="prompt">$</span> pip install plumbline-bench<span class="com">    # or:</span>
+<span class="prompt">$</span> uv sync                       <span class="com"># from the repo</span></code></pre>
+        </figure>
+
+        <figure class="codefig">
+          <figcaption>discover</figcaption>
+<pre class="code"><code><span class="prompt">$</span> plumbline list-models
+<span class="prompt">$</span> plumbline list-datasets</code></pre>
+        </figure>
+
+        <figure class="codefig">
+          <figcaption>reproduce a paper number</figcaption>
+<pre class="code"><code><span class="prompt">$</span> export NYUV2_ROOT=/path/to/nyuv2
+<span class="prompt">$</span> plumbline reproduce <span class="hl">da-v2-large-nyuv2</span></code></pre>
+        </figure>
+
+        <figure class="codefig">
+          <figcaption>run any model × dataset</figcaption>
+<pre class="code"><code><span class="prompt">$</span> plumbline run <span class="flag">--model</span> vggt <span class="flag">--dataset</span> eth3d \
+    <span class="flag">--tasks</span> pose <span class="flag">--max-views</span> 4</code></pre>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ─────────────────── SUPPORTED ─────────────────── -->
+    <section class="sec" id="supported">
+      <header class="sec-head">
+        <span class="sec-num">supported/</span>
+        <h2 class="head">models &amp; datasets</h2>
+      </header>
+
+      <div class="cov">
+        <article class="cov-col">
+          <h3>models<span class="cnt">9</span></h3>
+          <ul class="cov-flat">
+            <li>depth-anything-v2</li>
+            <li>depth-anything-3</li>
+            <li>metric3d-v2</li>
+            <li>moge</li>
+            <li>vggt</li>
+            <li>mast3r</li>
+            <li>marigold</li>
+            <li>geowizard</li>
+            <li>depth-pro</li>
+          </ul>
+        </article>
+
+        <article class="cov-col">
+          <h3>datasets<span class="cnt">8</span></h3>
+          <ul class="cov-flat">
+            <li>nyuv2</li>
+            <li>kitti</li>
+            <li>diode</li>
+            <li>eth3d</li>
+            <li>dtu</li>
+            <li>sintel</li>
+            <li>scannet</li>
+            <li>co3dv2</li>
+          </ul>
+        </article>
+      </div>
+
+      <p class="foot-note">
+        full list of pinned reproductions, paper targets, and tolerances:
+        <a href="https://github.com/kmatzen/plumbline/blob/main/REPRODUCTIONS.md">REPRODUCTIONS.md</a>
+        · adding a model or dataset:
+        <a href="https://github.com/kmatzen/plumbline/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.
+      </p>
+    </section>
+
+    <footer class="foot">
+      <span>plumbline</span>
+      <span class="sep">/</span>
+      <span>apache-2.0</span>
+      <span class="pad"></span>
+      <div class="links">
+        <a href="https://github.com/kmatzen/plumbline">github</a>
+        <a href="https://pypi.org/project/plumbline-bench/">pypi</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // scroll-spy nav highlight
+    const navLinks = Array.from(document.querySelectorAll('.nav a[href^="#"]'));
+    const sections = navLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>
