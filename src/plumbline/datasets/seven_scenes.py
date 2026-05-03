@@ -7,8 +7,9 @@ in RGB-D Images" and remains a standard relocalization benchmark.
 
 NOTE on paper citations: an earlier version of this docstring claimed
 "MASt3R (§4.2 and Table 5) reports on it" — that is incorrect. The
-MASt3R paper (arXiv:2406.09756) has Tables 1-4 only, and "7-Scenes"
-appears zero times. MASt3R's only public 7-Scenes eval (in
+MASt3R paper (arXiv:2406.09756) does not evaluate 7-Scenes pairwise
+pose under any table number ("7-Scenes" / "7Scenes" returns zero
+hits across the paper). MASt3R's only public 7-Scenes eval (in
 `naver/dust3r`'s `dust3r_visloc/datasets/sevenscenes.py`) is visual
 localization (PnP against retrieved map images, % at cm/deg
 thresholds) — not pairwise relative pose. Pairwise pose AUC on

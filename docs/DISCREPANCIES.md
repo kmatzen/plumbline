@@ -16,12 +16,13 @@ Status legend:
 | ID | One-liner | Status |
 |---|---|---|
 | D3 | VGGT-DTU chamfer — PatchmatchNet geometric-consistency filter verified on 22-scan re-run (Overall 0.756 mm vs prior 0.758, ~no-op). fp32 probe also verified (0.750, also ~no-op). Adapter + protocol levers exhausted; ~1.98× residual gap is in public VGGT-1B output, not anything plumbline controls | 🔎 upstream-blocked |
-| D4 | VGGT-ETH3D — per-view-masked path landed; 3-scene Overall 0.642 m vs paper 0.709 m (9.4 % UNDER paper, ±5 % strict gate misses but direction is favorable) | 🧪 fix-pending-verify |
-| D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta |
+| D4 | VGGT-ETH3D — per-view-masked path landed at Overall 0.642 m on the 3-scene subset (9.4 % UNDER paper 0.709). Apples-to-apples comparison needs the full 13-scene split (D10) | ✅ infra landed; awaits D10 |
+| D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta (subsumed by D22) |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
 | D17 | GeoWizard NYU 10 % off — adapter audit (dtype + xformers + full seed_all) verified on 654-sample run: AbsRel 0.0574 vs prior fp16's 0.0573, identical. Gap is upstream (checkpoint or training data), not adapter | 🔎 upstream-blocked |
 | D18 | GeoWizard-KITTI — same model + checkpoint as D17, same likely-upstream cause; YAML repointed to fp32+xformers for protocol fidelity but verification deprioritized | 🔎 upstream-blocked |
-| D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 new 2026-04-24 |
+| D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 upstream-blocked |
+| D23 | `mast3r_co3dv2_pose.yaml` `source_confidence: verified_pdf` is currently WebFetch-unverifiable — arXiv HTML render of `2406.09756` only loads the appendix (Tables 7-8). Cell value (mAA(30) = 0.818) may be correct but needs direct PDF read before promoting to ✅ | 🔎 new 2026-05-03 |
 
 ---
 
@@ -998,47 +999,40 @@ teardown — same numbers re-derivable by re-running the YAML).
 
 ---
 
-## Priorities for the next session
+## Priorities for the next session (2026-05-03)
 
-**Completed 2026-04-24:**
-- D8 — MATCH (`KITTIMogeEvalLoader` delegates to MoGe's `_process_instance`).
-- D20 — scene-agg memory bug fixed: eager per-chunk voxel_downsample (`8827a87`) + unit-mixup fix (`1fc0f9c`, DTU mm vs ETH3D m). D3 now completes without OOM.
-- D21 — prediction cache key now mixes input-tensor fingerprint (`8827a87`).
-- Marigold-style protocol + YAML repoint landed (`ce4183e`, `6d24c73`). Verify surfaced D22.
+**Active — needs GPU time:**
+1. **CO3Dv2 pose** — VGGT Table 1 (AUC@30 = 0.882) and MASt3R Table 3
+   (mAA(30) = 0.818). Loader + N-view MASt3R adapter landed
+   2026-04-27 (commit `cd35b93`); zero GPU validation. ≥ 2.5 h on a
+   3090 for the MASt3R run alone. Gates the pose half of the v0.1
+   release.
+2. **D4 / D10 — full 13-scene ETH3D split.** Per-view-masked path
+   already produces 0.642 m on the 3-scene subset. Need to either
+   stage the remaining 10 scenes (~14 GB) for the apples-to-apples
+   13-scene mean, or formally demote the row to "3-scene
+   informational subset".
+3. **D23 — direct PDF re-verification of `mast3r_co3dv2_pose`.**
+   WebFetch HTML render couldn't reach Table 3 across multiple URL
+   surfaces; cell value 0.818 needs PDF confirmation before the row
+   can count as ✅ in REPRODUCTIONS.md. Cheap (one PDF read).
 
-**Open correctness investigations:**
-1. **D3 — VGGT-DTU chamfer Overall 2× off** (0.758 mm mean / 0.442 mm
-   median vs paper 0.382 mm). 2026-04-25 single-record diff against
-   CUT3R `eval/mv_recon/` exposed stage-1 loader-side structural
-   divergence (plumbline shipped scene-level `Points/stl/*.ply` only;
-   CUT3R loader expects per-view `depths/*.npy` + `binary_masks/
-   *.png` per scan); fix landed same session — `DTUDataset(
-   with_per_view_gt=True)` derives per-view GT by z-buffering the
-   laser PLY through each GT pose and the runner now has a
-   `per_view_masked` path that ports the CUT3R 224×224-crop +
-   GT-mask + KDTree-NN protocol. Numbers went 130× → 2× off paper,
-   structurally correct, but ±5 % v0.1 gate not yet met. Remaining
-   gap candidates: Poisson-mesh-rendered GT (vs splat), all 49 rig
-   views (vs first 32), per-pixel aspect-ratio diagnosis.
-   YAML metric-key mismatch (`chamfer` → `overall`) fixed.
-2. **D4 — VGGT-ETH3D regression vs prior run** (1.75 m vs prior 0.82 m, 2× worse). A/B `scan_clean` vs `dslr_scan_eval` GT to isolate.
-3. **D22 — Marigold + GeoWizard KITTI paper cells** don't reproduce under either candidate protocol. Needs upstream clarification on paper's actual eval config.
-4. **D17** — GeoWizard NYU 10 % off. **Confirmed same family as D22 (2026-04-26).** Adapter audit (fp32, xformers, full ``seed_all``) verified on 654-sample re-run: AbsRel 0.0574 vs prior fp16's 0.0573, identical. Eval-protocol axes (5ba6fae) and adapter axes both ruled out. Gap lives in the public checkpoint or training data — upstream-blocked. D18 deprioritized for the same reason (same checkpoint, same conclusion expected).
+**Closed-blocked — do not retry without an upstream change:**
+- D3 (VGGT-DTU), D17 + D18 (GeoWizard NYU + KITTI), D9 + D22
+  (Marigold-KITTI). All five exhausted adapter + protocol + dtype +
+  RNG levers. Residual gap is in the public checkpoint or a
+  paper-private eval config. They re-enter the queue if/when
+  upstream releases an updated checkpoint or eval script.
 
-**Landed 2026-04-24:**
-- D8 — MoGe-KITTI AbsRel 0.0404 vs paper 0.0408 (0.9 % off) ✅
-  `KITTIMogeEvalLoader` now delegates to MoGe's own
-  `EvalDataLoaderPipeline._process_instance` for the homographic
-  FoV-crop. D9 + D18 share the same loader — D9 pending GPU verify,
-  D18 pending xformers install + verify.
-- D21 — prediction cache stale-hit bug exposed en route to D8;
-  workaround is `rm -rf` of the shard before re-run. Proper fix
-  deferred.
+**Deferred (v0.2+):**
+- D15 — DA-V2 NYU ~0.002 bias (Eigen-crop + rawDepths interaction).
+- New adapter additions per `plan.md` § 10 Tier 2.
 
-**Nice-to-have (v0.2):**
-- D10 — VGGT-ETH3D 13-scene full split, or demote to informational.
-- D17 — GeoWizard NYU 10 % off (RNG or alignment).
-- D15 — DA-V2 NYU ~0.002 bias (Eigen-crop + rawDepths).
+**Recently closed (one-liner; full diagnoses in their commits):**
+- D8 ✅ 2026-04-24 — MoGe-KITTI AbsRel 0.0404 vs paper 0.0408.
+- D19* ✅ 2026-04-26 — MoGe-DIODE FoV-warp port, 0.0407 vs 0.0400.
+- D20 ✅ 2026-04-24 — scene-agg memory bug.
+- D21 ✅ 2026-04-24 — prediction cache fingerprint.
 
 ---
 
