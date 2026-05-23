@@ -177,9 +177,7 @@ def run_cmd(
         ds_kwargs["root"] = data_root
     for kv in dataset_kwargs:
         if "=" not in kv:
-            raise typer.BadParameter(
-                f"--dataset-kwargs expects KEY=VALUE; got {kv!r}"
-            )
+            raise typer.BadParameter(f"--dataset-kwargs expects KEY=VALUE; got {kv!r}")
         k, _, v = kv.partition("=")
         ds_kwargs[k.strip()] = _parse_kv_value(v)
     dataset_instance = dataset_cls(**ds_kwargs)
@@ -220,6 +218,106 @@ def reproduce(
     if result.paper_match is not None:
         status = "[green]MATCH[/green]" if result.paper_match else "[red]MISMATCH[/red]"
         console.print(f"Paper-number check: {status}")
+
+
+@app.command("queue")
+def queue_cmd(
+    run: bool = typer.Option(
+        False,
+        "--run",
+        help="Execute the pending jobs (needs a GPU + staged data). Default: list only.",
+    ),
+    name: str | None = typer.Option(
+        None, "--name", help="Restrict to a single job by reproduction name."
+    ),
+    include_blocked: bool = typer.Option(
+        False, "--include-blocked", help="Also show blocked jobs in the listing."
+    ),
+    output: Path | None = typer.Option(
+        None, "--output", "-o", help="Write a JSON run summary (with --run)."
+    ),
+) -> None:
+    """Show or run the GPU job queue (``reproductions/gpu_queue.yaml``).
+
+    Without ``--run`` this is a planning view: pending/blocked jobs, their
+    paper targets, data footprints, and required env vars. With ``--run`` it
+    executes the pending jobs in priority order and reports MATCH / MISMATCH /
+    INFO / ERROR for each — the executable counterpart to ``GPU_RUNBOOK.md``.
+    """
+    from plumbline.queue import load_queue, run_queue
+
+    if run:
+        _eager_import_adapters()
+        records = run_queue(only=name, output=output)
+        if not records:
+            console.print("[yellow]no pending jobs to run[/yellow]")
+            raise typer.Exit()
+        table = Table(title="GPU queue — run results")
+        table.add_column("job")
+        table.add_column("outcome")
+        table.add_column("metric")
+        table.add_column("observed")
+        table.add_column("published")
+        style = {
+            "match": "green",
+            "mismatch": "red",
+            "info": "cyan",
+            "error": "yellow",
+        }
+        n_match = 0
+        for r in records:
+            if r.outcome == "match":
+                n_match += 1
+            obs = f"{r.observed:.4f}" if r.observed is not None else "—"
+            pub = (
+                f"{r.published:.4f}"
+                if r.published is not None and r.published == r.published
+                else "—"
+            )
+            detail = r.error if r.outcome == "error" else r.outcome
+            table.add_row(
+                r.name,
+                f"[{style.get(r.outcome, 'white')}]{detail}[/]",
+                r.primary_metric or "—",
+                obs,
+                pub,
+            )
+        console.print(table)
+        console.print(f"{n_match}/{len(records)} job(s) matched paper within tolerance.")
+        if output:
+            console.print(f"[green]wrote[/green] {output}")
+        return
+
+    jobs = load_queue()
+    shown = jobs if include_blocked else [j for j in jobs if j.status != "blocked"]
+    table = Table(title="GPU queue (reproductions/gpu_queue.yaml)")
+    table.add_column("pri", justify="right")
+    table.add_column("job")
+    table.add_column("status")
+    table.add_column("GB", justify="right")
+    table.add_column("~min", justify="right")
+    table.add_column("env")
+    table.add_column("paper target")
+    sstyle = {"pending": "green", "blocked": "yellow", "done": "dim"}
+    for j in shown:
+        table.add_row(
+            str(j.priority),
+            j.name,
+            f"[{sstyle.get(j.status, 'white')}]{j.status}[/]",
+            f"{j.data_footprint_gb:g}",
+            str(j.est_wall_min),
+            ",".join(j.requires_env),
+            j.paper_target or "—",
+        )
+    console.print(table)
+    n_pending = sum(1 for j in jobs if j.status == "pending")
+    n_blocked = sum(1 for j in jobs if j.status == "blocked")
+    n_done = sum(1 for j in jobs if j.status == "done")
+    hidden = "" if include_blocked else f" ({n_blocked} blocked hidden; --include-blocked to show)"
+    console.print(
+        f"{n_pending} pending, {n_blocked} blocked, {n_done} done.{hidden} "
+        f"Run with: [bold]plumbline queue --run[/bold]"
+    )
 
 
 @app.command("report")

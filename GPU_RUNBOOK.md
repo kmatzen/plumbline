@@ -3,6 +3,33 @@
 Spin up → bring up → run → tear down. Single doc; the agent and the
 human see the same instructions.
 
+## The run queue
+
+The backlog of reproductions awaiting a GPU is a machine-readable file,
+`reproductions/gpu_queue.yaml`, driven by the `plumbline queue` command —
+this is the executable index for everything below.
+
+```bash
+plumbline queue                  # plan: pending jobs, footprints, env vars
+plumbline queue --include-blocked  # also show what NOT to run (and why)
+plumbline queue --run            # execute pending jobs in priority order
+plumbline queue --run --name vggt-co3dv2-pose   # just one
+plumbline queue --run -o /tmp/results/queue.json  # write a JSON summary
+```
+
+`--run` executes each `pending` job via `plumbline reproduce`, captures
+MATCH / MISMATCH / INFO / ERROR, and keeps going if one job fails. It
+**never** runs `blocked` jobs (upstream-blocked cells, data-not-staged),
+and never mutates a YAML. After a job lands within tolerance, hand-flip
+its `status:` to `done` in the queue file and update `REPRODUCTIONS.md`.
+
+Use the listing to size the box: sum the `GB` column for the jobs you
+intend to run (+ weights + cache + 20 % headroom) against the rental
+disk before booking. As of 2026-05-23 the pending head of the queue is
+`vggt-co3dv2-pose` (target AUC@30 0.882) and `mast3r-co3dv2-pose`
+(target mAA(30) 0.818) — both paper targets PDF-verified, both on the
+same CO3Dv2 stage, so stage once and run back-to-back.
+
 ## Hard constraints
 
 1. **Never modify reproduction YAMLs.** Failed paper-match is a finding,
@@ -70,6 +97,7 @@ Depth Pro, Metric3Dv2.
 | MASt3R | `git clone --recursive https://github.com/naver/mast3r $HOME/deps/mast3r; uv pip install roma scikit-learn trimesh; export MAST3R_ROOT=$HOME/deps/mast3r` |
 | GeoWizard | `git clone --depth 1 https://github.com/fuxiao0719/GeoWizard $HOME/deps/geowizard; export GEOWIZARD_ROOT=$HOME/deps/geowizard; uv sync --extra geowizard; uv pip install --force-reinstall 'nvidia-cudnn-cu12==9.1.0.70'` |
 | π³ | `git clone https://github.com/yyfz/Pi3 $HOME/deps/pi3; cd $HOME/deps/pi3 && uv pip install -r requirements.txt; export PI3_ROOT=$HOME/deps/pi3` |
+| CUT3R | `git clone https://github.com/CUT3R/CUT3R $HOME/deps/cut3r; cd $HOME/deps/cut3r && uv pip install -r requirements.txt; export CUT3R_ROOT=$HOME/deps/cut3r`; download the 512-DPT weights per the repo README, then `export CUT3R_CKPT=$CUT3R_ROOT/src/cut3r_512_dpt_4_64.pth` |
 
 If `uv pip install` from a git URL dies with `curl 92 HTTP/2 stream
 CANCEL`, retry — pause concurrent s5cmd jobs first to free bandwidth.
@@ -233,9 +261,11 @@ gate (`plumbline reproduce vggt-paper-dtu-mvs`) that was retired
   `mast3r-co3dv2-pose` (MASt3R Table 3, mAA(30) = 0.818).
 - **No fabricated paper cells** — every `verified_pdf` YAML audited
   against the source PDF (table + col + row). See
-  `reproductions/AUDIT.md` for the per-YAML log; the 2026-05-03
-  follow-up flags `mast3r_co3dv2_pose` as `WEBFETCH_INCOMPLETE`
-  (HTML render only served the appendix; PDF re-verification owed).
+  `reproductions/AUDIT.md` for the per-YAML log. As of 2026-05-23 all
+  25 `verified_pdf` YAMLs with a pinned value are PDF-confirmed
+  (the last gap, `mast3r_co3dv2_pose`, was closed by a direct PDF read
+  of MASt3R Table 3 — D23 resolved; the two GeoWizard paper targets
+  were also audited for the first time and confirmed).
 
 D3 (VGGT-DTU) and D4 (VGGT-ETH3D) are no longer gate items —
 upstream-blocked / awaiting D10 respectively. See `REPRODUCTIONS.md`
