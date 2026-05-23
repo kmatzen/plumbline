@@ -180,20 +180,21 @@ ground truth).
 | geowizard_kitti | GeoWizard | KITTI Eigen | abs_rel | 0.097 | GeoWizard Table 1, KITTI AbsRel col, **"GeoWizard (Ours)" row = 9.7 → 0.097** (δ1 = 92.1) | VERIFIED (direct PDF, 2026-05-23) | First audit of this YAML. Same table/PDF page as above. Paper target confirmed; observed value upstream-blocked (D18/D22). Note Table 1's DIODE column is "DIODE-Full" (29.7), not the indoor/outdoor split used by the MoGe-lineage YAMLs. |
 | mast3r_co3dv2_pose | MASt3R | CO3Dv2 pose | pairwise_pose_auc@30 | 0.818 | MASt3R Table 3, CO3Dv2 row (b) MASt3R, mAA(30) = 81.8 → 0.818 (companions RRA@15 94.6, RTA@15 91.9) | VERIFIED (direct PDF, 2026-05-23) | See the 2026-05-03 follow-up table (row updated in place). Resolved D23. |
 | cut3r_nyuv2 | CUT3R | NYU-v2 (single-frame) | abs_rel | 0.086 | CUT3R Table 1 (Single-frame Depth Evaluation, Wang et al. 2025, arXiv:2501.12387), NYU-v2 Abs Rel col, **"Ours" row = 0.086** (companion δ<1.25 = 90.9) | VERIFIED (direct PDF, 2026-05-23) | PDF page 5. Protocol: per-frame median scaling per DUSt3R. **Value PDF-verified; eval-protocol match vs MonST3R's NYU eval UNCONFIRMED** (single-record diff owed before paper-match — see YAML CAVEAT). New adapter (video / unordered coverage); GPU validation pending. |
+| cut3r_kitti | CUT3R | KITTI (single-frame) | abs_rel | 0.092 | CUT3R Table 1, KITTI Abs Rel col, **"Ours" row = 0.092** (companion δ<1.25 = 91.3) | VERIFIED (direct PDF, 2026-05-23) | PDF page 5, same table/row as cut3r_nyuv2. Same caveat: value PDF-verified, eval-protocol match vs MonST3R's KITTI eval UNCONFIRMED. GPU validation pending. |
 
 ### Verified-coverage status (2026-05-23)
 
-All **26** `verified_pdf` YAMLs that pin a non-null value are now audited
+All **27** `verified_pdf` YAMLs that pin a non-null value are now audited
 against the source PDF:
 
-- **VERIFIED outright (value + table + col + row match):** 18 —
+- **VERIFIED outright (value + table + col + row match):** 19 —
   da3_nyuv2, da_v2_{small,base,large}_{nyuv2,kitti} (the canonical
   DA-V2 Table 2 cells), da_v2_large_diode, da_v2_large_kitti_moge,
   metric3d_v2_{kitti,nyuv2,giant_kitti,giant_nyuv2}, marigold_v1_1_kitti,
   vggt_paper_dtu_mvs, vggt_dtu_fp32_probe, vggt_eth3d_multiscene_chamfer,
   vggt_co3dv2_pose, mast3r_co3dv2_pose, geowizard_nyuv2, geowizard_kitti,
-  cut3r_nyuv2 (value verified; eval-protocol match still owed a
-  single-record diff).
+  cut3r_nyuv2, cut3r_kitti (both: value verified; eval-protocol match
+  vs MonST3R still owed a single-record diff).
 - **Value VERIFIED, citation table-number corrected in-YAML since the
   2026-04-20 audit** (the old `WRONG_TABLE` rows): da_v2_large_nyuv2,
   marigold_v1_1_nyuv2, moge_vitl_nyuv2, moge_vitl_diode_both,
