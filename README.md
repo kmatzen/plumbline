@@ -19,11 +19,12 @@ paper cells. API will still change before 1.0.
   (dynamic-scene video; base dust3r inference, flow refinement scoped as
   a follow-up). The last three landed with conversion unit tests; GPU
   validation pending.
-- **11 datasets**: NYUv2 (Eigen 2014, rawDepths), KITTI (Eigen 652,
+- **12 datasets**: NYUv2 (Eigen 2014, rawDepths), KITTI (Eigen 652,
   annotated GT, Garg crop), DIODE (FoV-warp loader, MoGe-paper protocol),
   ETH3D high-res multi-view, DTU MVS (22-scan test split), CO3Dv2
   (VGGT-canonical pose-eval recipe), 7-Scenes, GSO, iBims-1, Sintel
-  (RGB + flow; depth gated), ScanNet (gated).
+  (RGB + flow; depth gated), ScanNet (gated), **Bonn RGB-D Dynamic**
+  (video depth, one-sample-per-sequence; closes the runnable-video gap).
 - **16 paper-match reproductions** with `source_confidence: verified_pdf`
   — see [REPRODUCTIONS.md](./REPRODUCTIONS.md). Each cell audited
   table-+-column-+-row against the source paper
