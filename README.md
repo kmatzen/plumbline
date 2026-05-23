@@ -11,12 +11,14 @@ paper cells. API will still change before 1.0.
 
 ## What works today
 
-- **12 model adapters**: DA-V2 (6 variants including metric
+- **13 model adapters**: DA-V2 (6 variants including metric
   Indoor/Outdoor), DA3, Metric3Dv2 (S/L/Giant2), MoGe-1, MoGe-2 (incl.
   `*-normal`), Marigold v1-1, GeoWizard, Depth Pro, MASt3R (N-view via
   PointCloudOptimizer for N≥3, PairViewer for N=2), VGGT, π³, **CUT3R**
-  (recurrent — covers video + unordered image collections; adapter +
-  conversion unit tests landed, GPU validation pending).
+  (recurrent — video + unordered image collections), and **MonST3R**
+  (dynamic-scene video; base dust3r inference, flow refinement scoped as
+  a follow-up). The last three landed with conversion unit tests; GPU
+  validation pending.
 - **11 datasets**: NYUv2 (Eigen 2014, rawDepths), KITTI (Eigen 652,
   annotated GT, Garg crop), DIODE (FoV-warp loader, MoGe-paper protocol),
   ETH3D high-res multi-view, DTU MVS (22-scan test split), CO3Dv2

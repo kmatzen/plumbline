@@ -1,0 +1,43 @@
+# CUT3R single-frame depth on KITTI — CUT3R Table 1 paper target.
+#
+# Targets CUT3R Table 1 "Single-frame Depth Evaluation" (Wang et al.
+# 2025, arXiv:2501.12387), KITTI column, "Ours" row: Abs Rel = 0.092
+# (companion δ<1.25 = 91.3). Verified by direct PDF read 2026-05-23
+# (PDF page 5).
+#
+# Protocol (paper §4.1): zero-shot monocular depth on KITTI (dynamic,
+# outdoor), "per-frame median scaling per DUSt3R", metrics Abs Rel +
+# δ<1.25. CUT3R is recurrent; run here on single frames (min_views=1).
+#
+# CAVEAT (read before promoting to ✅): same as cut3r-nyuv2. The paper
+# *value* is PDF-verified, but whether plumbline's kitti_eigen_garg
+# protocol (Garg crop + clip[1e-3,80]) matches MonST3R/DUSt3R's KITTI
+# depth eval exactly is UNCONFIRMED. Single-record diff vs MonST3R's
+# eval code (plan.md §12) before counting this as a paper-match. GPU
+# validation pending (queued in reproductions/gpu_queue.yaml).
+
+name: cut3r-kitti
+protocol: kitti_eigen_garg
+
+model:
+  name: cut3r
+  kwargs:
+    size: 512
+
+# Per-frame median scaling (paper §4.1, "per DUSt3R"). kitti_eigen_garg
+# leaves scale_alignment to the reproduction.
+scale_alignment: median
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.092
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2025, CUT3R (arXiv:2501.12387), Table 1 (Single-frame Depth Evaluation), KITTI Abs Rel column, 'Ours' row = 0.092 (companion δ<1.25 = 91.3; protocol: per-frame median scaling per DUSt3R). Verified by direct PDF read 2026-05-23 (PDF page 5)."
+  source_confidence: verified_pdf
+
+notes: >
+  Outdoor companion to cut3r-nyuv2 (same Table 1). Needs $CUT3R_ROOT +
+  $CUT3R_CKPT (512-DPT weights) + $KITTI_ROOT. Value PDF-verified;
+  eval-protocol match unconfirmed (see CAVEAT) — treat as ⌛ until the
+  single-record diff against MonST3R's KITTI eval lands.

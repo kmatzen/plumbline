@@ -44,7 +44,7 @@ cells are now ℹ️ instead of ✅.
 | **Depth Pro** | ℹ️ δ₁ **0.9347** _(paper does not evaluate NYU — earlier 0.961 pin was fabricated)_ | ⌛ | — | — | — | — | — |
 | **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ⌛ AUC@30 target **0.818** (Table 3 verified_pdf, awaiting GPU run) | — |
 | **VGGT** | — | — | — | ⚠️ 0.642 m vs 0.709 _(D4 per-view-masked landed, 9.4% under paper on 3-scene; D10 needed for full split)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ⌛ AUC@30 target **0.882** (Table 1 verified_pdf, awaiting GPU run) | — |
-| **CUT3R** _(video + unordered)_ | ⌛ AbsRel target **0.086** (Table 1 verified_pdf; per-frame median scaling; protocol-diff + GPU pending) | 🎯 AbsRel target 0.092 (Table 1; no YAML yet) | — | — | — | ℹ️ recurrent/online — handles ordered video & unordered sets | — |
+| **CUT3R** _(video + unordered)_ | ⌛ AbsRel target **0.086** (Table 1 verified_pdf; per-frame median scaling; protocol-diff + GPU pending) | ⌛ AbsRel target **0.092** (Table 1 verified_pdf; same caveat) | — | — | — | ℹ️ recurrent/online — handles ordered video & unordered sets | — |
 
 ### Paper-match count
 

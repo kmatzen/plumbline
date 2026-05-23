@@ -76,8 +76,23 @@ jobs:
       recurrent + order-agnostic; this cell runs single frames). Value is
       PDF-verified; the eval-protocol match vs MonST3R's NYU eval is
       UNCONFIRMED — single-record diff first (see the YAML CAVEAT), so
-      expect ⚠️/⌛ not an automatic ✅. Companion target: KITTI Abs Rel
-      0.092 (same Table 1) once a cut3r-kitti YAML lands.
+      expect ⚠️/⌛ not an automatic ✅. Outdoor companion: cut3r-kitti.
+
+  - name: cut3r-kitti
+    status: pending
+    priority: 3
+    paper_target: "CUT3R Table 1 — KITTI single-frame Abs Rel = 0.092 (verified_pdf 2026-05-23)"
+    primary_metric: abs_rel
+    datasets: [kitti]
+    data_footprint_gb: 6
+    est_wall_min: 50
+    requires_env: [KITTI_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    extras: "CUT3R — same setup as cut3r-nyuv2."
+    notes: >
+      Outdoor companion to cut3r-nyuv2 (same Table 1, same adapter +
+      weights). Same protocol caveat: value PDF-verified, eval-protocol
+      match vs MonST3R's KITTI eval UNCONFIRMED. Run back-to-back with
+      cut3r-nyuv2 once CUT3R is set up.
 
   # ----- Tier 2: informational runs (no paper target; A/B + smoke) -----
   - name: da3-co3dv2-pose
