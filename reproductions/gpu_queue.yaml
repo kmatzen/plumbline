@@ -94,6 +94,25 @@ jobs:
       match vs MonST3R's KITTI eval UNCONFIRMED. Run back-to-back with
       cut3r-nyuv2 once CUT3R is set up.
 
+  - name: cut3r-bonn
+    status: pending
+    priority: 3
+    paper_target: "CUT3R Table 2 — Bonn VIDEO depth (per-sequence scale) Abs Rel = 0.078 (verified_pdf 2026-05-23)"
+    primary_metric: abs_rel
+    datasets: [bonn]
+    data_footprint_gb: 4
+    est_wall_min: 40
+    requires_env: [BONN_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    extras: >
+      Bonn: extract the rgbd_bonn_<name>.zip archives (no auth) from
+      https://www.ipb.uni-bonn.de/data/rgbd-dynamic-dataset/ under
+      $BONN_ROOT. CUT3R as for cut3r-nyuv2.
+    notes: >
+      First genuine VIDEO reproduction (one sample = one sequence, recurrent
+      multi-frame, per-sequence median scale). Value PDF-verified; the exact
+      Bonn sequence/frame selection is MonST3R's protocol and UNCONFIRMED
+      here — single-record diff first (see YAML CAVEAT).
+
   # ----- Tier 2: informational runs (no paper target; A/B + smoke) -----
   - name: da3-co3dv2-pose
     status: pending

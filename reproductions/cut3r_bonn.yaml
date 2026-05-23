@@ -1,0 +1,52 @@
+# CUT3R VIDEO depth on Bonn RGB-D Dynamic — CUT3R Table 2 paper target.
+#
+# Targets CUT3R Table 2 "Video Depth Evaluation" (Wang et al. 2025,
+# arXiv:2501.12387), Per-sequence scale block, BONN Abs Rel column,
+# "Ours" row = 0.078 (companion δ<1.25 = 93.7). Verified by direct PDF
+# read 2026-05-23 (PDF page 6).
+#
+# This is the first genuine VIDEO reproduction: one Sample == one Bonn
+# sequence of N frames, run through CUT3R's recurrent state, with the
+# runner fitting a single (per-sequence) median scale over the whole
+# sample — exactly the "per-sequence scale" protocol Table 2 uses.
+#
+# CAVEAT (read before promoting to ✅): the paper *value* is PDF-verified,
+# but the *exact* Bonn eval protocol (which sequences, how many frames /
+# what stride) lives in MonST3R's eval code (CUT3R follows MonST3R). This
+# YAML evaluates all discovered sequences with 60 evenly-sampled frames —
+# a reasonable default, NOT a confirmed match to MonST3R's selection.
+# Single-record diff vs MonST3R's Bonn eval (plan.md §12) before counting
+# this as a paper-match. GPU validation pending (queued).
+
+name: cut3r-bonn
+
+model:
+  name: cut3r
+  kwargs:
+    size: 512
+
+dataset:
+  name: bonn
+  kwargs:
+    num_frames: 60
+
+tasks: [mono_depth]
+# Per-sequence scale: the runner fits one median scale across all frames
+# of a sample, and one Bonn Sample is one sequence (paper §4.1 / Table 2).
+scale_alignment: median
+max_views: 64
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.078
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2025, CUT3R (arXiv:2501.12387), Table 2 (Video Depth Evaluation), Per-sequence scale, BONN Abs Rel column, 'Ours' row = 0.078 (companion δ<1.25 = 93.7). Verified by direct PDF read 2026-05-23 (PDF page 6)."
+  source_confidence: verified_pdf
+
+notes: >
+  Needs $CUT3R_ROOT + $CUT3R_CKPT (512-DPT) + $BONN_ROOT (extract the
+  rgbd_bonn_<name>.zip archives from ipb.uni-bonn.de under it). Value
+  PDF-verified; the sequence/frame selection is a reasonable default, not
+  MonST3R's exact protocol (see CAVEAT) — treat as ⌛ until the
+  single-record diff lands. Demonstrates the video task end-to-end.

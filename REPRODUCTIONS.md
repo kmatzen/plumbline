@@ -46,6 +46,13 @@ cells are now ℹ️ instead of ✅.
 | **VGGT** | — | — | — | ⚠️ 0.642 m vs 0.709 _(D4 per-view-masked landed, 9.4% under paper on 3-scene; D10 needed for full split)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ⌛ AUC@30 target **0.882** (Table 1 verified_pdf, awaiting GPU run) | — |
 | **CUT3R** _(video + unordered)_ | ⌛ AbsRel target **0.086** (Table 1 verified_pdf; per-frame median scaling; protocol-diff + GPU pending) | ⌛ AbsRel target **0.092** (Table 1 verified_pdf; same caveat) | — | — | — | ℹ️ recurrent/online — handles ordered video & unordered sets | — |
 
+**Video benchmark (new 2026-05-23):** the **Bonn RGB-D Dynamic** loader
+(`bonn`, one-sample-per-sequence) closes the runnable-video gap.
+`cut3r-bonn` targets CUT3R Table 2 video-depth (per-sequence scale)
+Bonn AbsRel **0.078** (verified_pdf) — ⌛ GPU + MonST3R-protocol-diff
+pending. MonST3R also reports Bonn (0.067 w/ flow GA); a faithful
+MonST3R-video cell awaits the flow-path follow-up.
+
 ### Paper-match count
 
 **16 ✅ mono-depth cells** with `source_confidence: verified_pdf`:
