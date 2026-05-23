@@ -11,7 +11,68 @@ Status legend:
 - 🔎 **SUSPECTED** — hypothesis + diagnosis path; not yet reproduced.
 - 📅 **DEFERRED** — known root cause, scoped for v0.2+.
 
+## Triage (2026-05-03)
+
+Single glanceable view of every questionable cell. Use this to pick
+where to look (model code? protocol? paper itself?) before opening a
+deeper diagnosis below.
+
+**Category key:**
+
+- 🔧 **Model integration** — adapter is suspect; debug the upstream-vs-
+  plumbline numerical path (dtype, RNG, attention, normalization).
+- 📐 **Protocol** — adapter OK; eval pipeline (alignment, mask, crop,
+  aggregation) diverges from paper code.
+- 📜 **Paper-side** — adapter + protocol audited; cell may be
+  unreproducible from the public release (private eval config,
+  internal checkpoint, undocumented post-processing).
+- 📑 **Citation** — paper cell number is wrong / fabricated /
+  mis-attributed; no actual delta against a real paper cell.
+- ⏳ **Untested** — infra ready, no GPU validation yet.
+- 🚫 **No path** — no paper cell exists for this combination; not a
+  paper-match candidate.
+
+### Per-cell triage
+
+| ID | Cell | Δ vs paper | Cat | Tried & ruled out | Next move |
+|---|---|---|---|---|---|
+| D3 | VGGT-DTU chamfer | +98 % (0.756 vs 0.382 mm) | 📜 | per-view-masked port, Jensen toolkit, PatchmatchNet filter, fp32, 49-view | watch upstream; reproduce structurally only |
+| D4 | VGGT-ETH3D 3-scene | −9.4 % (0.642 vs 0.709 m) | 📐 | per-view-masked path, MLP transform, 1 cm voxel | stage 13 scenes (D10) for apples-to-apples |
+| D9 | Marigold-KITTI | −13 % to +19 % across 3 protocols | 📜 | kitti_eigen_garg, kitti_moge_eval, marigold's own eval (latter is *worst*) | re-read paper Table 1; open upstream issue |
+| D10 | VGGT-ETH3D full 13-scene split | n/a (gates D4 verdict) | 📐 | — | stage remaining ~14 GB or demote D4 |
+| D17 | GeoWizard-NYU | +10.5 % (0.0574 vs 0.052) | 📜 | dtype (fp16/fp32), xformers attention, full `seed_all`, 4 alignment modes, raw vs filled GT | open upstream issue (`fuxiao0719/GeoWizard`) |
+| D18 | GeoWizard-KITTI | +35 % (0.131 vs 0.097) | 📜 | same checkpoint as D17; deprioritized verify | awaits D17 unblock |
+| D22 | Marigold/GeoWizard KITTI umbrella | various | 📜 | (subsumes D9 + D18) | open upstream issues; possibly drop these from v0.1 paper-match |
+| D23 | MASt3R-CO3Dv2 cell verification | ✅ RESOLVED 2026-05-23 | 📑 | WebFetch HTML render only loaded appendix on `2406.09756` (every URL surface) | direct PDF read done: Table 3 row (b) MASt3R = 94.6/91.9/81.8 — matches YAML exactly |
+| — | VGGT-CO3Dv2 (Table 1 0.882) | not run | ⏳ | paper cell verified 2026-05-03 | GPU run |
+| — | MASt3R-CO3Dv2 (Table 3 0.818) | not run | ⏳ | adapter rewrite + tests pass; 0 GPU validation; paper cell PDF-verified 2026-05-23 (D23 closed) | GPU run |
+| — | MASt3R N-view rewrite (any non-CO3Dv2 use) | not run | ⏳ | landed 2026-04-27; synthetic + unit tests only | GPU run |
+| — | DA3-CO3Dv2 | n/a (informational) | 🚫 | paper has no CO3Dv2 row | optional GPU run for A/B |
+| — | MoGe-2 ViT-L on any per-dataset cell | n/a | 🚫 | paper publishes only 10-dataset averages (Table 1) and ViT-Base ablations (Table B.4) | accept; no per-dataset paper-row possible for ViT-L |
+| — | Depth Pro on NYU/KITTI | n/a (informational) | 🚫 | paper evaluates Booster/ETH3D/Middlebury/NuScenes/Sintel/Sun-RGBD only | add a paper-actual dataset to get a real paper-row |
+
+### Per-paper trust
+
+How much we should trust each paper's published cells when adopters
+look at the matrix:
+
+| Paper | Verified cells | Trust | Why / action |
+|---|---|---|---|
+| Depth Anything V2 (Yang 2024, arXiv:2406.09414) | **8** (NYU S/B/L, KITTI S/B/L, DIODE L, KITTI-MoGe L) | High | All cells reproduce in tolerance. One fabricated Sintel pin (0.075 vs paper's 0.487) was caught and demoted. |
+| Metric3D-v2 (Hu 2024, arXiv:2404.15506) | **4** (NYU + KITTI L/Giant) | High | All four cells match within ±10 %. No protocol surprises. |
+| MoGe-1 (Wang 2024, arXiv:2410.19115) | **5** (NYU, KITTI, DIODE-both + 2 DA-V2 baseline cells) | High after audit | Systematic Table-2-vs-Table-3 citation error fixed in 2026-04-20 audit; values match once table number corrected. |
+| Marigold (Ke 2024, arXiv:2312.02145) | **1** (NYU) | **Mixed** | KITTI cell unreproducible under any candidate protocol, including the paper's own released eval code (D9 / D22). Strongly suggests the published 0.099 came from a private config. **Re-read Table 1 and the paper's KITTI dataset section before promoting.** |
+| GeoWizard (Fu 2024) | **0** + 2 off-paper (D17, D18) | **Suspect** | Both reported NYU + KITTI cells off after exhausting adapter (dtype, xformers, seed) + protocol (alignment, mask, depth field) + dtype levers. Public repo's `run_infer.py` doesn't ship the metrics-calculation code for paper Table 1. **Likely private eval config and/or different checkpoint than `lemonaddie/Geowizard`.** Consider dropping GeoWizard cells from v0.1 paper-match claim entirely. |
+| Depth Pro (Bochkovskii 2024, arXiv:2410.02073) | **0** | Pending | Paper doesn't evaluate NYU/KITTI; the previously-claimed NYU δ₁ 0.961 was fabricated (caught in 2026-04-20 audit). **No paper-row yet under the paper's actual eval set** (Booster/ETH3D/Middlebury/NuScenes/Sintel/Sun-RGBD). |
+| Depth Anything 3 (Bytedance Seed 2025, arXiv:2511.10647) | **1** (NYU δ₁) | Moderate (limited) | Paper's main Table 4 only reports δ₁ (no AbsRel breakdown), and the chamfer-track / GSO comparisons live in informational rows with no paper target. Per-paper-row policy: NYU is the only paper-comparable cell currently shippable. |
+| MoGe-2 (Wang 2025, arXiv:2507.02546) | **0** | **N/A — no path** | Per-dataset ViT-L cells are not published anywhere in the paper (Table 1 is 10-dataset average; Table B.4 is ViT-Base ablation). Either reproduce the 10-dataset average across all 10 datasets (unwieldy), or accept "no paper-row possible for MoGe-2 ViT-L per-dataset". |
+| VGGT (Wang 2025, arXiv:2503.11651) | **0** paper-match | **Suspect on chamfer** | Table 2 DTU 2 × over after exhausting all levers (D3, upstream-blocked). Table 3 ETH3D 3-scene 9.4 % under (D4); 13-scene apples-to-apples deferred (D10). Table 1 CO3Dv2 GPU pending. Paper §4.2 says "Following MASt3R [62]" for DTU — but MASt3R repo doesn't ship DTU eval, so the paper may rely on unreleased post-processing (TSDF / BA / pose refinement). **Re-read §4.2 + appendix carefully** if D3 stays blocked after a future VGGT release. |
+| MASt3R (Leroy 2024, arXiv:2406.09756) | **0** paper-match (1 cell PDF-verified, GPU pending) | Cell-verified | The arXiv HTML render only serves the appendix (Tables 7-8) across every URL surface tried, so the cell was confirmed by **direct PDF read 2026-05-23** (D23 resolved): `arxiv.org/pdf/2406.09756`, Table 3 (Multi-view pose regression on CO3Dv2 / RealEstate10K, 10 random frames), row (b) MASt3R = RRA@15 94.6 / RTA@15 91.9 / mAA(30) 81.8 — matches `mast3r_co3dv2_pose.yaml` (0.946 / 0.919 / 0.818) exactly. §4.3 protocol (41 cat / 10 frames / 45 pairs / no GT focals) also confirmed. Still **0 paper-match** only because the GPU run hasn't happened — the paper target itself is no longer suspect. |
+
 ## Open issues at a glance
+
+(Diagnosis-detail counterpart of the triage table above; categories &
+status carry over.)
 
 | ID | One-liner | Status |
 |---|---|---|
@@ -22,7 +83,7 @@ Status legend:
 | D17 | GeoWizard NYU 10 % off — adapter audit (dtype + xformers + full seed_all) verified on 654-sample run: AbsRel 0.0574 vs prior fp16's 0.0573, identical. Gap is upstream (checkpoint or training data), not adapter | 🔎 upstream-blocked |
 | D18 | GeoWizard-KITTI — same model + checkpoint as D17, same likely-upstream cause; YAML repointed to fp32+xformers for protocol fidelity but verification deprioritized | 🔎 upstream-blocked |
 | D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 upstream-blocked |
-| D23 | `mast3r_co3dv2_pose.yaml` `source_confidence: verified_pdf` is currently WebFetch-unverifiable — arXiv HTML render of `2406.09756` only loads the appendix (Tables 7-8). Cell value (mAA(30) = 0.818) may be correct but needs direct PDF read before promoting to ✅ | 🔎 new 2026-05-03 |
+| D23 | `mast3r_co3dv2_pose.yaml` cell verified by direct PDF read 2026-05-23 — `arxiv.org/pdf/2406.09756` Table 3 row (b) MASt3R CO3Dv2 = 94.6 / 91.9 / 81.8, matching the YAML (0.946 / 0.919 / 0.818) exactly. `source_confidence: verified_pdf` is now genuinely backed by a PDF read | ✅ RESOLVED 2026-05-23 |
 
 ---
 
@@ -1012,10 +1073,11 @@ teardown — same numbers re-derivable by re-running the YAML).
    stage the remaining 10 scenes (~14 GB) for the apples-to-apples
    13-scene mean, or formally demote the row to "3-scene
    informational subset".
-3. **D23 — direct PDF re-verification of `mast3r_co3dv2_pose`.**
-   WebFetch HTML render couldn't reach Table 3 across multiple URL
-   surfaces; cell value 0.818 needs PDF confirmation before the row
-   can count as ✅ in REPRODUCTIONS.md. Cheap (one PDF read).
+3. ~~**D23 — direct PDF re-verification of `mast3r_co3dv2_pose`.**~~
+   ✅ DONE 2026-05-23. Downloaded `arxiv.org/pdf/2406.09756`, read
+   Table 3 directly: CO3Dv2 row (b) MASt3R = 94.6 / 91.9 / 81.8,
+   matching the YAML exactly. The paper target is confirmed; only the
+   GPU run (item 1) remains before the row counts as ✅.
 
 **Closed-blocked — do not retry without an upstream change:**
 - D3 (VGGT-DTU), D17 + D18 (GeoWizard NYU + KITTI), D9 + D22

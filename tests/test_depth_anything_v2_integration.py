@@ -37,6 +37,28 @@ from plumbline.models.depth_anything_v2 import DepthAnythingV2Adapter
 from plumbline.runner import evaluate
 
 
+def _dav2_paper_backend_available() -> bool:
+    """True if the DA-V2 *paper* backend (the github repo on ``$DAV2_ROOT``)
+    is importable.
+
+    The tests below construct ``DepthAnythingV2Adapter`` with its default
+    ``source="paper"``, which needs the cloned repo on ``sys.path``. Without
+    it the only honest outcome is to skip (this module's docstring promises
+    "skipped otherwise") — ``torch``/``transformers`` being present isn't
+    sufficient. Guards against a hard failure on a fresh clone / dev laptop
+    while still running on a configured GPU box.
+    """
+    try:
+        import importlib.util
+
+        from plumbline.models.depth_anything_v2 import _ensure_dav2_on_path
+
+        _ensure_dav2_on_path()
+        return importlib.util.find_spec("depth_anything_v2") is not None
+    except Exception:
+        return False
+
+
 def _synthetic_image(h: int = 224, w: int = 224, seed: int = 0) -> np.ndarray:
     rng = np.random.default_rng(seed)
     return (rng.random((1, h, w, 3)) * 255).astype(np.uint8)
@@ -65,6 +87,15 @@ class _SingleSampleDataset(Dataset):
 
 
 @pytest.mark.weights
+@pytest.mark.skipif(
+    not _dav2_paper_backend_available(),
+    reason=(
+        "DA-V2 paper backend not on this host — clone "
+        "https://github.com/DepthAnything/Depth-Anything-V2 and set $DAV2_ROOT. "
+        "These run on a configured GPU box; skipped on dev machines per the "
+        "module docstring."
+    ),
+)
 class TestDepthAnythingV2Real:
     def test_predict_cpu_synthetic(self) -> None:
         model = DepthAnythingV2Adapter(device="cpu", variant="small")

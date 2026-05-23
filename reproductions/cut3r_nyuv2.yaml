@@ -1,0 +1,50 @@
+# CUT3R single-frame depth on NYUv2 — CUT3R Table 1 paper target.
+#
+# Targets CUT3R Table 1 "Single-frame Depth Evaluation" (Wang et al.
+# 2025, arXiv:2501.12387), NYU-v2 column, "Ours" row: Abs Rel = 0.086
+# (companion δ<1.25 = 90.9). Verified by direct PDF read 2026-05-23
+# (PDF page 5).
+#
+# Protocol (paper §4.1): zero-shot monocular depth on NYU-v2 (static),
+# "per-frame median scaling per DUSt3R", metrics Abs Rel + δ<1.25.
+# CUT3R is a recurrent multi-view model run here on a single frame
+# (min_views=1).
+#
+# CAVEAT (read before promoting to ✅): the paper *value* is PDF-verified,
+# but whether plumbline's `nyu_eigen_2014` protocol (rawDepths + Eigen
+# crop + clip[1e-3,10]) matches MonST3R/DUSt3R's NYU depth eval exactly
+# is UNCONFIRMED. The DUSt3R lineage ships its own NYU eval crop / depth
+# handling. Per the project's single-record-diff rule (plan.md §12),
+# diff plumbline's NYU pipeline against MonST3R's `eval/` depth code on
+# one frame before counting this as a paper-match. GPU validation
+# pending (queued in reproductions/gpu_queue.yaml).
+
+name: cut3r-nyuv2
+protocol: nyu_eigen_2014
+
+model:
+  name: cut3r
+  kwargs:
+    size: 512
+
+# Per-frame median scaling (paper §4.1, "per DUSt3R"). The nyu_eigen_2014
+# protocol intentionally leaves scale_alignment to the reproduction.
+scale_alignment: median
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.086
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2025, CUT3R (arXiv:2501.12387), Table 1 (Single-frame Depth Evaluation), NYU-v2 Abs Rel column, 'Ours' row = 0.086 (companion δ<1.25 = 90.9; protocol: per-frame median scaling per DUSt3R). Verified by direct PDF read 2026-05-23 (PDF page 5)."
+  source_confidence: verified_pdf
+
+notes: >
+  First CUT3R reproduction — closes the video / unordered-collection
+  coverage gap (CUT3R is recurrent + order-agnostic; this cell runs it
+  on single frames). Needs $CUT3R_ROOT (github clone) + $CUT3R_CKPT
+  (the 512-DPT weights) + $NYUV2_ROOT. Adapter + conversion unit tests
+  landed 2026-05-23; zero GPU validation yet. The paper target is
+  PDF-verified but the eval-protocol match is unconfirmed (see the
+  CAVEAT above) — treat as ⌛ infra/target, not a paper-match, until the
+  single-record diff against MonST3R's eval lands.

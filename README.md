@@ -11,10 +11,12 @@ paper cells. API will still change before 1.0.
 
 ## What works today
 
-- **11 model adapters**: DA-V2 (6 variants including metric
+- **12 model adapters**: DA-V2 (6 variants including metric
   Indoor/Outdoor), DA3, Metric3Dv2 (S/L/Giant2), MoGe-1, MoGe-2 (incl.
   `*-normal`), Marigold v1-1, GeoWizard, Depth Pro, MASt3R (N-view via
-  PointCloudOptimizer for N≥3, PairViewer for N=2), VGGT, π³.
+  PointCloudOptimizer for N≥3, PairViewer for N=2), VGGT, π³, **CUT3R**
+  (recurrent — covers video + unordered image collections; adapter +
+  conversion unit tests landed, GPU validation pending).
 - **11 datasets**: NYUv2 (Eigen 2014, rawDepths), KITTI (Eigen 652,
   annotated GT, Garg crop), DIODE (FoV-warp loader, MoGe-paper protocol),
   ETH3D high-res multi-view, DTU MVS (22-scan test split), CO3Dv2
@@ -52,9 +54,11 @@ GeoWizard (NYU, KITTI), Marigold (KITTI), VGGT (DTU). See
 `docs/DISCREPANCIES.md` D3 / D9 / D17 / D18 / D22.
 
 **Infra landed, GPU validation pending:** CO3Dv2 pose for VGGT
-(Table 1, AUC@30 = 0.882) and MASt3R (Table 3, mAA(30) = 0.818).
-VGGT-ETH3D per-view-masked path lands 9.4 % under paper on a 3-scene
-subset; full 13-scene comparison pending (D10).
+(Table 1, AUC@30 = 0.882) and MASt3R (Table 3, mAA(30) = 0.818) — both
+paper targets confirmed by direct PDF read (the MASt3R cell was
+re-verified 2026-05-23, closing D23). Queued as the top two GPU jobs
+(`plumbline queue`). VGGT-ETH3D per-view-masked path lands 9.4 % under
+paper on a 3-scene subset; full 13-scene comparison pending (D10).
 
 ## Install
 
@@ -83,6 +87,7 @@ For VGGT + MASt3R install notes see [GPU_RUNBOOK.md](./GPU_RUNBOOK.md).
 ```bash
 plumbline list-models
 plumbline list-datasets
+plumbline queue            # the GPU backlog: what to run, footprints, env vars
 
 # Match a paper number in under 2 minutes on a 3090:
 export NYUV2_ROOT=/path/to/nyuv2   # contains nyu_depth_v2_labeled.mat
@@ -117,21 +122,6 @@ authoritative 16-cell matrix:
 | `marigold-v1-1-nyuv2` | AbsRel 0.055 | **0.0577** | ✅ |
 | `moge-vitl-diode-both` | AbsRel 0.0400 | **0.0407** | ✅ |
 | `da-v2-large-kitti-moge` | AbsRel 0.0561 | **0.0569** | ✅ |
-
-Three pipeline details separate plumbline's default from typical
-"just-ran-the-HF-model" numbers and are required to hit paper targets:
-
-1. **NYU `rawDepths`**, not the colorization-filled `depths`. Every
-   modern mono-depth paper citing "NYU Eigen" evaluates against the
-   sparse Kinect measurements; plumbline's loader defaults to that.
-2. **Post-alignment depth clipping** (`depth_clip: [0.001, 10.0]` for
-   NYU) — without this, one pathological sample can push ViT-L's mean
-   AbsRel to 77 via an alignment-induced outlier.
-3. **Scale+shift in inverse-depth space** (MiDaS protocol) for
-   relative-depth models.
-
-See the "Note on the NYUv2 Eigen 2014 protocol" section of
-[REPRODUCTIONS.md](./REPRODUCTIONS.md) for the full diagnostic.
 
 ## Not yet reproducible without user-supplied data or compute
 

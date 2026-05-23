@@ -1,0 +1,198 @@
+# GPU run queue — the executable backlog of reproductions awaiting a GPU.
+#
+# This is the machine-readable counterpart to GPU_RUNBOOK.md. Each job
+# points at an existing reproduction (by its `name:`) and carries the
+# operator context needed to provision a rental box. `plumbline queue`
+# lists it; `plumbline queue --run` executes the `pending` jobs in
+# priority order and records MATCH / MISMATCH / ERROR for each.
+#
+# Hard rules (mirror GPU_RUNBOOK.md):
+#   - A failed paper-match is a finding, not a number to tune.
+#   - `blocked` jobs are NOT run — they document what not to waste GPU
+#     time on (upstream-blocked cells, data not yet staged).
+#   - Status here is hand-maintained: flip a job to `done` only after a
+#     run lands within tolerance and the matrix in REPRODUCTIONS.md is
+#     updated.
+#
+# status: pending | blocked | done
+# priority: lower runs first (ties broken by file order)
+
+schema_version: "1.0.0"
+
+jobs:
+  # ----- Tier 1: verified paper targets, just need the GPU run -----
+  - name: vggt-co3dv2-pose
+    status: pending
+    priority: 1
+    paper_target: "VGGT Table 1 — CO3Dv2 AUC@30 = 0.882 (verified_pdf 2026-05-03)"
+    primary_metric: pairwise_pose_auc@30
+    datasets: [co3dv2]
+    data_footprint_gb: 45
+    est_wall_min: 60
+    requires_env: [CO3DV2_ROOT]
+    extras: "VGGT: uv pip install 'git+https://github.com/facebookresearch/vggt'"
+    notes: >
+      Converts the first pose cell from infra-only to ✅ or surfaces a
+      real gap. Gates the pose half of the v0.1 release (plan.md §2
+      acceptance criterion #2). 41-cat / 10-seq / 10-frame seeded
+      recipe (co3dv2-vggt-pose-eval loader).
+
+  - name: mast3r-co3dv2-pose
+    status: pending
+    priority: 2
+    paper_target: "MASt3R Table 3 — CO3Dv2 mAA(30) = 0.818, RRA@15 0.946, RTA@15 0.919 (verified_pdf 2026-05-23, direct PDF read; D23 resolved)"
+    primary_metric: pairwise_pose_auc@30
+    datasets: [co3dv2]
+    data_footprint_gb: 45
+    est_wall_min: 150
+    requires_env: [CO3DV2_ROOT, MAST3R_ROOT]
+    extras: >
+      MASt3R: git clone --recursive https://github.com/naver/mast3r
+      $HOME/deps/mast3r; uv pip install roma scikit-learn trimesh;
+      export MAST3R_ROOT=$HOME/deps/mast3r
+    notes: >
+      N=10 dispatches to dust3r PointCloudOptimizer (init=mst,
+      niter=300). ~20 s/sample × 410 ≈ 2.5 h on a 3090. Shares the
+      co3dv2-vggt-pose-eval loader with the VGGT job, so stage CO3Dv2
+      once and run both back-to-back.
+
+  # ----- Tier 1b: new coverage (video / unordered) with a verified target -----
+  - name: cut3r-nyuv2
+    status: pending
+    priority: 3
+    paper_target: "CUT3R Table 1 — NYU-v2 single-frame Abs Rel = 0.086 (verified_pdf 2026-05-23)"
+    primary_metric: abs_rel
+    datasets: [nyuv2]
+    data_footprint_gb: 3
+    est_wall_min: 40
+    requires_env: [NYUV2_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    extras: >
+      CUT3R: git clone https://github.com/CUT3R/CUT3R $HOME/deps/cut3r;
+      cd $HOME/deps/cut3r && pip install -r requirements.txt; export
+      CUT3R_ROOT=$HOME/deps/cut3r; download the 512-DPT weights per the
+      repo README and export CUT3R_CKPT=$CUT3R_ROOT/src/cut3r_512_dpt_4_64.pth
+    notes: >
+      Closes the video / unordered-collection coverage gap (CUT3R is
+      recurrent + order-agnostic; this cell runs single frames). Value is
+      PDF-verified; the eval-protocol match vs MonST3R's NYU eval is
+      UNCONFIRMED — single-record diff first (see the YAML CAVEAT), so
+      expect ⚠️/⌛ not an automatic ✅. Companion target: KITTI Abs Rel
+      0.092 (same Table 1) once a cut3r-kitti YAML lands.
+
+  # ----- Tier 2: informational runs (no paper target; A/B + smoke) -----
+  - name: da3-co3dv2-pose
+    status: pending
+    priority: 4
+    paper_target: "none — informational A/B vs VGGT/MASt3R (DA3 paper does not evaluate CO3Dv2 pose)"
+    primary_metric: pairwise_pose_auc@30
+    datasets: [co3dv2]
+    data_footprint_gb: 45
+    est_wall_min: 60
+    requires_env: [CO3DV2_ROOT]
+    extras: "DA3 ships in the base install (transformers)."
+    notes: >
+      No paper_match expected (value: null). Run only if CO3Dv2 is
+      already staged for the Tier-1 jobs — it's a free A/B data point
+      on the same loader.
+
+  - name: pi3-dtu-mvs
+    status: pending
+    priority: 5
+    paper_target: "none — π³ chamfer smoke (value: null)"
+    primary_metric: chamfer
+    datasets: [dtu]
+    data_footprint_gb: 7
+    est_wall_min: 30
+    requires_env: [DTU_ROOT, PI3_ROOT]
+    extras: "π³: git clone https://github.com/yyfz/Pi3 $HOME/deps/pi3; uv pip install -r requirements.txt; export PI3_ROOT=$HOME/deps/pi3"
+    notes: "First π³ multi-view run. Smoke-test the adapter end-to-end; no paper cell to match."
+
+  - name: pi3-eth3d-multiscene
+    status: pending
+    priority: 6
+    paper_target: "none — π³ ETH3D chamfer smoke (value: null)"
+    primary_metric: overall
+    datasets: [eth3d]
+    data_footprint_gb: 8
+    est_wall_min: 40
+    requires_env: [ETH3D_ROOT, PI3_ROOT]
+    extras: "π³ as above."
+    notes: "π³ on the 3-scene ETH3D subset; informational only."
+
+  # ----- Blocked: do NOT run (data not staged, or upstream-blocked) -----
+  - name: vggt-eth3d-multiscene-chamfer
+    status: blocked
+    priority: 10
+    paper_target: "VGGT Table 3 — ETH3D Overall = 0.709 (verified_pdf, full 13-scene cross-scene mean)"
+    primary_metric: overall
+    datasets: [eth3d]
+    data_footprint_gb: 22
+    est_wall_min: 90
+    requires_env: [ETH3D_ROOT]
+    blocked_on: >
+      D10. The shipped YAML runs a 3-scene subset (already landed at
+      0.642 m, 9.4% under paper). An apples-to-apples 13-scene
+      comparison needs the remaining ~10 scenes (~14 GB) staged AND a
+      13-scene reproduction YAML. Unblock = stage data + author the
+      13-scene YAML, then move to pending.
+    notes: "See docs/DISCREPANCIES.md D4/D10."
+
+  - name: vggt-paper-dtu-mvs
+    status: blocked
+    priority: 11
+    paper_target: "VGGT Table 2 — DTU Overall = 0.382 mm (verified_pdf)"
+    primary_metric: overall
+    datasets: [dtu]
+    data_footprint_gb: 7
+    est_wall_min: 60
+    requires_env: [DTU_ROOT]
+    blocked_on: >
+      D3 upstream-blocked. PatchmatchNet filter + fp32 + Jensen toolkit
+      + 49-view all verified ~no-ops; residual ~2× gap is in the public
+      facebook/VGGT-1B output, not in plumbline. Re-enter the queue only
+      if an updated VGGT checkpoint ships.
+    notes: "Run only to confirm structural correctness, never as a paper-match. See D3."
+
+  - name: geowizard-nyuv2
+    status: blocked
+    priority: 12
+    paper_target: "GeoWizard Table 1 — NYUv2 AbsRel = 0.052 (verified_pdf 2026-05-23)"
+    primary_metric: abs_rel
+    datasets: [nyuv2]
+    data_footprint_gb: 3
+    est_wall_min: 300
+    requires_env: [NYUV2_ROOT, GEOWIZARD_ROOT]
+    blocked_on: >
+      D17 upstream-blocked. fp32 + xformers + full seed_all + 4
+      alignment modes all verified no-ops on a prior 5 h run (observed
+      0.0574 vs paper 0.052). Gap is in the public lemonaddie/Geowizard
+      checkpoint or a paper-private eval config. Don't re-burn 5 h.
+    notes: "Paper target is PDF-verified; the reproduction is upstream-blocked. See D17."
+
+  - name: geowizard-kitti
+    status: blocked
+    priority: 13
+    paper_target: "GeoWizard Table 1 — KITTI AbsRel = 0.097 (verified_pdf 2026-05-23)"
+    primary_metric: abs_rel
+    datasets: [kitti]
+    data_footprint_gb: 6
+    est_wall_min: 240
+    requires_env: [KITTI_ROOT, GEOWIZARD_ROOT]
+    blocked_on: "D18/D22 — same checkpoint + likely-private-config as D17. Result would be the same."
+    notes: "Paper target PDF-verified; reproduction upstream-blocked. See D18/D22."
+
+  - name: marigold-v1-1-kitti
+    status: blocked
+    priority: 14
+    paper_target: "Marigold Table 1 — KITTI AbsRel = 0.099 (verified_pdf)"
+    primary_metric: abs_rel
+    datasets: [kitti]
+    data_footprint_gb: 6
+    est_wall_min: 180
+    requires_env: [KITTI_ROOT]
+    blocked_on: >
+      D9/D22. Off-paper under both candidate protocols AND Marigold's
+      own released eval code (the latter is the worst, 19% off), which
+      rules out "just use the paper's code". Likely a private eval
+      config. Don't re-run without an upstream clarification.
+    notes: "See D9/D22."

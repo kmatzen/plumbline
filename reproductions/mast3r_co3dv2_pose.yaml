@@ -3,12 +3,20 @@
 # Targets MASt3R Table 3 (Leroy et al. 2024, arXiv:2406.09756), CO3Dv2
 # column block, MASt3R row: RRA@15 = 0.946, RTA@15 = 0.919,
 # **mAA(30) = 0.818** (= AUC@30 in plumbline's metric naming; MASt3R
-# paper §4.3 says "min(RRA@30, RTA@30)" = max(R°, t-cos°) AUC).
+# paper §4.3 says mAA30 = "area under the accuracy curve ... at
+# min(RRA@30, RTA@30)" = max(R°, t-cos°) AUC).
 #
-# Same 41-cat / 10-seq / 10-frame protocol as VGGT (paper §4.3 says
-# "Following [104]" = PoseDiffusion). MASt3R's only public eval that
-# uses this protocol is the one VGGT's `evaluation/test_co3d.py`
-# implements; MASt3R + DUSt3R repos don't ship a CO3Dv2 pose eval.
+# Verified by DIRECT PDF READ 2026-05-23 (resolves D23 — the arXiv HTML
+# render only ever served the appendix). Table 3 is titled "Multi-view
+# pose regression on the CO3Dv2 and RealEstate10K with 10 random
+# frames"; MASt3R is row (b) pairwise. CO3Dv2: RRA@15 94.6 / RTA@15
+# 91.9 / mAA(30) 81.8. (RealEstate10K mAA(30) 76.4, not used here.)
+#
+# Protocol per MASt3R §4.3: "Following [100]" (= PoseDiffusion) — 41
+# categories from CO3Dv2, each sequence 10 frames, relative pose
+# between all 45 pairs, NOT using ground-truth focals. MASt3R + DUSt3R
+# repos don't ship a CO3Dv2 pose eval; VGGT's `evaluation/test_co3d.py`
+# is the only public impl of this protocol.
 
 name: mast3r-co3dv2-pose
 protocol: co3dv2_vggt_pose
@@ -46,7 +54,7 @@ paper_reference:
   primary_metric: pairwise_pose_auc@30
   value: 0.818
   tolerance_relative: 0.05
-  citation: "Leroy et al. 2024, MASt3R (arXiv:2406.09756), Table 3, CO3Dv2 column block, mAA(30) row, MASt3R baseline = 81.8 → AUC@30 0.818. Companion cells (same row): RRA@15 = 0.946, RTA@15 = 0.919."
+  citation: "Leroy et al. 2024, MASt3R (arXiv:2406.09756), Table 3 (Multi-view pose regression on CO3Dv2 / RealEstate10K, 10 random frames), CO3Dv2 column block, row (b) pairwise → MASt3R: mAA(30) = 81.8 → AUC@30 0.818. Companion cells (same row): RRA@15 = 94.6 → 0.946, RTA@15 = 91.9 → 0.919. Verified by direct PDF read 2026-05-23 (D23 resolved)."
   source_confidence: verified_pdf
 
 notes: >

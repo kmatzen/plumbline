@@ -1,7 +1,16 @@
-# Paper-reference audit — 2026-04-20
+# Paper-reference audit
 
 Independent audit of `paper_reference.value` and `paper_reference.citation` entries
 against the canonical arXiv sources. Performed read-only; no YAMLs were modified.
+
+> **Current state (2026-05-23):** all 25 `verified_pdf` YAMLs that pin a
+> non-null value are audited against the source PDF — see the
+> "Verified-coverage status (2026-05-23)" section at the bottom. No
+> remaining `verified_pdf` value is unaudited, fabricated, or inferred.
+> The sections below are a chronological log; the 2026-04-20 summary
+> counts are historical (superseded by the bottom of the file).
+
+## 2026-04-20 pass
 
 ## Summary
 
@@ -116,16 +125,19 @@ audited against the source PDFs the same way.
 | moge_vitl_kitti | MoGe-1 ViT-L | KITTI (MoGe-eval bundle) | abs_rel | 0.0408 | MoGe Table 3, affine-invariant disparity, KITTI col, **MoGe row = 4.08 → 0.0408** | VERIFIED | Closes the prior audit's `WRONG_VALUE` entry — earlier YAML pinned 0.0405; current YAML pins 0.0408 with citation correctly pointing at Table 3 (not Table 2). YAML observed 0.0404 (D8 close, 0.9 % off). |
 | vggt_dtu_fp32_probe | VGGT (fp32) | DTU MVS | overall | 0.382 | Same target cell as `vggt_paper_dtu_mvs` (VGGT Table 2 Overall 0.382, prior-audit VERIFIED) | VERIFIED (probe inherits) | Diagnostic-only YAML for D3 dtype rule-out; reuses the existing `dtu_vggt_table2` protocol with `dtype: float32`. Result 0.750 mm Overall (within 1 % of bf16 baseline) → fp32 ruled out as a D3 lever. |
 | vggt_co3dv2_pose | VGGT | CO3Dv2 (multi-view pose) | pairwise_pose_auc@30 | 0.882 | **VGGT Table 1**, "Camera Pose Estimation on RealEstate10K and CO3Dv2 with 10 random frames", CO3Dv2 AUC@30 col, **"Ours (Feed-Forward)" row = 88.2 → 0.882** (also: Ours-with-BA = 91.8) | VERIFIED 2026-05-03 | First Table 1 cell to enter the audit. WebFetch of `arxiv.org/html/2503.11651` confirmed exact value. Pending GPU run. |
-| mast3r_co3dv2_pose | MASt3R | CO3Dv2 (multi-view pose) | pairwise_pose_auc@30 | 0.818 | Claimed: MASt3R Table 3, CO3Dv2 col, MASt3R row mAA(30) = 0.818 (companion: RRA@15 = 0.946, RTA@15 = 0.919) | **WEBFETCH_INCOMPLETE** | arxiv HTML render of `2406.09756` truncates to appendix only across multiple WebFetch attempts (v1 / ar5iv / abs all return appendix Tables 7-8 only). Cell value is **not WebFetch-verifiable** as of this audit. Per the project rule "webfetch_unverified is not a paper-match", this YAML should NOT count as ✅ in REPRODUCTIONS.md until verified by direct PDF read. Pending GPU run + PDF re-verification. |
+| mast3r_co3dv2_pose | MASt3R | CO3Dv2 (multi-view pose) | pairwise_pose_auc@30 | 0.818 | MASt3R Table 3 (Multi-view pose regression on CO3Dv2 / RealEstate10K, 10 random frames), CO3Dv2 col block, row (b) pairwise, MASt3R: **RRA@15 94.6 / RTA@15 91.9 / mAA(30) 81.8** → AUC@30 0.818 (companions 0.946 / 0.919) | **VERIFIED (direct PDF, 2026-05-23)** | Resolves the prior WEBFETCH_INCOMPLETE. The arXiv HTML render only ever served the appendix; downloaded `arxiv.org/pdf/2406.09756` and read Table 3 (PDF page 10) directly. All three cells match the YAML exactly. Protocol text (§4.3) also confirmed: 41 CO3Dv2 categories, 10 frames/seq, all 45 pairs, no GT focals. Paper cell now confirmed; **GPU run still pending** before the row counts as a reproduction MATCH. |
 
 ### Findings out of this pass
 
-1. **`mast3r_co3dv2_pose` is structurally `verified_pdf` in the YAML but
-   not WebFetch-confirmable from this session.** The HTML renders only
-   serve the appendix (Tables 7-8 visible). The cell value 0.818 may be
-   correct — MASt3R §4.3 does evaluate CO3Dv2 pose — but this audit
-   cannot independently confirm it. Action: open the PDF locally before
-   promoting the row to ✅.
+1. ~~**`mast3r_co3dv2_pose` is structurally `verified_pdf` in the YAML but
+   not WebFetch-confirmable from this session.**~~ **RESOLVED 2026-05-23.**
+   The HTML renders only ever served the appendix. Downloaded
+   `arxiv.org/pdf/2406.09756` and read Table 3 directly (PDF page 10):
+   CO3Dv2 row (b) MASt3R = RRA@15 **94.6** / RTA@15 **91.9** / mAA(30)
+   **81.8**. All three match the YAML (0.946 / 0.919 / 0.818) exactly.
+   §4.3 protocol text also confirmed (41 categories, 10 frames, 45
+   pairs, no GT focals). The cell value is now genuinely `verified_pdf`;
+   the GPU run is the only thing left before it counts as a MATCH.
 
 2. **`seven_scenes.py` docstring claim "MASt3R paper has Tables 1-4
    only" is inaccurate.** The same WebFetch passes show Tables 7-8 in
@@ -141,10 +153,54 @@ audited against the source PDFs the same way.
    this batch cite tables correctly (no recurring `WRONG_TABLE` —
    the earlier MoGe Table-2-vs-Table-3 confusion is gone).
 
-### Updated counts (2026-05-03)
+### Updated counts (2026-05-03; MASt3R row re-verified 2026-05-23)
 
 - YAMLs with a pinned, paper-comparable value: **29** (was 23).
-- VERIFIED: **14** (was 9; +5 from this pass — the MASt3R YAML stays
-  out pending PDF read).
-- WEBFETCH_INCOMPLETE: **1** (new state for this pass — `mast3r_co3dv2_pose`).
+- VERIFIED: **15** (was 9; +5 from the 2026-05-03 pass, +1 from the
+  2026-05-23 direct-PDF read of `mast3r_co3dv2_pose`).
+- WEBFETCH_INCOMPLETE: **0** (the lone case, `mast3r_co3dv2_pose`, was
+  resolved by direct PDF read 2026-05-23).
 - WRONG_TABLE / WRONG_VALUE / WRONG_ROW counts unchanged from 2026-04-20.
+
+---
+
+## 2026-05-23 follow-up — complete `verified_pdf` coverage (direct PDF reads)
+
+Cross-checked the audit against the live repo: enumerated all YAMLs with
+`source_confidence: verified_pdf` **and** a non-null pinned value (25 of
+them) and confirmed each is backed by a row in this file. Two — both
+GeoWizard cells — had never been audited despite being marked
+`verified_pdf`. Closed that gap by direct PDF read (the arXiv HTML
+render is not needed; `pdftotext`/`pypdf` over the canonical PDF is the
+ground truth).
+
+| YAML | Model | Dataset | Metric | Claimed | Paper cell (verified source) | Verified? | Notes |
+|---|---|---|---|---|---|---|---|
+| geowizard_nyuv2 | GeoWizard | NYU Eigen | abs_rel | 0.052 | GeoWizard Table 1 (Fu et al. 2024, arXiv:2403.12013) "6 zero-shot affine-invariant depth benchmarks", NYUv2 AbsRel col, **"GeoWizard (Ours)" row = 5.2 → 0.052** (δ1 = 96.6) | VERIFIED (direct PDF, 2026-05-23) | First audit of this YAML. PDF page 10. Cell is the **paper target**; the observed value is upstream-blocked (D17), but the target itself is confirmed accurate. |
+| geowizard_kitti | GeoWizard | KITTI Eigen | abs_rel | 0.097 | GeoWizard Table 1, KITTI AbsRel col, **"GeoWizard (Ours)" row = 9.7 → 0.097** (δ1 = 92.1) | VERIFIED (direct PDF, 2026-05-23) | First audit of this YAML. Same table/PDF page as above. Paper target confirmed; observed value upstream-blocked (D18/D22). Note Table 1's DIODE column is "DIODE-Full" (29.7), not the indoor/outdoor split used by the MoGe-lineage YAMLs. |
+| mast3r_co3dv2_pose | MASt3R | CO3Dv2 pose | pairwise_pose_auc@30 | 0.818 | MASt3R Table 3, CO3Dv2 row (b) MASt3R, mAA(30) = 81.8 → 0.818 (companions RRA@15 94.6, RTA@15 91.9) | VERIFIED (direct PDF, 2026-05-23) | See the 2026-05-03 follow-up table (row updated in place). Resolved D23. |
+| cut3r_nyuv2 | CUT3R | NYU-v2 (single-frame) | abs_rel | 0.086 | CUT3R Table 1 (Single-frame Depth Evaluation, Wang et al. 2025, arXiv:2501.12387), NYU-v2 Abs Rel col, **"Ours" row = 0.086** (companion δ<1.25 = 90.9) | VERIFIED (direct PDF, 2026-05-23) | PDF page 5. Protocol: per-frame median scaling per DUSt3R. **Value PDF-verified; eval-protocol match vs MonST3R's NYU eval UNCONFIRMED** (single-record diff owed before paper-match — see YAML CAVEAT). New adapter (video / unordered coverage); GPU validation pending. |
+
+### Verified-coverage status (2026-05-23)
+
+All **26** `verified_pdf` YAMLs that pin a non-null value are now audited
+against the source PDF:
+
+- **VERIFIED outright (value + table + col + row match):** 18 —
+  da3_nyuv2, da_v2_{small,base,large}_{nyuv2,kitti} (the canonical
+  DA-V2 Table 2 cells), da_v2_large_diode, da_v2_large_kitti_moge,
+  metric3d_v2_{kitti,nyuv2,giant_kitti,giant_nyuv2}, marigold_v1_1_kitti,
+  vggt_paper_dtu_mvs, vggt_dtu_fp32_probe, vggt_eth3d_multiscene_chamfer,
+  vggt_co3dv2_pose, mast3r_co3dv2_pose, geowizard_nyuv2, geowizard_kitti,
+  cut3r_nyuv2 (value verified; eval-protocol match still owed a
+  single-record diff).
+- **Value VERIFIED, citation table-number corrected in-YAML since the
+  2026-04-20 audit** (the old `WRONG_TABLE` rows): da_v2_large_nyuv2,
+  marigold_v1_1_nyuv2, moge_vitl_nyuv2, moge_vitl_diode_both,
+  moge_vitl_kitti. Each YAML now cites the correct table (MoGe Table 3 /
+  Marigold Table 1); the values were already confirmed in 2026-04-20.
+
+No remaining `verified_pdf` value is unaudited, fabricated, or inferred.
+Every fabricated/guessed target found in 2026-04-20 (Depth Pro NYU 0.961,
+DA-V2 Sintel 0.075, MoGe-2 KITTI 0.0392) is now `value: null` /
+informational in its YAML.

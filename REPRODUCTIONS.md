@@ -7,7 +7,8 @@ harness's acceptance test.
 > **Note (2026-05-03):** status matrix below reflects all GPU runs
 > through 2026-04-27. Open discrepancies and next-session priorities
 > are in `docs/DISCREPANCIES.md`. Per-YAML paper-citation audit (now
-> 29 paper-pinned YAMLs, 14 verified) is in
+> 29 paper-pinned YAMLs, 15 verified after the 2026-05-23 MASt3R
+> direct-PDF read) is in
 > [`reproductions/AUDIT.md`](./reproductions/AUDIT.md).
 
 ## Status matrix (2026-05-03)
@@ -43,6 +44,7 @@ cells are now ℹ️ instead of ✅.
 | **Depth Pro** | ℹ️ δ₁ **0.9347** _(paper does not evaluate NYU — earlier 0.961 pin was fabricated)_ | ⌛ | — | — | — | — | — |
 | **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ⌛ AUC@30 target **0.818** (Table 3 verified_pdf, awaiting GPU run) | — |
 | **VGGT** | — | — | — | ⚠️ 0.642 m vs 0.709 _(D4 per-view-masked landed, 9.4% under paper on 3-scene; D10 needed for full split)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ⌛ AUC@30 target **0.882** (Table 1 verified_pdf, awaiting GPU run) | — |
+| **CUT3R** _(video + unordered)_ | ⌛ AbsRel target **0.086** (Table 1 verified_pdf; per-frame median scaling; protocol-diff + GPU pending) | 🎯 AbsRel target 0.092 (Table 1; no YAML yet) | — | — | — | ℹ️ recurrent/online — handles ordered video & unordered sets | — |
 
 ### Paper-match count
 
@@ -72,10 +74,10 @@ pending GPU run**:
   `source_confidence: verified_pdf`. Paper cell verified via WebFetch
   2026-05-03.
 - MASt3R CO3Dv2 (Table 3, mAA(30) = 0.818, RRA@15 = 0.946, RTA@15 =
-  0.919) — `mast3r_co3dv2_pose.yaml`. Paper cell **WebFetch-
-  unverifiable** (HTML render only loads appendix); D23 in
-  `DISCREPANCIES.md` tracks the PDF re-verification owed before the
-  cell can count as ✅.
+  0.919) — `mast3r_co3dv2_pose.yaml`. Paper cell **verified by direct
+  PDF read 2026-05-23** (D23 resolved): `arxiv.org/pdf/2406.09756`
+  Table 3 row (b) MASt3R CO3Dv2 = 94.6 / 91.9 / 81.8, matching the
+  YAML exactly. GPU run is the only thing left before it counts as ✅.
 
 `Co3Dv2VGGTPoseEvalLoader` (41-cat / 10-seq / 10-frame seeded recipe)
 + MASt3R N-view via `PointCloudOptimizer` (N≥3) are tested but have
@@ -110,10 +112,10 @@ until the GPU run lands. DA3 has an informational companion
 2. **D10 · VGGT-ETH3D 13-scene full split** — closes D4's
    3-vs-13-scene caveat. Either stage ~14 GB and run, or formally
    demote to "3-scene informational subset".
-3. **D23 · MASt3R Table 3 PDF re-verification** — WebFetch HTML
-   render couldn't reach the main body; the cell value 0.818 in
-   `mast3r_co3dv2_pose.yaml` needs direct PDF confirmation before
-   the row counts as paper-match.
+3. ~~**D23 · MASt3R Table 3 PDF re-verification**~~ — ✅ done
+   2026-05-23. Direct PDF read of `arxiv.org/pdf/2406.09756` Table 3
+   confirmed CO3Dv2 row (b) MASt3R = 94.6 / 91.9 / 81.8, matching
+   `mast3r_co3dv2_pose.yaml` exactly. Only the GPU run remains.
 
 ### Closed-blocked (do not retry without an upstream change)
 
