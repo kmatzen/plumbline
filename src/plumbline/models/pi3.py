@@ -180,7 +180,12 @@ class Pi3Adapter(Model):
         local_points = out["local_points"][0].detach().float().cpu().numpy()  # (N, H, W, 3)
         points = out["points"][0].detach().float().cpu().numpy()               # (N, H, W, 3)
         camera_poses = out["camera_poses"][0].detach().float().cpu().numpy()   # (N, 4, 4)
-        conf_logits = out["conf"][0].detach().float().cpu().numpy()            # (N, H, W)
+        conf_logits = out["conf"][0].detach().float().cpu().numpy()
+        # Upstream conf carries a trailing channel dim: (N, H, W, 1) — see
+        # Pi3's example.py (`sigmoid(res['conf'][..., 0])`). Drop it so
+        # confidence is (N, H, W), matching depth / point_map.
+        if conf_logits.ndim == 4 and conf_logits.shape[-1] == 1:
+            conf_logits = conf_logits[..., 0]
         conf = 1.0 / (1.0 + np.exp(-conf_logits))  # sigmoid → [0, 1]
 
         # Per-view depth is the z-coordinate of the camera-local point map.

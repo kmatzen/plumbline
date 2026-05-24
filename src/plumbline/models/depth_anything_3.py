@@ -4,8 +4,16 @@ Upstream: https://github.com/ByteDance-Seed/Depth-Anything-3
 Package: ``depth_anything_3`` (pip-installable).
 
 Depth Anything 3 is the multi-view successor to DA-V2. Feed-forward
-prediction of depth + camera pose + intrinsics from 1..N views. Metric
-(paper reports metric depth benchmarks).
+prediction of depth + camera pose + intrinsics from 1..N views.
+
+Depth scale: the shipped ``DA3-LARGE`` checkpoint outputs **relative /
+affine-invariant** depth — the upstream README model table lists it under
+"Rel. Depth" only (no "Met. Depth"), and ``output_processor.py`` applies
+no metric conversion (``is_metric`` passes through as 0). So this adapter
+declares ``is_metric=False`` and ``alignment_hint="scale_shift"``. (The
+metric checkpoints ``DA3METRIC-LARGE`` / ``DA3NESTED-GIANT-LARGE`` are not
+shipped here; adding them would need per-variant metric handling.)
+Verified against upstream source 2026-05-23 — see docs/SOURCE_AUDIT.md.
 
 Install
 -------
@@ -19,12 +27,15 @@ Models (as of release, HuggingFace):
 
 Canonical conversion
 --------------------
-- DA3's ``Prediction.extrinsics`` is ``w2c = camera_from_world`` shape
-  ``(N, 3, 4)``. We pad to ``(N, 4, 4)`` and invert to
-  ``world_from_camera`` to match plumbline's convention. The pose encoder
-  biases view 0 to identity, so our "first camera is world" usually holds
-  within float noise; we rebase if it doesn't.
-- ``Prediction.depth`` is metric meters; default ``alignment_hint=none``.
+- DA3's ``Prediction.extrinsics`` is ``w2c = camera_from_world``. Upstream
+  ``output_processor.py`` returns it as ``(N, 4, 4)`` in the default
+  (no-input-extrinsics) path; only the ``align_to_input_ext_scale`` branch
+  slices to ``(N, 3, 4)``. We accept either shape, then invert to
+  ``world_from_camera``. The pose encoder biases view 0 to identity, so
+  our "first camera is world" usually holds within float noise; we rebase
+  if it doesn't.
+- ``Prediction.depth`` is relative/affine-invariant (see above);
+  ``alignment_hint="scale_shift"``.
 - ``Prediction.intrinsics`` live in DA3's processed-image pixel space
   (504 long-edge). The runner resizes depth to GT for metric computation.
 
@@ -74,7 +85,7 @@ class DepthAnything3Adapter(Model):
     version = "3.0"
     capabilities = ModelCapabilities(
         tasks=frozenset({"mono_depth", "mvs_depth", "pose"}),
-        is_metric=True,
+        is_metric=False,  # DA3-LARGE is relative/affine-invariant (see module docstring)
         min_views=1,
         max_views=math.inf,
         requires_intrinsics=False,
@@ -145,8 +156,8 @@ class DepthAnything3Adapter(Model):
             metadata={
                 "checkpoint": self.checkpoint,
                 "variant": self.variant,
-                "native_space": "depth",
-                "alignment_hint": "none",
+                "native_space": "depth_affine_invariant",
+                "alignment_hint": "scale_shift",
             },
         )
 
@@ -163,7 +174,7 @@ def _run_depth_anything_3(
     Returns arrays at DA3's processed resolution (long edge = 504,
     short edge rounded to a multiple of DA3's patch size):
 
-      - depth:      (N, H_p, W_p), float32, meters
+      - depth:      (N, H_p, W_p), float32, relative/affine-invariant
       - intrinsics: (N, 3, 3), float32, in processed pixel space
       - extrinsics: (N, 4, 4), float32, world_from_camera, first view = identity
       - confidence: (N, H_p, W_p), float32
@@ -177,16 +188,24 @@ def _run_depth_anything_3(
         # before checking export_dir.
         pred = model.inference(imgs_list, export_dir=None, export_format="mini_npz")
 
-    depth_np = np.asarray(pred.depth)  # (N, H, W), already numpy, metric meters
+    depth_np = np.asarray(pred.depth)  # (N, H, W), relative/affine-invariant
     intr_np = np.asarray(pred.intrinsics)  # (N, 3, 3)
-    extr_np = np.asarray(pred.extrinsics)  # (N, 3, 4), w2c (camera_from_world)
+    extr_np = np.asarray(pred.extrinsics)  # (N,4,4) default path, or (N,3,4); w2c
     conf_np = np.asarray(pred.conf) if pred.conf is not None else None
 
-    # w2c 3x4 → camera_from_world 4x4 → world_from_camera 4x4.
+    # w2c → camera_from_world (4x4) → world_from_camera. Upstream's default
+    # (no-input-extrinsics) path returns (N,4,4); the align-to-input branch
+    # returns (N,3,4). Accept either (assuming 3x4 when upstream actually
+    # ships 4x4 is a shape-mismatch crash).
     n = extr_np.shape[0]
-    cam_from_world = np.zeros((n, 4, 4), dtype=np.float64)
-    cam_from_world[:, :3, :] = extr_np.astype(np.float64)
-    cam_from_world[:, 3, 3] = 1.0
+    cam_from_world = np.tile(np.eye(4, dtype=np.float64), (n, 1, 1))
+    tail = extr_np.shape[-2:]
+    if tail == (4, 4):
+        cam_from_world = extr_np.astype(np.float64)
+    elif tail == (3, 4):
+        cam_from_world[:, :3, :] = extr_np.astype(np.float64)
+    else:
+        raise ValueError(f"unexpected DA3 extrinsics shape {extr_np.shape}; expected (N,4,4) or (N,3,4)")
     world_from_cam = invert_pose(cam_from_world)
 
     # Canonical invalid marker: negative / non-finite depth → 0.

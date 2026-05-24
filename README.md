@@ -150,6 +150,9 @@ authoritative 16-cell matrix:
   observed values, tolerances, and protocol notes.
 - [`CONTRIBUTING.md`](./CONTRIBUTING.md) — how to add a model or
   dataset adapter.
+- [`docs/SOURCE_AUDIT.md`](./docs/SOURCE_AUDIT.md) — per-adapter audit of
+  plumbline's implementation against each method's released upstream
+  source code (preprocessing, forward, output conventions).
 
 ## License
 

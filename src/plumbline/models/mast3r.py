@@ -11,9 +11,14 @@ The adapter dispatches based on view count:
   Fast (no optimization), deterministic.
 - ``N >= 3``: dust3r's ``PointCloudOptimizer`` global aligner — iterative
   optimization over the complete pairwise graph, ``init='mst'``,
-  ``niter=300``, ``lr=0.01``, ``schedule='linear'`` (paper §4.3 default).
-  This is the path MASt3R Table 3's CO3Dv2 row uses. ~20 s / scene at
-  N=10 on a 3090.
+  ``niter=300``, ``lr=0.01``, ``schedule='linear'``. NOTE (source audit
+  2026-05-23): ``init='mst'/niter=300/lr=0.01`` match dust3r's documented
+  quick-start, but ``schedule='linear'`` is NOT dust3r's default (which is
+  ``'cosine'`` — both are valid accepted values). The earlier "(paper §4.3
+  default)" claim was unsubstantiated by upstream source and is retracted.
+  Also note this uses *dust3r's* PointCloudOptimizer, not MASt3R's own
+  ``sparse_global_alignment`` — so N>=3 results are "MASt3R-via-dust3r-GA",
+  the v0.3 swap noted below. ~20 s / scene at N=10 on a 3090.
 
 A future v0.3 may swap PointCloudOptimizer for
 ``mast3r.cloud_opt.sparse_ga.sparse_global_alignment`` (MASt3R's own
