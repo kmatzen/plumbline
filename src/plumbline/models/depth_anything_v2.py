@@ -265,7 +265,12 @@ class DepthAnythingV2Adapter(Model):
                         keep_aspect_ratio=True,
                         ensure_multiple_of=14,
                         resize_method="lower_bound",
-                        image_interpolation_method=3,  # cv2.INTER_CUBIC
+                        # NOTE (source audit 2026-05-23): 3 == cv2.INTER_AREA,
+                        # NOT cv2.INTER_CUBIC. Upstream `image2tensor` uses
+                        # cv2.INTER_CUBIC (==2). Left as-is to preserve the 8
+                        # verified DA-V2 cells; switching to 2 for source
+                        # fidelity needs GPU re-validation. See docs/SOURCE_AUDIT.md.
+                        image_interpolation_method=3,
                     ),
                     NormalizeImage(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
                     PrepareForNet(),

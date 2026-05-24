@@ -111,6 +111,17 @@ until the GPU run lands. DA3 has an informational companion
 - (2026-04-27) "MASt3R Table 5 on 7-Scenes" claim in `seven_scenes.py`
   docstring — MASt3R does not evaluate 7-Scenes for pairwise pose.
 
+### Source-fidelity audit (2026-05-23)
+
+`docs/SOURCE_AUDIT.md` audits every adapter against its released upstream
+source. Most are faithful; fixes landed for DA-3 (extrinsics shape +
+relative-depth flag) and π³ (confidence shape). One **deferred** item
+touches verified cells: the DA-V2 *paper* path passes
+`image_interpolation_method=3` (`cv2.INTER_AREA`) where upstream uses
+`cv2.INTER_CUBIC` (=2). The 8 ✅ DA-V2 cells were validated with INTER_AREA,
+so switching to the faithful INTER_CUBIC needs a GPU re-validation of those
+cells before it lands (behavior left unchanged for now).
+
 ### Biggest open gaps (in order of per-cell leverage)
 
 1. **CO3Dv2 GPU run** — converts the only two pending pose
