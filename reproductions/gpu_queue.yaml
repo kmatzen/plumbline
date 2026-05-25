@@ -56,17 +56,18 @@ jobs:
       co3dv2-vggt-pose-eval loader with the VGGT job, so stage CO3Dv2
       once and run both back-to-back.
 
-  # ----- Ran 2026-05-25 → protocol delta (D24); now blocked, do NOT re-run for a paper-match -----
+  # ----- D24 RESOLVED 2026-05-25: protocol deltas, all 3 paper cells CONFIRMED via
+  # exact-set reproduction (CUT3R's own eval). Blocked = nothing left to run; the
+  # prepared eval data is mirrored at s3://plumbline-bench/datasets/cut3r_eval/. -----
   - name: cut3r-nyuv2
     status: blocked
     priority: 15
     blocked_on: >
-      D24 — ran 2026-05-25, observed 0.0522 (better than paper 0.086).
-      Documented PROTOCOL DELTA (plumbline strict raw+crop vs the
-      DUSt3R-lineage filled+no-crop the paper reports), NOT a model bug.
-      Do not re-run for a paper-match. Optional future coverage: author a
-      lineage-faithful variant (filled GT, no crop, CUT3R's exact .npy set
-      + cubic resize) to attempt an apples-to-apples match.
+      D24 RESOLVED — plumbline cell 0.0522 (vs paper 0.086) under its
+      stricter raw+crop protocol = documented protocol delta, NOT a model
+      bug. The apples-to-apples exact-set reproduction is DONE: CUT3R's own
+      eval on its exact prepared NYU set = 0.08595 vs paper 0.086 (0.06 %).
+      Nothing left to run; do not re-queue.
     paper_target: "CUT3R Table 1 — NYU-v2 single-frame Abs Rel = 0.086 (verified_pdf 2026-05-23)"
     primary_metric: abs_rel
     datasets: [nyuv2]
@@ -87,10 +88,11 @@ jobs:
     status: blocked
     priority: 16
     blocked_on: >
-      D24 — ran 2026-05-25, observed 0.0858 (better than paper 0.092).
-      Protocol delta (plumbline Eigen-652 + Garg crop vs the lineage
-      val_selection_cropped / no-crop set), NOT a model bug. Do not re-run
-      for a paper-match.
+      D24 RESOLVED — plumbline cell 0.0858 (vs paper 0.092) = protocol
+      delta (Eigen-652 + Garg crop vs the lineage gathered set), NOT a
+      model bug. Exact-set reproduction DONE: CUT3R's own eval on its
+      gathered set (1269 pairs) = 0.09219 vs paper 0.092 (0.2 %). Nothing
+      left to run.
     paper_target: "CUT3R Table 1 — KITTI single-frame Abs Rel = 0.092 (verified_pdf 2026-05-23)"
     primary_metric: abs_rel
     datasets: [kitti]
@@ -106,10 +108,10 @@ jobs:
     status: blocked
     priority: 17
     blocked_on: >
-      D24 — ran 2026-05-25, observed 0.0536 (better than paper 0.078).
-      Protocol/selection delta: a different sequence/frame set than CUT3R's
-      5-seq × 110-frame Table 2 set, NOT a model bug. Do not re-run for a
-      paper-match.
+      D24 RESOLVED — plumbline cell 0.0536 (vs paper 0.078) = protocol/
+      selection delta, NOT a model bug. Exact-set reproduction DONE via
+      CUT3R's VIDEO eval (per-seq scale = Table 2) on the 5-seq × 110-frame
+      set = 0.07661 vs paper 0.078 (1.8 %). Nothing left to run.
     paper_target: "CUT3R Table 2 — Bonn VIDEO depth (per-sequence scale) Abs Rel = 0.078 (verified_pdf 2026-05-23)"
     primary_metric: abs_rel
     datasets: [bonn]
