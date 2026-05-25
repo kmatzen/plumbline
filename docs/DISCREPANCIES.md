@@ -44,7 +44,7 @@ deeper diagnosis below.
 | D18 | GeoWizard-KITTI | +35 % (0.131 vs 0.097) | 📜 | same checkpoint as D17; deprioritized verify | awaits D17 unblock |
 | D22 | Marigold/GeoWizard KITTI umbrella | various | 📜 | (subsumes D9 + D18) | open upstream issues; possibly drop these from v0.1 paper-match |
 | D23 | MASt3R-CO3Dv2 cell verification | ✅ RESOLVED 2026-05-23 | 📑 | WebFetch HTML render only loaded appendix on `2406.09756` (every URL surface) | direct PDF read done: Table 3 row (b) MASt3R = 94.6/91.9/81.8 — matches YAML exactly |
-| D24 | CUT3R NYU/KITTI/Bonn depth (DUSt3R-lineage; also π³) | ✅ RESOLVED 2026-05-25 | 📐 | crop, clip, median-align, abs_rel formula — all ruled out by re-scoring cached preds | EXPLAINED (protocol delta): plumbline's strict `raw`+crop is stricter than the lineage `filled`+no-crop paper protocol; model is correct. Documented; `cut3r-*` jobs → `blocked` (D24) |
+| D24 | CUT3R NYU/KITTI/Bonn depth (DUSt3R-lineage; also π³) | ✅ RESOLVED 2026-05-25 | 📐 | crop, clip, median-align, abs_rel, resize — all ruled out by re-scoring cached preds | EXPLAINED (protocol delta): plumbline's strict `raw`+crop is stricter than the lineage protocol. **Paper number confirmed** — CUT3R's own pipeline on its exact prepared NYU set = 0.08595 vs paper 0.086 (0.06 %). `cut3r-*` jobs → `blocked` (D24) |
 | — | VGGT-CO3Dv2 (Table 1 0.882) | not run | ⏳ | paper cell verified 2026-05-03 | GPU run |
 | — | MASt3R-CO3Dv2 (Table 3 0.818) | not run | ⏳ | adapter rewrite + tests pass; 0 GPU validation; paper cell PDF-verified 2026-05-23 (D23 closed) | GPU run |
 | — | MASt3R N-view rewrite (any non-CO3Dv2 use) | not run | ⏳ | landed 2026-04-27; synthetic + unit tests only | GPU run |
@@ -69,7 +69,7 @@ look at the matrix:
 | MoGe-2 (Wang 2025, arXiv:2507.02546) | **0** | **N/A — no path** | Per-dataset ViT-L cells are not published anywhere in the paper (Table 1 is 10-dataset average; Table B.4 is ViT-Base ablation). Either reproduce the 10-dataset average across all 10 datasets (unwieldy), or accept "no paper-row possible for MoGe-2 ViT-L per-dataset". |
 | VGGT (Wang 2025, arXiv:2503.11651) | **0** paper-match | **Suspect on chamfer** | Table 2 DTU 2 × over after exhausting all levers (D3, upstream-blocked). Table 3 ETH3D 3-scene 9.4 % under (D4); 13-scene apples-to-apples deferred (D10). Table 1 CO3Dv2 GPU pending. Paper §4.2 says "Following MASt3R [62]" for DTU — but MASt3R repo doesn't ship DTU eval, so the paper may rely on unreleased post-processing (TSDF / BA / pose refinement). **Re-read §4.2 + appendix carefully** if D3 stays blocked after a future VGGT release. |
 | MASt3R (Leroy 2024, arXiv:2406.09756) | **0** paper-match (1 cell PDF-verified, GPU pending) | Cell-verified | The arXiv HTML render only serves the appendix (Tables 7-8) across every URL surface tried, so the cell was confirmed by **direct PDF read 2026-05-23** (D23 resolved): `arxiv.org/pdf/2406.09756`, Table 3 (Multi-view pose regression on CO3Dv2 / RealEstate10K, 10 random frames), row (b) MASt3R = RRA@15 94.6 / RTA@15 91.9 / mAA(30) 81.8 — matches `mast3r_co3dv2_pose.yaml` (0.946 / 0.919 / 0.818) exactly. §4.3 protocol (41 cat / 10 frames / 45 pairs / no GT focals) also confirmed. Still **0 paper-match** only because the GPU run hasn't happened — the paper target itself is no longer suspect. |
-| CUT3R (Wang 2025, arXiv:2501.12387) | **0** paper-match (3 cells diagnosed) | **High (model); protocol delta on cells** | Depth cells (NYU / KITTI / Bonn) reproduce *better* than paper under plumbline's strict `raw`+crop protocol; the published numbers use the DUSt3R-lineage `filled`+no-crop protocol. Model validated correct via D24 (re-scoring the same cached preds: lineage `filled`+no-crop = 0.0777 vs paper 0.086). The cells are documented **protocol deltas**, not ≤5 % paper-matches — `paper_match: no` here is expected and explained, *not* a suspect cell. |
+| CUT3R (Wang 2025, arXiv:2501.12387) | **1 end-to-end** (NYU, via CUT3R's own eval); 3 plumbline cells = protocol deltas | **High** | NYU paper cell (0.086) **reproduced end-to-end** on CUT3R's exact prepared set with its native pipeline: AbsRel 0.08595 / δ 0.9087 vs 0.086 / 0.909 (0.06 %, D24). plumbline's own depth cells (NYU / KITTI / Bonn) read *better* (e.g. NYU 0.0522) because its strict `raw`+crop protocol is stricter than the DUSt3R-lineage `filled`+no-crop one — documented **protocol deltas**, `paper_match: no` is expected and fully explained, not suspect. |
 
 ## Open issues at a glance
 
@@ -86,7 +86,7 @@ status carry over.)
 | D18 | GeoWizard-KITTI — same model + checkpoint as D17, same likely-upstream cause; YAML repointed to fp32+xformers for protocol fidelity but verification deprioritized | 🔎 upstream-blocked |
 | D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 upstream-blocked |
 | D23 | `mast3r_co3dv2_pose.yaml` cell verified by direct PDF read 2026-05-23 — `arxiv.org/pdf/2406.09756` Table 3 row (b) MASt3R CO3Dv2 = 94.6 / 91.9 / 81.8, matching the YAML (0.946 / 0.919 / 0.818) exactly. `source_confidence: verified_pdf` is now genuinely backed by a PDF read | ✅ RESOLVED 2026-05-23 |
-| D24 | CUT3R depth cells (nyuv2/kitti/bonn) all OFF-PAPER better than published — eval-protocol mismatch, NOT a model bug. Re-scoring the SAME cached preds: protocol levers (Eigen crop, clip [1e-3,10], median-align, abs_rel) ruled out (raw + CUT3R-protocol still 0.0526). Source = GT depth field: plumbline `depth_field=raw` (sparse Kinect) vs DUSt3R-lineage dense/filled depth. raw→filled +0.025, +Eigen-crop −0.017; filled+no-crop = 0.0777 vs paper 0.086 (~10 % residual = exact image set; cubic-vs-bilinear resize ruled out live, 0.0778 vs 0.0777) | ✅ RESOLVED 2026-05-25 (protocol delta — EXPLAINED, not a bug; live GPU re-confirmed) |
+| D24 | CUT3R depth cells (nyuv2/kitti/bonn) all OFF-PAPER better than published — eval-protocol mismatch, NOT a model bug. Re-scoring the SAME cached preds: protocol levers (Eigen crop, clip [1e-3,10], median-align, abs_rel) ruled out (raw + CUT3R-protocol still 0.0526). Source = GT depth field: plumbline `depth_field=raw` (sparse Kinect) vs DUSt3R-lineage dense/filled depth. raw→filled +0.025, +Eigen-crop −0.017; filled+no-crop = 0.0777 vs paper 0.086. Residual closed: CUT3R's OWN pipeline on its exact prepared NYU set reproduces 0.08595 vs paper 0.086 (0.06 %). | ✅ RESOLVED 2026-05-25 (protocol delta; paper number CONFIRMED reproducible end-to-end on exact set) |
 
 ---
 
@@ -846,10 +846,12 @@ NOT the source.
    DUSt3R/CUT3R/MonST3R/π³ lineage, which scores against dense depth.
 2. **Eigen crop (−0.017):** plumbline applies it; `eval_metrics.py` applies none. On
    filled GT the crop drops noisier interpolated borders (0.0605 vs 0.0777).
-3. **Residual 0.0777→0.086 (~10 %):** the exact NYU image set (CUT3R's prepared
-   `.npy` vs our 654 `.mat` Eigen indices). The pred-resize hypothesis is **ruled
-   out** empirically (2026-05-25 GPU re-score): `cv2.INTER_CUBIC` gives 0.0778 vs
-   PIL-bilinear 0.0777 — a 0.0001 no-op — so the entire residual is the image set.
+3. **Residual 0.0777→0.086 (~10 %):** the exact NYU image set + GT + native
+   preprocessing (CUT3R's prepared `.npy` vs our 654 `.mat` Eigen indices). The
+   pred-resize hypothesis is **ruled out** (cubic 0.0778 vs bilinear 0.0777, a
+   0.0001 no-op). **Confirmed:** running CUT3R's own pipeline on its exact prepared
+   set reproduces **0.08595 vs paper 0.086** (0.06 % — see exact-set reproduction
+   below), so the residual is fully accounted for by the eval set, not the model.
 
 KITTI / Bonn are the same class (eval-set/selection, not model): KITTI plumbline
 Eigen-652 + Garg crop vs CUT3R `val_selection_cropped` (1000 imgs, no crop,
@@ -889,13 +891,21 @@ bilinear 0.0777, a 0.0001 no-op). So the 0.0777→0.086 (~10 %) residual is
 **entirely the exact image set** (CUT3R's prepared `.npy` vs our Eigen-654), not
 resize.
 
-**Optional future coverage (not required to close D24):** a lineage-faithful
-variant on CUT3R's *exact* prepared NYU `.npy` set (`depth_field=filled`, no crop)
-is the only remaining way to attempt an apples-to-apples ≤5 % paper-match — on our
-Eigen-654 set the lineage protocol tops out at ~0.0777 regardless of resize. That
-prepared set is not staged on the GPU box (no bulk-pull), so the exact-set match
-stays open coverage. Run + cached preds:
-`s3://plumbline-bench/runs/20260525T165647Z/`.
+**Exact-set reproduction — paper number CONFIRMED end-to-end (2026-05-25 GPU):**
+staged CUT3R's *exact* prepared NYU eval set (MonST3R recipe: HuggingFace
+`sayakpaul/nyu_depth_v2` val → 654 `.h5` → `nyu_images/*.png` + dense
+`nyu_depths/*.npy`) and ran CUT3R's **own** native pipeline (`eval/monodepth/
+launch.py` inference + `eval_metrics.py`, `depth_evaluation(max_depth=None,
+lr=1e-3)`, `cv2.INTER_CUBIC` resize). Result: **AbsRel 0.08595, δ<1.25 0.9087**
+vs paper **0.086 / 90.9** — a **0.06 % match**. So the ~10 % residual was indeed
+the exact image set + GT + native preprocessing; on CUT3R's actual eval set the
+published number reproduces essentially exactly. This both (a) re-confirms
+plumbline's model integration is correct and (b) validates CUT3R Table 1's NYU
+cell as faithfully reproducible. plumbline's own `cut3r-nyuv2` cell stays a
+documented protocol delta (stricter `raw`+crop → 0.0522); porting CUT3R's exact
+eval set into a plumbline lineage protocol is optional future coverage, no longer
+a mystery. Run + cached preds: `s3://plumbline-bench/runs/20260525T165647Z/`;
+exact-set eval on the box at `/root/deps/cut3r/eval_results/monodepth/nyu_ours/`.
 
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 
