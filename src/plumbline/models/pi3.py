@@ -133,16 +133,16 @@ class Pi3Adapter(Model):
                 "https://github.com/yyfz/Pi3 and point $PI3_ROOT at it "
                 "(see the module docstring)."
             ) from exc
-        import torch
-
-        torch_dtype = {
-            "bfloat16": torch.bfloat16,
-            "float16": torch.float16,
-            "float32": torch.float32,
-        }[self.dtype]
-        # Upstream's README shows:
+        # Upstream (Pi3 example.py) keeps the model in float32 and runs
+        # inference under ``torch.amp.autocast`` — it does NOT cast the whole
+        # model to bf16/fp16:
         #     model = Pi3X.from_pretrained("yyfz233/Pi3X").to(device).eval()
-        self._model = cls.from_pretrained(hf).to(self.device).to(torch_dtype).eval()
+        #     with torch.amp.autocast('cuda', dtype=torch.bfloat16): ...
+        # Casting the model wholesale leaves some ops (e.g. the DPT-head
+        # conv_transpose inputs) in fp32 against bf16 weights and raises a
+        # dtype-mismatch RuntimeError. So load fp32 and apply ``self.dtype``
+        # as the autocast precision in predict().
+        self._model = cls.from_pretrained(hf).to(self.device).eval()
 
     # -- predict ---------------------------------------------------------
 
@@ -160,21 +160,47 @@ class Pi3Adapter(Model):
         import torch
 
         n, h, w, _ = images.shape
-        # Upstream expects (N, 3, H, W) float in [0, 1], batched via [None].
+        # π³'s DINOv2 backbone requires H and W to be multiples of the patch
+        # size (14). Upstream (``pi3/utils/basic.py::load_images_as_tensor``)
+        # resizes every frame to a uniform size that is a multiple of 14 and
+        # bounded by ``PIXEL_LIMIT`` px, preserving aspect ratio. plumbline's
+        # loaders emit native-resolution frames (e.g. DTU 1200x1600, not a
+        # multiple of 14), so we replicate that resize here — a model-specific
+        # input constraint belongs in the adapter (cf. the VGGT adapter's
+        # 518-px / multiple-of-14 preprocessing). The runner resizes predicted
+        # depth back to GT resolution for metric computation.
+        tw, th = _pi3_target_size(w, h)
+        if (th, tw) != (h, w):
+            from PIL import Image as _PImage
+
+            resized = np.empty((n, th, tw, 3), dtype=images.dtype)
+            for i in range(n):
+                resized[i] = np.asarray(
+                    _PImage.fromarray(images[i]).resize(
+                        (tw, th), _PImage.Resampling.LANCZOS
+                    )
+                )
+            images = resized
+            n, h, w, _ = images.shape
+        # Upstream feeds fp32 images in [0, 1]; precision is handled by
+        # autocast, not by casting the input (matches Pi3 example.py's
+        # ``load_images_as_tensor`` → ToTensor fp32).
         t = torch.from_numpy(images).to(self.device)
-        t = t.permute(0, 3, 1, 2).to(
-            dtype={
-                "bfloat16": torch.bfloat16,
-                "float16": torch.float16,
-                "float32": torch.float32,
-            }[self.dtype]
-        )
-        t = t.float() / 255.0 if self.dtype == "float32" else t / 255.0
+        t = t.permute(0, 3, 1, 2).float() / 255.0
         # (N, 3, H, W) -> (1, N, 3, H, W)
         batch = t[None]
 
+        autocast_dtype = {
+            "bfloat16": torch.bfloat16,
+            "float16": torch.float16,
+            "float32": torch.float32,
+        }[self.dtype]
         with torch.no_grad():
-            out = self._model(batch)
+            if self.dtype == "float32":
+                out = self._model(batch)
+            else:
+                with torch.amp.autocast("cuda", dtype=autocast_dtype):
+                    out = self._model(batch)
 
         # Move to CPU float32 for numpy handoff.
         local_points = out["local_points"][0].detach().float().cpu().numpy()  # (N, H, W, 3)
@@ -224,6 +250,27 @@ class Pi3Adapter(Model):
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
+
+def _pi3_target_size(w: int, h: int, pixel_limit: int = 255000) -> tuple[int, int]:
+    """π³'s uniform input size: multiples of 14, bounded by ``pixel_limit``
+    px, preserving aspect ratio.
+
+    Mirrors Pi3's ``pi3/utils/basic.py::load_images_as_tensor`` (default
+    ``PIXEL_LIMIT=255000``) so the adapter feeds the same resolution the
+    upstream demo does. Returns ``(W, H)``.
+    """
+    import math
+
+    scale = math.sqrt(pixel_limit / (w * h)) if w * h > 0 else 1.0
+    w_t, h_t = w * scale, h * scale
+    k, m = round(w_t / 14), round(h_t / 14)
+    while (k * 14) * (m * 14) > pixel_limit:
+        if (k / m) > (w_t / h_t):
+            k -= 1
+        else:
+            m -= 1
+    return max(1, k) * 14, max(1, m) * 14
 
 
 def _ensure_pi3_on_path() -> None:
