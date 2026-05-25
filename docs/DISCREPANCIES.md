@@ -86,7 +86,7 @@ status carry over.)
 | D18 | GeoWizard-KITTI — same model + checkpoint as D17, same likely-upstream cause; YAML repointed to fp32+xformers for protocol fidelity but verification deprioritized | 🔎 upstream-blocked |
 | D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 upstream-blocked |
 | D23 | `mast3r_co3dv2_pose.yaml` cell verified by direct PDF read 2026-05-23 — `arxiv.org/pdf/2406.09756` Table 3 row (b) MASt3R CO3Dv2 = 94.6 / 91.9 / 81.8, matching the YAML (0.946 / 0.919 / 0.818) exactly. `source_confidence: verified_pdf` is now genuinely backed by a PDF read | ✅ RESOLVED 2026-05-23 |
-| D24 | CUT3R depth cells (nyuv2/kitti/bonn) all OFF-PAPER better than published — eval-protocol mismatch, NOT a model bug. Re-scoring the SAME cached preds: protocol levers (Eigen crop, clip [1e-3,10], median-align, abs_rel) ruled out (raw + CUT3R-protocol still 0.0526). Source = GT depth field: plumbline `depth_field=raw` (sparse Kinect) vs DUSt3R-lineage dense/filled depth. raw→filled +0.025, +Eigen-crop −0.017; filled+no-crop = 0.0777 vs paper 0.086 (~10 % residual = exact image set + cubic-vs-bilinear resize) | ✅ RESOLVED 2026-05-25 (protocol delta — EXPLAINED, not a bug) |
+| D24 | CUT3R depth cells (nyuv2/kitti/bonn) all OFF-PAPER better than published — eval-protocol mismatch, NOT a model bug. Re-scoring the SAME cached preds: protocol levers (Eigen crop, clip [1e-3,10], median-align, abs_rel) ruled out (raw + CUT3R-protocol still 0.0526). Source = GT depth field: plumbline `depth_field=raw` (sparse Kinect) vs DUSt3R-lineage dense/filled depth. raw→filled +0.025, +Eigen-crop −0.017; filled+no-crop = 0.0777 vs paper 0.086 (~10 % residual = exact image set; cubic-vs-bilinear resize ruled out live, 0.0778 vs 0.0777) | ✅ RESOLVED 2026-05-25 (protocol delta — EXPLAINED, not a bug; live GPU re-confirmed) |
 
 ---
 
@@ -846,8 +846,10 @@ NOT the source.
    DUSt3R/CUT3R/MonST3R/π³ lineage, which scores against dense depth.
 2. **Eigen crop (−0.017):** plumbline applies it; `eval_metrics.py` applies none. On
    filled GT the crop drops noisier interpolated borders (0.0605 vs 0.0777).
-3. **Residual 0.0777→0.086 (~10 %):** exact NYU image set (CUT3R's prepared `.npy`
-   vs our 654 `.mat` Eigen indices) + `cv2.INTER_CUBIC` (CUT3R) vs PIL-bilinear resize.
+3. **Residual 0.0777→0.086 (~10 %):** the exact NYU image set (CUT3R's prepared
+   `.npy` vs our 654 `.mat` Eigen indices). The pred-resize hypothesis is **ruled
+   out** empirically (2026-05-25 GPU re-score): `cv2.INTER_CUBIC` gives 0.0778 vs
+   PIL-bilinear 0.0777 — a 0.0001 no-op — so the entire residual is the image set.
 
 KITTI / Bonn are the same class (eval-set/selection, not model): KITTI plumbline
 Eigen-652 + Garg crop vs CUT3R `val_selection_cropped` (1000 imgs, no crop,
@@ -879,12 +881,20 @@ D24`). The cells stay pinned to the paper value, so the harness honestly reports
 `paper_match: no` — that `no` is now an *explained* protocol delta, not a suspect
 cell.
 
+**Live re-confirmation (2026-05-25 GPU, `scripts/ablate_nyu_gtfield.py`):** the
+full 2×4 GT-field × protocol table reproduces exactly on the 654-image Eigen set —
+raw A=0.0522 / D=0.0526, filled A=0.0605 / D=0.0777 — and a cubic-resize probe
+**rules out** pred-resize as a residual source (filled+no-crop+cubic = 0.0778 vs
+bilinear 0.0777, a 0.0001 no-op). So the 0.0777→0.086 (~10 %) residual is
+**entirely the exact image set** (CUT3R's prepared `.npy` vs our Eigen-654), not
+resize.
+
 **Optional future coverage (not required to close D24):** a lineage-faithful
-variant (`depth_field=filled`, no crop, CUT3R's exact `.npy` set + `cv2.INTER_CUBIC`
-resize) could be authored to attempt an apples-to-apples paper-match. The lineage
-re-score already lands at 0.0777 vs paper 0.086 (~10 % residual = exact image set
-+ resize); whether the exact set + cubic resize closes that last ~10 % to ≤5 % is
-an open probe, GPU-gated. Run + cached preds:
+variant on CUT3R's *exact* prepared NYU `.npy` set (`depth_field=filled`, no crop)
+is the only remaining way to attempt an apples-to-apples ≤5 % paper-match — on our
+Eigen-654 set the lineage protocol tops out at ~0.0777 regardless of resize. That
+prepared set is not staged on the GPU box (no bulk-pull), so the exact-set match
+stays open coverage. Run + cached preds:
 `s3://plumbline-bench/runs/20260525T165647Z/`.
 
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
