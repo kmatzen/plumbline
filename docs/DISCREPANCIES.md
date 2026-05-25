@@ -44,6 +44,7 @@ deeper diagnosis below.
 | D18 | GeoWizard-KITTI | +35 % (0.131 vs 0.097) | 📜 | same checkpoint as D17; deprioritized verify | awaits D17 unblock |
 | D22 | Marigold/GeoWizard KITTI umbrella | various | 📜 | (subsumes D9 + D18) | open upstream issues; possibly drop these from v0.1 paper-match |
 | D23 | MASt3R-CO3Dv2 cell verification | ✅ RESOLVED 2026-05-23 | 📑 | WebFetch HTML render only loaded appendix on `2406.09756` (every URL surface) | direct PDF read done: Table 3 row (b) MASt3R = 94.6/91.9/81.8 — matches YAML exactly |
+| D24 | CUT3R NYU/KITTI/Bonn depth (DUSt3R-lineage; also π³) | NYU −39 % (0.052 vs 0.086); KITTI −7 % (0.086 vs 0.092); Bonn −31 % (0.054 vs 0.078) | 📐 | crop, clip, median-align, abs_rel formula — all ruled out by re-scoring cached preds | add DUSt3R-lineage NYU variant (`depth_field=filled`, no crop) or accept as protocol delta |
 | — | VGGT-CO3Dv2 (Table 1 0.882) | not run | ⏳ | paper cell verified 2026-05-03 | GPU run |
 | — | MASt3R-CO3Dv2 (Table 3 0.818) | not run | ⏳ | adapter rewrite + tests pass; 0 GPU validation; paper cell PDF-verified 2026-05-23 (D23 closed) | GPU run |
 | — | MASt3R N-view rewrite (any non-CO3Dv2 use) | not run | ⏳ | landed 2026-04-27; synthetic + unit tests only | GPU run |
@@ -84,6 +85,7 @@ status carry over.)
 | D18 | GeoWizard-KITTI — same model + checkpoint as D17, same likely-upstream cause; YAML repointed to fp32+xformers for protocol fidelity but verification deprioritized | 🔎 upstream-blocked |
 | D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 upstream-blocked |
 | D23 | `mast3r_co3dv2_pose.yaml` cell verified by direct PDF read 2026-05-23 — `arxiv.org/pdf/2406.09756` Table 3 row (b) MASt3R CO3Dv2 = 94.6 / 91.9 / 81.8, matching the YAML (0.946 / 0.919 / 0.818) exactly. `source_confidence: verified_pdf` is now genuinely backed by a PDF read | ✅ RESOLVED 2026-05-23 |
+| D24 | CUT3R depth cells (nyuv2/kitti/bonn) all OFF-PAPER better than published — eval-protocol mismatch, NOT a model bug. Re-scoring the SAME cached preds: protocol levers (Eigen crop, clip [1e-3,10], median-align, abs_rel) ruled out (raw + CUT3R-protocol still 0.0526). Source = GT depth field: plumbline `depth_field=raw` (sparse Kinect) vs DUSt3R-lineage dense/filled depth. raw→filled +0.025, +Eigen-crop −0.017; filled+no-crop = 0.0777 vs paper 0.086 (~10 % residual = exact image set + cubic-vs-bilinear resize) | 🔎 OPEN (protocol) 2026-05-25 |
 
 ---
 
@@ -803,6 +805,65 @@ pre-processing step).
 Not paper-match-blocking in the sense that we can't close the gap —
 it's a finding about the ground truth being recorded. Document and
 move on until Marigold / GeoWizard authors clarify.
+
+### D24 · CUT3R / π³ DUSt3R-lineage depth cells off-paper — eval-protocol, not model   🔎 NEW 2026-05-25
+
+First GPU run of CUT3R (Table 1 single-frame depth + Table 2 Bonn video) and π³
+landed every CUT3R depth cell **below** (better than) the published number:
+
+| Cell | observed | paper | Δ |
+|---|---|---|---|
+| cut3r-nyuv2 | 0.0522 | 0.086 | −39 % |
+| cut3r-kitti | 0.0858 | 0.092 | −7 % |
+| cut3r-bonn | 0.0536 | 0.078 | −31 % |
+
+The consistent direction (every cell better, not scattered) ruled out noise and
+pointed at a shared eval step. Diagnosed by **re-scoring the same cached predictions**
+(`scripts/ablate_nyu_gtfield.py`, no re-inference) under 4 protocol variants × 2 GT
+fields, against CUT3R's own scorer (`eval/monodepth/eval_metrics.py`,
+`depth_evaluation(pred, gt, max_depth=None)` = median scale-only, `gt>0` mask, **no
+spatial crop**, no clip):
+
+| Variant | raw GT | filled GT |
+|---|---|---|
+| A crop + clip **[plumbline `nyu_eigen_2014`]** | **0.0522** | 0.0605 |
+| D no-crop, no-clip **[CUT3R `eval_metrics.py`]** | 0.0526 | **0.0777** |
+
+(Variant A/raw reproduces the live run's 0.0522 exactly → methodology validated.)
+
+**Ruled out** (each moves AbsRel < 0.0005): Eigen crop, post-align clip [1e-3,10],
+median alignment (both sides identical: `median(gt)/median(pred)`), abs_rel formula
+(identical). Raw + CUT3R-protocol still yields 0.0526 — so the protocol pipeline is
+NOT the source.
+
+**Root cause = GT depth field (dominant) + Eigen crop (secondary):**
+
+1. **raw vs filled GT (+0.025):** plumbline pins `depth_field="raw"` (sparse, accurate
+   Kinect); CUT3R's scorer loads `np.load(data/nyu/*.npy)` = the DUSt3R-lineage
+   **dense/filled** NYU depth. Under CUT3R's own protocol, raw→filled = 0.0526→0.0777.
+   The loader's comment ("every paper cites rawDepths") does not hold for the
+   DUSt3R/CUT3R/MonST3R/π³ lineage, which scores against dense depth.
+2. **Eigen crop (−0.017):** plumbline applies it; `eval_metrics.py` applies none. On
+   filled GT the crop drops noisier interpolated borders (0.0605 vs 0.0777).
+3. **Residual 0.0777→0.086 (~10 %):** exact NYU image set (CUT3R's prepared `.npy`
+   vs our 654 `.mat` Eigen indices) + `cv2.INTER_CUBIC` (CUT3R) vs PIL-bilinear resize.
+
+KITTI / Bonn are the same class (eval-set/selection, not model): KITTI plumbline
+Eigen-652 + Garg crop vs CUT3R `val_selection_cropped` (1000 imgs, no crop,
+`max_depth=None`); Bonn plumbline 8 seqs / all-frames / 64-view vs CUT3R 5 seqs
+(`balloon2, crowd2, crowd3, person_tracking2, synchronous`) × 110 frames
+(`rgb_110`/`depth_110`), `max_depth=70`.
+
+**Verdict:** not a model/inference discrepancy — plumbline's CUT3R predictions are
+correct. `nyu_eigen_2014`'s raw+crop default is *stricter* than the DUSt3R-lineage
+dense+no-crop protocol these papers report. Note this is the *opposite* sign from
+D17 (GeoWizard-NYU, which is off-paper *worse* under raw GT) — so a single global
+GT-field switch is not free; it must be scoped per paper lineage.
+
+**Next move:** add a DUSt3R-lineage NYU/KITTI/Bonn variant (`depth_field=filled`,
+no crop, CUT3R's exact set/seqs) for CUT3R/MonST3R/π³ cells, *or* keep the current
+strict protocol and treat these as documented protocol deltas (not paper-matches).
+Run + cached preds: `s3://plumbline-bench/runs/20260525T165647Z/`.
 
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 
