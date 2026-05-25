@@ -44,14 +44,16 @@ cells are now ℹ️ instead of ✅.
 | **Depth Pro** | ℹ️ δ₁ **0.9347** _(paper does not evaluate NYU — earlier 0.961 pin was fabricated)_ | ⌛ | — | — | — | — | — |
 | **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ⌛ AUC@30 target **0.818** (Table 3 verified_pdf, awaiting GPU run) | — |
 | **VGGT** | — | — | — | ⚠️ 0.642 m vs 0.709 _(D4 per-view-masked landed, 9.4% under paper on 3-scene; D10 needed for full split)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ⌛ AUC@30 target **0.882** (Table 1 verified_pdf, awaiting GPU run) | — |
-| **CUT3R** _(video + unordered)_ | ⌛ AbsRel target **0.086** (Table 1 verified_pdf; per-frame median scaling; protocol-diff + GPU pending) | ⌛ AbsRel target **0.092** (Table 1 verified_pdf; same caveat) | — | — | — | ℹ️ recurrent/online — handles ordered video & unordered sets | — |
+| **CUT3R** _(video + unordered)_ | ℹ️ **0.0522** vs 0.086 _(better — D24 protocol delta: strict raw+crop vs lineage filled+no-crop; model correct, not a paper-match)_ | ℹ️ **0.0858** vs 0.092 _(better — D24 protocol delta: Eigen-652+Garg vs lineage val_selection_cropped)_ | — | — | — | ℹ️ recurrent/online — handles ordered video & unordered sets | — |
 
 **Video benchmark (new 2026-05-23):** the **Bonn RGB-D Dynamic** loader
 (`bonn`, one-sample-per-sequence) closes the runnable-video gap.
 `cut3r-bonn` targets CUT3R Table 2 video-depth (per-sequence scale)
-Bonn AbsRel **0.078** (verified_pdf) — ⌛ GPU + MonST3R-protocol-diff
-pending. MonST3R also reports Bonn (0.067 w/ flow GA); a faithful
-MonST3R-video cell awaits the flow-path follow-up.
+Bonn AbsRel **0.078** (verified_pdf); observed **0.0536** — a documented
+protocol/selection delta (D24, resolved 2026-05-25): a different
+sequence/frame set than CUT3R's 5-seq × 110-frame Table 2 set, so it is
+not a paper-match. MonST3R also reports Bonn (0.067 w/ flow GA); a
+faithful MonST3R-video cell awaits the flow-path follow-up.
 
 ### Paper-match count
 
