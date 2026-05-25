@@ -44,7 +44,7 @@ deeper diagnosis below.
 | D18 | GeoWizard-KITTI | +35 % (0.131 vs 0.097) | 📜 | same checkpoint as D17; deprioritized verify | awaits D17 unblock |
 | D22 | Marigold/GeoWizard KITTI umbrella | various | 📜 | (subsumes D9 + D18) | open upstream issues; possibly drop these from v0.1 paper-match |
 | D23 | MASt3R-CO3Dv2 cell verification | ✅ RESOLVED 2026-05-23 | 📑 | WebFetch HTML render only loaded appendix on `2406.09756` (every URL surface) | direct PDF read done: Table 3 row (b) MASt3R = 94.6/91.9/81.8 — matches YAML exactly |
-| D24 | CUT3R NYU/KITTI/Bonn depth (DUSt3R-lineage; also π³) | ✅ RESOLVED 2026-05-25 | 📐 | crop, clip, median-align, abs_rel, resize — all ruled out by re-scoring cached preds | EXPLAINED (protocol delta): plumbline's strict `raw`+crop is stricter than the lineage protocol. **Paper number confirmed** — CUT3R's own pipeline on its exact prepared NYU set = 0.08595 vs paper 0.086 (0.06 %). `cut3r-*` jobs → `blocked` (D24) |
+| D24 | CUT3R NYU/KITTI/Bonn depth (DUSt3R-lineage; also π³) | ✅ RESOLVED 2026-05-25 | 📐 | crop, clip, median-align, abs_rel, resize — all ruled out by re-scoring cached preds | EXPLAINED (protocol delta): plumbline's strict protocol differs from the lineage's. **All 3 paper cells confirmed** via CUT3R's own pipeline on its exact sets — NYU 0.08595/0.086, KITTI 0.09219/0.092, Bonn 0.07661/0.078. `cut3r-*` jobs → `blocked` (D24) |
 | — | VGGT-CO3Dv2 (Table 1 0.882) | not run | ⏳ | paper cell verified 2026-05-03 | GPU run |
 | — | MASt3R-CO3Dv2 (Table 3 0.818) | not run | ⏳ | adapter rewrite + tests pass; 0 GPU validation; paper cell PDF-verified 2026-05-23 (D23 closed) | GPU run |
 | — | MASt3R N-view rewrite (any non-CO3Dv2 use) | not run | ⏳ | landed 2026-04-27; synthetic + unit tests only | GPU run |
@@ -69,7 +69,7 @@ look at the matrix:
 | MoGe-2 (Wang 2025, arXiv:2507.02546) | **0** | **N/A — no path** | Per-dataset ViT-L cells are not published anywhere in the paper (Table 1 is 10-dataset average; Table B.4 is ViT-Base ablation). Either reproduce the 10-dataset average across all 10 datasets (unwieldy), or accept "no paper-row possible for MoGe-2 ViT-L per-dataset". |
 | VGGT (Wang 2025, arXiv:2503.11651) | **0** paper-match | **Suspect on chamfer** | Table 2 DTU 2 × over after exhausting all levers (D3, upstream-blocked). Table 3 ETH3D 3-scene 9.4 % under (D4); 13-scene apples-to-apples deferred (D10). Table 1 CO3Dv2 GPU pending. Paper §4.2 says "Following MASt3R [62]" for DTU — but MASt3R repo doesn't ship DTU eval, so the paper may rely on unreleased post-processing (TSDF / BA / pose refinement). **Re-read §4.2 + appendix carefully** if D3 stays blocked after a future VGGT release. |
 | MASt3R (Leroy 2024, arXiv:2406.09756) | **0** paper-match (1 cell PDF-verified, GPU pending) | Cell-verified | The arXiv HTML render only serves the appendix (Tables 7-8) across every URL surface tried, so the cell was confirmed by **direct PDF read 2026-05-23** (D23 resolved): `arxiv.org/pdf/2406.09756`, Table 3 (Multi-view pose regression on CO3Dv2 / RealEstate10K, 10 random frames), row (b) MASt3R = RRA@15 94.6 / RTA@15 91.9 / mAA(30) 81.8 — matches `mast3r_co3dv2_pose.yaml` (0.946 / 0.919 / 0.818) exactly. §4.3 protocol (41 cat / 10 frames / 45 pairs / no GT focals) also confirmed. Still **0 paper-match** only because the GPU run hasn't happened — the paper target itself is no longer suspect. |
-| CUT3R (Wang 2025, arXiv:2501.12387) | **1 end-to-end** (NYU, via CUT3R's own eval); 3 plumbline cells = protocol deltas | **High** | NYU paper cell (0.086) **reproduced end-to-end** on CUT3R's exact prepared set with its native pipeline: AbsRel 0.08595 / δ 0.9087 vs 0.086 / 0.909 (0.06 %, D24). plumbline's own depth cells (NYU / KITTI / Bonn) read *better* (e.g. NYU 0.0522) because its strict `raw`+crop protocol is stricter than the DUSt3R-lineage `filled`+no-crop one — documented **protocol deltas**, `paper_match: no` is expected and fully explained, not suspect. |
+| CUT3R (Wang 2025, arXiv:2501.12387) | **3 end-to-end** (NYU, KITTI, Bonn via CUT3R's own eval); 3 plumbline cells = protocol deltas | **High** | All three paper cells **reproduced end-to-end** on CUT3R's exact prepared sets + native pipeline: NYU 0.08595/0.086, KITTI 0.09219/0.092 (Table 1), Bonn 0.07661/0.078 (Table 2 video, per-seq scale) — all ≤2 % (D24). plumbline's own depth cells read *better* (NYU 0.0522, KITTI 0.0858, Bonn 0.0536) because its strict protocol / eval set differs from the DUSt3R lineage — documented **protocol deltas**, `paper_match: no` is expected and fully explained, not suspect. |
 
 ## Open issues at a glance
 
@@ -86,7 +86,7 @@ status carry over.)
 | D18 | GeoWizard-KITTI — same model + checkpoint as D17, same likely-upstream cause; YAML repointed to fp32+xformers for protocol fidelity but verification deprioritized | 🔎 upstream-blocked |
 | D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 upstream-blocked |
 | D23 | `mast3r_co3dv2_pose.yaml` cell verified by direct PDF read 2026-05-23 — `arxiv.org/pdf/2406.09756` Table 3 row (b) MASt3R CO3Dv2 = 94.6 / 91.9 / 81.8, matching the YAML (0.946 / 0.919 / 0.818) exactly. `source_confidence: verified_pdf` is now genuinely backed by a PDF read | ✅ RESOLVED 2026-05-23 |
-| D24 | CUT3R depth cells (nyuv2/kitti/bonn) all OFF-PAPER better than published — eval-protocol mismatch, NOT a model bug. Re-scoring the SAME cached preds: protocol levers (Eigen crop, clip [1e-3,10], median-align, abs_rel) ruled out (raw + CUT3R-protocol still 0.0526). Source = GT depth field: plumbline `depth_field=raw` (sparse Kinect) vs DUSt3R-lineage dense/filled depth. raw→filled +0.025, +Eigen-crop −0.017; filled+no-crop = 0.0777 vs paper 0.086. Residual closed: CUT3R's OWN pipeline on its exact prepared NYU set reproduces 0.08595 vs paper 0.086 (0.06 %). | ✅ RESOLVED 2026-05-25 (protocol delta; paper number CONFIRMED reproducible end-to-end on exact set) |
+| D24 | CUT3R depth cells (nyuv2/kitti/bonn) all OFF-PAPER better than published — eval-protocol mismatch, NOT a model bug. Re-scoring the SAME cached preds: protocol levers (Eigen crop, clip [1e-3,10], median-align, abs_rel) ruled out (raw + CUT3R-protocol still 0.0526). Source = GT depth field: plumbline `depth_field=raw` (sparse Kinect) vs DUSt3R-lineage dense/filled depth. raw→filled +0.025, +Eigen-crop −0.017; filled+no-crop = 0.0777 vs paper 0.086. Residual closed: CUT3R's OWN pipeline on its exact sets reproduces all 3 cells — NYU 0.08595/0.086, KITTI 0.09219/0.092, Bonn 0.07661/0.078 (video, per-seq scale). | ✅ RESOLVED 2026-05-25 (protocol delta; all 3 paper cells CONFIRMED reproducible end-to-end) |
 
 ---
 
@@ -891,21 +891,37 @@ bilinear 0.0777, a 0.0001 no-op). So the 0.0777→0.086 (~10 %) residual is
 **entirely the exact image set** (CUT3R's prepared `.npy` vs our Eigen-654), not
 resize.
 
-**Exact-set reproduction — paper number CONFIRMED end-to-end (2026-05-25 GPU):**
-staged CUT3R's *exact* prepared NYU eval set (MonST3R recipe: HuggingFace
-`sayakpaul/nyu_depth_v2` val → 654 `.h5` → `nyu_images/*.png` + dense
-`nyu_depths/*.npy`) and ran CUT3R's **own** native pipeline (`eval/monodepth/
-launch.py` inference + `eval_metrics.py`, `depth_evaluation(max_depth=None,
-lr=1e-3)`, `cv2.INTER_CUBIC` resize). Result: **AbsRel 0.08595, δ<1.25 0.9087**
-vs paper **0.086 / 90.9** — a **0.06 % match**. So the ~10 % residual was indeed
-the exact image set + GT + native preprocessing; on CUT3R's actual eval set the
-published number reproduces essentially exactly. This both (a) re-confirms
-plumbline's model integration is correct and (b) validates CUT3R Table 1's NYU
-cell as faithfully reproducible. plumbline's own `cut3r-nyuv2` cell stays a
-documented protocol delta (stricter `raw`+crop → 0.0522); porting CUT3R's exact
-eval set into a plumbline lineage protocol is optional future coverage, no longer
-a mystery. Run + cached preds: `s3://plumbline-bench/runs/20260525T165647Z/`;
-exact-set eval on the box at `/root/deps/cut3r/eval_results/monodepth/nyu_ours/`.
+**Exact-set reproduction — all three paper cells CONFIRMED end-to-end (2026-05-25
+GPU):** staged each cell's *exact* prepared eval set and ran CUT3R's **own** native
+pipeline (`eval/monodepth` for Table 1, `eval/video_depth --align scale` for
+Table 2). All reproduce the published numbers:
+
+| cell | exact-set result | paper | Δ | eval path |
+|---|---|---|---|---|
+| NYU (Table 1) | AbsRel 0.08595, δ 0.9087 | 0.086 / 90.9 | 0.06 % | `eval/monodepth` |
+| KITTI (Table 1) | AbsRel 0.09219, δ 0.9129 | 0.092 / 91.3 | 0.2 % | `eval/monodepth` |
+| Bonn (Table 2) | AbsRel 0.07661, δ 0.9376 | 0.078 / 93.7 | 1.8 % | `eval/video_depth`, per-seq scale |
+
+- **NYU:** MonST3R recipe (HF `sayakpaul/nyu_depth_v2` val → 654 `.h5` →
+  `nyu_images/*.png` + dense `nyu_depths/*.npy`); `depth_evaluation(max_depth=None,
+  lr=1e-3)`, `cv2.INTER_CUBIC` resize.
+- **KITTI:** gathered set per `prepare_kitti.py` — first ≤110 annotated-val depth
+  frames × 13 seqs (**1269 pairs**) + the *full* raw `image_02` (the box's plumbline
+  raw is pruned to Eigen frames, so the 13 raw drives were re-downloaded);
+  `max_depth=None`.
+- **Bonn:** `prepare_bonn.py` 110-frame subsets (`rgb_110`/`depth_110`, frames
+  [30:140]) × 5 seqs; this is the **video** eval (per-sequence single scale =
+  Table 2). The single-frame `eval/monodepth` path gives 0.0625 — a different,
+  easier number, *not* the Table 2 target.
+
+So every off-paper-better plumbline cell is fully explained: on each cell's exact
+eval set + native protocol the published number reproduces within ≤2 %. This both
+(a) re-confirms plumbline's CUT3R integration is correct and (b) validates CUT3R
+Table 1 (NYU, KITTI) + Table 2 (Bonn) as faithfully reproducible. plumbline's own
+`cut3r-*` cells stay documented protocol deltas (stricter protocol / different eval
+set → NYU 0.0522, KITTI 0.0858, Bonn 0.0536). Run + cached preds:
+`s3://plumbline-bench/runs/20260525T165647Z/`; exact-set evals on the box at
+`/root/deps/cut3r/eval_results/{monodepth/nyu_ours,monodepth/kitti_ours,video_depth/bonn_ours}/`.
 
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 
