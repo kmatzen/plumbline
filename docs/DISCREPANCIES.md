@@ -920,8 +920,11 @@ eval set + native protocol the published number reproduces within ≤2 %. This b
 Table 1 (NYU, KITTI) + Table 2 (Bonn) as faithfully reproducible. plumbline's own
 `cut3r-*` cells stay documented protocol deltas (stricter protocol / different eval
 set → NYU 0.0522, KITTI 0.0858, Bonn 0.0536). Run + cached preds:
-`s3://plumbline-bench/runs/20260525T165647Z/`; exact-set evals on the box at
-`/root/deps/cut3r/eval_results/{monodepth/nyu_ours,monodepth/kitti_ours,video_depth/bonn_ours}/`.
+`s3://plumbline-bench/runs/20260525T165647Z/`. The exact prepared eval datasets
+(NYU prepared + KITTI gathered set + the slow eu-central KITTI raw + Bonn `_110`
+subsets) are mirrored to **`s3://plumbline-bench/datasets/cut3r_eval/`** (8507 objs
+/ 5.15 GB) — `rclone copy` them into `$CUT3R_ROOT/data/` to re-run the exact-set
+eval without any re-download/re-prep.
 
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 
