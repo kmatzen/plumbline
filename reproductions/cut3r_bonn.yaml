@@ -10,13 +10,15 @@
 # runner fitting a single (per-sequence) median scale over the whole
 # sample — exactly the "per-sequence scale" protocol Table 2 uses.
 #
-# CAVEAT (read before promoting to ✅): the paper *value* is PDF-verified,
-# but the *exact* Bonn eval protocol (which sequences, how many frames /
-# what stride) lives in MonST3R's eval code (CUT3R follows MonST3R). This
-# YAML evaluates all discovered sequences with 60 evenly-sampled frames —
-# a reasonable default, NOT a confirmed match to MonST3R's selection.
-# Single-record diff vs MonST3R's Bonn eval (plan.md §12) before counting
-# this as a paper-match. GPU validation pending (queued).
+# STATUS — D24 RESOLVED 2026-05-25 (protocol delta, NOT a model bug):
+# The observed 0.0536 reads *better* than paper 0.078 because the eval
+# SET differs, not the model. CUT3R/MonST3R's Table 2 Bonn number uses 5
+# specific sequences (balloon2, crowd2, crowd3, person_tracking2,
+# synchronous) × 110 frames (rgb_110/depth_110), max_depth=70; this YAML
+# evaluates all discovered sequences / 60 evenly-sampled frames / 64-view.
+# plumbline's per-sequence-scale video pipeline is correct; the cell is a
+# documented protocol/selection delta (`paper_match: no` is EXPECTED).
+# See D24 in docs/DISCREPANCIES.md.
 
 name: cut3r-bonn
 
@@ -46,7 +48,8 @@ paper_reference:
 
 notes: >
   Needs $CUT3R_ROOT + $CUT3R_CKPT (512-DPT) + $BONN_ROOT (extract the
-  rgbd_bonn_<name>.zip archives from ipb.uni-bonn.de under it). Value
-  PDF-verified; the sequence/frame selection is a reasonable default, not
-  MonST3R's exact protocol (see CAVEAT) — treat as ⌛ until the
-  single-record diff lands. Demonstrates the video task end-to-end.
+  rgbd_bonn_<name>.zip archives from ipb.uni-bonn.de under it). Documented
+  PROTOCOL/SELECTION DELTA, not a paper-match (D24): different sequence/
+  frame selection than CUT3R's 5-seq × 110-frame Table 2 set, so the
+  observed 0.0536 vs paper 0.078 is expected. Demonstrates the video task
+  end-to-end; do not expect a ≤5 % match without matching the exact set.

@@ -56,10 +56,17 @@ jobs:
       co3dv2-vggt-pose-eval loader with the VGGT job, so stage CO3Dv2
       once and run both back-to-back.
 
-  # ----- Tier 1b: new coverage (video / unordered) with a verified target -----
+  # ----- Ran 2026-05-25 → protocol delta (D24); now blocked, do NOT re-run for a paper-match -----
   - name: cut3r-nyuv2
-    status: pending
-    priority: 3
+    status: blocked
+    priority: 15
+    blocked_on: >
+      D24 — ran 2026-05-25, observed 0.0522 (better than paper 0.086).
+      Documented PROTOCOL DELTA (plumbline strict raw+crop vs the
+      DUSt3R-lineage filled+no-crop the paper reports), NOT a model bug.
+      Do not re-run for a paper-match. Optional future coverage: author a
+      lineage-faithful variant (filled GT, no crop, CUT3R's exact .npy set
+      + cubic resize) to attempt an apples-to-apples match.
     paper_target: "CUT3R Table 1 — NYU-v2 single-frame Abs Rel = 0.086 (verified_pdf 2026-05-23)"
     primary_metric: abs_rel
     datasets: [nyuv2]
@@ -72,15 +79,18 @@ jobs:
       CUT3R_ROOT=$HOME/deps/cut3r; download the 512-DPT weights per the
       repo README and export CUT3R_CKPT=$CUT3R_ROOT/src/cut3r_512_dpt_4_64.pth
     notes: >
-      Closes the video / unordered-collection coverage gap (CUT3R is
-      recurrent + order-agnostic; this cell runs single frames). Value is
-      PDF-verified; the eval-protocol match vs MonST3R's NYU eval is
-      UNCONFIRMED — single-record diff first (see the YAML CAVEAT), so
-      expect ⚠️/⌛ not an automatic ✅. Outdoor companion: cut3r-kitti.
+      Closed the video / unordered-collection coverage gap. Ran on GPU
+      2026-05-25; the off-paper-better result is an explained protocol
+      delta (D24). See docs/DISCREPANCIES.md D24.
 
   - name: cut3r-kitti
-    status: pending
-    priority: 3
+    status: blocked
+    priority: 16
+    blocked_on: >
+      D24 — ran 2026-05-25, observed 0.0858 (better than paper 0.092).
+      Protocol delta (plumbline Eigen-652 + Garg crop vs the lineage
+      val_selection_cropped / no-crop set), NOT a model bug. Do not re-run
+      for a paper-match.
     paper_target: "CUT3R Table 1 — KITTI single-frame Abs Rel = 0.092 (verified_pdf 2026-05-23)"
     primary_metric: abs_rel
     datasets: [kitti]
@@ -89,14 +99,17 @@ jobs:
     requires_env: [KITTI_ROOT, CUT3R_ROOT, CUT3R_CKPT]
     extras: "CUT3R — same setup as cut3r-nyuv2."
     notes: >
-      Outdoor companion to cut3r-nyuv2 (same Table 1, same adapter +
-      weights). Same protocol caveat: value PDF-verified, eval-protocol
-      match vs MonST3R's KITTI eval UNCONFIRMED. Run back-to-back with
-      cut3r-nyuv2 once CUT3R is set up.
+      Outdoor companion to cut3r-nyuv2 (same Table 1). Ran 2026-05-25;
+      off-paper-better is an explained protocol delta (D24).
 
   - name: cut3r-bonn
-    status: pending
-    priority: 3
+    status: blocked
+    priority: 17
+    blocked_on: >
+      D24 — ran 2026-05-25, observed 0.0536 (better than paper 0.078).
+      Protocol/selection delta: a different sequence/frame set than CUT3R's
+      5-seq × 110-frame Table 2 set, NOT a model bug. Do not re-run for a
+      paper-match.
     paper_target: "CUT3R Table 2 — Bonn VIDEO depth (per-sequence scale) Abs Rel = 0.078 (verified_pdf 2026-05-23)"
     primary_metric: abs_rel
     datasets: [bonn]
@@ -109,9 +122,9 @@ jobs:
       $BONN_ROOT. CUT3R as for cut3r-nyuv2.
     notes: >
       First genuine VIDEO reproduction (one sample = one sequence, recurrent
-      multi-frame, per-sequence median scale). Value PDF-verified; the exact
-      Bonn sequence/frame selection is MonST3R's protocol and UNCONFIRMED
-      here — single-record diff first (see YAML CAVEAT).
+      multi-frame, per-sequence median scale). Ran 2026-05-25; off-paper is
+      an explained protocol/selection delta (D24). Demonstrates the video
+      task end-to-end.
 
   # ----- Tier 2: informational runs (no paper target; A/B + smoke) -----
   - name: da3-co3dv2-pose

@@ -9,12 +9,14 @@
 # outdoor), "per-frame median scaling per DUSt3R", metrics Abs Rel +
 # δ<1.25. CUT3R is recurrent; run here on single frames (min_views=1).
 #
-# CAVEAT (read before promoting to ✅): same as cut3r-nyuv2. The paper
-# *value* is PDF-verified, but whether plumbline's kitti_eigen_garg
-# protocol (Garg crop + clip[1e-3,80]) matches MonST3R/DUSt3R's KITTI
-# depth eval exactly is UNCONFIRMED. Single-record diff vs MonST3R's
-# eval code (plan.md §12) before counting this as a paper-match. GPU
-# validation pending (queued in reproductions/gpu_queue.yaml).
+# STATUS — D24 RESOLVED 2026-05-25 (protocol delta, NOT a model bug):
+# Same finding as cut3r-nyuv2. plumbline's kitti_eigen_garg protocol
+# (Eigen-652 + Garg crop + clip[1e-3,80]) is STRICTER than the
+# DUSt3R-lineage KITTI eval the paper reports (CUT3R's val_selection_cropped,
+# 1000 imgs, no crop, max_depth=None), so the observed 0.0858 reads
+# *better* than paper 0.092. plumbline's predictions are correct; the
+# cell is a documented protocol delta (`paper_match: no` is EXPECTED).
+# See D24 in docs/DISCREPANCIES.md.
 
 name: cut3r-kitti
 protocol: kitti_eigen_garg
@@ -38,6 +40,6 @@ paper_reference:
 
 notes: >
   Outdoor companion to cut3r-nyuv2 (same Table 1). Needs $CUT3R_ROOT +
-  $CUT3R_CKPT (512-DPT weights) + $KITTI_ROOT. Value PDF-verified;
-  eval-protocol match unconfirmed (see CAVEAT) — treat as ⌛ until the
-  single-record diff against MonST3R's KITTI eval lands.
+  $CUT3R_CKPT (512-DPT weights) + $KITTI_ROOT. Documented PROTOCOL DELTA,
+  not a paper-match (D24): plumbline's strict Eigen-652 + Garg-crop
+  protocol scores 0.0858 vs the lineage 0.092. Do not expect a ≤5 % match.

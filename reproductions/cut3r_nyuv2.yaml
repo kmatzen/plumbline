@@ -10,14 +10,16 @@
 # CUT3R is a recurrent multi-view model run here on a single frame
 # (min_views=1).
 #
-# CAVEAT (read before promoting to ✅): the paper *value* is PDF-verified,
-# but whether plumbline's `nyu_eigen_2014` protocol (rawDepths + Eigen
-# crop + clip[1e-3,10]) matches MonST3R/DUSt3R's NYU depth eval exactly
-# is UNCONFIRMED. The DUSt3R lineage ships its own NYU eval crop / depth
-# handling. Per the project's single-record-diff rule (plan.md §12),
-# diff plumbline's NYU pipeline against MonST3R's `eval/` depth code on
-# one frame before counting this as a paper-match. GPU validation
-# pending (queued in reproductions/gpu_queue.yaml).
+# STATUS — D24 RESOLVED 2026-05-25 (protocol delta, NOT a model bug):
+# The single-record diff this YAML was waiting on is now done (see D24 in
+# docs/DISCREPANCIES.md). Re-scoring the SAME cached CUT3R preds shows
+# plumbline's `nyu_eigen_2014` protocol (rawDepths + Eigen crop +
+# clip[1e-3,10]) lands at 0.0522 — *better* than paper 0.086 — because it
+# is STRICTER than the DUSt3R-lineage protocol the paper reports (dense/
+# filled GT, no crop), which re-scores to 0.0777. plumbline's CUT3R
+# predictions are correct. We keep the strict protocol on purpose, so this
+# is a documented protocol delta: the harness reports `paper_match: no`,
+# and that `no` is EXPECTED — not a suspect cell. See D24.
 
 name: cut3r-nyuv2
 protocol: nyu_eigen_2014
@@ -43,8 +45,8 @@ notes: >
   First CUT3R reproduction — closes the video / unordered-collection
   coverage gap (CUT3R is recurrent + order-agnostic; this cell runs it
   on single frames). Needs $CUT3R_ROOT (github clone) + $CUT3R_CKPT
-  (the 512-DPT weights) + $NYUV2_ROOT. Adapter + conversion unit tests
-  landed 2026-05-23; zero GPU validation yet. The paper target is
-  PDF-verified but the eval-protocol match is unconfirmed (see the
-  CAVEAT above) — treat as ⌛ infra/target, not a paper-match, until the
-  single-record diff against MonST3R's eval lands.
+  (the 512-DPT weights) + $NYUV2_ROOT. Pinned to the paper value, but this
+  is a documented PROTOCOL DELTA, not a paper-match (D24): under plumbline's
+  strict raw+crop protocol the model scores better (0.0522) than the
+  DUSt3R-lineage filled+no-crop paper number (0.086). Run for the strict
+  number; do not expect a ≤5 % match.
