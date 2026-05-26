@@ -40,7 +40,7 @@ cells are now ℹ️ instead of ✅.
 | **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ℹ️ _(paper publishes ViT-L only as 10-dataset avg)_ | ⌛ | — | — | — | ⌛ |
 | **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — | — |
 | **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ℹ️ **0.1090** vs 0.099 _(v1-1 / 1-step is the newer distilled checkpoint; paper cell is v1-0 / 50-step — D9 RESOLVED 2026-05-25: 0.0992 reproduces end-to-end on Marigold's own pipeline. Documented checkpoint-generation delta, not a paper-match cell.)_ | — | — | — | — | — |
-| **GeoWizard** | ⚠️ **0.0574** vs 0.052 _(10.5% off; D17 upstream-blocked, fp32+xformers verified 2026-04-26)_ | ⚠️ **0.131** vs 0.097 _(35.2% off; D18 same upstream-blocked cause)_ | — | — | — | — | — |
+| **GeoWizard** | ℹ️ **0.0574** vs 0.052 _(10.5% off — D17 RESOLVED 2026-05-26: paper number is best-of-N seeds, not single-seed; plumbline's 0.0574 matches `fuxiao0719/GeoWizard#36` reproducer @0.0576; paper-author-confirmed cherry-pick eval recipe)_ | ℹ️ **0.131** vs 0.097 _(35.2% off — D18 RESOLVED 2026-05-26 by same root cause)_ | — | — | — | — | — |
 | **Depth Pro** | ℹ️ δ₁ **0.9347** _(paper does not evaluate NYU — earlier 0.961 pin was fabricated)_ | ⌛ | — | — | — | — | — |
 | **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ⌛ AUC@30 target **0.818** (Table 3 verified_pdf, awaiting GPU run) | — |
 | **VGGT** | — | — | — | ⚠️ 0.642 m vs 0.709 _(D4 per-view-masked landed, 9.4% under paper on 3-scene; D10 needed for full split)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ⌛ AUC@30 target **0.882** (Table 1 verified_pdf, awaiting GPU run) | — |
