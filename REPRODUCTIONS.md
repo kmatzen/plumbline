@@ -39,7 +39,7 @@ cells are now ℹ️ instead of ✅.
 | **MoGe-1 ViT-L** | ✅ **0.0342** vs 0.0341 | ⚠️ **0.0447** vs 0.0408 _(9.4% off; D8 structural protocol)_ | ✅ **0.0407** vs 0.0400 _(1.7% off; FoV-warp port 2026-04-26)_ | — | — | — | 🎯 **0.0094** (δ₁ 0.9999) _(no paper target)_ |
 | **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ℹ️ _(paper publishes ViT-L only as 10-dataset avg)_ | ⌛ | — | — | — | ⌛ |
 | **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — | — |
-| **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ⚠️ **0.1090** vs 0.099 _(10.1% off; D9)_ | — | — | — | — | — |
+| **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ℹ️ **0.1090** vs 0.099 _(v1-1 / 1-step is the newer distilled checkpoint; paper cell is v1-0 / 50-step — D9 RESOLVED 2026-05-25: 0.0992 reproduces end-to-end on Marigold's own pipeline. Documented checkpoint-generation delta, not a paper-match cell.)_ | — | — | — | — | — |
 | **GeoWizard** | ⚠️ **0.0574** vs 0.052 _(10.5% off; D17 upstream-blocked, fp32+xformers verified 2026-04-26)_ | ⚠️ **0.131** vs 0.097 _(35.2% off; D18 same upstream-blocked cause)_ | — | — | — | — | — |
 | **Depth Pro** | ℹ️ δ₁ **0.9347** _(paper does not evaluate NYU — earlier 0.961 pin was fabricated)_ | ⌛ | — | — | — | — | — |
 | **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ⌛ AUC@30 target **0.818** (Table 3 verified_pdf, awaiting GPU run) | — |
@@ -97,12 +97,19 @@ until the GPU run lands. DA3 has an informational companion
 **Off-paper / upstream-blocked cells** (each root-caused in
 `docs/DISCREPANCIES.md`):
 
-- VGGT-DTU (D3), GeoWizard NYU (D17), GeoWizard KITTI (D18),
-  Marigold-KITTI (D9 / D22) — all promoted to **upstream-blocked**.
-  The adapter and protocol audits are exhausted; residual gap is in
-  the public checkpoint or a paper-private eval config. Cells stay
-  as ⚠️ in the matrix; the YAMLs ship on `main` because the protocol
-  shape is correct.
+- VGGT-DTU (D3), GeoWizard NYU (D17), GeoWizard KITTI (D18) —
+  **upstream-blocked**. The adapter and protocol audits are
+  exhausted; residual gap is in the public checkpoint or a
+  paper-private eval config. Cells stay as ⚠️ in the matrix; the
+  YAMLs ship on `main` because the protocol shape is correct.
+- Marigold-KITTI (D9 / D22 Marigold portion) — ✅ **RESOLVED 2026-05-25**
+  by end-to-end native-pipeline reproduction. Paper cell 0.099 is
+  reproducible with v1-0 / 50-step / ens-10 on Marigold's exact
+  prepared `kitti_eigen_split_test.tar` (0.0992, 0.2 % off).
+  Plumbline's `marigold_v1_1_kitti.yaml` lands ~0.11 because it
+  mirrors the current upstream eval script which defaults to the
+  newer **v1-1 / 1-step** distilled checkpoint — a documented
+  checkpoint-generation delta (v1-1 still matches paper on NYU).
 
 **Dropped from the ✅ count (2026-04-20 audit):**
 
@@ -139,8 +146,8 @@ cells before it lands (behavior left unchanged for now).
 
 ### Closed-blocked (do not retry without an upstream change)
 
-D3 (VGGT-DTU), D17 / D18 / D9 / D22 (GeoWizard, Marigold KITTI). All
-five hit the same wall: adapter + protocol audits exhausted, residual
+D3 (VGGT-DTU), D17 / D18 (GeoWizard NYU + KITTI). All
+three hit the same wall: adapter + protocol audits exhausted, residual
 gap is in the public release. Re-enter the queue if/when upstream
 releases an updated checkpoint or eval script.
 
