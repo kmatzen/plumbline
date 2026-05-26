@@ -27,7 +27,10 @@ jobs:
     paper_target: "VGGT Table 1 — CO3Dv2 AUC@30 = 0.882 (verified_pdf 2026-05-03)"
     primary_metric: pairwise_pose_auc@30
     datasets: [co3dv2]
-    data_footprint_gb: 45
+    # Data footprint is the *selective-fetch* working set (metadata zips +
+    # the 4100 JPEGs the eval actually touches), NOT the 4.3 TB raw zips.
+    # Stage via scripts/co3dv2_prefetch.py — see notes:.
+    data_footprint_gb: 4
     est_wall_min: 60
     requires_env: [CO3DV2_ROOT]
     extras: "VGGT: uv pip install 'git+https://github.com/facebookresearch/vggt'"
@@ -37,13 +40,20 @@ jobs:
       acceptance criterion #2). 41-cat / 10-seq / 10-frame seeded
       recipe (co3dv2-vggt-pose-eval loader).
 
+      Stage data via selective HTTP-Range prefetch:
+      `uv run python scripts/co3dv2_prefetch.py --root $CO3DV2_ROOT`
+      (~3-4 GB total, vs 4.3 TB raw — pulls metadata zips +
+      Range-fetches just the 4100 JPEGs the loader's seed=0 sampling
+      will visit). End-to-end verified on `apple` 2026-05-26 (100 JPEGs,
+      76 MB, loader produces correct 10×10 Samples).
+
   - name: mast3r-co3dv2-pose
     status: pending
     priority: 2
     paper_target: "MASt3R Table 3 — CO3Dv2 mAA(30) = 0.818, RRA@15 0.946, RTA@15 0.919 (verified_pdf 2026-05-23, direct PDF read; D23 resolved)"
     primary_metric: pairwise_pose_auc@30
     datasets: [co3dv2]
-    data_footprint_gb: 45
+    data_footprint_gb: 4
     est_wall_min: 150
     requires_env: [CO3DV2_ROOT, MAST3R_ROOT]
     extras: >
@@ -54,7 +64,8 @@ jobs:
       N=10 dispatches to dust3r PointCloudOptimizer (init=mst,
       niter=300). ~20 s/sample × 410 ≈ 2.5 h on a 3090. Shares the
       co3dv2-vggt-pose-eval loader with the VGGT job, so stage CO3Dv2
-      once and run both back-to-back.
+      once (via scripts/co3dv2_prefetch.py, ~3-4 GB selective fetch)
+      and run both back-to-back.
 
   # ----- D24 RESOLVED 2026-05-25: protocol deltas, all 3 paper cells CONFIRMED via
   # exact-set reproduction (CUT3R's own eval). Blocked = nothing left to run; the
@@ -135,7 +146,10 @@ jobs:
     paper_target: "none — informational A/B vs VGGT/MASt3R (DA3 paper does not evaluate CO3Dv2 pose)"
     primary_metric: pairwise_pose_auc@30
     datasets: [co3dv2]
-    data_footprint_gb: 45
+    # Shares the selective-fetch CO3Dv2 set with vggt-co3dv2-pose /
+    # mast3r-co3dv2-pose; once one job stages via scripts/co3dv2_prefetch.py
+    # the others are free.
+    data_footprint_gb: 4
     est_wall_min: 60
     requires_env: [CO3DV2_ROOT]
     extras: "DA3 ships in the base install (transformers)."
