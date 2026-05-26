@@ -1,0 +1,32 @@
+# Smoke test for D17 probe — 3-image validation of the 50-step path.
+# Disposable; deleted before commit. Validates pipeline + HF download +
+# eval surface in ~7 min wall before the 2.3 h sub60 run.
+
+name: geowizard-nyuv2-d17probe-50step-sub3
+protocol: nyu_eigen_2014
+
+model:
+  name: geowizard
+  kwargs:
+    domain: indoor
+    num_inference_steps: 50
+    ensemble_size: 10
+    processing_res: 768
+    dtype: float32
+    seed: 2024
+
+subset: 3
+
+scale_alignment: scale_shift_depth
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.052
+  tolerance_relative: 0.05
+  citation: "Fu et al. 2024, GeoWizard (arXiv:2403.12013), Table 1."
+  source_confidence: verified_pdf
+
+notes: >
+  Smoke test. Three-sample run is too small to draw conclusions —
+  only validates the 50-step pipeline launches.
