@@ -443,6 +443,45 @@ class TestKITTI:
         with pytest.raises(ValueError, match="image_02"):
             KITTIDataset(root=tmp_path, camera="rgb")
 
+    def test_invalid_depth_split(self, tmp_path: Path) -> None:
+        _write_fake_kitti(tmp_path, frames=1)
+        with pytest.raises(ValueError, match="depth_split"):
+            KITTIDataset(root=tmp_path, depth_split="test")
+
+    def test_invalid_max_frames_per_drive(self, tmp_path: Path) -> None:
+        _write_fake_kitti(tmp_path, frames=1)
+        with pytest.raises(ValueError, match="max_frames_per_drive"):
+            KITTIDataset(root=tmp_path, max_frames_per_drive=0)
+
+    def test_depth_split_val_only(self, tmp_path: Path) -> None:
+        # Two drives — one under val, one under train — split=val keeps val only.
+        _write_fake_kitti(
+            tmp_path, drive_ids=(2,), frames=2, depth_split="val"
+        )
+        _write_fake_kitti(
+            tmp_path, drive_ids=(5,), frames=2, depth_split="train"
+        )
+        ds = KITTIDataset(root=tmp_path, depth_split="val")
+        drives = {s.metadata["drive"] for s in ds}
+        assert drives == {"2011_09_26_drive_0002_sync"}, drives
+
+    def test_max_frames_per_drive_caps_per_drive(self, tmp_path: Path) -> None:
+        # Two val drives with 5 frames each — cap to 2 → 4 total, 2 per drive.
+        _write_fake_kitti(
+            tmp_path, drive_ids=(2, 5), frames=5, depth_split="val"
+        )
+        ds = KITTIDataset(
+            root=tmp_path, depth_split="val", max_frames_per_drive=2
+        )
+        by_drive: dict[str, list[str]] = {}
+        for s in ds:
+            by_drive.setdefault(s.metadata["drive"], []).append(s.metadata["frame_id"])
+        assert len(ds) == 4
+        assert all(len(frames) == 2 for frames in by_drive.values())
+        # First-N selection: each drive keeps the two lowest-numbered frames.
+        for frames in by_drive.values():
+            assert frames == sorted(frames)[:2]
+
 
 class TestKITTIMogeEvalLoader:
     def test_missing_root(self, tmp_path: Path) -> None:

@@ -1,0 +1,61 @@
+# MonST3R single-frame depth on KITTI — MonST3R Table 3 paper target.
+#
+# Targets MonST3R Table 3 "Single-frame Depth Evaluation" (Zhang et
+# al. 2024, arXiv:2410.03825, ICLR 2025 published version page 8),
+# KITTI column, "MonST3R" row: Abs Rel = 0.101 (companion δ<1.25 =
+# 89.3). Verified by direct PDF read 2026-05-26.
+#
+# Protocol (paper §4.2): zero-shot monocular depth, "per-frame median
+# scaling, following Wang et al. 2024c [DUSt3R]". Plumbline's `median`
+# alignment mode is exactly that (median ratio scale-only in depth
+# space). The adapter runs MonST3R weights through the DUSt3R-base
+# global alignment (no flow refinement) — Table 3 is itself a
+# single-frame ablation that doesn't use MonST3R's video / flow path,
+# so the base-path adapter is paper-faithful for this cell (see the
+# monst3r_nyuv2.yaml companion + monst3r.py "Faithfulness scope"
+# docstring).
+#
+# Single-frame inference uses MonST3R's demo view-duplicate trick
+# (load the frame twice, run dust3r pair inference, keep view 0).
+# This is the adapter's `single == n == 1` branch.
+
+name: monst3r-kitti
+# `kitti_dust3r_lineage`, not `kitti_eigen_garg` — the DUSt3R-family
+# eval on KITTI uses the 13-val-drive × ≤110-frame gathered set,
+# no spatial crop, max_depth=None (see `protocols/kitti_dust3r_lineage.yaml`).
+# Empirically calibrated by D24 (2026-05-25): CUT3R's own eval on
+# its gathered set reproduces 0.092 within 0.2 % of CUT3R Table 1,
+# confirming this image-set + scoring recipe is the lineage cell.
+protocol: kitti_dust3r_lineage
+
+model:
+  name: monst3r
+  kwargs:
+    long_edge: 512
+
+# Per-frame median scaling (paper §4.2). The protocol intentionally
+# leaves `scale_alignment` to the reproduction so individual lineage
+# adapters can pick their own (median for MonST3R, lstsq for some
+# DUSt3R-family ablations, etc.).
+scale_alignment: median
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.101
+  tolerance_relative: 0.05
+  citation: "Zhang et al. 2024, MonST3R (arXiv:2410.03825), Table 3 (Single-frame Depth Evaluation), KITTI Abs Rel column, 'MonST3R' row = 0.101 (companion δ<1.25 = 89.3; protocol §4.2: 'per-frame median scaling, following Wang et al. 2024c [DUSt3R]'). Verified by direct PDF read 2026-05-26 (ICLR 2025 published version, page 8)."
+  source_confidence: verified_pdf
+
+notes: >
+  Outdoor companion to monst3r-nyuv2 (same Table 3). Requires
+  $KITTI_ROOT containing raw drives + data_depth_annotated.zip
+  unpacked, $MONST3R_ROOT (recursive clone of
+  https://github.com/Junyi42/monst3r) so MonST3R's vendored dust3r
+  fork resolves on sys.path; weights pulled from HF
+  Junyi42/MonST3R_PO-TA-S-W_ViTLarge_BaseDecoder_512_dpt on first
+  use. Image set is the 13-val-drive × ≤110-frame gathered selection
+  (≤1269 frames) the paper inherits from DUSt3R, *not* Monodepth2's
+  652-image Eigen split — see `protocols/kitti_dust3r_lineage.yaml`
+  for the recipe and `docs/DISCREPANCIES.md` D24 for the empirical
+  calibration of this set against CUT3R's published 0.092 cell.

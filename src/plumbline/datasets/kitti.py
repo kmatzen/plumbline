@@ -190,6 +190,20 @@ class KITTIDataset(Dataset):
         official eval (``kitti_bm_crop: true`` in the KITTI dataset
         config) and is the right setting for paper-match on
         Marigold / GeoWizard / DA-V2 KITTI cells.
+    depth_split
+        ``None`` (default) scans drives whose annotated GT lives under
+        either ``depth_annotated/train/`` or ``depth_annotated/val/``.
+        ``"train"`` or ``"val"`` restricts to that split. The
+        DUSt3R/MonST3R/CUT3R lineage evaluates on the val drives only,
+        so ``protocols/kitti_dust3r_lineage.yaml`` pins ``depth_split:
+        val``. Ignored when ``sample_list`` is set (the list itself is
+        the authoritative selection).
+    max_frames_per_drive
+        If set, after sorting each drive's frames by ``frame_id``, keep
+        only the first ``N``. Mirrors MonST3R's
+        ``datasets_preprocess/prepare_kitti.py`` (``[:110]`` per drive)
+        which is the lineage's KITTI eval-set selection. Ignored when
+        ``sample_list`` is set.
     """
 
     split: str = "test"
@@ -205,11 +219,21 @@ class KITTIDataset(Dataset):
         apply_garg_crop: bool = False,
         apply_eigen_crop: bool = False,
         apply_kitti_bm_crop: bool = False,
+        depth_split: str | None = None,
+        max_frames_per_drive: int | None = None,
     ) -> None:
         if apply_garg_crop and apply_eigen_crop:
             raise ValueError(
                 "apply_garg_crop and apply_eigen_crop are mutually exclusive; "
                 "pick the one your target paper uses."
+            )
+        if depth_split is not None and depth_split not in ("train", "val"):
+            raise ValueError(
+                f"depth_split must be None, 'train', or 'val'; got {depth_split!r}"
+            )
+        if max_frames_per_drive is not None and max_frames_per_drive <= 0:
+            raise ValueError(
+                f"max_frames_per_drive must be positive or None; got {max_frames_per_drive!r}"
             )
         root_path = Path(root) if root else env_path("KITTI_ROOT")
         if root_path is None or not root_path.exists():
@@ -232,6 +256,10 @@ class KITTIDataset(Dataset):
         self.apply_garg_crop = bool(apply_garg_crop)
         self.apply_eigen_crop = bool(apply_eigen_crop)
         self.apply_kitti_bm_crop = bool(apply_kitti_bm_crop)
+        self.depth_split = depth_split
+        self.max_frames_per_drive = (
+            int(max_frames_per_drive) if max_frames_per_drive is not None else None
+        )
 
         if not self.raw_root.exists():
             raise DatasetNotAvailable(
@@ -264,6 +292,18 @@ class KITTIDataset(Dataset):
             else:
                 sample_list_path = host_candidate
         list_tag = sample_list_path.stem if sample_list_path else "scan"
+        # Fold the scan-mode kwargs into the manifest filename so a different
+        # depth_split / per-drive cap doesn't silently reuse a stale manifest.
+        if sample_list_path is None and (
+            self.depth_split is not None or self.max_frames_per_drive is not None
+        ):
+            split_tag = self.depth_split or "all"
+            cap_tag = (
+                f"top{self.max_frames_per_drive}"
+                if self.max_frames_per_drive is not None
+                else "full"
+            )
+            list_tag = f"scan_{split_tag}_{cap_tag}"
 
         manifest_path = self.root / ".plumbline_manifest" / f"kitti_{list_tag}_{camera}.jsonl"
         if manifest_path.exists():
@@ -294,8 +334,15 @@ class KITTIDataset(Dataset):
         """Iterate every image with a matching annotated-depth GT.
 
         Drives can appear under either ``depth_annotated/train/`` or
-        ``depth_annotated/val/``; we try both.
+        ``depth_annotated/val/``. When ``depth_split`` is set we restrict
+        to that split; otherwise we accept whichever exists. When
+        ``max_frames_per_drive`` is set we keep only the first N frames
+        per drive after sorting by ``frame_id`` (mirrors MonST3R's
+        ``prepare_kitti.py [:110]`` lineage-eval selection).
         """
+        splits_to_try = (
+            (self.depth_split,) if self.depth_split is not None else ("train", "val")
+        )
         raw_drives = sorted(p for p in self.raw_root.rglob("*_sync") if p.is_dir())
         for drive_dir in raw_drives:
             date = drive_dir.parent.name  # e.g. 2011_09_26
@@ -303,9 +350,9 @@ class KITTIDataset(Dataset):
             img_dir = drive_dir / self.camera / "data"
             if not img_dir.exists():
                 continue
-            # Annotated GT lives under either split directory.
+            # Annotated GT lives under one of the split directories.
             gt_dir = None
-            for split in ("train", "val"):
+            for split in splits_to_try:
                 candidate = (
                     self.depth_root / split / drive / "proj_depth" / "groundtruth" / self.camera
                 )
@@ -314,7 +361,17 @@ class KITTIDataset(Dataset):
                     break
             if gt_dir is None:
                 continue
-            for img_path in sorted(img_dir.glob("*.png")):
+            img_paths = sorted(img_dir.glob("*.png"))
+            if self.max_frames_per_drive is not None:
+                # Match MonST3R / CUT3R's prepare_kitti.py: enumerate the
+                # *annotated GT* frames first (sorted), take the first N,
+                # then look up the matching RGB. The annotated-GT set is
+                # always a subset of the raw set, so iterating GT-first
+                # avoids burning the cap on raw frames that have no GT.
+                gt_paths = sorted(gt_dir.glob("*.png"))[: self.max_frames_per_drive]
+                kept = {p.stem for p in gt_paths}
+                img_paths = [p for p in img_paths if p.stem in kept]
+            for img_path in img_paths:
                 frame_id = img_path.stem
                 depth_path = gt_dir / f"{frame_id}.png"
                 if not depth_path.exists():
