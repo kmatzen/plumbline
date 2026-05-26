@@ -75,21 +75,14 @@ from typing import Any, Iterable, Sequence
 import numpy as np
 import requests
 
-# fmt: off
-# Mirror src/plumbline/datasets/co3dv2_vggt_eval.py:CO3D_VGGT_SEEN_CATEGORIES exactly.
-# Canonical iteration order matters: it drives the shared RNG advance
-# that picks the same 410 (cat, seq) pairs the loader will pick.
-CO3D_VGGT_SEEN_CATEGORIES: tuple[str, ...] = (
-    "apple", "backpack", "banana", "baseballbat", "baseballglove",
-    "bench", "bicycle", "bottle", "bowl", "broccoli",
-    "cake", "car", "carrot", "cellphone", "chair",
-    "cup", "donut", "hairdryer", "handbag", "hydrant",
-    "keyboard", "laptop", "microwave", "motorcycle", "mouse",
-    "orange", "parkingmeter", "pizza", "plant", "stopsign",
-    "teddybear", "toaster", "toilet", "toybus", "toyplane",
-    "toytrain", "toytruck", "tv", "umbrella", "vase", "wineglass",
-)
-# fmt: on
+# Import the canonical category tuple directly from the loader. This
+# script's `compute_needed_paths` must iterate the same categories in
+# the same order as ``Co3Dv2VGGTPoseEvalLoader._build_records`` for the
+# shared py/numpy RNG to land on the same sample set; sharing the
+# constant (instead of duplicating it) makes that contract single-source.
+# tests/test_co3dv2_prefetch.py asserts path-for-path equivalence so any
+# future refactor that desyncs the two is caught at test time.
+from plumbline.datasets.co3dv2_vggt_eval import CO3D_VGGT_SEEN_CATEGORIES
 
 CDN = "https://dl.fbaipublicfiles.com/co3dv2_231130"
 

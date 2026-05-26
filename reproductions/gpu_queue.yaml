@@ -22,7 +22,7 @@ schema_version: "1.0.0"
 jobs:
   # ----- Tier 1: verified paper targets, just need the GPU run -----
   - name: vggt-co3dv2-pose
-    status: pending
+    status: done
     priority: 1
     paper_target: "VGGT Table 1 — CO3Dv2 AUC@30 = 0.882 (verified_pdf 2026-05-03)"
     primary_metric: pairwise_pose_auc@30
@@ -35,17 +35,14 @@ jobs:
     requires_env: [CO3DV2_ROOT]
     extras: "VGGT: uv pip install 'git+https://github.com/facebookresearch/vggt'"
     notes: >
-      Converts the first pose cell from infra-only to ✅ or surfaces a
-      real gap. Gates the pose half of the v0.1 release (plan.md §2
-      acceptance criterion #2). 41-cat / 10-seq / 10-frame seeded
-      recipe (co3dv2-vggt-pose-eval loader).
-
-      Stage data via selective HTTP-Range prefetch:
-      `uv run python scripts/co3dv2_prefetch.py --root $CO3DV2_ROOT`
-      (~3-4 GB total, vs 4.3 TB raw — pulls metadata zips +
-      Range-fetches just the 4100 JPEGs the loader's seed=0 sampling
-      will visit). End-to-end verified on `apple` 2026-05-26 (100 JPEGs,
-      76 MB, loader produces correct 10×10 Samples).
+      ✅ MATCH 2026-05-26 (RTX 3090, ~28 min wall): observed AUC@30
+      **0.8964** vs paper 0.882 (1.6 % over, within ±5 % tolerance);
+      companion pairwise_RRA@15 = 0.9819. 410 samples (41 SEEN cats ×
+      10 seq × 10 frame, seed=0), vggt_co3d_histogram AUC, antipodal
+      translation flip. CO3Dv2 staged via scripts/co3dv2_prefetch.py
+      (~3 GB selective fetch, end-to-end verified). Result JSON:
+      /root/runs/vggt_co3d_20260526T210832Z.json. First multi-view pose
+      paper-match in plumbline; v0.1 acceptance criterion #2 met.
 
   - name: mast3r-co3dv2-pose
     status: pending
