@@ -38,6 +38,7 @@
       <nav class="nav">
         <a href="#why">why</a>
         <a href="#install">install</a>
+        <a href="#verified">verified</a>
         <a href="#supported">supported</a>
         <a class="ext" href="https://github.com/kmatzen/plumbline">github↗</a>
       </nav>
@@ -156,6 +157,87 @@
     <span class="flag">--tasks</span> pose <span class="flag">--max-views</span> 4</code></pre>
         </figure>
       </div>
+    </section>
+
+    <!-- ─────────────────── VERIFIED ─────────────────── -->
+    <section class="sec" id="verified">
+      <header class="sec-head">
+        <span class="sec-num">verified/</span>
+        <h2 class="head">paper-match cells</h2>
+        <p class="sub">
+          Every cell below is a pinned config whose observed number lands
+          within the documented tolerance of the value reported in the
+          source paper. Each entry is audited against the source PDF
+          (table&nbsp;+&nbsp;column&nbsp;+&nbsp;row); see
+          <a href="https://github.com/kmatzen/plumbline/blob/main/reproductions/AUDIT.md">reproductions/AUDIT.md</a>.
+        </p>
+      </header>
+
+      <ul class="stat-row" aria-label="paper-match cell totals">
+        <li class="stat"><span class="stat-n">20</span><span class="stat-label">paper-match cells</span></li>
+        <li class="stat"><span class="stat-n">7</span><span class="stat-label">papers reproduced</span></li>
+        <li class="stat"><span class="stat-n">4</span><span class="stat-label">datasets</span></li>
+        <li class="stat"><span class="stat-n">1</span><span class="stat-label">multi-view pose ✓</span></li>
+      </ul>
+
+      <div class="cells-wrap">
+        <table class="cells">
+          <colgroup>
+            <col class="col-model" />
+            <col class="col-metric" />
+            <col class="col-obs" />
+            <col class="col-paper" />
+            <col class="col-delta" />
+          </colgroup>
+          <thead>
+            <tr><th>model</th><th>metric</th><th>observed</th><th>paper</th><th>Δ</th></tr>
+          </thead>
+          <tbody>
+
+            <tr class="group"><td colspan="5">NYU-v2 · AbsRel ↓ (lower is better) <span class="group-cnt">8 cells</span></td></tr>
+            <tr><td>moge-1 ViT-L</td><td>abs_rel</td><td class="obs">0.0342</td><td class="paper">0.0341</td><td class="delta">+0.3%</td></tr>
+            <tr><td>da-v2 small</td><td>abs_rel</td><td class="obs">0.0510</td><td class="paper">0.053</td><td class="delta">−3.8%</td></tr>
+            <tr><td>da-v2 base</td><td>abs_rel</td><td class="obs">0.0456</td><td class="paper">0.049</td><td class="delta">−6.9%</td></tr>
+            <tr><td>da-v2 large</td><td>abs_rel</td><td class="obs">0.0428</td><td class="paper">0.0420</td><td class="delta">+1.9%</td></tr>
+            <tr><td>marigold v1-1</td><td>abs_rel</td><td class="obs">0.0577</td><td class="paper">0.055</td><td class="delta">+4.9%</td></tr>
+            <tr><td>metric3d-v2 L</td><td>abs_rel</td><td class="obs">0.0660</td><td class="paper">0.063</td><td class="delta">+4.8%</td></tr>
+            <tr><td>metric3d-v2 G</td><td>abs_rel</td><td class="obs">0.0702</td><td class="paper">0.067</td><td class="delta">+4.8%</td></tr>
+            <tr><td>monst3r</td><td>abs_rel</td><td class="obs">0.0896</td><td class="paper">0.091</td><td class="delta">−1.5%</td></tr>
+
+            <tr class="group"><td colspan="5">NYU-v2 · δ&lt;1.25 ↑ (higher is better) <span class="group-cnt">1 cell</span></td></tr>
+            <tr><td>depth-anything-3</td><td>delta_1</td><td class="obs">0.9684</td><td class="paper">0.974</td><td class="delta">−0.6%</td></tr>
+
+            <tr class="group"><td colspan="5">KITTI · AbsRel ↓ <span class="group-cnt">8 cells</span></td></tr>
+            <tr><td>da-v2 small</td><td>abs_rel</td><td class="obs">0.0770</td><td class="paper">0.078</td><td class="delta">−1.3%</td></tr>
+            <tr><td>da-v2 base</td><td>abs_rel</td><td class="obs">0.0756</td><td class="paper">0.078</td><td class="delta">−3.1%</td></tr>
+            <tr><td>da-v2 large</td><td>abs_rel</td><td class="obs">0.0710</td><td class="paper">0.074</td><td class="delta">−4.1%</td></tr>
+            <tr><td>metric3d-v2 L</td><td>abs_rel</td><td class="obs">0.0495</td><td class="paper">0.052</td><td class="delta">−4.8%</td></tr>
+            <tr><td>metric3d-v2 G</td><td>abs_rel</td><td class="obs">0.0503</td><td class="paper">0.051</td><td class="delta">−1.4%</td></tr>
+            <tr><td>moge-1 ViT-L <span class="proto">(MoGe-eval)</span></td><td>abs_rel</td><td class="obs">0.0404</td><td class="paper">0.0408</td><td class="delta">−1.0%</td></tr>
+            <tr><td>da-v2 large <span class="proto">(MoGe-eval)</span></td><td>abs_rel</td><td class="obs">0.0569</td><td class="paper">0.0561</td><td class="delta">+1.4%</td></tr>
+            <tr><td>monst3r <span class="proto">(lineage)</span></td><td>abs_rel</td><td class="obs">0.0959</td><td class="paper">0.101</td><td class="delta">−5.0%</td></tr>
+
+            <tr class="group"><td colspan="5">DIODE · AbsRel ↓ <span class="group-cnt">2 cells</span></td></tr>
+            <tr><td>moge-1 ViT-L</td><td>abs_rel</td><td class="obs">0.0407</td><td class="paper">0.0400</td><td class="delta">+1.7%</td></tr>
+            <tr><td>da-v2 large</td><td>abs_rel</td><td class="obs">0.0529</td><td class="paper">0.0533</td><td class="delta">−0.8%</td></tr>
+
+            <tr class="group"><td colspan="5">CO3Dv2 · pairwise pose AUC@30 ↑ <span class="group-cnt new">1 cell — first multi-view pose ✓</span></td></tr>
+            <tr><td>vggt <span class="proto">(Table 1, feed-forward)</span></td><td>pose_auc@30</td><td class="obs">0.8964</td><td class="paper">0.882</td><td class="delta">+1.6%</td></tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <p class="foot-note">
+        Δ is the relative deviation from the paper number. Tolerance is pinned
+        per-cell in each YAML; cells outside their declared tolerance never count
+        as ✓ and are tracked in
+        <a href="https://github.com/kmatzen/plumbline/blob/main/docs/DISCREPANCIES.md">docs/DISCREPANCIES.md</a>
+        (paper text vs upstream code mismatches, checkpoint-generation drift,
+        paper-private eval recipes — never silently glossed over). Full list with
+        commits + tolerances in
+        <a href="https://github.com/kmatzen/plumbline/blob/main/REPRODUCTIONS.md">REPRODUCTIONS.md</a>.
+      </p>
     </section>
 
     <!-- ─────────────────── SUPPORTED ─────────────────── -->
