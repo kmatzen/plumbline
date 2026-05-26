@@ -85,6 +85,7 @@ def _write_fake_sintel(root: Path, *, scenes: int = 1, frames: int = 3) -> None:
             t = np.array([0.1 * fi, 0.0, 0.0], dtype=np.float64)
             RT = np.concatenate([R, t[:, None]], axis=1)
             with open(cam_dir / f"{name}.cam", "wb") as f:
+                f.write(struct.pack("<f", _SINTEL_TAG))
                 f.write(K.tobytes())
                 f.write(RT.tobytes())
 
@@ -138,6 +139,7 @@ class TestSintel:
         RT = np.eye(4)[:3, :4].astype(np.float64)
         path = tmp_path / "x.cam"
         with open(path, "wb") as f:
+            f.write(struct.pack("<f", _SINTEL_TAG))
             f.write(K.tobytes())
             f.write(RT.tobytes())
         K_loaded, E_loaded = load_cam(path)
