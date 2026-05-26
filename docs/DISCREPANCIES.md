@@ -38,7 +38,7 @@ deeper diagnosis below.
 |---|---|---|---|---|---|
 | D3 | VGGT-DTU chamfer | +98 % (0.756 vs 0.382 mm) | 📜 | per-view-masked port, Jensen toolkit, PatchmatchNet filter, fp32, 49-view | watch upstream; reproduce structurally only |
 | D4 | VGGT-ETH3D 3-scene | −9.4 % (0.642 vs 0.709 m) | 📐 | per-view-masked path, MLP transform, 1 cm voxel | stage 13 scenes (D10) for apples-to-apples |
-| D9 | Marigold-KITTI | −13 % to +19 % across 3 protocols | 📜 | kitti_eigen_garg, kitti_moge_eval, marigold's own eval (latter is *worst*) | re-read paper Table 1; open upstream issue |
+| D9 | Marigold-KITTI | ✅ RESOLVED 2026-05-25 | 📜 | upstream eval-script default repointed v1-0/50-step → v1-1/1-step between paper (CVPR 2024) and current `21_infer_kitti.sh` | EXPLAINED (checkpoint/config delta): Marigold's **own** native pipeline on its **own** prepared `kitti_eigen_split_test.tar` reproduces paper AbsRel 0.099 end-to-end with v1-0 / 50-step / ens-10 (0.0992 on 60-img spread subset, 0.2 % off). Plumbline's 0.109 (v1-1 / 1-step) is the newer distilled checkpoint the current upstream eval script defaults to — a documented checkpoint-generation delta, not a paper-private config and not a plumbline bug. |
 | D10 | VGGT-ETH3D full 13-scene split | n/a (gates D4 verdict) | 📐 | — | stage remaining ~14 GB or demote D4 |
 | D17 | GeoWizard-NYU | +10.5 % (0.0574 vs 0.052) | 📜 | dtype (fp16/fp32), xformers attention, full `seed_all`, 4 alignment modes, raw vs filled GT | open upstream issue (`fuxiao0719/GeoWizard`) |
 | D18 | GeoWizard-KITTI | +35 % (0.131 vs 0.097) | 📜 | same checkpoint as D17; deprioritized verify | awaits D17 unblock |
@@ -62,7 +62,7 @@ look at the matrix:
 | Depth Anything V2 (Yang 2024, arXiv:2406.09414) | **8** (NYU S/B/L, KITTI S/B/L, DIODE L, KITTI-MoGe L) | High | All cells reproduce in tolerance. One fabricated Sintel pin (0.075 vs paper's 0.487) was caught and demoted. |
 | Metric3D-v2 (Hu 2024, arXiv:2404.15506) | **4** (NYU + KITTI L/Giant) | High | All four cells match within ±10 %. No protocol surprises. |
 | MoGe-1 (Wang 2024, arXiv:2410.19115) | **5** (NYU, KITTI, DIODE-both + 2 DA-V2 baseline cells) | High after audit | Systematic Table-2-vs-Table-3 citation error fixed in 2026-04-20 audit; values match once table number corrected. |
-| Marigold (Ke 2024, arXiv:2312.02145) | **1** (NYU) | **Mixed** | KITTI cell unreproducible under any candidate protocol, including the paper's own released eval code (D9 / D22). Strongly suggests the published 0.099 came from a private config. **Re-read Table 1 and the paper's KITTI dataset section before promoting.** |
+| Marigold (Ke 2024, arXiv:2312.02145) | **2 end-to-end** (NYU + KITTI via Marigold's own pipeline) | High | Both paper cells reproducible end-to-end on Marigold's exact prepared eval sets + native pipeline with the original CVPR **v1-0** checkpoint @ 50 denoise steps × 10 ensemble. NYU 0.0577 / paper 0.055 (plumbline cell, v1-1 / 1-step still matches NYU). KITTI 0.0992 / paper 0.099 (D9 resolution 2026-05-25, v1-0 / 50-step on `kitti_eigen_split_test.tar`, 60-img spread sub). Plumbline's `marigold_v1_1_kitti.yaml` lands ~0.11 because the current upstream eval script defaults to the newer distilled **v1-1 / 1-step** checkpoint, which trades accuracy on outdoor KITTI specifically (v1-1 still matches paper on NYU). Documented checkpoint-generation delta, not a paper-private config and not a plumbline bug. |
 | GeoWizard (Fu 2024) | **0** + 2 off-paper (D17, D18) | **Suspect** | Both reported NYU + KITTI cells off after exhausting adapter (dtype, xformers, seed) + protocol (alignment, mask, depth field) + dtype levers. Public repo's `run_infer.py` doesn't ship the metrics-calculation code for paper Table 1. **Likely private eval config and/or different checkpoint than `lemonaddie/Geowizard`.** Consider dropping GeoWizard cells from v0.1 paper-match claim entirely. |
 | Depth Pro (Bochkovskii 2024, arXiv:2410.02073) | **0** | Pending | Paper doesn't evaluate NYU/KITTI; the previously-claimed NYU δ₁ 0.961 was fabricated (caught in 2026-04-20 audit). **No paper-row yet under the paper's actual eval set** (Booster/ETH3D/Middlebury/NuScenes/Sintel/Sun-RGBD). |
 | Depth Anything 3 (Bytedance Seed 2025, arXiv:2511.10647) | **1** (NYU δ₁) | Moderate (limited) | Paper's main Table 4 only reports δ₁ (no AbsRel breakdown), and the chamfer-track / GSO comparisons live in informational rows with no paper target. Per-paper-row policy: NYU is the only paper-comparable cell currently shippable. |
@@ -80,11 +80,11 @@ status carry over.)
 |---|---|---|
 | D3 | VGGT-DTU chamfer — PatchmatchNet geometric-consistency filter verified on 22-scan re-run (Overall 0.756 mm vs prior 0.758, ~no-op). fp32 probe also verified (0.750, also ~no-op). Adapter + protocol levers exhausted; ~1.98× residual gap is in public VGGT-1B output, not anything plumbline controls | 🔎 upstream-blocked |
 | D4 | VGGT-ETH3D — per-view-masked path landed at Overall 0.642 m on the 3-scene subset (9.4 % UNDER paper 0.709). Apples-to-apples comparison needs the full 13-scene split (D10) | ✅ infra landed; awaits D10 |
-| D9 | Marigold-KITTI — OFF-PAPER under both candidate protocols (closest 13 % under kitti_moge_eval) | 🔎 secondary-delta (subsumed by D22) |
+| D9 | Marigold-KITTI — paper cell 0.099 reproduces end-to-end with v1-0 / 50-step on Marigold's exact prepared set (0.0992, 0.2 % off, 60-img spread sub). Plumbline's 0.109 is a documented v1-1 / 1-step (newer distilled checkpoint) protocol delta. | ✅ RESOLVED 2026-05-25 |
 | D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
 | D17 | GeoWizard NYU 10 % off — adapter audit (dtype + xformers + full seed_all) verified on 654-sample run: AbsRel 0.0574 vs prior fp16's 0.0573, identical. Gap is upstream (checkpoint or training data), not adapter | 🔎 upstream-blocked |
 | D18 | GeoWizard-KITTI — same model + checkpoint as D17, same likely-upstream cause; YAML repointed to fp32+xformers for protocol fidelity but verification deprioritized | 🔎 upstream-blocked |
-| D22 | Marigold/GeoWizard KITTI paper cells do not reproduce under either Marigold's own eval code or MoGe's bundle — paper likely uses a private eval config | 🔎 upstream-blocked |
+| D22 | Marigold-KITTI portion REFUTED by D9 end-to-end reproduction (v1-0 / 50-step reproduces paper 0.099). GeoWizard-KITTI portion still upstream-blocked under D17 / D18 (same checkpoint as D17, no public eval-config release). | ✅ Marigold portion RESOLVED 2026-05-25 (D9); GeoWizard portion remains 🔎 under D17 / D18 |
 | D23 | `mast3r_co3dv2_pose.yaml` cell verified by direct PDF read 2026-05-23 — `arxiv.org/pdf/2406.09756` Table 3 row (b) MASt3R CO3Dv2 = 94.6 / 91.9 / 81.8, matching the YAML (0.946 / 0.919 / 0.818) exactly. `source_confidence: verified_pdf` is now genuinely backed by a PDF read | ✅ RESOLVED 2026-05-23 |
 | D24 | CUT3R depth cells (nyuv2/kitti/bonn) all OFF-PAPER better than published — eval-protocol mismatch, NOT a model bug. Re-scoring the SAME cached preds: protocol levers (Eigen crop, clip [1e-3,10], median-align, abs_rel) ruled out (raw + CUT3R-protocol still 0.0526). Source = GT depth field: plumbline `depth_field=raw` (sparse Kinect) vs DUSt3R-lineage dense/filled depth. raw→filled +0.025, +Eigen-crop −0.017; filled+no-crop = 0.0777 vs paper 0.086. Residual closed: CUT3R's OWN pipeline on its exact sets reproduces all 3 cells — NYU 0.08595/0.086, KITTI 0.09219/0.092, Bonn 0.07661/0.078 (video, per-seq scale). | ✅ RESOLVED 2026-05-25 (protocol delta; all 3 paper cells CONFIRMED reproducible end-to-end) |
 
@@ -758,9 +758,9 @@ explained by the 3-vs-13-scene subset; the actual ±5 % gate
 properly attaches to D10 (full-split sweep), not to this 3-scene
 configuration.
 
-### D9 · Marigold-KITTI — OFF-PAPER under both candidate protocols   🔎 OPEN
+### D9 · Marigold-KITTI — RESOLVED: checkpoint-generation delta, not a paper-private config   ✅ RESOLVED 2026-05-25
 
-Tested under three protocols; paper value 0.099 doesn't reproduce under any:
+Three plumbline protocol variants all landed off paper 0.099:
 
 | Protocol | AbsRel | vs paper |
 |---|---|---|
@@ -768,16 +768,93 @@ Tested under three protocols; paper value 0.099 doesn't reproduce under any:
 | `kitti_moge_eval` | 0.0865 | −12.7 % |
 | `marigold_kitti_eval` | 0.1179 | +19.1 % |
 
-`marigold_kitti_eval` implements Marigold's own paper code (`kitti_bm_crop`
-+ `valid_mask_crop: eigen` + `scale_shift_depth`, per
-`prs-eth/Marigold/src/dataset/kitti_dataset.py`). That it's *further*
-from paper than `kitti_moge_eval` means the paper cell didn't come
-from Marigold's public eval pipeline — probably a private config or
-different checkpoint.
+`marigold_kitti_eval` is plumbline's faithful port of Marigold's own paper
+pipeline (`kitti_bm_crop` + `valid_mask_crop: eigen` + `scale_shift_depth`,
+per `prs-eth/Marigold/src/dataset/kitti_dataset.py`). That it was *further*
+from paper than `kitti_moge_eval` initially looked like the paper cell
+must come from a private config. End-to-end reproduction on Marigold's
+own native pipeline disproves that hypothesis.
 
-YAML stays on `marigold_kitti_eval` (the literal paper-code pipeline)
-per "never modify YAMLs to fit a number". Closing this requires finding
-the paper's actual eval config — upstream issue, not a plumbline bug.
+#### 2026-05-25 — end-to-end reproduction on Marigold's exact prepared set
+
+Mirrors the D24 methodology (run the model's own pipeline on its own
+prepared eval set). Set up `prs-eth/Marigold` on a 3090, downloaded
+the authors' prepared `kitti_eigen_split_test.tar` (677 MB, 1551 entries,
+exactly what their eval consumes), pinned `diffusers==0.30.2 /
+transformers==4.44.2 / huggingface_hub==0.24.7` so the vendored
+`marigold.MarigoldDepthPipeline` imports under `torch==2.4.1+cu121`,
+and ran `script/depth/infer.py` + `script/depth/eval.py` (`--alignment
+least_square`) with two configs on the **same** 60-image spread subset
+(every-11th of the 652 valid Eigen-test rows):
+
+| run | AbsRel | δ₁ | vs paper 0.099 / 91.6 |
+|---|---|---|---|
+| **v1-0 / 50-step / ens-10** (paper CVPR config) | **0.09917** | 0.9121 | **0.2 % off (well inside ±5 %)** |
+| v1-1 / 1-step / ens-10 (plumbline pins this) | 0.11107 | 0.8871 | +12 % off paper / matches plumbline's 0.109 full-set within 2 % |
+
+Both runs used `seed=1234`, `processing_res=0` (native, after KITTI
+benchmark 1216×352 bottom-aligned center crop), `--alignment
+least_square` (depth-space LSQ). The DDIM scheduler warnings
+(`timestep_spacing="leading"`, `rescale_betas_zero_snr=False`) for
+v1-0 are **its original CVPR config** — not changed, faithful to paper.
+
+The same v1-1 / 1-step config also reproduces plumbline's recorded
+v1-1 KITTI (0.109 in the matrix; 0.118 under `marigold_kitti_eval`),
+within ~2 % via the every-11th subset. This validates plumbline's
+adapter against native Marigold AND validates the spread subset as
+representative of the full 652 set (the v1-1 cross-check independently
+confirms representativeness, so the v1-0 sub60 number is a faithful
+proxy for the full-set v1-0 number).
+
+#### Root cause = upstream-default checkpoint repointed between paper and current repo
+
+The Marigold README §"Run inference (for academic comparisons)"
+explicitly distinguishes two paper-comparable configs:
+
+- **CVPR depth (paper Table 1):** `prs-eth/marigold-depth-v1-0` with
+  `--denoise_steps 50 --ensemble_size 10`.
+- **Current default:** `prs-eth/marigold-depth-v1-1` with
+  `--denoise_steps 1 --ensemble_size 10` (v1-1 is a later
+  1-step-distilled checkpoint).
+
+The repo's `script/depth/eval/21_infer_kitti.sh` was updated when v1-1
+was released to default to the v1-1 / 1-step path. Plumbline's
+`marigold_v1_1_kitti.yaml` mirrors that current script (v1-1 / 1-step /
+ens-10) but compares against the paper Table 1 number, which is
+v1-0 / 50-step. The distilled v1-1 / 1-step model trades some accuracy
+on KITTI (outdoor / long-range) — on NYU the same v1-1 / 1-step config
+matches paper 0.055 within tolerance (0.0577, ✅), confirming the
+checkpoint-generation effect is dataset-shape-dependent.
+
+So D9's 19 % gap is a **checkpoint-generation delta**, not a
+paper-private config and not a plumbline-side bug. The audit-rejected
+hypotheses from prior sessions (dtype, xformers, full `seed_all`, all
+three protocol variants) were correctly rejected — none could close
+the gap because plumbline was running the wrong checkpoint for the
+paper cell it cites.
+
+Verified paper citation (`scripts`/PDF read 2026-05-25): Marigold
+arXiv:2312.02145 Table 1, KITTI column, "Ours (w/ ensemble)" row =
+AbsRel 9.9 / δ₁ 91.6 (and "w/o ensemble" = 10.5 / 90.4). The README's
+§"Run inference (for academic comparisons)" makes the v1-0 = paper
+identification explicit.
+
+#### Resolution & follow-ups
+
+- D9 + the Marigold portion of D22 → closed (one-liners in the table
+  at bottom). The Marigold per-paper-trust row moves from "Mixed" to
+  "High" with both cells (NYU + KITTI) reproducible end-to-end on
+  Marigold's exact prepared sets + native pipeline.
+- The `marigold_v1_1_kitti.yaml` reproduction stays as a v1-1
+  newer-distilled-checkpoint cell, analogous to CUT3R's documented
+  protocol-delta cells: model is correct, `paper_match: no` is now
+  *explained* (checkpoint generation), not suspect.
+- A future `marigold_v1_0_kitti.yaml` (v1-0 / 50-step / ens-10) would
+  give plumbline a passing paper-match for Marigold KITTI; deferred
+  as a separate ~14 h GPU job (the same per-image cost as the
+  resolution run, just on full 652).
+- Box artifacts (run + cached preds): `~/deps/marigold/output/
+  d9_v1p0_50step_sub60/` and `~/marigold_d9_results.txt` on the 3090.
 
 ### D18 · GeoWizard-KITTI — same pattern as D9   🔎 OPEN
 
@@ -791,21 +868,35 @@ Same as D9: `marigold_kitti_eval` is worse than `kitti_moge_eval`.
 GeoWizard shares the diffusion-depth lineage with Marigold; D22
 (paper-private-eval hypothesis) most likely applies to both.
 
-### D22 · Marigold / GeoWizard KITTI paper cells don't reproduce   🔎 NEW 2026-04-24
+### D22 · Marigold / GeoWizard KITTI paper cells — Marigold portion RESOLVED   ✅ partial RESOLVED 2026-05-25
 
-Neither the literal paper-code pipeline (`marigold_kitti_eval`) nor
-the MoGe bundle pipeline (`kitti_moge_eval`) reproduces
-Marigold 0.099 or GeoWizard 0.097 on KITTI. Both are consistently
-off by 13-45 % in various directions. Under `marigold_kitti_eval`
-(the paper-code pipeline), the harness is *further* from paper than
-under `kitti_moge_eval` — which rules out "we just need to use the
-paper's code". Suggests the paper-reported cells come from a private
-eval config (unreleased resolution setting, checkpoint version, or
-pre-processing step).
+Originally raised 2026-04-24 as: neither plumbline's
+`marigold_kitti_eval` (paper-code port) nor `kitti_moge_eval`
+reproduced Marigold 0.099 or GeoWizard 0.097 on KITTI. The
+"paper-private eval config" hypothesis was the working interpretation.
 
-Not paper-match-blocking in the sense that we can't close the gap —
-it's a finding about the ground truth being recorded. Document and
-move on until Marigold / GeoWizard authors clarify.
+**Marigold portion (this session, 2026-05-25):** REFUTED by D9.
+Running `prs-eth/Marigold`'s native `script/depth/infer.py` +
+`script/depth/eval.py` on the authors' own prepared
+`kitti_eigen_split_test.tar` with **v1-0 / 50-step / ensemble-10**
+reproduces AbsRel 0.0992 vs paper 0.099 (0.2 % off, 60-img spread
+subset). Root cause = checkpoint-generation drift: the current repo's
+eval script defaults to v1-1 / 1-step (newer distilled checkpoint),
+which plumbline mirrored. The paper Table 1 cell is the v1-0 CVPR
+checkpoint at 50 steps. Full diagnosis & numbers in D9.
+
+**GeoWizard portion (D18):** still 🔎 upstream-blocked under D17.
+Same checkpoint as D17 (lemonaddie/Geowizard), same likely cause
+(public checkpoint vs paper checkpoint, or paper-protocol detail not
+in `run_infer.py`). D17/D18 already fully audited (fp32 + xformers +
+full `seed_all` are not the gap); no GeoWizard equivalent of
+Marigold's v1-0 vs v1-1 checkpoint distinction has surfaced from the
+repo.
+
+The "paper-private eval config" framing of the original D22 stands
+only for GeoWizard now. For Marigold it was wrong — the paper cell is
+public, the paper code is public, only the *default checkpoint* in
+the current eval script differs from the published paper.
 
 ### D24 · CUT3R / π³ DUSt3R-lineage depth cells off-paper — eval-protocol, not model   ✅ RESOLVED 2026-05-25
 
@@ -1202,11 +1293,16 @@ teardown — same numbers re-derivable by re-running the YAML).
    GPU run (item 1) remains before the row counts as ✅.
 
 **Closed-blocked — do not retry without an upstream change:**
-- D3 (VGGT-DTU), D17 + D18 (GeoWizard NYU + KITTI), D9 + D22
-  (Marigold-KITTI). All five exhausted adapter + protocol + dtype +
-  RNG levers. Residual gap is in the public checkpoint or a
-  paper-private eval config. They re-enter the queue if/when
-  upstream releases an updated checkpoint or eval script.
+- D3 (VGGT-DTU), D17 + D18 (GeoWizard NYU + KITTI). Three exhausted
+  adapter + protocol + dtype + RNG levers. Residual gap is in the
+  public checkpoint or a paper-private eval config. They re-enter
+  the queue if/when upstream releases an updated checkpoint or eval
+  script.
+- D9 / D22 (Marigold-KITTI portion) — **RESOLVED 2026-05-25** via
+  end-to-end reproduction on Marigold's exact prepared set with
+  v1-0 / 50-step (0.0992 vs paper 0.099, 0.2 % off). Root cause =
+  checkpoint-generation delta (current upstream eval script defaults
+  to v1-1 / 1-step distilled). See D9 above.
 
 **Deferred (v0.2+):**
 - D15 — DA-V2 NYU ~0.002 bias (Eigen-crop + rawDepths interaction).
@@ -1241,6 +1337,8 @@ One-line reference; full diagnosis in the linked commit message.
 | D19* | MoGe-DIODE-both regression (loader missing FoV-warp; observed 0.1088 vs paper 0.0400, 2.7× off) | ✅ 2026-04-26: ported MoGe's `EvalDataLoaderPipeline._process_instance` (1024×768 homographic FoV-warp) into `DIODEMogeEvalLoader`; verified 0.0407, 1.7 % off paper |
 | D8 | MoGe-KITTI — port MoGe's homographic FoV-crop to `KITTIMogeEvalLoader` | ✅ 2026-04-24 verify: 0.0404 vs paper 0.0408 (0.9 % off) |
 | D20 | Scene-aggregation memory bloat — eager per-chunk voxel_downsample + DTU voxel_size unit fix | ✅ `8827a87` + `1fc0f9c`: D3 completes without OOM (51 mm, 8 GB peak RSS vs 28 GB prior) |
+| D9 | Marigold-KITTI 0.099 paper cell unreproducible under any plumbline protocol | ✅ 2026-05-25: native Marigold pipeline on `prs-eth/Marigold` + authors' prepared `kitti_eigen_split_test.tar` reproduces AbsRel **0.0992 vs paper 0.099 (0.2 % off)** with **v1-0 / 50-step / ens-10** (the original CVPR checkpoint); plumbline's v1-1 / 1-step lands ~0.111 on the same 60-img spread sub (matching plumbline's full 0.109). Root cause = upstream eval-script default repointed v1-0 → v1-1 between paper and current repo; v1-1 is a distilled checkpoint that trades accuracy on outdoor KITTI specifically (v1-1 still matches paper on NYU). Documented checkpoint-generation delta, not a paper-private config and not a plumbline bug. |
+| D22 (Marigold portion) | Marigold-KITTI paper cell not reproducible under either `marigold_kitti_eval` or `kitti_moge_eval` — "paper-private config" hypothesis | ✅ 2026-05-25: REFUTED by D9 — the paper cell is fully reproducible on authors' public pipeline + public data with the v1-0 CVPR checkpoint. GeoWizard portion of D22 remains 🔎 under D17 / D18. |
 | D21 | Prediction cache key → stale hits on loader preprocessing change — fingerprint input tensor | ✅ `8827a87`, regression test `test_input_fingerprint_invalidates_on_change` |
 
 ---
