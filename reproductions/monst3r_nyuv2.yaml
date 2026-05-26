@@ -1,0 +1,61 @@
+# MonST3R single-frame depth on NYUv2 — MonST3R Table 3 paper target.
+#
+# Targets MonST3R Table 3 "Single-frame Depth Evaluation" (Zhang et
+# al. 2024, arXiv:2410.03825, ICLR 2025 published version page 8),
+# NYU-v2 (static) column, "MonST3R" row: Abs Rel = 0.091 (companion
+# δ<1.25 = 88.8). Verified by direct PDF read 2026-05-26.
+#
+# Protocol (paper §4.2): zero-shot monocular depth, "per-frame median
+# scaling, following Wang et al. 2024c". Plumbline's `median`
+# alignment mode is exactly that (median ratio scale-only in depth
+# space). The adapter runs MonST3R weights through the DUSt3R-base
+# global alignment (no flow refinement) — Table 3 is itself a
+# single-frame ablation that doesn't use MonST3R's video / flow path
+# (Table 5 ablation confirms flow loss has ≤0.005 AbsRel effect),
+# so the base-path adapter is paper-faithful for this cell.
+#
+# Single-frame inference uses MonST3R's demo view-duplicate trick
+# (load the frame twice, run dust3r pair inference, keep view 0).
+# This is the adapter's `single == n == 1` branch — see
+# src/plumbline/models/monst3r.py docstring "Faithfulness scope".
+
+name: monst3r-nyuv2
+# `nyu_dust3r_lineage`, not `nyu_eigen_2014` — the DUSt3R-family eval
+# (filled GT + no Eigen crop + no clip) matches the paper Table 3
+# cell within 1.7 % (verified 2026-05-26 by re-scoring cached preds:
+# strict-Eigen 0.0599 vs lineage 0.0894 vs paper 0.091). Adapter +
+# alignment unchanged; only the GT-side processing differs.
+protocol: nyu_dust3r_lineage
+
+model:
+  name: monst3r
+  kwargs:
+    long_edge: 512
+
+# Per-frame median scaling (paper §4.2). The protocol intentionally
+# leaves `scale_alignment` to the reproduction so individual lineage
+# adapters can pick their own (median for MonST3R, lstsq for some
+# DUSt3R-family ablations, etc.).
+scale_alignment: median
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.091
+  tolerance_relative: 0.05
+  citation: "Zhang et al. 2024, MonST3R (arXiv:2410.03825), Table 3 (Single-frame Depth Evaluation), NYU-v2 (static) Abs Rel column, 'MonST3R' row = 0.091 (companion δ<1.25 = 88.8; protocol §4.2: 'per-frame median scaling, following Wang et al. 2024c'). Verified by direct PDF read 2026-05-26 (ICLR 2025 published version, page 8)."
+  source_confidence: verified_pdf
+
+notes: >
+  First MonST3R paper-match cell. Verified end-to-end 2026-05-26 on
+  RTX 3090 (9 min wall): AbsRel 0.0894 vs paper 0.091 (1.7 % off,
+  within 5 % tolerance); δ₁ 0.891 vs paper 0.888. Adapter is the
+  audited base-path (no flow refinement), single-frame via the
+  demo's view-duplicate trick. NYU loader iterates the standard 654-
+  image Eigen test split with **filled GT + no Eigen crop + no
+  depth_clip** (DUSt3R-lineage convention, per
+  `protocols/nyu_dust3r_lineage.yaml`). Requires $MONST3R_ROOT
+  (recursive clone of https://github.com/Junyi42/monst3r) so
+  MonST3R's vendored dust3r fork resolves on sys.path; weights
+  pulled from HF Junyi42/MonST3R_PO-TA-S-W_ViTLarge_BaseDecoder_512_dpt
+  on first use.
