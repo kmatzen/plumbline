@@ -29,7 +29,27 @@ DepthNormalEstimationPipeline`. Weights come from the HuggingFace repo
 Alignment: GeoWizard output is affine-invariant depth in [0, 1], same
 as Marigold. Use ``scale_alignment: scale_shift_depth`` to match the
 paper's depth-space alignment protocol (not the inverse-depth fit
-DA-V2 / MoGe use).
+DA-V2 / MoGe use). The author's own alignment helper at
+``geowizard/utils/de_normalized.py::align_scale_shift`` uses
+``np.polyfit(deg=1)`` over masked depth-space — structurally
+identical to plumbline's ``scale_shift_depth``.
+
+D17 / D18 note (resolved 2026-05-26): single-seed eval on the
+publicly-released ``lemonaddie/Geowizard`` checkpoint lands AbsRel
+~0.057 on NYU and ~0.11-0.13 on KITTI, vs paper Table 1's 0.052 /
+0.097. Adapter was audited end-to-end (dtype, xformers, full
+``seed_all``, denoise_steps 10 vs 50) — none move the metric beyond
+±1 %. Independent reproducer @anonymous on
+`fuxiao0719/GeoWizard#36` measured 0.0576 / 0.9615 (NYU, 50-step,
+ens-10), matching plumbline's 0.0574 / 0.9594 exactly. The author
+replied on that issue: *"we perform multiple inferences with
+different initialized seeds for each test dataset, along with the
+[ensemble] operation, and select the best result for the metric
+report."* The paper number is best-of-N seeds, not single-seed mean
+— an undocumented eval-protocol detail. Single-seed numbers from
+this adapter are the methodologically defensible baseline; the
+paper's 0.052 / 0.097 are not exactly reproducible without
+cherry-picking across seed draws.
 """
 
 from __future__ import annotations
@@ -110,9 +130,7 @@ class GeoWizardAdapter(Model):
         seed: int = 0,
     ) -> None:
         if domain not in _VALID_DOMAINS:
-            raise ValueError(
-                f"domain must be one of {sorted(_VALID_DOMAINS)}; got {domain!r}"
-            )
+            raise ValueError(f"domain must be one of {sorted(_VALID_DOMAINS)}; got {domain!r}")
         if num_inference_steps < 1:
             raise ValueError(f"num_inference_steps must be >= 1; got {num_inference_steps}")
         if ensemble_size < 1:
@@ -308,6 +326,7 @@ def _shim_diffusers_for_geowizard() -> None:
     except ModuleNotFoundError:
         try:
             import diffusers.models.transformers.dual_transformer_2d as _dt
+
             sys.modules["diffusers.models.dual_transformer_2d"] = _dt
         except ModuleNotFoundError:  # pragma: no cover
             pass

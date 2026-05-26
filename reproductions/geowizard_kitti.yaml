@@ -11,7 +11,14 @@ model:
   name: geowizard
   kwargs:
     domain: outdoor
-    num_inference_steps: 10
+    # 50 not 10: matches the README's "For academic comparison" guidance
+    # rather than `run_infer.py`'s in-the-wild argparse default. Same
+    # change as geowizard-nyuv2; verified on NYU sub60 to move the
+    # metric by only ~0.3 % (within noise), so this also won't close
+    # D18's residual gap (paper-private best-of-N seed selection per
+    # the paper author's statement on `fuxiao0719/GeoWizard#36`; same
+    # root cause as D17). Bumped 2026-05-26 for paper-protocol intent.
+    num_inference_steps: 50
     ensemble_size: 10
     processing_res: 768
     # Upstream's run_infer.py --half_precision flag is dead (dtype set
