@@ -120,3 +120,28 @@ class TestBonnLoader:
         from plumbline.datasets.registry import DATASET_REGISTRY
 
         assert "bonn" in DATASET_REGISTRY
+
+    def test_per_frame_emits_one_sample_per_frame(self, tmp_path: Path) -> None:
+        # 2 sequences × 4 frames each (each frame has matching depth + pose),
+        # per_frame=True should yield 8 single-frame Samples, not 2 sequences.
+        _make_sequence(tmp_path, "balloon", n=4)
+        _make_sequence(tmp_path, "crowd", n=4)
+        ds = BonnDataset(root=tmp_path, per_frame=True)
+        assert len(ds) == 8
+        samples = list(ds)
+        assert len(samples) == 8
+        for s in samples:
+            assert s.images.shape[0] == 1
+            assert s.depth_gt.shape[0] == 1
+            assert s.metadata["per_frame"] is True
+            assert s.metadata["n_frames"] == 1
+        # sample_ids are "<seq>/<rgb-stem>"
+        seqs = {s.metadata["sequence"] for s in samples}
+        assert seqs == {"balloon", "crowd"}
+
+    def test_per_frame_ignores_num_frames(self, tmp_path: Path) -> None:
+        _make_sequence(tmp_path, "balloon", n=6)
+        # num_frames=2 (sequence mode) would emit a single 2-frame Sample;
+        # per_frame=True ignores num_frames and emits all 6 frames.
+        ds = BonnDataset(root=tmp_path, per_frame=True, num_frames=2)
+        assert len(ds) == 6

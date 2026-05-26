@@ -91,10 +91,20 @@ class BonnDataset(Dataset):
         ``None`` = every ``rgbd_bonn_*`` directory found, sorted.
     num_frames
         Frames per sequence sample, evenly sub-sampled. Caps memory for long
-        sequences.
+        sequences. Ignored when ``per_frame=True``.
     max_depth
         Depth values above this (m) are marked invalid (Bonn indoor ~ up to a
         few metres; clips sensor outliers).
+    per_frame
+        ``False`` (default) emits one :class:`Sample` per *sequence* with
+        ``num_frames`` sub-sampled frames bundled into a single multi-view
+        Sample — the per-sequence video-depth shape MonST3R / CUT3R Table 2
+        uses. ``True`` emits one Sample per RGB frame
+        (``images.shape[0] == 1``), iterating every frame in every selected
+        sequence in timestamp order — the per-frame single-frame shape
+        MonST3R Table 3 uses. ``num_frames`` and the per-sequence
+        sub-sampling are skipped in this mode (every frame with a matched
+        depth + pose is emitted).
     """
 
     split = "test"
@@ -107,10 +117,12 @@ class BonnDataset(Dataset):
         sequences: list[str] | None = None,
         num_frames: int = 90,
         max_depth: float = 10.0,
+        per_frame: bool = False,
     ) -> None:
         self.split = split
         self.num_frames = int(num_frames)
         self.max_depth = float(max_depth)
+        self.per_frame = bool(per_frame)
         resolved = env_path("BONN_ROOT", Path(root) if root is not None else None)
         if resolved is None or not Path(resolved).is_dir():
             raise DatasetNotAvailable(
@@ -142,13 +154,25 @@ class BonnDataset(Dataset):
         return sorted(p for p in self.root.glob("rgbd_bonn_*") if p.is_dir())
 
     def __len__(self) -> int:
+        if self.per_frame:
+            return sum(len(self._associations(seq_dir)) for seq_dir in self._sequences)
         return len(self._sequences)
 
     def __iter__(self) -> Iterator[Sample]:
         for seq_dir in self._sequences:
-            yield self._load_sequence(seq_dir)
+            if self.per_frame:
+                yield from self._iter_per_frame(seq_dir)
+            else:
+                yield self._load_sequence(seq_dir)
 
-    def _load_sequence(self, seq_dir: Path) -> Sample:
+    def _associations(self, seq_dir: Path) -> list[tuple[float, str, str, NDArray[np.float64]]]:
+        """Build the rgb/depth/pose association list for a sequence.
+
+        Each entry is ``(timestamp, rgb_rel, depth_rel, world_from_cam)`` —
+        the same shape ``_load_sequence`` uses internally. Cached on the
+        sequence dir's mtime so per-frame iteration doesn't re-parse the
+        TUM lists for every frame.
+        """
         rgb = _read_tum_list(seq_dir / "rgb.txt")
         depth = _read_tum_list(seq_dir / "depth.txt")
         traj = _read_tum_traj(seq_dir / "groundtruth.txt")
@@ -156,10 +180,8 @@ class BonnDataset(Dataset):
             raise DatasetNotAvailable(
                 f"{seq_dir.name}: missing/empty rgb.txt, depth.txt, or groundtruth.txt"
             )
-
         depth_ts = np.array([t for t, _ in depth])
         traj_ts = np.array([t for t, _ in traj])
-        # Associate each rgb frame with the nearest depth + pose in time.
         assoc: list[tuple[float, str, str, NDArray[np.float64]]] = []
         for ts, rel in rgb:
             di = int(np.argmin(np.abs(depth_ts - ts)))
@@ -169,7 +191,46 @@ class BonnDataset(Dataset):
             assoc.append((ts, rel, depth[di][1], traj[ti][1]))
         if not assoc:
             raise DatasetNotAvailable(f"{seq_dir.name}: no rgb/depth/pose timestamp matches")
+        return assoc
 
+    def _iter_per_frame(self, seq_dir: Path) -> Iterator[Sample]:
+        """Emit one Sample per RGB frame (single-frame Table 3 shape)."""
+        sid_base = seq_dir.name.replace("rgbd_bonn_", "")
+        k = _intrinsic_matrix(BONN_INTRINSICS)
+        for ts, rgb_rel, depth_rel, w_from_c in self._associations(seq_dir):
+            image = read_rgb_uint8(seq_dir / rgb_rel)
+            d, v = _load_bonn_depth(seq_dir / depth_rel, max_depth=self.max_depth)
+            images_arr = image[None]  # (1, H, W, 3)
+            depth_gt = d[None].astype(np.float32)
+            depth_valid = v[None]
+            intrinsics = k[None]
+            # Single-frame: world == camera. Use identity so the loader's
+            # pose contract holds; downstream pose metrics aren't meaningful
+            # for a 1-view sample and are skipped by the runner.
+            extrinsics = np.eye(4, dtype=np.float32)[None]
+            sid = f"{sid_base}/{rgb_rel.removeprefix('rgb/').removesuffix('.png')}"
+            assert_valid_image(images_arr, name=f"bonn/{sid}/image")
+            assert_valid_intrinsics(intrinsics, name=f"bonn/{sid}/intrinsics")
+            assert_valid_extrinsics(extrinsics, name=f"bonn/{sid}/extrinsics")
+            assert_valid_depth(depth_gt, name=f"bonn/{sid}/depth")
+            yield Sample(
+                sample_id=sid,
+                images=images_arr,
+                intrinsics=intrinsics,
+                extrinsics_gt=extrinsics,
+                depth_gt=depth_gt,
+                depth_valid=depth_valid,
+                metadata={
+                    "dataset": "bonn",
+                    "sequence": sid_base,
+                    "timestamp": ts,
+                    "n_frames": 1,
+                    "per_frame": True,
+                },
+            )
+
+    def _load_sequence(self, seq_dir: Path) -> Sample:
+        assoc = self._associations(seq_dir)
         idxs = _even_indices(len(assoc), self.num_frames)
         images: list[NDArray[np.uint8]] = []
         depths: list[NDArray[np.float32]] = []

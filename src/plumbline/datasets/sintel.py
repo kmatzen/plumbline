@@ -75,6 +75,15 @@ class SintelDataset(Dataset):
     views_per_sample
         Number of consecutive frames grouped into one :class:`Sample`. ``1``
         = monocular (default); ``>1`` = sequential multi-view.
+    max_depth
+        If set, the loader writes ``Sample.depth_valid`` = ``(gt > 0) & (gt
+        < max_depth)``. Sintel encodes sky as ~1e5 m in the ``.dpt`` file
+        (it has no true infinity sentinel); the DUSt3R / MonST3R / CUT3R
+        eval lineage masks sky by clipping to ``max_depth=70`` (per
+        MonST3R's ``depth_metric.ipynb`` Sintel cell). Leave ``None`` to
+        pass the raw GT through (any 1e5 sky pixels will dominate
+        AbsRel, so this is **only** correct for adapters / protocols that
+        handle sky themselves).
     """
 
     split: str = "training"
@@ -87,9 +96,12 @@ class SintelDataset(Dataset):
         pass_name: str = "final",
         scenes: list[str] | None = None,
         views_per_sample: int = 1,
+        max_depth: float | None = None,
     ) -> None:
         if split != "training":
             raise ValueError(f"Sintel split '{split}' has no public GT; use 'training'")
+        if max_depth is not None and max_depth <= 0:
+            raise ValueError(f"max_depth must be positive or None; got {max_depth!r}")
         root_path = Path(root) if root else env_path("SINTEL_ROOT")
         if root_path is None or not root_path.exists():
             raise DatasetNotAvailable(
@@ -101,6 +113,7 @@ class SintelDataset(Dataset):
         self.split = split
         self.pass_name = pass_name
         self.views_per_sample = max(1, int(views_per_sample))
+        self.max_depth = float(max_depth) if max_depth is not None else None
 
         manifest_path = (
             self.root
@@ -183,16 +196,24 @@ class SintelDataset(Dataset):
         assert_valid_extrinsics(extrinsics, name=f"sintel/{rec['sample_id']}/extrinsics")
         assert_valid_depth(depth_gt, name=f"sintel/{rec['sample_id']}/depth")
 
+        depth_valid: NDArray[np.bool_] | None = None
+        if self.max_depth is not None:
+            # Sintel encodes sky as ~1e5 m (no infinity sentinel); the DUSt3R
+            # / MonST3R lineage masks it with max_depth (typically 70 m).
+            depth_valid = (depth_gt > 0) & (depth_gt < self.max_depth)
+
         return Sample(
             sample_id=rec["sample_id"],
             images=images,
             intrinsics=intrinsics,
             extrinsics_gt=extrinsics,
             depth_gt=depth_gt,
+            depth_valid=depth_valid,
             metadata={
                 "scene": rec["scene"],
                 "pass": self.pass_name,
                 "split": self.split,
+                "max_depth": self.max_depth,
             },
         )
 
@@ -225,14 +246,21 @@ def load_dpt(path: Path) -> NDArray[np.float32]:
 def load_cam(path: Path) -> tuple[NDArray[np.float32], NDArray[np.float32]]:
     """Parse a Sintel ``.cam`` file.
 
-    Format (from Sintel SDK):
+    Format (from Sintel SDK ``sintel_io.cam_read``):
+    - float32 tag (``TAG_FLOAT`` = 202021.25, same magic as ``.dpt`` / ``.flo``)
     - float64 3x3 intrinsics ``K`` (row-major)
     - float64 3x4 extrinsics ``[R|t]`` (``camera_from_world``)
 
     Returns ``(K, E_cam_from_world)`` where ``E`` is the 4x4 homogenized
-    extrinsic matrix.
+    extrinsic matrix. The tag (4 bytes) was previously skipped — without
+    reading it, K was misaligned by 4 bytes and the bottom row of K parsed
+    to zeros, tripping ``assert_valid_intrinsics``. Real on-disk file size
+    is 4 + 8*9 + 8*12 = 172 bytes.
     """
     with path.open("rb") as f:
+        tag = struct.unpack("<f", f.read(4))[0]
+        if not np.isclose(tag, _DPT_TAG, atol=1e-3):
+            raise ValueError(f"bad .cam tag in {path}: {tag}")
         K = np.frombuffer(f.read(8 * 9), dtype="<f8").reshape(3, 3)
         RT = np.frombuffer(f.read(8 * 12), dtype="<f8").reshape(3, 4)
     E = np.eye(4, dtype=np.float64)
