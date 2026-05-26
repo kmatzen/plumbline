@@ -99,8 +99,13 @@ when D3 was promoted to upstream-blocked:
 1. **≥ 15 verified_pdf paper-match cells** across at least 3 datasets
    and 5 distinct papers, each within its declared tolerance. **Met
    2026-04-27** (16 cells, 4 datasets, 6 papers).
-2. **At least one pose paper-match.** *Pending* — CO3Dv2 infra (VGGT
-   Table 1, MASt3R Table 3) landed 2026-04-27, GPU run pending.
+2. **At least one pose paper-match.** ✅ **MET 2026-05-26** — VGGT
+   CO3Dv2 (Table 1) lands AUC@30 = 0.8964 vs paper 0.882 (1.6 % over,
+   within ±5 % tolerance). RTX 3090, ~28 min wall, 410 samples (41
+   SEEN cats × 10 seq × 10 frame), CO3Dv2 staged via
+   `scripts/co3dv2_prefetch.py` selective HTTP-Range fetch (~3 GB vs
+   4.3 TB raw). MASt3R CO3Dv2 (Table 3) GPU run kicked off in parallel
+   (~5.5 h ETA, curope CUDA ext built).
 3. **No fabricated paper cells in `verified_pdf` YAMLs** — every cell
    audited against the source PDF (table + col + row).
    Tracked in `reproductions/AUDIT.md`.
