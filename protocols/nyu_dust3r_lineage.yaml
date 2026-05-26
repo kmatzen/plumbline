@@ -1,0 +1,70 @@
+# NYUv2 evaluation under the DUSt3R / MonST3R / CUT3R lineage.
+#
+# The DUSt3R-family of papers (DUSt3R, MASt3R, CUT3R, MonST3R, Spann3R,
+# π³, VGGT) all share a NYUv2 protocol that differs from the canonical
+# `nyu_eigen_2014` in three ways:
+#
+# 1. **GT field = `filled` (colorized-interpolated dense depth)** rather
+#    than `raw` Kinect measurements. The lineage trains and evaluates
+#    against the dense Silberman-colorization variant, not the sparse
+#    Kinect holes.
+# 2. **No Eigen spatial crop** — the lineage uses the full image plane
+#    (no `[45:471, 41:601]` mask). The Eigen crop was a 2014-era
+#    convention; the lineage drops it because their relative-depth
+#    aligners are scale-only and the crop doesn't change post-median-
+#    scaling AbsRel meaningfully (the eval mask is just `gt > 0`).
+# 3. **No post-alignment depth_clip** — the lineage's `depth_evaluation`
+#    helper (`eval/monodepth/eval_metrics.py` in CUT3R, equivalent in
+#    DUSt3R / MonST3R) does not clip the aligned prediction. AbsRel is
+#    computed directly from per-pixel `|pred - gt| / gt` over the
+#    `gt > 0` mask.
+#
+# Verified empirically against MonST3R Table 3 (Zhang et al. 2024,
+# arXiv:2410.03825, ICLR 2025 page 8, NYU-v2 (static) row): the cached
+# 654-sample MonST3R predictions on plumbline's NYU loader score
+# AbsRel 0.0599 under `nyu_eigen_2014` and AbsRel **0.0894 under this
+# lineage protocol** — paper's 0.091 reproduces within 1.7 % (well
+# inside the 5 % tolerance). See D24 / D17 / D9 in
+# docs/DISCREPANCIES.md for the broader pattern (every DUSt3R-lineage
+# paper reports under this lineage protocol, not Eigen-2014's).
+#
+# Use `protocol: nyu_eigen_2014` for adapters whose paper-table cells
+# are under the modern mono-depth convention (DA-V2, Metric3D-v2, MoGe,
+# Marigold, GeoWizard, Depth Pro, DA3); use `protocol: nyu_dust3r_lineage`
+# for DUSt3R-family adapters.
+
+name: nyu_dust3r_lineage
+description: >
+  NYUv2 under the DUSt3R / MonST3R / CUT3R-family eval protocol:
+  filled (Silberman-colorized) GT depth, no Eigen spatial crop, no
+  post-alignment clip, valid-mask = `gt > 0`. 654-image Eigen test
+  split is unchanged. The same 1449-pair labeled set as
+  `nyu_eigen_2014`, just iterated with a different GT field and
+  without the Eigen crop.
+
+reference:
+  paper_lineage: >
+    DUSt3R (Wang 2024, arXiv:2312.14132); MASt3R (Leroy 2024,
+    arXiv:2406.09756); CUT3R (Wang 2025, arXiv:2501.12387); MonST3R
+    (Zhang 2024, arXiv:2410.03825); Spann3R, π³, VGGT.
+  split_source: "Silberman 2012 splits.mat, testNdxs (0-indexed 654 indices)"
+  empirical_calibration: >
+    MonST3R Table 3 (NYU-v2 static, Abs Rel 0.091): plumbline cached
+    preds re-scored under this protocol = 0.0894, 1.7 % off paper —
+    within 5 % tolerance (2026-05-26). Establishes that this protocol
+    reproduces lineage paper cells on the standard 654-sample Eigen
+    test split without needing per-adapter prepared eval sets. (CUT3R
+    is the exception — its paper cell only reproduces on its own
+    prepared .npy set, see D24.)
+
+# Fields the runner must apply verbatim.
+fixed:
+  dataset:
+    name: nyuv2
+    split: test
+    kwargs:
+      apply_eigen_crop: false
+      depth_field: filled
+  # No depth_clip — the lineage's eval helper doesn't clip.
+  max_views: 1
+  tasks: [mono_depth]
