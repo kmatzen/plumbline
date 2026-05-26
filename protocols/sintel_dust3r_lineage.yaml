@@ -1,0 +1,85 @@
+# Sintel evaluation under the DUSt3R / MonST3R / CUT3R lineage.
+#
+# Sibling of `nyu_dust3r_lineage` and `kitti_dust3r_lineage`. The
+# DUSt3R-family papers evaluate Sintel under a recipe inherited from
+# DUSt3R (Wang et al. 2024c) and preserved by MonST3R Table 3:
+#
+# 1. **Scene set = 14 dynamic scenes** matching MonST3R's eval_metadata.py
+#    `sintel` entry (`alley_2`, `ambush_4/5/6`, `cave_2/4`, `market_2/5/6`,
+#    `shaman_3`, `sleeping_1/2`, `temple_2/3`). NOT all of training.
+# 2. **Pass = `final`** (with motion blur, atmosphere) — same as the
+#    Sintel official benchmark default.
+# 3. **`max_depth = 70`** — Sintel encodes sky as ~1e5 m in `.dpt` files
+#    (no infinity sentinel); the lineage masks sky by clipping to 70 m.
+#    This is set on the loader (Sintel's `max_depth` kwarg writes
+#    `depth_valid = (gt > 0) & (gt < 70)`), so the runner sees sky as
+#    invalid and never scores against it. Confirmed by direct read of
+#    MonST3R's `depth_metric.ipynb` Sintel cell (`max_depth=70`).
+# 4. **No spatial crop** — the lineage's eval helper masks only by
+#    `depth_valid`.
+# 5. **Per-frame median scaling** (MonST3R paper §4.2: "the single-frame
+#    evaluation adopts per-frame median scaling, following Wang et al.
+#    2024c [DUSt3R]"). The reproduction YAML sets `scale_alignment:
+#    median`; this protocol does not force it.
+#
+# Use this protocol for DUSt3R-family adapters reporting Sintel
+# single-frame Table 3-style numbers (MonST3R, DUSt3R, CUT3R, π³).
+# Video-depth Table 2 numbers (scale+shift per-sequence, "lad2") are a
+# different protocol — not covered here.
+
+name: sintel_dust3r_lineage
+description: >
+  Sintel under the DUSt3R / MonST3R / CUT3R-family single-frame eval
+  protocol: 14 dynamic scenes (final pass), max_depth=70 (sky-mask),
+  per-frame iteration, valid-mask = (gt > 0) & (gt < 70), no spatial
+  crop, **post-alignment depth clip to [1e-3, 70] m** (Sintel uniquely
+  clips predictions, matching MonST3R `depth_metric.ipynb` Sintel cell
+  which sets `post_clip_max=70`).
+
+reference:
+  paper_lineage: >
+    DUSt3R (Wang 2024c, arXiv:2312.14132); MASt3R (Leroy 2024,
+    arXiv:2406.09756); CUT3R (Wang 2025, arXiv:2501.12387); MonST3R
+    (Zhang 2024, arXiv:2410.03825).
+  gt_source: "MPI Sintel `.dpt` depth, training/final pass + training/depth + training/camdata_left"
+  scene_list_source: >
+    MonST3R `dust3r/eval_metadata.py` `sintel` entry `seq_list`,
+    matched verbatim. 14 dynamic-scene clips.
+  empirical_calibration: >
+    MonST3R Table 3 (Sintel single-frame, Abs Rel 0.345 / δ<1.25 56.5)
+    is the pinning paper cell. Sky-mask via max_depth=70 is
+    paper-protocol; without it Sintel AbsRel is unbounded (1e5 m sky
+    pixels dominate the mean).
+
+# Fields the runner must apply verbatim.
+fixed:
+  dataset:
+    name: sintel
+    kwargs:
+      split: training
+      pass_name: final
+      views_per_sample: 1
+      max_depth: 70
+      scenes:
+        - alley_2
+        - ambush_4
+        - ambush_5
+        - ambush_6
+        - cave_2
+        - cave_4
+        - market_2
+        - market_5
+        - market_6
+        - shaman_3
+        - sleeping_1
+        - sleeping_2
+        - temple_2
+        - temple_3
+  # MonST3R's depth_metric.ipynb Sintel cell uses `post_clip_max=70`
+  # (not used for NYU or Bonn cells). Plumbline's `depth_clip` clips
+  # post-aligned predictions to [lo, hi]; the lower bound is a no-op
+  # for any sane median-aligned prediction so it just expresses the
+  # 70-m upper clip.
+  depth_clip: [0.001, 70.0]
+  max_views: 1
+  tasks: [mono_depth]

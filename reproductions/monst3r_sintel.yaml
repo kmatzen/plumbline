@@ -1,0 +1,50 @@
+# MonST3R single-frame depth on Sintel — MonST3R Table 3 paper target.
+#
+# Targets MonST3R Table 3 "Single-frame Depth Evaluation" (Zhang et
+# al. 2024, arXiv:2410.03825, ICLR 2025 published version page 8),
+# Sintel column, "MonST3R" row: Abs Rel = 0.345 (companion δ<1.25 =
+# 56.5). Verified by direct PDF read 2026-05-26.
+#
+# Protocol (paper §4.2): zero-shot monocular depth, "per-frame median
+# scaling, following Wang et al. 2024c [DUSt3R]". Plumbline's `median`
+# alignment mode is exactly that. The adapter runs MonST3R weights
+# through the DUSt3R-base global alignment (no flow refinement) —
+# Table 3 is single-frame, doesn't use MonST3R's video / flow path —
+# so the base-path adapter is paper-faithful for this cell.
+#
+# Single-frame inference uses MonST3R's demo view-duplicate trick
+# (load the frame twice, run dust3r pair inference, keep view 0).
+
+name: monst3r-sintel
+# `sintel_dust3r_lineage`: 14 dynamic-scene clips, final pass, max_depth=70
+# (sky mask, paper-protocol), per-frame iteration, no spatial crop.
+protocol: sintel_dust3r_lineage
+
+model:
+  name: monst3r
+  kwargs:
+    long_edge: 512
+
+# Per-frame median scaling (paper §4.2). The protocol leaves this to
+# the reproduction so individual lineage adapters can pick their own.
+scale_alignment: median
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.345
+  tolerance_relative: 0.05
+  citation: "Zhang et al. 2024, MonST3R (arXiv:2410.03825), Table 3 (Single-frame Depth Evaluation), Sintel Abs Rel column, 'MonST3R' row = 0.345 (companion δ<1.25 = 56.5; protocol §4.2: 'per-frame median scaling, following Wang et al. 2024c [DUSt3R]'). Verified by direct PDF read 2026-05-26 (ICLR 2025 published version, page 8)."
+  source_confidence: verified_pdf
+
+notes: >
+  Sintel companion to monst3r-nyuv2 and monst3r-kitti (same Table 3,
+  same lineage protocol family). Requires $SINTEL_ROOT containing
+  MPI-Sintel-complete.zip extracted (training/final + training/depth
+  + training/camdata_left), $MONST3R_ROOT (recursive clone of
+  https://github.com/Junyi42/monst3r) for MonST3R's vendored dust3r
+  fork on sys.path; weights pulled from HF
+  Junyi42/MonST3R_PO-TA-S-W_ViTLarge_BaseDecoder_512_dpt on first
+  use. Iterates 14 dynamic-scene clips from MonST3R's eval_metadata.py
+  `sintel` entry; sky pixels (~1e5 m in `.dpt` files) excluded by the
+  loader via max_depth=70 before scoring.

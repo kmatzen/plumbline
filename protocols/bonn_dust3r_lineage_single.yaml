@@ -1,0 +1,68 @@
+# Bonn (single-frame depth) evaluation under the DUSt3R / MonST3R lineage.
+#
+# Sibling of `nyu_dust3r_lineage`, `kitti_dust3r_lineage`, and
+# `sintel_dust3r_lineage`. MonST3R Table 3 ("Single-frame Depth
+# Evaluation") reports Bonn AbsRel 0.076 / δ<1.25 = 93.9 — a *per-frame*
+# evaluation distinct from the Table 2 video-depth path that
+# `cut3r-bonn` and the existing per-sequence Bonn loader mode target.
+#
+# Recipe (matches MonST3R `dust3r/eval_metadata.py` `bonn` entry +
+# `depth_metric.ipynb` Bonn cell):
+#
+# 1. **5 sequences**: `balloon2`, `crowd2`, `crowd3`, `person_tracking2`,
+#    `synchronous` — MonST3R's `seq_list`, used for both Table 2 and
+#    (with per-frame iteration) Table 3.
+# 2. **Per-frame iteration** (`per_frame: true`): one plumbline Sample
+#    per RGB frame instead of one per sequence. The MonST3R adapter
+#    runs each as a single-image inference (view-duplicate trick),
+#    matching the single-frame depth path.
+# 3. **`max_depth = 70`** on the loader — Bonn is indoor (real depths ≤
+#    ~5 m), so 70 is a loose cap that matches MonST3R's eval helper
+#    (`depth_metric.ipynb` Bonn cell uses `max_depth=70`). Effectively
+#    only excludes invalid sentinel (-1) values; equivalent to "any
+#    finite positive GT".
+# 4. **No spatial crop, no post-alignment depth_clip** — same as the
+#    other lineage protocols.
+# 5. **Per-frame median scaling** (MonST3R paper §4.2). Reproduction
+#    YAML sets `scale_alignment: median`.
+#
+# Use `protocol: bonn_dust3r_lineage_single` for MonST3R / DUSt3R /
+# CUT3R single-frame Bonn Table 3 cells. The video-depth Table 2 cell
+# uses the per-sequence loader mode + `align_with_lad2=True` (not
+# covered here).
+
+name: bonn_dust3r_lineage_single
+description: >
+  Bonn RGB-D Dynamic, single-frame depth evaluation under the DUSt3R
+  / MonST3R lineage: 5 sequences (balloon2, crowd2, crowd3,
+  person_tracking2, synchronous), one Sample per RGB frame,
+  max_depth=70, valid-mask = `gt > 0`, no spatial crop.
+
+reference:
+  paper_lineage: >
+    DUSt3R (Wang 2024c, arXiv:2312.14132); CUT3R (Wang 2025,
+    arXiv:2501.12387); MonST3R (Zhang 2024, arXiv:2410.03825).
+  gt_source: "Palazzolo et al. 2019, Bonn RGB-D Dynamic dataset (Asus Xtion, 5000 units/m uint16 depth PNGs)"
+  sequence_list_source: >
+    MonST3R `dust3r/eval_metadata.py` `bonn` entry `seq_list`.
+  empirical_calibration: >
+    MonST3R Table 3 (Bonn single-frame, Abs Rel 0.076 / δ<1.25 93.9)
+    is the pinning paper cell. The Table 2 video-depth Bonn number
+    (0.067 w/ flow-refined GA) is a *different* recipe (per-sequence
+    scale+shift) and is out of scope for this single-frame protocol.
+
+# Fields the runner must apply verbatim.
+fixed:
+  dataset:
+    name: bonn
+    kwargs:
+      per_frame: true
+      max_depth: 70
+      sequences:
+        - balloon2
+        - crowd2
+        - crowd3
+        - person_tracking2
+        - synchronous
+  max_views: 1
+  tasks: [mono_depth]

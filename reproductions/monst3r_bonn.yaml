@@ -1,0 +1,50 @@
+# MonST3R single-frame depth on Bonn — MonST3R Table 3 paper target.
+#
+# Targets MonST3R Table 3 "Single-frame Depth Evaluation" (Zhang et
+# al. 2024, arXiv:2410.03825, ICLR 2025 published version page 8),
+# Bonn column, "MonST3R" row: Abs Rel = 0.076 (companion δ<1.25 =
+# 93.9). Verified by direct PDF read 2026-05-26.
+#
+# Protocol (paper §4.2): zero-shot monocular depth, "per-frame median
+# scaling, following Wang et al. 2024c [DUSt3R]". Plumbline's `median`
+# alignment mode is exactly that. The adapter runs MonST3R weights
+# through the DUSt3R-base global alignment (no flow refinement) —
+# Table 3 is single-frame, doesn't use MonST3R's video / flow path —
+# so the base-path adapter is paper-faithful for this cell.
+#
+# Distinct from `cut3r-bonn` (which targets MonST3R/CUT3R Table 2
+# *video* depth, per-sequence scale, multi-view inference). This cell
+# is per-frame single-image inference using MonST3R's demo
+# view-duplicate trick (load the frame twice, run dust3r pair
+# inference, keep view 0).
+
+name: monst3r-bonn
+# `bonn_dust3r_lineage_single`: 5 sequences (MonST3R's seq_list),
+# per-frame iteration (one Sample = one RGB frame), max_depth=70 (loose
+# Bonn-indoor cap matching MonST3R's eval helper), no spatial crop.
+protocol: bonn_dust3r_lineage_single
+
+model:
+  name: monst3r
+  kwargs:
+    long_edge: 512
+
+# Per-frame median scaling (paper §4.2).
+scale_alignment: median
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.076
+  tolerance_relative: 0.05
+  citation: "Zhang et al. 2024, MonST3R (arXiv:2410.03825), Table 3 (Single-frame Depth Evaluation), Bonn Abs Rel column, 'MonST3R' row = 0.076 (companion δ<1.25 = 93.9; protocol §4.2: 'per-frame median scaling, following Wang et al. 2024c [DUSt3R]'). Verified by direct PDF read 2026-05-26 (ICLR 2025 published version, page 8)."
+  source_confidence: verified_pdf
+
+notes: >
+  Bonn companion to monst3r-nyuv2, monst3r-kitti, monst3r-sintel (same
+  Table 3, same lineage protocol family). Requires $BONN_ROOT
+  containing rgbd_bonn_<name>/ TUM-format sequences (rgb/, depth/,
+  groundtruth.txt). Distinct from cut3r-bonn (Table 2 video, per-
+  sequence scale, multi-view). MonST3R does also publish a video Bonn
+  cell (Table 2: 0.067 w/ flow-refined GA); that's a follow-up gated
+  on the adapter's flow path (out of scope here).
