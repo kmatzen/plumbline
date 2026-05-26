@@ -48,3 +48,17 @@ notes: >
   sequence scale, multi-view). MonST3R does also publish a video Bonn
   cell (Table 2: 0.067 w/ flow-refined GA); that's a follow-up gated
   on the adapter's flow path (out of scope here).
+
+  STATUS — D27 RESOLVED 2026-05-26 (paper-text-vs-code mismatch).
+  Observed AbsRel 0.0654 vs paper 0.076 (14 % off, *better*). Single-
+  record diff against MonST3R's upstream `depth_metric.ipynb` Bonn cell:
+  paper §4.2 text claims "per-frame median scaling, following DUSt3R"
+  but the notebook actually scores via `depth_evaluation(pr, gt,
+  max_depth=70, align_with_lad2=True)` — per-sequence scale+shift LAD2
+  (Adam optimization, init at median-scale), with valid-pixel-weighted
+  mean across the 5 sequences. Plumbline implements the paper-text
+  recipe (per-frame median scale-only); paper number 0.076 reflects the
+  upstream code recipe. Same shape as D9 (Marigold checkpoint default)
+  and D17/D18 (GeoWizard best-of-N seeds) — `paper_match: no` is an
+  explained protocol delta, not a model/adapter bug. See
+  docs/DISCREPANCIES.md D27.
