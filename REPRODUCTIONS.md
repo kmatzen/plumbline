@@ -102,6 +102,22 @@ zero GPU validation as of 2026-05-03. Treat them as untested infra
 until the GPU run lands. DA3 has an informational companion
 (`da3_co3dv2_pose.yaml`) with no paper target.
 
+**CO3Dv2 disk gate cleared 2026-05-26 (selective fetch):** the raw
+CO3Dv2 distribution is ~4.3 TB (276 zips × ~18 GB avg) — well past the
+200 GB vast.ai box's budget and the historical block on these jobs. The
+VGGT/MASt3R eval protocol only needs 4 100 JPEGs (41 cats × 10 seq × 10
+frame) plus per-category metadata, so `scripts/co3dv2_prefetch.py` does
+a surgical HTTP-Range fetch: download each `{cat}_000.zip` metadata
+chunk (~30-90 MB), replicate the loader's `seed=0` selection algorithm
+to enumerate the exact JPEGs needed, then `zipfile.ZipFile` over a
+custom `RangeHTTPFile` reads each individual JPEG's local file header +
+compressed bytes out of the per-category big chunks. End-to-end verified
+on `apple` (100 JPEGs, 76 MB, loader produces correct 10×10 Samples).
+Full-set estimate: **~3-4 GB on disk, ~60 min one-time fetch**. The
+three Tier-1 jobs (`vggt-co3dv2-pose`, `mast3r-co3dv2-pose`,
+`da3-co3dv2-pose`) all share the staged set and now have
+`data_footprint_gb: 4` in `gpu_queue.yaml`.
+
 **Off-paper / upstream-blocked cells** (each root-caused in
 `docs/DISCREPANCIES.md`):
 
