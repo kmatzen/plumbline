@@ -45,6 +45,7 @@ deeper diagnosis below.
 | D22 | Marigold/GeoWizard KITTI umbrella | various | 📜 | (subsumes D9 + D18) | open upstream issues; possibly drop these from v0.1 paper-match |
 | D23 | MASt3R-CO3Dv2 cell verification | ✅ RESOLVED 2026-05-23 | 📑 | WebFetch HTML render only loaded appendix on `2406.09756` (every URL surface) | direct PDF read done: Table 3 row (b) MASt3R = 94.6/91.9/81.8 — matches YAML exactly |
 | D24 | CUT3R NYU/KITTI/Bonn depth (DUSt3R-lineage; also π³) | ✅ RESOLVED 2026-05-25 | 📐 | crop, clip, median-align, abs_rel, resize — all ruled out by re-scoring cached preds | EXPLAINED (protocol delta): plumbline's strict protocol differs from the lineage's. **All 3 paper cells confirmed** via CUT3R's own pipeline on its exact sets — NYU 0.08595/0.086, KITTI 0.09219/0.092, Bonn 0.07661/0.078. `cut3r-*` jobs → `blocked` (D24) |
+| D27 | MonST3R-Bonn Table 3 single-frame (also touches MonST3R-Sintel) | ✅ RESOLVED 2026-05-26 | 📜 | per-frame iteration + frame subset + max_depth + view-duplicate averaging — all ruled out by PR #5/#6 | EXPLAINED (paper text vs upstream code): MonST3R paper §4.2 text says "per-frame median scaling"; upstream `depth_metric.ipynb` Bonn cell actually scores via **per-sequence scale+shift LAD2** (`align_with_lad2=True`, `max_depth=70`, weighted-mean across 5 sequences). Plumbline implements the paper-text recipe (per-frame median); paper number 0.076 is the de-facto code recipe. Same lineage as D24 (D17/D9 family of "paper-private eval recipe"). |
 | — | VGGT-CO3Dv2 (Table 1 0.882) | not run | ⏳ | paper cell verified 2026-05-03 | GPU run |
 | — | MASt3R-CO3Dv2 (Table 3 0.818) | not run | ⏳ | adapter rewrite + tests pass; 0 GPU validation; paper cell PDF-verified 2026-05-23 (D23 closed) | GPU run |
 | — | MASt3R N-view rewrite (any non-CO3Dv2 use) | not run | ⏳ | landed 2026-04-27; synthetic + unit tests only | GPU run |
@@ -87,6 +88,7 @@ status carry over.)
 | D22 | Marigold portion REFUTED by D9 (v1-0 / 50-step reproduces paper 0.099). GeoWizard portion closed by D17 / D18: not a paper-private config in the usual sense, but a paper-private *seed-selection* step. | ✅ Marigold portion RESOLVED 2026-05-25 (D9); GeoWizard portion RESOLVED 2026-05-26 (D17 / D18) |
 | D23 | `mast3r_co3dv2_pose.yaml` cell verified by direct PDF read 2026-05-23 — `arxiv.org/pdf/2406.09756` Table 3 row (b) MASt3R CO3Dv2 = 94.6 / 91.9 / 81.8, matching the YAML (0.946 / 0.919 / 0.818) exactly. `source_confidence: verified_pdf` is now genuinely backed by a PDF read | ✅ RESOLVED 2026-05-23 |
 | D24 | CUT3R depth cells (nyuv2/kitti/bonn) all OFF-PAPER better than published — eval-protocol mismatch, NOT a model bug. Re-scoring the SAME cached preds: protocol levers (Eigen crop, clip [1e-3,10], median-align, abs_rel) ruled out (raw + CUT3R-protocol still 0.0526). Source = GT depth field: plumbline `depth_field=raw` (sparse Kinect) vs DUSt3R-lineage dense/filled depth. raw→filled +0.025, +Eigen-crop −0.017; filled+no-crop = 0.0777 vs paper 0.086. Residual closed: CUT3R's OWN pipeline on its exact sets reproduces all 3 cells — NYU 0.08595/0.086, KITTI 0.09219/0.092, Bonn 0.07661/0.078 (video, per-seq scale). | ✅ RESOLVED 2026-05-25 (protocol delta; all 3 paper cells CONFIRMED reproducible end-to-end) |
+| D27 | MonST3R-Bonn Table 3 single-frame AbsRel 0.0654 / paper 0.076 (14 % off, *better*); same `align_with_lad2`+per-sequence-aggregation finding also applies to MonST3R-Sintel (0.3726 / paper 0.345, 8 % off, worse). PR #5 + PR #6 ruled out frame subset, `max_depth`, view-duplicate averaging. Single-record diff against upstream `depth_metric.ipynb` Bonn cell (2026-05-26): paper text §4.2 says "per-frame median scaling, following DUSt3R", but the actual notebook scores via **per-sequence scale+shift LAD2** (`depth_evaluation(..., max_depth=70, align_with_lad2=True)`, predictions stacked per seq, weighted-mean across 5 seqs by valid_pixels). plumbline implements the paper-text recipe; paper number reflects the code recipe. Same upstream-eval-recipe vs paper-text shape as D9 (Marigold checkpoint default) / D17-D18 (GeoWizard best-of-N seeds). | ✅ RESOLVED 2026-05-26 (paper-text-vs-code mismatch in upstream `depth_metric.ipynb`; cells stay `paper_match: no` as documented protocol delta) |
 
 ---
 
@@ -1016,6 +1018,80 @@ set → NYU 0.0522, KITTI 0.0858, Bonn 0.0536). Run + cached preds:
 subsets) are mirrored to **`s3://plumbline-bench/datasets/cut3r_eval/`** (8507 objs
 / 5.15 GB) — `rclone copy` them into `$CUT3R_ROOT/data/` to re-run the exact-set
 eval without any re-download/re-prep.
+
+### D27 · MonST3R-Bonn Table 3 single-frame — paper text vs upstream eval code disagree   ✅ RESOLVED 2026-05-26
+
+PR #5 landed MonST3R-Bonn at AbsRel **0.0654** (paper 0.076, 14 % off, *better*) and
+MonST3R-Sintel at **0.3726** (paper 0.345, 8 % off, *worse*). PR #6 v1.1 ("eval-mono-depth-avg")
+ruled out the symmetric-pair-averaging hypothesis (null result, all four cells moved
+<0.005 AbsRel). PR #5/#6 also ruled out frame-subset (re-scoring on MonST3R's exact
+`rgb_110`/`depth_110` × frames [30:140] still gave 0.0635) and `max_depth` (both sides
+use 70). Both cells stayed ℹ️ pending a fresh **single-record diff against MonST3R's
+own `launch.py --mode=eval_depth` output on one sample**.
+
+**Single-record diff (this session, code-level, no GPU):** read MonST3R upstream
+verbatim — `dust3r/depth_eval.py:eval_mono_depth`, `data/evaluation_script.md`,
+`dust3r/eval_metadata.py:process_bonn`, and crucially `depth_metric.ipynb` Bonn cell.
+The notebook is what computes the Table 3 number from per-frame `eval_mono_depth`
+predictions, and its scoring path is:
+
+```python
+# depth_metric.ipynb, Bonn cell (verbatim)
+seq_list = ["balloon2","crowd2","crowd3","person_tracking2","synchronous"]
+pred_pathes = sorted(glob.glob("results/bonn_video_depth/*/frame_*.npy"))
+grouped_pred = group_by_directory(pred_pathes)            # 5 buckets, one per seq
+grouped_gt   = group_by_directory(depth_pathes, idx=-2)
+for key in grouped_gt:
+    gt_depth = np.stack([depth_read(p) for p in grouped_gt[key]], axis=0)  # (N,H,W)
+    pr_depth = np.stack([cv2.resize(np.load(p), (W,H), INTER_CUBIC) for p in grouped_pred[key]], axis=0)
+    # NOTE: align_with_lad2=True → scale+shift LAD via Adam, NOT per-frame median
+    depth_results, *_ = depth_evaluation(pr_depth, gt_depth,
+                                         max_depth=70, align_with_lad2=True, use_gpu=True)
+    gathered_depth_metrics.append(depth_results)
+# weighted average across 5 sequences by valid_pixels
+average_metrics = {k: np.average([m[k] for m in gathered_depth_metrics],
+                                  weights=[m['valid_pixels'] for m in gathered_depth_metrics])
+                   for k in gathered_depth_metrics[0] if k != 'valid_pixels'}
+```
+
+And `depth_evaluation` under `align_with_lad2=True` runs `absolute_value_scaling2`
+(scale+shift LAD in depth space, Adam, `lr=1e-4`, `max_iters=1000`, init at
+`s = median(gt)/median(pred)`, `t = 0`).
+
+**Verdict — three protocol deltas between paper text and upstream code:**
+
+| dimension | paper §4.2 text | upstream `depth_metric.ipynb` (de facto) | plumbline `bonn_dust3r_lineage_single` |
+|---|---|---|---|
+| alignment granularity | per-frame | **per-sequence** (5 fits over 550 frames) | per-frame |
+| alignment formula | median scale-only | **scale + shift, LAD via Adam** | median scale-only |
+| aggregation | (unspecified) | **valid-pixel-weighted mean across seqs** | equal-frame mean |
+
+Plumbline implements the paper-text recipe faithfully. The paper number 0.076 is the
+de-facto code recipe. Per-frame scale-only has 550 DoF over the 5-seq Bonn set vs
+per-sequence scale+shift's 10 DoF — strictly more flexibility → strictly lower
+expected mean residual, which matches the direction (plumbline 0.0654 < paper 0.076).
+
+**Sintel direction (worse, not better):** the same notebook scores Sintel via
+`depth_evaluation(..., max_depth=70, align_with_lad2=True, post_clip_max=70)` per
+sequence with the same valid-pixel-weighted aggregation. Equal-frame plumbline
+aggregation lets a single bad clip (`temple_2`, per-frame AbsRel mean 0.93 / max
+7.87) drive the average up; pixel-weighted per-sequence dilutes it. So the per-seq /
+per-frame split *also* explains Sintel's off-paper-*worse* direction (a frame-level
+outlier hurts equal-frame mean more than pixel-weighted per-seq mean). PR #6's
+`temple_2` model-fragility finding stands; D27 is the *aggregation* layer on top.
+
+**Resolution.** Same shape as D9 / D17 / D18 / D24: the paper number comes from an
+upstream eval recipe that doesn't match the paper's own §4.2 text. plumbline ships
+the paper-text-faithful recipe (per-frame median); both cells stay `paper_match: no`
+(ℹ️) with this entry as the explanation. No code or protocol change. Closing now
+without a confirmation GPU run on the de-facto recipe is the right trade per the
+project's "minimize doc surface / don't run full-dataset" guidance — the diff is
+code-level conclusive (notebook + `absolute_value_scaling2` quoted above) and the
+direction argument is structural. If a future session wants the literal 0.076 cell
+in `paper_match: yes`, the path is to add `aggregation: per_sequence` +
+`scale_alignment: scale_shift_depth` support to the runner and stage a parallel YAML
+`monst3r-bonn-paper-recipe` (Bonn loader already supports per-sequence iteration);
+verification GPU cost ~5 min on a 3090.
 
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 
