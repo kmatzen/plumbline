@@ -45,7 +45,7 @@ cells are now ℹ️ instead of ✅.
 | **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ⌛ AUC@30 target **0.818** (Table 3 verified_pdf, awaiting GPU run) | — |
 | **VGGT** | — | — | — | ⚠️ 0.642 m vs 0.709 _(D4 per-view-masked landed, 9.4% under paper on 3-scene; D10 needed for full split)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ⌛ AUC@30 target **0.882** (Table 1 verified_pdf, awaiting GPU run) | — |
 | **CUT3R** _(video + unordered)_ | ℹ️ **0.0522** vs 0.086 _(better — D24 protocol delta: strict raw+crop vs lineage filled+no-crop; model correct, not a paper-match)_ | ℹ️ **0.0858** vs 0.092 _(better — D24 protocol delta: Eigen-652+Garg vs lineage val_selection_cropped)_ | — | — | — | ℹ️ recurrent/online — handles ordered video & unordered sets | — |
-| **MonST3R** _(dynamic / video, base path)_ | ✅ **0.0894** vs 0.091 _(1.7% off, Table 3 single-frame, `nyu_dust3r_lineage` protocol; verified 2026-05-26)_ | — | — | — | — | — | — |
+| **MonST3R** _(dynamic / video, base path)_ | ✅ **0.0894** vs 0.091 _(1.7% off, Table 3 single-frame, `nyu_dust3r_lineage` protocol; verified 2026-05-26)_ | ✅ **0.0980** vs 0.101 _(2.9% off, Table 3 single-frame, `kitti_dust3r_lineage` protocol — 1269-frame gathered set, 13 val drives × ≤110 frames; verified 2026-05-26)_ | — | — | — | — | — |
 
 **Video benchmark (new 2026-05-23):** the **Bonn RGB-D Dynamic** loader
 (`bonn`, one-sample-per-sequence) closes the runnable-video gap.
@@ -58,11 +58,12 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 
 ### Paper-match count
 
-**17 ✅ mono-depth cells** with `source_confidence: verified_pdf`:
+**19 ✅ mono-depth cells** with `source_confidence: verified_pdf`:
 
 - NYU (9): DA-V2 S/B/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3, **MonST3R** (lineage protocol, 2026-05-26)
 - KITTI Eigen+Garg (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
 - KITTI MoGe-eval (2): MoGe-1 ViT-L (D8 close), DA-V2 ViT-L (2026-04-27)
+- KITTI dust3r-lineage (1): **MonST3R** (lineage protocol, 2026-05-26)
 - DIODE (2): MoGe-1 ViT-L, DA-V2 ViT-L (FoV-warp loader, 2026-04-26/27)
 
 Each cell is verified against the source PDF (table + col + row) per

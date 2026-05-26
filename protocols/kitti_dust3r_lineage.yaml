@@ -1,0 +1,80 @@
+# KITTI evaluation under the DUSt3R / MonST3R / CUT3R lineage.
+#
+# Sibling of `nyu_dust3r_lineage`. The DUSt3R-family of papers reports
+# KITTI under a non-Eigen recipe inherited from DUSt3R's eval and
+# preserved verbatim through MonST3R, CUT3R, π³, etc.:
+#
+# 1. **Image set = the prepared "gathered" subset** of KITTI's
+#    annotated-val drives, NOT Monodepth2's 652-frame Eigen split.
+#    MonST3R's `datasets_preprocess/prepare_kitti.py` defines it by
+#    sorting `data/kitti/val/<drive>/proj_depth/groundtruth/image_02`
+#    and taking the first ≤110 frames per drive. With 13 val drives
+#    × ≤110 frames this yields ≤1269 image/GT pairs. The same set
+#    underpins CUT3R's `data/kitti/depth_selection/val_selection_cropped/
+#    {image_gathered,groundtruth_depth_gathered}` paths.
+# 2. **No spatial crop** — neither Garg nor Eigen is applied. The
+#    lineage's eval helper (`dust3r/depth_eval.py:depth_evaluation`)
+#    masks only by `gt > 0` and `gt < max_depth`.
+# 3. **`max_depth = None`** for KITTI (the MonST3R `depth_metric.ipynb`
+#    KITTI cell explicitly passes `max_depth=None`), so the valid mask
+#    is just `gt > 0` — no clip to [1e-3, 80] m.
+# 4. **Per-frame median scaling** (paper §4.2: "the single-frame
+#    evaluation adopts per-frame median scaling, following Wang et al.
+#    2024c [DUSt3R]"). The reproduction YAML sets `scale_alignment:
+#    median`; this protocol does not force it.
+#
+# Use `protocol: kitti_eigen_garg` for adapters whose paper-table cells
+# are under Monodepth2-Eigen + Garg-crop + clip[1e-3,80] (DA-V2,
+# Metric3D-v2, MoGe, Depth Pro, DA3); use `protocol: kitti_eigen_crop`
+# for Marigold / MoGe / GeoWizard; use this lineage protocol for
+# DUSt3R-family adapters (MonST3R, CUT3R, π³, DUSt3R, MASt3R, Spann3R,
+# VGGT when reporting Table 3-style single-frame depth).
+#
+# Empirical calibration (2026-05-25, exact-set reproduction logged in
+# `docs/DISCREPANCIES.md` D24): CUT3R's own eval on its prepared
+# gathered set scored AbsRel 0.09219 vs paper 0.092 (0.2 %), confirming
+# the gathered-1269 image selection is the lineage cell. This protocol
+# materializes the *same* selection from the standard KITTI raw +
+# data_depth_annotated tree (no per-paper prepared bundle needed).
+
+name: kitti_dust3r_lineage
+description: >
+  KITTI under the DUSt3R / MonST3R / CUT3R-family eval protocol: the
+  13 annotated-val drives, first ≤110 frames per drive (≤1269 total),
+  left rectified camera (image_02), uint16 annotated GT (/256 → m),
+  no spatial crop, valid-mask = `gt > 0`, no post-alignment clip.
+
+reference:
+  paper_lineage: >
+    DUSt3R (Wang 2024, arXiv:2312.14132); MASt3R (Leroy 2024,
+    arXiv:2406.09756); CUT3R (Wang 2025, arXiv:2501.12387); MonST3R
+    (Zhang 2024, arXiv:2410.03825); Spann3R, π³, VGGT.
+  gt_source: "Uhrig et al. 2017, KITTI Depth-Prediction Benchmark (annotated dense depth, data_depth_annotated.zip)"
+  split_source: >
+    MonST3R `datasets_preprocess/prepare_kitti.py`: enumerate
+    `data/kitti/val/<drive>/proj_depth/groundtruth/image_02/*.png`,
+    sort, take first ≤110 per drive. Equivalent to scanning
+    plumbline's `depth_annotated/val/<drive>_sync/proj_depth/groundtruth/
+    image_02/` with `depth_split=val` and `max_frames_per_drive=110`.
+  empirical_calibration: >
+    CUT3R's own eval on its prepared gathered set scored AbsRel
+    0.09219 vs CUT3R paper 0.092 (0.2 %) — see D24 in
+    `docs/DISCREPANCIES.md`. plumbline reproduces the same image set
+    from the standard KITTI tree (no prepared-bundle download
+    needed).
+
+# Fields the runner must apply verbatim.
+fixed:
+  dataset:
+    name: kitti
+    kwargs:
+      depth_split: val
+      max_frames_per_drive: 110
+      camera: image_02
+      apply_garg_crop: false
+      apply_eigen_crop: false
+      apply_kitti_bm_crop: false
+  # No depth_clip — the lineage's eval helper doesn't clip
+  # (`max_depth=None`, valid mask = `gt > 0`).
+  max_views: 1
+  tasks: [mono_depth]
