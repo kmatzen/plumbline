@@ -228,3 +228,47 @@ def _ensure_monst3r_on_path() -> None:
     root = os.environ.get("MONST3R_ROOT", "/workspace/deps/monst3r")
     if os.path.isdir(root) and root not in sys.path:
         sys.path.insert(0, root)
+    _shim_sam2_for_monst3r()
+
+
+def _shim_sam2_for_monst3r() -> None:
+    """Stub the ``sam2`` package so MonST3R's vendored dust3r can import.
+
+    MonST3R's ``dust3r/cloud_opt/optimizer.py`` ships a *module-level*
+    ``from sam2.build_sam import build_sam2_video_predictor``. The
+    symbol is only invoked inside ``refine_motion_mask_w_sam2()`` —
+    part of the motion-mask refinement path that the base-aligner
+    adapter (this one) never triggers. Installing sam2 + its
+    checkpoint file (~2 GB) just to import a never-called function
+    isn't worth it; instead we register a no-op ``sam2`` module in
+    ``sys.modules`` before the upstream import resolves. If the
+    motion-mask path ever runs, calling
+    ``build_sam2_video_predictor`` from the stub raises a clear
+    ``ImportError`` pointing at the real install.
+
+    Idempotent; no-op if a real ``sam2`` is already importable.
+    """
+    if "sam2" in sys.modules:
+        return
+    try:
+        import sam2  # noqa: F401
+        return
+    except ImportError:
+        pass
+
+    import types
+
+    sam2_pkg = types.ModuleType("sam2")
+    sam2_pkg.__path__ = []  # mark as a package so `from sam2.X import` works
+    build_sam_mod = types.ModuleType("sam2.build_sam")
+
+    def _build_sam2_video_predictor(*args: object, **kwargs: object) -> object:
+        raise ImportError(
+            "sam2 is stubbed by plumbline (motion-mask refinement is out "
+            "of scope for the base MonST3R adapter). Install MonST3R's "
+            "third_party/sam2 + checkpoint if you need refine_motion_mask_w_sam2()."
+        )
+
+    build_sam_mod.build_sam2_video_predictor = _build_sam2_video_predictor  # type: ignore[attr-defined]
+    sys.modules["sam2"] = sam2_pkg
+    sys.modules["sam2.build_sam"] = build_sam_mod
