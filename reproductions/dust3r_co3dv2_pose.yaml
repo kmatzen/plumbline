@@ -1,0 +1,87 @@
+# DUSt3R N-view pose on CO3Dv2 — MASt3R Table 3 paper-match
+#
+# Targets MASt3R Table 3 (Leroy et al. 2024, arXiv:2406.09756, ECCV
+# 2024), CO3Dv2 column block, DUSt3R row: **RRA@15 = 0.943, RTA@15
+# = 0.884, mAA(30) = 0.774**.
+#
+# Verified by direct PDF read 2026-05-27 (same table previously
+# verified for the MASt3R row in `mast3r_co3dv2_pose.yaml`, see
+# D23 / 2026-05-23). Table 3 is titled "Multi-view pose regression
+# on the CO3Dv2 and RealEstate10K with 10 random frames"; DUSt3R is
+# included as the immediate baseline above MASt3R, both evaluated
+# under the same protocol.
+#
+# Why MASt3R's table rather than DUSt3R's own paper:
+# DUSt3R's own paper (arXiv:2312.14132) also evaluates CO3Dv2 pose,
+# but plumbline's `Co3Dv2VGGTPoseEvalLoader` was designed against the
+# **MASt3R Table 3 / PoseDiffusion** protocol (10 random frames per
+# seq, all 45 pairs, 41 SEEN categories, seed=0, no GT focals) — the
+# same loader that landed the MASt3R and VGGT cells. Pinning to the
+# same table+protocol that already has one verified row (MASt3R 0.818)
+# keeps the cells commensurable.
+#
+# Adapter:
+# `DUSt3RAdapter` (new) wraps the original DUSt3R checkpoint via the
+# shared `_run_mast3r` helper — same dust3r `PointCloudOptimizer`
+# (`init=mst, niter=300, schedule=linear, lr=0.01`) that drives the
+# MASt3R cell. The only differences from MASt3R are the checkpoint
+# (`naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt`) and the model class
+# (`AsymmetricCroCo3DStereo` vs `AsymmetricMASt3R`).
+
+name: dust3r-co3dv2-pose
+protocol: co3dv2_vggt_pose
+
+model:
+  name: dust3r
+  kwargs:
+    # PCO hyperparams match the MASt3R adapter defaults / dust3r quick-
+    # start: ga_niter 300, ga_lr 0.01, ga_schedule "linear", ga_init
+    # "mst", scene_graph "complete" (45 pairs from 10 frames).
+    {}
+
+dataset:
+  name: co3dv2-vggt-pose-eval
+  kwargs:
+    # Identical to mast3r_co3dv2_pose.yaml + vggt_co3dv2_pose.yaml so
+    # the three cells are directly comparable.
+    num_frames: 10
+    min_num_images: 50
+    min_quality: 0.5
+    fast_eval: true
+    sequences_per_category: 10
+    seed: 0
+
+tasks: [pose]
+scale_alignment: none
+pointcloud_alignment: none
+max_views: 10
+device: cuda:0
+
+pose_translation_antipodal: true
+pose_auc_mode: vggt_co3d_histogram
+pose_auc_thresholds: [3.0, 5.0, 15.0, 30.0]
+# RRA@15 = 0.943, RTA@15 = 0.884 — both reported in the same paper row.
+pose_acc_thresholds: [5.0, 15.0]
+
+paper_reference:
+  primary_metric: pairwise_pose_auc@30
+  value: 0.774
+  tolerance_relative: 0.05
+  citation: "Leroy et al. 2024, MASt3R (arXiv:2406.09756, ECCV 2024), Table 3 (Multi-view pose regression on CO3Dv2 / RealEstate10K, 10 random frames), CO3Dv2 column block, DUSt3R row: mAA(30) = 77.4 → AUC@30 0.774. Companion cells (same row): RRA@15 = 94.3 → 0.943, RTA@15 = 88.4 → 0.884. Verified by direct PDF read 2026-05-27 (same table as `mast3r_co3dv2_pose.yaml`, D23 lineage)."
+  source_confidence: verified_pdf
+
+notes: >
+  Companion metrics expected from Table 3 DUSt3R row: RRA@15 = 0.943,
+  RTA@15 = 0.884. Tolerance ±5 % matches the MASt3R / VGGT cells on
+  the same protocol.
+
+  This is the third method on the `Co3Dv2VGGTPoseEvalLoader` protocol
+  (after VGGT at 0.8964 / paper 0.882 and MASt3R at 0.7960 / paper
+  0.818). All three share the same prefetched ~3 GB CO3Dv2 subset
+  staged via `scripts/co3dv2_prefetch.py`.
+
+  Adapter routing: N=10 views → `_run_mast3r` shared helper →
+  dust3r's `PointCloudOptimizer` over the complete (45-pair) graph,
+  300 iters Adam @ lr 0.01 with MST init. Same apparatus as the
+  MASt3R cell; only the checkpoint differs. Run wall expected
+  ~3-4 h (same as MASt3R since PCO compute dominates).

@@ -24,6 +24,7 @@ _BUILTIN_ADAPTER_MODULES: tuple[str, ...] = (
     "plumbline.models.depth_anything_v2",
     "plumbline.models.metric3d_v2",
     "plumbline.models.mast3r",
+    "plumbline.models.dust3r",
     "plumbline.models.vggt",
     "plumbline.models.depth_anything_3",
     "plumbline.models.moge",
