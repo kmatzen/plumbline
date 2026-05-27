@@ -45,7 +45,7 @@ jobs:
       paper-match in plumbline; v0.1 acceptance criterion #2 met.
 
   - name: mast3r-co3dv2-pose
-    status: pending
+    status: done
     priority: 2
     paper_target: "MASt3R Table 3 — CO3Dv2 mAA(30) = 0.818, RRA@15 0.946, RTA@15 0.919 (verified_pdf 2026-05-23, direct PDF read; D23 resolved)"
     primary_metric: pairwise_pose_auc@30
@@ -56,13 +56,23 @@ jobs:
     extras: >
       MASt3R: git clone --recursive https://github.com/naver/mast3r
       $HOME/deps/mast3r; uv pip install roma scikit-learn trimesh;
-      export MAST3R_ROOT=$HOME/deps/mast3r
+      export MAST3R_ROOT=$HOME/deps/mast3r. For practical wall-time also
+      build the curope CUDA ext in MASt3R's dust3r fork
+      ($MAST3R_ROOT/dust3r/croco/models/curope; python setup.py
+      build_ext --inplace, CUDA_HOME=/usr/local/cuda-12.1). Without it,
+      MASt3R falls back to a pytorch RoPE2D and per-sample wall climbs
+      from ~50 s to ~70 s.
     notes: >
-      N=10 dispatches to dust3r PointCloudOptimizer (init=mst,
-      niter=300). ~20 s/sample × 410 ≈ 2.5 h on a 3090. Shares the
-      co3dv2-vggt-pose-eval loader with the VGGT job, so stage CO3Dv2
-      once (via scripts/co3dv2_prefetch.py, ~3-4 GB selective fetch)
-      and run both back-to-back.
+      ✅ MATCH 2026-05-26 (RTX 3090, ~3.2 h cumulative wall, includes
+      one interrupted-by-SSH-drop restart that resumed cleanly from
+      the prediction cache): observed mAA(30) **0.7960** vs paper
+      0.818 (−2.7 % under, within ±5 % tolerance); companion
+      pairwise_RRA@15 = 0.9708. 410 samples (41 SEEN cats × 10 seq ×
+      10 frame, seed=0), dust3r PointCloudOptimizer (init=mst,
+      niter=300, lr=0.01). Shares the staged CO3Dv2 set with
+      vggt-co3dv2-pose (PR #10) via scripts/co3dv2_prefetch.py.
+      Result JSON: /root/runs/mast3r_co3d_20260526T225340Z.json.
+      v0.1 acceptance criterion #2 seconded (VGGT was first, PR #10).
 
   # ----- D24 RESOLVED 2026-05-25: protocol deltas, all 3 paper cells CONFIRMED via
   # exact-set reproduction (CUT3R's own eval). Blocked = nothing left to run; the
