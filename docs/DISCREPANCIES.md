@@ -1108,17 +1108,96 @@ shard; a proper fix hashes the first-sample tensor shape + a small
 byte sample into the cache key, or invalidates on `dataset.__class__`
 fingerprint changes.
 
-### D10 · VGGT-ETH3D 3-scene vs 13-scene split   📅 DEFERRED
+### D10 · VGGT-ETH3D 3-scene vs 13-scene split   🔬 INVESTIGATED 2026-05-27
 
-Plumbline's YAML runs courtyard + delivery_area + facade (3 scenes);
-paper's Table 3 Overall 0.709 is the 13-scene cross-scene mean. A
-3-scene subset genuinely can't match the 13-scene aggregate.
+**Closed end-to-end: full 13-scene run completed, paper number not
+reproduced (+23.5 % over), but the structural reason is now visible
+and is one scene, not a protocol gap.**
 
-Resolution: (a) stage remaining 10 scenes (+~14 GB data) and run full
-split; (b) extract per-scene paper numbers from VGGT supplementary;
-or (c) demote to informational with larger tolerance. Earlier audit
-intended (c) — `tolerance_relative: 1.0` encoded that before the
-repo-wide 5 % cap landed.
+Plumbline's prior YAML ran only courtyard + delivery_area + facade
+(3 of 13). 3-scene subset Overall 0.642 was 9.4 % under paper 0.709
+— but that "closer than expected" was misleading: it happened to
+exclude the scenes where plumbline diverges.
+
+Full 13-scene run (PID 15445, vast.ai RTX 3090, 363 8-view windows,
+~2 h wall):
+
+    scene           Acc      Comp     Overall  Overall_med
+    kicker          0.102    0.052    0.077    0.043
+    office          0.075    0.101    0.088    0.049
+    pipes           0.122    0.078    0.100    0.058
+    electro         0.476    0.166    0.321    0.129
+    relief_2        0.583    0.403    0.493    0.326
+    facade          0.770    0.299    0.535    0.151
+    courtyard       0.469    0.736    0.603    0.262
+    relief          0.644    0.579    0.612    0.400
+    meadow          0.992    0.556    0.774    0.532
+    delivery_area   0.513    1.065    0.789    0.380
+    terrace         0.795    0.813    0.804    0.479
+    playground      0.221    1.759    0.990    0.574
+    terrains        0.208   10.185    5.197    5.082   ← outlier
+    -----------------------------------------------------
+    aggregate       0.459    1.292    0.875    0.651
+    paper Table 3   0.901    0.518    0.709    (no median)
+
+**Headline**: Overall 0.875 vs paper 0.709 = **+23.5 % MISMATCH**.
+
+**But it's one scene.** `terrains` Completeness is 10.18 m, 13× the
+average of every other scene (median 0.56) and 20× the paper mean.
+Excluding `terrains`, the 12-scene mean Overall is **0.515**
+(plumbline) vs paper 0.709 — i.e., plumbline is 27 % *tighter* than
+paper across the other 12 scenes. The aggregate is dominated by one
+pathological case.
+
+**Plumbline-tighter pattern is consistent.** Accuracy across all 13
+scenes: plumbline 0.459 vs paper 0.901 (49 % tighter); Completeness
+(without terrains): plumbline ~0.55 vs paper 0.518 (6 % looser). The
+"plumbline tighter on Acc, slightly looser on Comp" shape that
+appeared in the 3-scene subset (D4) replicates across the full
+split — modulo the terrains outlier.
+
+**What's terrains-specific.** GT files (scan1.ply, scan2.ply,
+scan_alignment.mlp) are present, same structure as working scenes.
+Acc is 0.21 (well-behaved); only Comp blows up to 10 m. The
+asymmetry is "GT_point → nearest pred_point" diverges, which means
+either (a) pred point cloud is missing large regions of the scene
+that GT covers, or (b) there's a per-scene scale mismatch that
+ICP-per-window aligned poorly. The 5.2 m median (not just mean)
+confirms it's not a tail-of-tail outlier within terrains but a
+whole-scene shift.
+
+**Resolution path**: filed as ⚠️ off-paper with documented terrains
+outlier in REPRODUCTIONS.md. Two follow-ups left for a future
+session:
+- (a) Per-window ICP-alignment dump for terrains — confirm whether
+  ICP is mis-aligning the predicted scene relative to GT scan.
+- (b) Compare to paper's own per-scene numbers if VGGT authors
+  publish them (currently unavailable per the 2026-05-27
+  supplementary search — paper publishes only the 13-scene mean).
+
+The 3-scene subset record stays in `vggt_eth3d_subset_chamfer.yaml`
+as an informational regression detector. Result JSON archived at
+`docs/runs/plumb_vggt_eth3d_13_20260527T163122Z.json`.
+
+### D10b · ETH3D loader stale manifest cache   🔬 FIXED 2026-05-27
+
+Discovered during D10's 13-scene run: the ETH3D loader's manifest
+cache (`<root>/.plumbline_manifest/eth3d_train_vps<N>_v2.jsonl`) is
+keyed only by split + views_per_sample. The first 13-scene run
+silently used the prior 3-scene manifest because the cache file
+predated the 10 new scene downloads. The run reported `n_evaluated:
+137` and 3 unique scene_ids despite the YAML listing 13 scenes — the
+`scenes:` whitelist filtered records *after* the cached load, so a
+manifest written when only 3 scenes existed on disk produced exactly
+those 3 records regardless of what was newly downloaded.
+
+Wasted ~40 min of GPU time before the cause was identified
+(`jq -r .scene` on the manifest revealed only 3 entries).
+
+Manual workaround: delete the manifest, re-run. Code fix to
+auto-invalidate when on-disk scene-dir set differs from manifest's
+scene set lands with this PR in
+`src/plumbline/datasets/eth3d.py:ETH3DDataset.__init__`.
 
 ### D17 · GeoWizard-NYU — RESOLVED: paper number is best-of-N seeds, not a fixed-seed metric   ✅ RESOLVED 2026-05-26
 

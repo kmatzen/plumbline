@@ -121,11 +121,35 @@ class ETH3DDataset(Dataset):
         # so a prior single-scene run left a cache that silently hid other
         # scenes from later multi-scene calls. Filename bumped to _v2 to
         # invalidate those stale caches on upgrade.
+        #
+        # D10b (2026-05-27): even with the "scan(None)" behavior, the cache
+        # could go stale if new scene dirs are added to disk *after* the
+        # manifest is written — e.g. a 3-scene staging followed by a
+        # 10-scene top-up. We now compare the on-disk scene-dir set to the
+        # manifest's scene set; if disk has any scene that the manifest
+        # doesn't, re-scan + re-save. (Stale entries — manifest scenes
+        # that no longer exist on disk — are tolerated; they yield zero
+        # samples and don't otherwise affect downstream code.)
         manifest_path = (
             self.root / ".plumbline_manifest" / f"eth3d_{split}_vps{self.views_per_sample}_v2.jsonl"
         )
+        on_disk_scenes = {
+            p.name
+            for p in self.root.iterdir()
+            if p.is_dir() and (p / "dslr_calibration_undistorted" / "images.txt").exists()
+        }
+        records: list[dict[str, Any]] = []
         if manifest_path.exists():
             records = load_manifest(manifest_path)
+            cached_scenes = {r["scene"] for r in records}
+            missing_on_disk = on_disk_scenes - cached_scenes
+            if missing_on_disk:
+                # New scenes since the manifest was last written. Re-scan
+                # the full set so the cache reflects current disk state.
+                # (We don't try to incrementally merge — full re-scan is
+                # cheap relative to inference.)
+                records = list(self._scan(None))
+                save_manifest(manifest_path, records)
         else:
             records = list(self._scan(None))
             save_manifest(manifest_path, records)
