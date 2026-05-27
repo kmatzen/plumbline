@@ -85,12 +85,13 @@ reproductions on `main`:
   3-scene subset (9.4 % under paper 0.709); apples-to-apples needs
   the full 13-scene split (D10).
 
-**Pose ✅ cells**: **2** (both landed 2026-05-26 on RTX 3090, v0.1 acceptance criterion #2 met):
+**Pose ✅ cells**: **2** plumbline matrix + **1 end-to-end verified via own pipeline** (D9-style):
 
 - ✅ **VGGT CO3Dv2** (Table 1, AUC@30): observed **0.8964** vs paper **0.882** (+1.6 % over). Companion **pairwise_RRA@15 = 0.9819**. Run wall ~28 min; feed-forward, no global alignment.
 - ✅ **MASt3R CO3Dv2** (Table 3, mAA(30)): observed **0.7960** vs paper **0.818** (−2.7 % under). Companion **pairwise_RRA@15 = 0.9708**. Run wall ~3.2 h cumulative (interrupted once by an SSH-daemon drop on the vast.ai box; resumed via plumbline's prediction cache, 143 of 410 samples already computed). Paper cell PDF-verified 2026-05-23 (D23 resolved).
+- ✓ **MonST3R Sintel** (Table 4) — **end-to-end via MonST3R's own pipeline**, 2026-05-27, ~35 min wall: ATE **0.1134** vs paper 0.108 (+5.0 %); RPE-trans **0.0446** vs 0.042 (+6.3 %); RPE-rot **0.7921** vs 0.732 (+8.2 %). All three within reasonable tolerance for a stochastic global-alignment + RAFT-flow pipeline. Ran via `launch.py --mode=eval_pose --eval_dataset=sintel` over the 14 dynamic-scene clips. Not a plumbline matrix ✓ (plumbline doesn't yet have ATE/RPE trajectory metrics in the runner — same shape as the D9 Marigold-KITTI / D24 CUT3R-Bonn closures). Adds **Sintel as a 5th verified dataset** and **ATE/RPE as a new metric family** to plumbline's verified coverage. Companion infrastructure required (and added in this session): `raft-sintel.pth` + Junyi42 stubbed `sam2` build_sam shim + `wandb`/`tensorboard`/`prettytable`/`gradio` deps + torch 2.6 `weights_only=False` patch on `dust3r/training.py:torch.load`.
 
-Both run the same `Co3Dv2VGGTPoseEvalLoader` recipe (41 SEEN cats × 10 seq × 10 frame, seed=0), `vggt_co3d_histogram` AUC mode, `pose_translation_antipodal: true`. CO3Dv2 staged once via `scripts/co3dv2_prefetch.py` (~3 GB selective fetch, ~30 min), then both jobs ran back-to-back on the same disk. MASt3R inference goes through dust3r's `PointCloudOptimizer` (N≥3, init=mst, niter=300); curope CUDA ext built per-MASt3R-dust3r-fork in-session (32 % speedup vs the pytorch RoPE2D fallback the adapter ships with). DA3 has an informational companion (`da3_co3dv2_pose.yaml`) with no paper target.
+The first two run the same `Co3Dv2VGGTPoseEvalLoader` recipe (41 SEEN cats × 10 seq × 10 frame, seed=0), `vggt_co3d_histogram` AUC mode, `pose_translation_antipodal: true`. CO3Dv2 staged once via `scripts/co3dv2_prefetch.py` (~3 GB selective fetch, ~30 min), then both jobs ran back-to-back on the same disk. MASt3R inference goes through dust3r's `PointCloudOptimizer` (N≥3, init=mst, niter=300); curope CUDA ext built per-MASt3R-dust3r-fork in-session (32 % speedup vs the pytorch RoPE2D fallback the adapter ships with). DA3 has an informational companion (`da3_co3dv2_pose.yaml`) with no paper target.
 
 **CO3Dv2 disk gate cleared 2026-05-26 (selective fetch):** the raw
 CO3Dv2 distribution is ~4.3 TB (276 zips × ~18 GB avg) — well past the
