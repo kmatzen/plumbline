@@ -38,8 +38,9 @@
       <nav class="nav">
         <a href="#why">why</a>
         <a href="#install">install</a>
-        <a href="#verified">verified</a>
         <a href="#supported">supported</a>
+        <a href="#verified">verified</a>
+        <a href="#colophon">colophon</a>
         <a class="ext" href="https://github.com/kmatzen/plumbline">github↗</a>
       </nav>
     </header>
@@ -86,7 +87,7 @@
         </p>
       </header>
 
-      <ol class="proto">
+      <ol class="proto reveal stagger">
         <li>
           <span class="proto-num">01</span>
           <div>
@@ -132,7 +133,7 @@
         <p class="sub">requires Python 3.10+ and a CUDA GPU for most models.</p>
       </header>
 
-      <div class="qs-grid">
+      <div class="qs-grid reveal stagger">
         <figure class="codefig">
           <figcaption>install</figcaption>
 <pre class="code"><code><span class="prompt">$</span> pip install plumbline-bench<span class="com">    # or:</span>
@@ -157,87 +158,6 @@
     <span class="flag">--tasks</span> pose <span class="flag">--max-views</span> 4</code></pre>
         </figure>
       </div>
-    </section>
-
-    <!-- ─────────────────── VERIFIED ─────────────────── -->
-    <section class="sec" id="verified">
-      <header class="sec-head">
-        <span class="sec-num">verified/</span>
-        <h2 class="head">paper-match cells</h2>
-        <p class="sub">
-          Every cell below is a pinned config whose observed number lands
-          within the documented tolerance of the value reported in the
-          source paper. Each entry is audited against the source PDF
-          (table&nbsp;+&nbsp;column&nbsp;+&nbsp;row); see
-          <a href="https://github.com/kmatzen/plumbline/blob/main/reproductions/AUDIT.md">reproductions/AUDIT.md</a>.
-        </p>
-      </header>
-
-      <ul class="stat-row" aria-label="paper-match cell totals">
-        <li class="stat"><span class="stat-n">20</span><span class="stat-label">paper-match cells</span></li>
-        <li class="stat"><span class="stat-n">7</span><span class="stat-label">papers reproduced</span></li>
-        <li class="stat"><span class="stat-n">4</span><span class="stat-label">datasets</span></li>
-        <li class="stat"><span class="stat-n">1</span><span class="stat-label">multi-view pose ✓</span></li>
-      </ul>
-
-      <div class="cells-wrap">
-        <table class="cells">
-          <colgroup>
-            <col class="col-model" />
-            <col class="col-metric" />
-            <col class="col-obs" />
-            <col class="col-paper" />
-            <col class="col-delta" />
-          </colgroup>
-          <thead>
-            <tr><th>model</th><th>metric</th><th>observed</th><th>paper</th><th>Δ</th></tr>
-          </thead>
-          <tbody>
-
-            <tr class="group"><td colspan="5">NYU-v2 · AbsRel ↓ (lower is better) <span class="group-cnt">8 cells</span></td></tr>
-            <tr><td>moge-1 ViT-L</td><td>abs_rel</td><td class="obs">0.0342</td><td class="paper">0.0341</td><td class="delta">+0.3%</td></tr>
-            <tr><td>da-v2 small</td><td>abs_rel</td><td class="obs">0.0510</td><td class="paper">0.053</td><td class="delta">−3.8%</td></tr>
-            <tr><td>da-v2 base</td><td>abs_rel</td><td class="obs">0.0456</td><td class="paper">0.049</td><td class="delta">−6.9%</td></tr>
-            <tr><td>da-v2 large</td><td>abs_rel</td><td class="obs">0.0428</td><td class="paper">0.0420</td><td class="delta">+1.9%</td></tr>
-            <tr><td>marigold v1-1</td><td>abs_rel</td><td class="obs">0.0577</td><td class="paper">0.055</td><td class="delta">+4.9%</td></tr>
-            <tr><td>metric3d-v2 L</td><td>abs_rel</td><td class="obs">0.0660</td><td class="paper">0.063</td><td class="delta">+4.8%</td></tr>
-            <tr><td>metric3d-v2 G</td><td>abs_rel</td><td class="obs">0.0702</td><td class="paper">0.067</td><td class="delta">+4.8%</td></tr>
-            <tr><td>monst3r</td><td>abs_rel</td><td class="obs">0.0896</td><td class="paper">0.091</td><td class="delta">−1.5%</td></tr>
-
-            <tr class="group"><td colspan="5">NYU-v2 · δ&lt;1.25 ↑ (higher is better) <span class="group-cnt">1 cell</span></td></tr>
-            <tr><td>depth-anything-3</td><td>delta_1</td><td class="obs">0.9684</td><td class="paper">0.974</td><td class="delta">−0.6%</td></tr>
-
-            <tr class="group"><td colspan="5">KITTI · AbsRel ↓ <span class="group-cnt">8 cells</span></td></tr>
-            <tr><td>da-v2 small</td><td>abs_rel</td><td class="obs">0.0770</td><td class="paper">0.078</td><td class="delta">−1.3%</td></tr>
-            <tr><td>da-v2 base</td><td>abs_rel</td><td class="obs">0.0756</td><td class="paper">0.078</td><td class="delta">−3.1%</td></tr>
-            <tr><td>da-v2 large</td><td>abs_rel</td><td class="obs">0.0710</td><td class="paper">0.074</td><td class="delta">−4.1%</td></tr>
-            <tr><td>metric3d-v2 L</td><td>abs_rel</td><td class="obs">0.0495</td><td class="paper">0.052</td><td class="delta">−4.8%</td></tr>
-            <tr><td>metric3d-v2 G</td><td>abs_rel</td><td class="obs">0.0503</td><td class="paper">0.051</td><td class="delta">−1.4%</td></tr>
-            <tr><td>moge-1 ViT-L <span class="proto">(MoGe-eval)</span></td><td>abs_rel</td><td class="obs">0.0404</td><td class="paper">0.0408</td><td class="delta">−1.0%</td></tr>
-            <tr><td>da-v2 large <span class="proto">(MoGe-eval)</span></td><td>abs_rel</td><td class="obs">0.0569</td><td class="paper">0.0561</td><td class="delta">+1.4%</td></tr>
-            <tr><td>monst3r <span class="proto">(lineage)</span></td><td>abs_rel</td><td class="obs">0.0959</td><td class="paper">0.101</td><td class="delta">−5.0%</td></tr>
-
-            <tr class="group"><td colspan="5">DIODE · AbsRel ↓ <span class="group-cnt">2 cells</span></td></tr>
-            <tr><td>moge-1 ViT-L</td><td>abs_rel</td><td class="obs">0.0407</td><td class="paper">0.0400</td><td class="delta">+1.7%</td></tr>
-            <tr><td>da-v2 large</td><td>abs_rel</td><td class="obs">0.0529</td><td class="paper">0.0533</td><td class="delta">−0.8%</td></tr>
-
-            <tr class="group"><td colspan="5">CO3Dv2 · pairwise pose AUC@30 ↑ <span class="group-cnt new">1 cell — first multi-view pose ✓</span></td></tr>
-            <tr><td>vggt <span class="proto">(Table 1, feed-forward)</span></td><td>pose_auc@30</td><td class="obs">0.8964</td><td class="paper">0.882</td><td class="delta">+1.6%</td></tr>
-
-          </tbody>
-        </table>
-      </div>
-
-      <p class="foot-note">
-        Δ is the relative deviation from the paper number. Tolerance is pinned
-        per-cell in each YAML; cells outside their declared tolerance never count
-        as ✓ and are tracked in
-        <a href="https://github.com/kmatzen/plumbline/blob/main/docs/DISCREPANCIES.md">docs/DISCREPANCIES.md</a>
-        (paper text vs upstream code mismatches, checkpoint-generation drift,
-        paper-private eval recipes — never silently glossed over). Full list with
-        commits + tolerances in
-        <a href="https://github.com/kmatzen/plumbline/blob/main/REPRODUCTIONS.md">REPRODUCTIONS.md</a>.
-      </p>
     </section>
 
     <!-- ─────────────────── SUPPORTED ─────────────────── -->
@@ -293,10 +213,119 @@
       </p>
     </section>
 
+    <!-- ─────────────────── VERIFIED ─────────────────── -->
+    <section class="sec" id="verified">
+      <header class="sec-head">
+        <span class="sec-num">verified/</span>
+        <h2 class="head">paper-match cells</h2>
+        <p class="sub">
+          Every cell below is a pinned config whose observed number lands
+          within the documented tolerance of the value reported in the
+          source paper. Each entry is audited against the source PDF
+          (table&nbsp;+&nbsp;column&nbsp;+&nbsp;row); see
+          <a href="https://github.com/kmatzen/plumbline/blob/main/reproductions/AUDIT.md">reproductions/AUDIT.md</a>.
+        </p>
+      </header>
+
+      <ul class="stat-row" aria-label="harness scope and evidence">
+        <li class="stat"><span class="stat-n">12</span><span class="stat-label">models</span></li>
+        <li class="stat"><span class="stat-n">12</span><span class="stat-label">datasets</span></li>
+        <li class="stat"><span class="stat-n">20</span><span class="stat-label">verified results</span></li>
+      </ul>
+
+      <!-- One unified list: all 20 verified cells, sorted closest-to-paper
+           first. Multi-view pose (vggt / CO3Dv2) sits inline with everything
+           else, no special framing. Dataset · metric is part of each row. -->
+      <ul class="cell-list reveal stagger" aria-label="verified paper-match cells">
+        <li><span class="cm">moge-1 ViT-L</span>                              <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0342 / 0.0341</span> <span class="cd near">+0.3%</span>  <span class="spark" data-pct="51.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">depth-anything-3</span>                          <span class="ds">NYU · δ&lt;1.25</span>    <span class="cv">0.9684 / 0.974</span> <span class="cd near">−0.6%</span>  <span class="spark" data-pct="47"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">da-v2 large</span>                               <span class="ds">DIODE · abs_rel</span>    <span class="cv">0.0529 / 0.0533</span> <span class="cd near">−0.8%</span>  <span class="spark" data-pct="46"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">moge-1 ViT-L <span class="proto">MoGe-eval</span></span>    <span class="ds">KITTI · abs_rel</span>    <span class="cv">0.0404 / 0.0408</span> <span class="cd near">−1.0%</span>  <span class="spark" data-pct="45"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">da-v2 small</span>                               <span class="ds">KITTI · abs_rel</span>    <span class="cv">0.0770 / 0.078</span> <span class="cd near">−1.3%</span>  <span class="spark" data-pct="43.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">metric3d-v2 G</span>                             <span class="ds">KITTI · abs_rel</span>    <span class="cv">0.0503 / 0.051</span> <span class="cd near">−1.4%</span>  <span class="spark" data-pct="43"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">da-v2 large <span class="proto">MoGe-eval</span></span>     <span class="ds">KITTI · abs_rel</span>    <span class="cv">0.0569 / 0.0561</span> <span class="cd near">+1.4%</span>  <span class="spark" data-pct="57"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">monst3r</span>                                   <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0896 / 0.091</span> <span class="cd near">−1.5%</span>  <span class="spark" data-pct="42.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">vggt <span class="proto">Table 1, feed-forward</span></span> <span class="ds">CO3Dv2 · pose_auc@30</span> <span class="cv">0.8964 / 0.882</span> <span class="cd near">+1.6%</span>  <span class="spark" data-pct="58"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">moge-1 ViT-L</span>                              <span class="ds">DIODE · abs_rel</span>    <span class="cv">0.0407 / 0.0400</span> <span class="cd near">+1.7%</span>  <span class="spark" data-pct="58.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">da-v2 large</span>                               <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0428 / 0.0420</span> <span class="cd close">+1.9%</span> <span class="spark" data-pct="59.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">da-v2 base</span>                                <span class="ds">KITTI · abs_rel</span>    <span class="cv">0.0756 / 0.078</span> <span class="cd close">−3.1%</span> <span class="spark" data-pct="34.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">da-v2 small</span>                               <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0510 / 0.053</span> <span class="cd close">−3.8%</span> <span class="spark" data-pct="31"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">da-v2 large</span>                               <span class="ds">KITTI · abs_rel</span>    <span class="cv">0.0710 / 0.074</span> <span class="cd close">−4.1%</span> <span class="spark" data-pct="29.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">metric3d-v2 L</span>                             <span class="ds">KITTI · abs_rel</span>    <span class="cv">0.0495 / 0.052</span> <span class="cd close">−4.8%</span> <span class="spark" data-pct="26"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">metric3d-v2 G</span>                             <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0702 / 0.067</span> <span class="cd close">+4.8%</span> <span class="spark" data-pct="74"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">metric3d-v2 L</span>                             <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0660 / 0.063</span> <span class="cd close">+4.8%</span> <span class="spark" data-pct="74"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">marigold v1-1</span>                             <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0577 / 0.055</span> <span class="cd close">+4.9%</span> <span class="spark" data-pct="74.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">monst3r <span class="proto">lineage</span></span>            <span class="ds">KITTI · abs_rel</span>    <span class="cv">0.0959 / 0.101</span> <span class="cd close">−5.0%</span> <span class="spark" data-pct="25"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">da-v2 base</span>                                <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0456 / 0.049</span> <span class="cd wide">−6.9%</span>  <span class="spark" data-pct="15.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+      </ul>
+
+      <p class="legend">
+        <span class="legend-item"><span class="dot near"></span> ≤2% off paper</span>
+        <span class="legend-item"><span class="dot close"></span> ≤5% off paper</span>
+        <span class="legend-item"><span class="dot wide"></span> within YAML tolerance, &gt;5%</span>
+        <span class="legend-item"><span class="spark inline" data-pct="50"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span> tolerance band: −10% &hellip; paper &hellip; +10%</span>
+      </p>
+
+      <p class="foot-note">
+        Δ is the relative deviation from the paper number. Tolerance is pinned
+        per-cell in each YAML; cells outside their declared tolerance never count
+        as ✓ and are tracked in
+        <a href="https://github.com/kmatzen/plumbline/blob/main/docs/DISCREPANCIES.md">docs/DISCREPANCIES.md</a>
+        (paper text vs upstream code mismatches, checkpoint-generation drift,
+        paper-private eval recipes — never silently glossed over). Full list with
+        commits + tolerances in
+        <a href="https://github.com/kmatzen/plumbline/blob/main/REPRODUCTIONS.md">REPRODUCTIONS.md</a>.
+      </p>
+    </section>
+
+    <!-- ─────────────────── COLOPHON ─────────────────── -->
+    <section class="sec colophon-sec" id="colophon">
+      <header class="sec-head">
+        <span class="sec-num">colophon/</span>
+        <h2 class="head">made by claude</h2>
+        <p class="sub">
+          Honest framing of how this codebase actually got written. Read
+          it before trusting the numbers above.
+        </p>
+      </header>
+
+      <div class="colophon reveal">
+        <p>
+          <span class="acc">plumbline</span> is generated and maintained by
+          <a class="lk" href="https://claude.ai/code">Claude</a>
+          (Anthropic's coding assistant), iterating largely autonomously on
+          its own commits. Each adapter, dataset loader, discrepancy audit,
+          prefetch tool, and paper-text-vs-code closure on
+          <a class="lk" href="https://github.com/kmatzen/plumbline/blob/main/docs/DISCREPANCIES.md">docs/DISCREPANCIES.md</a>
+          was authored end-to-end by the model.
+        </p>
+        <p>
+          The one human-written prior shaping the rest is narrow: <em>for
+          every paper-match cell, study the companion code</em>
+          (eval scripts, demo notebooks, prediction loaders, preprocess
+          helpers) <em>until the protocol is faithful — not just the paper
+          text.</em> Most off-paper deltas in 3D-vision benchmarks trace
+          to this gap, and most of plumbline's resolved discrepancies
+          (D9 Marigold checkpoint drift, D17/18 GeoWizard best-of-N seeds,
+          D24 CUT3R GT-depth-field, D27 MonST3R-Bonn align_with_lad2)
+          are exactly that story. The work that follows from that prior
+          is the model's own decisions, top to bottom.
+        </p>
+        <p class="contrib">
+          Contributions from humans <em>and</em> bots are welcome — pull
+          requests, issues, additional reproductions, discrepancy reports.
+          See
+          <a class="lk" href="https://github.com/kmatzen/plumbline/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.
+        </p>
+      </div>
+    </section>
+
     <footer class="foot">
       <span>plumbline</span>
       <span class="sep">/</span>
       <span>apache-2.0</span>
+      <span class="sep">/</span>
+      <span>made by claude</span>
       <span class="pad"></span>
       <div class="links">
         <a href="https://github.com/kmatzen/plumbline">github</a>
@@ -306,18 +335,83 @@
   </div>
 
   <script>
-    // scroll-spy nav highlight
-    const navLinks = Array.from(document.querySelectorAll('.nav a[href^="#"]'));
-    const sections = navLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const id = e.target.id;
-          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+    (() => {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // ─── scroll-spy nav highlight ────────────────────────────────────
+      const navLinks = Array.from(document.querySelectorAll('.nav a[href^="#"]'));
+      const sections = navLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+      const navObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const id = e.target.id;
+            navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      sections.forEach(s => navObs.observe(s));
+
+      // ─── plumb-ruler active tick follows scroll progress ────────────
+      const ticks = Array.from(document.querySelectorAll('.plumb-tick'));
+      const updateRuler = () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = max > 0 ? window.scrollY / max : 0;
+        const idx = Math.min(ticks.length - 1, Math.floor(pct * ticks.length));
+        ticks.forEach((t, i) => t.classList.toggle('active', i === idx));
+      };
+      window.addEventListener('scroll', updateRuler, { passive: true });
+      updateRuler();
+
+      if (reduced) {
+        // No animations: jump to final state.
+        document.querySelectorAll('.spark[data-pct]').forEach(s => {
+          s.style.setProperty('--pct', s.dataset.pct + '%');
+        });
+        document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+        return;
+      }
+
+      // ─── reveal-on-scroll: fade+slide elements when they enter ──────
+      //   Also fires the sparkline marker tween (markers start at paper-
+      //   center until --pct is set, then CSS transitions them to position).
+      const revealObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          e.target.classList.add('in-view');
+          e.target.querySelectorAll('.spark[data-pct]').forEach(s => {
+            s.style.setProperty('--pct', s.dataset.pct + '%');
+          });
+          revealObs.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+      // ─── stat count-up: animate big numbers from 0 to target ────────
+      const ease = t => 1 - Math.pow(1 - t, 3);
+      function countUp(el, target, duration = 900) {
+        const start = performance.now();
+        function step(now) {
+          const t = Math.min(1, (now - start) / duration);
+          el.textContent = Math.round(target * ease(t));
+          if (t < 1) requestAnimationFrame(step);
         }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px' });
-    sections.forEach(s => obs.observe(s));
+        requestAnimationFrame(step);
+      }
+      const statObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          e.target.querySelectorAll('.stat-n').forEach(n => {
+            // Read target from text on first run; store on dataset for re-runs.
+            const target = parseInt(n.dataset.target || n.textContent, 10);
+            n.dataset.target = String(target);
+            n.textContent = '0';
+            countUp(n, target);
+          });
+          statObs.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px -20% 0px' });
+      document.querySelectorAll('.stat-row').forEach(s => statObs.observe(s));
+    })();
   </script>
 </body>
 </html>
