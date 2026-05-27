@@ -48,13 +48,18 @@ class TestBundledQueue:
             )
 
     def test_verified_pose_targets_present_and_pending(self) -> None:
-        """The two PDF-verified pose runs are the v0.1 release gate; they must
-        stay in the queue and runnable until the GPU run lands."""
+        """The two PDF-verified pose runs are the v0.1 release gate. They must
+        stay in the queue; until landed they're ``pending``, after landing they
+        flip to ``done`` (vggt-co3dv2-pose landed 2026-05-26 — see PR #10).
+        The invariant is "never silently dropped"; the live status mix moves
+        as runs land.
+        """
         by_name = {j.name: j for j in queue_mod.load_queue()}
         for name in ("vggt-co3dv2-pose", "mast3r-co3dv2-pose"):
             assert name in by_name, f"{name} dropped from the GPU queue"
-            assert by_name[name].status == "pending"
-            assert by_name[name].runnable
+            assert by_name[name].status in ("pending", "done"), (
+                f"{name} unexpectedly {by_name[name].status!r}; must be pending or done"
+            )
 
     def test_upstream_blocked_jobs_are_blocked_with_reason(self) -> None:
         """Upstream-blocked cells must be marked blocked (so they're never
