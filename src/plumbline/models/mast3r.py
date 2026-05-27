@@ -274,11 +274,15 @@ def _run_mast3r(
     ga_lr: float = 0.01,
     ga_schedule: str = "linear",
     ga_init: str = "mst",
+    scene_graph: str = "complete",
 ) -> dict[str, NDArray[Any]]:
     """Run MASt3R on N views; return plumbline-shaped arrays.
 
-    Uses dust3r's ``inference`` over the complete pairwise graph, then
-    extracts depth, intrinsics, and world_from_camera poses via either
+    Uses dust3r's ``inference`` over the requested ``scene_graph`` (default
+    ``"complete"`` — pairwise, dust3r's quick-start; switch to one of
+    dust3r's sliding-window graphs like ``"swinstride-5-noncyclic"`` for
+    long sequences where the complete graph blows past memory). Extracts
+    depth, intrinsics, and world_from_camera poses via either
     ``PairViewer`` (N==2) or ``PointCloudOptimizer`` (N>=3). Always
     rebases poses + point map so view 0 is the canonical world frame.
     """
@@ -290,7 +294,7 @@ def _run_mast3r(
 
     n = int(images.shape[0])
     dust3r_imgs = _images_to_dust3r_dicts(images, long_edge=long_edge)
-    pairs = make_pairs(dust3r_imgs, scene_graph="complete", prefilter=None, symmetrize=True)
+    pairs = make_pairs(dust3r_imgs, scene_graph=scene_graph, prefilter=None, symmetrize=True)
     output = inference(pairs, model, device, batch_size=1, verbose=False)
 
     if n == 2:

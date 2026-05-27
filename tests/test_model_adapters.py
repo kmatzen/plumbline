@@ -18,6 +18,7 @@ import plumbline.models.depth_anything_3
 
 # Force import so decorators run.
 import plumbline.models.depth_anything_v2
+import plumbline.models.dust3r
 import plumbline.models.geowizard
 import plumbline.models.mast3r
 import plumbline.models.metric3d_v2
@@ -32,6 +33,7 @@ EXPECTED_ADAPTERS = [
     "depth-anything-v2",
     "metric3d-v2",
     "mast3r",
+    "dust3r",
     "vggt",
     "depth-anything-3",
     "moge",
@@ -136,6 +138,64 @@ def test_mast3r_config_hash_depends_on_ga_hyperparams() -> None:
     assert len(set(variants.values())) == len(variants), (
         f"hashes collided: {variants}"
     )
+
+
+def test_dust3r_requires_two_views() -> None:
+    import numpy as np
+
+    cls = MODEL_REGISTRY["dust3r"]
+    model = cls(device="cpu")  # type: ignore[call-arg]
+    images_single = np.zeros((1, 8, 8, 3), dtype=np.uint8)
+    with pytest.raises(ValueError, match="at least 2"):
+        model.predict(images_single)
+
+
+def test_dust3r_supports_multiview() -> None:
+    """DUSt3R adapter supports up to 60 views (Sintel-pose long-clip
+    headroom matches the MonST3R adapter)."""
+    cls = MODEL_REGISTRY["dust3r"]
+    assert cls.capabilities.min_views == 2
+    assert cls.capabilities.max_views >= 10  # CO3Dv2 pose protocol
+
+
+def test_dust3r_rejects_too_many_views() -> None:
+    import numpy as np
+
+    cls = MODEL_REGISTRY["dust3r"]
+    model = cls(device="cpu")  # type: ignore[call-arg]
+    over = np.zeros((cls.capabilities.max_views + 1, 8, 8, 3), dtype=np.uint8)
+    with pytest.raises(ValueError, match="capped at"):
+        model.predict(over)
+
+
+def test_dust3r_config_hash_depends_on_ga_and_scene_graph() -> None:
+    """All PCO hyperparams + scene_graph must affect the cache key:
+    flipping any of them changes downstream predictions for N>=3."""
+    cls = MODEL_REGISTRY["dust3r"]
+    base = cls(device="cpu")  # type: ignore[call-arg]
+    variants = {
+        "default": base.config_hash(),
+        "niter": cls(device="cpu", ga_niter=50).config_hash(),  # type: ignore[call-arg]
+        "lr": cls(device="cpu", ga_lr=0.005).config_hash(),  # type: ignore[call-arg]
+        "schedule": cls(device="cpu", ga_schedule="cosine").config_hash(),  # type: ignore[call-arg]
+        "init": cls(device="cpu", ga_init="known_poses").config_hash(),  # type: ignore[call-arg]
+        # scene_graph is the dust3r-vs-MASt3R adapter difference; required
+        # for long-clip Sintel-pose runs (swinstride) and for explicit
+        # commensurability with MASt3R's "complete" default on CO3Dv2.
+        "graph": cls(device="cpu", scene_graph="swinstride-5-noncyclic").config_hash(),  # type: ignore[call-arg]
+    }
+    assert len(set(variants.values())) == len(variants), (
+        f"hashes collided: {variants}"
+    )
+
+
+def test_dust3r_distinct_from_mast3r() -> None:
+    """DUSt3R and MASt3R must hash to different keys even with identical
+    GA hyperparams — they use different checkpoints + model classes, so
+    their predictions diverge and the cache must not collide."""
+    dust = MODEL_REGISTRY["dust3r"](device="cpu").config_hash()  # type: ignore[call-arg]
+    mast = MODEL_REGISTRY["mast3r"](device="cpu").config_hash()  # type: ignore[call-arg]
+    assert dust != mast
 
 
 def test_metric3d_requires_intrinsics() -> None:
