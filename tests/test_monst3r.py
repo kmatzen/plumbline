@@ -108,6 +108,8 @@ class TestPredict:
     def test_max_views_cap_raises(self, monkeypatch: pytest.MonkeyPatch) -> None:
         captured: dict[str, Any] = {}
         _patch(monkeypatch, captured)
-        images = np.zeros((33, 8, 8, 3), dtype=np.uint8)
+        # Adapter caps at 60 views (covers Sintel's longest dynamic clip
+        # for Table 4 trajectory-pose eval). Going past it should raise.
+        images = np.zeros((61, 8, 8, 3), dtype=np.uint8)
         with pytest.raises(ValueError, match="capped at"):
             MonST3RAdapter(device="cpu").predict(images)

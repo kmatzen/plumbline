@@ -1,0 +1,120 @@
+# MonST3R video pose on Sintel — MonST3R Table 4 paper target.
+#
+# Targets MonST3R Table 4 "Evaluation on camera pose estimation" (Zhang
+# et al. 2024, arXiv:2410.03825, ICLR 2025), Sintel column, MonST3R row:
+# ATE 0.108 / RPE trans 0.042 / RPE rot 0.732. Verified by direct PDF
+# read 2026-05-26 (page 9).
+#
+# Protocol: per-sequence ego-motion estimation, evaluated with TUM-RGBD
+# style ATE/RPE-RMSE after Sim(3) (Umeyama) alignment. MonST3R's own
+# `dust3r/utils/vo_eval.py:eval_metrics` wraps `evo`'s `main_ape.ape` +
+# `main_rpe.rpe` with `align=True, correct_scale=True`. Plumbline's
+# `trajectory_ate_rmse_sim3` / `trajectory_rpe_rmse_sim3` in
+# `src/plumbline/metrics/pose.py` use the same `evo` calls, so the
+# metric is bit-identical.
+#
+# Sequence set: 14 dynamic Sintel-final clips per MonST3R's
+# `dust3r/eval_metadata.py` `sintel` `seq_list`. Each is run as one
+# trajectory (full_seq=true on the Sintel loader → one Sample per
+# scene with all frames).
+#
+# Adapter coverage of the Table 4 apparatus (v1.2):
+# `MonST3RAdapter(video_pose=True, sintel_ckpt=True)` runs the full
+# MonST3R video-pose pipeline end-to-end — `_run_monst3r_video_pose`
+# in `src/plumbline/models/monst3r.py` builds the
+# `swinstride-5-noncyclic` pair graph, calls MonST3R's extended
+# `global_aligner` with `flow_loss_weight=0.01`, `motion_mask_thre=0.35`,
+# `temporal_smoothing_weight=0.01`, `use_self_mask=True`, then runs
+# `compute_global_alignment(init='mst', niter=300, schedule='linear',
+# lr=0.01)`. This is the same apparatus as MonST3R's `launch.py
+# --mode=eval_pose --eval_dataset=sintel`; the only thing plumbline
+# replaces is the trajectory I/O and the final ATE/RPE math (which
+# `metrics/pose.py` does via the same `evo` calls as MonST3R's
+# `vo_eval.py`, so the metric is bit-identical).
+
+name: monst3r-sintel-pose
+
+model:
+  name: monst3r
+  kwargs:
+    long_edge: 512
+    # Full MonST3R video-pose pipeline (paper Table 4 row): sliding-
+    # window pair graph + flow consistency + motion mask + temporal
+    # smoothness terms in the global alignment. Replicates `launch.py
+    # --mode=eval_pose --eval_dataset=sintel`. All other knobs default
+    # to MonST3R's `dust3r/training.py` argparser defaults.
+    video_pose: true
+    # Sintel-specific: use raft-sintel.pth for flow consistency (vs
+    # the Tartan-C-T-TSKH default that other datasets use).
+    sintel_ckpt: true
+
+dataset:
+  name: sintel
+  split: training
+  kwargs:
+    pass_name: final
+    # full_seq: one Sample per scene with every frame packed in.
+    # Trajectory-pose metrics need the whole sequence at once for
+    # Sim(3) alignment + per-pair RPE. With `video_pose: true` on the
+    # model side, scene_graph=swinstride-5-noncyclic keeps the pair
+    # count ~5N instead of N(N-1)/2, so 50-frame scenes fit in 24 GB.
+    full_seq: true
+    # 14 dynamic-scene clips, matching MonST3R `dust3r/eval_metadata.py`
+    # `sintel` entry `seq_list` verbatim.
+    scenes:
+      - alley_2
+      - ambush_4
+      - ambush_5
+      - ambush_6
+      - cave_2
+      - cave_4
+      - market_2
+      - market_5
+      - market_6
+      - shaman_3
+      - sleeping_1
+      - sleeping_2
+      - temple_2
+      - temple_3
+
+tasks: [pose]
+# Trajectory pose metrics (ATE / RPE-trans / RPE-rot, TUM-RGBD style)
+# via the new `trajectory_*_rmse_sim3` functions in `metrics/pose.py`.
+pose_trajectory_metrics: true
+# Sintel's longest dynamic clip is ~50 frames; cap large enough to
+# cover all 14 without truncating.
+max_views: 60
+device: cuda:0
+
+paper_reference:
+  primary_metric: trajectory_ate_rmse
+  value: 0.108
+  tolerance_relative: 0.10
+  citation: "Zhang et al. 2024, MonST3R (arXiv:2410.03825), Table 4 (Evaluation on camera pose estimation), Sintel column, MonST3R row = ATE 0.108 / RPE trans 0.042 / RPE rot 0.732. Verified by direct PDF read 2026-05-26 (page 9). Eval: TUM-RGBD-style ATE/RPE-RMSE under Sim(3) alignment, 14 dynamic-scene clips, via evo (`align=True, correct_scale=True, delta=1, all_pairs=True`)."
+  source_confidence: verified_pdf
+
+notes: >
+  Companion metrics from paper Table 4: RPE-trans = 0.042, RPE-rot
+  = 0.732 (degrees). All three are reported under the same TUM-RGBD
+  convention; plumbline emits `trajectory_ate_rmse`,
+  `trajectory_rpe_trans_rmse`, `trajectory_rpe_rot_deg_rmse` in the
+  per-sample / aggregate metrics.
+
+  Tolerance ±10 % because Sim(3)-aligned ATE/RPE is stochastic (Adam
+  GA over 300 iters, RAFT-flow consistency loss) and small numerical
+  drift between runs / hardware is expected. Plumbline's video-pose
+  path replicates MonST3R's `launch.py --mode=eval_pose` apparatus
+  end-to-end:
+    - scene_graph=swinstride-5-noncyclic pair graph.
+    - MonST3R's extended `PointCloudOptimizer` with flow_loss_weight=0.01,
+      motion_mask_thre=0.35, temporal_smoothing_weight=0.01,
+      sintel_ckpt=True, use_self_mask=True (all paper §4.1 defaults).
+    - compute_global_alignment(init='mst', niter=300, schedule='linear',
+      lr=0.01).
+
+  An end-to-end paper-trust signal at ATE 0.1134 (+5 %) was recorded
+  separately in PR #14 by running MonST3R's own `launch.py
+  --mode=eval_pose` pipeline directly; that result was via MonST3R's
+  code. This YAML is the *plumbline-computed* counterpart on the same
+  paper row — should now match to within stochastic GA noise since
+  the same optimizer apparatus is being driven.
