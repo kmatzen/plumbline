@@ -1,0 +1,55 @@
+# VGGT ETH3D — 3-scene informational subset (historical record).
+#
+# Preserves the 3-scene reproduction that lived on `main` from
+# 2026-04-26 to 2026-05-27 (before D10 was closed end-to-end by the
+# full 13-scene run in `vggt_eth3d_multiscene_chamfer.yaml`).
+#
+# Why keep this around: the per-scene numbers below are an honest
+# A/B against the paper's 13-scene mean when interpreted as
+# subset-vs-full, and they're the closest thing to a per-scene
+# breakdown for VGGT on ETH3D until/unless VGGT supplementary
+# materials publish per-scene values.
+#
+# This YAML is informational only — there is no per-scene paper
+# target. The aggregate Overall 0.642 m on 3 scenes is 9.4 % under
+# the paper's 13-scene 0.709 m (closer than expected for a subset).
+
+name: vggt-eth3d-subset-chamfer
+protocol: eth3d_vggt_table3
+
+model:
+  name: vggt
+  kwargs:
+    dtype: bfloat16
+
+dataset:
+  name: eth3d
+  split: train
+  kwargs:
+    scenes: [courtyard, delivery_area, facade]
+    views_per_sample: 8
+    max_gt_points: 100000
+
+max_views: 8
+device: cuda:0
+
+paper_reference:
+  primary_metric: overall
+  value: 0.642
+  tolerance_relative: 0.05
+  citation: "Subset-of-paper informational target. VGGT paper Table 3 reports 13-scene Overall 0.709 (Wang et al. 2025, arXiv:2503.11651). The 3-scene subset observed value 0.642 is plumbline's own 2026-04-26 reproduction and is not a paper value — pinned here to make this YAML a regression-detector for the subset configuration."
+  source_confidence: informational_no_paper
+
+notes: >
+  Per-scene 2026-04-26 (137 8-view windows, 1 cm voxel):
+
+      scene          Acc      Comp     Overall  Overall_med
+      courtyard      0.469    0.736    0.603    0.262
+      delivery_area  0.513    1.065    0.789    0.380
+      facade         0.770    0.299    0.535    0.151
+      aggregate      0.584    0.700    0.642    0.265
+
+  Median Overall 0.265 m suggests the metric tail is short — not
+  the issue D3 had where mean ≫ median. Use this YAML to detect
+  regressions in the 3-scene subset behaviour; the 13-scene
+  paper-match attempt lives in `vggt_eth3d_multiscene_chamfer.yaml`.
