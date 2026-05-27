@@ -736,40 +736,19 @@ footer.foot .sep { color: var(--fg-dim); }
   .topbar { padding: 12px 16px; }
 }
 
-/* --------------------------- colophon ------------------------------ */
-.colophon {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(14px, 1.6vw, 20px);
-  max-width: 72ch;
-  padding: clamp(20px, 2.4vw, 28px) clamp(22px, 2.6vw, 32px);
-  border: 1px solid var(--rule);
-  border-left: 2px solid var(--acc);
-  background: var(--bg-1);
-}
-.colophon p {
-  margin: 0;
+/* --------------------------- footer ai-note ----------------------- */
+/* In-footer AI disclosure; AI label is a peer of the copyright and
+   the licence chip, not a section. Subdued so the human attribution
+   reads first. */
+footer.foot .ai-note { color: var(--fg-dim); }
+footer.foot .ai-note .lk {
   color: var(--fg-soft);
-  font-size: clamp(14px, 1.05vw, 15.5px);
-  line-height: 1.75;
+  border-bottom: 1px solid var(--rule);
+  transition: border-color 140ms var(--ease), color 140ms var(--ease);
 }
-.colophon em {
-  font-style: normal;
-  color: var(--fg);
-  font-weight: 500;
-}
-.colophon .acc { color: var(--acc); font-weight: 500; }
-.colophon .lk {
+footer.foot .ai-note .lk:hover {
   color: var(--acc);
-  border-bottom: 1px solid rgba(212, 240, 0, 0.32);
-  transition: border-color 140ms var(--ease);
-}
-.colophon .lk:hover { border-bottom-color: var(--acc); }
-.colophon .contrib {
-  color: var(--fg);
-  border-top: 1px dashed var(--rule);
-  padding-top: clamp(14px, 1.6vw, 20px);
-  margin-top: 4px;
+  border-bottom-color: var(--acc);
 }
 
 /* --------------------------- scroll-triggered reveal ------------- */

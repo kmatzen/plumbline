@@ -40,7 +40,6 @@
         <a href="#install">install</a>
         <a href="#supported">supported</a>
         <a href="#verified">verified</a>
-        <a href="#built">built</a>
         <a class="ext" href="https://github.com/kmatzen/plumbline">github↗</a>
       </nav>
     </header>
@@ -229,12 +228,12 @@
       </header>
 
       <ul class="stat-row" aria-label="harness scope and evidence">
-        <li class="stat"><span class="stat-n">12</span><span class="stat-label">models</span></li>
+        <li class="stat"><span class="stat-n">13</span><span class="stat-label">models</span></li>
         <li class="stat"><span class="stat-n">12</span><span class="stat-label">datasets</span></li>
-        <li class="stat"><span class="stat-n">21</span><span class="stat-label">verified results</span></li>
+        <li class="stat"><span class="stat-n">23</span><span class="stat-label">verified results</span></li>
       </ul>
 
-      <!-- One unified list: all 20 verified cells, sorted closest-to-paper
+      <!-- One unified list: all 23 verified cells, sorted closest-to-paper
            first. Multi-view pose (vggt / CO3Dv2) sits inline with everything
            else, no special framing. Dataset · metric is part of each row. -->
       <ul class="cell-list reveal stagger" aria-label="verified paper-match cells">
@@ -249,6 +248,7 @@
         <li><span class="cm">vggt <span class="proto">Table 1, feed-forward</span></span> <span class="ds">CO3Dv2 · pose_auc@30</span> <span class="cv">0.8964 / 0.882</span> <span class="cd near">+1.6%</span>  <span class="spark" data-pct="58"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
         <li><span class="cm">moge-1 ViT-L</span>                              <span class="ds">DIODE · abs_rel</span>    <span class="cv">0.0407 / 0.0400</span> <span class="cd near">+1.7%</span>  <span class="spark" data-pct="58.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
         <li><span class="cm">da-v2 large</span>                               <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0428 / 0.0420</span> <span class="cd close">+1.9%</span> <span class="spark" data-pct="59.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">dust3r <span class="proto">Table 3, N-view</span></span>     <span class="ds">CO3Dv2 · mAA@30</span>    <span class="cv">0.7893 / 0.774</span> <span class="cd close">+2.0%</span> <span class="spark" data-pct="60"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
         <li><span class="cm">mast3r <span class="proto">Table 3, N-view</span></span>     <span class="ds">CO3Dv2 · mAA@30</span>    <span class="cv">0.7960 / 0.818</span> <span class="cd close">−2.7%</span> <span class="spark" data-pct="36.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
         <li><span class="cm">da-v2 base</span>                                <span class="ds">KITTI · abs_rel</span>    <span class="cv">0.0756 / 0.078</span> <span class="cd close">−3.1%</span> <span class="spark" data-pct="34.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
         <li><span class="cm">da-v2 small</span>                               <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0510 / 0.053</span> <span class="cd close">−3.8%</span> <span class="spark" data-pct="31"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
@@ -257,6 +257,7 @@
         <li><span class="cm">metric3d-v2 G</span>                             <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0702 / 0.067</span> <span class="cd close">+4.8%</span> <span class="spark" data-pct="74"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
         <li><span class="cm">metric3d-v2 L</span>                             <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0660 / 0.063</span> <span class="cd close">+4.8%</span> <span class="spark" data-pct="74"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
         <li><span class="cm">marigold v1-1</span>                             <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0577 / 0.055</span> <span class="cd close">+4.9%</span> <span class="spark" data-pct="74.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
+        <li><span class="cm">monst3r <span class="proto">Table 4, video-pose</span></span>  <span class="ds">Sintel · traj_ATE</span>  <span class="cv">0.1134 / 0.108</span> <span class="cd close">+5.0%</span> <span class="spark" data-pct="75"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
         <li><span class="cm">monst3r <span class="proto">lineage</span></span>            <span class="ds">KITTI · abs_rel</span>    <span class="cv">0.0959 / 0.101</span> <span class="cd close">−5.0%</span> <span class="spark" data-pct="25"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
         <li><span class="cm">da-v2 base</span>                                <span class="ds">NYU · abs_rel</span>      <span class="cv">0.0456 / 0.049</span> <span class="cd wide">−6.9%</span>  <span class="spark" data-pct="15.5"><span class="spark-band"></span><span class="spark-center"></span><span class="spark-marker"></span></span></li>
       </ul>
@@ -280,39 +281,12 @@
       </p>
     </section>
 
-    <!-- ─────────────────── BUILT ─────────────────── -->
-    <section class="sec colophon-sec" id="built">
-      <header class="sec-head">
-        <span class="sec-num">built/</span>
-        <h2 class="head">built by claude</h2>
-      </header>
-
-      <div class="colophon reveal">
-        <p>
-          <span class="acc">plumbline</span> was written by
-          <a class="lk" href="https://claude.ai/code">Claude</a>,
-          Anthropic's coding assistant, largely autonomously. The
-          one rule that shaped the rest came from a human:
-          <em>for every paper-match cell, study the paper's companion
-          code</em> — eval scripts, demo notebooks, dataset loaders,
-          preprocess helpers — <em>until the protocol is faithful, not
-          just what the paper text says.</em> Everything else is the
-          model's own work.
-        </p>
-        <p class="contrib">
-          Pull requests and issues from humans <em>and</em> bots are
-          both welcome on
-          <a class="lk" href="https://github.com/kmatzen/plumbline">GitHub</a>.
-        </p>
-      </div>
-    </section>
-
     <footer class="foot">
-      <span>plumbline</span>
+      <span>© 2026 Kevin Blackburn-Matzen</span>
       <span class="sep">/</span>
       <span>apache-2.0</span>
       <span class="sep">/</span>
-      <span>built by claude</span>
+      <span class="ai-note">code written largely by <a class="lk" href="https://claude.ai/code">Claude</a></span>
       <span class="pad"></span>
       <div class="links">
         <a href="https://github.com/kmatzen/plumbline">github</a>
