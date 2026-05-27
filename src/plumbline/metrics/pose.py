@@ -22,6 +22,8 @@ __all__ = [
     "pairwise_relative_poses",
     "pose_auc",
     "rotation_error_degrees",
+    "trajectory_ate_rmse_sim3",
+    "trajectory_rpe_rmse_sim3",
     "translation_cosine_error",
     "translation_error",
 ]
@@ -255,6 +257,181 @@ def pairwise_pose_errors(
     rot = rotation_error_degrees(R_p, R_g)
     trans = translation_cosine_error(t_p, t_g, antipodal=translation_antipodal)
     return np.asarray(rot, dtype=np.float64), np.asarray(trans, dtype=np.float64)
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------
+# Trajectory pose metrics (TUM-RGBD-style ATE / RPE)
+# ---------------------------------------------------------------------------
+#
+# Standard SLAM / visual-odometry evaluation:
+# - ATE = root-mean-square Euclidean error between predicted and GT camera
+#   positions, after Sim(3) (Umeyama) alignment.
+# - RPE = root-mean-square error of the *relative* pose between every pair
+#   of frames spaced by ``delta`` (here delta=1, i.e. consecutive frames),
+#   split into translation and rotation components.
+#
+# We delegate to the ``evo`` library so the numbers we compute are
+# bit-identical to what MonST3R / DUSt3R / SLAM papers report — they all
+# use ``evo``'s ``main_ape.ape`` + ``main_rpe.rpe`` under the hood. ``evo``
+# is an optional dependency (``pip install plumbline-bench[pose-trajectory]``);
+# the imports below fail with a clear error if it's missing.
+
+
+def _evo_trajectory(extrinsics: NDArray[Any]) -> Any:
+    """Convert a ``(N, 4, 4)`` ``world_from_camera`` stack to ``evo``'s
+    :class:`PoseTrajectory3D`. Timestamps are synthetic integer frame indices
+    (paper convention; the timestamp axis is only used by ``evo`` for sync /
+    plot ordering, not by the metric itself).
+    """
+    try:
+        from evo.core.trajectory import PoseTrajectory3D
+    except ImportError as exc:  # pragma: no cover - optional dep guard
+        raise ImportError(
+            "trajectory pose metrics require the `evo` library. Install with "
+            "`pip install plumbline-bench[pose-trajectory]` or `pip install evo`."
+        ) from exc
+    E = np.asarray(extrinsics, dtype=np.float64)
+    if E.ndim != 3 or E.shape[-2:] != (4, 4):
+        raise ValueError(f"extrinsics must be (N, 4, 4); got {E.shape}")
+    n = E.shape[0]
+    timestamps = np.arange(n, dtype=np.float64)
+    positions = E[:, :3, 3]
+    # evo expects quaternions as (w, x, y, z).
+    R = E[:, :3, :3]
+    quats_xyzw = _rotmat_to_quat_xyzw(R)
+    quats_wxyz = quats_xyzw[:, [3, 0, 1, 2]]
+    return PoseTrajectory3D(
+        positions_xyz=positions,
+        orientations_quat_wxyz=quats_wxyz,
+        timestamps=timestamps,
+    )
+
+
+def _rotmat_to_quat_xyzw(R: NDArray[Any]) -> NDArray[np.float64]:
+    """Batched rotation-matrix → quaternion (x, y, z, w). Stable shepperd
+    algorithm; handles the four sign cases without picking a single
+    component.
+    """
+    R = np.asarray(R, dtype=np.float64)
+    if R.ndim != 3 or R.shape[-2:] != (3, 3):
+        raise ValueError(f"R must be (N, 3, 3); got {R.shape}")
+    n = R.shape[0]
+    out = np.empty((n, 4), dtype=np.float64)
+    trace = R[:, 0, 0] + R[:, 1, 1] + R[:, 2, 2]
+    for i in range(n):
+        Ri = R[i]
+        tr = trace[i]
+        if tr > 0:
+            s = np.sqrt(tr + 1.0) * 2
+            qw = 0.25 * s
+            qx = (Ri[2, 1] - Ri[1, 2]) / s
+            qy = (Ri[0, 2] - Ri[2, 0]) / s
+            qz = (Ri[1, 0] - Ri[0, 1]) / s
+        elif Ri[0, 0] > Ri[1, 1] and Ri[0, 0] > Ri[2, 2]:
+            s = np.sqrt(1.0 + Ri[0, 0] - Ri[1, 1] - Ri[2, 2]) * 2
+            qw = (Ri[2, 1] - Ri[1, 2]) / s
+            qx = 0.25 * s
+            qy = (Ri[0, 1] + Ri[1, 0]) / s
+            qz = (Ri[0, 2] + Ri[2, 0]) / s
+        elif Ri[1, 1] > Ri[2, 2]:
+            s = np.sqrt(1.0 + Ri[1, 1] - Ri[0, 0] - Ri[2, 2]) * 2
+            qw = (Ri[0, 2] - Ri[2, 0]) / s
+            qx = (Ri[0, 1] + Ri[1, 0]) / s
+            qy = 0.25 * s
+            qz = (Ri[1, 2] + Ri[2, 1]) / s
+        else:
+            s = np.sqrt(1.0 + Ri[2, 2] - Ri[0, 0] - Ri[1, 1]) * 2
+            qw = (Ri[1, 0] - Ri[0, 1]) / s
+            qx = (Ri[0, 2] + Ri[2, 0]) / s
+            qy = (Ri[1, 2] + Ri[2, 1]) / s
+            qz = 0.25 * s
+        out[i] = (qx, qy, qz, qw)
+    return out
+
+
+def trajectory_ate_rmse_sim3(
+    E_pred: NDArray[Any],
+    E_gt: NDArray[Any],
+) -> float:
+    """ATE-RMSE between predicted and GT trajectories, after Sim(3) Umeyama
+    alignment (TUM-RGBD convention, ``correct_scale=True``).
+
+    Inputs are ``(N, 4, 4)`` ``world_from_camera`` matrices. Returns a single
+    RMSE float in trajectory units (meters when poses are metric).
+
+    Implementation goes through ``evo.main_ape.ape`` so the metric is
+    bit-identical to what TUM-RGBD / DUSt3R / MonST3R papers report (they
+    all wrap the same ``evo`` call). See ``_evo_trajectory`` for the
+    conversion to evo's ``PoseTrajectory3D``.
+    """
+    from evo.core.metrics import PoseRelation
+    from evo.main_ape import ape
+
+    traj_ref = _evo_trajectory(E_gt)
+    traj_est = _evo_trajectory(E_pred)
+    result = ape(
+        traj_ref,
+        traj_est,
+        est_name="traj",
+        pose_relation=PoseRelation.translation_part,
+        align=True,
+        correct_scale=True,
+    )
+    return float(result.stats["rmse"])
+
+
+def trajectory_rpe_rmse_sim3(
+    E_pred: NDArray[Any],
+    E_gt: NDArray[Any],
+    *,
+    delta: int = 1,
+) -> tuple[float, float]:
+    """RPE-RMSE for translation (units of trajectory) and rotation
+    (degrees), evaluated between every pair of frames spaced by ``delta``
+    after Sim(3) alignment (TUM-RGBD convention, ``correct_scale=True``,
+    ``all_pairs=True``).
+
+    Inputs are ``(N, 4, 4)`` ``world_from_camera``. Returns
+    ``(rpe_trans_rmse, rpe_rot_deg_rmse)``.
+
+    Goes through ``evo.main_rpe.rpe`` so the metric is bit-identical to
+    MonST3R / TUM-RGBD reporting.
+    """
+    from evo.core.metrics import PoseRelation, Unit
+    from evo.main_rpe import rpe
+
+    traj_ref = _evo_trajectory(E_gt)
+    traj_est = _evo_trajectory(E_pred)
+    rpe_trans = rpe(
+        traj_ref,
+        traj_est,
+        est_name="traj",
+        pose_relation=PoseRelation.translation_part,
+        align=True,
+        correct_scale=True,
+        delta=delta,
+        delta_unit=Unit.frames,
+        rel_delta_tol=0.01,
+        all_pairs=True,
+    )
+    rpe_rot = rpe(
+        traj_ref,
+        traj_est,
+        est_name="traj",
+        pose_relation=PoseRelation.rotation_angle_deg,
+        align=True,
+        correct_scale=True,
+        delta=delta,
+        delta_unit=Unit.frames,
+        rel_delta_tol=0.01,
+        all_pairs=True,
+    )
+    return float(rpe_trans.stats["rmse"]), float(rpe_rot.stats["rmse"])
 
 
 # ---------------------------------------------------------------------------

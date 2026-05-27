@@ -134,6 +134,7 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
     )
     pose_auc_mode = str(cfg.get("pose_auc_mode", "analytic"))
     pose_translation_antipodal = bool(cfg.get("pose_translation_antipodal", False))
+    pose_trajectory_metrics = bool(cfg.get("pose_trajectory_metrics", False))
 
     report = evaluate(
         model=model,
@@ -147,6 +148,7 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
         pose_acc_thresholds=pose_acc_thresholds,
         pose_auc_mode=pose_auc_mode,
         pose_translation_antipodal=pose_translation_antipodal,
+        pose_trajectory_metrics=pose_trajectory_metrics,
         depth_clip=depth_clip,
         pointcloud_alignment=cfg.get("pointcloud_alignment", "none"),
         chamfer_outlier_distance=cfg.get("chamfer_outlier_distance"),

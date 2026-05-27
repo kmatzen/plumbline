@@ -74,7 +74,21 @@ class SintelDataset(Dataset):
         Optional list of scene names to restrict to. Default: all.
     views_per_sample
         Number of consecutive frames grouped into one :class:`Sample`. ``1``
-        = monocular (default); ``>1`` = sequential multi-view.
+        = monocular (default); ``>1`` = sequential multi-view sliding window.
+        Ignored when ``full_seq=True``.
+    full_seq
+        ``True`` emits exactly ONE :class:`Sample` per scene with all of that
+        scene's frames packed into the Sample's ``images`` / ``extrinsics_gt``.
+        This is the per-trajectory shape that ATE / RPE pose evaluation needs
+        (MonST3R Table 4 / DUSt3R / TUM-RGBD convention). Default ``False``
+        for backward compat with the sliding-window mono-depth runs.
+    frame_stride
+        Only honoured when ``full_seq=True``. Emit every ``frame_stride``th
+        frame within each scene (default ``1`` = every frame). Bumps the
+        effective trajectory length down by this factor — useful when a
+        downstream multi-view adapter has a memory cap (plumbline's MonST3R
+        adapter does dense pairwise PCO, which is O(N²) in VRAM; Sintel's
+        50-frame scenes don't fit on 24 GB without striding).
     max_depth
         If set, the loader writes ``Sample.depth_valid`` = ``(gt > 0) & (gt
         < max_depth)``. Sintel encodes sky as ~1e5 m in the ``.dpt`` file
@@ -97,6 +111,8 @@ class SintelDataset(Dataset):
         scenes: list[str] | None = None,
         views_per_sample: int = 1,
         max_depth: float | None = None,
+        full_seq: bool = False,
+        frame_stride: int = 1,
     ) -> None:
         if split != "training":
             raise ValueError(f"Sintel split '{split}' has no public GT; use 'training'")
@@ -114,11 +130,24 @@ class SintelDataset(Dataset):
         self.pass_name = pass_name
         self.views_per_sample = max(1, int(views_per_sample))
         self.max_depth = float(max_depth) if max_depth is not None else None
+        self.full_seq = bool(full_seq)
+        self.frame_stride = max(1, int(frame_stride))
+        if self.frame_stride > 1 and not self.full_seq:
+            raise ValueError(
+                "frame_stride > 1 only applies in full_seq mode (per-scene trajectories)"
+            )
 
+        # Manifest key includes the full_seq toggle so the two modes don't
+        # share a cache.
+        vps_tag = (
+            f"full_s{self.frame_stride}"
+            if self.full_seq
+            else f"vps{self.views_per_sample}"
+        )
         manifest_path = (
             self.root
             / ".plumbline_manifest"
-            / f"sintel_{split}_{pass_name}_vps{self.views_per_sample}.jsonl"
+            / f"sintel_{split}_{pass_name}_{vps_tag}.jsonl"
         )
         if manifest_path.exists():
             records = load_manifest(manifest_path)
@@ -152,6 +181,29 @@ class SintelDataset(Dataset):
             scene_dirs = [p for p in scene_dirs if p.name in wanted]
         for scene_dir in scene_dirs:
             frames = sorted(scene_dir.glob("frame_*.png"))
+            if not frames:
+                continue
+            if self.full_seq:
+                # One Sample per scene; pack every `frame_stride`th frame.
+                strided = frames[:: self.frame_stride]
+                tag = "full" if self.frame_stride == 1 else f"full_s{self.frame_stride}"
+                rec = {
+                    "sample_id": f"{scene_dir.name}/{tag}",
+                    "scene": scene_dir.name,
+                    "image_paths": [str(f.relative_to(self.root)) for f in strided],
+                    "depth_paths": [
+                        str(
+                            (depth_root / scene_dir.name / (f.stem + ".dpt")).relative_to(self.root)
+                        )
+                        for f in strided
+                    ],
+                    "cam_paths": [
+                        str((cam_root / scene_dir.name / (f.stem + ".cam")).relative_to(self.root))
+                        for f in strided
+                    ],
+                }
+                yield rec
+                continue
             for i in range(0, len(frames) - self.views_per_sample + 1):
                 view_frames = frames[i : i + self.views_per_sample]
                 rec = {

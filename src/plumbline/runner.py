@@ -60,6 +60,10 @@ from plumbline.metrics.pointmap import (
 from plumbline.metrics.pose import accuracy_at_threshold as pose_acc_fn
 from plumbline.metrics.pose import auc as pose_auc_fn
 from plumbline.metrics.pose import (
+    trajectory_ate_rmse_sim3,
+    trajectory_rpe_rmse_sim3,
+)
+from plumbline.metrics.pose import (
     pairwise_pose_errors,
     rotation_error_degrees,
     translation_cosine_error,
@@ -101,6 +105,7 @@ def evaluate(
     pose_acc_thresholds: tuple[float, ...] = (15.0,),
     pose_auc_mode: str = "analytic",
     pose_translation_antipodal: bool = False,
+    pose_trajectory_metrics: bool = False,
     delta_thresholds: tuple[float, ...] = (1.25, 1.25**2, 1.25**3),
     f_score_threshold: float = 0.05,
     depth_clip: tuple[float, float] | None = None,
@@ -371,6 +376,7 @@ def evaluate(
             pose_acc_thresholds=pose_acc_thresholds,
             pose_auc_mode=pose_auc_mode,
             pose_translation_antipodal=pose_translation_antipodal,
+            pose_trajectory_metrics=pose_trajectory_metrics,
             delta_thresholds=delta_thresholds,
             f_score_threshold=f_score_threshold,
             depth_clip=depth_clip,
@@ -597,6 +603,7 @@ def _compute_metrics(
     pose_acc_thresholds: tuple[float, ...],
     pose_auc_mode: str,
     pose_translation_antipodal: bool,
+    pose_trajectory_metrics: bool,
     delta_thresholds: tuple[float, ...],
     f_score_threshold: float,
     depth_clip: tuple[float, float] | None = None,
@@ -642,6 +649,7 @@ def _compute_metrics(
                 pose_acc_thresholds,
                 pose_auc_mode,
                 pose_translation_antipodal,
+                pose_trajectory_metrics,
             )
         )
 
@@ -1177,6 +1185,7 @@ def _pose_metrics(
     acc_thresholds: tuple[float, ...],
     auc_mode: str,
     translation_antipodal: bool,
+    trajectory_metrics: bool = False,
 ) -> dict[str, float]:
     if E_pred.shape != E_gt.shape:
         raise ValueError(f"pose shape mismatch: {E_pred.shape} vs {E_gt.shape}")
@@ -1223,6 +1232,33 @@ def _pose_metrics(
             out[f"pairwise_RRA@{t:g}"] = float(v)
         for t, v in pw_rta.items():
             out[f"pairwise_RTA@{t:g}"] = float(v)
+
+    # Trajectory pose metrics (TUM-RGBD-style ATE / RPE). These are what
+    # MonST3R Table 4 / SLAM-style papers report for video-pose evaluation.
+    # The metric is meaningful only when each Sample is a *trajectory* (N
+    # ordered frames from one sequence) AND the loader provides
+    # metric-scale GT (Sim(3) alignment recovers scale, so any
+    # consistently-scaled pred lands on the same number). Plumbline
+    # delegates to `evo` to match MonST3R's bit-for-bit eval shape (their
+    # `dust3r/utils/vo_eval.py:eval_metrics` is the same evo wrapper).
+    if E_pred.ndim == 3 and E_pred.shape[0] >= 3 and trajectory_metrics:
+        try:
+            ate = trajectory_ate_rmse_sim3(E_pred, E_gt)
+            rpe_t, rpe_r = trajectory_rpe_rmse_sim3(E_pred, E_gt, delta=1)
+            out["trajectory_ate_rmse"] = float(ate)
+            out["trajectory_rpe_trans_rmse"] = float(rpe_t)
+            out["trajectory_rpe_rot_deg_rmse"] = float(rpe_r)
+        except ImportError:
+            # `evo` is an optional extra; silently skip if not installed.
+            pass
+        except Exception:  # noqa: BLE001
+            # Umeyama can fail on degenerate trajectories (collinear /
+            # near-stationary cameras). Emit NaN so the per-sample row
+            # records the failure and aggregation skips it via nanmean —
+            # don't crash the whole eval.
+            out["trajectory_ate_rmse"] = float("nan")
+            out["trajectory_rpe_trans_rmse"] = float("nan")
+            out["trajectory_rpe_rot_deg_rmse"] = float("nan")
 
     return out
 
