@@ -282,40 +282,25 @@
     <section class="sec colophon-sec" id="colophon">
       <header class="sec-head">
         <span class="sec-num">colophon/</span>
-        <h2 class="head">made by claude</h2>
-        <p class="sub">
-          Honest framing of how this codebase actually got written. Read
-          it before trusting the numbers above.
-        </p>
+        <h2 class="head">written by claude</h2>
       </header>
 
       <div class="colophon reveal">
         <p>
-          <span class="acc">plumbline</span> is generated and maintained by
-          <a class="lk" href="https://claude.ai/code">Claude</a>
-          (Anthropic's coding assistant), iterating largely autonomously on
-          its own commits. Each adapter, dataset loader, discrepancy audit,
-          prefetch tool, and paper-text-vs-code closure on
-          <a class="lk" href="https://github.com/kmatzen/plumbline/blob/main/docs/DISCREPANCIES.md">docs/DISCREPANCIES.md</a>
-          was authored end-to-end by the model.
-        </p>
-        <p>
-          The one human-written prior shaping the rest is narrow: <em>for
-          every paper-match cell, study the companion code</em>
-          (eval scripts, demo notebooks, prediction loaders, preprocess
-          helpers) <em>until the protocol is faithful — not just the paper
-          text.</em> Most off-paper deltas in 3D-vision benchmarks trace
-          to this gap, and most of plumbline's resolved discrepancies
-          (D9 Marigold checkpoint drift, D17/18 GeoWizard best-of-N seeds,
-          D24 CUT3R GT-depth-field, D27 MonST3R-Bonn align_with_lad2)
-          are exactly that story. The work that follows from that prior
-          is the model's own decisions, top to bottom.
+          <span class="acc">plumbline</span> was written by
+          <a class="lk" href="https://claude.ai/code">Claude</a>,
+          Anthropic's coding assistant, largely autonomously. The
+          one rule that shaped the rest came from a human:
+          <em>for every paper-match cell, study the paper's companion
+          code</em> — eval scripts, demo notebooks, dataset loaders,
+          preprocess helpers — <em>until the protocol is faithful, not
+          just what the paper text says.</em> Everything else is the
+          model's own work.
         </p>
         <p class="contrib">
-          Contributions from humans <em>and</em> bots are welcome — pull
-          requests, issues, additional reproductions, discrepancy reports.
-          See
-          <a class="lk" href="https://github.com/kmatzen/plumbline/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.
+          Pull requests and issues from humans <em>and</em> bots are
+          both welcome on
+          <a class="lk" href="https://github.com/kmatzen/plumbline">GitHub</a>.
         </p>
       </div>
     </section>
