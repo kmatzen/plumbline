@@ -43,7 +43,7 @@ cells are now ℹ️ instead of ✅.
 | **GeoWizard** | ℹ️ **0.0574** vs 0.052 _(10.5% off — D17 RESOLVED 2026-05-26: paper number is best-of-N seeds, not single-seed; plumbline's 0.0574 matches `fuxiao0719/GeoWizard#36` reproducer @0.0576; paper-author-confirmed cherry-pick eval recipe)_ | ℹ️ **0.131** vs 0.097 _(35.2% off — D18 RESOLVED 2026-05-26 by same root cause)_ | — | — | — | — | — |
 | **Depth Pro** | ℹ️ δ₁ **0.9347** _(paper does not evaluate NYU — earlier 0.961 pin was fabricated)_ | ⌛ | — | — | — | — | — |
 | **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ✅ AUC@30 **0.7960** vs 0.818 _(2.7 % off, verified 2026-05-26 on RTX 3090; companion RRA@15 = 0.9708; dust3r PointCloudOptimizer N=10, init=mst, niter=300, curope CUDA ext built)_ | — |
-| **VGGT** | — | — | — | ⚠️ 0.642 m vs 0.709 _(D4 per-view-masked landed, 9.4% under paper on 3-scene; D10 needed for full split)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ✅ AUC@30 **0.8964** vs 0.882 _(1.6 % over, verified 2026-05-26 on RTX 3090; CO3Dv2 staged via scripts/co3dv2_prefetch.py at ~3 GB)_ | — |
+| **VGGT** | — | — | — | ⚠️ 0.875 m vs 0.709 _(D10 13-scene investigated 2026-05-27, +23.5 % over paper; one outlier `terrains` Comp 10.18 m drives the aggregate — without it 12-scene mean is 0.515, 27 % tighter than paper. See docs/DISCREPANCIES.md D10.)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ✅ AUC@30 **0.8964** vs 0.882 _(1.6 % over, verified 2026-05-26 on RTX 3090; CO3Dv2 staged via scripts/co3dv2_prefetch.py at ~3 GB)_ | — |
 | **CUT3R** _(video + unordered)_ | ℹ️ **0.0522** vs 0.086 _(better — D24 protocol delta: strict raw+crop vs lineage filled+no-crop; model correct, not a paper-match)_ | ℹ️ **0.0858** vs 0.092 _(better — D24 protocol delta: Eigen-652+Garg vs lineage val_selection_cropped)_ | — | — | — | ℹ️ recurrent/online — handles ordered video & unordered sets | — |
 | **MonST3R** _(dynamic / video, base path)_ | ✅ **0.0896** vs 0.091 _(1.5% off, Table 3 single-frame, `nyu_dust3r_lineage` protocol; verified 2026-05-26, adapter v1.1)_ | ✅ **0.0959** vs 0.101 _(4.1% off, Table 3 single-frame, `kitti_dust3r_lineage` protocol — 1269-frame gathered set; verified 2026-05-26, adapter v1.1)_ | — | — | — | — | — |
 
@@ -82,9 +82,13 @@ reproductions on `main`:
 - VGGT-DTU (D3) — protocol port complete; ~2 × residual gap declared
   upstream-blocked 2026-04-27 (PatchmatchNet filter + fp32 + Jensen
   toolkit + 49-view all verified ~no-ops).
-- VGGT-ETH3D (D4) — per-view-masked path lands Overall 0.642 m on a
-  3-scene subset (9.4 % under paper 0.709); apples-to-apples needs
-  the full 13-scene split (D10).
+- VGGT-ETH3D (D4 / D10) — full 13-scene run lands Overall 0.875 m
+  vs paper 0.709 (+23.5 %, MISMATCH). The aggregate is dominated by
+  one outlier scene (`terrains` Comp 10.18 m); excluding it, the
+  other 12 scenes mean 0.515 m (27 % tighter than paper). D10 closed
+  as ⚠️ investigated with a localised follow-up. The 3-scene subset
+  variant is preserved at `vggt_eth3d_subset_chamfer.yaml` for
+  regression detection.
 
 **Pose ✅ cells (plumbline matrix)**: **4** — every number below was computed by plumbline's runner, loader, adapter, and metric code.
 
@@ -158,12 +162,17 @@ cells before it lands (behavior left unchanged for now).
 
 ### Biggest open gaps (in order of per-cell leverage)
 
-1. **CO3Dv2 GPU run** — converts the only two pending pose
-   reproductions (VGGT Table 1, MASt3R Table 3) from ⌛ to ✅ or
-   surfaces a real gap. Gates the pose half of the v0.1 release.
-2. **D10 · VGGT-ETH3D 13-scene full split** — closes D4's
-   3-vs-13-scene caveat. Either stage ~14 GB and run, or formally
-   demote to "3-scene informational subset".
+1. ~~**CO3Dv2 GPU run**~~ — ✅ closed 2026-05-26 (VGGT 0.8964, MASt3R
+   0.7960) + extended 2026-05-27 with DUSt3R (0.7893). Three CO3Dv2
+   pose ✅ cells live on the same `vggt_co3d_histogram` AUC mode.
+2. ~~**D10 · VGGT-ETH3D 13-scene full split**~~ — 🔬 investigated
+   end-to-end 2026-05-27. Full 13-scene run lands Overall 0.875 vs
+   paper 0.709 (+23.5 %, MISMATCH). One scene (`terrains`) drives
+   the entire aggregate gap: Comp 10.18 m vs ~0.5 m on the other 12
+   scenes. Excluding terrains, 12-scene mean Overall 0.515 vs paper
+   0.709 (plumbline 27 % tighter). Stays ⚠️ off-paper with a now-
+   localised follow-up (ICP-per-window diagnostic on terrains). See
+   `docs/DISCREPANCIES.md` D10.
 3. ~~**D23 · MASt3R Table 3 PDF re-verification**~~ — ✅ done
    2026-05-23. Direct PDF read of `arxiv.org/pdf/2406.09756` Table 3
    confirmed CO3Dv2 row (b) MASt3R = 94.6 / 91.9 / 81.8, matching
