@@ -99,13 +99,20 @@ when D3 was promoted to upstream-blocked:
 1. **≥ 15 verified_pdf paper-match cells** across at least 3 datasets
    and 5 distinct papers, each within its declared tolerance. **Met
    2026-04-27** (16 cells, 4 datasets, 6 papers).
-2. **At least one pose paper-match.** ✅ **MET 2026-05-26** — VGGT
-   CO3Dv2 (Table 1) lands AUC@30 = 0.8964 vs paper 0.882 (1.6 % over,
-   within ±5 % tolerance). RTX 3090, ~28 min wall, 410 samples (41
-   SEEN cats × 10 seq × 10 frame), CO3Dv2 staged via
+2. **At least one pose paper-match.** ✅ **MET 2026-05-26** — both
+   PDF-verified pose targets landed within tolerance on a single
+   RTX 3090 session:
+   - **VGGT CO3Dv2** (Table 1, feed-forward): AUC@30 **0.8964** vs
+     paper 0.882 (+1.6 %), ~28 min wall.
+   - **MASt3R CO3Dv2** (Table 3, N-view via dust3r `PointCloudOptimizer`,
+     init=mst niter=300): mAA(30) **0.7960** vs paper 0.818 (−2.7 %),
+     ~3.2 h cumulative wall (interrupted once by an SSH-daemon drop on
+     the vast.ai box; resumed cleanly from plumbline's prediction cache,
+     143 of 410 samples already computed).
+   Both ran the same `Co3Dv2VGGTPoseEvalLoader` recipe (41 SEEN cats ×
+   10 seq × 10 frame, seed=0) on a CO3Dv2 set staged via
    `scripts/co3dv2_prefetch.py` selective HTTP-Range fetch (~3 GB vs
-   4.3 TB raw). MASt3R CO3Dv2 (Table 3) GPU run kicked off in parallel
-   (~5.5 h ETA, curope CUDA ext built).
+   4.3 TB raw).
 3. **No fabricated paper cells in `verified_pdf` YAMLs** — every cell
    audited against the source PDF (table + col + row).
    Tracked in `reproductions/AUDIT.md`.

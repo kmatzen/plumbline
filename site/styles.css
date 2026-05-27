@@ -820,6 +820,7 @@ footer.foot .sep { color: var(--fg-dim); }
 .cell-list.reveal.in-view > *:nth-child(18) { transition-delay: 820ms; }
 .cell-list.reveal.in-view > *:nth-child(19) { transition-delay: 865ms; }
 .cell-list.reveal.in-view > *:nth-child(20) { transition-delay: 910ms; }
+.cell-list.reveal.in-view > *:nth-child(21) { transition-delay: 955ms; }
 
 /* Sparkline marker tweens from paper-baseline (center) to data-pct on reveal */
 .spark-marker {

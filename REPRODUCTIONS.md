@@ -42,7 +42,7 @@ cells are now ℹ️ instead of ✅.
 | **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ℹ️ **0.1090** vs 0.099 _(v1-1 / 1-step is the newer distilled checkpoint; paper cell is v1-0 / 50-step — D9 RESOLVED 2026-05-25: 0.0992 reproduces end-to-end on Marigold's own pipeline. Documented checkpoint-generation delta, not a paper-match cell.)_ | — | — | — | — | — |
 | **GeoWizard** | ℹ️ **0.0574** vs 0.052 _(10.5% off — D17 RESOLVED 2026-05-26: paper number is best-of-N seeds, not single-seed; plumbline's 0.0574 matches `fuxiao0719/GeoWizard#36` reproducer @0.0576; paper-author-confirmed cherry-pick eval recipe)_ | ℹ️ **0.131** vs 0.097 _(35.2% off — D18 RESOLVED 2026-05-26 by same root cause)_ | — | — | — | — | — |
 | **Depth Pro** | ℹ️ δ₁ **0.9347** _(paper does not evaluate NYU — earlier 0.961 pin was fabricated)_ | ⌛ | — | — | — | — | — |
-| **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ⌛ AUC@30 target **0.818** (Table 3 verified_pdf, awaiting GPU run) | — |
+| **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ✅ AUC@30 **0.7960** vs 0.818 _(2.7 % off, verified 2026-05-26 on RTX 3090; companion RRA@15 = 0.9708; dust3r PointCloudOptimizer N=10, init=mst, niter=300, curope CUDA ext built)_ | — |
 | **VGGT** | — | — | — | ⚠️ 0.642 m vs 0.709 _(D4 per-view-masked landed, 9.4% under paper on 3-scene; D10 needed for full split)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ✅ AUC@30 **0.8964** vs 0.882 _(1.6 % over, verified 2026-05-26 on RTX 3090; CO3Dv2 staged via scripts/co3dv2_prefetch.py at ~3 GB)_ | — |
 | **CUT3R** _(video + unordered)_ | ℹ️ **0.0522** vs 0.086 _(better — D24 protocol delta: strict raw+crop vs lineage filled+no-crop; model correct, not a paper-match)_ | ℹ️ **0.0858** vs 0.092 _(better — D24 protocol delta: Eigen-652+Garg vs lineage val_selection_cropped)_ | — | — | — | ℹ️ recurrent/online — handles ordered video & unordered sets | — |
 | **MonST3R** _(dynamic / video, base path)_ | ✅ **0.0896** vs 0.091 _(1.5% off, Table 3 single-frame, `nyu_dust3r_lineage` protocol; verified 2026-05-26, adapter v1.1)_ | ✅ **0.0959** vs 0.101 _(4.1% off, Table 3 single-frame, `kitti_dust3r_lineage` protocol — 1269-frame gathered set; verified 2026-05-26, adapter v1.1)_ | — | — | — | — | — |
@@ -64,14 +64,14 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 
 ### Paper-match count
 
-**19 ✅ mono-depth cells + 1 ✅ pose cell = 20 total** with `source_confidence: verified_pdf`:
+**19 ✅ mono-depth cells + 2 ✅ pose cells = 21 total** with `source_confidence: verified_pdf`:
 
 - NYU (9): DA-V2 S/B/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3, **MonST3R** (lineage protocol, 2026-05-26)
 - KITTI Eigen+Garg (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
 - KITTI MoGe-eval (2): MoGe-1 ViT-L (D8 close), DA-V2 ViT-L (2026-04-27)
 - KITTI dust3r-lineage (1): **MonST3R** (lineage protocol, 2026-05-26)
 - DIODE (2): MoGe-1 ViT-L, DA-V2 ViT-L (FoV-warp loader, 2026-04-26/27)
-- **CO3Dv2 pose (1): VGGT (AUC@30 0.8964 vs 0.882, 2026-05-26)** — first multi-view pose paper-match; v0.1 acceptance criterion #2 met.
+- **CO3Dv2 pose (2): VGGT (AUC@30 0.8964 vs 0.882, +1.6 %) + MASt3R (mAA(30) 0.7960 vs 0.818, −2.7 %), both 2026-05-26** — v0.1 acceptance criterion #2 met (VGGT) and seconded (MASt3R).
 
 Each cell is verified against the source PDF (table + col + row) per
 `reproductions/AUDIT.md`.
@@ -85,15 +85,12 @@ reproductions on `main`:
   3-scene subset (9.4 % under paper 0.709); apples-to-apples needs
   the full 13-scene split (D10).
 
-**Pose ✅ cells**: **1** (VGGT-CO3Dv2 landed 2026-05-26, v0.1 acceptance criterion #2 met):
+**Pose ✅ cells**: **2** (both landed 2026-05-26 on RTX 3090, v0.1 acceptance criterion #2 met):
 
-- ✅ **VGGT CO3Dv2** (Table 1, AUC@30): observed **0.8964** vs paper **0.882** (1.6 % over, within ±5 %). Companion **pairwise_RRA@15 = 0.9819**. 410 samples (41 SEEN cats × 10 seq × 10 frame, seed=0), `vggt_co3d_histogram` AUC mode, `pose_translation_antipodal: true`. Run 2026-05-26 on RTX 3090 / CUDA 12.4 / torch 2.6.0; CO3Dv2 staged via `scripts/co3dv2_prefetch.py` (~3 GB selective fetch). Run wall time ~28 min; result at `s3://plumbline-bench/runs/vggt_co3d_20260526T210832Z/` (pending S3 token refresh).
-- ⏳ **MASt3R CO3Dv2** (Table 3, mAA(30) = 0.818, RRA@15 = 0.946, RTA@15 = 0.919) — `mast3r_co3dv2_pose.yaml`. Paper cell verified by direct PDF read 2026-05-23 (D23 resolved). GPU run kicked off 2026-05-26 in parallel with this docs PR (~5.5 h ETA on RTX 3090 with curope CUDA ext built; smoke verified at 48.7 s / 10-view sample).
+- ✅ **VGGT CO3Dv2** (Table 1, AUC@30): observed **0.8964** vs paper **0.882** (+1.6 % over). Companion **pairwise_RRA@15 = 0.9819**. Run wall ~28 min; feed-forward, no global alignment.
+- ✅ **MASt3R CO3Dv2** (Table 3, mAA(30)): observed **0.7960** vs paper **0.818** (−2.7 % under). Companion **pairwise_RRA@15 = 0.9708**. Run wall ~3.2 h cumulative (interrupted once by an SSH-daemon drop on the vast.ai box; resumed via plumbline's prediction cache, 143 of 410 samples already computed). Paper cell PDF-verified 2026-05-23 (D23 resolved).
 
-`Co3Dv2VGGTPoseEvalLoader` (41-cat / 10-seq / 10-frame seeded recipe)
-+ MASt3R N-view via `PointCloudOptimizer` (N≥3) — VGGT side now has a GPU-verified
-paper-match; MASt3R side has smoke-verified inference but full-eval result pending.
-DA3 has an informational companion (`da3_co3dv2_pose.yaml`) with no paper target.
+Both run the same `Co3Dv2VGGTPoseEvalLoader` recipe (41 SEEN cats × 10 seq × 10 frame, seed=0), `vggt_co3d_histogram` AUC mode, `pose_translation_antipodal: true`. CO3Dv2 staged once via `scripts/co3dv2_prefetch.py` (~3 GB selective fetch, ~30 min), then both jobs ran back-to-back on the same disk. MASt3R inference goes through dust3r's `PointCloudOptimizer` (N≥3, init=mst, niter=300); curope CUDA ext built per-MASt3R-dust3r-fork in-session (32 % speedup vs the pytorch RoPE2D fallback the adapter ships with). DA3 has an informational companion (`da3_co3dv2_pose.yaml`) with no paper target.
 
 **CO3Dv2 disk gate cleared 2026-05-26 (selective fetch):** the raw
 CO3Dv2 distribution is ~4.3 TB (276 zips × ~18 GB avg) — well past the
