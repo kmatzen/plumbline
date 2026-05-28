@@ -159,7 +159,7 @@ jobs:
     data_footprint_gb: 4
     est_wall_min: 60
     requires_env: [CO3DV2_ROOT]
-    extras: "DA3 ships in the base install (transformers)."
+    extras: "DA3: `plumbline install depth-anything-3` (pip package `depth-anything-3`; NOT in the base install)."
     notes: >
       No paper_match expected (value: null). Run only if CO3Dv2 is
       already staged for the Tier-1 jobs — it's a free A/B data point
