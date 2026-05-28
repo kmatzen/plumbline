@@ -342,15 +342,29 @@ jobs:
     extras: "base install; ETH3D MoGe bundle as above."
     notes: "Companion to moge-vitl-eth3d-moge (same MoGe Table 3 block, DA-V2 row). NB: distinct from DA-V2's own Table 2 ETH3D 0.131."
 
+  # --- New MODEL coverage: Depth Pro on Sintel (metric δ₁, NO alignment).
+  #     Depth Pro's first paper-match candidate (yaml landed 2026-05-28). ---
+  - name: depth-pro-sintel
+    status: pending
+    priority: 6
+    paper_target: "Depth Pro Table 1 — Sintel δ₁ 0.400 (metric, no alignment; verified_pdf 2026-05-28)"
+    primary_metric: delta_1
+    datasets: [sintel]
+    data_footprint_gb: 6
+    est_wall_min: 30
+    requires_env: [SINTEL_ROOT]
+    extras: "plumbline install depth-pro; download depth_pro.pt → ~/.cache/plumbline/weights/depth-pro/ (see adapter docstring)"
+    notes: "NEW model coverage (Depth Pro's first ✅ candidate). EXPERIMENT: confirm the Sintel pass (final/clean) + depth cap (max_depth) against Depth Pro's eval on the first run; the target 0.400 is PDF-verified. Depth Pro does NOT eval NYU/KITTI."
+
   # --- New coverage NEEDING harness work (verified targets ready; create
   #     the protocol/loader path before these can be queued as runnable): ---
   #   * iBims-1 — DONE 2026-05-28: `ibims1_moge` protocol + yamls created and
   #     queued above (moge-vitl-ibims1 / da-v2-large-ibims1).
   #   * ETH3D mono-depth — DONE 2026-05-28: `eth3d_moge` protocol +
   #     `eth3d-moge-eval` loader + yamls created, queued above.
-  #   * Depth Pro × ETH3D / Sintel (Depth Pro Table 1, metric δ₁ 0.415 /
-  #     0.400, NO scale alignment) — Depth Pro's FIRST ✅ (new model);
-  #     needs a metric-δ₁ protocol on those loaders.
+  #   * Depth Pro × Sintel — DONE 2026-05-28: depth_pro_sintel.yaml queued
+  #     above (metric δ₁ 0.400, no alignment). ETH3D (δ₁ 0.415) still
+  #     backlog — its eval set doesn't map onto the chamfer `eth3d` loader.
   #   * DA-V2 own-Table-2 × DIODE (S 0.073 / B 0.068 / L 0.066) and ETH3D
   #     (S 0.142 / B 0.137 / L 0.131) — DA-V2's own protocol (distinct from
   #     the MoGe re-eval cells). Sintel (L 0.487) deferred: pass/alignment
