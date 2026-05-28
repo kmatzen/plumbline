@@ -15,6 +15,7 @@ tolerance.
 from __future__ import annotations
 
 import importlib.resources as resources
+import logging
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -31,11 +32,68 @@ from plumbline.runner import evaluate
 __all__ = [
     "REPRODUCTIONS_DIR",
     "ReproductionResult",
+    "expected_metric_keys",
     "load_reproduction_config",
     "run_reproduction",
 ]
 
 REPRODUCTIONS_DIR = Path(__file__).resolve().parent.parent.parent / "reproductions"
+
+log = logging.getLogger(__name__)
+
+
+def expected_metric_keys(cfg: dict[str, Any]) -> set[str]:
+    """Static over-approximation of the metric keys a config's run can emit.
+
+    Mirrors the key construction in :func:`plumbline.runner.evaluate` /
+    ``_compute_metrics`` so a reproduction's ``paper_reference.primary_metric``
+    can be validated at load time — *before* burning a GPU run that would
+    otherwise silently report ``NaN`` via ``aggregate_metrics.get(metric, nan)``
+    (the pi3-dtu 'chamfer' vs 'overall' class of bug). ``cfg`` must be
+    protocol-merged (post :func:`apply_protocol`).
+
+    Conservative by design: returns the *union* of keys reachable for the
+    declared tasks/aggregation, so it never rejects a valid metric. Keep in
+    sync with the runner; ``tests/test_reproduction_metric_keys.py`` enforces
+    that every shipped reproduction's primary_metric is in this set.
+    """
+    tasks = set(cfg.get("tasks", []))
+    # Scene aggregation replaces the per-sample metric path entirely
+    # (runner: the scene branch ``continue``s before _compute_metrics).
+    if cfg.get("aggregation", "sample") == "scene":
+        return {
+            "overall",
+            "accuracy",
+            "completeness",
+            "overall_median",
+            "accuracy_median",
+            "completeness_median",
+        }
+    keys: set[str] = set()
+    if {"mono_depth", "mvs_depth"} & tasks:
+        keys |= {"abs_rel", "rmse", "log10", "silog"}
+        deltas = cfg.get("delta_thresholds") or (1.25, 1.25**2, 1.25**3)
+        keys |= {f"delta_{i}" for i in range(1, len(deltas) + 1)}
+    if "pose" in tasks:
+        auc_thr = cfg.get("pose_auc_thresholds") or (5.0, 10.0, 30.0)
+        acc_thr = cfg.get("pose_acc_thresholds") or (15.0,)
+        keys |= {"rotation_error_deg_mean", "translation_cos_err_deg_mean"}
+        keys |= {"pairwise_rot_err_deg_mean", "pairwise_trans_cos_err_deg_mean"}
+        for t in auc_thr:
+            keys.add(f"pose_auc@{float(t):g}")
+            keys.add(f"pairwise_pose_auc@{float(t):g}")
+        for t in acc_thr:
+            keys.add(f"pairwise_RRA@{float(t):g}")
+            keys.add(f"pairwise_RTA@{float(t):g}")
+        if cfg.get("pose_trajectory_metrics"):
+            keys |= {
+                "trajectory_ate_rmse",
+                "trajectory_rpe_trans_rmse",
+                "trajectory_rpe_rot_deg_rmse",
+            }
+    if {"mvs_depth", "point_cloud"} & tasks:
+        keys |= {"chamfer", "precision", "recall", "f_score"}
+    return keys
 
 
 @dataclass
@@ -88,6 +146,17 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
     # for YAMLs that don't declare a protocol.
     cfg = apply_protocol(cfg)
 
+    # Fail fast (before the GPU run) if the declared primary_metric can't be
+    # emitted by this config's path — otherwise the run silently reports NaN
+    # via ``aggregate_metrics.get(primary_metric, nan)``. See expected_metric_keys.
+    _pm = cfg.get("paper_reference", {}).get("primary_metric")
+    if _pm is not None and _pm not in expected_metric_keys(cfg):
+        raise ValueError(
+            f"reproduction {name!r}: paper_reference.primary_metric {_pm!r} is not "
+            f"among the metrics this config can emit ({sorted(expected_metric_keys(cfg))}). "
+            f"Fix the yaml — a scene-aggregation run emits 'overall', not 'chamfer'."
+        )
+
     model_name = cfg["model"]["name"]
     dataset_name = cfg["dataset"]["name"]
     if model_name not in MODEL_REGISTRY:
@@ -122,16 +191,10 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
             dataset = dataset.subset(int(subset_n))
 
     depth_clip_cfg = cfg.get("depth_clip")
-    depth_clip = (
-        (float(depth_clip_cfg[0]), float(depth_clip_cfg[1])) if depth_clip_cfg else None
-    )
+    depth_clip = (float(depth_clip_cfg[0]), float(depth_clip_cfg[1])) if depth_clip_cfg else None
 
-    pose_auc_thresholds = tuple(
-        float(t) for t in cfg.get("pose_auc_thresholds", (5.0, 10.0, 30.0))
-    )
-    pose_acc_thresholds = tuple(
-        float(t) for t in cfg.get("pose_acc_thresholds", (15.0,))
-    )
+    pose_auc_thresholds = tuple(float(t) for t in cfg.get("pose_auc_thresholds", (5.0, 10.0, 30.0)))
+    pose_acc_thresholds = tuple(float(t) for t in cfg.get("pose_acc_thresholds", (15.0,)))
     pose_auc_mode = str(cfg.get("pose_auc_mode", "analytic"))
     pose_translation_antipodal = bool(cfg.get("pose_translation_antipodal", False))
     pose_trajectory_metrics = bool(cfg.get("pose_trajectory_metrics", False))
@@ -168,6 +231,19 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
 
     paper = cfg.get("paper_reference", {})
     primary_metric = paper.get("primary_metric") or next(iter(report.aggregate_metrics))
+    if primary_metric not in report.aggregate_metrics:
+        # A primary_metric the protocol never emits silently produced a NaN
+        # ``observed`` (pi3-dtu asked for 'chamfer' while the MVS path emits
+        # 'overall'/'accuracy'/'completeness'). Surface it loudly so a yaml
+        # typo is a visible error, not a phantom NaN reproduction.
+        log.warning(
+            "reproduction %r: primary_metric %r is not among the computed "
+            "metrics %s; observed will be NaN. Fix paper_reference.primary_metric "
+            "in the reproduction yaml to match a metric the protocol emits.",
+            name,
+            primary_metric,
+            sorted(report.aggregate_metrics),
+        )
     observed = float(report.aggregate_metrics.get(primary_metric, float("nan")))
     # value / tolerance_relative may be null (intentionally — e.g. D16: indoor-only run,
     # paper cites combined-val). Treat null / missing as NaN / default so paper_match
