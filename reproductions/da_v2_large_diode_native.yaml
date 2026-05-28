@@ -1,0 +1,34 @@
+# Depth Anything V2 (large) on DIODE val — DA-V2's OWN Table 2.
+#
+# ViT-L companion to da-v2-small/base-diode-native. DA-V2 Table 2 (zero-shot
+# relative depth, DIODE column, ViT-L row) = 0.066 AbsRel.
+#
+# NB: distinct from da-v2-large-diode (MoGe Table 3 re-eval, 0.0533, MoGe
+# bundle + scale_shift_clamped). This is DA-V2's OWN number under DA-V2's own
+# protocol on the native DIODE val — a cross-protocol A/B of the same model
+# on the same dataset (0.066 own vs 0.0533 MoGe re-eval; the gap IS the
+# preprocessing/alignment difference between the two evals).
+
+name: da-v2-large-diode-native
+protocol: diode_dav2
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.066
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), DIODE column, Depth-Anything-V2 ViT-L row: AbsRel = 0.066. Affine-invariant inverse depth. Verified by ar5iv PDF read 2026-05-28."
+  source_confidence: verified_pdf
+
+notes: >
+  Next-box run, same recipe as da-v2-small/base-diode-native (validated on
+  the ViT-S indoor slice at 0.0722 vs 0.073). domain=both combined val.
+  Compare against da-v2-large-diode (MoGe re-eval, 0.0533) for a
+  same-model/same-dataset cross-protocol delta. Needs DIODE val at $DIODE_ROOT.

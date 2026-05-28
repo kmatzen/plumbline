@@ -356,6 +356,43 @@ jobs:
     extras: "plumbline install depth-pro; download depth_pro.pt → ~/.cache/plumbline/weights/depth-pro/ (see adapter docstring)"
     notes: "NEW model coverage (Depth Pro's first ✅ candidate). EXPERIMENT: confirm the Sintel pass (final/clean) + depth cap (max_depth) against Depth Pro's eval on the first run; the target 0.400 is PDF-verified. Depth Pro does NOT eval NYU/KITTI."
 
+  # --- New PROTOCOL coverage: DA-V2 own Table 2 on DIODE (native loader,
+  #     affine-inv disparity) across variants S/B/L. Recipe already validated
+  #     on the ViT-S indoor slice (0.0722 vs 0.073). YAMLs landed 2026-05-28. ---
+  - name: da-v2-small-diode-native
+    status: pending
+    priority: 5
+    paper_target: "DA-V2 Table 2 — DIODE ViT-S AbsRel 0.073 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [diode]
+    data_footprint_gb: 3
+    est_wall_min: 20
+    requires_env: [DIODE_ROOT]
+    extras: "base install (DA-V2 HF path); DIODE val (~2.7 GB) at $DIODE_ROOT"
+    notes: "HIGH-CONFIDENCE: this exact recipe matched the ViT-S indoor slice at 0.0722 vs 0.073. domain=both combined val. DA-V2's OWN Table 2, distinct from the MoGe re-eval cells."
+  - name: da-v2-base-diode-native
+    status: pending
+    priority: 5
+    paper_target: "DA-V2 Table 2 — DIODE ViT-B AbsRel 0.068 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [diode]
+    data_footprint_gb: 3
+    est_wall_min: 20
+    requires_env: [DIODE_ROOT]
+    extras: "base install; DIODE val as above."
+    notes: "New DA-V2-Base DIODE coverage (no Base DIODE cell existed). Same recipe as da-v2-small-diode-native."
+  - name: da-v2-large-diode-native
+    status: pending
+    priority: 5
+    paper_target: "DA-V2 Table 2 — DIODE ViT-L AbsRel 0.066 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [diode]
+    data_footprint_gb: 3
+    est_wall_min: 20
+    requires_env: [DIODE_ROOT]
+    extras: "base install; DIODE val as above."
+    notes: "DA-V2's OWN number (0.066) vs the MoGe re-eval da-v2-large-diode (0.0533) — same model+dataset, cross-protocol A/B."
+
   # --- New coverage NEEDING harness work (verified targets ready; create
   #     the protocol/loader path before these can be queued as runnable): ---
   #   * iBims-1 — DONE 2026-05-28: `ibims1_moge` protocol + yamls created and
@@ -365,10 +402,13 @@ jobs:
   #   * Depth Pro × Sintel — DONE 2026-05-28: depth_pro_sintel.yaml queued
   #     above (metric δ₁ 0.400, no alignment). ETH3D (δ₁ 0.415) still
   #     backlog — its eval set doesn't map onto the chamfer `eth3d` loader.
-  #   * DA-V2 own-Table-2 × DIODE (S 0.073 / B 0.068 / L 0.066) and ETH3D
-  #     (S 0.142 / B 0.137 / L 0.131) — DA-V2's own protocol (distinct from
-  #     the MoGe re-eval cells). Sintel (L 0.487) deferred: pass/alignment
-  #     ambiguous (resolve from MoGe sintel.json first). New PROTOCOL.
+  #   * DA-V2 own-Table-2 × DIODE — DONE 2026-05-28: `diode_dav2` protocol +
+  #     da-v2-{small,base,large}-diode-native (S 0.073 / B 0.068 / L 0.066),
+  #     queued above. ETH3D (S 0.142 / B 0.137 / L 0.131) still BACKLOG —
+  #     needs a MiDaS-protocol mono-depth ETH3D loader (native `eth3d` is
+  #     chamfer-only; `eth3d-moge-eval` is MoGe's preprocessing → MoGe's
+  #     numbers, not DA-V2's). Sintel (L 0.487) deferred: pass/alignment
+  #     ambiguous (resolve from MoGe sintel.json first).
   #   * RealEstate10K pose — DONE 2026-05-28: `realestate10k_pose` protocol +
   #     `realestate10k-pose-eval` loader + 3 YAMLs (vggt/mast3r/dust3r); all
   #     targets PDF-verified. In the BLOCKED section (data: YouTube scraping).

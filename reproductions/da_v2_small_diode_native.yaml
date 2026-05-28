@@ -1,0 +1,35 @@
+# Depth Anything V2 (small) on DIODE val — DA-V2's OWN Table 2.
+#
+# Native-loader, combined-val counterpart to the informational
+# da-v2-small-diode-indoor cell. Targets DA-V2's own Table 2 (zero-shot
+# relative depth, DIODE column, ViT-S row) = 0.073 AbsRel, NOT MoGe's
+# Table 3 re-eval (0.0533, which is ViT-L). New protocol+variant coverage.
+
+name: da-v2-small-diode-native
+protocol: diode_dav2
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: small
+
+# DA-V2 predicts affine-invariant inverse depth (MiDaS-style disparity).
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.073
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), DIODE column, Depth-Anything-V2 ViT-S row: AbsRel = 0.073. Affine-invariant inverse depth (per table caption). Verified by ar5iv PDF read 2026-05-28."
+  source_confidence: verified_pdf
+
+notes: >
+  HIGH-CONFIDENCE next-box run (not blind): the sibling
+  da-v2-small-diode-indoor ran this exact recipe (native `diode` +
+  scale_shift + [1e-3,50] clip) on the val-indoor slice (325 imgs) at
+  AbsRel 0.0722 — a 1.1% match to this 0.073 target. This cell only
+  switches to domain=both (full val, 325 indoor + 446 outdoor) for the
+  strictly-comparable combined-val number DA-V2 reports. If it lands off,
+  the DIODE-outdoor depth clip (>50 m far returns) is the lever (see the
+  diode_dav2 protocol). Needs DIODE val unpacked at $DIODE_ROOT (~2.7 GB).
