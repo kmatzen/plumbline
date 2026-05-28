@@ -29,6 +29,7 @@ the released *checkpoint* doesn't match the paper (e.g. GeoWizard).
 | pi3 | yyfz/Pi3 | minor-divergence → fixed | `conf` trailing-dim kept (fixed); no resize-to-14 + bf16-weights vs autocast (documented) |
 | cut3r | CUT3R/CUT3R | faithful | transcribed from demo.py while building; depth/pose/pointmap conversions match |
 | monst3r | Junyi42/monst3r | faithful (base only) | base dust3r alignment only; flow refinement intentionally out of scope (documented) |
+| dust3r | naver/dust3r | faithful | single-frame `F(I,I)` byte-identical to upstream `load_images`+`inference` (single-record diff, D28); N≥3 shares dust3r PCO with mast3r |
 
 ## Fixes applied in this audit (2026-05-23)
 
@@ -308,3 +309,36 @@ MonST3R per-view geometry with plain dust3r alignment, not the flow-refined
 trajectory. The flow path is a GPU-validated v0.3 follow-up.
 
 **Net:** faithful base inference; flow refinement out of scope (disclosed).
+
+## dust3r
+
+Upstream: `naver/dust3r` (`utils/image.py` `load_images`, `inference.py`,
+`image_pairs.py`, `cloud_opt/*`). The foundation model MASt3R / MonST3R extend;
+the adapter shares MASt3R's audited `_run_mast3r` for the multi-view path and
+adds a single-frame branch for the paper's monocular-depth setup.
+
+**VERIFIED (single-frame `F(I,I)`, adapter v1.1):** `AsymmetricCroCo3DStereo.from_pretrained("naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt")`.
+For `N==1` the adapter runs `_dust3r_single_frame_eval` — DUSt3R §4.3's
+*"feed the same input image I to the network as F(I, I)"* — implemented as the
+view-duplicate trick (`make_pairs(symmetrize=True)` over the duplicated image,
+average `pred1.pts3d` across the two directed pairs, depth = z-coordinate). A
+**single-record diff** (`scripts/_dust3r_nyu_singlediff.py`, NYU sample 0,
+2026-05-28) confirms byte-identity to a from-scratch reference built on dust3r's
+*own* `load_images` + `inference`: input tensor `max|Δ|=0.0`, depth map
+`max|Δ|=0.0` / `corr=1.0`, single-sample AbsRel `0.0412 == 0.0412`. So the
+preprocessing (`_images_to_dust3r_dicts`) and output extraction are faithful to
+upstream, not merely close.
+
+**VERIFIED (N≥3):** routes through the shared `_run_mast3r` (dust3r
+PointCloudOptimizer, `init='mst'/niter=300/lr=0.01`, view-0 rebase) — same
+audited path as the mast3r section above, differing only in checkpoint + the
+`scene_graph` kwarg (`"complete"` default; `"swinstride-5-noncyclic"` for long
+clips). `N==2` uses dust3r's PairViewer.
+
+**Paper-cell note (D28):** the single-frame depth cells land KITTI ✅ (0.1049 vs
+0.1074) but NYU / Bonn off-paper; the single-record diff above proves this is the
+unreleased **eval recipe** (GT-processing), not adapter infidelity. See
+`docs/DISCREPANCIES.md` D28.
+
+**Net:** faithful — single-frame `F(I,I)` byte-verified against upstream;
+multi-view shares the audited dust3r-GA path.

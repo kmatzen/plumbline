@@ -1,0 +1,68 @@
+# DUSt3R single-frame depth on Bonn — DUSt3R Table 2 paper target.
+#
+# Targets DUSt3R Table 2 "Monocular depth estimation on multiple
+# benchmarks" (Wang et al. 2024, arXiv:2312.14132, CVPR 2024, page 8),
+# Indoor / BONN column, "DUSt3R 512" row (T = transfer / zero-shot):
+# **Rel = 8.08, δ₁.₂₅ = 93.56** (→ AbsRel 0.0808, δ₁ 0.9356, both
+# bolded as best zero-shot). Verified by direct PDF read 2026-05-27.
+#
+# Protocol (paper §4.3): single-frame `F(I, I)` — see the
+# `dust3r_nyuv2.yaml` companion for the full recipe. This is the
+# dynamic-indoor sibling on the same DUSt3R-origin lineage protocol
+# the MonST3R Table 3 paper also reports on
+# (`bonn_dust3r_lineage_single`).
+#
+# Distinct from any video-depth / per-sequence-scale Bonn cell
+# (MonST3R Table 2's 0.067 w/ flow-refined GA, CUT3R Table 2's 0.078).
+# DUSt3R only reports the single-frame number (Table 2 is *all*
+# single-frame F(I,I)); there is no DUSt3R video-Bonn cell.
+
+name: dust3r-bonn
+# `bonn_dust3r_lineage_single`: 5 sequences (balloon2, crowd2, crowd3,
+# person_tracking2, synchronous), per-frame iteration (one Sample =
+# one RGB frame), max_depth=70 (loose Bonn-indoor cap), no spatial
+# crop. Same protocol the monst3r-bonn cell uses.
+protocol: bonn_dust3r_lineage_single
+
+model:
+  name: dust3r
+  kwargs:
+    long_edge: 512  # paper "DUSt3R 512" row, default DPT-head model
+
+# Per-frame median scaling (paper §4.3 implied; lineage convention).
+# NOTE: the MonST3R Table 3 Bonn cell (0.076) is scored by the upstream
+# notebook with per-sequence scale+shift LAD2, NOT per-frame median —
+# see D27 in docs/DISCREPANCIES.md. DUSt3R's Table 2 predates that
+# notebook and is text-faithful to §4.3, so per-frame median is the
+# correct recipe here. Whether the DUSt3R paper authors *also* used
+# per-sequence LAD2 internally is not stated; we score to the paper
+# text (per-frame median) and let any future delta surface as a D27-
+# shaped finding.
+scale_alignment: median
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.0808
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2024, DUSt3R (arXiv:2312.14132, CVPR 2024), Table 2 (Monocular depth estimation on multiple benchmarks), Indoor / BONN column, 'DUSt3R 512' row (T = transfer/zero-shot): Rel = 8.08 → AbsRel 0.0808 (bolded best zero-shot). Companion δ₁.₂₅ = 93.56 → 0.9356 (also bolded). Protocol §4.3: 'we simply feed the same input image I to the network as F(I, I)'; per-frame median scaling (lineage convention). Verified by direct PDF read 2026-05-27."
+  source_confidence: verified_pdf
+
+notes: >
+  Dynamic-indoor companion to dust3r-nyuv2 / dust3r-kitti (same
+  Table 2). Sister cell to monst3r-bonn on the same
+  `bonn_dust3r_lineage_single` protocol; distinct from cut3r-bonn
+  (CUT3R Table 2 = video per-seq scale, not Table 2 monocular).
+
+  Adapter routing: N=1 → `_dust3r_single_frame_eval` (paper §4.3's
+  F(I, I)). Requires $BONN_ROOT containing rgbd_bonn_<name>/ TUM-
+  format sequences (rgb/, depth/, groundtruth.txt) and $DUST3R_ROOT
+  (recursive clone of https://github.com/naver/dust3r); weights
+  pulled from HF naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt on first
+  use. Expected wall ~15 min on RTX 3090 (5 seqs × ~250-450 frames
+  each, single-frame inference per frame).
+
+  Companion metric (δ₁.₂₅ = 0.9356) reported in the same row. See
+  D27 (docs/DISCREPANCIES.md) for the MonST3R-Bonn LAD2-vs-text
+  precedent that may also apply here — flag as a follow-up finding if
+  the GPU run lands materially better than paper.

@@ -266,3 +266,79 @@ jobs:
       rules out "just use the paper's code". Likely a private eval
       config. Don't re-run without an upstream clarification.
     notes: "See D9/D22."
+
+  # ----- Tier 1 (DUSt3R own-paper depth): three monocular cells pinned
+  # 2026-05-27, awaiting GPU. These are the *origin* of the DUSt3R-lineage
+  # protocols (`nyu_dust3r_lineage`, `kitti_dust3r_lineage`,
+  # `bonn_dust3r_lineage_single`) that MonST3R and CUT3R cite back to —
+  # so closing them anchors the lineage at its source. Adapter v1.1 added
+  # the N=1 view-duplicate branch (paper §4.3's F(I, I)) so these can
+  # actually run; see PR for `dust3r_{nyuv2,kitti,bonn}.yaml`. -----
+  - name: dust3r-nyuv2
+    status: blocked
+    priority: 18
+    paper_target: "DUSt3R Table 2 — NYU-v2 (Indoor) Rel = 6.50 → AbsRel 0.0650 (verified_pdf 2026-05-27, direct PDF read)"
+    primary_metric: abs_rel
+    datasets: [nyuv2]
+    data_footprint_gb: 3
+    est_wall_min: 15
+    requires_env: [NYUV2_ROOT, DUST3R_ROOT]
+    extras: >
+      DUSt3R: git clone --recursive https://github.com/naver/dust3r
+      $HOME/deps/dust3r; uv pip install roma scikit-learn trimesh;
+      export DUST3R_ROOT=$HOME/deps/dust3r. Weights pulled from HF
+      naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt on first use.
+    blocked_on: >
+      D28 INVESTIGATED 2026-05-28 — observed AbsRel 0.0777 vs paper
+      0.0650 (19.5 % off worse). Cause = GT-processing recipe, NOT
+      alignment (alignment sweep on cached preds: median 0.0777 is
+      already best; scale+shift all worse). Re-scoring the same preds,
+      paper 0.065 is BRACKETED: nyu_eigen_2014 (raw+crop+clip) 0.0489 <
+      paper 0.065 < nyu_dust3r_lineage (filled+no-crop) 0.0777. Same
+      D24 shape (GT-processing dominates NYU AbsRel). Model output is
+      fine; nothing to re-run; ℹ️ informational.
+
+  - name: dust3r-kitti
+    status: done
+    priority: 19
+    paper_target: "DUSt3R Table 2 — KITTI (Outdoor) Rel = 10.74 → AbsRel 0.1074 (verified_pdf 2026-05-27)"
+    primary_metric: abs_rel
+    datasets: [kitti]
+    data_footprint_gb: 6
+    est_wall_min: 30
+    requires_env: [KITTI_ROOT, DUST3R_ROOT]
+    extras: "DUSt3R — same setup as dust3r-nyuv2."
+    notes: >
+      ✅ MATCH 2026-05-28 (RTX 3090, ~6 min wall): observed AbsRel
+      **0.1049** vs paper 0.1074 (2.3 % off, within ±5 % tolerance);
+      companion δ₁ **0.8661** vs paper 0.8600 (0.7 % off). Full lineage
+      set: **1269 / 1269 frames, 13 drives, 0 skipped**. NOTE: a first
+      run accidentally used KITTI_ROOT=/root/data/kitti (an Eigen-652
+      raw tree) and silently evaluated only the 82-frame raw∩GT
+      intersection (skipped=0, looked fine, coincidentally also matched
+      at 0.1086) — the correct full gathered tree is
+      /root/data/kitti_dust3r_lineage (1269 frames, what MonST3R-KITTI
+      used). Lesson: the lineage KITTI loader enumerates from raw RGB
+      and attaches GT, so a wrong KITTI_ROOT under-counts silently;
+      check n_evaluated against the protocol spec. Result JSON:
+      /root/runs/dust3r_kitti_full_20260528T024041Z.json. Closes the
+      KITTI cell of the DUSt3R-own-paper depth pin.
+
+  - name: dust3r-bonn
+    status: blocked
+    priority: 20
+    paper_target: "DUSt3R Table 2 — BONN (Indoor dynamic) Rel = 8.08 → AbsRel 0.0808 (verified_pdf 2026-05-27)"
+    primary_metric: abs_rel
+    datasets: [bonn]
+    data_footprint_gb: 4
+    est_wall_min: 20
+    requires_env: [BONN_ROOT, DUST3R_ROOT]
+    extras: "DUSt3R — same setup as dust3r-nyuv2."
+    blocked_on: >
+      D28 INVESTIGATED 2026-05-28 — observed AbsRel 0.1337 vs paper
+      0.0808 (65 % off worse). Per-seq breakdown: balloon2 0.079,
+      person_tracking2 0.046 (both ≤ paper); crowd2 / crowd3 /
+      synchronous 0.15-0.18 (the three dynamic seqs drive aggregate).
+      DUSt3R is not a dynamic-scene model — the entire reason MonST3R
+      exists. Paper's 0.0808 must come from per-seq LAD2 or similar
+      (D27 pattern, paper-private). Nothing to re-run.

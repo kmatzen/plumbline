@@ -1,0 +1,73 @@
+# DUSt3R single-frame depth on NYUv2 — DUSt3R Table 2 paper target.
+#
+# Targets DUSt3R Table 2 "Monocular depth estimation on multiple
+# benchmarks" (Wang et al. 2024, arXiv:2312.14132, CVPR 2024, page 8),
+# Indoor / NYU-v2 column, "DUSt3R 512" row (T = transfer / zero-shot):
+# **Rel = 6.50, δ₁.₂₅ = 94.02** (→ AbsRel 0.0650, δ₁ 0.9402, both
+# bolded as best zero-shot). Verified by direct PDF read 2026-05-27.
+#
+# Protocol (paper §4.3 "Monocular Depth"):
+#   "For this monocular task, we simply feed the same input image I to
+#    the network as F(I, I). By design, depth prediction is simply the
+#    z coordinate in the predicted 3D pointmap."
+#
+# i.e. the view-duplicate trick — DUSt3RAdapter v1.1's `single == n == 1`
+# branch routes through `_dust3r_single_frame_eval` (symmetrize a self-
+# pair, average the two pred1.pts3d directions). This is bit-identical
+# in shape to MonST3R's `eval_mono_depth` helper that monst3r-nyuv2 /
+# monst3r-kitti / monst3r-bonn use; the difference is the checkpoint
+# (DUSt3R's `naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt` vs MonST3R's
+# `Junyi42/MonST3R_PO-TA-S-W_ViTLarge_BaseDecoder_512_dpt`) and which
+# dust3r package resolves on sys.path ($DUST3R_ROOT vs $MONST3R_ROOT/
+# dust3r).
+#
+# Alignment recipe: per-frame median scaling. Paper §4.3 doesn't spell
+# it out explicitly in the text, but it's what every downstream paper
+# in the lineage cites DUSt3R for (MonST3R §4.2: "per-frame median
+# scaling, following Wang et al. 2024c [DUSt3R]"). The lineage protocol
+# file `protocols/nyu_dust3r_lineage.yaml` codifies the full recipe
+# (filled GT, no Eigen crop, no post-alignment clip) — empirically
+# calibrated against MonST3R Table 3 NYU-v2 cell within 1.7 % using
+# this loader (see D24 / D27 in docs/DISCREPANCIES.md).
+
+name: dust3r-nyuv2
+# `nyu_dust3r_lineage` — DUSt3R is the *origin* of this lineage; the
+# protocol is named after this paper. Filled GT + no Eigen crop + no
+# clip, 654-image Eigen test split.
+protocol: nyu_dust3r_lineage
+
+model:
+  name: dust3r
+  kwargs:
+    long_edge: 512  # paper "DUSt3R 512" row, default DPT-head model
+
+# Per-frame median scaling (paper §4.3 implied, §4.2-of-MonST3R
+# explicit: "following Wang et al. 2024c [DUSt3R]").
+scale_alignment: median
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.0650
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2024, DUSt3R (arXiv:2312.14132, CVPR 2024), Table 2 (Monocular depth estimation on multiple benchmarks), Indoor / NYU-v2 column, 'DUSt3R 512' row (T = transfer/zero-shot): Rel = 6.50 → AbsRel 0.0650 (bolded best zero-shot). Companion δ₁.₂₅ = 94.02 → 0.9402 (also bolded). Protocol §4.3: 'we simply feed the same input image I to the network as F(I, I)' — the view-duplicate trick, single-frame monocular depth, AbsRel = |y − ŷ|/y. Verified by direct PDF read 2026-05-27."
+  source_confidence: verified_pdf
+
+notes: >
+  First DUSt3R-own-paper depth pin. Sister cell to monst3r-nyuv2 and
+  cut3r-nyuv2 on the same `nyu_dust3r_lineage` protocol (filled GT +
+  no Eigen crop + no clip), same view-duplicate recipe — the three
+  cells are directly comparable. DUSt3R is the *origin* paper for the
+  lineage protocol; MonST3R / CUT3R / Spann3R / π³ all cite this paper
+  (Wang 2024c) for the per-frame-median + filled-GT recipe.
+
+  Adapter routing: N=1 → `_dust3r_single_frame_eval` (paper §4.3's
+  F(I, I)). Requires $DUST3R_ROOT (recursive clone of
+  https://github.com/naver/dust3r) so DUSt3R's vendored dust3r pkg
+  resolves on sys.path; weights pulled from HF
+  naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt on first use. Expected
+  wall ~10 min on RTX 3090 (same shape as monst3r-nyuv2's 9 min).
+
+  Companion metric (δ₁.₂₅ = 0.9402) reported in the same row; the
+  pinning here uses AbsRel as primary_metric to mirror the other
+  lineage cells.
