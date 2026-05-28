@@ -369,10 +369,56 @@ jobs:
   #     (S 0.142 / B 0.137 / L 0.131) — DA-V2's own protocol (distinct from
   #     the MoGe re-eval cells). Sintel (L 0.487) deferred: pass/alignment
   #     ambiguous (resolve from MoGe sintel.json first). New PROTOCOL.
-  #   Note-only (no plumbline loader): RealEstate10K pose — VGGT 0.853,
-  #   MASt3R 0.764, DUSt3R 0.612 (MASt3R Table 3 / VGGT Table 1).
+  #   * RealEstate10K pose — DONE 2026-05-28: `realestate10k_pose` protocol +
+  #     `realestate10k-pose-eval` loader + 3 YAMLs (vggt/mast3r/dust3r); all
+  #     targets PDF-verified. In the BLOCKED section (data: YouTube scraping).
 
   # ----- Blocked: do NOT run (data not staged, or upstream-blocked) -----
+
+  # RealEstate10K pose — loader (`realestate10k-pose-eval`) + `realestate10k_pose`
+  # protocol + 3 reproduction YAMLs + all 3 targets PDF-verified (2026-05-28),
+  # loader smoke-tested on synthetic data. BLOCKED only on data: RE10K ships
+  # camera .txt files but the RGB frames must be scraped from YouTube (yt-dlp,
+  # many source videos offline) — no clean HF/zip bundle. Unblock = stage
+  # <clip_id>/{*.txt,<timestamp>.png} to $REALESTATE10K_ROOT (ideally the
+  # canonical 1.8K test split via the `clips:` kwarg), then flip to pending.
+  # First real run also confirms the cam_from_world→world_from_camera convention.
+  - name: vggt-realestate10k-pose
+    status: blocked
+    priority: 8
+    paper_target: "VGGT Table 1 — RealEstate10K AUC@30 = 0.853 (verified_pdf 2026-05-28)"
+    primary_metric: pairwise_pose_auc@30
+    datasets: [realestate10k-pose-eval]
+    data_footprint_gb: 20
+    est_wall_min: 30
+    requires_env: [REALESTATE10K_ROOT]
+    blocked_on: "RealEstate10K frames not staged (YouTube scraping required; no clean bundle). Loader + target ready."
+    notes: "New dataset coverage on the pose axis. Same protocol as the ✅ co3dv2 pose cells."
+  - name: mast3r-realestate10k-pose
+    status: blocked
+    priority: 8
+    paper_target: "MASt3R Table 3 — RealEstate10K mAA(30) = 0.764 (verified_pdf 2026-05-28)"
+    primary_metric: pairwise_pose_auc@30
+    datasets: [realestate10k-pose-eval]
+    data_footprint_gb: 20
+    est_wall_min: 30
+    requires_env: [REALESTATE10K_ROOT]
+    extras: "plumbline install mast3r"
+    blocked_on: "RealEstate10K frames not staged (as above). Loader + target ready."
+    notes: "Same model+protocol as the ✅ mast3r-co3dv2-pose cell."
+  - name: dust3r-realestate10k-pose
+    status: blocked
+    priority: 8
+    paper_target: "MASt3R Table 3 — RealEstate10K DUSt3R mAA(30) = 0.612 (verified_pdf 2026-05-28)"
+    primary_metric: pairwise_pose_auc@30
+    datasets: [realestate10k-pose-eval]
+    data_footprint_gb: 20
+    est_wall_min: 30
+    requires_env: [REALESTATE10K_ROOT]
+    extras: "plumbline install dust3r"
+    blocked_on: "RealEstate10K frames not staged (as above). Loader + target ready."
+    notes: "Same model+protocol as the ✅ dust3r-co3dv2-pose cell."
+
   - name: vggt-eth3d-multiscene-chamfer
     status: blocked
     priority: 10

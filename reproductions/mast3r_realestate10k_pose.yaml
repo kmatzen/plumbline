@@ -1,0 +1,47 @@
+# MASt3R N-view pose on RealEstate10K — MASt3R Table 3 paper-match.
+#
+# Targets MASt3R Table 3 (Leroy et al. 2024, arXiv:2406.09756, ECCV 2024),
+# RealEstate10K column, pairwise block (b), MASt3R row: mAA(30) = 0.764.
+# Same PoseDiffusion protocol + loader as the CO3Dv2 MASt3R pose cell
+# (mast3r-co3dv2-pose, ✅). New DATASET coverage on the pose axis.
+
+name: mast3r-realestate10k-pose
+protocol: realestate10k_pose
+
+model:
+  name: mast3r
+  kwargs: {}
+
+dataset:
+  name: realestate10k-pose-eval
+  kwargs:
+    num_frames: 10
+    seed: 0
+    # clips: null   # set to the canonical 1.8K RealEstate10K test split
+
+tasks: [pose]
+scale_alignment: none
+pointcloud_alignment: none
+max_views: 10
+device: cuda:0
+
+pose_translation_antipodal: true
+pose_auc_mode: vggt_co3d_histogram
+pose_auc_thresholds: [3.0, 5.0, 15.0, 30.0]
+pose_acc_thresholds: [5.0, 15.0]
+
+paper_reference:
+  primary_metric: pairwise_pose_auc@30
+  value: 0.764
+  tolerance_relative: 0.05
+  citation: "Leroy et al. 2024, MASt3R (arXiv:2406.09756, ECCV 2024), Table 3 (multi-view pose regression on CO3Dv2 / RealEstate10K, 10 random frames), RealEstate10K column, pairwise block (b), MASt3R row: mAA(30) = 76.4 → AUC@30 0.764. Verified by direct PDF read 2026-05-28 (ECCV camera-ready p.13; CO3Dv2 mAA(30) 81.8 in the same row confirms the table)."
+  source_confidence: verified_pdf
+
+notes: >
+  Next-box EXPERIMENT (2026-05-28 coverage pass) — RealEstate10K pose via the
+  new `realestate10k-pose-eval` loader. Same model+protocol as the ✅
+  mast3r-co3dv2-pose cell, so a clean run here is high-confidence MODULO the
+  RealEstate10K data caveats (see vggt-realestate10k-pose notes: YouTube frame
+  scraping, the 1.8K test-clip subset, and the cam_from_world→world_from_camera
+  pose convention — all confirmed on the first real run; none move the
+  PDF-verified target 0.764).

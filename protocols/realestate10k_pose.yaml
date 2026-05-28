@@ -1,0 +1,30 @@
+# RealEstate10K multi-view pose protocol — DUSt3R/MASt3R/VGGT recipe.
+#
+# The SAME PoseDiffusion protocol as co3dv2_vggt_pose, applied to
+# RealEstate10K's 1.8K test clips: 10 frames/clip, all C(10,2)=45 unordered
+# pairs, per-pair max(rot°, trans-cos°) error, mAA(30) = AUC of
+# min(RRA@30, RTA@30). RealEstate10K reports mAA(30) ONLY (no RRA@15/RTA@15
+# companions, unlike the CO3Dv2 block). Loader: `realestate10k-pose-eval`.
+# Source: MASt3R §4.3 — "Following [104], ... 1.8K video clips from the test
+# set of RealEstate10k. Each sequence is 10 frames long, ... all possible 45
+# pairs, not using ground-truth focals."
+
+name: realestate10k_pose
+description: >
+  RealEstate10K N-view pose evaluation under the PoseDiffusion/DUSt3R/MASt3R
+  protocol: 10 frames/clip, 45 pairs, per-pair max(rot, trans) error, AUC in
+  degrees, no pose alignment (frame-invariant pairwise). Loader:
+  `realestate10k-pose-eval`.
+
+reference:
+  paper: "VGGT (arXiv:2503.11651) Table 1 'Re10K (unseen)' column; MASt3R (arXiv:2406.09756) Table 3 RealEstate10K block. Same protocol as co3dv2_vggt_pose."
+  eval_code: "facebookresearch/vggt @ evaluation (RealEstate10K path); naver/dust3r pose eval (PoseDiffusion lineage)"
+
+fixed:
+  dataset:
+    name: realestate10k-pose-eval
+  tasks: [pose]
+  scale_alignment: none
+  pointcloud_alignment: none
+  pose_translation_antipodal: true
+  pose_auc_mode: vggt_co3d_histogram

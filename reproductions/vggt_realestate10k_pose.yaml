@@ -1,0 +1,52 @@
+# VGGT N-view pose on RealEstate10K — VGGT Table 1 paper-match.
+#
+# Targets VGGT Table 1 (Wang et al. 2025, arXiv:2503.11651), "Re10K (unseen)"
+# column, "Ours (Feed-Forward)" row, AUC@30 = 0.853. Same PoseDiffusion
+# protocol as the CO3Dv2 pose cell. New DATASET coverage on the pose axis.
+
+name: vggt-realestate10k-pose
+protocol: realestate10k_pose
+
+model:
+  name: vggt
+  kwargs: {}
+
+dataset:
+  name: realestate10k-pose-eval
+  kwargs:
+    num_frames: 10
+    seed: 0
+    # clips: null   # set to the canonical 1.8K RealEstate10K test split
+    #               # (DUSt3R/PoseDiffusion) to match the paper subset exactly
+
+tasks: [pose]
+scale_alignment: none
+pointcloud_alignment: none
+max_views: 10
+device: cuda:0
+
+pose_translation_antipodal: true
+pose_auc_mode: vggt_co3d_histogram
+pose_auc_thresholds: [3.0, 5.0, 15.0, 30.0]
+pose_acc_thresholds: [5.0, 15.0]
+
+paper_reference:
+  primary_metric: pairwise_pose_auc@30
+  value: 0.853
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2025, VGGT (arXiv:2503.11651), Table 1, 'Re10K (unseen)' column, 'Ours (Feed-Forward)' row = 85.3 → AUC@30 0.853. Verified by ar5iv PDF read 2026-05-28 (the CO3Dv2 88.2 in the same row confirms the right cell)."
+  source_confidence: verified_pdf
+
+notes: >
+  Next-box EXPERIMENT (2026-05-28 coverage pass) — new RealEstate10K dataset
+  coverage on the pose axis, via the new `realestate10k-pose-eval` loader
+  (mirrors the CO3Dv2 pose loader's Sample/extrinsics path). THREE unknowns
+  to resolve on the first real run (none affect the PDF-verified target 0.853):
+  (1) DATA — RealEstate10K frames must be scraped from YouTube (many source
+  videos offline); stage to $REALESTATE10K_ROOT as <clip_id>/{*.txt,
+  <timestamp>.png}. (2) CLIP SUBSET — pass the canonical 1.8K test split via
+  `clips:` to match the paper; otherwise every clip on disk is used. (3) POSE
+  CONVENTION — the loader treats the .txt 3x4 as cam_from_world and inverts to
+  world_from_camera (CO3Dv2 convention); a w2c/c2w mixup would tank mAA, so
+  confirm first. Aggregation caveat is the same as the CO3Dv2 pose cell
+  (per-sample vs per-group AUC, ~1-2%).
