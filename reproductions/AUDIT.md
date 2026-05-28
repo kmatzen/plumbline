@@ -211,3 +211,29 @@ No remaining `verified_pdf` value is unaudited, fabricated, or inferred.
 Every fabricated/guessed target found in 2026-04-20 (Depth Pro NYU 0.961,
 DA-V2 Sintel 0.075, MoGe-2 KITTI 0.0392) is now `value: null` /
 informational in its YAML.
+
+## Observed-value provenance (2026-05-28)
+
+Two verification passes on the 22 ✅ cells:
+
+**Target re-verification (paper PDFs):** 21/22 targets confirmed at their
+cited table/row/column. **2 one-digit transcription slips corrected**
+(both cells remain ✅ within ±5 %):
+- `dust3r-co3dv2-pose` mAA(30) **0.774 → 0.772** (MASt3R ECCV Table 3
+  DUSt3R row = 94.3 / 88.4 / **77.2**; companions were already correct).
+- `dust3r-kitti` companion δ₁ **0.8600 → 0.8660** (DUSt3R Table 2 KITTI;
+  ar5iv re-read).
+
+**Observed-vs-retained-JSON provenance:**
+- **Byte-exact vs a retained result JSON (5):** vggt/mast3r/dust3r
+  CO3Dv2 pose, dust3r-kitti, monst3r-sintel-pose — JSONs on
+  `s3://plumbline-bench/runs/` (3 also in `docs/runs/`).
+- **Archive-confirmed (~10):** the early mono-depth ✅ cells match
+  `docs/runs/archive/20260421.md` within rounding.
+- **No retained JSON yet (5):** monst3r-nyuv2, da-v2-large-diode,
+  da-v2-large-kitti-moge, moge-vitl-kitti, moge-vitl-diode-both — run in
+  earlier sessions; **queued for a JSON-capturing re-run**
+  (`gpu_queue.yaml`, priority 3). After those, every ✅ is byte-verified.
+
+**Habit going forward:** every reproduction run syncs its result JSON to
+`s3://plumbline-bench/runs/` so coverage and provenance grow together.
