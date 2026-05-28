@@ -56,3 +56,10 @@ results/
 results/
 reports/
 tmp/
+
+# Local session artifacts — never commit (intentionally repo-external):
+# result-JSON backups already live on s3://plumbline-bench/runs/;
+# .claude/ is local Claude Code config (hooks/settings).
+.claude/
+box_backup_*/
+runs_*_drain_*/
