@@ -316,13 +316,38 @@ jobs:
     extras: "base install; iBims-1 bundle as above."
     notes: "NEW dataset (iBims-1). Companion to moge-vitl-ibims1 (same MoGe Table 3 block, DA-V2 row)."
 
+  # --- New dataset/path: ETH3D mono-depth (MoGe Table 3 affine-inv-disparity)
+  #     via the NEW eth3d-moge-eval loader + eth3d_moge protocol (landed
+  #     2026-05-28). First non-chamfer ETH3D ✅. ---
+  - name: moge-vitl-eth3d-moge
+    status: pending
+    priority: 5
+    paper_target: "MoGe Table 3 (affine-inv-disparity) — MoGe-1 ETH3D AbsRel 0.0317 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [eth3d-moge-eval]
+    data_footprint_gb: 2
+    est_wall_min: 20
+    requires_env: [ETH3D_MOGE_ROOT]
+    extras: "plumbline install moge; fetch ETH3D.zip from Ruicheng/monocular-geometry-evaluation → $ETH3D_MOGE_ROOT (distinct from $ETH3D_ROOT)"
+    notes: "NEW dataset/path. The first run ALSO validates the new eth3d-moge-eval loader vs the real bundle (image ext, intrinsics scaling). If off, try scale_shift_clamped (ETH3D has outdoor scenes)."
+  - name: da-v2-large-eth3d-moge
+    status: pending
+    priority: 5
+    paper_target: "MoGe Table 3 (DA-V2 re-eval) — DA-V2-L ETH3D AbsRel 0.0473 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [eth3d-moge-eval]
+    data_footprint_gb: 2
+    est_wall_min: 20
+    requires_env: [ETH3D_MOGE_ROOT]
+    extras: "base install; ETH3D MoGe bundle as above."
+    notes: "Companion to moge-vitl-eth3d-moge (same MoGe Table 3 block, DA-V2 row). NB: distinct from DA-V2's own Table 2 ETH3D 0.131."
+
   # --- New coverage NEEDING harness work (verified targets ready; create
   #     the protocol/loader path before these can be queued as runnable): ---
   #   * iBims-1 — DONE 2026-05-28: `ibims1_moge` protocol + yamls created and
   #     queued above (moge-vitl-ibims1 / da-v2-large-ibims1).
-  #   * ETH3D mono-depth (MoGe affine-inv-disp): MoGe-1 0.0317, DA-V2-L
-  #     0.0473 — needs an `eth3d_moge` protocol + ETH3D loader's mono-depth
-  #     path (currently MVS-chamfer only). First non-chamfer ETH3D ✅.
+  #   * ETH3D mono-depth — DONE 2026-05-28: `eth3d_moge` protocol +
+  #     `eth3d-moge-eval` loader + yamls created, queued above.
   #   * Depth Pro × ETH3D / Sintel (Depth Pro Table 1, metric δ₁ 0.415 /
   #     0.400, NO scale alignment) — Depth Pro's FIRST ✅ (new model);
   #     needs a metric-δ₁ protocol on those loaders.

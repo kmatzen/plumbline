@@ -1,0 +1,35 @@
+# MoGe (ViT-L) on ETH3D mono-depth — MoGe Table 3 (affine-inv-disparity).
+#
+# Extends the already-PDF-verified MoGe Table 3 cells to the ETH3D column
+# via the MoGe-bundle `eth3d-moge-eval` loader. First non-chamfer ETH3D
+# cell. Created in the 2026-05-28 coverage pass; awaiting a GPU run (which
+# also validates the new loader against the real ETH3D.zip bundle).
+
+name: moge-vitl-eth3d-moge
+protocol: eth3d_moge
+
+model:
+  name: moge
+  kwargs:
+    variant: vitl
+
+# Affine-invariant-disparity (inverse-depth scale+shift). scale_shift is the
+# clean-indoor convention; ETH3D has outdoor scenes too, so scale_shift_clamped
+# may fit better — confirm on the first run.
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.0317
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 affine-invariant-disparity block, MoGe (Ours) ViT-L row, ETH3D column: Rel 3.17 → AbsRel 0.0317 (companion δ₁ 0.988). Same verified table as the MoGe-1 NYU/KITTI/DIODE ✅ cells. Verified by PDF read 2026-05-28."
+  source_confidence: verified_pdf
+
+notes: >
+  Next-box experiment (2026-05-28 coverage pass). Uses the NEW
+  `eth3d-moge-eval` loader (MoGe ETH3D bundle; set $ETH3D_MOGE_ROOT —
+  distinct from $ETH3D_ROOT, the native chamfer set). The loader mirrors
+  the validated iBims-1 loader but is UNVALIDATED against the real
+  ETH3D.zip — the first run validates it (image extension, intrinsics
+  scaling) as well as the paper target.

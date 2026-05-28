@@ -1,0 +1,29 @@
+# Depth Anything V2 (large) on ETH3D mono-depth — MoGe Table 3 (DA-V2 row).
+#
+# Companion to moge-vitl-eth3d-moge: the DA-V2 row of the same MoGe Table 3
+# affine-invariant-disparity block (MoGe re-evaluates DA-V2 there), via the
+# MoGe-bundle eth3d-moge-eval loader. Low pinning risk (same verified table
+# as the DA-V2-L NYU/KITTI-MoGe/DIODE ✅ cells). Created 2026-05-28.
+
+name: da-v2-large-eth3d-moge
+protocol: eth3d_moge
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.0473
+  tolerance_relative: 0.05
+  citation: "MoGe re-eval of DA-V2 — Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 affine-invariant-disparity block, Depth Anything V2 row, ETH3D column: Rel 4.73 → AbsRel 0.0473 (companion δ₁ 0.980). DA-V2 has no native ETH3D mono-depth eval; same MoGe table as the DA-V2-L NYU/KITTI-MoGe/DIODE ✅ cells. (NB: distinct from DA-V2's OWN Table 2 ETH3D 0.131 under its own pipeline.) Verified by PDF read 2026-05-28."
+  source_confidence: verified_pdf
+
+notes: >
+  Next-box experiment (2026-05-28 coverage pass). MoGe ETH3D bundle via the
+  new `eth3d-moge-eval` loader (set $ETH3D_MOGE_ROOT). Base install (DA-V2
+  HF path). Loader real-data validation happens on the first run.
