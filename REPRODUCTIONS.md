@@ -7,8 +7,8 @@ harness's acceptance test.
 > **Note (2026-05-03):** status matrix below reflects all GPU runs
 > through 2026-04-27. Open discrepancies and next-session priorities
 > are in `docs/DISCREPANCIES.md`. Per-YAML paper-citation audit (now
-> 29 paper-pinned YAMLs, 15 verified after the 2026-05-23 MASt3R
-> direct-PDF read) is in
+> 29 paper-pinned YAMLs, 22 verified as of 2026-05-28; was 15 at the
+> 2026-05-23 MASt3R direct-PDF read) is in
 > [`reproductions/AUDIT.md`](./reproductions/AUDIT.md).
 
 ## Status matrix (2026-05-03)
@@ -30,7 +30,7 @@ cells are now ℹ️ instead of ✅.
 | Model → Dataset | NYUv2 | KITTI | DIODE | ETH3D | DTU | Co3Dv2 | GSO |
 |---|---|---|---|---|---|---|---|
 | **DA-V2 Small** | ✅ **0.0510** vs 0.053 | ✅ **0.0770** vs 0.078 | ℹ️ **0.0722** _(no ViT-S paper cell under this protocol)_ | — | — | — | ⌛ |
-| **DA-V2 Base** | ✅ **0.0456** vs 0.049 | ✅ **0.0756** vs 0.078 | — | — | — | — | — |
+| **DA-V2 Base** | ℹ️ **0.0456** vs 0.049 _(6.9% off — reproduction delta, exceeds ±5%; see yaml note)_ | ✅ **0.0756** vs 0.078 | — | — | — | — | — |
 | **DA-V2 Large** | ✅ **0.0428** vs 0.0420 | ✅ **0.0710** vs 0.074 | ✅ **0.0529** vs 0.0533 _(landed 2026-04-27 via DIODE FoV-warp loader)_ | — | — | — | 🎯 **0.0122** (δ₁ 0.9999) _(no paper target)_ |
 | **DA-V2 Metric-Outdoor-L** | — | ℹ️ **0.0877** _(VKITTI-finetuned; no direct paper)_ | — | — | — | — | — |
 | **Metric3D-v2 L** | ✅ **0.0660** vs 0.063 | ✅ **0.0495** vs 0.052 | — | — | — | — | — |
@@ -45,7 +45,7 @@ cells are now ℹ️ instead of ✅.
 | **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ✅ AUC@30 **0.7960** vs 0.818 _(2.7 % off, verified 2026-05-26 on RTX 3090; companion RRA@15 = 0.9708; dust3r PointCloudOptimizer N=10, init=mst, niter=300, curope CUDA ext built)_ | — |
 | **VGGT** | — | — | — | ⚠️ 0.875 m vs 0.709 _(D10 13-scene investigated 2026-05-27, +23.5 % over paper; one outlier `terrains` Comp 10.18 m drives the aggregate — without it 12-scene mean is 0.515, 27 % tighter than paper. See docs/DISCREPANCIES.md D10.)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ✅ AUC@30 **0.8964** vs 0.882 _(1.6 % over, verified 2026-05-26 on RTX 3090; CO3Dv2 staged via scripts/co3dv2_prefetch.py at ~3 GB)_ | — |
 | **CUT3R** _(video + unordered)_ | ℹ️ **0.0522** vs 0.086 _(better — D24 protocol delta: strict raw+crop vs lineage filled+no-crop; model correct, not a paper-match)_ | ℹ️ **0.0858** vs 0.092 _(better — D24 protocol delta: Eigen-652+Garg vs lineage val_selection_cropped)_ | — | — | — | ℹ️ recurrent/online — handles ordered video & unordered sets | — |
-| **MonST3R** _(dynamic / video, base path)_ | ✅ **0.0896** vs 0.091 _(1.5% off, Table 3 single-frame, `nyu_dust3r_lineage` protocol; verified 2026-05-26, adapter v1.1)_ | ✅ **0.0959** vs 0.101 _(4.1% off, Table 3 single-frame, `kitti_dust3r_lineage` protocol — 1269-frame gathered set; verified 2026-05-26, adapter v1.1)_ | — | — | — | — | — |
+| **MonST3R** _(dynamic / video, base path)_ | ✅ **0.0896** vs 0.091 _(1.5% off, Table 3 single-frame, `nyu_dust3r_lineage` protocol; verified 2026-05-26, adapter v1.1)_ | ℹ️ **0.0959** vs 0.101 _(5.05% off — just over ±5% tol, Table 3 single-frame, `kitti_dust3r_lineage` protocol — 1269-frame gathered set; verified 2026-05-26, adapter v1.1)_ | — | — | — | — | — |
 | **DUSt3R** _(origin paper, single-frame F(I,I))_ | ℹ️ **0.0777** vs 0.0650 _(D28 — GT-processing delta, NOT alignment: re-scoring the same preds, paper 0.065 is **bracketed** by Eigen-crop 0.0489 ↔ lineage 0.0777; alignment sweep ruled out (median already best); 2026-05-28)_ | ✅ **0.1049** vs 0.1074 _(2.3% off; Table 2 KITTI, view-duplicate adapter v1.1, `kitti_dust3r_lineage` protocol; full 1269-frame / 13-drive gathered set; companion δ₁ 0.8661 vs 0.8600 within 0.7%; 2026-05-28)_ | — | — | — | ✅ AUC@30 **0.7893** vs 0.774 _(2.0 % over; MASt3R Table 3 DUSt3R row, 2026-05-27)_ | — |
 
 Sintel + Bonn lineage cells (also MonST3R Table 3 single-frame) land as **ℹ️ informational** — structurally faithful but off-paper >5 %:
@@ -66,13 +66,14 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 
 ### Paper-match count
 
-**19 ✅ mono-depth cells + 4 ✅ pose cells = 23 total** with `source_confidence: verified_pdf`:
+**18 ✅ mono-depth cells + 4 ✅ pose cells = 22 total** with `source_confidence: verified_pdf`:
 
-- NYU (9): DA-V2 S/B/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3, **MonST3R** (lineage protocol, 2026-05-26)
+- NYU (8): DA-V2 S/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3, **MonST3R** (lineage protocol, 2026-05-26)
 - KITTI Eigen+Garg (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
 - KITTI MoGe-eval (2): MoGe-1 ViT-L (D8 close), DA-V2 ViT-L (2026-04-27)
-- KITTI dust3r-lineage (1): **MonST3R** (lineage protocol, 2026-05-26)
+- KITTI dust3r-lineage (1): **DUSt3R** (0.1049/0.1074, −2.3%) — was present in the grid + site but omitted from this breakdown
 - DIODE (2): MoGe-1 ViT-L, DA-V2 ViT-L (FoV-warp loader, 2026-04-26/27)
+- _(2026-05-28 confidence audit: DA-V2 Base NYU (6.9% off) and MonST3R KITTI (5.05% off) downgraded ✅→ℹ️ (both exceed ±5%); DUSt3R-KITTI restored above. The old "23" had under-counted DUSt3R-KITTI (true base 24); after the 2 downgrades the verified count is 22 — now consistent with the site's 22.)_
 - **CO3Dv2 pose (3): VGGT (AUC@30 0.8964 vs 0.882, +1.6 %) + MASt3R (mAA(30) 0.7960 vs 0.818, −2.7 %) + DUSt3R (mAA(30) 0.7893 vs 0.774, +2.0 %), all on MASt3R Table 3 protocol** — v0.1 acceptance criterion #2 met (VGGT) and twice-seconded (MASt3R / DUSt3R).
 - **Sintel trajectory pose (1): MonST3R Table 4 — ATE 0.1134 vs 0.108 (+5.0 %), plumbline-computed 2026-05-27** via the new adapter v1.2 video-pose path + `metrics/pose.py` ATE/RPE family.
 
