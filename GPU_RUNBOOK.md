@@ -90,14 +90,28 @@ The base install (`uv sync` / `pip install plumbline-bench`) covers
 torch + diffusers + transformers — enough for DA-V2, DA3, Marigold,
 Depth Pro, Metric3Dv2.
 
-| Adapter | Extra setup |
-|---|---|
-| MoGe | `uv pip install 'git+https://github.com/microsoft/MoGe.git'` |
-| VGGT | `uv pip install 'git+https://github.com/facebookresearch/vggt'` |
-| MASt3R | `git clone --recursive https://github.com/naver/mast3r $HOME/deps/mast3r; uv pip install roma scikit-learn trimesh; export MAST3R_ROOT=$HOME/deps/mast3r` |
-| GeoWizard | `git clone --depth 1 https://github.com/fuxiao0719/GeoWizard $HOME/deps/geowizard; export GEOWIZARD_ROOT=$HOME/deps/geowizard; uv sync --extra geowizard; uv pip install --force-reinstall 'nvidia-cudnn-cu12==9.1.0.70'` |
-| π³ | `git clone https://github.com/yyfz/Pi3 $HOME/deps/pi3; cd $HOME/deps/pi3 && uv pip install -r requirements.txt; export PI3_ROOT=$HOME/deps/pi3` |
-| CUT3R | `git clone https://github.com/CUT3R/CUT3R $HOME/deps/cut3r; cd $HOME/deps/cut3r && uv pip install -r requirements.txt; export CUT3R_ROOT=$HOME/deps/cut3r`; download the 512-DPT weights per the repo README, then `export CUT3R_CKPT=$CUT3R_ROOT/src/cut3r_512_dpt_4_64.pth` |
+Don't hand-maintain install commands: ask the tool.
+`plumbline install --list` prints the table below, `plumbline install
+<adapter>` prints the full plan (add `--yes` to run it), and `plumbline
+doctor` reports which adapters are present on the current box.
+
+<!-- generated from src/plumbline/install.py INSTALL_SPECS; run `plumbline install --list` -->
+
+| Adapter | Kind | Install plan |
+|---|---|---|
+| metric3d-v2 | base | (none — base install) |
+| marigold | base | (none — base install) |
+| depth-anything-v2 | base | (none — base install) |
+| depth-anything-3 | pypi | `uv pip install depth-anything-3` |
+| moge | git | `uv pip install 'git+https://github.com/microsoft/MoGe.git'` |
+| vggt | git | `uv pip install 'git+https://github.com/facebookresearch/vggt'` |
+| depth-pro | git | `uv pip install 'git+https://github.com/apple/ml-depth-pro.git'` |
+| mast3r | clone | `git clone --recursive https://github.com/naver/mast3r $HOME/deps/mast3r; uv pip install roma scikit-learn trimesh; export MAST3R_ROOT=$HOME/deps/mast3r; export DUST3R_ROOT=...` (see notes) |
+| dust3r | clone | `git clone --recursive https://github.com/naver/dust3r $HOME/deps/dust3r; uv pip install roma scikit-learn trimesh; export DUST3R_ROOT=$HOME/deps/dust3r` |
+| monst3r | clone | `git clone --recursive https://github.com/Junyi42/monst3r $HOME/deps/monst3r; uv pip install roma scikit-learn trimesh; export MONST3R_ROOT=$HOME/deps/monst3r` |
+| cut3r | clone | `git clone --recursive https://github.com/CUT3R/CUT3R $HOME/deps/cut3r; uv pip install -r $HOME/deps/cut3r/requirements.txt; export CUT3R_ROOT=$HOME/deps/cut3r; export CUT3R_CKPT=...` (512-DPT weights per repo README) |
+| pi3 | clone | `git clone https://github.com/yyfz/Pi3 $HOME/deps/pi3; uv pip install -r $HOME/deps/pi3/requirements.txt; export PI3_ROOT=$HOME/deps/pi3` |
+| geowizard | clone | `git clone https://github.com/fuxiao0719/GeoWizard $HOME/deps/geowizard; export GEOWIZARD_ROOT=$HOME/deps/geowizard` then `uv sync --extra geowizard; uv pip install --force-reinstall 'nvidia-cudnn-cu12==9.1.0.70'` |
 
 If `uv pip install` from a git URL dies with `curl 92 HTTP/2 stream
 CANCEL`, retry — pause concurrent s5cmd jobs first to free bandwidth.

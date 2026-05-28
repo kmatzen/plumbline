@@ -7,6 +7,8 @@ Uses typer (click under the hood). Kept thin: it's a view over
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -18,6 +20,7 @@ from plumbline._discover import register_builtin_adapters
 from plumbline._version import __version__
 from plumbline.cache import PredictionCache, default_cache_dir
 from plumbline.datasets.registry import DATASET_REGISTRY
+from plumbline.install import INSTALL_SPECS, check, install_hint, install_plan, spec_for
 from plumbline.models.registry import MODEL_REGISTRY
 from plumbline.report import Report
 from plumbline.runner import evaluate
@@ -318,6 +321,148 @@ def queue_cmd(
         f"{n_pending} pending, {n_blocked} blocked, {n_done} done.{hidden} "
         f"Run with: [bold]plumbline queue --run[/bold]"
     )
+
+
+def _run_steps(name: str, steps: list[str]) -> None:
+    """Run the pip/git steps of an install plan via subprocess.
+
+    ``uv pip install ...`` lines are rewritten to use the current interpreter
+    (``sys.executable -m uv pip install``) so the deps land in the venv that is
+    running plumbline, not whatever ``uv`` happens to be on ``$PATH``. ``git
+    clone`` lines run as-is. ``export ...`` lines are never executed (a child
+    process can't mutate the parent's environment); they are printed instead.
+    """
+    for step in steps:
+        if step.startswith("export "):
+            console.print(f"[yellow]set this yourself:[/yellow] {step}")
+            continue
+        if step.startswith("uv pip install"):
+            argv = [sys.executable, "-m", "uv", *step.split()[1:]]
+        else:
+            argv = step.split()
+        console.print(f"[cyan]$[/cyan] {' '.join(argv)}")
+        # argv is built from the trusted INSTALL_SPECS registry, not user input.
+        result = subprocess.run(argv, check=False)
+        if result.returncode != 0:
+            console.print(
+                f"[red]install step failed[/red] for {name!r} (exit {result.returncode}): {step}"
+            )
+            raise typer.Exit(result.returncode)
+
+
+@app.command("install")
+def install_cmd(
+    name: str | None = typer.Argument(None, help="Adapter to install (omit to list all)."),
+    all_: bool = typer.Option(
+        False, "--all", help="Install every pip/git adapter (skips clone adapters)."
+    ),
+    yes: bool = typer.Option(
+        False, "--yes", "-y", help="Actually run the pip/git steps (default: print the plan)."
+    ),
+    list_: bool = typer.Option(False, "--list", help="List all adapters and how to install them."),
+) -> None:
+    """Show or run adapter install plans (source: ``plumbline.install``).
+
+    With no NAME (or ``--list``) this prints a table of every adapter, its kind,
+    and a one-line how-to. With NAME it prints that adapter's ordered install
+    plan; add ``--yes`` to actually run the pip/git steps into the current venv.
+    For ``clone`` adapters ``--yes`` runs the ``git clone`` + extra-deps steps
+    and then prints the ``export`` lines you must add to your shell (env is never
+    persisted). ``--all`` iterates the pip + git adapters.
+    """
+    if all_:
+        targets = [n for n, s in INSTALL_SPECS.items() if s.kind in ("pypi", "git")]
+        for n in sorted(targets):
+            console.print(f"[bold]{n}[/bold] ({spec_for(n).kind})")
+            steps = install_plan(n)
+            if yes:
+                _run_steps(n, steps)
+            else:
+                for step in steps:
+                    console.print(f"  {step}")
+        if not yes:
+            console.print("\nRe-run with [bold]--yes[/bold] to execute these steps.")
+        return
+
+    if name is None or list_:
+        table = Table(title="Adapter install plans (source: src/plumbline/install.py)")
+        table.add_column("adapter")
+        table.add_column("kind")
+        table.add_column("how to install")
+        for n in sorted(INSTALL_SPECS):
+            spec = INSTALL_SPECS[n]
+            table.add_row(n, spec.kind, spec.how_to())
+        console.print(table)
+        console.print(
+            "Run [bold]plumbline install <name>[/bold] for the full plan, "
+            "[bold]--yes[/bold] to execute, or [bold]plumbline doctor[/bold] to check status."
+        )
+        return
+
+    if name not in INSTALL_SPECS:
+        options = ", ".join(sorted(INSTALL_SPECS))
+        raise typer.BadParameter(f"Unknown adapter '{name}'. Known: {options}")
+
+    spec = spec_for(name)
+    steps = install_plan(name)
+    if not steps:
+        console.print(f"[green]{name}[/green] {spec.how_to()} — nothing to install.")
+        return
+
+    if not yes:
+        console.print(f"[bold]install plan for {name}[/bold] ({spec.kind}):")
+        for step in steps:
+            console.print(f"  {step}")
+        console.print("\nRe-run with [bold]--yes[/bold] to execute these steps.")
+        return
+
+    _run_steps(name, steps)
+    if spec.kind == "clone":
+        console.print(
+            f"\n[green]cloned[/green] {name}. Add these to your shell so the adapter "
+            "can find the clone:"
+        )
+        for step in steps:
+            if step.startswith("export "):
+                console.print(f"  {step}")
+    else:
+        console.print(f"[green]installed[/green] {name}.")
+
+
+@app.command("doctor")
+def doctor_cmd(
+    name: str | None = typer.Argument(None, help="Adapter to check (omit to check all)."),
+) -> None:
+    """Check which adapters look installed (CI-gateable).
+
+    Runs the registry's ``check`` for each requested adapter and prints an
+    OK / MISSING table with the fix hint. Exits nonzero if any *requested*
+    adapter is MISSING, so CI can gate on a specific adapter being present.
+    """
+    if name is not None and name not in INSTALL_SPECS:
+        options = ", ".join(sorted(INSTALL_SPECS))
+        raise typer.BadParameter(f"Unknown adapter '{name}'. Known: {options}")
+
+    names = [name] if name is not None else sorted(INSTALL_SPECS)
+    table = Table(title="Adapter doctor")
+    table.add_column("adapter")
+    table.add_column("status")
+    table.add_column("fix")
+    n_missing = 0
+    for n in names:
+        ok, _detail = check(n)
+        if ok:
+            status = "[green]OK[/green]"
+            fix = "—"
+        else:
+            status = "[red]MISSING[/red]"
+            fix = install_hint(n)
+            n_missing += 1
+        table.add_row(n, status, fix)
+    console.print(table)
+    console.print(f"{len(names) - n_missing}/{len(names)} OK, {n_missing} missing.")
+    if n_missing:
+        raise typer.Exit(1)
 
 
 @app.command("report")
