@@ -1094,6 +1094,143 @@ in `paper_match: yes`, the path is to add `aggregation: per_sequence` +
 `monst3r-bonn-paper-recipe` (Bonn loader already supports per-sequence iteration);
 verification GPU cost ~5 min on a 3090.
 
+### D28 · DUSt3R Table 2 indoor cells off-paper — lineage-recipe ≠ DUSt3R-paper-recipe   🔬 INVESTIGATED 2026-05-28
+
+End-to-end GPU run of the three DUSt3R-own-paper depth pins (PR `dust3r-depth-pin`,
+RTX 3090, 2026-05-28), against DUSt3R Table 2 "DUSt3R 512" row (Wang 2024, CVPR,
+arXiv:2312.14132, §4.3 *"we simply feed the same input image I to the network as
+F(I, I)"*; AbsRel / δ₁ in paper-percent units):
+
+| cell | observed AbsRel | paper | Δ | observed δ₁ | paper δ₁ | n | match |
+|---|---|---|---|---|---|---|---|
+| dust3r-kitti | **0.1049** | 0.1074 | −2.3 % | 0.8661 | 0.8600 | 1269 | ✅ |
+| dust3r-nyuv2 | **0.0777** | 0.0650 | +19.5 % | 0.9101 | 0.9402 | 654 | ❌ |
+| dust3r-bonn | **0.1337** | 0.0808 | +65.4 % | 0.8666 | 0.9356 | 3093 | ❌ |
+
+KITTI lands within tolerance on the *lineage-empirical* protocol — the same
+`kitti_dust3r_lineage` recipe that reproduces `cut3r-kitti` exactly and
+`monst3r-kitti` within 4.1 %. So the outdoor recipe matches DUSt3R's own paper
+recipe. NYU and Bonn don't.
+
+**KITTI data-root footgun (caught 2026-05-28).** The first KITTI run pointed
+`KITTI_ROOT` at an Eigen-652 raw tree and silently evaluated only **82 frames**
+(the raw∩GT intersection) with `skipped=0` — it *looked* like a clean run and
+coincidentally also matched (0.1086). The lineage KITTI loader enumerates from
+raw `image_02/data` and attaches annotated GT, so a root with sparse raw frames
+under-counts without raising. Re-run on the proper gathered tree
+(`/root/data/kitti_dust3r_lineage`, 1269 frames / 13 drives) gives 0.1049 — the
+verdict held, but only the full-set number is trustworthy. Worth a runner guard
+(assert `n_evaluated` ≥ a protocol-declared minimum, D21-adjacent).
+
+The lineage protocols (`{nyu,kitti,bonn}_dust3r_lineage*`) are named after DUSt3R
+because the *file paths and prep conventions* trace from DUSt3R, but the *eval
+recipe* in plumbline is calibrated against MonST3R's released
+`depth_metric.ipynb` (the only end-to-end runnable artefact in the lineage —
+DUSt3R's repo has dataset-prep scripts but no released depth-eval scripts; the
+table is implicitly produced by §4.3's `F(I, I)` plus an unspecified scoring
+helper). MonST3R's notebook NYU cell uses `depth_evaluation(pred, gt,
+max_depth=None, lr=1e-3)` → default branch = per-frame median scale-only (read
+2026-05-28 from `/root/deps/monst3r/depth_metric.ipynb` cell 7 + `depth_eval.py:148`).
+
+**Diagnosis (cached-prediction re-score sweep, 2026-05-28, no new GPU).** The
+config-hash prediction cache lets us re-score the exact same model outputs under
+different scoring recipes in seconds. Two dimensions tested:
+
+*Dimension 1 — scale-alignment (RULED OUT for NYU).* Re-scoring NYU's 654 cached
+preds under every alignment mode plumbline supports:
+
+| alignment | NYU AbsRel | Bonn AbsRel |
+|---|---|---|
+| median (scale-only, what we ship) | **0.0777** | **0.1337** |
+| lstsq (scale-only, L2) | 0.0876 | — |
+| scale_shift (inv-depth) | 0.1239 | 0.1147 |
+| scale_shift_depth (depth, ≈ MonST3R `align_with_lad2`) | 0.0931 | 0.1070 |
+
+For NYU **median is already the best** mode and *nothing* approaches paper 0.0650
+— adding a shift term makes it worse. So alignment is **not** the NYU gap. (An
+earlier draft of this entry attributed the gap to an alignment-recipe delta on
+the strength of δ₁ being closer to paper than AbsRel; that reasoning was wrong —
+a shift term changes δ₁ too — and the sweep refutes it. Retracted.)
+
+*Dimension 2 — GT processing (THIS is the NYU gap).* Re-scoring the same NYU
+preds, median alignment held fixed, swapping only the GT-side protocol:
+
+| NYU GT processing | AbsRel | δ₁ |
+|---|---|---|
+| `nyu_eigen_2014` (raw GT, Eigen crop, clip) | **0.0489** | 0.9635 |
+| **paper "DUSt3R 512"** | **0.0650** | 0.9402 |
+| `nyu_dust3r_lineage` (filled GT, no crop, no clip) | **0.0777** | 0.9101 |
+
+GT processing swings the *same predictions* across a 59 % range (0.0489 → 0.0777)
+and the paper number sits **bracketed in between**. This is the exact D24 shape
+(CUT3R-NYU swings 0.052 strict-Eigen ↔ 0.086 lineage; MonST3R-NYU 0.0599 ↔
+0.0894). The DUSt3R model output is fine — it scores anywhere from 0.049 to 0.078
+purely as a function of GT-processing conventions nobody documented. DUSt3R's
+2023 paper predates the lineage filled+no-crop convention and used some
+intermediate raw/crop/clip recipe (unreleased) that lands at 0.065.
+
+**Bonn (recipe + genuine dynamic-scene weakness).** No alignment mode gets Bonn
+near paper 0.0808 (best is scale_shift_depth at 0.1070, still 32 % off). The
+per-sequence breakdown shows why:
+
+| Bonn sequence | n | per-frame mean AbsRel | nature |
+|---|---|---|---|
+| balloon2          | 467 | **0.0785** | mostly static, single object |
+| person_tracking2  | 565 | **0.0455** | smooth tracking, low motion |
+| crowd2            | 893 | 0.1837 | crowd, dynamic |
+| crowd3            | 838 | 0.1516 | crowd, dynamic |
+| synchronous       | 330 | 0.1820 | dance, dynamic |
+
+The two low-dynamic sequences land at/below paper; the three dynamic ones (75 %
+of frames) drive the aggregate up. DUSt3R is *not* a dynamic-scene model — the
+premise of MonST3R existing. The paper 0.0808 is reachable only with a recipe
+that suppresses the dynamic-region error (per-sequence scale+shift LAD2 like the
+D27 MonST3R notebook, and/or a tighter valid mask) — paper-private, plus a real
+model limitation on dynamics that no per-frame scoring choice fixes.
+
+**Inference faithfulness — single-record diff (conclusive, NOT a bug).** To rule
+out a plumbline-side inference/prep bug as the NYU gap (rather than just the eval
+recipe), a one-sample diff (`scripts/_dust3r_nyu_singlediff.py`, run on the box;
+NYU sample 0) compared plumbline's path against a from-scratch reference that uses
+dust3r's *own* `load_images` + raw `inference()`:
+
+| comparison | result |
+|---|---|
+| input tensor: plumbline `_images_to_dust3r_dicts` vs dust3r `load_images` | **max\|Δ\| = 0.00000** (bit-identical) |
+| depth map: plumbline `_dust3r_single_frame_eval` vs from-scratch F(I,I) | **max\|Δ\| = 0.00000, corr = 1.000000** |
+| single-sample AbsRel (filled, no crop, median) | **0.0412 == 0.0412** |
+
+plumbline's DUSt3R inference is byte-for-byte the canonical `F(I, I)` output —
+there is **no prep / extraction / wrapper bug**. The 0.0777 aggregate is DUSt3R's
+genuine output quality under the lineage recipe (sample 0 at 0.0412 shows the
+high per-sample variance behind that mean). The off-paper gap is therefore *100 %*
+eval recipe, mechanically confirmed.
+
+**Authoritative recipe is unrecoverable.** naver/dust3r#180 ("Evaluation on
+monocular depth estimation task") asks the exact recipe question — *"affine-
+invariant space or scale and shift per image via least squares? … pointers to
+existing code?"* — and has **0 maintainer replies**. DUSt3R's repo ships no
+monocular-depth eval script (only `datasets_preprocess/` + demo); the paper just
+cites refs [6, 117] for "the protocol". So the recipe that yields 0.065 cannot be
+recovered, and the OP's own guess (affine-invariant) is *worse* in our sweep.
+
+**Same shape as D9 / D17 / D24 / D27**: the published number comes from an
+unreleased / undocumented eval recipe — here specifically the **GT-processing**
+dimension for NYU (evidenced by the bracket above + the byte-faithful inference),
+not alignment. plumbline ships
+the lineage-empirical recipe (reproduces MonST3R / CUT3R cells, and DUSt3R-KITTI
+within 2.3 %); it doesn't match DUSt3R's own indoor recipe. KITTI stays ✅ MATCH;
+NYU and Bonn are ℹ️ — explained, not a model / adapter bug. No code or protocol
+change. Diagnostic variant YAMLs (`dust3r_{nyuv2,bonn}_{lstsq,scale_shift,…}.yaml`,
+`dust3r_nyuv2_eigen.yaml`) live only on the GPU box under `reproductions/`, not
+committed — the cached preds at `/root/.cache/plumbline/predictions/dust3r/16431eab…`
+reproduce the whole sweep.
+
+The DUSt3R-own-paper *pinning* is still valuable: it anchors the lineage at
+its source, ships the adapter's N=1 `F(I, I)` branch (v1.1) that the family
+depends on, and makes the recipe gap visible / reproducible. Same value
+proposition as CUT3R's three D24 cells.
+
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 
 Cache key in `src/plumbline/runner.py` `_predict_with_cache` is

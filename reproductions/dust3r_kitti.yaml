@@ -1,0 +1,56 @@
+# DUSt3R single-frame depth on KITTI — DUSt3R Table 2 paper target.
+#
+# Targets DUSt3R Table 2 "Monocular depth estimation on multiple
+# benchmarks" (Wang et al. 2024, arXiv:2312.14132, CVPR 2024, page 8),
+# Outdoor / KITTI column, "DUSt3R 512" row (T = transfer / zero-shot):
+# **Rel = 10.74, δ₁.₂₅ = 86.00** (→ AbsRel 0.1074, δ₁ 0.8600, both
+# bolded as best zero-shot). Verified by direct PDF read 2026-05-27.
+#
+# Protocol (paper §4.3): single-frame `F(I, I)` — see the
+# `dust3r_nyuv2.yaml` companion for the full recipe. This is the
+# outdoor sibling on the same DUSt3R-origin lineage protocol
+# (`kitti_dust3r_lineage`) the MonST3R / CUT3R papers also report on.
+
+name: dust3r-kitti
+# `kitti_dust3r_lineage` — DUSt3R is the *origin* of this lineage.
+# 13 annotated-val drives × ≤110 frames (≤1269 pairs), image_02,
+# no spatial crop, max_depth=None, valid mask = `gt > 0`. Calibrated
+# against CUT3R's own eval (D24): CUT3R's prepared gathered set scored
+# 0.09219 vs paper 0.092 (0.2 %), confirming the image-set + recipe.
+protocol: kitti_dust3r_lineage
+
+model:
+  name: dust3r
+  kwargs:
+    long_edge: 512  # paper "DUSt3R 512" row, default DPT-head model
+
+# Per-frame median scaling (paper §4.3 implied; the lineage-MonST3R
+# §4.2 makes the citation explicit: "following Wang et al. 2024c
+# [DUSt3R]").
+scale_alignment: median
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.1074
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2024, DUSt3R (arXiv:2312.14132, CVPR 2024), Table 2 (Monocular depth estimation on multiple benchmarks), Outdoor / KITTI column, 'DUSt3R 512' row (T = transfer/zero-shot): Rel = 10.74 → AbsRel 0.1074 (bolded best zero-shot). Companion δ₁.₂₅ = 86.00 → 0.8600 (also bolded). Protocol §4.3: 'we simply feed the same input image I to the network as F(I, I)'; per-frame median scaling (lineage convention, MonST3R §4.2 explicit citation to DUSt3R). Verified by direct PDF read 2026-05-27."
+  source_confidence: verified_pdf
+
+notes: >
+  Outdoor companion to dust3r-nyuv2 (same Table 2). Sister cell to
+  monst3r-kitti / cut3r-kitti on the same `kitti_dust3r_lineage`
+  protocol — directly comparable.
+
+  Adapter routing: N=1 → `_dust3r_single_frame_eval` (paper §4.3's
+  F(I, I)). Requires $KITTI_ROOT containing raw drives +
+  data_depth_annotated.zip unpacked, $DUST3R_ROOT (recursive clone of
+  https://github.com/naver/dust3r); weights pulled from HF
+  naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt on first use. Image set is
+  the 13-val-drive × ≤110-frame gathered selection (≤1269 frames) —
+  the DUSt3R/MonST3R-prepared subset, NOT Monodepth2's 652-image Eigen
+  split (see protocols/kitti_dust3r_lineage.yaml for the recipe and
+  docs/DISCREPANCIES.md D24 for the empirical calibration against
+  CUT3R's published 0.092 cell). Expected wall ~25 min on RTX 3090.
+
+  Companion metric (δ₁.₂₅ = 0.8600) reported in the same row.
