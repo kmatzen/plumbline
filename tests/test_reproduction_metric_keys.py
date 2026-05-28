@@ -48,3 +48,25 @@ def test_primary_metric_is_emittable(path) -> None:
         f"(tasks={cfg.get('tasks')}, aggregation={cfg.get('aggregation', 'sample')}). "
         f"Run would silently report NaN. Emittable keys: {sorted(emittable)}."
     )
+
+
+# Loosest legitimate paper-match gate in use is 0.10 (monst3r-sintel-pose ATE,
+# a stochastic global-alignment pipeline). A tolerance looser than this lets a
+# documented mismatch still register as a ✅ paper-match — exactly what the
+# vggt-eth3d cell's old 0.30 did (it made the harness report paper_match=True
+# for a +23% MISMATCH; fixed 2026-05-28). Anything above the cap should be a
+# deliberate, justified bump here.
+_MAX_SANE_TOLERANCE = 0.10
+
+
+@pytest.mark.parametrize("path", _REPRO_YAMLS, ids=lambda p: p.stem)
+def test_tolerance_is_not_absurdly_loose(path) -> None:
+    paper = yaml.safe_load(path.read_text(encoding="utf-8")).get("paper_reference") or {}
+    tol = paper.get("tolerance_relative")
+    if tol is None or paper.get("value") is None:
+        return  # informational cell — no paper-match is computed
+    assert float(tol) <= _MAX_SANE_TOLERANCE, (
+        f"{path.name}: tolerance_relative={tol} exceeds the sane cap "
+        f"{_MAX_SANE_TOLERANCE} — a gate this loose lets a real mismatch register "
+        f"as a ✅ paper-match. If genuinely needed, bump _MAX_SANE_TOLERANCE with a reason."
+    )

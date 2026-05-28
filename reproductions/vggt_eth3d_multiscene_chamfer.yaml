@@ -56,7 +56,7 @@ device: cuda:0
 paper_reference:
   primary_metric: overall
   value: 0.709
-  tolerance_relative: 0.30
+  tolerance_relative: 0.05
   citation: "Wang et al. 2025, VGGT (arXiv:2503.11651, CVPR 2025), Table 3 (ETH3D) — Overall = (Acc + Comp)/2, full 13-scene cross-scene average over the high-res MVS training set. VGGT (Point) row: Acc 0.901, Comp 0.518, Overall 0.709."
   source_confidence: verified_pdf
 
@@ -91,11 +91,15 @@ notes: >
   Per-scene Acc is also consistently tighter (0.459 vs 0.901 paper
   mean, 49 % under).
 
-  Tolerance loosened to ±30 % to encode the off-paper status without
-  pretending to a paper-match: this YAML is the canonical 13-scene
-  run record but D10 docs DO NOT promote it to ✅ (still ⚠️). See
-  `docs/DISCREPANCIES.md` D10 for the terrains outlier diagnostic
-  path. Companion 3-scene subset stays in
+  Tolerance is the standard ±5 % gate: observed 0.875 vs 0.709 is
+  +23.4 %, so the harness computes paper_match=False — correctly a
+  MISMATCH (⚠️), matching the D10 verdict. NOTE: a prior ±30 %
+  tolerance here was backwards — at 23.4 % off it made the harness
+  report paper_match=TRUE (a *false* paper-match), the opposite of the
+  intended "do not pretend to a paper-match". Corrected to 0.05
+  2026-05-28. This YAML is the canonical 13-scene run record; D10 docs
+  keep it ⚠️, never ✅. See `docs/DISCREPANCIES.md` D10 for the terrains
+  outlier diagnostic path. Companion 3-scene subset stays in
   `vggt_eth3d_subset_chamfer.yaml`.
 
   Trajectory:
