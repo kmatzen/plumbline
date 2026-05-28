@@ -1,0 +1,24 @@
+# ETH3D mono-depth protocol — MoGe-paper variant.
+#
+# ETH3D as single-frame mono-depth (MoGe Table 3, affine-invariant-
+# disparity column), via the `eth3d-moge-eval` loader (MoGe's preprocessed
+# bundle — NOT the native `eth3d` chamfer set / eth3d_vggt_table3). Mirrors
+# diode_moge / ibims1_moge: no clip, no boundary mask, single-view.
+
+name: eth3d_moge
+description: >
+  ETH3D single-frame mono-depth under the MoGe Table 3 protocol
+  (affine-invariant-disparity column): no clip, no boundary mask,
+  single-view. Source: MoGe's monocular-geometry-evaluation ETH3D bundle.
+
+reference:
+  paper: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), ETH3D column"
+  source_bundle: "Ruicheng/monocular-geometry-evaluation (HuggingFace), ETH3D.zip"
+
+fixed:
+  dataset:
+    name: eth3d-moge-eval
+  depth_clip: null
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]
