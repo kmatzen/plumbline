@@ -1,0 +1,54 @@
+# Depth Pro on Sintel — metric δ₁ (Depth Pro Table 1).
+#
+# Depth Pro's FIRST paper-match candidate (it does NOT evaluate NYU/KITTI;
+# its Table 1 "zero-shot metric depth accuracy" reports Booster / ETH3D /
+# Middlebury / NuScenes / Sintel / Sun-RGBD). Sintel is the cleanest of
+# those for plumbline: the `sintel` loader's .dpt GT is already in METERS,
+# and Depth Pro outputs metric meters (is_metric=True) — so this is a
+# direct metric comparison with NO scale alignment (the eval Depth Pro
+# was designed for). New MODEL coverage (Depth Pro had 0 ✅).
+#
+# Created GPU-free in the 2026-05-28 coverage pass; this is a queued
+# EXPERIMENT, not yet a claim — see the protocol caveats below.
+
+name: depth-pro-sintel
+# No protocol preset (Depth Pro's metric eval differs from the relative
+# sintel_dust3r_lineage / MoGe protocols); config is inline.
+
+model:
+  name: depth-pro
+  kwargs: {}
+
+dataset:
+  name: sintel
+  kwargs:
+    pass_name: final     # UNCONFIRMED: Depth Pro's appendix specifies the pass
+    views_per_sample: 1
+    max_depth: 70.0      # sky cap; Sintel encodes sky as ~1e5 m. Depth Pro's
+                         # exact cap is UNCONFIRMED — most metric-depth evals
+                         # cap (70 m is the DUSt3R/MonST3R lineage value).
+
+# Depth Pro is metric → compare absolute meters, no per-frame fit.
+scale_alignment: none
+tasks: [mono_depth]
+device: cuda:0
+
+paper_reference:
+  primary_metric: delta_1
+  value: 0.400
+  tolerance_relative: 0.05
+  citation: "Bochkovskii et al. 2024, Depth Pro (arXiv:2410.02073), Table 1 (zero-shot metric depth accuracy), Depth Pro row, Sintel column: δ₁ = 0.400 (40.0%). Metric — NO scale alignment. Verified by PDF read 2026-05-28 (the agent confirmed this; note Depth Pro does NOT eval NYU/KITTI, where a prior pin (0.961 NYU) was fabricated)."
+  source_confidence: verified_pdf
+
+notes: >
+  Next-box EXPERIMENT (2026-05-28 coverage pass) — Depth Pro's first
+  paper-match candidate / NEW model coverage. Two protocol unknowns to
+  resolve against Depth Pro's eval setup on the first run (or by reading
+  its released eval code): (1) Sintel pass (final vs clean); (2) the depth
+  cap / sky handling (max_depth). If δ₁ lands off, those are the levers —
+  the target value 0.400 itself is PDF-verified. Needs `plumbline install
+  depth-pro` + the depth_pro.pt weights (manual download to
+  ~/.cache/plumbline/weights/depth-pro/; see the adapter docstring).
+  ETH3D (Depth Pro Table 1 δ₁ 0.415) is a separate candidate but its eval
+  set doesn't map cleanly onto plumbline's chamfer-oriented `eth3d`
+  loader — left in the backlog pending eval-set investigation.
