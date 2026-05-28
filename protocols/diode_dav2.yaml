@@ -1,0 +1,39 @@
+# DIODE mono-depth protocol — Depth Anything V2's OWN Table 2 recipe.
+#
+# Distinct from `diode_moge` (which uses MoGe's preprocessed `diode-moge-eval`
+# bundle and pins MoGe Table 3's DA-V2 re-eval cell, 0.0533). This protocol
+# uses the NATIVE `diode` loader (raw DIODE val) and targets DA-V2's OWN
+# numbers in Yang et al. 2024 Table 2 "Zero-shot relative depth estimation"
+# (DIODE column): ViT-S 0.073 / ViT-B 0.068 / ViT-L 0.066 AbsRel.
+#
+# DA-V2 predicts affine-invariant inverse depth → MiDaS-style scale+shift in
+# inverse-depth space (`scale_alignment: scale_shift`, set per-reproduction).
+#
+# Recipe note (validated on the indoor slice): da-v2-small-diode-indoor ran
+# this exact config on DIODE val-indoor (325 imgs) at AbsRel 0.0722, a 1.1%
+# match to the paper's 0.073 — so the native-loader + scale_shift + [1e-3,50]
+# clip recipe is sound. These cells extend it to domain=both (val: 325 indoor
+# + 446 outdoor), the strictly-comparable combined-val slice DA-V2 reports.
+# Open lever (flagged, not blocking the verified target): DIODE outdoor depth
+# can exceed 50 m; the [1e-3, 50] clip masks those far returns — if a
+# domain=both run lands off, widening / removing the clip is the first knob.
+
+name: diode_dav2
+description: >
+  DIODE val mono-depth under Depth Anything V2's own Table 2 protocol:
+  native `diode` loader, affine-invariant disparity (scale_shift), [1e-3, 50]
+  m clip, no boundary mask, single-view. Domain=both (combined val).
+
+reference:
+  paper: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), DIODE column"
+
+fixed:
+  dataset:
+    name: diode
+    split: val
+    kwargs:
+      domain: both
+  depth_clip: [0.001, 50.0]
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]

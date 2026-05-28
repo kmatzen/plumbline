@@ -1,0 +1,28 @@
+# Depth Anything V2 (base) on DIODE val — DA-V2's OWN Table 2.
+#
+# ViT-B companion to da-v2-small-diode-native. DA-V2 Table 2 (zero-shot
+# relative depth, DIODE column, ViT-B row) = 0.068 AbsRel. New variant
+# coverage (no DA-V2-Base DIODE cell existed).
+
+name: da-v2-base-diode-native
+protocol: diode_dav2
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: base
+
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.068
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), DIODE column, Depth-Anything-V2 ViT-B row: AbsRel = 0.068. Affine-invariant inverse depth. Verified by ar5iv PDF read 2026-05-28."
+  source_confidence: verified_pdf
+
+notes: >
+  Next-box run, same recipe as da-v2-small-diode-native (recipe validated
+  on the ViT-S indoor slice at 0.0722 vs 0.073). domain=both combined val.
+  Needs DIODE val at $DIODE_ROOT.
