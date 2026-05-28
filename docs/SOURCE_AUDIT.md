@@ -28,7 +28,7 @@ the released *checkpoint* doesn't match the paper (e.g. GeoWizard).
 | depth-pro | apple/ml-depth-pro | faithful | metric depth + focal handling correct; never passes GT `f_px` (intended no-intrinsics mode) |
 | pi3 | yyfz/Pi3 | minor-divergence → fixed | `conf` trailing-dim kept (fixed); no resize-to-14 + bf16-weights vs autocast (documented) |
 | cut3r | CUT3R/CUT3R | faithful | transcribed from demo.py while building; depth/pose/pointmap conversions match |
-| monst3r | Junyi42/monst3r | faithful (base only) | base dust3r alignment only; flow refinement intentionally out of scope (documented) |
+| monst3r | Junyi42/monst3r | faithful | base dust3r alignment for depth; v1.2 `video_pose` path wires the full flow + motion + temporal video-pose alignment (Sintel Table 4 ✅) |
 | dust3r | naver/dust3r | faithful | single-frame `F(I,I)` byte-identical to upstream `load_images`+`inference` (single-record diff, D28); N≥3 shares dust3r PCO with mast3r |
 
 ## Fixes applied in this audit (2026-05-23)
@@ -301,14 +301,18 @@ single-frame via the demo's duplicate trick; reuses MASt3R's audited
 `_run_mast3r` (dust3r preprocessing + PointCloudOptimizer + view-0 rebase).
 Conversion logic covered by `tests/test_monst3r.py`.
 
-**Intentional scope limit (documented in the adapter):** MonST3R's full video
+**Flow / video-pose path (landed v1.2, 2026-05-27):** MonST3R's full video
 pipeline adds optical-flow consistency (`flow_loss_weight`), temporal
-smoothing, motion masks, and window-wise alignment. This adapter runs the
-**base** global alignment only (`flow_loss_weight=0` equivalent) — genuine
-MonST3R per-view geometry with plain dust3r alignment, not the flow-refined
-trajectory. The flow path is a GPU-validated v0.3 follow-up.
+smoothing, motion masks, and window-wise alignment. The adapter's
+`video_pose=True` path now wires all of these (swinstride-5-noncyclic graph +
+flow + motion + temporal terms in the global alignment) and is GPU-validated on
+the Sintel Table-4 trajectory cell (ATE 0.1134 vs 0.108, ✅). The default
+`video_pose=False` path still runs **base** global alignment
+(`flow_loss_weight=0` equivalent), appropriate for the mono-depth /
+unordered-multi-view cells.
 
-**Net:** faithful base inference; flow refinement out of scope (disclosed).
+**Net:** faithful base inference for depth; the flow-refined video-pose path is
+wired and GPU-validated (MonST3R Table 4 / Sintel).
 
 ## dust3r
 

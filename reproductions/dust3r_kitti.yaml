@@ -3,7 +3,7 @@
 # Targets DUSt3R Table 2 "Monocular depth estimation on multiple
 # benchmarks" (Wang et al. 2024, arXiv:2312.14132, CVPR 2024, page 8),
 # Outdoor / KITTI column, "DUSt3R 512" row (T = transfer / zero-shot):
-# **Rel = 10.74, δ₁.₂₅ = 86.00** (→ AbsRel 0.1074, δ₁ 0.8600, both
+# **Rel = 10.74, δ₁.₂₅ = 86.60** (→ AbsRel 0.1074, δ₁ 0.8660, both
 # bolded as best zero-shot). Verified by direct PDF read 2026-05-27.
 #
 # Protocol (paper §4.3): single-frame `F(I, I)` — see the
@@ -34,7 +34,7 @@ paper_reference:
   primary_metric: abs_rel
   value: 0.1074
   tolerance_relative: 0.05
-  citation: "Wang et al. 2024, DUSt3R (arXiv:2312.14132, CVPR 2024), Table 2 (Monocular depth estimation on multiple benchmarks), Outdoor / KITTI column, 'DUSt3R 512' row (T = transfer/zero-shot): Rel = 10.74 → AbsRel 0.1074 (bolded best zero-shot). Companion δ₁.₂₅ = 86.00 → 0.8600 (also bolded). Protocol §4.3: 'we simply feed the same input image I to the network as F(I, I)'; per-frame median scaling (lineage convention, MonST3R §4.2 explicit citation to DUSt3R). Verified by direct PDF read 2026-05-27."
+  citation: "Wang et al. 2024, DUSt3R (arXiv:2312.14132, CVPR 2024), Table 2 (Monocular depth estimation on multiple benchmarks), Outdoor / KITTI column, 'DUSt3R 512' row (T = transfer/zero-shot): Rel = 10.74 → AbsRel 0.1074 (bolded best zero-shot). Companion δ₁.₂₅ = 86.60 → 0.8660 (also bolded; corrected 2026-05-28: was transcribed 86.00, ar5iv re-read confirms 86.60). Protocol §4.3: 'we simply feed the same input image I to the network as F(I, I)'; per-frame median scaling (lineage convention, MonST3R §4.2 explicit citation to DUSt3R). Verified by direct PDF read 2026-05-27."
   source_confidence: verified_pdf
 
 notes: >
@@ -53,4 +53,4 @@ notes: >
   docs/DISCREPANCIES.md D24 for the empirical calibration against
   CUT3R's published 0.092 cell). Expected wall ~25 min on RTX 3090.
 
-  Companion metric (δ₁.₂₅ = 0.8600) reported in the same row.
+  Companion metric (δ₁.₂₅ = 0.8660) reported in the same row.
