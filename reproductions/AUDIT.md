@@ -3,10 +3,14 @@
 Independent audit of `paper_reference.value` and `paper_reference.citation` entries
 against the canonical arXiv sources. Performed read-only; no YAMLs were modified.
 
-> **Current state (2026-05-23):** all 25 `verified_pdf` YAMLs that pin a
+> **Current state (2026-05-28):** all 28 `verified_pdf` YAMLs that pin a
 > non-null value are audited against the source PDF — see the
-> "Verified-coverage status (2026-05-23)" section at the bottom. No
-> remaining `verified_pdf` value is unaudited, fabricated, or inferred.
+> "Verified-coverage status" section at the bottom. No remaining
+> `verified_pdf` value is unaudited, fabricated, or inferred. A 2026-05-28
+> re-verification of the 22 ✅ targets confirmed 21/22 against the papers
+> and corrected two transcription slips read straight from the PDF:
+> `dust3r-co3dv2-pose` mAA(30) 0.774→0.772 and `dust3r-kitti` companion
+> δ₁ 0.8600→0.8660 (both cells remain ✅ within ±5 %).
 > The sections below are a chronological log; the 2026-04-20 summary
 > counts are historical (superseded by the bottom of the file).
 

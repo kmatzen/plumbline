@@ -2,7 +2,7 @@
 #
 # Targets MASt3R Table 3 (Leroy et al. 2024, arXiv:2406.09756, ECCV
 # 2024), CO3Dv2 column block, DUSt3R row: **RRA@15 = 0.943, RTA@15
-# = 0.884, mAA(30) = 0.774**.
+# = 0.884, mAA(30) = 0.772**.
 #
 # Verified by direct PDF read 2026-05-27 (same table previously
 # verified for the MASt3R row in `mast3r_co3dv2_pose.yaml`, see
@@ -65,9 +65,9 @@ pose_acc_thresholds: [5.0, 15.0]
 
 paper_reference:
   primary_metric: pairwise_pose_auc@30
-  value: 0.774
+  value: 0.772
   tolerance_relative: 0.05
-  citation: "Leroy et al. 2024, MASt3R (arXiv:2406.09756, ECCV 2024), Table 3 (Multi-view pose regression on CO3Dv2 / RealEstate10K, 10 random frames), CO3Dv2 column block, DUSt3R row: mAA(30) = 77.4 → AUC@30 0.774. Companion cells (same row): RRA@15 = 94.3 → 0.943, RTA@15 = 88.4 → 0.884. Verified by direct PDF read 2026-05-27 (same table as `mast3r_co3dv2_pose.yaml`, D23 lineage)."
+  citation: "Leroy et al. 2024, MASt3R (arXiv:2406.09756, ECCV 2024), Table 3 (Multi-view pose regression on CO3Dv2 / RealEstate10K, 10 random frames), CO3Dv2 column block, DUSt3R row: mAA(30) = 77.2 → AUC@30 0.772. Companion cells (same row): RRA@15 = 94.3 → 0.943, RTA@15 = 88.4 → 0.884. Verified by direct PDF read 2026-05-27; primary value corrected 2026-05-28 (was transcribed 77.4 → 0.774; ECCV PDF DUSt3R row reads 94.3 / 88.4 / 77.2, companions confirmed unchanged). Same table as `mast3r_co3dv2_pose.yaml`, D23 lineage."
   source_confidence: verified_pdf
 
 notes: >

@@ -4,10 +4,9 @@ A reproducible evaluation harness for 3D geometric foundation models —
 think `lm-evaluation-harness`, but for models like **VGGT**, **Depth
 Anything 3**, **MASt3R**, **Metric3Dv2**, and **Depth Anything V2**.
 
-**Status:** v0.1 in development. **16 paper-match cells** across NYU +
-KITTI + DIODE mono-depth, each verified against the source PDF. Pose
-+ multi-view-chamfer infra landed but not yet GPU-validated against
-paper cells. API will still change before 1.0.
+**Status:** v0.1 in development. **22 paper-match cells** — 18 mono-depth
+(NYU / KITTI / DIODE) + 4 multi-view pose/trajectory (CO3Dv2 / Sintel) —
+each verified against the source PDF. API will still change before 1.0.
 
 ## What works today
 
@@ -16,16 +15,17 @@ paper cells. API will still change before 1.0.
   `*-normal`), Marigold v1-1, GeoWizard, Depth Pro, MASt3R (N-view via
   PointCloudOptimizer for N≥3, PairViewer for N=2), VGGT, π³, **CUT3R**
   (recurrent — video + unordered image collections), and **MonST3R**
-  (dynamic-scene video; base dust3r inference, flow refinement scoped as
-  a follow-up). The last three landed with conversion unit tests; GPU
-  validation pending.
+  (dynamic-scene video; the v1.2 `video_pose` path wires MonST3R's full
+  flow + motion-mask + temporal global alignment, GPU-validated on the
+  Sintel Table-4 trajectory cell). π³ and CUT3R also have GPU smoke runs
+  (informational).
 - **12 datasets**: NYUv2 (Eigen 2014, rawDepths), KITTI (Eigen 652,
   annotated GT, Garg crop), DIODE (FoV-warp loader, MoGe-paper protocol),
   ETH3D high-res multi-view, DTU MVS (22-scan test split), CO3Dv2
   (VGGT-canonical pose-eval recipe), 7-Scenes, GSO, iBims-1, Sintel
   (RGB + flow; depth gated), ScanNet (gated), **Bonn RGB-D Dynamic**
   (video depth, one-sample-per-sequence; closes the runnable-video gap).
-- **16 paper-match reproductions** with `source_confidence: verified_pdf`
+- **22 paper-match reproductions** with `source_confidence: verified_pdf`
   — see [REPRODUCTIONS.md](./REPRODUCTIONS.md). Each cell audited
   table-+-column-+-row against the source paper
   ([reproductions/AUDIT.md](./reproductions/AUDIT.md)).
@@ -46,22 +46,23 @@ cell reproduces" and "we built honest infra but the public release
 doesn't reproduce the paper cell". The matrix in
 [`REPRODUCTIONS.md`](./REPRODUCTIONS.md) tracks this:
 
-**Verified paper-match (16 cells, safe to cite):** DA-V2 (S/B/L on
-NYU, KITTI; L on DIODE, KITTI-MoGe), Metric3Dv2 (L/Giant on NYU,
-KITTI), MoGe-1 ViT-L (NYU, KITTI, DIODE), Marigold v1-1 (NYU), DA3
-(NYU).
+**Verified paper-match (22 cells, safe to cite):** 18 mono-depth — DA-V2
+(S/L on NYU; S/B/L on KITTI; L on DIODE + KITTI-MoGe), Metric3Dv2
+(L/Giant on NYU + KITTI), MoGe-1 ViT-L (NYU, KITTI, DIODE), Marigold v1-1
+(NYU), DA3 (NYU δ₁), MonST3R (NYU), DUSt3R (KITTI); plus 4 multi-view
+pose — VGGT / MASt3R / DUSt3R on CO3Dv2 (mAA@30) and MonST3R on Sintel
+(trajectory ATE, Table 4).
 
 **Upstream-blocked (adapter+protocol audited; gap is in the released
 checkpoint or a paper-private eval config — do not promote):**
 GeoWizard (NYU, KITTI), Marigold (KITTI), VGGT (DTU). See
 `docs/DISCREPANCIES.md` D3 / D9 / D17 / D18 / D22.
 
-**Infra landed, GPU validation pending:** CO3Dv2 pose for VGGT
-(Table 1, AUC@30 = 0.882) and MASt3R (Table 3, mAA(30) = 0.818) — both
-paper targets confirmed by direct PDF read (the MASt3R cell was
-re-verified 2026-05-23, closing D23). Queued as the top two GPU jobs
-(`plumbline queue`). VGGT-ETH3D per-view-masked path lands 9.4 % under
-paper on a 3-scene subset; full 13-scene comparison pending (D10).
+**Off-paper, investigated (honest infra; documented protocol / recipe
+deltas, not promoted to ✅):** VGGT-ETH3D 13-scene Overall 0.875 vs 0.709
+(+23.5 %, driven by the `terrains` outlier — D10); DUSt3R / MonST3R /
+CUT3R lineage-depth cells on NYU / Bonn / Sintel (GT-processing recipe
+deltas — D24 / D27 / D28). See `docs/DISCREPANCIES.md`.
 
 ## Install
 
@@ -112,12 +113,12 @@ plumbline run --model vggt --dataset eth3d --tasks pose \
 
 A handful of representative ✅ reproductions across the three
 datasets — see [REPRODUCTIONS.md](./REPRODUCTIONS.md) for the
-authoritative 16-cell matrix:
+authoritative 22-cell matrix:
 
 | Reproduction | Paper | Observed | Status |
 |---|---|---|---|
 | `da-v2-small-nyuv2` | AbsRel 0.053 | **0.0510** | ✅ |
-| `da-v2-large-nyuv2` | AbsRel 0.045 | **0.0428** | ✅ |
+| `da-v2-large-nyuv2` | AbsRel 0.0420 | **0.0428** | ✅ |
 | `metric3d-v2-giant-nyuv2` | AbsRel 0.067 | **0.0702** | ✅ |
 | `da3-nyuv2` | δ₁ 0.974 | **0.9684** | ✅ |
 | `da-v2-small-kitti` | AbsRel 0.078 | **0.0770** | ✅ |
@@ -125,13 +126,11 @@ authoritative 16-cell matrix:
 | `marigold-v1-1-nyuv2` | AbsRel 0.055 | **0.0577** | ✅ |
 | `moge-vitl-diode-both` | AbsRel 0.0400 | **0.0407** | ✅ |
 | `da-v2-large-kitti-moge` | AbsRel 0.0561 | **0.0569** | ✅ |
+| `vggt-co3dv2-pose` | AUC@30 0.882 | **0.8964** | ✅ |
+| `monst3r-sintel-pose` | ATE 0.108 | **0.1134** | ✅ |
 
 ## Not yet reproducible without user-supplied data or compute
 
-- **CO3Dv2 pose** (`vggt-co3dv2-pose`, `mast3r-co3dv2-pose`) — infra
-  + verified paper targets landed 2026-04-27; awaiting GPU run on
-  CO3Dv2 (~30-50 GB stage of the 41 SEEN categories' test split).
-  Will gate the pose half of v0.1.
 - `vggt-paper-dtu-mvs` — protocol port complete (per-view-masked,
   PatchmatchNet filter); residual ~2 × gap is upstream-blocked. Run
   to confirm the structural correctness, not as a paper-match. Set
