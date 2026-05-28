@@ -140,21 +140,23 @@ def test_mast3r_config_hash_depends_on_ga_hyperparams() -> None:
     )
 
 
-def test_dust3r_requires_two_views() -> None:
-    import numpy as np
+def test_dust3r_supports_single_frame() -> None:
+    """DUSt3R adapter v1.1: paper §4.3 monocular depth is `F(I, I)`.
+    The adapter now accepts N=1 via the view-duplicate trick (mirrors
+    the MonST3R adapter's `_monst3r_single_frame_eval`) so DUSt3R
+    Table 2 NYU/KITTI/Bonn cells can be reproduced.
 
+    Pre-v1.1 the adapter raised on N<2; that's a behavioural change
+    (recorded in the docstring + version bump 1.0 → 1.1).
+    """
     cls = MODEL_REGISTRY["dust3r"]
-    model = cls(device="cpu")  # type: ignore[call-arg]
-    images_single = np.zeros((1, 8, 8, 3), dtype=np.uint8)
-    with pytest.raises(ValueError, match="at least 2"):
-        model.predict(images_single)
+    assert cls.capabilities.min_views == 1
 
 
 def test_dust3r_supports_multiview() -> None:
     """DUSt3R adapter supports up to 60 views (Sintel-pose long-clip
     headroom matches the MonST3R adapter)."""
     cls = MODEL_REGISTRY["dust3r"]
-    assert cls.capabilities.min_views == 2
     assert cls.capabilities.max_views >= 10  # CO3Dv2 pose protocol
 
 
