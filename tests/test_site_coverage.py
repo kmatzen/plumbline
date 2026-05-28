@@ -26,6 +26,8 @@ from plumbline.models.registry import MODEL_REGISTRY
 from plumbline.paths import REPO_ROOT
 
 SITE_HTML = REPO_ROOT / "site" / "index.html"
+REPRODUCTIONS_MD = REPO_ROOT / "REPRODUCTIONS.md"
+README_MD = REPO_ROOT / "README.md"
 
 
 def _parse_coverage(kind: str) -> tuple[int, list[str]]:
@@ -79,3 +81,66 @@ class TestSiteCoverage:
         _, items = _parse_coverage("datasets")
         unknown = [d for d in items if d not in DATASET_REGISTRY]
         assert not unknown, f"site lists unregistered datasets: {unknown}"
+
+
+# --- Cross-surface verified-count consistency (added 2026-05-28) ---
+# The "verified paper-match" count must agree across every surface that
+# advertises it: the site stat, the site's listed cells, REPRODUCTIONS.md's
+# breakdown total, and the README headline. Caught the 24/23/22 drift fixed
+# 2026-05-28 (two over-claimed ✅ cells downgraded + a generation-stale README).
+
+
+def _site_verified_count() -> int:
+    html = SITE_HTML.read_text(encoding="utf-8")
+    m = re.search(
+        r'<span class="stat-n">(\d+)</span><span class="stat-label">verified results',
+        html,
+    )
+    assert m, "could not find the 'verified results' stat on the site"
+    return int(m.group(1))
+
+
+def _site_verified_list_count() -> int:
+    html = SITE_HTML.read_text(encoding="utf-8")
+    block = re.search(
+        r'<ul class="cell-list[^"]*"[^>]*aria-label="verified paper-match cells">(.*?)</ul>',
+        html,
+        re.DOTALL,
+    )
+    assert block, "could not find the verified paper-match cell list on the site"
+    return len(re.findall(r"<li[ >]", block.group(1)))
+
+
+def _reproductions_verified_total() -> int:
+    md = REPRODUCTIONS_MD.read_text(encoding="utf-8")
+    m = re.search(r"=\s*(\d+)\s+total\*\*", md)
+    assert m, "could not find the '= N total' verified breakdown in REPRODUCTIONS.md"
+    return int(m.group(1))
+
+
+class TestVerifiedCountConsistency:
+    """The 'verified paper-match' count must agree across all surfaces."""
+
+    def test_site_stat_matches_listed_cells(self) -> None:
+        stat, listed = _site_verified_count(), _site_verified_list_count()
+        assert stat == listed, (
+            f"site 'verified results' stat ({stat}) != number of listed verified "
+            f"cells ({listed}) — update site/index.html"
+        )
+
+    def test_site_matches_reproductions_total(self) -> None:
+        site, repro = _site_verified_count(), _reproductions_verified_total()
+        assert site == repro, (
+            f"site verified count ({site}) != REPRODUCTIONS.md '= N total' ({repro})"
+        )
+
+    def test_readme_counts_match_reproductions_total(self) -> None:
+        readme = README_MD.read_text(encoding="utf-8")
+        repro = _reproductions_verified_total()
+        counts = {int(n) for n in re.findall(r"(\d+) paper-match", readme)}
+        counts |= {int(n) for n in re.findall(r"(\d+)-cell matrix", readme)}
+        assert counts, "no 'N paper-match' / 'N-cell matrix' count found in README"
+        bad = sorted(c for c in counts if c != repro)
+        assert not bad, (
+            f"README paper-match counts {bad} disagree with REPRODUCTIONS.md total ({repro})"
+        )
