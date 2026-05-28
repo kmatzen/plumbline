@@ -28,7 +28,6 @@ from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
-
 from rich.console import Console
 from rich.progress import (
     BarColumn,
@@ -60,12 +59,10 @@ from plumbline.metrics.pointmap import (
 from plumbline.metrics.pose import accuracy_at_threshold as pose_acc_fn
 from plumbline.metrics.pose import auc as pose_auc_fn
 from plumbline.metrics.pose import (
-    trajectory_ate_rmse_sim3,
-    trajectory_rpe_rmse_sim3,
-)
-from plumbline.metrics.pose import (
     pairwise_pose_errors,
     rotation_error_degrees,
+    trajectory_ate_rmse_sim3,
+    trajectory_rpe_rmse_sim3,
     translation_cosine_error,
 )
 from plumbline.models.base import Model, Prediction
@@ -414,9 +411,7 @@ def evaluate(
             disable=not show_progress,
             transient=False,
         )
-        scene_task = scene_progress.add_task(
-            "chamfer", total=len(scene_points), status=""
-        )
+        scene_task = scene_progress.add_task("chamfer", total=len(scene_points), status="")
         scene_progress.start()
         per_scene: dict[str, dict[str, float]] = {}
         for scene, chunks in scene_points.items():
@@ -438,12 +433,11 @@ def evaluate(
                     # stuck. Bbox-diagonal is the simplest similarity
                     # match that's symmetric and unit-aware.
                     s0, R0, t0 = _bbox_similarity_warm_start(merged, gt)
-                    s, R, t, _info = icp_similarity(
-                        merged, gt, init_s=s0, init_R=R0, init_t=t0
-                    )
+                    s, R, t, _info = icp_similarity(merged, gt, init_s=s0, init_R=R0, init_t=t0)
                     merged = apply_similarity(merged, s, R, t).astype(np.float32)
                 per_scene[scene] = accuracy_completeness(
-                    merged, gt,
+                    merged,
+                    gt,
                     voxel_size=None,
                     outlier_distance=chamfer_outlier_distance,
                 )
@@ -470,7 +464,8 @@ def evaluate(
             # further from any individual surface measurement and inflate
             # Acc relative to the paper convention.
             per_scene[scene] = accuracy_completeness(
-                merged, gt,
+                merged,
+                gt,
                 voxel_size=None,
                 outlier_distance=chamfer_outlier_distance,
             )
@@ -478,9 +473,38 @@ def evaluate(
         scene_progress.stop()
         report.per_scene_metrics = per_scene
         keys = sorted({k for m in per_scene.values() for k in m})
-        report.aggregate_metrics = {
-            k: float(np.mean([per_scene[s][k] for s in per_scene])) for k in keys
-        }
+        # Aggregate across scenes with an unweighted mean, skipping scenes
+        # whose value is non-finite — mirrors the per-sample path below
+        # ("skip NaNs"). A single scene whose scene-merge ICP/chamfer
+        # diverged to NaN must not poison the whole benchmark number:
+        # observed on pi3-DTU, where one divergent scan turned the 22-scan
+        # Overall into NaN while the converged scenes were fine (ETH3D, with
+        # the same per-view-masked path but fewer scenes, stayed finite).
+        scene_aggregate: dict[str, float] = {}
+        for k in keys:
+            vals = np.asarray(
+                [per_scene[s][k] for s in per_scene if k in per_scene[s]],
+                dtype=np.float64,
+            )
+            finite = vals[np.isfinite(vals)]
+            scene_aggregate[k] = float(finite.mean()) if finite.size else float("nan")
+        report.aggregate_metrics = scene_aggregate
+        primary = "overall" if "overall" in keys else (keys[0] if keys else None)
+        if primary is not None:
+            dropped = [
+                s
+                for s in per_scene
+                if primary in per_scene[s] and not np.isfinite(per_scene[s][primary])
+            ]
+            if dropped:
+                log.warning(
+                    "scene-agg '%s': dropped %d/%d non-finite scene(s) before "
+                    "aggregation; per-scene=%s",
+                    primary,
+                    len(dropped),
+                    len(per_scene),
+                    {s: per_scene[s].get(primary) for s in per_scene},
+                )
         return report
 
     # Aggregate with per-sample mean; skip NaNs.
@@ -790,11 +814,7 @@ def _geometric_consistency_mask(
     Returns a boolean ``(V, H, W)`` array, or ``None`` if essential
     prediction fields are missing.
     """
-    if (
-        prediction.depth is None
-        or prediction.intrinsics is None
-        or prediction.extrinsics is None
-    ):
+    if prediction.depth is None or prediction.intrinsics is None or prediction.extrinsics is None:
         return None
     depth = prediction.depth.astype(np.float64)  # (V, H, W) — predicted z-depth
     K = prediction.intrinsics.astype(np.float64)  # (V, 3, 3) at pred-pixel res
@@ -837,14 +857,14 @@ def _geometric_consistency_mask(
             d_src = depth[j]
             # cam_from_world @ world_from_ref_cam = src_cam_from_ref_cam
             T_src_from_ref = np.linalg.inv(Ew[j]) @ Ew[i]
-            xyz_in_src = (
-                T_src_from_ref[:3, :3] @ xyz_ref_cam + T_src_from_ref[:3, 3:4]
-            )
+            xyz_in_src = T_src_from_ref[:3, :3] @ xyz_ref_cam + T_src_from_ref[:3, 3:4]
             uv_src_h = K_src @ xyz_in_src
             z_src_proj = uv_src_h[2]
             # Avoid div-by-zero at the rear half-space.
             valid_proj = z_src_proj > eps
-            xy_src = np.where(valid_proj, uv_src_h[:2] / np.where(valid_proj, z_src_proj, 1.0), -1.0)
+            xy_src = np.where(
+                valid_proj, uv_src_h[:2] / np.where(valid_proj, z_src_proj, 1.0), -1.0
+            )
             x_src = xy_src[0]
             y_src = xy_src[1]
             # Bilinear-ish: nearest-pixel sample (matches PatchmatchNet's
@@ -856,23 +876,15 @@ def _geometric_consistency_mask(
             sampled = np.zeros_like(d_ref)
             sampled[in_bounds] = d_src[yi[in_bounds], xi[in_bounds]]
             # Reproject src → ref-cam → ref-pixel
-            xyz_src_cam = (
-                np.linalg.inv(K_src)
-                @ np.vstack((xy_src, ones_flat))
-                * sampled
-            )
+            xyz_src_cam = np.linalg.inv(K_src) @ np.vstack((xy_src, ones_flat)) * sampled
             T_ref_from_src = Ew_ref_inv @ Ew[j]
-            xyz_back_ref_cam = (
-                T_ref_from_src[:3, :3] @ xyz_src_cam + T_ref_from_src[:3, 3:4]
-            )
+            xyz_back_ref_cam = T_ref_from_src[:3, :3] @ xyz_src_cam + T_ref_from_src[:3, 3:4]
             depth_reproj = xyz_back_ref_cam[2]
             uv_back = K_ref @ xyz_back_ref_cam
             z_back = uv_back[2]
             valid_back = (z_back > eps) & in_bounds & (sampled > 0)
             xy_back = np.where(valid_back, uv_back[:2] / np.where(valid_back, z_back, 1.0), 1e9)
-            dist_px = np.sqrt(
-                (xy_back[0] - x_ref_flat) ** 2 + (xy_back[1] - y_ref_flat) ** 2
-            )
+            dist_px = np.sqrt((xy_back[0] - x_ref_flat) ** 2 + (xy_back[1] - y_ref_flat) ** 2)
             rel_depth_diff = np.where(
                 d_ref > eps, np.abs(depth_reproj - d_ref) / np.maximum(d_ref, eps), 1e9
             )
@@ -924,15 +936,11 @@ def _per_view_masked_clouds(
             or prediction.extrinsics is None
         ):
             return None
-        pmap = _back_project_depth(
-            prediction.depth, prediction.intrinsics, prediction.extrinsics
-        )
+        pmap = _back_project_depth(prediction.depth, prediction.intrinsics, prediction.extrinsics)
     V_p, H_p, W_p, _ = pmap.shape
     V_gt, H_gt_canvas, W_gt_canvas = sample.depth_gt.shape
     if V_p != V_gt:
-        log.warning(
-            "per-view-masked: pred view count %d != GT view count %d", V_p, V_gt
-        )
+        log.warning("per-view-masked: pred view count %d != GT view count %d", V_p, V_gt)
         return None
 
     # Per-view native sizes — datasets with varying-native-size views (ETH3D)
@@ -1199,9 +1207,7 @@ def _pose_metrics(
         Eg = E_gt
     abs_rot = np.asarray(rotation_error_degrees(Ep, Eg)).reshape(-1)
     abs_trans = np.asarray(
-        translation_cosine_error(
-            Ep[..., :3, 3], Eg[..., :3, 3], antipodal=translation_antipodal
-        )
+        translation_cosine_error(Ep[..., :3, 3], Eg[..., :3, 3], antipodal=translation_antipodal)
     ).reshape(-1)
     abs_combined = np.maximum(abs_rot, abs_trans)
     abs_aucs = pose_auc_fn(abs_combined, list(auc_thresholds), mode=auc_mode)
@@ -1251,7 +1257,7 @@ def _pose_metrics(
         except ImportError:
             # `evo` is an optional extra; silently skip if not installed.
             pass
-        except Exception:  # noqa: BLE001
+        except Exception:
             # Umeyama can fail on degenerate trajectories (collinear /
             # near-stationary cameras). Emit NaN so the per-sample row
             # records the failure and aggregation skips it via nanmean —

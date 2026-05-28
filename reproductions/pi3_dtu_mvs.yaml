@@ -21,12 +21,15 @@ model:
 device: cuda:0
 
 paper_reference:
-  primary_metric: chamfer
+  # The per-view-masked MVS path emits 'overall' = (Acc + Comp) / 2 (plus
+  # 'accuracy'/'completeness'); there is NO 'chamfer' key, so naming the
+  # primary metric 'chamfer' silently yielded a NaN observed. 'overall' IS
+  # the chamfer the VGGT DTU table reports ("Overall (Chamfer distance)").
+  # run_reproduction now warns on an unknown primary_metric.
+  primary_metric: overall
   # Pi3 Table 3 reports DTU: Accuracy 1.198 / Completion 1.849 /
-  # Normal Consistency 0.678. plumbline's DTU loader reports chamfer
-  # as (Acc + Comp) / 2, mirroring VGGT's protocol. A direct
-  # paper-match here requires confirming Pi3 uses the same MVSNet-22
-  # subset + mm units that VGGT's 0.382 does.
+  # Normal Consistency 0.678. A direct paper-match here requires confirming
+  # Pi3 uses the same MVSNet-22 subset + mm units that VGGT's 0.382 does.
   value: null
   tolerance_relative: null
   citation: "Yuan et al. 2025, π³ (arXiv:2507.13347), Table 3. DTU Accuracy=1.198, Completion=1.849 — unit convention vs plumbline's mm chamfer not yet confirmed."

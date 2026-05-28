@@ -176,9 +176,7 @@ class Pi3Adapter(Model):
             resized = np.empty((n, th, tw, 3), dtype=images.dtype)
             for i in range(n):
                 resized[i] = np.asarray(
-                    _PImage.fromarray(images[i]).resize(
-                        (tw, th), _PImage.Resampling.LANCZOS
-                    )
+                    _PImage.fromarray(images[i]).resize((tw, th), _PImage.Resampling.LANCZOS)
                 )
             images = resized
             n, h, w, _ = images.shape
@@ -204,8 +202,8 @@ class Pi3Adapter(Model):
 
         # Move to CPU float32 for numpy handoff.
         local_points = out["local_points"][0].detach().float().cpu().numpy()  # (N, H, W, 3)
-        points = out["points"][0].detach().float().cpu().numpy()               # (N, H, W, 3)
-        camera_poses = out["camera_poses"][0].detach().float().cpu().numpy()   # (N, 4, 4)
+        points = out["points"][0].detach().float().cpu().numpy()  # (N, H, W, 3)
+        camera_poses = out["camera_poses"][0].detach().float().cpu().numpy()  # (N, 4, 4)
         conf_logits = out["conf"][0].detach().float().cpu().numpy()
         # Upstream conf carries a trailing channel dim: (N, H, W, 1) — see
         # Pi3's example.py (`sigmoid(res['conf'][..., 0])`). Drop it so
@@ -237,7 +235,11 @@ class Pi3Adapter(Model):
                 "checkpoint": _VARIANT_HF[self.variant][2],
                 "dtype": self.dtype,
                 "n_views": n,
-                "native_space": "camera_local_xyz",
+                # ``point_map`` is π³'s *global* (world-frame, view-0-anchored)
+                # output (``out["points"]``), NOT the camera-local map — the
+                # chamfer path consumes it as a world cloud. (The camera-local
+                # map is ``out["local_points"]``, used only to derive depth.)
+                "native_space": "world_xyz",
                 "alignment_hint": "none",
             },
         )
@@ -260,7 +262,6 @@ def _pi3_target_size(w: int, h: int, pixel_limit: int = 255000) -> tuple[int, in
     ``PIXEL_LIMIT=255000``) so the adapter feeds the same resolution the
     upstream demo does. Returns ``(W, H)``.
     """
-    import math
 
     scale = math.sqrt(pixel_limit / (w * h)) if w * h > 0 else 1.0
     w_t, h_t = w * scale, h * scale
