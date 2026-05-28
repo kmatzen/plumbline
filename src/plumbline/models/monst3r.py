@@ -193,13 +193,13 @@ class MonST3RAdapter(Model):
         try:
             from dust3r.model import AsymmetricCroCo3DStereo  # type: ignore[import-not-found]
         except ImportError as exc:  # pragma: no cover - needs the repo
-            raise ImportError(
-                "MonST3RAdapter needs the MonST3R repo (ships its own dust3r "
-                "fork). Clone https://github.com/Junyi42/monst3r recursively "
-                "and set $MONST3R_ROOT (default /workspace/deps/monst3r)."
-            ) from exc
+            from plumbline.install import install_hint
+
+            raise ImportError(f"{type(self).__name__} {install_hint('monst3r')}") from exc
         # demo.py: AsymmetricCroCo3DStereo.from_pretrained(weights).to(device)
-        self._model = AsymmetricCroCo3DStereo.from_pretrained(self.checkpoint).to(self.device).eval()
+        self._model = (
+            AsymmetricCroCo3DStereo.from_pretrained(self.checkpoint).to(self.device).eval()
+        )
 
     # -- predict ---------------------------------------------------------
 
@@ -233,7 +233,10 @@ class MonST3RAdapter(Model):
         single = n == 1
         if single:
             depth, point_map, K = _monst3r_single_frame_eval(
-                self._model, images, device=self.device, long_edge=self.long_edge,
+                self._model,
+                images,
+                device=self.device,
+                long_edge=self.long_edge,
             )
             extrinsics = np.eye(4, dtype=np.float32)[None]
             confidence = None
@@ -384,9 +387,7 @@ def _monst3r_single_frame_eval(
 
     H, W = depth.shape
     f = float(max(H, W))
-    K = np.array(
-        [[f, 0.0, W / 2.0], [0.0, f, H / 2.0], [0.0, 0.0, 1.0]], dtype=np.float32
-    )
+    K = np.array([[f, 0.0, W / 2.0], [0.0, f, H / 2.0], [0.0, 0.0, 1.0]], dtype=np.float32)
     return depth[None], pts3d[None], K[None]
 
 
@@ -447,9 +448,7 @@ def _run_monst3r_video_pose(
 
     n = int(images.shape[0])
     dust3r_imgs = _images_to_dust3r_dicts(images, long_edge=long_edge)
-    pairs = make_pairs(
-        dust3r_imgs, scene_graph=scene_graph_type, prefilter=None, symmetrize=True
-    )
+    pairs = make_pairs(dust3r_imgs, scene_graph=scene_graph_type, prefilter=None, symmetrize=True)
     output = inference(pairs, model, device, batch_size=1, verbose=False)
 
     with torch.enable_grad():
@@ -478,7 +477,10 @@ def _run_monst3r_video_pose(
             pxl_thre=pxl_thresh,
         )
         scene.compute_global_alignment(
-            init=ga_init, niter=ga_niter, schedule=ga_schedule, lr=ga_lr,
+            init=ga_init,
+            niter=ga_niter,
+            schedule=ga_schedule,
+            lr=ga_lr,
         )
 
     depthmaps = [d.detach().cpu().numpy() for d in scene.get_depthmaps()]
@@ -549,6 +551,7 @@ def _shim_sam2_for_monst3r() -> None:
         return
     try:
         import sam2  # noqa: F401
+
         return
     except ImportError:
         pass

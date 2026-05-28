@@ -15,6 +15,7 @@ or any adapter dependency (no torch / transformers import):
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import pytest
@@ -33,6 +34,8 @@ _VALID_KINDS = {"base", "pypi", "git", "clone"}
 
 _GPU_QUEUE_YAML = Path(__file__).resolve().parent.parent / "reproductions" / "gpu_queue.yaml"
 _PYPROJECT = Path(__file__).resolve().parent.parent / "pyproject.toml"
+_MODELS_DIR = Path(__file__).resolve().parent.parent / "src" / "plumbline" / "models"
+_HINT_CALL = re.compile(r"""install_hint\(\s*['"]([^'"]+)['"]\s*\)""")
 
 
 def test_registry_is_nonempty_and_has_13_entries() -> None:
@@ -155,6 +158,26 @@ def test_da3_job_no_longer_claims_base_install() -> None:
     assert "ships in the base install" not in extras, extras
     # And it must point operators at the real install path.
     assert "depth-anything-3" in extras, extras
+
+
+# ---------------------------------------------------------------------------
+# Adapter ImportError messages derive from the registry via install_hint(); a
+# typo there would make the error path itself raise KeyError. Every name passed
+# to install_hint() in the adapter modules must be a real registry key.
+# ---------------------------------------------------------------------------
+
+
+def test_adapter_install_hint_args_are_valid_registry_names() -> None:
+    calls: list[tuple[str, str]] = []
+    for path in sorted(_MODELS_DIR.glob("*.py")):
+        for m in _HINT_CALL.finditer(path.read_text(encoding="utf-8")):
+            calls.append((path.name, m.group(1)))
+    assert calls, "no install_hint(...) calls found in adapter modules — wiring removed?"
+    for fname, name in calls:
+        assert name in INSTALL_SPECS, (
+            f"{fname}: install_hint({name!r}) names an unknown adapter; "
+            f"valid: {sorted(INSTALL_SPECS)}"
+        )
 
 
 def test_da3_extras_matches_registry_truth() -> None:
