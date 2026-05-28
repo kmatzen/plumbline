@@ -22,9 +22,10 @@ device: cuda:0
 
 paper_reference:
   primary_metric: abs_rel
-  value: 0.0  # PLACEHOLDER
+  value: 0.0125
   tolerance_relative: 0.05
-  citation: "Yang et al. 2024, Depth Anything V2 (no native GSO). UNVERIFIED — informational row."
+  citation: "MoGe re-eval of DA-V2 — Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 affine-invariant-disparity block, Depth Anything V2 row, GSO column: Rel 1.25 → AbsRel 0.0125 (companion δ₁ 1.00). DA-V2 has no native GSO eval; same MoGe table as the DA-V2-L NYU/KITTI-MoGe/DIODE ✅ cells. Verified by PDF re-read 2026-05-28; the recorded observed (0.0122, 2026-04-19) already matches — a re-run is queued to capture a retained result JSON before promoting to ✅."
+  source_confidence: verified_pdf
 
 notes: >
   Observed (RTX 3090 Ti, 2026-04-19, full 1030-object eval split, ROE):

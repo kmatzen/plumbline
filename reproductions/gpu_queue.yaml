@@ -148,7 +148,7 @@ jobs:
 
   # ----- Tier 2: informational runs (no paper target; A/B + smoke) -----
   - name: da3-co3dv2-pose
-    status: pending
+    status: done
     priority: 4
     paper_target: "none — informational A/B vs VGGT/MASt3R (DA3 paper does not evaluate CO3Dv2 pose)"
     primary_metric: pairwise_pose_auc@30
@@ -161,24 +161,32 @@ jobs:
     requires_env: [CO3DV2_ROOT]
     extras: "DA3: `plumbline install depth-anything-3` (pip package `depth-anything-3`; NOT in the base install)."
     notes: >
-      No paper_match expected (value: null). Run only if CO3Dv2 is
-      already staged for the Tier-1 jobs — it's a free A/B data point
-      on the same loader.
+      ✅ RAN 2026-05-28 (RTX 3090): AUC@30 **0.882**, RRA@15 0.974 —
+      informational A/B (sits between VGGT 0.896 and MASt3R 0.796); no
+      paper target. Required `plumbline install depth-anything-3` (NOT
+      the base install — the old "ships in base install" note was the
+      drift fixed this session). Result JSON:
+      s3://plumbline-bench/runs/queue_da3_20260528T160939Z.json.
 
   - name: pi3-dtu-mvs
-    status: pending
+    status: done
     priority: 5
     paper_target: "none — π³ chamfer smoke (value: null)"
-    primary_metric: chamfer
+    primary_metric: overall
     datasets: [dtu]
     data_footprint_gb: 7
     est_wall_min: 30
     requires_env: [DTU_ROOT, PI3_ROOT]
     extras: "π³: git clone https://github.com/yyfz/Pi3 $HOME/deps/pi3; uv pip install -r requirements.txt; export PI3_ROOT=$HOME/deps/pi3"
-    notes: "First π³ multi-view run. Smoke-test the adapter end-to-end; no paper cell to match."
+    notes: >
+      ✅ RAN 2026-05-28: Overall **17.33 mm** (acc 6.00 / comp 28.67,
+      22/22 scenes finite) — informational (no paper target). This run
+      surfaced + fixed a silent-NaN bug: the yaml's primary_metric was
+      'chamfer' but the scene-MVS path emits 'overall' (now guarded by a
+      test). JSON: s3://plumbline-bench/runs/pi3_dtu_detail_*.json.
 
   - name: pi3-eth3d-multiscene
-    status: pending
+    status: done
     priority: 6
     paper_target: "none — π³ ETH3D chamfer smoke (value: null)"
     primary_metric: overall
@@ -187,7 +195,118 @@ jobs:
     est_wall_min: 40
     requires_env: [ETH3D_ROOT, PI3_ROOT]
     extras: "π³ as above."
-    notes: "π³ on the 3-scene ETH3D subset; informational only."
+    notes: >
+      ✅ RAN 2026-05-28: overall **3.75 m** (~6× VGGT's 0.64 m subset) —
+      informational only. JSON:
+      s3://plumbline-bench/runs/queue_pi3-eth3d-multiscene_*.json.
+
+  # ===== NEXT-BOX backlog (2026-05-28 coverage + certainty pass) =====
+  # Chosen after a paper-PDF audit. Two prior FABRICATED targets were
+  # avoided (Depth-Pro-NYU 0.961; DA-V2-Sintel 0.075). New-coverage
+  # targets below come from tables ALREADY PDF-verified (MoGe Table 3 /
+  # DA-V2 Table 2), so pinning risk is low. ALWAYS sync the result JSON
+  # to s3://plumbline-bench/runs/ (provenance habit).
+
+  # --- Certainty: re-run already-✅ cells to capture a retained JSON.
+  #     The 2026-05-28 provenance pass found these 5 lack one on S3. ---
+  - name: monst3r-nyuv2
+    status: pending
+    priority: 3
+    paper_target: "MonST3R Table 3 — NYU AbsRel 0.091 (already ✅; re-run only for JSON)"
+    primary_metric: abs_rel
+    datasets: [nyuv2]
+    data_footprint_gb: 3
+    est_wall_min: 20
+    requires_env: [NYUV2_ROOT, MONST3R_ROOT]
+    extras: "plumbline install monst3r"
+    notes: "Already ✅ (0.0896 vs 0.091); re-run captures+retains a result JSON → s3 runs/. Closes the provenance gap."
+  - name: da-v2-large-diode
+    status: pending
+    priority: 3
+    paper_target: "MoGe Table 3 — DA-V2-L DIODE AbsRel 0.0533 (already ✅; re-run for JSON)"
+    primary_metric: abs_rel
+    datasets: [diode]
+    data_footprint_gb: 3
+    est_wall_min: 15
+    requires_env: [DIODE_MOGE_ROOT]
+    extras: "base install"
+    notes: "Already ✅ (0.0529); re-run to capture+retain JSON."
+  - name: da-v2-large-kitti-moge
+    status: pending
+    priority: 3
+    paper_target: "MoGe Table 3 — DA-V2-L KITTI AbsRel 0.0561 (already ✅; re-run for JSON)"
+    primary_metric: abs_rel
+    datasets: [kitti]
+    data_footprint_gb: 3
+    est_wall_min: 15
+    requires_env: [KITTI_MOGE_ROOT]
+    extras: "base install"
+    notes: "Already ✅ (0.0569); re-run to capture+retain JSON."
+  - name: moge-vitl-kitti
+    status: pending
+    priority: 3
+    paper_target: "MoGe Table 3 — MoGe-1 KITTI AbsRel 0.0408 (already ✅ via D8; re-run for JSON)"
+    primary_metric: abs_rel
+    datasets: [kitti]
+    data_footprint_gb: 3
+    est_wall_min: 15
+    requires_env: [KITTI_MOGE_ROOT]
+    extras: "plumbline install moge"
+    notes: "Already ✅ (0.0404, D8 MoGe-eval close); re-run to capture+retain JSON."
+  - name: moge-vitl-diode-both
+    status: pending
+    priority: 3
+    paper_target: "MoGe Table 3 — MoGe-1 DIODE AbsRel 0.0400 (already ✅; re-run for JSON)"
+    primary_metric: abs_rel
+    datasets: [diode]
+    data_footprint_gb: 3
+    est_wall_min: 15
+    requires_env: [DIODE_MOGE_ROOT]
+    extras: "plumbline install moge"
+    notes: "Already ✅ (0.0407); re-run to capture+retain JSON."
+
+  # --- New DATASET coverage: GSO. Target verified 2026-05-28; the
+  #     recorded observed already matches, so the run promotes 🎯→✅
+  #     with a retained JSON. ---
+  - name: moge-vitl-gso
+    status: pending
+    priority: 4
+    paper_target: "MoGe Table 3 (affine-inv-disparity) — MoGe-1 GSO AbsRel 0.00944 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [gso]
+    data_footprint_gb: 2
+    est_wall_min: 15
+    requires_env: [GSO_ROOT]
+    extras: "plumbline install moge"
+    notes: "Target pinned (0.00944); recorded observed 0.0094 matches → expected ✅. NEW dataset coverage (GSO)."
+  - name: da-v2-large-gso
+    status: pending
+    priority: 4
+    paper_target: "MoGe Table 3 (DA-V2 re-eval) — DA-V2-L GSO AbsRel 0.0125 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [gso]
+    data_footprint_gb: 2
+    est_wall_min: 15
+    requires_env: [GSO_ROOT]
+    extras: "base install"
+    notes: "Target pinned (0.0125); recorded observed 0.0122 matches → expected ✅. NEW dataset coverage (GSO)."
+
+  # --- New coverage NEEDING harness work (verified targets ready; create
+  #     the protocol/loader path before these can be queued as runnable): ---
+  #   * iBims-1 (MoGe affine-inv-disp): MoGe-1 0.0320, DA-V2-L 0.0348 —
+  #     needs an `ibims1_moge` protocol (mirror gso_moge). NEW dataset, 40 MB.
+  #   * ETH3D mono-depth (MoGe affine-inv-disp): MoGe-1 0.0317, DA-V2-L
+  #     0.0473 — needs an `eth3d_moge` protocol + ETH3D loader's mono-depth
+  #     path (currently MVS-chamfer only). First non-chamfer ETH3D ✅.
+  #   * Depth Pro × ETH3D / Sintel (Depth Pro Table 1, metric δ₁ 0.415 /
+  #     0.400, NO scale alignment) — Depth Pro's FIRST ✅ (new model);
+  #     needs a metric-δ₁ protocol on those loaders.
+  #   * DA-V2 own-Table-2 × DIODE (S 0.073 / B 0.068 / L 0.066) and ETH3D
+  #     (S 0.142 / B 0.137 / L 0.131) — DA-V2's own protocol (distinct from
+  #     the MoGe re-eval cells). Sintel (L 0.487) deferred: pass/alignment
+  #     ambiguous (resolve from MoGe sintel.json first). New PROTOCOL.
+  #   Note-only (no plumbline loader): RealEstate10K pose — VGGT 0.853,
+  #   MASt3R 0.764, DUSt3R 0.612 (MASt3R Table 3 / VGGT Table 1).
 
   # ----- Blocked: do NOT run (data not staged, or upstream-blocked) -----
   - name: vggt-eth3d-multiscene-chamfer
