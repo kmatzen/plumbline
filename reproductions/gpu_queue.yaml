@@ -291,10 +291,35 @@ jobs:
     extras: "base install"
     notes: "Target pinned (0.0125); recorded observed 0.0122 matches → expected ✅. NEW dataset coverage (GSO)."
 
+  # --- New DATASET coverage: iBims-1 (MoGe Table 3 affine-inv-disparity).
+  #     NEW protocol `ibims1_moge` + yamls landed 2026-05-28; ~40 MB bundle. ---
+  - name: moge-vitl-ibims1
+    status: pending
+    priority: 5
+    paper_target: "MoGe Table 3 (affine-inv-disparity) — MoGe-1 iBims-1 AbsRel 0.0320 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [ibims1]
+    data_footprint_gb: 1
+    est_wall_min: 15
+    requires_env: [IBIMS1_ROOT]
+    extras: "plumbline install moge; fetch iBims-1.zip from Ruicheng/monocular-geometry-evaluation → $IBIMS1_ROOT"
+    notes: "NEW dataset (iBims-1). Target from the verified MoGe Table 3. If off-paper, the likely lever is scale_alignment (scale_shift vs scale_shift_clamped)."
+  - name: da-v2-large-ibims1
+    status: pending
+    priority: 5
+    paper_target: "MoGe Table 3 (DA-V2 re-eval) — DA-V2-L iBims-1 AbsRel 0.0348 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [ibims1]
+    data_footprint_gb: 1
+    est_wall_min: 15
+    requires_env: [IBIMS1_ROOT]
+    extras: "base install; iBims-1 bundle as above."
+    notes: "NEW dataset (iBims-1). Companion to moge-vitl-ibims1 (same MoGe Table 3 block, DA-V2 row)."
+
   # --- New coverage NEEDING harness work (verified targets ready; create
   #     the protocol/loader path before these can be queued as runnable): ---
-  #   * iBims-1 (MoGe affine-inv-disp): MoGe-1 0.0320, DA-V2-L 0.0348 —
-  #     needs an `ibims1_moge` protocol (mirror gso_moge). NEW dataset, 40 MB.
+  #   * iBims-1 — DONE 2026-05-28: `ibims1_moge` protocol + yamls created and
+  #     queued above (moge-vitl-ibims1 / da-v2-large-ibims1).
   #   * ETH3D mono-depth (MoGe affine-inv-disp): MoGe-1 0.0317, DA-V2-L
   #     0.0473 — needs an `eth3d_moge` protocol + ETH3D loader's mono-depth
   #     path (currently MVS-chamfer only). First non-chamfer ETH3D ✅.

@@ -1,0 +1,31 @@
+# Depth Anything V2 (large) on iBims-1 — MoGe Table 3 (DA-V2 re-eval row).
+#
+# Companion to moge-vitl-ibims1: the DA-V2 row of the same MoGe Table 3
+# affine-invariant-disparity block (MoGe re-evaluates DA-V2 there). Same
+# verified table as the DA-V2-L NYU/KITTI-MoGe/DIODE ✅ cells, so low
+# pinning risk. NEW-dataset cell created in the 2026-05-28 coverage pass.
+
+name: da-v2-large-ibims1
+protocol: ibims1_moge
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+# Same affine-invariant-disparity alignment as the MoGe cell; scale_shift
+# (indoor) — fall back to scale_shift_clamped if the first run is off.
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.0348
+  tolerance_relative: 0.05
+  citation: "MoGe re-eval of DA-V2 — Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 affine-invariant-disparity block, Depth Anything V2 row, iBims-1 column: Rel 3.48 → AbsRel 0.0348 (companion δ₁ 0.985). DA-V2 has no native iBims-1 eval; same MoGe table as the DA-V2-L NYU/KITTI-MoGe/DIODE ✅ cells. Verified by PDF read 2026-05-28."
+  source_confidence: verified_pdf
+
+notes: >
+  Next-box experiment (2026-05-28 coverage pass) — NEW dataset (iBims-1
+  MoGe bundle; see moge-vitl-ibims1 for the fetch). Run to confirm +
+  capture a result JSON. Base install (DA-V2 HF path); no extra deps.

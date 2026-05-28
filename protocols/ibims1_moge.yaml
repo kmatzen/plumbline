@@ -1,0 +1,33 @@
+# iBims-1 evaluation protocol — MoGe-paper variant.
+#
+# iBims-1 (Koch et al. 2018) is a high-quality indoor RGB-D benchmark.
+# MoGe (Wang et al. 2024) reports it in Table 3 "Depth Map Estimation"
+# (affine-invariant-disparity column). plumbline's `ibims1` loader reads
+# MoGe's preprocessed HF bundle (Ruicheng/monocular-geometry-evaluation,
+# iBims-1.zip ~40 MB) — same encoding/eval-set as the DIODE/GSO MoGe
+# bundles — so the eval set + preprocessing match the paper.
+#
+# Mirrors diode_moge / kitti_moge_eval (the other MoGe real-data depth
+# cells): no depth_clip, no boundary mask (the bundle is pre-filtered;
+# its mask is np.isfinite on the encoded depth), single-view mono_depth.
+# scale_alignment is set per-reproduction (affine-invariant-disparity =
+# scale_shift for this clean indoor benchmark, NYU convention).
+
+name: ibims1_moge
+description: >
+  iBims-1 indoor mono-depth evaluation under the MoGe Table 3 protocol
+  (affine-invariant-disparity column): no clip, no boundary mask,
+  single-view. Source: MoGe's monocular-geometry-evaluation bundle.
+
+reference:
+  paper: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), iBims-1 column"
+  source_bundle: "Ruicheng/monocular-geometry-evaluation (HuggingFace), iBims-1.zip"
+
+fixed:
+  dataset:
+    name: ibims1
+    split: test
+  depth_clip: null
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]

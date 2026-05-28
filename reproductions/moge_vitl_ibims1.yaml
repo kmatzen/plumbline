@@ -1,0 +1,36 @@
+# MoGe (ViT-L) on iBims-1 — MoGe Table 3 (affine-invariant-disparity).
+#
+# Extends the already-PDF-verified MoGe Table 3 cells (NYU/KITTI/DIODE
+# ✅) to the iBims-1 column — same MoGe HF eval bundle, same affine-
+# invariant-disparity alignment — so this is a low-risk NEW-dataset cell
+# (target from a table we've already verified). Created in the 2026-05-28
+# coverage pass; awaiting a GPU run (gpu_queue.yaml).
+
+name: moge-vitl-ibims1
+protocol: ibims1_moge
+
+model:
+  name: moge
+  kwargs:
+    variant: vitl
+
+# Affine-invariant-disparity = inverse-depth scale+shift. NYU (the other
+# clean indoor MoGe cell) uses plain scale_shift; if the first run lands
+# off, try scale_shift_clamped (the DIODE/KITTI MoGe-eval convention).
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.0320
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 affine-invariant-disparity block, MoGe (Ours) ViT-L row, iBims-1 column: Rel 3.20 → AbsRel 0.0320 (companion δ₁ 0.981). Same verified table as the MoGe-1 NYU/KITTI/DIODE ✅ cells. Verified by PDF read 2026-05-28."
+  source_confidence: verified_pdf
+
+notes: >
+  Next-box experiment (2026-05-28 coverage pass) — NEW dataset (iBims-1,
+  ~40 MB MoGe bundle: `hf download Ruicheng/monocular-geometry-evaluation
+  --repo-type dataset --include 'iBims-1*' --local-dir $IBIMS1_ROOT/..`
+  then unzip; set $IBIMS1_ROOT). Run to confirm the target + capture a
+  result JSON → s3://plumbline-bench/runs/. Most likely off-paper lever
+  if needed: scale_alignment (scale_shift vs scale_shift_clamped).
