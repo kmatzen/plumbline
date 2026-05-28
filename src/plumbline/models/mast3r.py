@@ -134,12 +134,9 @@ class MASt3RAdapter(Model):
         try:
             from mast3r.model import AsymmetricMASt3R  # type: ignore[import-not-found]
         except ImportError as exc:  # pragma: no cover
-            raise ImportError(
-                "MASt3RAdapter needs the `mast3r` package. Clone "
-                "https://github.com/naver/mast3r recursively and set "
-                "$MAST3R_ROOT (default /workspace/deps/mast3r). The repo is "
-                "not on PyPI."
-            ) from exc
+            from plumbline.install import install_hint
+
+            raise ImportError(f"{type(self).__name__} {install_hint('mast3r')}") from exc
         model = AsymmetricMASt3R.from_pretrained(self.checkpoint).to(self.device).eval()
         self._model = model
 
@@ -301,13 +298,9 @@ def _run_mast3r(
         scene = global_aligner(output, device=device, mode=GlobalAlignerMode.PairViewer)
         conf_per_view = _extract_pairviewer_confidence(scene)
     else:
-        scene = global_aligner(
-            output, device=device, mode=GlobalAlignerMode.PointCloudOptimizer
-        )
+        scene = global_aligner(output, device=device, mode=GlobalAlignerMode.PointCloudOptimizer)
         # Iterative optimization. Returns a final scalar loss; ignored.
-        scene.compute_global_alignment(
-            init=ga_init, niter=ga_niter, schedule=ga_schedule, lr=ga_lr
-        )
+        scene.compute_global_alignment(init=ga_init, niter=ga_niter, schedule=ga_schedule, lr=ga_lr)
         # Per-view confidence aggregation across edges is non-trivial for
         # PointCloudOptimizer (per-pair, not per-view); leave None for now.
         conf_per_view = None

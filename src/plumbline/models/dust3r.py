@@ -127,15 +127,10 @@ class DUSt3RAdapter(Model):
         try:
             from dust3r.model import AsymmetricCroCo3DStereo  # type: ignore[import-not-found]
         except ImportError as exc:  # pragma: no cover
-            raise ImportError(
-                "DUSt3RAdapter needs the `dust3r` package. Clone "
-                "https://github.com/naver/dust3r recursively and set "
-                "$DUST3R_ROOT (default /workspace/deps/dust3r). The repo is "
-                "not on PyPI."
-            ) from exc
-        model = (
-            AsymmetricCroCo3DStereo.from_pretrained(self.checkpoint).to(self.device).eval()
-        )
+            from plumbline.install import install_hint
+
+            raise ImportError(f"{type(self).__name__} {install_hint('dust3r')}") from exc
+        model = AsymmetricCroCo3DStereo.from_pretrained(self.checkpoint).to(self.device).eval()
         self._model = model
 
     def predict(
@@ -160,7 +155,10 @@ class DUSt3RAdapter(Model):
         single = n == 1
         if single:
             depth, point_map, K = _dust3r_single_frame_eval(
-                self._model, images, device=self.device, long_edge=self.long_edge,
+                self._model,
+                images,
+                device=self.device,
+                long_edge=self.long_edge,
             )
             extrinsics = np.eye(4, dtype=np.float32)[None]
             confidence = None
@@ -284,7 +282,5 @@ def _dust3r_single_frame_eval(
 
     H, W = depth.shape
     f = float(max(H, W))
-    K = np.array(
-        [[f, 0.0, W / 2.0], [0.0, f, H / 2.0], [0.0, 0.0, 1.0]], dtype=np.float32
-    )
+    K = np.array([[f, 0.0, W / 2.0], [0.0, f, H / 2.0], [0.0, 0.0, 1.0]], dtype=np.float32)
     return depth[None], pts3d[None], K[None]

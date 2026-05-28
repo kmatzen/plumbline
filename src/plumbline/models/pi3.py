@@ -128,10 +128,10 @@ class Pi3Adapter(Model):
             mod = __import__(module, fromlist=[cls_name])
             cls = getattr(mod, cls_name)
         except (ImportError, AttributeError) as exc:  # pragma: no cover
+            from plumbline.install import install_hint
+
             raise ImportError(
-                f"Pi3Adapter could not import {module}.{cls_name}. Clone "
-                "https://github.com/yyfz/Pi3 and point $PI3_ROOT at it "
-                "(see the module docstring)."
+                f"{type(self).__name__} could not import {module}.{cls_name}: {install_hint('pi3')}"
             ) from exc
         # Upstream (Pi3 example.py) keeps the model in float32 and runs
         # inference under ``torch.amp.autocast`` — it does NOT cast the whole

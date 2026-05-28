@@ -116,14 +116,10 @@ class DepthAnything3Adapter(Model):
         try:
             from depth_anything_3.api import DepthAnything3  # type: ignore[import-not-found]
         except ImportError as exc:  # pragma: no cover
-            raise ImportError(
-                "DepthAnything3Adapter needs the `depth_anything_3` package. "
-                "Install with `VIRTUAL_ENV=<project>/.venv uv pip install "
-                "depth-anything-3`."
-            ) from exc
-        self._model = (
-            DepthAnything3.from_pretrained(self.checkpoint).to(device=self.device).eval()
-        )
+            from plumbline.install import install_hint
+
+            raise ImportError(f"{type(self).__name__} {install_hint('depth-anything-3')}") from exc
+        self._model = DepthAnything3.from_pretrained(self.checkpoint).to(device=self.device).eval()
 
     def predict(
         self,
@@ -205,7 +201,9 @@ def _run_depth_anything_3(
     elif tail == (3, 4):
         cam_from_world[:, :3, :] = extr_np.astype(np.float64)
     else:
-        raise ValueError(f"unexpected DA3 extrinsics shape {extr_np.shape}; expected (N,4,4) or (N,3,4)")
+        raise ValueError(
+            f"unexpected DA3 extrinsics shape {extr_np.shape}; expected (N,4,4) or (N,3,4)"
+        )
     world_from_cam = invert_pose(cam_from_world)
 
     # Canonical invalid marker: negative / non-finite depth → 0.

@@ -141,12 +141,9 @@ class MoGeAdapter(Model):
             else:
                 from moge.model.v1 import MoGeModel  # type: ignore[import-not-found]
         except ImportError as exc:  # pragma: no cover — exercised only on real installs
-            raise ImportError(
-                "MoGeAdapter needs the `moge` package. Install with "
-                "`uv pip install 'git+https://github.com/microsoft/MoGe.git'`. "
-                "It is NOT in transformers or PyTorch Hub; the upstream repo is "
-                "the only supported install path."
-            ) from exc
+            from plumbline.install import install_hint
+
+            raise ImportError(f"{type(self).__name__} {install_hint('moge')}") from exc
         self._model = MoGeModel.from_pretrained(self.checkpoint).to(self.device).eval()
 
     # -- predict ---------------------------------------------------------

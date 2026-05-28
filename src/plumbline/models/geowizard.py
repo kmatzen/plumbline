@@ -164,11 +164,9 @@ class GeoWizardAdapter(Model):
             # $GEOWIZARD_ROOT/geowizard/models/geowizard_pipeline.py.
             from models.geowizard_pipeline import DepthNormalEstimationPipeline
         except ImportError as exc:  # pragma: no cover
-            raise ImportError(
-                "GeoWizardAdapter could not import the upstream pipeline. "
-                "Clone https://github.com/fuxiao0719/GeoWizard and point "
-                "$GEOWIZARD_ROOT at it (see the module docstring)."
-            ) from exc
+            from plumbline.install import install_hint
+
+            raise ImportError(f"{type(self).__name__} {install_hint('geowizard')}") from exc
 
         torch_dtype = torch.float16 if self.dtype == "float16" else torch.float32
         self._pipe = DepthNormalEstimationPipeline.from_pretrained(

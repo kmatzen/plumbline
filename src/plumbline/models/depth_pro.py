@@ -63,7 +63,9 @@ from plumbline.models.registry import register_model
 __all__ = ["DepthProAdapter"]
 
 _DEFAULT_WEIGHTS_URL = "https://ml-site.cdn-apple.com/models/depth-pro/depth_pro.pt"
-_DEFAULT_WEIGHTS_PATH = Path.home() / ".cache" / "plumbline" / "weights" / "depth-pro" / "depth_pro.pt"
+_DEFAULT_WEIGHTS_PATH = (
+    Path.home() / ".cache" / "plumbline" / "weights" / "depth-pro" / "depth_pro.pt"
+)
 
 
 @register_model("depth-pro")
@@ -117,10 +119,9 @@ class DepthProAdapter(Model):
         try:
             import depth_pro
         except ImportError as exc:  # pragma: no cover
-            raise ImportError(
-                "DepthProAdapter needs the upstream `depth_pro` package. Install "
-                "with `uv pip install 'git+https://github.com/apple/ml-depth-pro.git'`."
-            ) from exc
+            from plumbline.install import install_hint
+
+            raise ImportError(f"{type(self).__name__} {install_hint('depth-pro')}") from exc
         if not self.weights_path.exists():
             raise FileNotFoundError(
                 f"Depth Pro weights not found at {self.weights_path}. Download:\n"

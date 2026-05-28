@@ -141,11 +141,9 @@ class CUT3RAdapter(Model):
         try:
             from src.dust3r.model import ARCroco3DStereo  # type: ignore[import-not-found]
         except ImportError as exc:  # pragma: no cover - needs the repo
-            raise ImportError(
-                "CUT3RAdapter needs the CUT3R repo. Clone "
-                "https://github.com/CUT3R/CUT3R and set $CUT3R_ROOT "
-                "(default /workspace/deps/cut3r); the package is not on PyPI."
-            ) from exc
+            from plumbline.install import install_hint
+
+            raise ImportError(f"{type(self).__name__} {install_hint('cut3r')}") from exc
         # demo.py: ARCroco3DStereo.from_pretrained(args.model_path).to(device).eval()
         # `from_pretrained` accepts a local .pth checkpoint path here.
         self._model = ARCroco3DStereo.from_pretrained(self.checkpoint).to(self.device).eval()

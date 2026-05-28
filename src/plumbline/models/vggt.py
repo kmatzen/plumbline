@@ -102,11 +102,9 @@ class VGGTAdapter(Model):
         try:
             from vggt.models.vggt import VGGT  # type: ignore[import-not-found]
         except ImportError as exc:  # pragma: no cover
-            raise ImportError(
-                "VGGTAdapter needs the `vggt` package from "
-                "https://github.com/facebookresearch/vggt. Install with "
-                "`uv pip install git+https://github.com/facebookresearch/vggt`."
-            ) from exc
+            from plumbline.install import install_hint
+
+            raise ImportError(f"{type(self).__name__} {install_hint('vggt')}") from exc
         model = VGGT.from_pretrained(self.checkpoint).to(self.device).eval()
         self._model = model
 
