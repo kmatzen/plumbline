@@ -670,7 +670,7 @@ jobs:
     extras: "base install (needs DAV2_ROOT clone, source=paper); DDAD MoGe bundle as above."
     notes: "✅ MATCH 2026-05-30 (H100): observed AbsRel 0.1310 vs 0.1300 (+0.8%, 1000/1000). JSON: /mnt/localssd/plumbline-work/runs/da_v2_large_ddad_20260530T162946Z.json."
   - name: moge-vitl-sintel-moge
-    status: pending
+    status: done
     priority: 4
     paper_target: "MoGe Table 3 (affine-inv-disparity) — MoGe-1 Sintel AbsRel 0.184 (verified_pdf 2026-05-30)"
     primary_metric: abs_rel
@@ -679,9 +679,9 @@ jobs:
     est_wall_min: 25
     requires_env: [SINTEL_MOGE_ROOT]
     extras: "plumbline install moge; hf download --include 'Sintel*' → unzip under $SINTEL_MOGE_ROOT (NOT $SINTEL_ROOT native tree)"
-    notes: "NEW path: MoGe-bundle Sintel mono-depth (distinct from native sintel / depth-pro-sintel)."
+    notes: "✅ MATCH 2026-05-30 (H100): observed AbsRel 0.1863 vs 0.1840 (+1.2%, 1064/1064, δ₁ 0.7943). JSON: /mnt/localssd/plumbline-work/runs/moge_vitl_sintel_moge_20260530T165447Z.json. S3: runs/tier_a_sintel_moge_20260530/results/."
   - name: da-v2-large-sintel-moge
-    status: pending
+    status: done
     priority: 4
     paper_target: "MoGe Table 3 (DA-V2 re-eval) — DA-V2-L Sintel AbsRel 0.214 (verified_pdf 2026-05-30)"
     primary_metric: abs_rel
@@ -690,13 +690,13 @@ jobs:
     est_wall_min: 25
     requires_env: [SINTEL_MOGE_ROOT]
     extras: "base install (needs DAV2_ROOT); Sintel MoGe bundle as above."
-    notes: "Companion to moge-vitl-sintel-moge."
+    notes: "✅ MATCH 2026-05-30 (H100): observed AbsRel 0.2139 vs 0.2140 (−0.05%, 1064/1064). JSON: /mnt/localssd/plumbline-work/runs/da_v2_large_sintel_moge_20260530T170219Z.json."
 
   # ============================================================================
   # COVERAGE EXPANSION CANDIDATES (identified 2026-05-30, post mono-depth sweep)
   # ----------------------------------------------------------------------------
-  # TIER A (DDAD + Sintel): DONE 2026-05-30 — PDF audit + loaders + 4 YAMLs +
-  #   queue entries above. Awaiting GPU runs.
+  # TIER A (DDAD + Sintel): DONE 2026-05-30 — PDF audit + harness + 4/4 GPU ✅
+  #   (DDAD + Sintel MoGe bundle). Results on localssd + S3 tier_a_* prefixes.
   #
   # REMAINING from the 10-dataset HF bundle (NOT in MoGe-1 Table 3 — no
   # verified_pdf pin under Wang et al. 2024 Table 3):

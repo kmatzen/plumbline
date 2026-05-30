@@ -322,10 +322,10 @@ without a policy change. Options if you still want coverage:
 YAMLs, PDF-audited). Defer Spring/HAMMER to a MoGe-2 appendix audit or
 informational runs.
 
-**Harness landed 2026-05-30:** `ddad-moge-eval` + `sintel-moge-eval`
-loaders, `ddad_moge` / `sintel_moge` protocols, reproduction YAMLs
-`moge-vitl-ddad`, `da-v2-large-ddad`, `moge-vitl-sintel-moge`,
-`da-v2-large-sintel-moge` — queued in `gpu_queue.yaml` (pending GPU).
+**Harness + GPU 2026-05-30:** `ddad-moge-eval` + `sintel-moge-eval`
+loaders; four reproduction YAMLs; **4/4 paper-match on H100** (localssd +
+S3 `runs/tier_a_complete_20260530/results/`): DDAD MoGe-1 0.0902/0.0891,
+DA-V2-L 0.1310/0.1300; Sintel MoGe-1 0.1863/0.1840, DA-V2-L 0.2139/0.2140.
 
 ### Table-number note (unchanged convention)
 
