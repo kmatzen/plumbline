@@ -648,7 +648,7 @@ jobs:
   #     Spring/HAMMER are in the HF 10-dataset bundle but NOT in MoGe-1 Table 3;
   #     see reproductions/AUDIT.md — deferred (MoGe-2 appendix or informational).
   - name: moge-vitl-ddad
-    status: pending
+    status: done
     priority: 4
     paper_target: "MoGe Table 3 (affine-inv-disparity) — MoGe-1 DDAD AbsRel 0.0891 (verified_pdf 2026-05-30)"
     primary_metric: abs_rel
@@ -657,9 +657,9 @@ jobs:
     est_wall_min: 20
     requires_env: [DDAD_MOGE_ROOT]
     extras: "plumbline install moge; hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'DDAD*' → unzip DDAD.zip under $DDAD_MOGE_ROOT"
-    notes: "NEW dataset (DDAD MoGe bundle). Tier-A PDF audit 2026-05-30. First run validates ddad-moge-eval loader."
+    notes: "✅ MATCH 2026-05-30 (H100): observed AbsRel 0.0902 vs 0.0891 (+1.2%, 1000/1000, δ₁ 0.9145). NEW dataset (DDAD MoGe bundle). JSON: /mnt/localssd/plumbline-work/runs/moge_vitl_ddad_20260530T161219Z.json."
   - name: da-v2-large-ddad
-    status: pending
+    status: done
     priority: 4
     paper_target: "MoGe Table 3 (DA-V2 re-eval) — DA-V2-L DDAD AbsRel 0.130 (verified_pdf 2026-05-30)"
     primary_metric: abs_rel
@@ -668,7 +668,7 @@ jobs:
     est_wall_min: 20
     requires_env: [DDAD_MOGE_ROOT]
     extras: "base install (needs DAV2_ROOT clone, source=paper); DDAD MoGe bundle as above."
-    notes: "Companion to moge-vitl-ddad. Same loader/protocol."
+    notes: "✅ MATCH 2026-05-30 (H100): observed AbsRel 0.1310 vs 0.1300 (+0.8%, 1000/1000). JSON: /mnt/localssd/plumbline-work/runs/da_v2_large_ddad_20260530T162946Z.json."
   - name: moge-vitl-sintel-moge
     status: pending
     priority: 4

@@ -46,6 +46,28 @@ and docs/DISCREPANCIES.md before re-running.
 7. **Never bulk-pull `s3://plumbline-bench/datasets/`.** Pull only what
    the current sample / reproduction needs (see § Thrift bootstrap).
 
+## Pod disk policy (k8s / vast.ai-style boxes)
+
+The **home overlay is small** (~75G). HuggingFace/uv/torch caches,
+MoGe-eval zip downloads, and dataset trees belong on **`/mnt/localssd`**
+— not `$HOME/data` or `$HOME/.cache`. On this cluster, using more than
+**1/8 of the node's local SSD** can get the pod killed (~3 TiB budget on
+a 26 TiB volume; check with `df -h /mnt/localssd`).
+
+```bash
+source /mnt/localssd/plumbline/scripts/pod-localssd-env.sh
+# → PLUMBLINE_WORK=/mnt/localssd/plumbline-work
+# → HF_HOME, UV_CACHE_DIR, DDAD_MOGE_ROOT, SINTEL_MOGE_ROOT, DAV2_ROOT, …
+
+df -h / /mnt/localssd
+du -sh "$PLUMBLINE_WORK"   # keep an eye on the 1/8 budget during big fetches
+```
+
+Stage downloads under `"$PLUMBLINE_WORK/data/..."`, write result JSONs to
+`"$PLUMBLINE_WORK/runs/"`, and clone adapter deps to
+`"$PLUMBLINE_WORK/deps/"`. Do **not** re-download into `/tmp` on the overlay
+and leave the zips behind.
+
 ## Pre-flight
 
 ```bash
@@ -76,15 +98,15 @@ uv run python -c "import torch; assert torch.cuda.is_available()"
 uv run plumbline list-models
 ```
 
-Set dataset-root env vars in `~/.bashrc-plumbline` for what you actually
-need. Don't pre-create directories for datasets you won't touch.
+After `source scripts/pod-localssd-env.sh`, add any **non-MoGe-bundle**
+roots you need. Don't pre-create directories for datasets you won't touch.
 
 ```bash
-export NYUV2_ROOT=$HOME/data/nyuv2
-export KITTI_ROOT=$HOME/data/kitti
-export ETH3D_ROOT=$HOME/data/eth3d
-export DTU_ROOT=$HOME/data/dtu
-# ... only add what the current session needs
+export NYUV2_ROOT=$PLUMBLINE_WORK/data/nyuv2
+export KITTI_ROOT=$PLUMBLINE_WORK/data/kitti
+export ETH3D_ROOT=$PLUMBLINE_WORK/data/eth3d
+export DTU_ROOT=$PLUMBLINE_WORK/data/dtu
+# MoGe-bundle roots (DDAD_MOGE_ROOT, SINTEL_MOGE_ROOT, …) are set by pod-localssd-env.sh
 ```
 
 ### Per-adapter extras (install only what you need)
