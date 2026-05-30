@@ -33,7 +33,13 @@ class TestLoadProtocol:
         assert cfg["fixed"]["dataset"]["name"] == "eth3d"
         assert cfg["fixed"]["dataset"]["kwargs"]["views_per_sample"] == 1
         assert cfg["fixed"]["dataset"]["kwargs"]["with_per_view_gt"] is True
+        assert cfg["fixed"]["dataset"]["kwargs"]["resize_images_to_pv_render"] is True
         assert cfg["fixed"]["depth_clip"] == [0.001, 80.0]
+
+    def test_loads_shipped_sintel_dav2_preset(self) -> None:
+        cfg = load_protocol("sintel_dav2")
+        assert cfg["fixed"]["dataset"]["kwargs"]["max_depth"] == 70.0
+        assert cfg["fixed"]["dataset"]["kwargs"]["pass_name"] == "final"
 
     def test_missing_protocol_raises(self) -> None:
         with pytest.raises(FileNotFoundError):

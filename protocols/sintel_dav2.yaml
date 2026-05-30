@@ -1,0 +1,28 @@
+# Sintel mono-depth protocol — Depth Anything V2 Table 2 (zero-shot relative).
+#
+# Native MPI-Sintel training split via the `sintel` loader. DA-V2 Table 2
+# reports ViT-L AbsRel 0.487 on Sintel; the paper does not fully specify
+# pass (final/clean) or sky handling — this pins the MonST3R/DUSt3R lineage
+# sky mask (max_depth 70 m) on the `final` pass, matching depth_pro_sintel
+# and MonST3R protocol notes in plumbline.
+
+name: sintel_dav2
+description: >
+  Sintel training mono-depth: native loader, final pass, sky masked at 70 m,
+  scale_shift alignment, single-view.
+
+reference:
+  paper: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), Sintel column"
+
+fixed:
+  dataset:
+    name: sintel
+    split: training
+    kwargs:
+      pass_name: final
+      views_per_sample: 1
+      max_depth: 70.0
+  depth_clip: [0.001, 70.0]
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]

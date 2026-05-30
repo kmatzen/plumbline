@@ -368,22 +368,22 @@ jobs:
     requires_env: [SINTEL_ROOT]
     extras: "plumbline install depth-pro; download depth_pro.pt → ~/.cache/plumbline/weights/depth-pro/ (Apple CDN, see adapter docstring); Sintel depth+camera+images training archives from files.is.tue.mpg.de (no auth, NOT actually gated)"
     notes: >
-      ⚠️ OFF-PAPER 2026-05-30 (H100): observed δ₁ 0.2418 vs 0.400 (metric,
-      no alignment; 1064/1064, companion AbsRel 0.793). EXPERIMENT — the two
-      flagged unknowns (Sintel pass final/clean, depth cap max_depth=70) are
-      unconfirmed and are the likely levers; the 0.400 target is PDF-verified.
-      Sintel data IS fetchable without registration (correcting the prior
-      "auth-gated" assumption): MPI-Sintel-depth-training + -training_images
-      zips from files.is.tue.mpg.de. depth-pro install + depth_pro.pt staged.
-      Left pending — needs the pass/cap resolved against Depth Pro's eval code
-      (not tuned here). JSON: s3://plumbline-bench/runs/backlog_20260529/results/.
+      ⚠️ OFF-PAPER 2026-05-30 (H100): δ₁ 0.2418 vs 0.400 with inline final/max_depth
+      70. YAML now uses protocol sintel_dav2 (same sky mask). depth_pro.pt not
+      on pod yet — re-run after staging weights. JSON:
+      s3://plumbline-bench/runs/backlog_20260529/results/.
 
   # --- New PROTOCOL coverage: DA-V2 own Table 2 on DIODE (native loader,
   #     affine-inv disparity) across variants S/B/L. Recipe already validated
   #     on the ViT-S indoor slice (0.0722 vs 0.073). YAMLs landed 2026-05-28. ---
   - name: da-v2-small-diode-native
-    status: pending
+    status: blocked
     priority: 5
+    blocked_on: >
+      D29. Indoor slice matches (0.0720 vs 0.073); outdoor native preprocessing
+      gap drives domain=both miss (0.22 vs 0.073). MoGe-bundle cell matches at
+      0.053. Fix needs DA-V2 unreleased outdoor eval or MoGe homographic warp on
+      native DIODE — not a tune knob. Do not re-queue until protocol lands.
     paper_target: "DA-V2 Table 2 — DIODE ViT-S AbsRel 0.073 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
     datasets: [diode]
@@ -400,8 +400,9 @@ jobs:
       domain=both, so outdoor CAN be done right). NOT a model bug, NOT
       tuned. Left pending. JSON on S3 backlog_20260529.
   - name: da-v2-base-diode-native
-    status: pending
+    status: blocked
     priority: 5
+    blocked_on: "D29 — same outdoor gap as da-v2-small-diode-native."
     paper_target: "DA-V2 Table 2 — DIODE ViT-B AbsRel 0.068 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
     datasets: [diode]
@@ -411,8 +412,9 @@ jobs:
     extras: "base install (needs DAV2_ROOT clone); DIODE val as above."
     notes: "⚠️ OFF-PAPER 2026-05-29 (H100): 0.2182 vs 0.068 on domain=both (outdoor split drives the miss, same shape as da-v2-small-diode-native). See docs/DISCREPANCIES.md D29. Left pending."
   - name: da-v2-large-diode-native
-    status: pending
+    status: blocked
     priority: 5
+    blocked_on: "D29 — same outdoor gap as da-v2-small-diode-native."
     paper_target: "DA-V2 Table 2 — DIODE ViT-L AbsRel 0.066 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
     datasets: [diode]
@@ -718,7 +720,10 @@ jobs:
     est_wall_min: 180
     requires_env: [ETH3D_ROOT]
     extras: "base install; native ETH3D train scenes (dslr_undistorted + scan_eval). First run builds per-view GT render caches."
-    notes: "Harness landed 2026-05-30 (`eth3d_dav2`). Paper ~13 scenes; S3 may only have 3-scene subset."
+    notes: >
+      D31 fix ✅. 8–9 scene interim (2026-05-30): **0.1002** vs 0.142 (−29 %, 289–320
+      frames). Converging as harder scenes stage (was −47 % on 3-scene). JSON:
+      da_v2_small_eth3d_native_8scene_20260530.json. Full 13-scene still pending.
   - name: da-v2-base-eth3d-native
     status: pending
     priority: 6
@@ -729,7 +734,9 @@ jobs:
     est_wall_min: 180
     requires_env: [ETH3D_ROOT]
     extras: "Same $ETH3D_ROOT + eth3d_dav2 as da-v2-small-eth3d-native."
-    notes: "Companion to da-v2-small-eth3d-native."
+    notes: >
+      D31 fix ✅. 8–9 scene interim: **0.0875** vs 0.137 (−36 %). JSON:
+      da_v2_base_eth3d_native_8scene_20260530.json.
   - name: da-v2-large-eth3d-native
     status: pending
     priority: 6
@@ -741,13 +748,27 @@ jobs:
     requires_env: [ETH3D_ROOT]
     extras: "Same staging; GT caches shared across variants once rendered."
     notes: >
-      ⚠️ OFF-PAPER 2026-05-30 (H100, 3-scene S3 subset): observed AbsRel 0.3302
-      vs 0.1310 (+152 %). Harness + GT-render path exercised (137 samples).
-      Likely gaps: (1) paper uses ~13 ETH3D train scenes, we had 3; (2) MiDaS/
-      DA-V2 Table-2 ETH3D eval recipe may differ from our z-buffer render +
-      scale_shift @518. Single-record diff vs upstream before re-pinning.
-      JSON: /mnt/localssd/plumbline-work/runs/da_v2_large_eth3d_native_20260530T181618Z.json.
-      Distinct from da-v2-large-eth3d-moge (MoGe Table 3, 0.0473 ✅).
+      D31 RESOLVED loader bug (RGB/GT misalignment). 8–9 scene interim (2026-05-30):
+      **0.0837** vs 0.131 (−36 %, 320 frames; was 0.3302 pre-fix / 0.0679 on
+      3-scene). Variant order L<B<S holds. Still pending: full 13-scene mean.
+      JSON: da_v2_large_eth3d_native_8scene_20260530.json (+ earlier fix JSONs).
+      MoGe Table-3 cell 0.0473 ✅ is separate.
+  - name: depth-anything-v2-sintel
+    status: pending
+    priority: 6
+    paper_target: "DA-V2 Table 2 — Sintel ViT-L AbsRel 0.487 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [sintel]
+    data_footprint_gb: 4
+    est_wall_min: 45
+    requires_env: [SINTEL_ROOT, DAV2_ROOT]
+    extras: "protocol sintel_dav2 (final pass, max_depth 70 m sky mask). Native Sintel staged at $SINTEL_ROOT."
+    notes: >
+      ⚠️ OFF-PAPER 2026-05-30 (H100, 1064 frames): AbsRel 0.232 vs 0.487 (−52 %)
+      under sintel_dav2 (sky mask fix; pre-fix run without max_depth was invalid).
+      Pass/clean + DA-V2 §B recipe still unconfirmed. MoGe-bundle Table-3 cell
+      0.214 ✅ is a different protocol. JSON:
+      /mnt/localssd/plumbline-work/runs/da_v2_sintel_native_fix_20260530.json.
 
   # TIER C — remaining loader work (targets known):
   #   * Depth Pro Table 1 remaining columns → Depth Pro's FIRST ✅ (sintel is

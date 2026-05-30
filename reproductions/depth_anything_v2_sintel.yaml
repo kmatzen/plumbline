@@ -5,43 +5,25 @@
 # protocol gives a stable number.
 
 name: depth-anything-v2-sintel
+protocol: sintel_dav2
 
 model:
   name: depth-anything-v2
   kwargs:
-    variant: "large"
+    variant: large
     input_size: 518
 
-dataset:
-  name: sintel
-  split: training
-  kwargs:
-    pass_name: final
-    views_per_sample: 1
-
-tasks:
-  - mono_depth
-
 scale_alignment: scale_shift
-max_views: 1
 device: cuda:0
 
 paper_reference:
   primary_metric: abs_rel
-  # Audit 2026-04-20: the previous 0.075 pin was fabricated. DA-V2
-  # Table 2 (Yang et al. 2024, arXiv:2406.09414) reports ViT-L Sintel
-  # AbsRel = 0.487 under its own zero-shot protocol — which is over 6×
-  # the 0.075 value this YAML previously claimed. The paper does not
-  # specify exactly which Sintel pass (clean/final/albedo) or which
-  # scale alignment mode, so a paper-match reproduction requires first
-  # reading the DA-V2 paper's "Section B. Benchmarks" for the protocol.
-  # Until that's pinned, this YAML stays a smoke test — not a
-  # paper-match.
-  value: null
-  tolerance_relative: null
-  citation: "Informational smoke test. DA-V2 Table 2 reports ViT-L Sintel AbsRel=0.487 (protocol not fully specified); not reproduced here."
-  source_confidence: null
+  value: 0.487
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), Sintel column, ViT-L row: AbsRel = 0.487. Pass/sky cap pinned to MonST3R lineage (final, max_depth 70 m) pending DA-V2 appendix confirmation. Verified by PDF read 2026-05-28."
+  source_confidence: verified_pdf
 
 notes: >
-  Use this as the CPU-free pipeline shakedown: small HF checkpoint + small
-  dataset. No metric-scale assumptions — run with scale_shift alignment.
+  Native Sintel under protocol sintel_dav2 (sky mask at 70 m). Prior run
+  without max_depth blew up AbsRel (sky ~1e5 m). MoGe-bundle cell
+  da-v2-large-sintel-moge (0.214) is a different table/protocol.

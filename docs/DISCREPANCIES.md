@@ -1313,6 +1313,67 @@ DA-V2 re-eval convention, same as the other MoGe-bundle DA-V2-L cells) landed
 **0.0348 vs 0.0348** (exact, MATCH). Companion `moge-vitl-ibims1` already
 matched under plain `scale_shift` (indoor-only set).
 
+### D31 · DA-V2 native-ETH3D Table-2 — RGB/GT resolution misalignment (fixed); 3-scene subset still under paper   ✅ FIXED / 🔎 OPEN subset 2026-05-30
+
+First native ETH3D smoke (`da-v2-large-eth3d-native`, 3 scenes on S3, 158
+frames) returned AbsRel **0.330** vs paper **0.131** (+152 %). Root cause was
+**not** alignment mode (`scale_shift` vs `scale_shift_clamped` barely moved the
+number) but a loader bug: per-view GT was rendered at the DA-V2 inference cap
+(`pv_render_max_dim=518`, e.g. 345×518) while RGB stayed at native DSLR
+resolution (~4135×6205) padded into the same canvas. Metrics compared each
+518×345 GT pixel (full-FOV laser depth at render scale) against the
+corresponding native-resolution pred pixel (only the top-left patch of the
+FOV) — structurally misaligned.
+
+**Fix (protocol-fidelity, not tuning):** `ETH3DDataset.resize_images_to_pv_render`
++ `protocols/eth3d_dav2.yaml` sets `resize_images_to_pv_render: true` so RGB is
+area-resampled to the GT render size before inference. Single-sample check on
+`courtyard/000001_v1` dropped from AbsRel **0.224 → 0.024** under `scale_shift`.
+
+**Re-run on the same 3-scene S3 subset (H100, 2026-05-30):**
+
+| cell | observed AbsRel | paper | Δ |
+|---|---|---|---|
+| da-v2-small-eth3d-native | **0.0758** | 0.142 | −47 % |
+| da-v2-base-eth3d-native | **0.0713** | 0.137 | −48 % |
+| da-v2-large-eth3d-native | **0.0679** | 0.131 | −48 % |
+
+Variant ordering matches the paper (L < B < S), but all three land ~48 %
+**under** tolerance on the 3-scene subset.
+
+**Update (5-scene subset, 2026-05-30):** after staging `meadow` + `electro`
+and re-running with the D31 fix, AbsRel moves **toward** the paper as harder
+scenes enter the mean (meadow per-scene ~0.30):
+
+| cell | observed (5 scenes, 218 frames) | paper | Δ |
+|---|---|---|---|
+| da-v2-small-eth3d-native | **0.1078** | 0.142 | −24 % |
+| da-v2-base-eth3d-native | **0.0996** | 0.137 | −27 % |
+| da-v2-large-eth3d-native | **0.0882** (4 scenes / 173 fr) | 0.131 | −33 % |
+
+Still outside ±5 %, but the direction confirms the earlier miss was mostly
+subset bias + the RGB/GT bug, not a wrong model. **Verdict:** harness + D31 fix ✅;
+paper-match gated on full 13-scene staging (`scripts/stage-eth3d-train-scenes.sh`).
+JSONs: `da_v2_*_eth3d_native_*scene_20260530.json` on localssd + S3
+`tier_c_d31_20260530/results/`. Queue stays `pending` until 13-scene run.
+
+### D32 · DA-V2 native-Sintel Table-2 under paper with MonST3R-lineage sky mask   🔬 INVESTIGATED 2026-05-30
+
+First native-Sintel run (`depth-anything-v2-sintel`) without `max_depth` included
+Sintel sky pixels (~1e5 m) and returned nonsense (AbsRel 64k). Added protocol
+`sintel_dav2` (final pass, `max_depth=70`, `scale_shift`, depth clip to 70 m).
+
+Full training split (1064 frames, H100): **AbsRel 0.232** vs DA-V2 Table-2
+**0.487** (−52 %, MISMATCH). Same “reads better than paper” shape as the D31
+3-scene ETH3D subset — likely a remaining protocol delta (pass, boundary mask,
+or DA-V2 §B benchmark detail), not a broken adapter. MoGe-bundle
+`da-v2-large-sintel-moge` at **0.214** is Table 3, not comparable. JSON:
+`/mnt/localssd/plumbline-work/runs/da_v2_sintel_native_fix_20260530.json`.
+
+Depth Pro on the same `sintel_dav2` protocol (metric, no alignment) still
+**δ₁ 0.242** vs **0.400** — unchanged from the pre-protocol run; pass/cap alone
+do not close the gap. See `depth-pro-sintel` queue notes.
+
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 
 Cache key in `src/plumbline/runner.py` `_predict_with_cache` is

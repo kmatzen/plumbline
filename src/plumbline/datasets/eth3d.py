@@ -70,6 +70,18 @@ __all__ = [
 ]
 
 
+def _resize_rgb_uint8(image: NDArray[np.uint8], *, height: int, width: int) -> NDArray[np.uint8]:
+    """Down/up-sample an RGB uint8 image to ``(height, width)`` with area filter."""
+    from PIL import Image
+
+    h, w, _ = image.shape
+    if h == height and w == width:
+        return image
+    pil = Image.fromarray(image)
+    resample = Image.Resampling.BOX if (height < h or width < w) else Image.Resampling.BILINEAR
+    return np.asarray(pil.resize((width, height), resample=resample), dtype=np.uint8)
+
+
 @register_dataset("eth3d")
 class ETH3DDataset(Dataset):
     """ETH3D high-res multi-view dataset loader.
@@ -100,6 +112,7 @@ class ETH3DDataset(Dataset):
         with_per_view_gt: bool = False,
         pv_splat_radius: int = 1,
         pv_render_max_dim: int | None = 2048,
+        resize_images_to_pv_render: bool = False,
     ) -> None:
         root_path = Path(root) if root else env_path("ETH3D_ROOT")
         if root_path is None or not root_path.exists():
@@ -177,6 +190,11 @@ class ETH3DDataset(Dataset):
         self.pv_render_max_dim = (
             int(pv_render_max_dim) if pv_render_max_dim is not None else None
         )
+        # When True, resize each RGB view to the per-view GT render resolution
+        # (``pv_render_max_dim`` cap) so mono-depth metrics are pixel-aligned.
+        # VGGT/π³ chamfer runs keep False — they need native images for the
+        # adapter while GT stays at the capped render res for masking.
+        self.resize_images_to_pv_render = bool(resize_images_to_pv_render)
         # Per-scene rendered (depth, valid, image_id_to_idx) cache.
         self._pv_depth_cache: dict[str, dict[str, Any]] = {}
 
@@ -239,24 +257,10 @@ class ETH3DDataset(Dataset):
             pose[:3, 3] = t
             poses_cw.append(pose)  # camera_from_world per COLMAP
 
-        # Images may differ in size; pack into the largest canvas with zero
-        # padding for now. Adapters that care should use the native-size
-        # per-view from metadata; most models resize internally.
-        max_h = max(img.shape[0] for img in images)
-        max_w = max(img.shape[1] for img in images)
-        padded = np.zeros((len(images), max_h, max_w, 3), dtype=np.uint8)
-        for i, img in enumerate(images):
-            h, w, _ = img.shape
-            padded[i, :h, :w] = img
-
-        assert_valid_image(padded, name=f"eth3d/{rec['sample_id']}/image")
-
-        intrinsics = np.stack(Ks).astype(np.float32)
-        assert_valid_intrinsics(intrinsics, name=f"eth3d/{rec['sample_id']}/intrinsics")
-
-        world_from_camera = np.stack([invert_pose(p) for p in poses_cw])
-        extrinsics = rebase_to_first_camera(world_from_camera).astype(np.float32)
-        assert_valid_extrinsics(extrinsics, name=f"eth3d/{rec['sample_id']}/extrinsics")
+        depth_gt: NDArray[np.float32] | None = None
+        depth_valid: NDArray[np.bool_] | None = None
+        gt_sizes: list[tuple[int, int]] | None = None
+        native_sizes = [(img.shape[0], img.shape[1]) for img in images]
 
         pcd = None
         # Newer manifests store a list of ply paths (ETH3D ships scan_clean
@@ -307,29 +311,71 @@ class ETH3DDataset(Dataset):
                         pcd = pcd[idx]
                     self._gt_cache[cache_key] = pcd
 
-        depth_gt: NDArray[np.float32] | None = None
-        depth_valid: NDArray[np.bool_] | None = None
-        gt_sizes: list[tuple[int, int]] | None = None
         if self.with_per_view_gt and ply_rels:
             scene_pv = self._load_or_render_scene_pv_depth(
                 scene=rec["scene"],
                 ply_rels=ply_rels,
             )
             if scene_pv is not None:
+                # Pre-render canvas: native unless mono-depth asks for alignment.
+                if self.resize_images_to_pv_render:
+                    render_sizes = [
+                        scene_pv["render_sizes"][
+                            scene_pv["image_id_to_idx"][int(ir["image_id"])]
+                        ]
+                        for ir in rec["image_records"]
+                        if int(ir["image_id"]) in scene_pv["image_id_to_idx"]
+                    ]
+                    if render_sizes:
+                        canvas_h = max(h for h, _ in render_sizes)
+                        canvas_w = max(w for _, w in render_sizes)
+                    else:
+                        canvas_h = max(img.shape[0] for img in images)
+                        canvas_w = max(img.shape[1] for img in images)
+                else:
+                    canvas_h = max(img.shape[0] for img in images)
+                    canvas_w = max(img.shape[1] for img in images)
                 depth_gt, depth_valid, gt_sizes = self._stack_per_view_depth_for_sample(
                     scene_pv=scene_pv,
                     image_records=rec["image_records"],
-                    canvas_h=max_h,
-                    canvas_w=max_w,
+                    canvas_h=canvas_h,
+                    canvas_w=canvas_w,
                 )
+
+        if self.resize_images_to_pv_render and gt_sizes is not None:
+            resized: list[NDArray[np.uint8]] = []
+            for img, (H_r, W_r) in zip(images, gt_sizes, strict=True):
+                if H_r > 0 and W_r > 0:
+                    resized.append(_resize_rgb_uint8(img, height=H_r, width=W_r))
+                else:
+                    resized.append(img)
+            images = resized
+
+        max_h = max(img.shape[0] for img in images)
+        max_w = max(img.shape[1] for img in images)
+        padded = np.zeros((len(images), max_h, max_w, 3), dtype=np.uint8)
+        for i, img in enumerate(images):
+            h, w, _ = img.shape
+            padded[i, :h, :w] = img
+
+        assert_valid_image(padded, name=f"eth3d/{rec['sample_id']}/image")
+
+        intrinsics = np.stack(Ks).astype(np.float32)
+        assert_valid_intrinsics(intrinsics, name=f"eth3d/{rec['sample_id']}/intrinsics")
+
+        world_from_camera = np.stack([invert_pose(p) for p in poses_cw])
+        extrinsics = rebase_to_first_camera(world_from_camera).astype(np.float32)
+        assert_valid_extrinsics(extrinsics, name=f"eth3d/{rec['sample_id']}/extrinsics")
 
         metadata: dict[str, Any] = {
             "scene": rec["scene"],
-            "native_sizes": [(img.shape[0], img.shape[1]) for img in images],
+            "native_sizes": native_sizes,
             "split": self.split,
         }
         if gt_sizes is not None:
             metadata["gt_sizes"] = gt_sizes
+        if self.resize_images_to_pv_render and gt_sizes is not None:
+            metadata["eval_sizes"] = gt_sizes
         return Sample(
             sample_id=rec["sample_id"],
             images=padded,

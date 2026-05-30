@@ -12,25 +12,15 @@
 # EXPERIMENT, not yet a claim — see the protocol caveats below.
 
 name: depth-pro-sintel
-# No protocol preset (Depth Pro's metric eval differs from the relative
-# sintel_dust3r_lineage / MoGe protocols); config is inline.
+# Metric δ₁ on native Sintel; shares sky mask / pass with sintel_dav2 except
+# alignment (none — Depth Pro outputs metric meters).
+protocol: sintel_dav2
 
 model:
   name: depth-pro
   kwargs: {}
 
-dataset:
-  name: sintel
-  kwargs:
-    pass_name: final     # UNCONFIRMED: Depth Pro's appendix specifies the pass
-    views_per_sample: 1
-    max_depth: 70.0      # sky cap; Sintel encodes sky as ~1e5 m. Depth Pro's
-                         # exact cap is UNCONFIRMED — most metric-depth evals
-                         # cap (70 m is the DUSt3R/MonST3R lineage value).
-
-# Depth Pro is metric → compare absolute meters, no per-frame fit.
 scale_alignment: none
-tasks: [mono_depth]
 device: cuda:0
 
 paper_reference:

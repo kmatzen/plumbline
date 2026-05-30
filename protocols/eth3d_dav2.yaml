@@ -32,6 +32,8 @@ fixed:
       with_per_view_gt: true
       pv_render_max_dim: 518
       pv_splat_radius: 1
+      # Pixel-align RGB with the capped GT render (DA-V2 Table-2 inference @518).
+      resize_images_to_pv_render: true
   depth_clip: [0.001, 80.0]
   mask_boundaries: false
   max_views: 1
