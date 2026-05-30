@@ -327,7 +327,7 @@ jobs:
   #     via the NEW eth3d-moge-eval loader + eth3d_moge protocol (landed
   #     2026-05-28). First non-chamfer ETH3D ✅. ---
   - name: moge-vitl-eth3d-moge
-    status: pending
+    status: done
     priority: 5
     paper_target: "MoGe Table 3 (affine-inv-disparity) — MoGe-1 ETH3D AbsRel 0.0317 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
@@ -336,9 +336,15 @@ jobs:
     est_wall_min: 20
     requires_env: [ETH3D_MOGE_ROOT]
     extras: "plumbline install moge; fetch ETH3D.zip from Ruicheng/monocular-geometry-evaluation → $ETH3D_MOGE_ROOT (distinct from $ETH3D_ROOT)"
-    notes: "NEW dataset/path. The first run ALSO validates the new eth3d-moge-eval loader vs the real bundle (image ext, intrinsics scaling). If off, try scale_shift_clamped (ETH3D has outdoor scenes)."
+    notes: >
+      ✅ MATCH 2026-05-30 (H100): observed AbsRel 0.0311 vs 0.0317 (454/454,
+      δ₁ 0.9888). NEW dataset/path. First run drove two fixes: (1) rewrote the
+      eth3d-moge-eval loader to MoGe's pipeline (real bundle is nested
+      ETH3D/<scene>/<frame>, .index.txt-driven, 2048×1365 warp); (2) YAML
+      alignment scale_shift → scale_shift_clamped (MoGe's protocol; scale_shift
+      blew the mean to 169 on outdoor scenes — D30). JSON: s3://plumbline-bench/runs/backlog_20260529/results/.
   - name: da-v2-large-eth3d-moge
-    status: pending
+    status: done
     priority: 5
     paper_target: "MoGe Table 3 (DA-V2 re-eval) — DA-V2-L ETH3D AbsRel 0.0473 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
@@ -346,8 +352,11 @@ jobs:
     data_footprint_gb: 2
     est_wall_min: 20
     requires_env: [ETH3D_MOGE_ROOT]
-    extras: "base install; ETH3D MoGe bundle as above."
-    notes: "Companion to moge-vitl-eth3d-moge (same MoGe Table 3 block, DA-V2 row). NB: distinct from DA-V2's own Table 2 ETH3D 0.131."
+    extras: "base install (needs DAV2_ROOT clone, source=paper); ETH3D MoGe bundle as above."
+    notes: >
+      ✅ MATCH 2026-05-30 (H100): observed AbsRel 0.04731 vs 0.0473 (near-exact;
+      454/454, δ₁ 0.9793). scale_shift_clamped per D30. Companion to
+      moge-vitl-eth3d-moge. JSON: s3://plumbline-bench/runs/backlog_20260529/results/.
 
   # --- New MODEL coverage: Depth Pro on Sintel (metric δ₁, NO alignment).
   #     Depth Pro's first paper-match candidate (yaml landed 2026-05-28). ---
@@ -360,8 +369,17 @@ jobs:
     data_footprint_gb: 6
     est_wall_min: 30
     requires_env: [SINTEL_ROOT]
-    extras: "plumbline install depth-pro; download depth_pro.pt → ~/.cache/plumbline/weights/depth-pro/ (see adapter docstring)"
-    notes: "NEW model coverage (Depth Pro's first ✅ candidate). EXPERIMENT: confirm the Sintel pass (final/clean) + depth cap (max_depth) against Depth Pro's eval on the first run; the target 0.400 is PDF-verified. Depth Pro does NOT eval NYU/KITTI."
+    extras: "plumbline install depth-pro; download depth_pro.pt → ~/.cache/plumbline/weights/depth-pro/ (Apple CDN, see adapter docstring); Sintel depth+camera+images training archives from files.is.tue.mpg.de (no auth, NOT actually gated)"
+    notes: >
+      ⚠️ OFF-PAPER 2026-05-30 (H100): observed δ₁ 0.2418 vs 0.400 (metric,
+      no alignment; 1064/1064, companion AbsRel 0.793). EXPERIMENT — the two
+      flagged unknowns (Sintel pass final/clean, depth cap max_depth=70) are
+      unconfirmed and are the likely levers; the 0.400 target is PDF-verified.
+      Sintel data IS fetchable without registration (correcting the prior
+      "auth-gated" assumption): MPI-Sintel-depth-training + -training_images
+      zips from files.is.tue.mpg.de. depth-pro install + depth_pro.pt staged.
+      Left pending — needs the pass/cap resolved against Depth Pro's eval code
+      (not tuned here). JSON: s3://plumbline-bench/runs/backlog_20260529/results/.
 
   # --- New PROTOCOL coverage: DA-V2 own Table 2 on DIODE (native loader,
   #     affine-inv disparity) across variants S/B/L. Recipe already validated
