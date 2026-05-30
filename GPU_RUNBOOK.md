@@ -68,6 +68,17 @@ Stage downloads under `"$PLUMBLINE_WORK/data/..."`, write result JSONs to
 `"$PLUMBLINE_WORK/deps/"`. Do **not** re-download into `/tmp` on the overlay
 and leave the zips behind.
 
+**Backup habit (ephemeral pods).** After each successful reproduction (or
+before stepping away), push artifacts off the box:
+
+```bash
+source scripts/pod-localssd-env.sh
+./scripts/backup-session.sh <session-tag>   # runs/*.json + MoGe bundles → S3
+git push origin main                         # code + queue bookkeeping
+```
+
+Session token exports expire (~12 h); re-paste when `aws s3 ls` fails.
+
 ## Pre-flight
 
 ```bash
