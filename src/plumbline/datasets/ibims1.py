@@ -82,7 +82,13 @@ class IBims1Dataset(Dataset):
         *,
         root: Path | str | None = None,
         scenes: list[str] | None = None,
+        split: str = "test",
     ) -> None:
+        # `split` is accepted for protocol-YAML compatibility (the ibims1_moge
+        # protocol sets `split: test`), but iBims-1 is a single 100-scene eval
+        # set with no train/test partition — only "test" is meaningful.
+        if split != "test":
+            raise ValueError(f"IBims1Dataset only exposes the test split; got {split!r}")
         root_path = Path(root) if root else env_path("IBIMS1_ROOT")
         if root_path is None or not root_path.exists():
             raise DatasetNotAvailable(
@@ -95,8 +101,7 @@ class IBims1Dataset(Dataset):
             )
         self.root = root_path
         all_scenes = sorted(
-            p.name for p in root_path.iterdir()
-            if p.is_dir() and (p / "meta.json").exists()
+            p.name for p in root_path.iterdir() if p.is_dir() and (p / "meta.json").exists()
         )
         if scenes is not None:
             wanted = set(scenes)
@@ -127,9 +132,7 @@ class IBims1Dataset(Dataset):
 
         depth = read_moge_depth_png(sample_dir / "depth.png")
         if depth.shape != (H, W):
-            raise ValueError(
-                f"ibims1/{name}: depth {depth.shape} mismatches image {(H, W)}"
-            )
+            raise ValueError(f"ibims1/{name}: depth {depth.shape} mismatches image {(H, W)}")
         # MoGe-encoded depth uses NaN/inf for invalid/beyond-far. plumbline's
         # convention treats 0 as invalid; downstream metrics filter via
         # depth_valid AND-ed with depth>0.

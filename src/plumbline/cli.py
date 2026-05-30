@@ -7,6 +7,7 @@ Uses typer (click under the hood). Kept thin: it's a view over
 from __future__ import annotations
 
 import json
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -326,20 +327,28 @@ def queue_cmd(
 def _run_steps(name: str, steps: list[str]) -> None:
     """Run the pip/git steps of an install plan via subprocess.
 
-    ``uv pip install ...`` lines are rewritten to use the current interpreter
-    (``sys.executable -m uv pip install``) so the deps land in the venv that is
-    running plumbline, not whatever ``uv`` happens to be on ``$PATH``. ``git
-    clone`` lines run as-is. ``export ...`` lines are never executed (a child
-    process can't mutate the parent's environment); they are printed instead.
+    ``uv pip install ...`` lines are rewritten to target the current
+    interpreter explicitly (``uv pip install --python <sys.executable> ...``) so
+    the deps land in the venv that is running plumbline, not whatever virtualenv
+    ``uv`` would otherwise default to. ``uv`` is a standalone binary (installed
+    via the astral.sh installer, per GPU_RUNBOOK.md), so it is invoked directly
+    rather than as ``python -m uv`` — the latter only works if ``uv`` happens to
+    be pip-installed into the venv, which it generally is not. ``git clone``
+    lines run as-is. ``export ...`` lines are never executed (a child process
+    can't mutate the parent's environment); they are printed instead.
     """
     for step in steps:
         if step.startswith("export "):
             console.print(f"[yellow]set this yourself:[/yellow] {step}")
             continue
+        # shlex.split so shell quoting in the plan (e.g. a quoted git URL) is
+        # honored rather than surviving as literal quote chars in argv.
+        tokens = shlex.split(step)
         if step.startswith("uv pip install"):
-            argv = [sys.executable, "-m", "uv", *step.split()[1:]]
+            # tokens == ["uv", "pip", "install", <args...>]; target the running venv.
+            argv = ["uv", "pip", "install", "--python", sys.executable, *tokens[3:]]
         else:
-            argv = step.split()
+            argv = tokens
         console.print(f"[cyan]$[/cyan] {' '.join(argv)}")
         # argv is built from the trusted INSTALL_SPECS registry, not user input.
         result = subprocess.run(argv, check=False)
