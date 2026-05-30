@@ -31,7 +31,9 @@ ETH3D-moge / iBims-1, all PDF-verified) are **done**. Remaining queue work is
 mostly **blocked** off-paper investigations (native ETH3D/Sintel Table 2 →
 handoff docs; DIODE native D29 outdoor) plus **`depth-pro-sintel`** (Depth Pro
 Table 1 δ₁ experiment — upstream ships no Sintel eval script). Use
-`plumbline queue --include-blocked` before re-running anything.
+`plumbline queue --include-blocked` before re-running anything. Active execution
+plan: [`docs/GPU_BACKLOG_PLAN.md`](docs/GPU_BACKLOG_PLAN.md) (D29 MoGe warp on
+native DIODE is track 1).
 
 ## Hard constraints
 

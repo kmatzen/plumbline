@@ -1265,6 +1265,20 @@ cell `da-v2-large-diode` (also `domain=both`, 771 samples, via `diode-moge-eval`
 MoGe's reported 0.0533. So MoGe's preprocessing tames outdoor; the native
 protocol's does not.
 
+**2026-05-30 follow-up (`docs/GPU_BACKLOG_PLAN.md` §1):**
+
+- ``moge_fov_warp`` on native val is a **no-op** when RGB is already 1024×768
+  (FoV warp leaves pixels unchanged; AbsRel identical to native).
+- Outdoor 30-frame smoke: native **~0.19** vs ``diode-moge-eval`` **~0.05** —
+  divergence is **MoGe HF bundle depth/mask** (log PNG + ``isfinite``), not warp alone.
+- Experiment ``diode_dav2_moge_bundle`` (bundle loader + Table-2 ``scale_shift``):
+  ViT-S **0.0618** vs 0.073 (−15 %); ViT-L **0.0543** vs 0.066 (−18 %) — much closer
+  than native but still **under** paper (MISMATCH), same shape as D31/D32.
+
+Probes: ``scripts/probe-diode-d29-warp.py``. Repros:
+``da-v2-small-diode-native-moge-warp``, ``da-v2-small-diode-moge-bundle``,
+``da-v2-large-diode-moge-bundle``.
+
 **Verdict:** ⚠️ off-paper, protocol gap — NOT a model/adapter bug and NOT tuned.
 Two readings, both consistent with the data and neither verifiable without
 DA-V2's own (unreleased) zero-shot eval script: (a) DA-V2's Table 2 DIODE number

@@ -74,9 +74,11 @@ __all__ = [
     "DIODE_INTRINSIC",
     "DIODEDataset",
     "DIODEMogeEvalLoader",
+    "diode_intrinsics_normalized",
     "load_diode_depth_m",
     "load_diode_depth_mask",
     "load_moge_depth_png",
+    "warp_diode_native_with_moge",
 ]
 
 # DIODE devkit's demo intrinsic. Per-scan calibration may differ by a
@@ -117,9 +119,17 @@ class DIODEDataset(Dataset):
         :data:`DIODE_INTRINSIC`.
     scenes
         Optional scene whitelist (e.g. ``["scene_00019"]``).
+    moge_fov_warp
+        When ``True``, apply MoGe's homographic FoV warp (1024×768,
+        ``EvalDataLoaderPipeline._process_instance``) to each sample.
+        Used to test the D29 outdoor-preprocessing hypothesis without
+        switching to the HF MoGe bundle loader.
     """
 
     split: str = "val"
+    MOGE_WARP_WIDTH = 1024
+    MOGE_WARP_HEIGHT = 768
+    MOGE_DROP_MAX_DEPTH = 1000.0
 
     def __init__(
         self,
@@ -129,6 +139,7 @@ class DIODEDataset(Dataset):
         domain: str = "indoors",
         intrinsic: tuple[float, float, float, float] | None = None,
         scenes: list[str] | None = None,
+        moge_fov_warp: bool = False,
     ) -> None:
         root_path = Path(root) if root else env_path("DIODE_ROOT")
         if root_path is None or not root_path.exists():
@@ -154,11 +165,37 @@ class DIODEDataset(Dataset):
         self.split = split
         self.domain = domain
         self.intrinsic = intrinsic or DIODE_INTRINSIC
+        self.moge_fov_warp = moge_fov_warp
         self._K: NDArray[np.float32] = _intrinsic_matrix(self.intrinsic)
+        self._moge_pipe = None
+        if moge_fov_warp:
+            try:
+                from moge.test.dataloader import EvalDataLoaderPipeline
+            except ModuleNotFoundError as exc:
+                raise ImportError(
+                    "DIODEDataset(moge_fov_warp=True) needs the `moge` package. "
+                    "Install with `uv pip install "
+                    "'git+https://github.com/microsoft/MoGe.git'`."
+                ) from exc
+            # ``EvalDataLoaderPipeline`` reads ``.index.txt`` at init; we only
+            # call ``_process_instance``, so use a stub index under the manifest.
+            stub = self.root / ".plumbline_manifest" / "moge_warp_stub"
+            stub.mkdir(parents=True, exist_ok=True)
+            (stub / ".index.txt").write_text("stub\n")
+            self._moge_pipe = EvalDataLoaderPipeline(
+                path=str(stub),
+                width=self.MOGE_WARP_WIDTH,
+                height=self.MOGE_WARP_HEIGHT,
+                split=".index.txt",
+                drop_max_depth=self.MOGE_DROP_MAX_DEPTH,
+            )
 
+        warp_tag = "_mogewarp" if moge_fov_warp else ""
         scenes_tag = "all" if scenes is None else f"scenes{len(scenes)}"
         manifest_path = (
-            self.root / ".plumbline_manifest" / f"diode_{split}_{domain}_{scenes_tag}.jsonl"
+            self.root
+            / ".plumbline_manifest"
+            / f"diode_{split}_{domain}_{scenes_tag}{warp_tag}.jsonl"
         )
         if manifest_path.exists():
             records = load_manifest(manifest_path)
@@ -227,6 +264,9 @@ class DIODEDataset(Dataset):
     # -- per-sample ------------------------------------------------------
 
     def _load_sample(self, rec: dict[str, Any]) -> Sample:
+        if self.moge_fov_warp:
+            return self._load_sample_moge_warp(rec)
+
         image = read_rgb_uint8(self.root / rec["rgb_path"])
         images = image[None]  # (1, H, W, 3)
         assert_valid_image(images, name=f"diode/{rec['sample_id']}/image")
@@ -256,6 +296,45 @@ class DIODEDataset(Dataset):
                 "scene": rec["scene"],
                 "scan": rec["scan"],
                 "split": self.split,
+                "intrinsic_source": (
+                    "user-supplied" if self.intrinsic != DIODE_INTRINSIC else "diode_devkit_default"
+                ),
+            },
+        )
+
+    def _load_sample_moge_warp(self, rec: dict[str, Any]) -> Sample:
+        assert self._moge_pipe is not None
+        image, depth_gt, depth_valid, K_pix = warp_diode_native_with_moge(
+            self._moge_pipe,
+            image=read_rgb_uint8(self.root / rec["rgb_path"]),
+            depth_m=load_diode_depth_m(self.root / rec["depth_path"]),
+            valid_mask=load_diode_depth_mask(self.root / rec["mask_path"]),
+            intrinsic=self.intrinsic,
+        )
+        images = image[None]
+        depth_gt = depth_gt[None]
+        depth_valid = depth_valid[None]
+        K_stack = K_pix[None]
+        E_eye = np.eye(4, dtype=np.float32)[None]
+
+        assert_valid_image(images, name=f"diode/{rec['sample_id']}/image")
+        assert_valid_intrinsics(K_stack, name=f"diode/{rec['sample_id']}/intrinsics")
+        assert_valid_extrinsics(E_eye, name=f"diode/{rec['sample_id']}/extrinsics")
+        assert_valid_depth(depth_gt, name=f"diode/{rec['sample_id']}/depth")
+
+        return Sample(
+            sample_id=rec["sample_id"],
+            images=images,
+            intrinsics=K_stack,
+            extrinsics_gt=E_eye,
+            depth_gt=depth_gt,
+            depth_valid=depth_valid,
+            metadata={
+                "domain": rec["domain"],
+                "scene": rec["scene"],
+                "scan": rec["scan"],
+                "split": self.split,
+                "preprocess": "moge_fov_warp",
                 "intrinsic_source": (
                     "user-supplied" if self.intrinsic != DIODE_INTRINSIC else "diode_devkit_default"
                 ),
@@ -574,3 +653,61 @@ def _intrinsic_matrix(
         [[fx, 0.0, cx], [0.0, fy, cy], [0.0, 0.0, 1.0]],
         dtype=np.float32,
     )
+
+
+def diode_intrinsics_normalized(
+    intrinsic: tuple[float, float, float, float],
+    *,
+    width: int,
+    height: int,
+) -> NDArray[np.float32]:
+    """MoGe-style normalized intrinsics for a ``width``×``height`` frame."""
+    fx, fy, cx, cy = intrinsic
+    return np.array(
+        [
+            [fx / width, 0.0, cx / width],
+            [0.0, fy / height, cy / height],
+            [0.0, 0.0, 1.0],
+        ],
+        dtype=np.float32,
+    )
+
+
+def warp_diode_native_with_moge(
+    moge_pipe: Any,
+    *,
+    image: NDArray[np.uint8],
+    depth_m: NDArray[np.float32],
+    valid_mask: NDArray[np.bool_],
+    intrinsic: tuple[float, float, float, float],
+) -> tuple[NDArray[np.uint8], NDArray[np.float32], NDArray[np.bool_], NDArray[np.float32]]:
+    """Run MoGe's homographic FoV warp on native DIODE RGB-D (D29 experiment).
+
+    Returns ``(image_uint8, depth_m, valid_mask, K_pixel)`` on the warped grid.
+    """
+    h, w = image.shape[:2]
+    depth = np.where(valid_mask, depth_m, np.nan).astype(np.float32)
+    raw = {
+        "filename": "native",
+        "width": moge_pipe.width,
+        "height": moge_pipe.height,
+        "image": image,
+        "depth": np.nan_to_num(depth, nan=1, posinf=1, neginf=1),
+        "depth_mask": valid_mask,
+        "depth_mask_inf": np.zeros_like(valid_mask),
+        "intrinsics": diode_intrinsics_normalized(intrinsic, width=w, height=h),
+    }
+    inst = moge_pipe._process_instance(raw)
+
+    img_t = inst["image"]
+    image_out = (img_t.permute(1, 2, 0).numpy() * 255.0).clip(0, 255).astype(np.uint8)
+    depth_out = inst["depth"].numpy().astype(np.float32)
+    valid_out = inst["depth_mask"].numpy().astype(bool)
+    depth_out = np.where(valid_out, depth_out, np.float32(1.0))
+
+    K_norm = inst["intrinsics"].numpy().astype(np.float32)
+    oh, ow = image_out.shape[:2]
+    K_pix = K_norm.copy()
+    K_pix[0, :] *= ow
+    K_pix[1, :] *= oh
+    return image_out, depth_out, valid_out, K_pix

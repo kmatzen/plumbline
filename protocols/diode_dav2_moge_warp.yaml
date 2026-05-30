@@ -1,0 +1,27 @@
+# DIODE mono-depth — DA-V2 Table 2 recipe + MoGe homographic FoV warp (D29).
+#
+# Experimental protocol only: native ``diode`` val files on disk, but each
+# sample is warped with MoGe's ``EvalDataLoaderPipeline`` (1024×768) before
+# inference. Targets the D29 hypothesis that outdoor Table-2 miss is
+# preprocessing, not model weights. Does NOT replace ``diode_dav2`` until a
+# full run lands within tolerance — see docs/GPU_BACKLOG_PLAN.md §1.
+
+name: diode_dav2_moge_warp
+description: >
+  DIODE val under DA-V2 Table 2 alignment (scale_shift, [1e-3, 50] m) with
+  MoGe FoV warp on native RGB-D. domain=both.
+
+reference:
+  paper: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), DIODE column"
+
+fixed:
+  dataset:
+    name: diode
+    split: val
+    kwargs:
+      domain: both
+      moge_fov_warp: true
+  depth_clip: [0.001, 50.0]
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]

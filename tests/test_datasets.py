@@ -17,6 +17,7 @@ from PIL import Image
 from plumbline.datasets.diode import (
     DIODE_INTRINSIC,
     DIODEDataset,
+    diode_intrinsics_normalized,
     load_diode_depth_m,
     load_diode_depth_mask,
 )
@@ -1059,6 +1060,22 @@ class TestDIODE:
         out = load_diode_depth_mask(p)
         assert out.dtype == bool
         np.testing.assert_array_equal(out, np.array([[True, False], [False, True]]))
+
+    def test_diode_intrinsics_normalized(self) -> None:
+        K = diode_intrinsics_normalized(DIODE_INTRINSIC, width=1024, height=768)
+        assert K[0, 0] == pytest.approx(886.81 / 1024)
+        assert K[1, 1] == pytest.approx(886.81 / 768)
+
+    def test_moge_fov_warp_changes_shape(self, tmp_path: Path) -> None:
+        pytest.importorskip("moge")
+        _write_fake_diode(tmp_path, frames=1)
+        native = DIODEDataset(root=tmp_path, domain="indoors")
+        warped = DIODEDataset(root=tmp_path, domain="indoors", moge_fov_warp=True)
+        s0 = next(iter(native))
+        s1 = next(iter(warped))
+        assert s0.images.shape[1:3] != s1.images.shape[1:3]
+        assert s1.images.shape[1:3] == (768, 1024)
+        assert s1.metadata.get("preprocess") == "moge_fov_warp"
 
 
 # ---------------------------------------------------------------------------

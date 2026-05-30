@@ -1,0 +1,23 @@
+# D29: MoGe-bundle loader + DA-V2 Table 2 protocol (not MoGe Table 3 clamp).
+
+name: da-v2-small-diode-moge-bundle
+protocol: diode_dav2_moge_bundle
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: small
+
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.073
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, DA-V2 Table 2 DIODE ViT-S AbsRel 0.073."
+  source_confidence: verified_pdf
+
+notes: >
+  D29 follow-up: native moge_fov_warp is a no-op at 1024×768. This cell uses
+  the MoGe HF bundle (log depth + isfinite mask) with Table-2 alignment.

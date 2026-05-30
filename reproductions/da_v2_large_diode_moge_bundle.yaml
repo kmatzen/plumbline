@@ -1,0 +1,19 @@
+# D29: MoGe-bundle + DA-V2 Table 2 (ViT-L).
+
+name: da-v2-large-diode-moge-bundle
+protocol: diode_dav2_moge_bundle
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.066
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, DA-V2 Table 2 DIODE ViT-L AbsRel 0.066."
+  source_confidence: verified_pdf

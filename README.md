@@ -146,6 +146,8 @@ authoritative 32-cell matrix:
 
 ## Documentation
 
+- **GPU backlog plan (active):** [`docs/GPU_BACKLOG_PLAN.md`](docs/GPU_BACKLOG_PLAN.md)
+
 - [`plan.md`](./plan.md) — architecture + v0.1 spec and roadmap.
 - [`GPU_RUNBOOK.md`](./GPU_RUNBOOK.md) — running on a rented GPU,
   including per-adapter install quirks.

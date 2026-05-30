@@ -12,8 +12,9 @@ details within each section.
 > [`REPRODUCTIONS.md`](./REPRODUCTIONS.md) (paper-match matrix) and
 > [`docs/DISCREPANCIES.md`](./docs/DISCREPANCIES.md) (open issues).
 > [`GPU_RUNBOOK.md`](./GPU_RUNBOOK.md) is the bring-up + thrift
-> bootstrap doc for both human and autonomous-agent operators. § 10
-> below has the v0.2 roadmap.
+> bootstrap doc for both human and autonomous-agent operators.
+> [`docs/GPU_BACKLOG_PLAN.md`](./docs/GPU_BACKLOG_PLAN.md) is the active
+> post-coverage execution plan (D29 DIODE first). § 10 below has the v0.2 roadmap.
 
 ---
 

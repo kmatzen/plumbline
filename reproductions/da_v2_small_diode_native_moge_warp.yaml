@@ -1,0 +1,24 @@
+# D29 experiment: native DIODE + MoGe FoV warp, ViT-S, DA-V2 Table 2 target.
+
+name: da-v2-small-diode-native-moge-warp
+protocol: diode_dav2_moge_warp
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: small
+
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.073
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2, DIODE ViT-S AbsRel 0.073."
+  source_confidence: verified_pdf
+
+notes: >
+  D29 outdoor-preprocessing experiment (2026-05-30). Same paper target as
+  da-v2-small-diode-native but protocol applies MoGe homographic warp to
+  native val RGB-D. If domain=both matches, port fix to base/large natives.

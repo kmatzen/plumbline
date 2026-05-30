@@ -1,0 +1,24 @@
+# D29 experiment: DA-V2 Table 2 alignment on MoGe's DIODE eval bundle.
+#
+# Uses ``diode-moge-eval`` (HF preprocessed depth + homographic warp) with
+# DA-V2 Table 2 ``scale_shift`` and [1e-3, 50] clip — NOT MoGe Table 3's
+# ``scale_shift_clamped``. Tests whether Table-2 paper numbers used MoGe's
+# RGB-D preprocessing while keeping DA-V2's alignment recipe.
+
+name: diode_dav2_moge_bundle
+description: >
+  MoGe HF DIODE bundle loader + DA-V2 Table 2 scale_shift / depth clip.
+
+reference:
+  paper: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2, DIODE"
+
+fixed:
+  dataset:
+    name: diode-moge-eval
+    split: val
+    kwargs:
+      domain: both
+  depth_clip: [0.001, 50.0]
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]
