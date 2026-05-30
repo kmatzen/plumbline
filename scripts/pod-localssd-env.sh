@@ -19,6 +19,12 @@ export UV_CACHE_DIR="$PLUMBLINE_WORK/cache/uv"
 export XDG_CACHE_HOME="$PLUMBLINE_WORK/cache/xdg"
 export HF_HUB_DISABLE_XET=1
 
+# HF token: paste once into $PLUMBLINE_WORK/.hf_token (chmod 600). Never commit.
+if [[ -r "${PLUMBLINE_WORK}/.hf_token" ]]; then
+  export HF_TOKEN="$(<"${PLUMBLINE_WORK}/.hf_token")"
+  export HUGGING_FACE_HUB_TOKEN="$HF_TOKEN"
+fi
+
 # MoGe-eval bundles (ROOT = parent of DDAD/, Sintel/, …)
 export DDAD_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
 export SINTEL_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"

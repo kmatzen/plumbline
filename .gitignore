@@ -57,6 +57,10 @@ results/
 reports/
 tmp/
 
+# Ephemeral-box secrets (keep under $PLUMBLINE_WORK/.hf_token instead)
+.hf_token
+**/.hf_token
+
 # Local session artifacts — never commit (intentionally repo-external):
 # result-JSON backups already live on s3://plumbline-bench/runs/;
 # .claude/ is local Claude Code config (hooks/settings).
