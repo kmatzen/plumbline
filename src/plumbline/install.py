@@ -245,12 +245,17 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         clone_recursive=True,
         dest_env="MONST3R_ROOT",
         default_dest="$HOME/deps/monst3r",
-        extra_pip=_TRIMESH_STACK,
+        # MonST3R's dust3r fork imports `evo` at module load (dust3r/utils/
+        # vo_eval.py), so it is required even for the mono-depth path — not
+        # just trajectory metrics. roma/scikit-learn/trimesh are the shared
+        # dust3r-family deps.
+        extra_pip=(*_TRIMESH_STACK, "evo"),
         weights="hf-auto",
         notes=(
             "Ships its own dust3r fork — only ONE dust3r-family model "
             "(mast3r/dust3r/monst3r) can be used per process (Python caches "
-            "`import dust3r`)."
+            "`import dust3r`). The fork imports `evo` at load time, so it is a "
+            "hard dependency (in extra_pip)."
         ),
     ),
     "cut3r": InstallSpec(

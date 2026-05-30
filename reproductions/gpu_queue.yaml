@@ -210,7 +210,7 @@ jobs:
   # --- Certainty: re-run already-✅ cells to capture a retained JSON.
   #     The 2026-05-28 provenance pass found these 5 lack one on S3. ---
   - name: monst3r-nyuv2
-    status: pending
+    status: done
     priority: 3
     paper_target: "MonST3R Table 3 — NYU AbsRel 0.091 (already ✅; re-run only for JSON)"
     primary_metric: abs_rel
@@ -221,7 +221,7 @@ jobs:
     extras: "plumbline install monst3r"
     notes: "Already ✅ (0.0896 vs 0.091); re-run captures+retains a result JSON → s3 runs/. Closes the provenance gap."
   - name: da-v2-large-diode
-    status: pending
+    status: done
     priority: 3
     paper_target: "MoGe Table 3 — DA-V2-L DIODE AbsRel 0.0533 (already ✅; re-run for JSON)"
     primary_metric: abs_rel
@@ -232,7 +232,7 @@ jobs:
     extras: "base install"
     notes: "Already ✅ (0.0529); re-run to capture+retain JSON."
   - name: da-v2-large-kitti-moge
-    status: pending
+    status: done
     priority: 3
     paper_target: "MoGe Table 3 — DA-V2-L KITTI AbsRel 0.0561 (already ✅; re-run for JSON)"
     primary_metric: abs_rel
@@ -243,7 +243,7 @@ jobs:
     extras: "base install"
     notes: "Already ✅ (0.0569); re-run to capture+retain JSON."
   - name: moge-vitl-kitti
-    status: pending
+    status: done
     priority: 3
     paper_target: "MoGe Table 3 — MoGe-1 KITTI AbsRel 0.0408 (already ✅ via D8; re-run for JSON)"
     primary_metric: abs_rel
@@ -254,7 +254,7 @@ jobs:
     extras: "plumbline install moge"
     notes: "Already ✅ (0.0404, D8 MoGe-eval close); re-run to capture+retain JSON."
   - name: moge-vitl-diode-both
-    status: pending
+    status: done
     priority: 3
     paper_target: "MoGe Table 3 — MoGe-1 DIODE AbsRel 0.0400 (already ✅; re-run for JSON)"
     primary_metric: abs_rel
@@ -269,7 +269,7 @@ jobs:
   #     recorded observed already matches, so the run promotes 🎯→✅
   #     with a retained JSON. ---
   - name: moge-vitl-gso
-    status: pending
+    status: done
     priority: 4
     paper_target: "MoGe Table 3 (affine-inv-disparity) — MoGe-1 GSO AbsRel 0.00944 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
@@ -278,9 +278,9 @@ jobs:
     est_wall_min: 15
     requires_env: [GSO_ROOT]
     extras: "plumbline install moge"
-    notes: "Target pinned (0.00944); recorded observed 0.0094 matches → expected ✅. NEW dataset coverage (GSO)."
+    notes: "✅ MATCH 2026-05-29 (H100): observed AbsRel 0.00958 vs 0.00944 (1030/1030). NEW dataset coverage (GSO). JSON: s3://plumbline-bench/runs/backlog_20260529/results/."
   - name: da-v2-large-gso
-    status: pending
+    status: done
     priority: 4
     paper_target: "MoGe Table 3 (DA-V2 re-eval) — DA-V2-L GSO AbsRel 0.0125 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
@@ -289,12 +289,12 @@ jobs:
     est_wall_min: 15
     requires_env: [GSO_ROOT]
     extras: "base install"
-    notes: "Target pinned (0.0125); recorded observed 0.0122 matches → expected ✅. NEW dataset coverage (GSO)."
+    notes: "✅ MATCH 2026-05-29 (H100): observed AbsRel 0.01247 vs 0.0125 (1030/1030). NEW dataset coverage (GSO). Needs DAV2_ROOT clone (source=paper). JSON: s3://plumbline-bench/runs/backlog_20260529/results/."
 
   # --- New DATASET coverage: iBims-1 (MoGe Table 3 affine-inv-disparity).
   #     NEW protocol `ibims1_moge` + yamls landed 2026-05-28; ~40 MB bundle. ---
   - name: moge-vitl-ibims1
-    status: pending
+    status: done
     priority: 5
     paper_target: "MoGe Table 3 (affine-inv-disparity) — MoGe-1 iBims-1 AbsRel 0.0320 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
@@ -303,7 +303,7 @@ jobs:
     est_wall_min: 15
     requires_env: [IBIMS1_ROOT]
     extras: "plumbline install moge; fetch iBims-1.zip from Ruicheng/monocular-geometry-evaluation → $IBIMS1_ROOT"
-    notes: "NEW dataset (iBims-1). Target from the verified MoGe Table 3. If off-paper, the likely lever is scale_alignment (scale_shift vs scale_shift_clamped)."
+    notes: "✅ MATCH 2026-05-29 (H100): observed AbsRel 0.0316 vs 0.0320 (100/100). NEW dataset coverage (iBims-1). Required the ibims1 loader `split` fix (PR #21). JSON: s3://plumbline-bench/runs/backlog_20260529/results/."
   - name: da-v2-large-ibims1
     status: pending
     priority: 5
@@ -313,8 +313,15 @@ jobs:
     data_footprint_gb: 1
     est_wall_min: 15
     requires_env: [IBIMS1_ROOT]
-    extras: "base install; iBims-1 bundle as above."
-    notes: "NEW dataset (iBims-1). Companion to moge-vitl-ibims1 (same MoGe Table 3 block, DA-V2 row)."
+    extras: "base install (needs DAV2_ROOT clone, source=paper); iBims-1 bundle as above."
+    notes: >
+      ⚠️ OFF-PAPER 2026-05-29 (H100): observed AbsRel 0.0391 vs 0.0348
+      (+12.4 %, outside ±5 %; 100/100, genuine — not a skip). Speculative
+      cell, never previously run. The companion moge-vitl-ibims1 matched
+      (0.0316), so the loader/protocol are sound; this is a DA-V2-specific
+      gap on iBims-1 under scale_shift. NOT tuned (the yaml note suggested
+      scale_shift_clamped as a fallback but that is a YAML change, deferred
+      to human review). Left pending. JSON: s3://plumbline-bench/runs/backlog_20260529/results/.
 
   # --- New dataset/path: ETH3D mono-depth (MoGe Table 3 affine-inv-disparity)
   #     via the NEW eth3d-moge-eval loader + eth3d_moge protocol (landed
@@ -368,8 +375,15 @@ jobs:
     data_footprint_gb: 3
     est_wall_min: 20
     requires_env: [DIODE_ROOT]
-    extras: "base install (DA-V2 HF path); DIODE val (~2.7 GB) at $DIODE_ROOT"
-    notes: "HIGH-CONFIDENCE: this exact recipe matched the ViT-S indoor slice at 0.0722 vs 0.073. domain=both combined val. DA-V2's OWN Table 2, distinct from the MoGe re-eval cells."
+    extras: "base install (needs DAV2_ROOT clone, source=paper); DIODE val (~2.7 GB) at $DIODE_ROOT"
+    notes: >
+      ⚠️ OFF-PAPER 2026-05-29 (H100): observed AbsRel 0.2196 vs 0.073 on
+      domain=both. Per-domain split: indoor 0.0720 (≈ paper, 325 imgs),
+      outdoor 0.3271 (446 imgs) — outdoor drives the miss. See
+      docs/DISCREPANCIES.md D29: native diode_dav2 outdoor preprocessing
+      gap (the MoGe-bundle DA-V2 DIODE cell matches at 0.053 on the same
+      domain=both, so outdoor CAN be done right). NOT a model bug, NOT
+      tuned. Left pending. JSON on S3 backlog_20260529.
   - name: da-v2-base-diode-native
     status: pending
     priority: 5
@@ -379,8 +393,8 @@ jobs:
     data_footprint_gb: 3
     est_wall_min: 20
     requires_env: [DIODE_ROOT]
-    extras: "base install; DIODE val as above."
-    notes: "New DA-V2-Base DIODE coverage (no Base DIODE cell existed). Same recipe as da-v2-small-diode-native."
+    extras: "base install (needs DAV2_ROOT clone); DIODE val as above."
+    notes: "⚠️ OFF-PAPER 2026-05-29 (H100): 0.2182 vs 0.068 on domain=both (outdoor split drives the miss, same shape as da-v2-small-diode-native). See docs/DISCREPANCIES.md D29. Left pending."
   - name: da-v2-large-diode-native
     status: pending
     priority: 5
@@ -390,8 +404,8 @@ jobs:
     data_footprint_gb: 3
     est_wall_min: 20
     requires_env: [DIODE_ROOT]
-    extras: "base install; DIODE val as above."
-    notes: "DA-V2's OWN number (0.066) vs the MoGe re-eval da-v2-large-diode (0.0533) — same model+dataset, cross-protocol A/B."
+    extras: "base install (needs DAV2_ROOT clone); DIODE val as above."
+    notes: "⚠️ OFF-PAPER 2026-05-29 (H100): 0.2142 vs 0.066 on domain=both (outdoor split drives the miss). See docs/DISCREPANCIES.md D29. The MoGe re-eval da-v2-large-diode matched at 0.0529 (same model+dataset, MoGe preprocessing). Left pending."
 
   # --- New coverage NEEDING harness work (verified targets ready; create
   #     the protocol/loader path before these can be queued as runnable): ---

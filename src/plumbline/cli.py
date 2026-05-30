@@ -7,6 +7,7 @@ Uses typer (click under the hood). Kept thin: it's a view over
 from __future__ import annotations
 
 import json
+import os
 import shlex
 import subprocess
 import sys
@@ -336,14 +337,20 @@ def _run_steps(name: str, steps: list[str]) -> None:
     be pip-installed into the venv, which it generally is not. ``git clone``
     lines run as-is. ``export ...`` lines are never executed (a child process
     can't mutate the parent's environment); they are printed instead.
+
+    Env vars in tokens (e.g. ``$HOME`` in a clone's default destination) are
+    expanded with ``os.path.expandvars`` — subprocess does not go through a
+    shell, so without this a ``git clone ... $HOME/deps/foo`` step would create
+    a literal ``$HOME`` directory under the cwd.
     """
     for step in steps:
         if step.startswith("export "):
             console.print(f"[yellow]set this yourself:[/yellow] {step}")
             continue
         # shlex.split so shell quoting in the plan (e.g. a quoted git URL) is
-        # honored rather than surviving as literal quote chars in argv.
-        tokens = shlex.split(step)
+        # honored rather than surviving as literal quote chars in argv; then
+        # expandvars so $HOME-style refs resolve as a shell would.
+        tokens = [os.path.expandvars(t) for t in shlex.split(step)]
         if step.startswith("uv pip install"):
             # tokens == ["uv", "pip", "install", <args...>]; target the running venv.
             argv = ["uv", "pip", "install", "--python", sys.executable, *tokens[3:]]
