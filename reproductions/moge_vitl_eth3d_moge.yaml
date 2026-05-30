@@ -13,10 +13,14 @@ model:
   kwargs:
     variant: vitl
 
-# Affine-invariant-disparity (inverse-depth scale+shift). scale_shift is the
-# clean-indoor convention; ETH3D has outdoor scenes too, so scale_shift_clamped
-# may fit better — confirm on the first run.
-scale_alignment: scale_shift
+# Affine-invariant-disparity (inverse-depth scale+shift). ETH3D has outdoor
+# scenes (meadow/playground/terrains), where plain scale_shift lets a few
+# far-depth pixels invert to enormous aligned depths and a single sample
+# dominates mean AbsRel (observed mean 169 / median 0.0234 on the 2026-05-29
+# run). scale_shift_clamped is MoGe's actual eval protocol (moge/test/
+# metrics.py: floor aligned disparity at 1/gt.max()) and is what the sibling
+# DIODE/KITTI MoGe-eval cells use; under it this cell lands 0.0323 vs 0.0317.
+scale_alignment: scale_shift_clamped
 device: cuda:0
 
 paper_reference:

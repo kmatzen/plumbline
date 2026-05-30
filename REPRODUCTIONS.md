@@ -31,12 +31,12 @@ cells are now ℹ️ instead of ✅.
 |---|---|---|---|---|---|---|---|
 | **DA-V2 Small** | ✅ **0.0510** vs 0.053 | ✅ **0.0770** vs 0.078 | ℹ️ **0.0722** _(no ViT-S paper cell under this protocol)_ | — | — | — | ⌛ |
 | **DA-V2 Base** | ℹ️ **0.0456** vs 0.049 _(6.9% off — reproduction delta, exceeds ±5%; see yaml note)_ | ✅ **0.0756** vs 0.078 | — | — | — | — | — |
-| **DA-V2 Large** | ✅ **0.0428** vs 0.0420 | ✅ **0.0710** vs 0.074 | ✅ **0.0529** vs 0.0533 _(landed 2026-04-27 via DIODE FoV-warp loader)_ | — | — | — | 🎯 **0.0122** (δ₁ 0.9999) _(no paper target)_ |
+| **DA-V2 Large** | ✅ **0.0428** vs 0.0420 | ✅ **0.0710** vs 0.074 | ✅ **0.0529** vs 0.0533 _(landed 2026-04-27 via DIODE FoV-warp loader)_ | ✅ **0.0473** vs 0.0473 _(MoGe-eval mono-depth, scale_shift_clamped; 2026-05-30)_ | — | — | ✅ **0.0125** vs 0.0125 (δ₁ 0.9999) _(MoGe Table 3 GSO; 2026-05-30)_ |
 | **DA-V2 Metric-Outdoor-L** | — | ℹ️ **0.0877** _(VKITTI-finetuned; no direct paper)_ | — | — | — | — | — |
 | **Metric3D-v2 L** | ✅ **0.0660** vs 0.063 | ✅ **0.0495** vs 0.052 | — | — | — | — | — |
 | **Metric3D-v2 Giant** | ✅ **0.0702** vs 0.067 | ✅ **0.0503** vs 0.051 | — | — | — | — | — |
 | **DA3** | ✅ δ₁ **0.9684** vs 0.974 | — | — | ⚠️ chamfer 7.14 (protocol gap) | — | ⌛ informational only (paper does not evaluate CO3Dv2 pose; A/B vs VGGT/MASt3R) | 🎯 **0.0150** (δ₁ 0.9994) _(no paper target)_ |
-| **MoGe-1 ViT-L** | ✅ **0.0342** vs 0.0341 | ⚠️ **0.0447** vs 0.0408 _(9.4% off; D8 structural protocol)_ | ✅ **0.0407** vs 0.0400 _(1.7% off; FoV-warp port 2026-04-26)_ | — | — | — | 🎯 **0.0094** (δ₁ 0.9999) _(no paper target)_ |
+| **MoGe-1 ViT-L** | ✅ **0.0342** vs 0.0341 | ⚠️ **0.0447** vs 0.0408 _(9.4% off; D8 structural protocol)_ | ✅ **0.0407** vs 0.0400 _(1.7% off; FoV-warp port 2026-04-26)_ | ✅ **0.0311** vs 0.0317 _(MoGe-eval mono-depth, scale_shift_clamped; 2026-05-30)_ | — | — | ✅ **0.00958** vs 0.00944 (δ₁ 0.9999) _(MoGe Table 3 GSO; 2026-05-30)_ |
 | **MoGe-2 ViT-L** | ✅ **0.0305** (scale+shift) | ℹ️ _(paper publishes ViT-L only as 10-dataset avg)_ | ⌛ | — | — | — | ⌛ |
 | **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — | — |
 | **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ℹ️ **0.1090** vs 0.099 _(v1-1 / 1-step is the newer distilled checkpoint; paper cell is v1-0 / 50-step — D9 RESOLVED 2026-05-25: 0.0992 reproduces end-to-end on Marigold's own pipeline. Documented checkpoint-generation delta, not a paper-match cell.)_ | — | — | — | — | — |
@@ -66,13 +66,16 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 
 ### Paper-match count
 
-**18 ✅ mono-depth cells + 4 ✅ pose cells = 22 total** with `source_confidence: verified_pdf`:
+**23 ✅ mono-depth cells + 4 ✅ pose cells = 27 total** with `source_confidence: verified_pdf`:
 
 - NYU (8): DA-V2 S/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3, **MonST3R** (lineage protocol, 2026-05-26)
 - KITTI Eigen+Garg (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
 - KITTI MoGe-eval (2): MoGe-1 ViT-L (D8 close), DA-V2 ViT-L (2026-04-27)
 - KITTI dust3r-lineage (1): **DUSt3R** (0.1049/0.1074, −2.3%) — was present in the grid + site but omitted from this breakdown
 - DIODE (2): MoGe-1 ViT-L, DA-V2 ViT-L (FoV-warp loader, 2026-04-26/27)
+- **GSO (2, NEW 2026-05-30): MoGe-1 ViT-L (0.00958 vs 0.00944), DA-V2 ViT-L (0.01247 vs 0.0125)** — MoGe Table 3 GSO column
+- **iBims-1 (1, NEW 2026-05-30): MoGe-1 ViT-L (0.0316 vs 0.0320)** — MoGe Table 3; the DA-V2-L companion is ⚠️ off-paper (0.0391 vs 0.0348)
+- **ETH3D MoGe-eval mono-depth (2, NEW 2026-05-30): MoGe-1 ViT-L (0.0311 vs 0.0317), DA-V2 ViT-L (0.0473 vs 0.0473)** — new `eth3d-moge-eval` loader (MoGe pipeline) + `scale_shift_clamped` fix (D30)
 - _(2026-05-28 confidence audit: DA-V2 Base NYU (6.9% off) and MonST3R KITTI (5.05% off) downgraded ✅→ℹ️ (both exceed ±5%); DUSt3R-KITTI restored above. The old "23" had under-counted DUSt3R-KITTI (true base 24); after the 2 downgrades the verified count is 22 — now consistent with the site's 22.)_
 - **CO3Dv2 pose (3): VGGT (AUC@30 0.8964 vs 0.882, +1.6 %) + MASt3R (mAA(30) 0.7960 vs 0.818, −2.7 %) + DUSt3R (mAA(30) 0.7893 vs 0.772, +2.2 %), all on MASt3R Table 3 protocol** — v0.1 acceptance criterion #2 met (VGGT) and twice-seconded (MASt3R / DUSt3R).
 - **Sintel trajectory pose (1): MonST3R Table 4 — ATE 0.1134 vs 0.108 (+5.0 %), plumbline-computed 2026-05-27** via the new adapter v1.2 video-pose path + `metrics/pose.py` ATE/RPE family.

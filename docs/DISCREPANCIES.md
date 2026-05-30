@@ -1277,6 +1277,36 @@ JSONs: `s3://plumbline-bench/runs/backlog_20260529/results/`. The indoor cell
 (`da-v2-small-diode-indoor`, value:null informational) remains the trustworthy
 native-DIODE DA-V2 reference.
 
+### D30 · ETH3D-MoGe cells used scale_shift not scale_shift_clamped — outdoor blowup   ✅ RESOLVED 2026-05-30
+
+First end-to-end run of the ETH3D MoGe-eval cells (H100, 2026-05-29/30) exposed
+two issues, both now fixed:
+
+1. **Loader** (`eth3d-moge-eval`): the placeholder shipped 2026-05-28 assumed a
+   flat `<root>/<scene>` layout and a naive read+scale path. The real ETH3D.zip
+   bundle is a nested, `.index.txt`-driven tree (`<root>/ETH3D/<scene>/<frame>/`,
+   453 samples) and needs MoGe's homographic FoV-warp. Rewrote it to mirror the
+   validated DIODE/KITTI MoGe-eval loaders (delegates to
+   `EvalDataLoaderPipeline._process_instance`, target 2048×1365 per MoGe
+   `configs/eval/all_benchmarks.json`).
+
+2. **Alignment**: `moge_vitl_eth3d_moge.yaml` / `da_v2_large_eth3d_moge.yaml`
+   pinned `scale_alignment: scale_shift`. On ETH3D's outdoor scenes
+   (meadow/playground/terrains) plain scale_shift lets a few far-depth pixels
+   invert to enormous aligned depths — `moge-vitl-eth3d-moge` came back **median
+   AbsRel 0.0234** (≈ paper) but **mean 169** (max sample 44 320). This is the
+   exact failure `scale_shift_clamped` exists to prevent — MoGe's own eval
+   protocol (`moge/test/metrics.py`: floor aligned disparity at `1/gt.max()`),
+   and the alignment every sibling DIODE/KITTI MoGe-eval cell already uses.
+   Verified via `plumbline run --scale-alignment scale_shift_clamped`:
+   **AbsRel 0.0323 vs paper 0.0317** (1.9 %, MATCH). Fixed both YAMLs to
+   `scale_shift_clamped`.
+
+This is a protocol-fidelity fix (match the authors' eval), not a tuned knob:
+the alignment was simply mis-specified relative to MoGe's code and the other
+MoGe cells. Per the "alignment must match the paper" rule, scale_shift on a
+dataset with outdoor far-depth was the bug.
+
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 
 Cache key in `src/plumbline/runner.py` `_predict_with_cache` is

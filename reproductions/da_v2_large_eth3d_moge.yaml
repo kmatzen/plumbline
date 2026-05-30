@@ -13,7 +13,11 @@ model:
   kwargs:
     variant: large
 
-scale_alignment: scale_shift
+# scale_shift_clamped = MoGe's eval protocol (moge/test/metrics.py); ETH3D's
+# outdoor scenes blow up mean AbsRel under plain scale_shift (a few far-depth
+# pixels invert to huge aligned depths). Matches the sibling DIODE/KITTI
+# MoGe-eval cells. See docs/DISCREPANCIES.md D30.
+scale_alignment: scale_shift_clamped
 device: cuda:0
 
 paper_reference:
