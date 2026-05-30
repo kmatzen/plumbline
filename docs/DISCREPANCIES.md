@@ -1231,6 +1231,52 @@ its source, ships the adapter's N=1 `F(I, I)` branch (v1.1) that the family
 depends on, and makes the recipe gap visible / reproducible. Same value
 proposition as CUT3R's three D24 cells.
 
+### D29 · DA-V2 native-DIODE Table-2 cells off-paper on `domain=both` — outdoor preprocessing gap   🔬 INVESTIGATED 2026-05-29
+
+End-to-end GPU run (H100, 2026-05-29) of the three `da-v2-{small,base,large}-diode-native`
+cells (protocol `diode_dav2`, native `diode` loader, `scale_shift`, depth_clip
+`[1e-3, 50]`, `domain=both`), against Depth Anything V2's own Table 2 DIODE
+column (Yang et al. 2024, arXiv:2406.09414): ViT-S 0.073 / ViT-B 0.068 / ViT-L 0.066.
+
+| cell | observed AbsRel | paper | Δ | n | match |
+|---|---|---|---|---|---|
+| da-v2-small-diode-native | **0.2196** | 0.073 | +201 % | 771 | ❌ |
+| da-v2-base-diode-native  | **0.2182** | 0.068 | +221 % | 771 | ❌ |
+| da-v2-large-diode-native | **0.2142** | 0.066 | +225 % | 771 | ❌ |
+
+**Diagnosis (per-sample domain split of the same run, no extra GPU).** The
+combined number is entirely driven by the outdoor split:
+
+| split | n | mean AbsRel (ViT-S) |
+|---|---|---|
+| indoors | 325 | **0.0720** (≈ paper 0.073, −1.4 %) |
+| outdoor | 446 | **0.3271** |
+
+The indoor slice reproduces DA-V2's DIODE number almost exactly — confirming the
+model, weights (`source="paper"` + `$DAV2_ROOT`), and indoor recipe are correct
+(it's the same config that matched `da-v2-small-diode-indoor` at 0.0722). The
+*native* `diode_dav2` outdoor handling is the divergence: DIODE outdoor spans
+0–350 m with sky, and `scale_shift`-in-disparity + a hard `[1e-3, 50]` m clip
+does not reproduce whatever DA-V2's eval did on outdoor.
+
+**Corroboration that outdoor *can* be done right:** the MoGe-bundle DA-V2 DIODE
+cell `da-v2-large-diode` (also `domain=both`, 771 samples, via `diode-moge-eval`
++ MoGe's homographic warp / affine-invariant-disparity) matched at **0.0529** vs
+MoGe's reported 0.0533. So MoGe's preprocessing tames outdoor; the native
+protocol's does not.
+
+**Verdict:** ⚠️ off-paper, protocol gap — NOT a model/adapter bug and NOT tuned.
+Two readings, both consistent with the data and neither verifiable without
+DA-V2's own (unreleased) zero-shot eval script: (a) DA-V2's Table 2 DIODE number
+is effectively indoor-only / outdoor-capped; (b) it is combined but under a
+different outdoor depth treatment than `[1e-3, 50]`-clip. The `diode_dav2`
+protocol comment already flagged the clip as the "first knob," but widening it
+makes outdoor *worse* (more far returns), so the clip is not the lever. Left the
+three jobs `pending`; YAMLs/protocol unchanged (per the no-tune rule). Result
+JSONs: `s3://plumbline-bench/runs/backlog_20260529/results/`. The indoor cell
+(`da-v2-small-diode-indoor`, value:null informational) remains the trustworthy
+native-DIODE DA-V2 reference.
+
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 
 Cache key in `src/plumbline/runner.py` `_predict_with_cache` is
