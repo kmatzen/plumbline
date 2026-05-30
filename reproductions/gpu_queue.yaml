@@ -643,3 +643,62 @@ jobs:
       DUSt3R is not a dynamic-scene model — the entire reason MonST3R
       exists. Paper's 0.0808 must come from per-seq LAD2 or similar
       (D27 pattern, paper-private). Nothing to re-run.
+
+  # ============================================================================
+  # COVERAGE EXPANSION CANDIDATES (identified 2026-05-30, post mono-depth sweep)
+  # ----------------------------------------------------------------------------
+  # NOT queued as runnable jobs: each needs either a paper-target PDF audit
+  # (per reproductions/AUDIT.md — do NOT pin numbers from WebFetch; the repo has
+  # been bitten by fabricated tables) and/or new harness code. Listed in
+  # priority order (value ÷ effort). The 2026-05-29/30 session cleared every
+  # verified-target mono-depth cell that had staged data, so further growth means
+  # NEW (model,dataset) cells. All MoGe-eval bundles + Sintel are now on S3.
+  #
+  # TIER A — proven loader pattern, data fetchable, just needs YAMLs + a Table-3
+  #          PDF audit. HIGHEST value/effort. The MoGe eval bundle
+  #          (Ruicheng/monocular-geometry-evaluation) ships 10 datasets; we have
+  #          reproduced 6 (NYU/KITTI/DIODE/ETH3D/GSO/iBims). The 4 NOT yet done
+  #          are clean in-pattern adds via a `<ds>-moge-eval` loader cloned from
+  #          eth3d-moge-eval (nested .index.txt + MoGe FoV-warp + scale_shift_clamped):
+  #   * DDAD-moge   (outdoor driving)  — moge-1 + da-v2-L rows, MoGe Table 3
+  #   * Spring-moge (synthetic, hi-res) — moge-1 + da-v2-L rows, MoGe Table 3
+  #   * Sintel-moge (synthetic)        — moge-1 + da-v2-L rows, MoGe Table 3.
+  #     NB also unblocks a clean Sintel mono-depth path distinct from the
+  #     native `sintel` loader (which depth-pro-sintel/monst3r-sintel use).
+  #   * HAMMER-moge (transparent/specular materials) — moge-1 + da-v2-L rows.
+  #   Effort: ~1 loader (copy eth3d_moge_eval.py, set width/height from MoGe
+  #   all_benchmarks.json per dataset) + 1 protocol + N YAMLs. Risk: low
+  #   (pattern validated this session). Gate: PDF-audit the MoGe Table 3 cells.
+  #
+  # TIER B — more MoGe-Table-3 BASELINE ROWS on the already-staged bundles
+  #          (GSO/iBims/ETH3D/DIODE/KITTI). MoGe Table 3 re-evaluates several
+  #          baselines; we did the DA-V2 + MoGe rows. If the table also pins
+  #          Metric3D-v2 / DA3 / Marigold / UniDepth on these columns, each is a
+  #          new ✅ candidate reusing staged data + the proven moge-eval loaders.
+  #          Gate: PDF-audit which baseline rows × columns the table actually has.
+  #
+  # TIER C — needs a NEW loader (medium effort), targets already known:
+  #   * DA-V2 own-Table-2 ETH3D mono-depth (S 0.142 / B 0.137 / L 0.131,
+  #     verified_pdf) — needs a NATIVE-ETH3D MiDaS-protocol mono-depth loader
+  #     (native `eth3d` is chamfer-only; `eth3d-moge-eval` is MoGe's preprocessing
+  #     → MoGe's numbers, not DA-V2's own). Same gap noted for DA-V2 Sintel below.
+  #   * Depth Pro Table 1 remaining columns → Depth Pro's FIRST ✅ (sintel is
+  #     off-paper, D-pro experiment). ETH3D δ₁ 0.415, Booster, Middlebury,
+  #     NuScenes, Sun-RGBD — metric depth (no alignment). Needs metric loaders
+  #     (a metric ETH3D mono-depth loader from the native set is the cheapest
+  #     start; reuses $ETH3D_ROOT poses+depth).
+  #
+  # TIER D — experiments on data we ALREADY staged (no new loader), but the
+  #          paper protocol is under-specified → resolve the knob, then audit:
+  #   * depth-anything-v2-sintel (value:null today): DA-V2 Table 2 Sintel 0.487,
+  #     pass (final/clean) + alignment unspecified. Sintel now staged → runnable.
+  #   * depth-pro-sintel (D-pro): δ₁ 0.2418 vs 0.400 — resolve pass_name +
+  #     max_depth against Depth Pro's released eval before re-pinning.
+  #
+  # TIER E — blocked on DATA (already represented above as blocked jobs):
+  #   * RealEstate10K pose ×3 (YouTube scraping) · ScanNet/ScanNet-1500 (ToS).
+  #
+  # NOTE: MoGe-2 ViT-L is NOT a per-dataset expansion target — the MoGe-2 paper
+  # only publishes ViT-L as a 10-dataset average (per-dataset is ViT-Base
+  # ablation, Table B.4). MoGe-2 per-dataset cells would be informational only.
+  # ============================================================================
