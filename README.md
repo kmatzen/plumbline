@@ -137,11 +137,12 @@ authoritative 32-cell matrix:
   PatchmatchNet filter); residual ~2 × gap is upstream-blocked. Run
   to confirm the structural correctness, not as a paper-match. Set
   `$DTU_ROOT` and run.
-- `depth-anything-v2-sintel` — Sintel loader works on the public RGB
-  bundle. (Sintel depth + camera archives turned out to be direct
-  downloads, not auth-gated — now staged on S3; see GPU_RUNBOOK. The
-  first metric-depth Sintel run, `depth-pro-sintel`, is off-paper at
-  δ₁ 0.2418 vs 0.400 — an open experiment, see DISCREPANCIES.md.)
+- **DA-V2 Table 2 native ETH3D / Sintel** — staged and run end-to-end; **parked
+  OFF-PAPER** (~30–52 % *under* paper; MoGe-bundle cells on same datasets still
+  ✅). Return notes: [`docs/ETH3D_DAV2_TABLE2_HANDOFF.md`](docs/ETH3D_DAV2_TABLE2_HANDOFF.md),
+  [`docs/SINTEL_DAV2_TABLE2_HANDOFF.md`](docs/SINTEL_DAV2_TABLE2_HANDOFF.md).
+- `depth-pro-sintel` — Depth Pro δ₁ **0.242** vs **0.400** (metric depth; separate
+  from DA-V2 native Sintel above).
 
 ## Documentation
 

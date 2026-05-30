@@ -358,8 +358,12 @@ jobs:
   # --- New MODEL coverage: Depth Pro on Sintel (metric δ₁, NO alignment).
   #     Depth Pro's first paper-match candidate (yaml landed 2026-05-28). ---
   - name: depth-pro-sintel
-    status: pending
+    status: blocked
     priority: 6
+    blocked_on: >
+      Depth Pro Table 1 Sintel δ₁ OFF-PAPER (0.242 vs 0.400, metric, no alignment).
+      Re-run 2026-05-30 with staged depth_pro.pt unchanged. Upstream ml-depth-pro
+      ships boundary metrics only — no Sintel eval script. Do not tune YAML.
     paper_target: "Depth Pro Table 1 — Sintel δ₁ 0.400 (metric, no alignment; verified_pdf 2026-05-28)"
     primary_metric: delta_1
     datasets: [sintel]
@@ -368,10 +372,9 @@ jobs:
     requires_env: [SINTEL_ROOT]
     extras: "plumbline install depth-pro; download depth_pro.pt → ~/.cache/plumbline/weights/depth-pro/ (Apple CDN, see adapter docstring); Sintel depth+camera+images training archives from files.is.tue.mpg.de (no auth, NOT actually gated)"
     notes: >
-      ⚠️ OFF-PAPER 2026-05-30 (H100): δ₁ 0.2418 vs 0.400 with inline final/max_depth
-      70. YAML now uses protocol sintel_dav2 (same sky mask). depth_pro.pt not
-      on pod yet — re-run after staging weights. JSON:
-      s3://plumbline-bench/runs/backlog_20260529/results/.
+      ⚠️ OFF-PAPER 2026-05-30 (H100, 1064/1064): δ₁ 0.2418 vs 0.400 under
+      protocol sintel_dav2 (final pass, max_depth 70, sky mask). Weights confirmed
+      on pod. JSON: /mnt/localssd/plumbline-work/runs/depth_pro_sintel_20260530T220902Z.json.
 
   # --- New PROTOCOL coverage: DA-V2 own Table 2 on DIODE (native loader,
   #     affine-inv disparity) across variants S/B/L. Recipe already validated
@@ -711,7 +714,11 @@ jobs:
   #          Gate: PDF-audit which baseline rows × columns the table actually has.
   #
   - name: da-v2-small-eth3d-native
-    status: pending
+    status: blocked
+    blocked_on: >
+      D33 — OFF-PAPER native ETH3D Table 2 (harness fixed; ~32 % under paper).
+      See docs/ETH3D_DAV2_TABLE2_HANDOFF.md. Do not re-queue until upstream eval
+      recipe is found — not a YAML tune knob.
     priority: 6
     paper_target: "DA-V2 Table 2 — ETH3D ViT-S AbsRel 0.142 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
@@ -721,11 +728,13 @@ jobs:
     requires_env: [ETH3D_ROOT]
     extras: "base install; native ETH3D train scenes (dslr_undistorted + scan_eval). First run builds per-view GT render caches."
     notes: >
-      D31 fix ✅. 8–9 scene interim (2026-05-30): **0.1002** vs 0.142 (−29 %, 289–320
-      frames). Converging as harder scenes stage (was −47 % on 3-scene). JSON:
-      da_v2_small_eth3d_native_8scene_20260530.json. Full 13-scene still pending.
+      D31 fix ✅. ⚠️ OFF-PAPER 13-scene definitive (2026-05-30, 454 frames, 13 scenes):
+      **0.1012** vs 0.142 (−29 %). Variant order L<B<S holds; gap stable vs 8–12 scene
+      interim — not a staging bug. JSON: da_v2_small_eth3d_native_13scene_20260530.json.
+      S3: tier_c_eth3d_13scene_20260530/results/.
   - name: da-v2-base-eth3d-native
-    status: pending
+    status: blocked
+    blocked_on: "D33 — same as da-v2-small-eth3d-native; docs/ETH3D_DAV2_TABLE2_HANDOFF.md"
     priority: 6
     paper_target: "DA-V2 Table 2 — ETH3D ViT-B AbsRel 0.137 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
@@ -735,10 +744,11 @@ jobs:
     requires_env: [ETH3D_ROOT]
     extras: "Same $ETH3D_ROOT + eth3d_dav2 as da-v2-small-eth3d-native."
     notes: >
-      D31 fix ✅. 8–9 scene interim: **0.0875** vs 0.137 (−36 %). JSON:
-      da_v2_base_eth3d_native_8scene_20260530.json.
+      D31 fix ✅. ⚠️ OFF-PAPER 13-scene (454 fr): **0.0936** vs 0.137 (−32 %). JSON:
+      da_v2_base_eth3d_native_13scene_20260530.json.
   - name: da-v2-large-eth3d-native
-    status: pending
+    status: blocked
+    blocked_on: "D33 — same as da-v2-small-eth3d-native; docs/ETH3D_DAV2_TABLE2_HANDOFF.md"
     priority: 6
     paper_target: "DA-V2 Table 2 — ETH3D ViT-L AbsRel 0.131 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
@@ -748,13 +758,19 @@ jobs:
     requires_env: [ETH3D_ROOT]
     extras: "Same staging; GT caches shared across variants once rendered."
     notes: >
-      D31 RESOLVED loader bug (RGB/GT misalignment). 8–9 scene interim (2026-05-30):
-      **0.0837** vs 0.131 (−36 %, 320 frames; was 0.3302 pre-fix / 0.0679 on
-      3-scene). Variant order L<B<S holds. Still pending: full 13-scene mean.
-      JSON: da_v2_large_eth3d_native_8scene_20260530.json (+ earlier fix JSONs).
-      MoGe Table-3 cell 0.0473 ✅ is separate.
+      D31 RESOLVED loader bug (RGB/GT misalignment). ⚠️ OFF-PAPER 13-scene (454 fr):
+      **0.0888** vs 0.131 (−32 %; was 0.3302 pre-fix). L<B<S holds. Remaining delta
+      likely protocol (sparse official `*_depth.7z` vs dense z-buffer @518; D33).
+      All-`dslr_scan_eval` ViT-L re-run: **0.0782** vs 0.131 (−40 %, worse match).
+      JSON: da_v2_large_eth3d_native_13scene_dslr_eval_20260530.json. Do not tune YAML.
+      JSON: da_v2_large_eth3d_native_13scene_20260530.json. MoGe Table-3 0.0473 ✅
+      is separate (eth3d_moge bundle).
   - name: depth-anything-v2-sintel
-    status: pending
+    status: blocked
+    blocked_on: >
+      D32 — OFF-PAPER native Sintel Table 2 (AbsRel 0.232 vs 0.487; clean pass
+      does not explain). See docs/SINTEL_DAV2_TABLE2_HANDOFF.md. MoGe-bundle cell
+      matches — different protocol.
     priority: 6
     paper_target: "DA-V2 Table 2 — Sintel ViT-L AbsRel 0.487 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel

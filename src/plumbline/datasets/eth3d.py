@@ -63,11 +63,60 @@ from plumbline.datasets.registry import register_dataset
 
 __all__ = [
     "ETH3DDataset",
+    "load_eth3d_official_depth_map",
+    "official_depth_valid_mask",
     "parse_colmap_cameras",
     "parse_colmap_images",
     "parse_scan_alignment_mlp",
     "quat_to_rot",
 ]
+
+
+def load_eth3d_official_depth_map(
+    path: Path | str,
+    *,
+    height: int | None = None,
+    width: int | None = None,
+) -> NDArray[np.float32]:
+    """Load an ETH3D ``ground_truth_depth/dslr_images/*.JPG`` depth dump.
+
+    Files are row-major ``float32`` (one value per pixel), **not** JPEG.
+    Invalid pixels are ``inf`` in the archive; returned as ``nan``.
+    Shape is ``(height, width)`` matching the **distorted** DSLR resolution
+    (not the undistorted ``dslr_calibration_undistorted`` sizes). When
+    ``height``/``width`` are omitted, infer from the float count (ETH3D
+    high-res train scenes are 4032×6048 or 6048×4032).
+    """
+    path = Path(path)
+    arr = np.fromfile(path, dtype=np.float32)
+    if height is None or width is None:
+        height, width = _infer_eth3d_official_depth_hw(arr.size, name=path.name)
+    expected = height * width
+    if arr.size != expected:
+        raise ValueError(
+            f"ETH3D depth size mismatch for {path.name}: got {arr.size} floats, "
+            f"expected {expected} ({height}x{width})"
+        )
+    depth = arr.reshape(height, width).astype(np.float32)
+    depth[~np.isfinite(depth)] = np.nan
+    return depth
+
+
+def _infer_eth3d_official_depth_hw(
+    num_floats: int, *, name: str = ""
+) -> tuple[int, int]:
+    """Infer (H, W) for an official ETH3D depth dump from its pixel count."""
+    for h, w in ((4032, 6048), (6048, 4032)):
+        if h * w == num_floats:
+            return h, w
+    raise ValueError(
+        f"cannot infer ETH3D official depth shape for {name!r}: {num_floats} floats"
+    )
+
+
+def official_depth_valid_mask(depth: NDArray[np.floating[Any]]) -> NDArray[np.bool_]:
+    """Valid pixels for ETH3D official rendered depth (finite, positive, in-range)."""
+    return np.isfinite(depth) & (depth > 0) & (depth < 1e6)
 
 
 def _resize_rgb_uint8(image: NDArray[np.uint8], *, height: int, width: int) -> NDArray[np.uint8]:
@@ -156,11 +205,10 @@ class ETH3DDataset(Dataset):
             records = load_manifest(manifest_path)
             cached_scenes = {r["scene"] for r in records}
             missing_on_disk = on_disk_scenes - cached_scenes
-            if missing_on_disk:
-                # New scenes since the manifest was last written. Re-scan
-                # the full set so the cache reflects current disk state.
-                # (We don't try to incrementally merge — full re-scan is
-                # cheap relative to inference.)
+            if missing_on_disk or self._manifest_gt_paths_stale(records):
+                # Re-scan when new scenes appear on disk, or when official
+                # ``dslr_scan_eval`` GT is staged after an earlier manifest
+                # that only had ``scan_clean`` (D33 / DA-V2 Table-2 fidelity).
                 records = list(self._scan(None))
                 save_manifest(manifest_path, records)
         else:
@@ -206,6 +254,25 @@ class ETH3DDataset(Dataset):
         return len(self._records)
 
     # -- scanning --------------------------------------------------------
+
+    def _manifest_gt_paths_stale(self, records: list[dict[str, Any]]) -> bool:
+        """True if any scene's cached GT ply paths differ from on-disk preference."""
+        seen: set[str] = set()
+        for rec in records:
+            scene = rec["scene"]
+            if scene in seen:
+                continue
+            seen.add(scene)
+            current = [
+                str(p.relative_to(self.root))
+                for p in _resolve_scan_clean_plys(self.root / scene)
+            ]
+            cached = rec.get("point_cloud_plys")
+            if cached is None and rec.get("point_cloud_ply"):
+                cached = [rec["point_cloud_ply"]]
+            if current != cached:
+                return True
+        return False
 
     def _scan(self, scenes: list[str] | None) -> Iterator[dict[str, Any]]:
         scene_dirs = sorted(p for p in self.root.iterdir() if p.is_dir())
@@ -411,9 +478,15 @@ class ETH3DDataset(Dataset):
         if scene in self._pv_depth_cache:
             return self._pv_depth_cache[scene]
 
+        gt_tag = (
+            "dslr_eval"
+            if ply_rels and "dslr_scan_eval" in ply_rels[0]
+            else "scan_clean"
+        )
         cache_path = (
-            self.root / ".plumbline_manifest"
-            / f"eth3d_pv_depth_{scene}_max{self.pv_render_max_dim}_r{self.pv_splat_radius}.npz"
+            self.root
+            / ".plumbline_manifest"
+            / f"eth3d_pv_depth_{scene}_max{self.pv_render_max_dim}_r{self.pv_splat_radius}_{gt_tag}.npz"
         )
         if cache_path.exists():
             with np.load(cache_path, allow_pickle=True) as f:

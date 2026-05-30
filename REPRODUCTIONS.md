@@ -53,6 +53,22 @@ Sintel + Bonn lineage cells (also MonST3R Table 3 single-frame) land as **ℹ️
 - **MonST3R-Bonn** (`bonn_dust3r_lineage_single`, 5 sequences × all RGB frames, per-frame median, max_depth=70): ℹ️ AbsRel **0.0654** vs paper 0.076 _(14.0 % off, better; companion δ₁ 0.960 vs 0.939, also off, better)_ — **D27 RESOLVED 2026-05-26**: single-record diff against upstream `depth_metric.ipynb` shows the paper's 0.076 is produced by **per-sequence scale+shift LAD2** alignment (`depth_evaluation(..., max_depth=70, align_with_lad2=True)`, weighted-mean across 5 seqs), not the paper §4.2 text's claimed "per-frame median scaling". plumbline is paper-text-faithful; paper number reflects upstream code recipe. Same shape as D9 / D17 / D24 (paper-private eval recipes). Re-scoring on MonST3R's exact `rgb_110/depth_110` subset already ruled out frame-subset (0.0635). See `docs/DISCREPANCIES.md` D27.
 - **DUSt3R-Bonn** (`bonn_dust3r_lineage_single`, same protocol as above): ℹ️ AbsRel **0.1337** vs paper **0.0808** _(65.4 % off worse; per-seq split: balloon2 0.0785, person_tracking2 0.0455 — both at/under paper; crowd2 0.184, crowd3 0.152, synchronous 0.182 — the three dynamic-content seqs drive the aggregate up). **D28 finding 2026-05-28**: DUSt3R is not a dynamic-scene model (that's the premise of MonST3R), and per-frame median-scale-only cannot compensate for systematic dynamic-region depth errors the way a per-seq scale+shift LAD2 recipe (D27 pattern, what MonST3R's notebook uses) does. Same model + recipe family as the (matching) MonST3R-Bonn cell; the residual delta is the recipe choice, not the model. The paper's 0.0808 is paper-private — §4.3 doesn't specify the indoor scoring recipe. See `docs/DISCREPANCIES.md` D28.
 
+**DA-V2 Table 2 native benchmarks (parked 2026-05-30, D31/D32/D33)** — harness runs complete;
+**do not promote to ✅** (reads much better than paper; likely upstream eval recipe, not adapter bug).
+MoGe-bundle Table-3 cells on the same datasets **still ✅** (different preprocessing).
+
+| Reproduction | Paper AbsRel | Observed | Δ vs paper | Handoff |
+|---|---|---|---|---|
+| `da-v2-small-eth3d-native` | 0.142 | **0.1012** | −29 % | [ETH3D](docs/ETH3D_DAV2_TABLE2_HANDOFF.md) |
+| `da-v2-base-eth3d-native` | 0.137 | **0.0936** | −32 % | [ETH3D](docs/ETH3D_DAV2_TABLE2_HANDOFF.md) |
+| `da-v2-large-eth3d-native` | 0.131 | **0.0888** (all `dslr_scan_eval`: **0.0782**) | −32 % / −40 % | [ETH3D](docs/ETH3D_DAV2_TABLE2_HANDOFF.md) |
+| `depth-anything-v2-sintel` | 0.487 | **0.2321** (`clean` pass **0.2224**) | −52 % | [Sintel](docs/SINTEL_DAV2_TABLE2_HANDOFF.md) |
+| `da-v2-small-diode-native` | 0.073 | **0.2196** | +201 % | D29 — outdoor split |
+| `da-v2-base-diode-native` | 0.068 | **0.2182** | +221 % | D29 |
+| `da-v2-large-diode-native` | 0.066 | **0.2142** | +225 % | D29 |
+
+Compare: `da-v2-large-eth3d-moge` **0.0473** ✅ · `da-v2-large-sintel-moge` **0.2139** ✅.
+
 **Adapter v1.0 → v1.1 (2026-05-26, eval-mono-depth-avg null-result):** the suspected single-frame fix — averaging the two symmetric pair predictions (`pred1.pts3d.mean(dim=0)`, MonST3R `eval_mono_depth` shape) instead of routing through the MASt3R-shared PairViewer — was implemented and re-run across all four cells. **Result: all four cells moved by <0.005 AbsRel**, ruling out avg-pred as the cause of the Sintel/Bonn deltas. The v1.1 path is still preserved (it matches MonST3R's upstream eval code verbatim, making the adapter strictly more faithful). The Bonn delta itself was closed shortly after by **D27 (2026-05-26)** via a single-record code-level diff against upstream `depth_metric.ipynb`: paper §4.2 text says "per-frame median scaling" but the actual notebook scores via per-sequence scale+shift LAD2 (`align_with_lad2=True`, valid-pixel-weighted across 5 seqs) — paper-text-vs-code mismatch, not a plumbline bug. Same finding also explains the Sintel direction (per-seq pixel-weighted aggregation dilutes the `temple_2` outlier the equal-frame plumbline mean amplifies). See `docs/DISCREPANCIES.md` D27.
 
 **Video benchmark (new 2026-05-23):** the **Bonn RGB-D Dynamic** loader

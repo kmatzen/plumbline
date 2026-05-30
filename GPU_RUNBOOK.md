@@ -27,11 +27,11 @@ Use the listing to size the box: sum the `GB` column for the jobs you
 intend to run (+ weights + cache + 20 % headroom) against the rental
 disk before booking. As of 2026-05-30 the CO3Dv2 pose cells and the
 mono-depth coverage backlog (GSO / iBims-1 / DIODE-moge / KITTI-moge /
-ETH3D-moge, all PDF-verified) are **done** (16 done, 5 pending). The 5
-pending are documented off-paper findings, not fresh runs:
-`da-v2-large-ibims1`, `da-v2-{small,base,large}-diode-native` (D29), and
-`depth-pro-sintel` (D-pro Sintel δ₁ experiment) — see their queue `notes:`
-and docs/DISCREPANCIES.md before re-running.
+ETH3D-moge / iBims-1, all PDF-verified) are **done**. Remaining queue work is
+mostly **blocked** off-paper investigations (native ETH3D/Sintel Table 2 →
+handoff docs; DIODE native D29 outdoor) plus **`depth-pro-sintel`** (Depth Pro
+Table 1 δ₁ experiment — upstream ships no Sintel eval script). Use
+`plumbline queue --include-blocked` before re-running anything.
 
 ## Hard constraints
 
@@ -214,11 +214,11 @@ itself — `DIODE_MOGE_ROOT/DIODE/`, `KITTI_MOGE_ROOT/KITTI/`,
 | GSO | 2 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'GSO.zip' --local-dir /tmp/moge && unzip /tmp/moge/GSO.zip -d $GSO_ROOT/..` |
 | DIODE val | 2.8 GB | `curl -L -O http://diode-dataset.s3.amazonaws.com/val.tar.gz && tar xzf val.tar.gz -C $DIODE_ROOT/..` |
 | ETH3D 3-scene (chamfer) | 8 GB | Per scene: `curl -L --fail -O https://www.eth3d.net/data/${scene}_dslr_undistorted.7z` and `..._scan_clean.7z`, extract with `7z x -y`. Scenes: `courtyard delivery_area facade`. Needs `apt install p7zip-full`. This is `$ETH3D_ROOT` (native), NOT the MoGe mono-depth bundle. |
-| ETH3D 13-scene train (DA-V2 Table 2) | ~22 GB | `./scripts/stage-eth3d-train-scenes.sh` (or pass scene names). Downloads `dslr_undistorted` + `scan_clean` per scene from eth3d.net. S3 may only cache the 3-scene subset — stage the rest for an apples-to-apples Table-2 cross-scene mean. Native mono-depth uses `eth3d_dav2` (`resize_images_to_pv_render: true`; see D31). |
+| ETH3D 13-scene train (DA-V2 Table 2) | ~22 GB + eval extras | Staged ✅; harness OFF-PAPER (~−32 % under paper). **Parked** — return: [`docs/ETH3D_DAV2_TABLE2_HANDOFF.md`](docs/ETH3D_DAV2_TABLE2_HANDOFF.md) (D31/D33). Probe: `scripts/probe-eth3d-official-depth.py`. |
 | ETH3D MoGe-eval bundle | 1.4 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'ETH3D*' --local-dir /tmp/moge && unzip /tmp/moge/ETH3D.zip -d $ETH3D_MOGE_ROOT` (nested `ETH3D/<scene>/<frame>/`, 453 samples; mono-depth, distinct from chamfer ETH3D). |
 | DDAD MoGe-eval bundle | 0.6 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'DDAD*' --local-dir /tmp/moge && unzip /tmp/moge/DDAD.zip -d $DDAD_MOGE_ROOT` (1000 samples, 1400×700 warp; Tier-A Table 3). |
 | Sintel MoGe-eval bundle | 0.5 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'Sintel*' --local-dir /tmp/moge && unzip /tmp/moge/Sintel.zip -d $SINTEL_MOGE_ROOT` (1064 frames, 872×436; MoGe Table 3 — NOT `$SINTEL_ROOT`). |
-| Sintel (depth+cam+RGB) | 6 GB | See § "Sintel — NOT auth-gated" above (two direct-download zips, no registration). Native tree for Depth Pro / MonST3R, not MoGe-bundle eval. |
+| Sintel (depth+cam+RGB) | 6 GB | See § "Sintel — NOT auth-gated" below. Native DA-V2 Table 2 **parked** (OFF-PAPER: ViT-L AbsRel **0.232** vs **0.487**; `clean` pass **0.222** — see [`docs/SINTEL_DAV2_TABLE2_HANDOFF.md`](docs/SINTEL_DAV2_TABLE2_HANDOFF.md)). Probe: `scripts/probe-sintel-pass.py`. |
 | DTU MVS-22 | 7 GB | `gdown 135oKPefcPTsdtLRzoDAQtPpHuoIrpRI_ -O dtu_test.zip && unzip dtu_test.zip` (MVSNet test, ~554 MB) + `aria2c -x 16 -s 16 https://roboimagedata2.compute.dtu.dk/data/MVS/Points.zip` (GT clouds, ~7 GB). **Do NOT fetch SampleSet.zip — that's a 2-scan demo.** |
 | 7-Scenes | 12 GB | Per scene from `http://download.microsoft.com/download/2/8/5/28564B23-0828-408F-8631-23B1EFF1DAC8/${scene}.zip`, then unzip nested `seq-*.zip`. Scenes: `chess fire heads office pumpkin redkitchen stairs`. |
 

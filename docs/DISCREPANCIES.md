@@ -1313,7 +1313,7 @@ DA-V2 re-eval convention, same as the other MoGe-bundle DA-V2-L cells) landed
 **0.0348 vs 0.0348** (exact, MATCH). Companion `moge-vitl-ibims1` already
 matched under plain `scale_shift` (indoor-only set).
 
-### D31 · DA-V2 native-ETH3D Table-2 — RGB/GT resolution misalignment (fixed); 3-scene subset still under paper   ✅ FIXED / 🔎 OPEN subset 2026-05-30
+### D31 · DA-V2 native-ETH3D Table-2 — RGB/GT misalignment (fixed); full 13-scene still under paper   ✅ FIXED / 🔎 OPEN protocol 2026-05-30
 
 First native ETH3D smoke (`da-v2-large-eth3d-native`, 3 scenes on S3, 158
 frames) returned AbsRel **0.330** vs paper **0.131** (+152 %). Root cause was
@@ -1352,12 +1352,110 @@ scenes enter the mean (meadow per-scene ~0.30):
 | da-v2-large-eth3d-native | **0.0882** (4 scenes / 173 fr) | 0.131 | −33 % |
 
 Still outside ±5 %, but the direction confirms the earlier miss was mostly
-subset bias + the RGB/GT bug, not a wrong model. **Verdict:** harness + D31 fix ✅;
-paper-match gated on full 13-scene staging (`scripts/stage-eth3d-train-scenes.sh`).
-JSONs: `da_v2_*_eth3d_native_*scene_20260530.json` on localssd + S3
-`tier_c_d31_20260530/results/`. Queue stays `pending` until 13-scene run.
+subset bias + the RGB/GT bug, not a wrong model.
 
-### D32 · DA-V2 native-Sintel Table-2 under paper with MonST3R-lineage sky mask   🔬 INVESTIGATED 2026-05-30
+**Definitive 13-scene run (454 frames, all train scenes staged, H100 2026-05-30):**
+
+| cell | observed AbsRel | paper | Δ |
+|---|---|---|---|
+| da-v2-small-eth3d-native | **0.1012** | 0.142 | −29 % |
+| da-v2-base-eth3d-native | **0.0936** | 0.137 | −32 % |
+| da-v2-large-eth3d-native | **0.0888** | 0.131 | −32 % |
+
+Gap barely moved vs the 8–12 scene interim (~−29–32 %); adding harder scenes did
+not close the paper numbers. Variant ordering L < B < S matches Table 2.
+
+**Verdict:** harness + D31 loader fix ✅; paper-match still **OPEN** (protocol
+delta, same shape as D32 native-Sintel). JSONs:
+`da_v2_*_eth3d_native_13scene_20260530.json` on localssd + S3
+`tier_c_eth3d_13scene_20260530/results/` (also `tier_c_d31_20260530` subset runs).
+Queue: `pending` / OFF-PAPER — do not tune YAML per GPU_RUNBOOK.
+
+### D33 · DA-V2 native-ETH3D — GT source + eval recipe still diverge from ETH3D official   🔎 PARKED 2026-05-30
+
+**Return checklist:** [`docs/ETH3D_DAV2_TABLE2_HANDOFF.md`](ETH3D_DAV2_TABLE2_HANDOFF.md)
+
+After the D31 RGB/GT alignment fix and the definitive 13-scene run (454 frames),
+AbsRel stays ~29–32 % **under** paper (ViT-L **0.0888** vs **0.131**). Variant
+ordering is correct; the gap is not sample-count or staging incompleteness.
+
+**GT source audit (same run):**
+
+| GT on disk | scenes | frames | ViT-L mean AbsRel |
+|---|---|---|---|
+| `dslr_scan_eval` (official DSLR-visible) | 3 | 158 | **0.0679** |
+| `scan_clean` fallback only | 10 | 296 | **0.1000** |
+| all 13 | 454 | **0.0888** |
+
+Initial staging (`stage-eth3d-train-scenes.sh`) fetched `scan_clean` but not
+`dslr_scan_eval`; only courtyard / delivery_area / facade had eval GT from an
+earlier mirror. **`{scene}_dslr_scan_eval.7z` exists on eth3d.net for the other
+train scenes** — staging script updated to fetch it; loader now rescans the
+manifest when eval GT appears and tags per-view depth caches by GT source.
+
+**Remaining protocol deltas (likely dominant):**
+
+1. **Official ETH3D mono eval** uses pre-rendered `*_depth.7z` maps on
+   **distorted** images (sparse floats, infinity = invalid, occlusion masks).
+   Plumbline z-buffers MLP-aligned PLY into **undistorted** views at 518 px
+   (denser valid mask) — closer to VGGT Table-3 machinery than to the sparse
+   ETH3D depth dumps DA-V2 Table-2 may have used via MiDaS/DA-V1 lineage.
+2. Frame set: plumbline evaluates **every** COLMAP image (454). MoGe's
+   `.index.txt` lists **453** lines but the same **454** `scene/DSC_*` keys when
+   mapped from manifest image names — not a coverage gap (2026-05-30 inventory).
+
+**Re-run with all-`dslr_scan_eval` GT (ViT-L, 454 frames, H100 2026-05-30):**
+AbsRel **0.0782** vs paper **0.131** (−40 %, still MISMATCH). Moved **further
+under** paper vs the mixed-GT run (**0.0888**) — confirms official frustum-clipped
+GT is not the missing lever; the gap is upstream of PLY choice.
+
+JSON: `da_v2_large_eth3d_native_13scene_dslr_eval_20260530.json`. S3:
+`tier_c_eth3d_dslr_eval_20260530/results/`.
+
+**Official-depth probe (courtyard, ViT-L, 38 frames, 2026-05-30):**
+`scripts/probe-eth3d-official-depth.py` loads `ground_truth_depth/dslr_images`
+(float32, distorted 4032×6048) and compares to z-buffer `eth3d_dav2` on the
+**same undistorted RGB** preds (geometry intentionally mismatched — interim step).
+
+| GT source | mean AbsRel | valid pixels @518 |
+|---|---|---|
+| z-buffer (`eth3d_dav2`) | **0.0313** | **83.6 %** |
+| official depth (nearest→518) | **0.0222** | **15.0 %** |
+
+Official ETH3D depth is **much sparser** (~6× fewer evaluated pixels). Even
+with undistorted/distorted mismatch, AbsRel stays *below* z-buffer on this
+scene — so the remaining Table-2 gap is **not** explained by “we forgot the
+sparse mask.” The open item is **distorted `dslr_jpg` RGB + pixel-aligned
+official depth** (ETH3D doc + DA-V2 issue #281); issue reporter saw AbsRel
+~0.5 with a mis-sized pipeline vs paper ~0.13.
+
+Helpers: `load_eth3d_official_depth_map`, `official_depth_valid_mask` in
+`datasets/eth3d.py`. Log (undistorted misalign only):
+`$PLUMBLINE_WORK/runs/eth3d_official_depth_probe_courtyard.log`.
+
+**Distorted RGB + pixel-aligned official depth (courtyard, ViT-L, 38 frames,
+2026-05-30):** staged `courtyard_dslr_jpg.7z` (`images/dslr_images/`, 4032×6048,
+same grid as official depth). Extended `scripts/probe-eth3d-official-depth.py`.
+
+| Track | mean AbsRel | valid @518 |
+|---|---|---|
+| z-buffer (`eth3d_dav2` undistorted) | **0.0313** | **83.6 %** |
+| official + undistorted pred (misaligned) | 0.0222 | 15.0 % |
+| **official + distorted RGB (aligned)** | **0.0204** | **15.0 %** |
+| official + distorted RGB @518 | 0.0208 | 15.0 % |
+
+Pixel alignment does **not** move metrics toward paper **0.131** — courtyard
+stays ~6× **under** on the ETH3D-documented sparse-depth recipe. Full 13-scene
+harness at **0.0782** (`dslr_scan_eval` + z-buffer @518) is therefore unlikely
+to close via official depth dumps alone; remaining deltas are probably **frame
+inventory / aggregation** (454 COLMAP views vs MoGe 453, per-scene weighting) or
+undocumented DA-V2 eval code (issue #281: mis-sized resize → AbsRel ~0.5, not
+~0.13). Log:
+`$PLUMBLINE_WORK/runs/eth3d_official_depth_probe_distorted_courtyard.log`.
+
+### D32 · DA-V2 native-Sintel Table-2 under paper with MonST3R-lineage sky mask   🔎 PARKED 2026-05-30
+
+**Return checklist:** [`docs/SINTEL_DAV2_TABLE2_HANDOFF.md`](SINTEL_DAV2_TABLE2_HANDOFF.md)
 
 First native-Sintel run (`depth-anything-v2-sintel`) without `max_depth` included
 Sintel sky pixels (~1e5 m) and returned nonsense (AbsRel 64k). Added protocol
@@ -1371,8 +1469,14 @@ or DA-V2 §B benchmark detail), not a broken adapter. MoGe-bundle
 `/mnt/localssd/plumbline-work/runs/da_v2_sintel_native_fix_20260530.json`.
 
 Depth Pro on the same `sintel_dav2` protocol (metric, no alignment) still
-**δ₁ 0.242** vs **0.400** — unchanged from the pre-protocol run; pass/cap alone
-do not close the gap. See `depth-pro-sintel` queue notes.
+**δ₁ 0.2418** vs **0.400** (1064/1064, H100 2026-05-30, `depth_pro.pt` on pod) —
+unchanged from the pre-weight run; pass/cap alone do not close the gap. Upstream
+`ml-depth-pro` publishes boundary metrics only, not Sintel Table-1 eval. JSON:
+`depth_pro_sintel_20260530T220902Z.json`. Queue: `depth-pro-sintel` **blocked**.
+
+**Pass probe (2026-05-30, `scripts/probe-sintel-pass.py`, 1064 frames):** `final`
+**0.2321** vs `clean` **0.2224** (same `training/depth` GT) — `clean` is slightly
+*better*, not worse; pass name does not explain the −52 % gap vs paper.
 
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 

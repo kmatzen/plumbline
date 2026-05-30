@@ -27,6 +27,8 @@ from plumbline.datasets.dtu import (
 )
 from plumbline.datasets.eth3d import (
     ETH3DDataset,
+    load_eth3d_official_depth_map,
+    official_depth_valid_mask,
     parse_colmap_cameras,
     parse_colmap_images,
     quat_to_rot,
@@ -317,6 +319,38 @@ class TestETH3D:
         samples = list(ds)
         assert len(samples) == 4
         assert all(s.num_views == 1 for s in samples)
+
+    def test_load_eth3d_official_depth_map(self, tmp_path: Path) -> None:
+        depth_dir = tmp_path / "scene" / "ground_truth_depth" / "dslr_images"
+        depth_dir.mkdir(parents=True)
+        h, w = 4, 6
+        raw = np.array([1.0, 2.0, np.inf, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0], dtype=np.float32)
+        (depth_dir / "DSC_0001.JPG").write_bytes(raw.tobytes())
+        loaded = load_eth3d_official_depth_map(depth_dir / "DSC_0001.JPG", height=h, width=w)
+        assert loaded.shape == (h, w)
+        assert np.isnan(loaded[0, 2])
+        mask = official_depth_valid_mask(loaded)
+        assert mask.sum() == raw.size - 1
+
+    def test_manifest_rescans_when_dslr_scan_eval_staged(self, tmp_path: Path) -> None:
+        _write_fake_eth3d(tmp_path, scenes=1, views=2)
+        scene_dir = tmp_path / "scene_0"
+        clean = scene_dir / "scan_clean"
+        clean.mkdir(parents=True)
+        (clean / "scan1.ply").write_text(
+            "ply\nformat ascii 1.0\nelement vertex 1\nproperty float x\n"
+            "property float y\nproperty float z\nend_header\n0 0 1\n"
+        )
+        ds1 = ETH3DDataset(root=tmp_path, views_per_sample=1)
+        assert ds1._records[0]["point_cloud_plys"] == ["scene_0/scan_clean/scan1.ply"]
+        eval_dir = scene_dir / "dslr_scan_eval"
+        eval_dir.mkdir(parents=True)
+        (eval_dir / "scan1.ply").write_text(
+            "ply\nformat ascii 1.0\nelement vertex 1\nproperty float x\n"
+            "property float y\nproperty float z\nend_header\n0 0 2\n"
+        )
+        ds2 = ETH3DDataset(root=tmp_path, views_per_sample=1)
+        assert ds2._records[0]["point_cloud_plys"] == ["scene_0/dslr_scan_eval/scan1.ply"]
 
     def test_cache_is_scene_filter_independent(self, tmp_path: Path) -> None:
         # Regression: prior revision cached the scene-filtered scan, so a

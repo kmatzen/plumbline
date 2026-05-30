@@ -14,14 +14,43 @@ DEFAULT_SCENES=(
 SCENES=("${@:-${DEFAULT_SCENES[@]}}")
 
 for scene in "${SCENES[@]}"; do
-  if [[ -d "$ROOT/$scene/dslr_calibration_undistorted" ]]; then
-    echo "skip $scene (already staged)"
-    continue
-  fi
   echo "==> $scene"
-  for kind in dslr_undistorted scan_clean; do
+  kinds=(dslr_undistorted scan_clean dslr_scan_eval)
+  if [[ ! -d "$ROOT/$scene/dslr_calibration_undistorted" ]]; then
+    # Fresh scene: need images + scan_clean (+ eval GT when published).
+    :
+  else
+    # Scene already has calibration/images; only top up missing archives.
+    kinds=(dslr_scan_eval)
+    if [[ -d "$ROOT/$scene/dslr_scan_eval" ]] \
+      && [[ -d "$ROOT/$scene/ground_truth_depth" ]] \
+      && compgen -G "$ROOT/$scene/images/dslr_images/"'*.JPG' > /dev/null; then
+      echo "  skip (eval GT + official depth + distorted JPG present)"
+      continue
+    fi
+    if [[ ! -d "$ROOT/$scene/ground_truth_depth" ]]; then
+      kinds+=(dslr_depth)
+    fi
+    if [[ ! -d "$ROOT/$scene/images/dslr_images" ]]; then
+      kinds+=(dslr_jpg)
+    fi
+  fi
+  for kind in "${kinds[@]}"; do
+    if [[ "$kind" == dslr_scan_eval && -d "$ROOT/$scene/dslr_scan_eval" ]]; then
+      continue
+    fi
+    if [[ "$kind" == dslr_jpg ]] && compgen -G "$ROOT/$scene/images/dslr_images/"'*.JPG' > /dev/null; then
+      continue
+    fi
+    if [[ "$kind" != dslr_scan_eval && "$kind" != dslr_depth && "$kind" != dslr_jpg && -d "$ROOT/$scene/dslr_calibration_undistorted" ]]; then
+      continue
+    fi
     url="https://www.eth3d.net/data/${scene}_${kind}.7z"
     arc="$TMP/${scene}_${kind}.7z"
+    if ! curl -sfI -o /dev/null "$url"; then
+      echo "  skip $kind (not published for $scene)"
+      continue
+    fi
     if [[ ! -f "$arc" ]]; then
       curl -L --fail -o "$arc" "$url"
     fi
