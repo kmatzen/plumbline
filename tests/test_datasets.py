@@ -311,6 +311,13 @@ class TestETH3D:
             f"got {call_count['n']} calls"
         )
 
+    def test_views_per_sample_one_yields_one_view_samples(self, tmp_path: Path) -> None:
+        _write_fake_eth3d(tmp_path, scenes=1, views=4)
+        ds = ETH3DDataset(root=tmp_path, views_per_sample=1)
+        samples = list(ds)
+        assert len(samples) == 4
+        assert all(s.num_views == 1 for s in samples)
+
     def test_cache_is_scene_filter_independent(self, tmp_path: Path) -> None:
         # Regression: prior revision cached the scene-filtered scan, so a
         # single-scene open left a manifest that hid other scenes from a

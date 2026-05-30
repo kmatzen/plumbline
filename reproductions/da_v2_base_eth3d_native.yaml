@@ -1,0 +1,25 @@
+# Depth Anything V2 (base) on ETH3D — DA-V2's OWN Table 2.
+#
+# ViT-B companion. DA-V2 Table 2 ETH3D AbsRel 0.137 (verified_pdf 2026-05-28).
+
+name: da-v2-base-eth3d-native
+protocol: eth3d_dav2
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: base
+    input_size: 518
+
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.137
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), ETH3D column, ViT-B row: AbsRel = 0.137. Verified by NeurIPS 2024 PDF read 2026-05-28."
+  source_confidence: verified_pdf
+
+notes: >
+  Same native ETH3D recipe as da-v2-small-eth3d-native. Needs $ETH3D_ROOT.

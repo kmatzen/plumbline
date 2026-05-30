@@ -1,0 +1,28 @@
+# Depth Anything V2 (large) on ETH3D — DA-V2's OWN Table 2.
+#
+# ViT-L companion. DA-V2 Table 2 ETH3D AbsRel 0.131 (verified_pdf 2026-05-28).
+# NB: distinct from da-v2-large-eth3d-moge (MoGe Table 3 re-eval, 0.0473).
+
+name: da-v2-large-eth3d-native
+protocol: eth3d_dav2
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+    input_size: 518
+
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.131
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), ETH3D column, ViT-L row: AbsRel = 0.131. Verified by NeurIPS 2024 PDF read 2026-05-28."
+  source_confidence: verified_pdf
+
+notes: >
+  Native ETH3D mono-depth (protocol eth3d_dav2). First run builds per-scene
+  rendered-GT caches under $ETH3D_ROOT/.plumbline_manifest/ (slow once per
+  scene). Paper Table 2 uses the full ETH3D high-res train set (~13 scenes).

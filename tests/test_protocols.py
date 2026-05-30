@@ -28,6 +28,13 @@ class TestLoadProtocol:
         assert cfg["fixed"]["dataset"]["name"] == "nyuv2"
         assert cfg["fixed"]["depth_clip"] == [0.001, 10.0]
 
+    def test_loads_shipped_eth3d_dav2_preset(self) -> None:
+        cfg = load_protocol("eth3d_dav2")
+        assert cfg["fixed"]["dataset"]["name"] == "eth3d"
+        assert cfg["fixed"]["dataset"]["kwargs"]["views_per_sample"] == 1
+        assert cfg["fixed"]["dataset"]["kwargs"]["with_per_view_gt"] is True
+        assert cfg["fixed"]["depth_clip"] == [0.001, 80.0]
+
     def test_missing_protocol_raises(self) -> None:
         with pytest.raises(FileNotFoundError):
             load_protocol("does-not-exist")

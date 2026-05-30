@@ -1,0 +1,38 @@
+# ETH3D mono-depth protocol — Depth Anything V2's OWN Table 2 recipe.
+#
+# Distinct from `eth3d_moge` (MoGe's preprocessed bundle + MoGe Table 3
+# re-eval numbers). This uses the native `eth3d` loader with per-view GT
+# depth rendered from the MLP-aligned laser scan (same machinery as VGGT
+# Table 3 per-view GT, but evaluated as single-frame mono-depth with
+# MiDaS-style scale+shift on affine-invariant inverse depth).
+#
+# Targets DA-V2 Table 2 (Yang et al. 2024, zero-shot relative depth):
+# ViT-S 0.142 / ViT-B 0.137 / ViT-L 0.131 AbsRel on ETH3D [62].
+#
+# Inference matches the paper appendix: shorter side resized to 518 px
+# (`input_size: 518` on the model). GT is rendered at `pv_render_max_dim:
+# 518` so evaluation resolution matches inference.
+
+name: eth3d_dav2
+description: >
+  ETH3D high-res train split, single-view mono-depth under DA-V2 / MiDaS
+  Table-2 protocol: native loader, per-view laser-scan GT render, scale_shift,
+  depth clip [1e-3, 80] m, one view per sample.
+
+reference:
+  paper: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), ETH3D column"
+  gt_note: "Per-view depth z-buffered from scan_clean / dslr_scan_eval PLY via COLMAP poses (ETH3DDataset.with_per_view_gt)"
+
+fixed:
+  dataset:
+    name: eth3d
+    split: train
+    kwargs:
+      views_per_sample: 1
+      with_per_view_gt: true
+      pv_render_max_dim: 518
+      pv_splat_radius: 1
+  depth_clip: [0.001, 80.0]
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]

@@ -708,11 +708,41 @@ jobs:
   #          new ✅ candidate reusing staged data + the proven moge-eval loaders.
   #          Gate: PDF-audit which baseline rows × columns the table actually has.
   #
-  # TIER C — needs a NEW loader (medium effort), targets already known:
-  #   * DA-V2 own-Table-2 ETH3D mono-depth (S 0.142 / B 0.137 / L 0.131,
-  #     verified_pdf) — needs a NATIVE-ETH3D MiDaS-protocol mono-depth loader
-  #     (native `eth3d` is chamfer-only; `eth3d-moge-eval` is MoGe's preprocessing
-  #     → MoGe's numbers, not DA-V2's own). Same gap noted for DA-V2 Sintel below.
+  - name: da-v2-small-eth3d-native
+    status: pending
+    priority: 6
+    paper_target: "DA-V2 Table 2 — ETH3D ViT-S AbsRel 0.142 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [eth3d]
+    data_footprint_gb: 8
+    est_wall_min: 180
+    requires_env: [ETH3D_ROOT]
+    extras: "base install; native ETH3D train scenes (dslr_undistorted + scan_eval). First run builds per-view GT render caches."
+    notes: "Harness landed 2026-05-30 (`eth3d_dav2`). Paper ~13 scenes; S3 may only have 3-scene subset."
+  - name: da-v2-base-eth3d-native
+    status: pending
+    priority: 6
+    paper_target: "DA-V2 Table 2 — ETH3D ViT-B AbsRel 0.137 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [eth3d]
+    data_footprint_gb: 8
+    est_wall_min: 180
+    requires_env: [ETH3D_ROOT]
+    extras: "Same $ETH3D_ROOT + eth3d_dav2 as da-v2-small-eth3d-native."
+    notes: "Companion to da-v2-small-eth3d-native."
+  - name: da-v2-large-eth3d-native
+    status: pending
+    priority: 6
+    paper_target: "DA-V2 Table 2 — ETH3D ViT-L AbsRel 0.131 (verified_pdf 2026-05-28)"
+    primary_metric: abs_rel
+    datasets: [eth3d]
+    data_footprint_gb: 8
+    est_wall_min: 180
+    requires_env: [ETH3D_ROOT]
+    extras: "Same staging; GT caches shared across variants once rendered."
+    notes: "Distinct from da-v2-large-eth3d-moge (MoGe Table 3, 0.0473)."
+
+  # TIER C — remaining loader work (targets known):
   #   * Depth Pro Table 1 remaining columns → Depth Pro's FIRST ✅ (sintel is
   #     off-paper, D-pro experiment). ETH3D δ₁ 0.415, Booster, Middlebury,
   #     NuScenes, Sun-RGBD — metric depth (no alignment). Needs metric loaders
