@@ -1,0 +1,23 @@
+# D29: MoGe bundle + scale_shift_clamped (MoGe eval alignment on Table-2 target).
+
+name: da-v2-small-diode-moge-bundle-clamped
+protocol: diode_dav2_moge_bundle
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: small
+
+scale_alignment: scale_shift_clamped
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.073
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, DA-V2 Table 2 DIODE ViT-S AbsRel 0.073."
+  source_confidence: verified_pdf
+
+notes: >
+  D29: same loader as da-v2-small-diode-moge-bundle but MoGe's disparity floor
+  (scale_shift_clamped). Compare to MoGe Table-3 da-v2-large-diode (0.053).

@@ -383,10 +383,10 @@ jobs:
     status: blocked
     priority: 5
     blocked_on: >
-      D29. Indoor slice matches (0.0720 vs 0.073); outdoor native preprocessing
-      gap drives domain=both miss (0.22 vs 0.073). MoGe-bundle cell matches at
-      0.053. Fix needs DA-V2 unreleased outdoor eval or MoGe homographic warp on
-      native DIODE — not a tune knob. Do not re-queue until protocol lands.
+      D29 — native outdoor preprocessing gap (indoor ≈ paper). MoGe HF bundle +
+      Table-2 scale_shift fixes outdoor (0.069) but combined still ~16% under paper
+      (0.062 vs 0.073). FoV warp on native is a no-op at 1024×768. See
+      docs/D29_DIODE_TABLE2_HANDOFF.md. Do not re-queue without upstream confirmation.
     paper_target: "DA-V2 Table 2 — DIODE ViT-S AbsRel 0.073 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
     datasets: [diode]

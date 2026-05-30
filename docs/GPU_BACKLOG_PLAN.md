@@ -34,24 +34,19 @@ changing pinned paper targets.
 |------------|--------------|--------------|------------|
 | `diode_dav2` native | 0.2196 | 0.2142 | +200 % (blocked) |
 | `diode_dav2_moge_warp` (FoV warp on native files) | 0.2196 | — | **no-op** at 1024×768 (image diff 0) |
-| `diode_dav2_moge_bundle` (HF bundle + Table-2 `scale_shift`) | **0.0618** | **0.0543** | −15 % / −18 % under paper |
+| `diode_dav2_moge_bundle` + `scale_shift` | **0.0618** | **0.0588** | **0.0543** | −15 % / −13 % / −18 % under |
+| `diode_dav2_moge_bundle` + `scale_shift_clamped` | **0.0585** | — | — | −20 % under (ViT-S) |
 
-Outdoor smoke (30 frames): native **0.19** vs `diode-moge-eval` **0.05** — gap is
-**log-encoded depth + `isfinite` mask** (and bundle RGB), not homographic warp alone.
+**Per-domain (bundle + scale_shift):** indoor ViT-S **0.052** / outdoor **0.069** (n=325/446).
+Native outdoor was **~0.33**; bundle fixes outdoor but both domains sit *under* paper.
 
-**Current read:** DA-V2 Table 2 DIODE likely used MoGe-lineage **GT/mask
-preprocessing**, not raw `*_depth.npy` + `*_depth_mask.npy`. Bundle + Table-2
-alignment lands *under* paper (same “reads better” shape as native ETH3D/Sintel),
-so do **not** silently repoint `diode_dav2` to `diode-moge-eval` without upstream
-confirmation.
+GT probe (40 pairs): native valid **98.7%** vs bundle **87.2%** mask coverage; depth MAE **0.1 mm** on overlap.
 
-**Next (D29):**
+**Verdict:** Native `diode_dav2` cells stay **blocked** — outdoor needs MoGe-bundle GT/mask,
+not FoV warp. Bundle + Table-2 alignment still MISMATCH (under paper, like D31/D32).
+See [`docs/D29_DIODE_TABLE2_HANDOFF.md`](D29_DIODE_TABLE2_HANDOFF.md).
 
-1. Per-domain JSON from `da_v2_small_diode_moge_bundle` (indoor vs outdoor).
-2. Try `scale_shift_clamped` on bundle under Table-2 targets (vs MoGe Table 3).
-3. Diff bundle vs native GT/mask on matched `sample_path` keys.
-4. If upstream confirms bundle recipe → new protocol or loader flag; else document
-   protocol delta and keep natives `blocked`.
+**Next (D29):** upstream confirmation only; no further GPU unless authors reply.
 
 **Artifacts:** `$PLUMBLINE_WORK/runs/diode_d29_warp_probe_outdoor40.log`,
 `da_v2_small_diode_moge_bundle_20260530.json`, `da_v2_large_diode_moge_bundle_20260530.json`.

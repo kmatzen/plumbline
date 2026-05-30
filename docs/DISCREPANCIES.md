@@ -1275,9 +1275,12 @@ protocol's does not.
   ViT-S **0.0618** vs 0.073 (−15 %); ViT-L **0.0543** vs 0.066 (−18 %) — much closer
   than native but still **under** paper (MISMATCH), same shape as D31/D32.
 
-Probes: ``scripts/probe-diode-d29-warp.py``. Repros:
-``da-v2-small-diode-native-moge-warp``, ``da-v2-small-diode-moge-bundle``,
-``da-v2-large-diode-moge-bundle``.
+Per-domain (bundle + ``scale_shift``): indoor **0.052** / outdoor **0.069** (ViT-S) —
+outdoor fixed vs native **0.33**, but combined still ~16 % under paper.
+
+Probes: ``scripts/probe-diode-d29-warp.py``, ``scripts/probe-diode-d29-native-vs-bundle.py``.
+Handoff: [`docs/D29_DIODE_TABLE2_HANDOFF.md`](D29_DIODE_TABLE2_HANDOFF.md).
+Repros: ``da-v2-*-diode-moge-bundle`` (+ clamped experiment).
 
 **Verdict:** ⚠️ off-paper, protocol gap — NOT a model/adapter bug and NOT tuned.
 Two readings, both consistent with the data and neither verifiable without

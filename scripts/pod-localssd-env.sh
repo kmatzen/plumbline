@@ -29,7 +29,8 @@ fi
 export DDAD_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
 export SINTEL_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
 export ETH3D_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
-export DIODE_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
+# DIODE MoGe bundle is mirrored at datasets/diode_moge/ (not under moge_eval/).
+export DIODE_MOGE_ROOT="${DIODE_MOGE_ROOT:-$PLUMBLINE_WORK/data/diode_moge}"
 export KITTI_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
 export IBIMS1_ROOT="${IBIMS1_ROOT:-$PLUMBLINE_WORK/data/ibims1}"
 export ETH3D_ROOT="${ETH3D_ROOT:-$PLUMBLINE_WORK/data/eth3d}"
