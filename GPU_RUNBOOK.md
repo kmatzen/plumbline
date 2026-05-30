@@ -160,7 +160,8 @@ rental box's disk before starting.
 
 **Prefer S3 first.** Most of these are already cached at
 `s3://plumbline-bench/datasets/` (as of 2026-05-30: `nyuv2 kitti kitti_moge
-diode diode_moge gso ibims1 eth3d eth3d_moge sintel dtu cut3r_eval`). Pull
+diode diode_moge gso ibims1 eth3d eth3d_moge sintel dtu cut3r_eval`; DDAD/Sintel
+MoGe zips may need HF fetch — see rows below). Pull
 with `aws s3 sync s3://plumbline-bench/datasets/<name>/ $<ROOT>/` — faster than
 re-fetching from source, and avoids the HF/source quirks. The source recipes
 below are the fallback when a dataset isn't on S3.
@@ -168,7 +169,8 @@ below are the fallback when a dataset isn't on S3.
 **ROOT-points-at-parent gotcha:** the MoGe-bundle loaders expect the env var
 to point at the directory *containing* the bundle subdir, not the subdir
 itself — `DIODE_MOGE_ROOT/DIODE/`, `KITTI_MOGE_ROOT/KITTI/`,
-`ETH3D_MOGE_ROOT/ETH3D/`. (GSO/iBims point directly at the scene-dir parent.)
+`ETH3D_MOGE_ROOT/ETH3D/`, `DDAD_MOGE_ROOT/DDAD/`, `SINTEL_MOGE_ROOT/Sintel/`.
+(GSO/iBims point directly at the scene-dir parent.)
 
 | Dataset | Min viable | Fetch |
 |---|---|---|
@@ -180,7 +182,9 @@ itself — `DIODE_MOGE_ROOT/DIODE/`, `KITTI_MOGE_ROOT/KITTI/`,
 | DIODE val | 2.8 GB | `curl -L -O http://diode-dataset.s3.amazonaws.com/val.tar.gz && tar xzf val.tar.gz -C $DIODE_ROOT/..` |
 | ETH3D 3-scene (chamfer) | 8 GB | Per scene: `curl -L --fail -O https://www.eth3d.net/data/${scene}_dslr_undistorted.7z` and `..._dslr_scan_eval.7z`, extract with `7z x -y`. Scenes: `courtyard delivery_area facade`. Needs `apt install p7zip-full`. This is `$ETH3D_ROOT` (native chamfer), NOT the mono-depth bundle. |
 | ETH3D MoGe-eval bundle | 1.4 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'ETH3D*' --local-dir /tmp/moge && unzip /tmp/moge/ETH3D.zip -d $ETH3D_MOGE_ROOT` (nested `ETH3D/<scene>/<frame>/`, 453 samples; mono-depth, distinct from chamfer ETH3D). |
-| Sintel (depth+cam+RGB) | 6 GB | See § "Sintel — NOT auth-gated" above (two direct-download zips, no registration). |
+| DDAD MoGe-eval bundle | 0.6 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'DDAD*' --local-dir /tmp/moge && unzip /tmp/moge/DDAD.zip -d $DDAD_MOGE_ROOT` (1000 samples, 1400×700 warp; Tier-A Table 3). |
+| Sintel MoGe-eval bundle | 0.5 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'Sintel*' --local-dir /tmp/moge && unzip /tmp/moge/Sintel.zip -d $SINTEL_MOGE_ROOT` (1064 frames, 872×436; MoGe Table 3 — NOT `$SINTEL_ROOT`). |
+| Sintel (depth+cam+RGB) | 6 GB | See § "Sintel — NOT auth-gated" above (two direct-download zips, no registration). Native tree for Depth Pro / MonST3R, not MoGe-bundle eval. |
 | DTU MVS-22 | 7 GB | `gdown 135oKPefcPTsdtLRzoDAQtPpHuoIrpRI_ -O dtu_test.zip && unzip dtu_test.zip` (MVSNet test, ~554 MB) + `aria2c -x 16 -s 16 https://roboimagedata2.compute.dtu.dk/data/MVS/Points.zip` (GT clouds, ~7 GB). **Do NOT fetch SampleSet.zip — that's a 2-scan demo.** |
 | 7-Scenes | 12 GB | Per scene from `http://download.microsoft.com/download/2/8/5/28564B23-0828-408F-8631-23B1EFF1DAC8/${scene}.zip`, then unzip nested `seq-*.zip`. Scenes: `chess fire heads office pumpkin redkitchen stairs`. |
 

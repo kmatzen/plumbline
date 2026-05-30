@@ -1,0 +1,21 @@
+# Sintel mono-depth protocol — MoGe Table 3 (affine-invariant disparity).
+#
+# MPI-Sintel via the MoGe HF eval bundle (sky-masked, 872×436 warp).
+# Distinct from native `sintel` (MonST3R lineage, Depth Pro metric δ₁).
+
+name: sintel_moge
+description: >
+  Sintel mono-depth under MoGe Table 3 (affine-invariant-disparity):
+  HF-bundle 1064 frames, FoV warp, single-view.
+
+reference:
+  paper: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), Sintel column"
+  source_bundle: "Ruicheng/monocular-geometry-evaluation (HuggingFace), Sintel.zip"
+
+fixed:
+  dataset:
+    name: sintel-moge-eval
+  depth_clip: null
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]

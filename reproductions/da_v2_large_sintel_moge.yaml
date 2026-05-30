@@ -1,0 +1,26 @@
+# Depth Anything V2 (large) on Sintel — MoGe Table 3 DA-V2 re-eval row.
+#
+# Companion to moge-vitl-sintel-moge. NOT DA-V2's own Table 2 Sintel 0.487
+# (different protocol on native sintel).
+
+name: da-v2-large-sintel-moge
+protocol: sintel_moge
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+scale_alignment: scale_shift_clamped
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.214
+  tolerance_relative: 0.05
+  citation: "MoGe re-eval of DA-V2 — Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 affine-invariant-disparity block, Depth Anything V2 row, Sintel column: Rel 21.4 → AbsRel 0.214 (companion δ₁ 0.728). Verified by PDF read 2026-05-30 (reproductions/AUDIT.md)."
+  source_confidence: verified_pdf
+
+notes: >
+  Tier-A expansion (2026-05-30). Needs DAV2_ROOT clone. Same $SINTEL_MOGE_ROOT
+  as moge-vitl-sintel-moge (MoGe bundle, not native Sintel).

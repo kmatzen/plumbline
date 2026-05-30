@@ -4,9 +4,10 @@ A reproducible evaluation harness for 3D geometric foundation models —
 think `lm-evaluation-harness`, but for models like **VGGT**, **Depth
 Anything 3**, **MASt3R**, **Metric3Dv2**, and **Depth Anything V2**.
 
-**Status:** v0.1 in development. **22 paper-match cells** — 18 mono-depth
-(NYU / KITTI / DIODE) + 4 multi-view pose/trajectory (CO3Dv2 / Sintel) —
-each verified against the source PDF. API will still change before 1.0.
+**Status:** v0.1 in development. **27 paper-match cells** — 23 mono-depth
+(NYU / KITTI / DIODE / GSO / iBims-1 / ETH3D MoGe-eval) + 4 multi-view
+pose/trajectory (CO3Dv2 / Sintel) — each verified against the source PDF.
+API will still change before 1.0.
 
 ## What works today
 
@@ -25,7 +26,7 @@ each verified against the source PDF. API will still change before 1.0.
   (VGGT-canonical pose-eval recipe), 7-Scenes, GSO, iBims-1, Sintel
   (RGB + flow; depth gated), ScanNet (gated), **Bonn RGB-D Dynamic**
   (video depth, one-sample-per-sequence; closes the runnable-video gap).
-- **22 paper-match reproductions** with `source_confidence: verified_pdf`
+- **27 paper-match reproductions** with `source_confidence: verified_pdf`
   — see [REPRODUCTIONS.md](./REPRODUCTIONS.md). Each cell audited
   table-+-column-+-row against the source paper
   ([reproductions/AUDIT.md](./reproductions/AUDIT.md)).
@@ -46,12 +47,13 @@ cell reproduces" and "we built honest infra but the public release
 doesn't reproduce the paper cell". The matrix in
 [`REPRODUCTIONS.md`](./REPRODUCTIONS.md) tracks this:
 
-**Verified paper-match (22 cells, safe to cite):** 18 mono-depth — DA-V2
-(S/L on NYU; S/B/L on KITTI; L on DIODE + KITTI-MoGe), Metric3Dv2
-(L/Giant on NYU + KITTI), MoGe-1 ViT-L (NYU, KITTI, DIODE), Marigold v1-1
-(NYU), DA3 (NYU δ₁), MonST3R (NYU), DUSt3R (KITTI); plus 4 multi-view
-pose — VGGT / MASt3R / DUSt3R on CO3Dv2 (mAA@30) and MonST3R on Sintel
-(trajectory ATE, Table 4).
+**Verified paper-match (27 cells, safe to cite):** 23 mono-depth — DA-V2
+(S/L on NYU; S/B/L on KITTI; L on DIODE + KITTI-MoGe + GSO + ETH3D
+MoGe-eval), Metric3Dv2 (L/Giant on NYU + KITTI), MoGe-1 ViT-L (NYU,
+KITTI, DIODE, GSO, iBims-1, ETH3D MoGe-eval), Marigold v1-1 (NYU), DA3
+(NYU δ₁), MonST3R (NYU), DUSt3R (KITTI); plus 4 multi-view pose — VGGT
+/ MASt3R / DUSt3R on CO3Dv2 (mAA@30) and MonST3R on Sintel (trajectory
+ATE, Table 4).
 
 **Upstream-blocked (adapter+protocol audited; gap is in the released
 checkpoint or a paper-private eval config — do not promote):**
@@ -113,7 +115,7 @@ plumbline run --model vggt --dataset eth3d --tasks pose \
 
 A handful of representative ✅ reproductions across the three
 datasets — see [REPRODUCTIONS.md](./REPRODUCTIONS.md) for the
-authoritative 22-cell matrix:
+authoritative 27-cell matrix:
 
 | Reproduction | Paper | Observed | Status |
 |---|---|---|---|

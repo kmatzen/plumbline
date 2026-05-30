@@ -2273,3 +2273,103 @@ class TestCo3Dv2VGGTPoseEvalLoader:
         assert len(ds) == 2
         seqs_seen = sorted({s.metadata["sequence"] for s in ds})
         assert seqs_seen == ["apple_pre_0", "apple_pre_1"]
+
+
+# ---------------------------------------------------------------------------
+# DDAD / Sintel MoGe-eval bundles (Tier A, 2026-05-30)
+# ---------------------------------------------------------------------------
+
+
+def _write_fake_moge_index_bundle(
+    tmp_path: Path,
+    *,
+    bundle_subdir: str,
+    sample_paths: list[str],
+    H: int = 32,
+    W: int = 48,
+) -> None:
+    """Minimal MoGe-bundle tree for ddad-moge-eval / sintel-moge-eval tests."""
+    root = tmp_path / bundle_subdir
+    root.mkdir(parents=True)
+    (root / ".index.txt").write_text("\n".join(sample_paths) + "\n")
+    for sp in sample_paths:
+        d = root / sp
+        d.mkdir(parents=True)
+        Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
+            d / "image.jpg"
+        )
+        _write_fake_moge_depth_png(d / "depth.png", depth_m=2.0, H=H, W=W)
+        import json
+
+        meta = {
+            "intrinsics": [
+                [0.9, 0.0, 0.5],
+                [0.0, 0.9 * (W / H), 0.5],
+                [0.0, 0.0, 1.0],
+            ]
+        }
+        (d / "meta.json").write_text(json.dumps(meta))
+
+
+class TestDDADMogeEvalDataset:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+        from plumbline.datasets.ddad_sintel_moge_eval import DDADMogeEvalDataset
+
+        with pytest.raises(DatasetNotAvailable, match="DDAD MoGe"):
+            DDADMogeEvalDataset(root=tmp_path / "nope")
+
+    def test_non_test_split_rejected(self, tmp_path: Path) -> None:
+        from plumbline.datasets.ddad_sintel_moge_eval import DDADMogeEvalDataset
+
+        _write_fake_moge_index_bundle(tmp_path, bundle_subdir="DDAD", sample_paths=["a/0"])
+        with pytest.raises(ValueError, match="test split"):
+            DDADMogeEvalDataset(root=tmp_path, split="val")
+
+    def test_registered(self) -> None:
+        from plumbline.datasets.ddad_sintel_moge_eval import DDADMogeEvalDataset
+        from plumbline.datasets.registry import DATASET_REGISTRY
+
+        assert DATASET_REGISTRY["ddad-moge-eval"] is DDADMogeEvalDataset
+
+    def test_loads_with_moge_installed(self, tmp_path: Path) -> None:
+        pytest.importorskip("moge")
+        from plumbline.datasets.ddad_sintel_moge_eval import DDADMogeEvalDataset
+
+        _write_fake_moge_index_bundle(
+            tmp_path, bundle_subdir="DDAD", sample_paths=["scene/0001"], H=64, W=128
+        )
+        ds = DDADMogeEvalDataset(root=tmp_path)
+        assert len(ds) == 1
+        s = next(iter(ds))
+        assert s.images.shape == (1, 700, 1400, 3)
+        assert s.depth_gt.shape == (1, 700, 1400)
+        assert s.sample_id == "ddad-moge/scene_0001"
+
+
+class TestSintelMogeEvalDataset:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+        from plumbline.datasets.ddad_sintel_moge_eval import SintelMogeEvalDataset
+
+        with pytest.raises(DatasetNotAvailable, match="Sintel MoGe"):
+            SintelMogeEvalDataset(root=tmp_path / "nope")
+
+    def test_registered(self) -> None:
+        from plumbline.datasets.ddad_sintel_moge_eval import SintelMogeEvalDataset
+        from plumbline.datasets.registry import DATASET_REGISTRY
+
+        assert DATASET_REGISTRY["sintel-moge-eval"] is SintelMogeEvalDataset
+
+    def test_loads_with_moge_installed(self, tmp_path: Path) -> None:
+        pytest.importorskip("moge")
+        from plumbline.datasets.ddad_sintel_moge_eval import SintelMogeEvalDataset
+
+        _write_fake_moge_index_bundle(
+            tmp_path, bundle_subdir="Sintel", sample_paths=["alley_1/0001"], H=32, W=64
+        )
+        ds = SintelMogeEvalDataset(root=tmp_path)
+        assert len(ds) == 1
+        s = next(iter(ds))
+        assert s.images.shape == (1, 436, 872, 3)
+        assert s.sample_id == "sintel-moge/alley_1_0001"
