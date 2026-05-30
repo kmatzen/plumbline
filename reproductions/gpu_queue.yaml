@@ -740,7 +740,14 @@ jobs:
     est_wall_min: 180
     requires_env: [ETH3D_ROOT]
     extras: "Same staging; GT caches shared across variants once rendered."
-    notes: "Distinct from da-v2-large-eth3d-moge (MoGe Table 3, 0.0473)."
+    notes: >
+      ⚠️ OFF-PAPER 2026-05-30 (H100, 3-scene S3 subset): observed AbsRel 0.3302
+      vs 0.1310 (+152 %). Harness + GT-render path exercised (137 samples).
+      Likely gaps: (1) paper uses ~13 ETH3D train scenes, we had 3; (2) MiDaS/
+      DA-V2 Table-2 ETH3D eval recipe may differ from our z-buffer render +
+      scale_shift @518. Single-record diff vs upstream before re-pinning.
+      JSON: /mnt/localssd/plumbline-work/runs/da_v2_large_eth3d_native_20260530T181618Z.json.
+      Distinct from da-v2-large-eth3d-moge (MoGe Table 3, 0.0473 ✅).
 
   # TIER C — remaining loader work (targets known):
   #   * Depth Pro Table 1 remaining columns → Depth Pro's FIRST ✅ (sintel is
