@@ -62,15 +62,12 @@ different dataset/protocol (`eth3d_moge`) — not comparable.
 
 ## When you return — ranked next steps
 
-1. **Find DA-V2 / DA-V1 ETH3D eval code** — no eval script in `depth-anything-v2` clone;
-   GitHub [issue #281](https://github.com/DepthAnything/Depth-Anything-V2/issues/281)
-   (mis-sized resize → ~0.5, not ~0.13). Diff against our pipeline, don’t tune YAML.
-2. **Third-party eval scripts** — [DepthAnythingAC `evaluate_depth.py`](https://github.com/HVision-NKU/DepthAnythingAC/blob/master/evaluate_depth.py)
-   implements `Disparity2Depth` + `depth_cap=80` for `ETH3D` (same shape as our
-   `scale_shift` on disparity). DA-V2 repo still has **no** ETH3D loader; issues
-   [#280](https://github.com/DepthAnything/Depth-Anything-V2/issues/280) /
-   [#281](https://github.com/DepthAnything/Depth-Anything-V2/issues/281) report
-   unreleased recipes.
+1. **MoGe eval harness (primary)** — [`docs/DA_V2_TABLE2_UPSTREAM_EVAL.md`](DA_V2_TABLE2_UPSTREAM_EVAL.md):
+   `moge/scripts/eval_baseline.py` + HF bundle @ **2048×1365** + `disparity_affine_invariant`
+   with disparity floor at `1/gt.max()`. Matches our **MoGe Table-3** cell (0.047 ✅).
+2. **Issue #281** — devkit sparse depth + resize → ~0.5 AbsRel (same failure mode as
+   pre-D31 native harness). Not the MoGe-bundle path.
+3. **DepthAnythingAC** — possible third-party reference; not verified here.
 3. **Optional loader** — `eth3d_official_depth` protocol: distorted JPG + sparse
    `*_depth.7z`, native res, `scale_shift`; only if upstream code confirms that recipe.
    Helpers already in `datasets/eth3d.py` (`load_eth3d_official_depth_map`).

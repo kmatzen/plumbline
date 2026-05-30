@@ -1,5 +1,8 @@
 # D29 — DA-V2 Table 2 native DIODE handoff (2026-05-30)
 
+Upstream eval archaeology: [`docs/DA_V2_TABLE2_UPSTREAM_EVAL.md`](DA_V2_TABLE2_UPSTREAM_EVAL.md).
+MoGe `eval_baseline.py` + HF bundle is the closest public Table-2 recipe.
+
 **Status:** Investigated; native cells stay **blocked**. Outdoor gap **explained**;
 full Table-2 match not closed (bundle path reads *under* paper).
 

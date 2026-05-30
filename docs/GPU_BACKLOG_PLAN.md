@@ -13,11 +13,11 @@ still governs thrift, S3, and the no-YAML-tune rule.
 | DA-V2 native ETH3D / Sintel Table 2 | 🔎 parked (upstream recipe) | `ETH3D_DAV2_TABLE2_HANDOFF.md`, `SINTEL_DAV2_TABLE2_HANDOFF.md` |
 | Depth Pro Sintel Table 1 | 🔎 blocked (no public eval) | D32 notes in `DISCREPANCIES.md` |
 | VGGT ETH3D 13-scene chamfer | ✅ ran (D10 MISMATCH documented) | `vggt_eth3d_multiscene_chamfer.yaml` |
-| **D29 native DIODE outdoor** | 🚧 **in progress** | D29, this doc §1 |
+| **D29 native DIODE outdoor** | 🔎 parked (bundle ~under paper) | D29, `DA_V2_TABLE2_UPSTREAM_EVAL.md` |
 
 ## Execution order
 
-### 1. D29 — native DIODE outdoor (in progress)
+### 1. D29 — native DIODE outdoor (parked)
 
 **Goal:** Close DA-V2 Table 2 `da-v2-{small,base,large}-diode-native` without
 changing pinned paper targets.
@@ -53,13 +53,16 @@ See [`docs/D29_DIODE_TABLE2_HANDOFF.md`](D29_DIODE_TABLE2_HANDOFF.md).
 
 **Do not:** Widen `[1e-3, 50]` clip or tune reproduction YAML paper values.
 
-### 2. DA-V2 upstream eval archaeology (parallel, low GPU)
+### 2. DA-V2 upstream eval archaeology — **documented** ✅
 
-**Goal:** Unblock native ETH3D/Sintel Table 2 without guessing.
+See [`docs/DA_V2_TABLE2_UPSTREAM_EVAL.md`](DA_V2_TABLE2_UPSTREAM_EVAL.md). MoGe
+`eval_baseline.py` + HF bundles is the reproducible Table-2 path; DA-V2 repo ships
+no native ETH3D/Sintel/DIODE eval.
 
-- Search DA-V1 `metric_depth`, MiDaS lineage, [DepthAnythingAC `evaluate_depth.py`](https://github.com/HVision-NKU/DepthAnythingAC/blob/master/evaluate_depth.py) (`ETH3D` + `Disparity2Depth`).
-- Track GitHub [DA-V2 #280](https://github.com/DepthAnything/Depth-Anything-V2/issues/280), [#281](https://github.com/DepthAnything/Depth-Anything-V2/issues/281).
-- Frame inventory: **done** — 454 plumbline COLMAP views = 454 MoGe `scene/DSC_*` keys ([ETH3D handoff](ETH3D_DAV2_TABLE2_HANDOFF.md)).
+Optional GPU: run MoGe harness on DIODE/ETH3D/Sintel configs to pin exact upstream
+numbers on this pod.
+
+**Also done (archaeology):** DA-V1 has no Table-2 eval; issues [#280](https://github.com/DepthAnything/Depth-Anything-V2/issues/280) / [#281](https://github.com/DepthAnything/Depth-Anything-V2/issues/281); ETH3D frame inventory 454=454 ([handoff](ETH3D_DAV2_TABLE2_HANDOFF.md)).
 
 ### 3. VGGT ETH3D 13-scene (D10 closure)
 

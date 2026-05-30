@@ -1,5 +1,9 @@
 # Sintel DA-V2 Table 2 — handoff (parked 2026-05-30)
 
+Upstream eval archaeology: [`docs/DA_V2_TABLE2_UPSTREAM_EVAL.md`](DA_V2_TABLE2_UPSTREAM_EVAL.md).
+MoGe bundle @ 872×436 + `has_sharp_boundary` matches Table 3 (0.214 ✅); native
+`$SINTEL_ROOT` + `sintel_dav2` does not.
+
 Parallel to [`ETH3D_DAV2_TABLE2_HANDOFF.md`](ETH3D_DAV2_TABLE2_HANDOFF.md). **Do not tune YAML**
 to chase paper AbsRel — OFF-PAPER (~52% under). Narrative: `docs/DISCREPANCIES.md` **D32**.
 
