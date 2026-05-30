@@ -7,7 +7,7 @@ harness's acceptance test.
 > **Note (2026-05-03):** status matrix below reflects all GPU runs
 > through 2026-04-27. Open discrepancies and next-session priorities
 > are in `docs/DISCREPANCIES.md`. Per-YAML paper-citation audit (now
-> 29 paper-pinned YAMLs, 22 verified as of 2026-05-28; was 15 at the
+> 29 paper-pinned YAMLs, 27 verified as of 2026-05-30; was 15 at the
 > 2026-05-23 MASt3R direct-PDF read) is in
 > [`reproductions/AUDIT.md`](./reproductions/AUDIT.md).
 
@@ -76,7 +76,7 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 - **GSO (2, NEW 2026-05-30): MoGe-1 ViT-L (0.00958 vs 0.00944), DA-V2 ViT-L (0.01247 vs 0.0125)** — MoGe Table 3 GSO column
 - **iBims-1 (1, NEW 2026-05-30): MoGe-1 ViT-L (0.0316 vs 0.0320)** — MoGe Table 3; the DA-V2-L companion is ⚠️ off-paper (0.0391 vs 0.0348)
 - **ETH3D MoGe-eval mono-depth (2, NEW 2026-05-30): MoGe-1 ViT-L (0.0311 vs 0.0317), DA-V2 ViT-L (0.0473 vs 0.0473)** — new `eth3d-moge-eval` loader (MoGe pipeline) + `scale_shift_clamped` fix (D30)
-- _(2026-05-28 confidence audit: DA-V2 Base NYU (6.9% off) and MonST3R KITTI (5.05% off) downgraded ✅→ℹ️ (both exceed ±5%); DUSt3R-KITTI restored above. The old "23" had under-counted DUSt3R-KITTI (true base 24); after the 2 downgrades the verified count is 22 — now consistent with the site's 22.)_
+- _(2026-05-28 confidence audit: DA-V2 Base NYU (6.9% off) and MonST3R KITTI (5.05% off) downgraded ✅→ℹ️ (both exceed ±5%); DUSt3R-KITTI restored above. The 2026-05-29/30 backlog added 5 mono-depth ✅ cells (GSO×2, iBims MoGe-1, ETH3D MoGe-eval×2) for 27 total — consistent with the site and README.)_
 - **CO3Dv2 pose (3): VGGT (AUC@30 0.8964 vs 0.882, +1.6 %) + MASt3R (mAA(30) 0.7960 vs 0.818, −2.7 %) + DUSt3R (mAA(30) 0.7893 vs 0.772, +2.2 %), all on MASt3R Table 3 protocol** — v0.1 acceptance criterion #2 met (VGGT) and twice-seconded (MASt3R / DUSt3R).
 - **Sintel trajectory pose (1): MonST3R Table 4 — ATE 0.1134 vs 0.108 (+5.0 %), plumbline-computed 2026-05-27** via the new adapter v1.2 video-pose path + `metrics/pose.py` ATE/RPE family.
 

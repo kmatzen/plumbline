@@ -1,0 +1,25 @@
+# Depth Anything V2 (large) on DDAD — MoGe Table 3 DA-V2 re-eval row.
+#
+# Companion to moge-vitl-ddad; same MoGe-bundle loader + protocol.
+
+name: da-v2-large-ddad
+protocol: ddad_moge
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+scale_alignment: scale_shift_clamped
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.130
+  tolerance_relative: 0.05
+  citation: "MoGe re-eval of DA-V2 — Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 affine-invariant-disparity block, Depth Anything V2 row, DDAD column: Rel 13.0 → AbsRel 0.130 (companion δ₁ 0.866). Verified by PDF read 2026-05-30 (reproductions/AUDIT.md)."
+  source_confidence: verified_pdf
+
+notes: >
+  Tier-A expansion (2026-05-30). Needs DAV2_ROOT clone (source=paper) per
+  install notes. Same $DDAD_MOGE_ROOT staging as moge-vitl-ddad.

@@ -644,31 +644,65 @@ jobs:
       exists. Paper's 0.0808 must come from per-seq LAD2 or similar
       (D27 pattern, paper-private). Nothing to re-run.
 
+  # --- Tier A (2026-05-30): MoGe Table 3 DDAD + Sintel — PDF-audited, harness landed.
+  #     Spring/HAMMER are in the HF 10-dataset bundle but NOT in MoGe-1 Table 3;
+  #     see reproductions/AUDIT.md — deferred (MoGe-2 appendix or informational).
+  - name: moge-vitl-ddad
+    status: pending
+    priority: 4
+    paper_target: "MoGe Table 3 (affine-inv-disparity) — MoGe-1 DDAD AbsRel 0.0891 (verified_pdf 2026-05-30)"
+    primary_metric: abs_rel
+    datasets: [ddad-moge-eval]
+    data_footprint_gb: 1
+    est_wall_min: 20
+    requires_env: [DDAD_MOGE_ROOT]
+    extras: "plumbline install moge; hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'DDAD*' → unzip DDAD.zip under $DDAD_MOGE_ROOT"
+    notes: "NEW dataset (DDAD MoGe bundle). Tier-A PDF audit 2026-05-30. First run validates ddad-moge-eval loader."
+  - name: da-v2-large-ddad
+    status: pending
+    priority: 4
+    paper_target: "MoGe Table 3 (DA-V2 re-eval) — DA-V2-L DDAD AbsRel 0.130 (verified_pdf 2026-05-30)"
+    primary_metric: abs_rel
+    datasets: [ddad-moge-eval]
+    data_footprint_gb: 1
+    est_wall_min: 20
+    requires_env: [DDAD_MOGE_ROOT]
+    extras: "base install (needs DAV2_ROOT clone, source=paper); DDAD MoGe bundle as above."
+    notes: "Companion to moge-vitl-ddad. Same loader/protocol."
+  - name: moge-vitl-sintel-moge
+    status: pending
+    priority: 4
+    paper_target: "MoGe Table 3 (affine-inv-disparity) — MoGe-1 Sintel AbsRel 0.184 (verified_pdf 2026-05-30)"
+    primary_metric: abs_rel
+    datasets: [sintel-moge-eval]
+    data_footprint_gb: 1
+    est_wall_min: 25
+    requires_env: [SINTEL_MOGE_ROOT]
+    extras: "plumbline install moge; hf download --include 'Sintel*' → unzip under $SINTEL_MOGE_ROOT (NOT $SINTEL_ROOT native tree)"
+    notes: "NEW path: MoGe-bundle Sintel mono-depth (distinct from native sintel / depth-pro-sintel)."
+  - name: da-v2-large-sintel-moge
+    status: pending
+    priority: 4
+    paper_target: "MoGe Table 3 (DA-V2 re-eval) — DA-V2-L Sintel AbsRel 0.214 (verified_pdf 2026-05-30)"
+    primary_metric: abs_rel
+    datasets: [sintel-moge-eval]
+    data_footprint_gb: 1
+    est_wall_min: 25
+    requires_env: [SINTEL_MOGE_ROOT]
+    extras: "base install (needs DAV2_ROOT); Sintel MoGe bundle as above."
+    notes: "Companion to moge-vitl-sintel-moge."
+
   # ============================================================================
   # COVERAGE EXPANSION CANDIDATES (identified 2026-05-30, post mono-depth sweep)
   # ----------------------------------------------------------------------------
-  # NOT queued as runnable jobs: each needs either a paper-target PDF audit
-  # (per reproductions/AUDIT.md — do NOT pin numbers from WebFetch; the repo has
-  # been bitten by fabricated tables) and/or new harness code. Listed in
-  # priority order (value ÷ effort). The 2026-05-29/30 session cleared every
-  # verified-target mono-depth cell that had staged data, so further growth means
-  # NEW (model,dataset) cells. All MoGe-eval bundles + Sintel are now on S3.
+  # TIER A (DDAD + Sintel): DONE 2026-05-30 — PDF audit + loaders + 4 YAMLs +
+  #   queue entries above. Awaiting GPU runs.
   #
-  # TIER A — proven loader pattern, data fetchable, just needs YAMLs + a Table-3
-  #          PDF audit. HIGHEST value/effort. The MoGe eval bundle
-  #          (Ruicheng/monocular-geometry-evaluation) ships 10 datasets; we have
-  #          reproduced 6 (NYU/KITTI/DIODE/ETH3D/GSO/iBims). The 4 NOT yet done
-  #          are clean in-pattern adds via a `<ds>-moge-eval` loader cloned from
-  #          eth3d-moge-eval (nested .index.txt + MoGe FoV-warp + scale_shift_clamped):
-  #   * DDAD-moge   (outdoor driving)  — moge-1 + da-v2-L rows, MoGe Table 3
-  #   * Spring-moge (synthetic, hi-res) — moge-1 + da-v2-L rows, MoGe Table 3
-  #   * Sintel-moge (synthetic)        — moge-1 + da-v2-L rows, MoGe Table 3.
-  #     NB also unblocks a clean Sintel mono-depth path distinct from the
-  #     native `sintel` loader (which depth-pro-sintel/monst3r-sintel use).
-  #   * HAMMER-moge (transparent/specular materials) — moge-1 + da-v2-L rows.
-  #   Effort: ~1 loader (copy eth3d_moge_eval.py, set width/height from MoGe
-  #   all_benchmarks.json per dataset) + 1 protocol + N YAMLs. Risk: low
-  #   (pattern validated this session). Gate: PDF-audit the MoGe Table 3 cells.
+  # REMAINING from the 10-dataset HF bundle (NOT in MoGe-1 Table 3 — no
+  # verified_pdf pin under Wang et al. 2024 Table 3):
+  #   * Spring-moge — training-only in MoGe-1; per-dataset numbers in MoGe-2
+  #     appendix Table B.4 only (separate audit if desired).
+  #   * HAMMER-moge — not named in MoGe-1; MoGe-2 Table B.4 has cells.
   #
   # TIER B — more MoGe-Table-3 BASELINE ROWS on the already-staged bundles
   #          (GSO/iBims/ETH3D/DIODE/KITTI). MoGe Table 3 re-evaluates several

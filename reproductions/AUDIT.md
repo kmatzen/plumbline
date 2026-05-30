@@ -237,3 +237,99 @@ cited table/row/column. **2 one-digit transcription slips corrected**
 
 **Habit going forward:** every reproduction run syncs its result JSON to
 `s3://plumbline-bench/runs/` so coverage and provenance grow together.
+
+---
+
+## 2026-05-30 — MoGe Table 3 Tier-A expansion audit (DDAD / Spring / Sintel / HAMMER)
+
+**Goal:** pin `paper_reference.value` for the four remaining MoGe-eval-bundle
+datasets before queuing `moge-vitl-*` / `da-v2-large-*` reproduction YAMLs.
+
+**Source read:** Wang et al. 2024, *MoGe: Unlocking Accurate Monocular Geometry
+Estimation for Open-Domain Images with Optimal Training Supervision*,
+arXiv:2410.19115 — main-body HTML + appendix Table 7 cross-check
+(`https://arxiv.org/html/2410.19115v1`). Numbers in the **affine-invariant
+disparity** sub-block of the depth table (plumbline cites this block as
+**“MoGe Table 3”** throughout; the PDF caption is *“Table 3: Quantitative
+results for depth map estimation”*). Rel values are **percent** in the paper;
+plumbline AbsRel pins use `value = Rel / 100`. Companion δ₁ uses the paired
+δ₁^d column (`δ₁^d / 100`).
+
+**Column order (8 datasets in paper):** NYUv2 · KITTI · ETH3D · iBims-1 · GSO ·
+Sintel · DDAD · DIODE. §4.1 states all compared methods use **ViT-Large**
+backbones except called-out exceptions (LeReS / Marigold / GeoWizard).
+
+### Cross-check: already-pinned cells (unchanged)
+
+| Dataset | Model | Paper Rel (%) | Pinned AbsRel | δ₁ | Status |
+|---|---|---:|---:|---:|---|
+| GSO | MoGe-1 | 0.944 | 0.00944 | 1.00 | VERIFIED (matches `moge_vitl_gso`) |
+| GSO | DA-V2-L | 1.25 | 0.0125 | 1.00 | VERIFIED (matches `da_v2_large_gso`) |
+| iBims-1 | MoGe-1 | 3.20 | 0.0320 | 0.981 | VERIFIED (`moge_vitl_ibims1`) |
+| iBims-1 | DA-V2-L | 3.48 | 0.0348 | 0.985 | VERIFIED (`da_v2_large_ibims1` target; run off-paper) |
+| ETH3D | MoGe-1 | 3.17 | 0.0317 | 0.989 | VERIFIED (`moge_vitl_eth3d_moge`) |
+| ETH3D | DA-V2-L | 4.73 | 0.0473 | 0.980 | VERIFIED (`da_v2_large_eth3d_moge`) |
+
+Paper rows (Table 3, affine-invariant disparity): **Ours** = MoGe-1 ViT-L;
+**DA V2** = Depth Anything V2 ViT-L.
+
+### Tier A — NEW pins from MoGe-1 Table 3 (ready for YAML)
+
+| Proposed YAML | Model | Dataset | Metric | Paper cell | Pinned AbsRel | δ₁ | Verified? |
+|---|---|---|---|---|---:|---:|---|
+| `moge-vitl-ddad` | MoGe-1 ViT-L | DDAD (MoGe bundle) | abs_rel | Table 3, affine-inv. disparity, **Ours** row, **DDAD** col: Rel **8.91** | **0.0891** | 0.915 | **VERIFIED** |
+| `da-v2-large-ddad` | DA-V2 ViT-L | DDAD (MoGe bundle) | abs_rel | Table 3, same block, **DA V2** row, **DDAD** col: Rel **13.0** | **0.130** | 0.866 | **VERIFIED** |
+| `moge-vitl-sintel-moge` | MoGe-1 ViT-L | Sintel (MoGe bundle) | abs_rel | Table 3, **Ours** row, **Sintel** col: Rel **18.4** | **0.184** | 0.795 | **VERIFIED** |
+| `da-v2-large-sintel-moge` | DA-V2 ViT-L | Sintel (MoGe bundle) | abs_rel | Table 3, **DA V2** row, **Sintel** col: Rel **21.4** | **0.214** | 0.728 | **VERIFIED** |
+
+**Eval bundle notes (MoGe `all_benchmarks.json`, HF
+`Ruicheng/monocular-geometry-evaluation`):**
+
+| Dataset | Warp size | Bundle notes |
+|---|---|---|
+| DDAD | 1400×700 | 1000 val samples; vehicle regions cropped |
+| Sintel | 872×436 | 1064 frames; sky masked; center crop from 1024×436 |
+| Spring | 1920×1080 | 1000 / 5000 frames subsampled |
+| HAMMER | 1664×832 | 775 images; transparent/specular |
+
+**Harness:** clone `eth3d-moge-eval` loader pattern + `scale_shift_clamped`
+(same as KITTI/DIODE/ETH3D MoGe-eval ✅ cells; D30).
+
+### Spring + HAMMER — NOT_IN_PAPER (MoGe-1)
+
+**Finding:** MoGe-1 **does not publish** Spring or HAMMER depth numbers.
+Table 3 and appendix Table 7 list only the **eight** datasets above. Spring
+appears in training Table 6 only; **HAMMER is not named** in the MoGe-1 PDF
+/HTML at all. The HuggingFace eval bundle ships 10 zips (adds Spring + HAMMER
+for the **released eval script**), but those two sets are **outside** the
+paper table plumbline reproduces.
+
+**Do not** pin `verified_pdf` targets for Spring/HAMMER under “MoGe Table 3”
+without a policy change. Options if you still want coverage:
+
+1. **Informational** YAMLs (`value: null`, `source_confidence` omitted) until
+   a paper row exists.
+2. **Separate audit path — MoGe-2** (arXiv:2507.02546, appendix Table B.4,
+   10-column affine-invariant disparity, ViT-L comparisons). Example cells
+   (MoGe-1 **MoGe** row / **DA V2** row in that table — *not* the same table
+   number as MoGe-1; treat as a different citation if used):
+   - Spring: MoGe **3.30** → 0.0330, DA-V2 **4.97** → 0.0497
+   - HAMMER: MoGe **5.58** → 0.0558, DA-V2 **8.82** → 0.0882
+3. **Reproduce MoGe upstream JSON** (`moge/scripts/eval_baseline.py` on the
+   bundle) and treat as `verified_upstream` / informational — not `verified_pdf`.
+
+**Recommendation for Tier A queue:** implement **DDAD + Sintel** only (4
+YAMLs, PDF-audited). Defer Spring/HAMMER to a MoGe-2 appendix audit or
+informational runs.
+
+**Harness landed 2026-05-30:** `ddad-moge-eval` + `sintel-moge-eval`
+loaders, `ddad_moge` / `sintel_moge` protocols, reproduction YAMLs
+`moge-vitl-ddad`, `da-v2-large-ddad`, `moge-vitl-sintel-moge`,
+`da-v2-large-sintel-moge` — queued in `gpu_queue.yaml` (pending GPU).
+
+### Table-number note (unchanged convention)
+
+Earlier audits noted ar5iv sometimes labels the depth table “Table 2”; the
+canonical arxiv v1 HTML uses **Table 3** for depth and **Table 4** for FOV.
+Plumbline YAMLs should keep citing **Table 3** + **affine-invariant disparity**
+to match the six existing MoGe-eval ✅ cells.

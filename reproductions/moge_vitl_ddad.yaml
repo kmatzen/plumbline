@@ -1,0 +1,28 @@
+# MoGe-1 ViT-L on DDAD — MoGe Table 3 (affine-invariant disparity).
+#
+# Tier-A coverage (PDF-audited 2026-05-30). Outdoor driving via the MoGe
+# HF bundle; distinct from raw DDAD devkit paths.
+
+name: moge-vitl-ddad
+protocol: ddad_moge
+
+model:
+  name: moge
+  kwargs:
+    variant: vitl
+
+scale_alignment: scale_shift_clamped
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.0891
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 affine-invariant-disparity block, MoGe (Ours) ViT-L row, DDAD column: Rel 8.91 → AbsRel 0.0891 (companion δ₁ 0.915). Verified by PDF read 2026-05-30 (reproductions/AUDIT.md)."
+  source_confidence: verified_pdf
+
+notes: >
+  Tier-A expansion (2026-05-30). Set $DDAD_MOGE_ROOT to the parent of DDAD/
+  (MoGe bundle, ~593 MB). hf download Ruicheng/monocular-geometry-evaluation
+  --repo-type dataset --include 'DDAD*' --local-dir <tmp> && unzip DDAD.zip.
+  First run validates the new ddad-moge-eval loader.

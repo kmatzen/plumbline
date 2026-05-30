@@ -1,0 +1,27 @@
+# MoGe-1 ViT-L on Sintel — MoGe Table 3 (affine-invariant disparity).
+#
+# Clean MoGe-bundle Sintel mono-depth path (872×436, sky-masked). Distinct
+# from monst3r-sintel (dust3r lineage) and depth-pro-sintel (metric δ₁).
+
+name: moge-vitl-sintel-moge
+protocol: sintel_moge
+
+model:
+  name: moge
+  kwargs:
+    variant: vitl
+
+scale_alignment: scale_shift_clamped
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.184
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 affine-invariant-disparity block, MoGe (Ours) ViT-L row, Sintel column: Rel 18.4 → AbsRel 0.184 (companion δ₁ 0.795). Verified by PDF read 2026-05-30 (reproductions/AUDIT.md)."
+  source_confidence: verified_pdf
+
+notes: >
+  Tier-A expansion (2026-05-30). Set $SINTEL_MOGE_ROOT to the parent of
+  Sintel/ (MoGe bundle ~530 MB). NOT the same tree as $SINTEL_ROOT (native
+  MPI-Sintel for Depth Pro / MonST3R). hf download with --include 'Sintel*'.

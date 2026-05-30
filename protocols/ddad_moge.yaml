@@ -1,0 +1,21 @@
+# DDAD mono-depth protocol — MoGe Table 3 (affine-invariant disparity).
+#
+# DDAD outdoor driving via the MoGe HF eval bundle (NOT the raw DDAD devkit).
+# Mirrors eth3d_moge / kitti_moge_eval: no Garg crop, no fixed depth clip.
+
+name: ddad_moge
+description: >
+  DDAD mono-depth under MoGe Table 3 (affine-invariant-disparity):
+  HF-bundle sample list, FoV warp to 1400×700, single-view.
+
+reference:
+  paper: "Wang et al. 2024, MoGe (arXiv:2410.19115), Table 3 (Depth Map Est.), DDAD column"
+  source_bundle: "Ruicheng/monocular-geometry-evaluation (HuggingFace), DDAD.zip"
+
+fixed:
+  dataset:
+    name: ddad-moge-eval
+  depth_clip: null
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]
