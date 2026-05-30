@@ -79,7 +79,12 @@ class ETH3DMogeEvalDataset(Dataset):
         *,
         root: Path | str | None = None,
         scenes: list[str] | None = None,
+        split: str = "test",
     ) -> None:
+        # `split` is accepted for protocol-YAML compatibility with the other
+        # MoGe-bundle loaders; the ETH3D MoGe eval bundle is a single set.
+        if split != "test":
+            raise ValueError(f"ETH3DMogeEvalDataset only exposes the test split; got {split!r}")
         root_path = Path(root) if root else env_path("ETH3D_MOGE_ROOT")
         if root_path is None or not root_path.exists():
             raise DatasetNotAvailable(

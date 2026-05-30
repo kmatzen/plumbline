@@ -20,7 +20,6 @@ from plumbline.datasets.diode import (
     load_diode_depth_m,
     load_diode_depth_mask,
 )
-from plumbline.datasets.gso import GSODataset, read_moge_depth_png
 from plumbline.datasets.dtu import (
     DTU_MVS_TEST_SCANS,
     DTUDataset,
@@ -32,6 +31,8 @@ from plumbline.datasets.eth3d import (
     parse_colmap_images,
     quat_to_rot,
 )
+from plumbline.datasets.gso import GSODataset, read_moge_depth_png
+from plumbline.datasets.ibims1 import IBims1Dataset
 from plumbline.datasets.kitti import (
     KITTIDataset,
     KITTIMogeEvalLoader,
@@ -41,7 +42,6 @@ from plumbline.datasets.kitti import (
     load_kitti_depth_png_to_m,
     parse_eigen_sample_list,
 )
-from plumbline.datasets.ibims1 import IBims1Dataset
 from plumbline.datasets.scannet import ScanNetDataset, load_scannet_pose
 from plumbline.datasets.seven_scenes import (
     SEVEN_SCENES_INTRINSIC,
@@ -291,6 +291,7 @@ class TestETH3D:
 
         # Spy on load_ply_xyz — the whole-file parse happens inside it.
         import plumbline.datasets.eth3d as eth3d_mod
+
         call_count = {"n": 0}
         original = eth3d_mod.load_ply_xyz
 
@@ -457,24 +458,16 @@ class TestKITTI:
 
     def test_depth_split_val_only(self, tmp_path: Path) -> None:
         # Two drives — one under val, one under train — split=val keeps val only.
-        _write_fake_kitti(
-            tmp_path, drive_ids=(2,), frames=2, depth_split="val"
-        )
-        _write_fake_kitti(
-            tmp_path, drive_ids=(5,), frames=2, depth_split="train"
-        )
+        _write_fake_kitti(tmp_path, drive_ids=(2,), frames=2, depth_split="val")
+        _write_fake_kitti(tmp_path, drive_ids=(5,), frames=2, depth_split="train")
         ds = KITTIDataset(root=tmp_path, depth_split="val")
         drives = {s.metadata["drive"] for s in ds}
         assert drives == {"2011_09_26_drive_0002_sync"}, drives
 
     def test_max_frames_per_drive_caps_per_drive(self, tmp_path: Path) -> None:
         # Two val drives with 5 frames each — cap to 2 → 4 total, 2 per drive.
-        _write_fake_kitti(
-            tmp_path, drive_ids=(2, 5), frames=5, depth_split="val"
-        )
-        ds = KITTIDataset(
-            root=tmp_path, depth_split="val", max_frames_per_drive=2
-        )
+        _write_fake_kitti(tmp_path, drive_ids=(2, 5), frames=5, depth_split="val")
+        ds = KITTIDataset(root=tmp_path, depth_split="val", max_frames_per_drive=2)
         by_drive: dict[str, list[str]] = {}
         for s in ds:
             by_drive.setdefault(s.metadata["drive"], []).append(s.metadata["frame_id"])
@@ -530,9 +523,7 @@ class TestKITTIMogeEvalLoader:
 
         root_env = os.environ.get("KITTI_MOGE_ROOT")
         if not root_env or not Path(root_env, "KITTI", ".index.txt").exists():
-            pytest.skip(
-                "KITTI MoGe-eval bundle not staged (set $KITTI_MOGE_ROOT)"
-            )
+            pytest.skip("KITTI MoGe-eval bundle not staged (set $KITTI_MOGE_ROOT)")
 
         ld = KITTIMogeEvalLoader()
         s = next(iter(ld))
@@ -1492,9 +1483,7 @@ class TestCo3Dv2:
         _write_fake_co3dv2(tmp_path, sequences=3, frames_per_sequence=4)
         from plumbline.datasets.co3dv2 import Co3Dv2Dataset
 
-        ds = Co3Dv2Dataset(
-            root=tmp_path, views_per_sample=4, max_sequences_per_category=2
-        )
+        ds = Co3Dv2Dataset(root=tmp_path, views_per_sample=4, max_sequences_per_category=2)
         assert len(ds) == 2  # 2 sequences × 1 sliding window each at full-frame count
 
     def test_pytorch3d_to_opencv_identity(self) -> None:
@@ -1669,9 +1658,7 @@ class TestGSO:
         _write_fake_gso(tmp_path, objects=("obj",), H=32, W=32)
         # Overwrite depth.png with a smaller one — loader should raise.
         depth = np.full((16, 16), 1.0, dtype=np.float32)
-        _encode_moge_depth_png(
-            depth, near=0.1, far=10.0, path=tmp_path / "obj" / "depth.png"
-        )
+        _encode_moge_depth_png(depth, near=0.1, far=10.0, path=tmp_path / "obj" / "depth.png")
         ds = GSODataset(root=tmp_path)
         with pytest.raises(ValueError, match="mismatches image"):
             next(iter(ds))
@@ -1689,9 +1676,7 @@ class TestGSO:
         assert np.isnan(loaded[1, 1])
         assert np.isinf(loaded[1, 2])
 
-    def test_read_moge_depth_png_rejects_missing_metadata(
-        self, tmp_path: Path
-    ) -> None:
+    def test_read_moge_depth_png_rejects_missing_metadata(self, tmp_path: Path) -> None:
         # Save a uint16 PNG without near/far in info — loader must refuse.
         raw = np.zeros((4, 4), dtype=np.uint16)
         p = tmp_path / "no_meta.png"
@@ -1758,7 +1743,13 @@ class TestSevenScenes:
 
     def test_default_test_split_has_all_seven_scenes(self) -> None:
         assert set(SEVEN_SCENES_TEST_SEQUENCES) == {
-            "chess", "fire", "heads", "office", "pumpkin", "redkitchen", "stairs",
+            "chess",
+            "fire",
+            "heads",
+            "office",
+            "pumpkin",
+            "redkitchen",
+            "stairs",
         }
 
     def test_rejects_bad_views_or_stride(self, tmp_path: Path) -> None:
@@ -1872,8 +1863,13 @@ class TestSevenScenes:
 
 
 def _write_fake_moge_depth_png(
-    path: Path, *, depth_m: float, H: int, W: int,
-    near: float = 0.1, far: float = 10.0,
+    path: Path,
+    *,
+    depth_m: float,
+    H: int,
+    W: int,
+    near: float = 0.1,
+    far: float = 10.0,
 ) -> None:
     """Emit a MoGe-encoded uint16 PNG whose decoded value is ~depth_m everywhere."""
     from PIL import PngImagePlugin
@@ -1893,7 +1889,11 @@ def _write_fake_moge_depth_png(
 
 
 def _write_fake_ibims1(
-    root: Path, *, scenes: int = 3, H: int = 48, W: int = 64,
+    root: Path,
+    *,
+    scenes: int = 3,
+    H: int = 48,
+    W: int = 64,
 ) -> list[str]:
     """Write a minimal iBims-1 bundle and return scene names."""
     names: list[str] = []
@@ -1911,11 +1911,13 @@ def _write_fake_ibims1(
         seg[10:20, :] = 5
         Image.fromarray(seg).save(scene_dir / "segmentation.png")
         # Meta — normalised intrinsics per MoGe bundle convention.
-        meta = {"intrinsics": [
-            [0.87, 0.0, 0.5],   # fx/W, 0, cx/W
-            [0.0, 1.16, 0.5],   # 0, fy/H, cy/H
-            [0.0, 0.0, 1.0],
-        ]}
+        meta = {
+            "intrinsics": [
+                [0.87, 0.0, 0.5],  # fx/W, 0, cx/W
+                [0.0, 1.16, 0.5],  # 0, fy/H, cy/H
+                [0.0, 0.0, 1.0],
+            ]
+        }
         (scene_dir / "meta.json").write_text(__import__("json").dumps(meta))
         names.append(name)
     return names
@@ -1946,6 +1948,20 @@ class TestIBims1:
         ds = IBims1Dataset(root=tmp_path, scenes=["fake_01", "fake_03"])
         ids = [s.sample_id for s in ds]
         assert ids == ["ibims1/fake_01", "ibims1/fake_03"]
+
+    def test_split_test_accepted(self, tmp_path: Path) -> None:
+        # The ibims1_moge protocol passes `split: test`; the loader must accept
+        # it (iBims-1 is a single eval set, so it's a no-op).
+        _write_fake_ibims1(tmp_path, scenes=2)
+        ds = IBims1Dataset(root=tmp_path, split="test")
+        assert len(ds) == 2
+
+    def test_non_test_split_rejected(self, tmp_path: Path) -> None:
+        # Any other split is rejected early with a clear error rather than
+        # silently ignored.
+        _write_fake_ibims1(tmp_path, scenes=1)
+        with pytest.raises(ValueError, match="test split"):
+            IBims1Dataset(root=tmp_path, split="train")
 
     def test_depth_decoding_and_invalid_pixels(self, tmp_path: Path) -> None:
         _write_fake_ibims1(tmp_path, scenes=1, H=32, W=32)
@@ -2024,17 +2040,15 @@ def _write_fake_co3dv2_vggt(
         for s in range(sequences_per_category):
             seq_name = f"{category}_seq_{s:04d}"
             quality = 0.4 if s < bad_quality_seqs else 0.9
-            seq_data.append(
-                {"sequence_name": seq_name, "viewpoint_quality_score": quality}
-            )
+            seq_data.append({"sequence_name": seq_name, "viewpoint_quality_score": quality})
             images_dir = cat_dir / seq_name / "images"
             images_dir.mkdir(parents=True, exist_ok=True)
             for f in range(frames_per_sequence):
                 img_name = f"frame{f + 1:06d}.jpg"
                 img_path = images_dir / img_name
-                Image.fromarray(
-                    (np.random.rand(H, W, 3) * 255).astype(np.uint8)
-                ).save(img_path, quality=85)
+                Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
+                    img_path, quality=85
+                )
                 rel_path = f"{category}/{seq_name}/images/{img_name}"
                 frame_data.append(
                     {
@@ -2230,9 +2244,9 @@ class TestCo3Dv2VGGTPoseEvalLoader:
             for f in range(60):
                 img_name = f"frame{f + 1:06d}.jpg"
                 p = images_root / seq_name / "images" / img_name
-                Image.fromarray(
-                    (np.random.rand(H, W, 3) * 255).astype(np.uint8)
-                ).save(p, quality=85)
+                Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
+                    p, quality=85
+                )
                 seqs[seq_name].append(
                     {
                         "filepath": f"apple/{seq_name}/images/{img_name}",
