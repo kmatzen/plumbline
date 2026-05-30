@@ -19,8 +19,8 @@ details within each section.
 
 ## 0. Context for the agent
 
-- Owner: Kevin Blackburn-Matzen (formerly Facebook CompPhoto/XR). Deep
-  3D vision background. Has shipped VGGT-era systems in product. Has strong
+- Owner: Kevin Blackburn-Matzen. Deep 3D vision background. Has shipped
+  VGGT-era systems in product. Has strong
   opinions about coordinate systems and color; defer to him on conventions.
 - The goal is **an OSS library that the 3D vision community adopts as the
   default eval harness.** Credibility comes from reproducing published
