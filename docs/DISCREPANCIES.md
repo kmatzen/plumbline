@@ -1307,6 +1307,12 @@ the alignment was simply mis-specified relative to MoGe's code and the other
 MoGe cells. Per the "alignment must match the paper" rule, scale_shift on a
 dataset with outdoor far-depth was the bug.
 
+**Same fix on iBims-1 (2026-05-30):** `da-v2-large-ibims1` was off-paper at
+AbsRel 0.0391 under `scale_shift`; switching to `scale_shift_clamped` (MoGe's
+DA-V2 re-eval convention, same as the other MoGe-bundle DA-V2-L cells) landed
+**0.0348 vs 0.0348** (exact, MATCH). Companion `moge-vitl-ibims1` already
+matched under plain `scale_shift` (indoor-only set).
+
 ### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
 
 Cache key in `src/plumbline/runner.py` `_predict_with_cache` is

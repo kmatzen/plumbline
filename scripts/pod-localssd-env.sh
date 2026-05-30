@@ -31,5 +31,7 @@ export SINTEL_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
 export ETH3D_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
 export DIODE_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
 export KITTI_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
+export IBIMS1_ROOT="${IBIMS1_ROOT:-$PLUMBLINE_WORK/data/ibims1}"
 
 export DAV2_ROOT="${DAV2_ROOT:-$PLUMBLINE_WORK/deps/depth-anything-v2}"
+export SINTEL_ROOT="${SINTEL_ROOT:-$PLUMBLINE_WORK/data/sintel}"

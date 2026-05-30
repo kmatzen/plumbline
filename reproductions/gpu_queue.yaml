@@ -305,7 +305,7 @@ jobs:
     extras: "plumbline install moge; fetch iBims-1.zip from Ruicheng/monocular-geometry-evaluation → $IBIMS1_ROOT"
     notes: "✅ MATCH 2026-05-29 (H100): observed AbsRel 0.0316 vs 0.0320 (100/100). NEW dataset coverage (iBims-1). Required the ibims1 loader `split` fix (PR #21). JSON: s3://plumbline-bench/runs/backlog_20260529/results/."
   - name: da-v2-large-ibims1
-    status: pending
+    status: done
     priority: 5
     paper_target: "MoGe Table 3 (DA-V2 re-eval) — DA-V2-L iBims-1 AbsRel 0.0348 (verified_pdf 2026-05-28)"
     primary_metric: abs_rel
@@ -315,13 +315,10 @@ jobs:
     requires_env: [IBIMS1_ROOT]
     extras: "base install (needs DAV2_ROOT clone, source=paper); iBims-1 bundle as above."
     notes: >
-      ⚠️ OFF-PAPER 2026-05-29 (H100): observed AbsRel 0.0391 vs 0.0348
-      (+12.4 %, outside ±5 %; 100/100, genuine — not a skip). Speculative
-      cell, never previously run. The companion moge-vitl-ibims1 matched
-      (0.0316), so the loader/protocol are sound; this is a DA-V2-specific
-      gap on iBims-1 under scale_shift. NOT tuned (the yaml note suggested
-      scale_shift_clamped as a fallback but that is a YAML change, deferred
-      to human review). Left pending. JSON: s3://plumbline-bench/runs/backlog_20260529/results/.
+      ✅ MATCH 2026-05-30 (H100): observed AbsRel 0.0348 vs 0.0348 (exact,
+      100/100, δ₁ 0.9850). Fix: scale_shift → scale_shift_clamped (D30 /
+      MoGe DA-V2 re-eval convention; prior 0.0391 under plain scale_shift).
+      JSON: /mnt/localssd/plumbline-work/runs/da_v2_large_ibims1_20260530T173549Z.json.
 
   # --- New dataset/path: ETH3D mono-depth (MoGe Table 3 affine-inv-disparity)
   #     via the NEW eth3d-moge-eval loader + eth3d_moge protocol (landed

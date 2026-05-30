@@ -13,9 +13,9 @@ model:
   kwargs:
     variant: large
 
-# Same affine-invariant-disparity alignment as the MoGe cell; scale_shift
-# (indoor) — fall back to scale_shift_clamped if the first run is off.
-scale_alignment: scale_shift
+# MoGe Table 3 DA-V2 re-eval uses scale_shift_clamped (moge/test/metrics.py),
+# same as the other DA-V2-L MoGe-bundle ✅ cells (ETH3D/DIODE/KITTI/DDAD).
+scale_alignment: scale_shift_clamped
 device: cuda:0
 
 paper_reference:
