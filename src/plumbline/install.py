@@ -149,21 +149,26 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
     "depth-anything-v2": InstallSpec(
         name="depth-anything-v2",
         kind="base",
-        probe_import="transformers",  # default source="hf" path
+        probe_import="transformers",  # importable via base deps; see notes on source=
         weights="hf-auto",
         extra_env=(
             (
                 "DAV2_ROOT",
-                "Only for source='paper': path to a clone of "
-                "https://github.com/DepthAnything/Depth-Anything-V2 "
-                "(default /workspace/deps/depth-anything-v2).",
+                "Required by the adapter's DEFAULT source='paper' path: a clone "
+                "of https://github.com/DepthAnything/Depth-Anything-V2 "
+                "(default /workspace/deps/depth-anything-v2). The .pth weights "
+                "auto-download from HF; only the model class comes from the clone.",
             ),
         ),
         notes=(
-            "Default (source='hf') path loads via transformers (base dep). The "
-            "source='paper' path additionally needs a clone of "
-            "https://github.com/DepthAnything/Depth-Anything-V2 pointed to by "
-            "$DAV2_ROOT (default /workspace/deps/depth-anything-v2)."
+            "transformers (base dep) makes this import-OK, but the adapter "
+            "DEFAULTS to source='paper' (the .pth checkpoints — the HF '-hf' "
+            "re-exports score ~0.002 AbsRel lower and tip cells off-gate, so "
+            "paper-match reproductions use 'paper'). That path needs a clone of "
+            "https://github.com/DepthAnything/Depth-Anything-V2 at $DAV2_ROOT "
+            "(default /workspace/deps/depth-anything-v2). Without it every "
+            "sample errors out and the run lands n_evaluated=0 / observed=nan. "
+            "Pass source='hf' to use the no-clone transformers path instead."
         ),
     ),
     "depth-anything-3": InstallSpec(

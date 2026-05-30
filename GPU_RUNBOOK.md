@@ -25,10 +25,13 @@ its `status:` to `done` in the queue file and update `REPRODUCTIONS.md`.
 
 Use the listing to size the box: sum the `GB` column for the jobs you
 intend to run (+ weights + cache + 20 % headroom) against the rental
-disk before booking. As of 2026-05-23 the pending head of the queue is
-`vggt-co3dv2-pose` (target AUC@30 0.882) and `mast3r-co3dv2-pose`
-(target mAA(30) 0.818) — both paper targets PDF-verified, both on the
-same CO3Dv2 stage, so stage once and run back-to-back.
+disk before booking. As of 2026-05-30 the CO3Dv2 pose cells and the
+mono-depth coverage backlog (GSO / iBims-1 / DIODE-moge / KITTI-moge /
+ETH3D-moge, all PDF-verified) are **done** (16 done, 5 pending). The 5
+pending are documented off-paper findings, not fresh runs:
+`da-v2-large-ibims1`, `da-v2-{small,base,large}-diode-native` (D29), and
+`depth-pro-sintel` (D-pro Sintel δ₁ experiment) — see their queue `notes:`
+and docs/DISCREPANCIES.md before re-running.
 
 ## Hard constraints
 
@@ -155,6 +158,18 @@ Footprint is *minimum viable* (sample-list-driven), not full release.
 Sum the rows for your queue + 20 % headroom and confirm it fits the
 rental box's disk before starting.
 
+**Prefer S3 first.** Most of these are already cached at
+`s3://plumbline-bench/datasets/` (as of 2026-05-30: `nyuv2 kitti kitti_moge
+diode diode_moge gso ibims1 eth3d eth3d_moge sintel dtu cut3r_eval`). Pull
+with `aws s3 sync s3://plumbline-bench/datasets/<name>/ $<ROOT>/` — faster than
+re-fetching from source, and avoids the HF/source quirks. The source recipes
+below are the fallback when a dataset isn't on S3.
+
+**ROOT-points-at-parent gotcha:** the MoGe-bundle loaders expect the env var
+to point at the directory *containing* the bundle subdir, not the subdir
+itself — `DIODE_MOGE_ROOT/DIODE/`, `KITTI_MOGE_ROOT/KITTI/`,
+`ETH3D_MOGE_ROOT/ETH3D/`. (GSO/iBims point directly at the scene-dir parent.)
+
 | Dataset | Min viable | Fetch |
 |---|---|---|
 | NYUv2 | 3 GB | `curl -L -O https://horatio.cs.nyu.edu/mit/silberman/nyu_depth_v2/nyu_depth_v2_labeled.mat` to `$NYUV2_ROOT` |
@@ -163,16 +178,27 @@ rental box's disk before starting.
 | iBims-1 | 40 MB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'iBims-1.zip' --local-dir /tmp/moge && unzip /tmp/moge/iBims-1.zip -d $IBIMS1_ROOT/..` |
 | GSO | 2 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'GSO.zip' --local-dir /tmp/moge && unzip /tmp/moge/GSO.zip -d $GSO_ROOT/..` |
 | DIODE val | 2.8 GB | `curl -L -O http://diode-dataset.s3.amazonaws.com/val.tar.gz && tar xzf val.tar.gz -C $DIODE_ROOT/..` |
-| ETH3D 3-scene | 8 GB | Per scene: `curl -L --fail -O https://www.eth3d.net/data/${scene}_dslr_undistorted.7z` and `..._dslr_scan_eval.7z`, extract with `7z x -y`. Scenes: `courtyard delivery_area facade`. Needs `apt install p7zip-full`. |
+| ETH3D 3-scene (chamfer) | 8 GB | Per scene: `curl -L --fail -O https://www.eth3d.net/data/${scene}_dslr_undistorted.7z` and `..._dslr_scan_eval.7z`, extract with `7z x -y`. Scenes: `courtyard delivery_area facade`. Needs `apt install p7zip-full`. This is `$ETH3D_ROOT` (native chamfer), NOT the mono-depth bundle. |
+| ETH3D MoGe-eval bundle | 1.4 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'ETH3D*' --local-dir /tmp/moge && unzip /tmp/moge/ETH3D.zip -d $ETH3D_MOGE_ROOT` (nested `ETH3D/<scene>/<frame>/`, 453 samples; mono-depth, distinct from chamfer ETH3D). |
+| Sintel (depth+cam+RGB) | 6 GB | See § "Sintel — NOT auth-gated" above (two direct-download zips, no registration). |
 | DTU MVS-22 | 7 GB | `gdown 135oKPefcPTsdtLRzoDAQtPpHuoIrpRI_ -O dtu_test.zip && unzip dtu_test.zip` (MVSNet test, ~554 MB) + `aria2c -x 16 -s 16 https://roboimagedata2.compute.dtu.dk/data/MVS/Points.zip` (GT clouds, ~7 GB). **Do NOT fetch SampleSet.zip — that's a 2-scan demo.** |
 | 7-Scenes | 12 GB | Per scene from `http://download.microsoft.com/download/2/8/5/28564B23-0828-408F-8631-23B1EFF1DAC8/${scene}.zip`, then unzip nested `seq-*.zip`. Scenes: `chess fire heads office pumpkin redkitchen stairs`. |
 
-**Auth-gated, deprioritized 2026-04-19** (loaders work, data isn't on
-the v0.1 critical path; substitutes already promoted in plan.md § 2):
+**Sintel — NOT actually auth-gated (corrected 2026-05-30).** The MPI-Sintel
+depth + camera + image training archives are direct downloads, no
+registration. Now staged on S3 (`datasets/sintel/`, has `training/{final,
+clean,depth,camdata_left}`). If re-fetching:
+```bash
+curl -L -O https://files.is.tue.mpg.de/jwulff/sintel/MPI-Sintel-depth-training-20150305.zip  # depth+camera
+curl -L -O https://files.is.tue.mpg.de/sintel/MPI-Sintel-training_images.zip                 # final+clean RGB
+unzip -o '*.zip' -d $SINTEL_ROOT   # → training/{final,clean,depth,camdata_left}
+```
+
+**Auth-gated, deprioritized** (loaders work, data isn't on the v0.1 critical
+path; substitutes already promoted in plan.md § 2):
 
 | Dataset | Why deprioritized |
 |---|---|
-| Sintel depth + cameras | Registration at https://sintel.is.tue.mpg.de/signup |
 | ScanNet v2 / ScanNet-1500 | ToS at http://www.scan-net.org/, ≤24 h approval |
 
 After a successful fetch, push the dataset back to S3 so the next
@@ -326,9 +352,27 @@ leave it for the user. Stop work and report when:
 
 - **ScanNet poses** can be `inf` on tracker-dropped frames; loader
   filters silently.
-- **Scale alignment** must match the paper: DA-V2 → `scale_shift`,
-  Metric3Dv2 → `none`, MASt3R → `median`, VGGT → `none`, Marigold /
-  GeoWizard → `scale_shift_depth`.
+- **Scale alignment** must match the paper: DA-V2 (own Table 2) →
+  `scale_shift`, Metric3Dv2 → `none`, MASt3R → `median`, VGGT → `none`,
+  Marigold / GeoWizard → `scale_shift_depth`. **MoGe-eval mono-depth
+  (DIODE/KITTI/GSO/iBims/ETH3D bundles) → `scale_shift_clamped`** — MoGe's
+  own protocol (`moge/test/metrics.py`) floors aligned disparity at
+  `1/gt.max()`. Plain `scale_shift` is fine on clean-indoor sets (iBims, NYU)
+  but on any set with outdoor far-depth (ETH3D, DIODE, KITTI) a few pixels
+  invert to enormous depths and a single sample blows up mean AbsRel
+  (ETH3D-moge: mean 169 / median 0.0234 under scale_shift; 0.032 under
+  clamped — see D30).
+- **DA-V2 paper-match needs `$DAV2_ROOT`.** The adapter *defaults* to
+  `source="paper"` (the `.pth` checkpoints — HF `-hf` re-exports score ~0.002
+  lower and tip cells off-gate, see commit c14d776), which imports the model
+  class from a clone of `github.com/DepthAnything/Depth-Anything-V2`. Despite
+  the install table calling DA-V2 "base", every DA-V2 reproduction needs:
+  `git clone --depth 1 https://github.com/DepthAnything/Depth-Anything-V2
+  $HOME/deps/depth-anything-v2 && export DAV2_ROOT=$HOME/deps/depth-anything-v2`
+  (the `.pth` weights auto-download from HF). Without it, every sample is
+  caught as "OOM or adapter error" and the run ends `n_evaluated=0`,
+  `observed=nan` — looks like a silent non-result. **Always check
+  `n_evaluated` in the report JSON.**
 - **Depth vs disparity**: every adapter must emit depth in
   `Prediction.depth`. Check `metadata["native_space"]` to see what
   upstream emits before conversion.

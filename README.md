@@ -136,9 +136,10 @@ authoritative 22-cell matrix:
   to confirm the structural correctness, not as a paper-match. Set
   `$DTU_ROOT` and run.
 - `depth-anything-v2-sintel` — Sintel loader works on the public RGB
-  bundle; the paper's AbsRel target needs the auth-gated depth +
-  camera archive (deprioritized 2026-04-19; substitutes are GSO /
-  iBims-1).
+  bundle. (Sintel depth + camera archives turned out to be direct
+  downloads, not auth-gated — now staged on S3; see GPU_RUNBOOK. The
+  first metric-depth Sintel run, `depth-pro-sintel`, is off-paper at
+  δ₁ 0.2418 vs 0.400 — an open experiment, see DISCREPANCIES.md.)
 
 ## Documentation
 
