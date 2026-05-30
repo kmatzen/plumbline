@@ -63,9 +63,10 @@ MoGe-bundle Table-3 cells on the same datasets **still ✅** (different preproce
 | `da-v2-base-eth3d-native` | 0.137 | **0.0936** | −32 % | [ETH3D](docs/ETH3D_DAV2_TABLE2_HANDOFF.md) |
 | `da-v2-large-eth3d-native` | 0.131 | **0.0888** (all `dslr_scan_eval`: **0.0782**) | −32 % / −40 % | [ETH3D](docs/ETH3D_DAV2_TABLE2_HANDOFF.md) |
 | `depth-anything-v2-sintel` | 0.487 | **0.2321** (`clean` pass **0.2224**) | −52 % | [Sintel](docs/SINTEL_DAV2_TABLE2_HANDOFF.md) |
-| `da-v2-small-diode-native` | 0.073 | **0.2196** | +201 % | D29 — outdoor split |
+| `da-v2-small-diode-native` | 0.073 | **0.2196** | +201 % | [D29](docs/D29_DIODE_TABLE2_HANDOFF.md) — native outdoor |
 | `da-v2-base-diode-native` | 0.068 | **0.2182** | +221 % | D29 |
 | `da-v2-large-diode-native` | 0.066 | **0.2142** | +225 % | D29 |
+| `da-v2-*-diode-moge-bundle` (exp.) | 0.073 / 0.068 / 0.066 | **0.062 / 0.059 / 0.054** | −13–18 % | D29 — MoGe GT/mask, still under paper |
 
 Compare: `da-v2-large-eth3d-moge` **0.0473** ✅ · `da-v2-large-sintel-moge` **0.2139** ✅.
 
