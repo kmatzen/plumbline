@@ -58,11 +58,34 @@ chamfer. Candidates to audit:
 **Do not** reuse `eth3d_dav2` / z-buffer projection until a citation ties Table 1
 to that geometry.
 
+## Appendix C Table 16 (confirmed 2026-05-30)
+
+| Field | Sintel value |
+|-------|----------------|
+| Valid depth | **0.01 m – 80 m** |
+| Samples | **1064** (training) |
+| GT resolution | **436 × 1024** |
+| Resize | bilinear pred → GT (plumbline default) |
+
+| Run | Protocol | δ₁ (1064) | Notes |
+|-----|----------|-----------|--------|
+| 2026-05-30 | `sintel_dav2` (0.001–70 m) | **0.2418** | legacy |
+| 2026-05-31 | `sintel_depth_pro_metric` (0.01–80 m) | **0.2409** | appendix Table 16 |
+
+80-frame smoke (first scenes): δ₁ **~0.48** — tail frames drive full-set mean down.
+Depth clip / max_depth levers ruled out on smoke (identical δ₁ for 70 vs 80 m).
+
+Protocol: `sintel_depth_pro_metric.yaml` · probe: `scripts/probe-depth-pro-sintel-protocol.py`
+
+**Verdict:** protocol aligned with appendix; gap likely **upstream weights** (README:
+reference impl re-trained, may not match paper) or undisclosed frame weighting.
+Keep `depth-pro-sintel` **blocked**; do not tune `paper_reference.value`.
+
 ## Implementation checklist
 
 | Step | Owner | Status |
 |------|--------|--------|
-| PDF + appendix: exact δ₁ formula, resize, mask | doc | 🔎 open |
+| PDF + appendix: exact δ₁ formula, resize, mask | doc | ✅ Table 16 |
 | Search Depth Pro repo issues / supp for eval hints | doc | 🔎 open |
 | Define `SintelDepthProDataset` or extend `sintel` with `eval_mode: metric_delta1` | code | pending |
 | ETH3D metric GT staging plan | data | blocked until source defined |

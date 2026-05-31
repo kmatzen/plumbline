@@ -14,7 +14,7 @@
 name: depth-pro-sintel
 # Metric δ₁ on native Sintel; shares sky mask / pass with sintel_dav2 except
 # alignment (none — Depth Pro outputs metric meters).
-protocol: sintel_dav2
+protocol: sintel_depth_pro_metric
 
 model:
   name: depth-pro
@@ -33,10 +33,9 @@ paper_reference:
 notes: >
   Next-box EXPERIMENT (2026-05-28 coverage pass) — Depth Pro's first
   paper-match candidate / NEW model coverage. Two protocol unknowns to
-  resolve against Depth Pro's eval setup on the first run (or by reading
-  its released eval code): (1) Sintel pass (final vs clean); (2) the depth
-  cap / sky handling (max_depth). If δ₁ lands off, those are the levers —
-  the target value 0.400 itself is PDF-verified. Needs `plumbline install
+  Appendix C Table 16 protocol (`sintel_depth_pro_metric`). Full run 2026-05-31:
+  δ₁ **0.2409** vs paper **0.400** (MISMATCH). 80-frame smoke ~0.48. Upstream
+  README: public weights re-trained. Needs `plumbline install
   depth-pro` + the depth_pro.pt weights (manual download to
   ~/.cache/plumbline/weights/depth-pro/; see the adapter docstring).
   ETH3D (Depth Pro Table 1 δ₁ 0.415) is a separate candidate but its eval

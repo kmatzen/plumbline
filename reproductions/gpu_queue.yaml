@@ -392,9 +392,10 @@ jobs:
     status: blocked
     priority: 6
     blocked_on: >
-      Depth Pro Table 1 Sintel δ₁ OFF-PAPER (0.242 vs 0.400, metric, no alignment).
-      Re-run 2026-05-30 with staged depth_pro.pt unchanged. Upstream ml-depth-pro
-      ships boundary metrics only — no Sintel eval script. Do not tune YAML.
+      Depth Pro Table 1 Sintel δ₁ OFF-PAPER: full 1064-frame δ₁ 0.2409 vs 0.400
+      (2026-05-31, appendix Table 16 protocol 0.01–80 m). 80-frame smoke ~0.48 —
+      tail scenes drag mean down. Upstream README: public weights re-trained, may
+      not match paper. No Sintel eval script. Do not tune YAML.
     paper_target: "Depth Pro Table 1 — Sintel δ₁ 0.400 (metric, no alignment; verified_pdf 2026-05-28)"
     primary_metric: delta_1
     datasets: [sintel]
@@ -405,7 +406,7 @@ jobs:
     notes: >
       ⚠️ OFF-PAPER 2026-05-30 (H100, 1064/1064): δ₁ 0.2418 vs 0.400 under
       protocol sintel_dav2 (final pass, max_depth 70, sky mask). Weights confirmed
-      on pod. JSON: /mnt/localssd/plumbline-work/runs/depth_pro_sintel_20260530T220902Z.json.
+      JSON: depth_pro_sintel_table16_20260531.json (δ₁ 0.2409); prior 0.2418.
 
   # --- New PROTOCOL coverage: DA-V2 own Table 2 on DIODE (native loader,
   #     affine-inv disparity) across variants S/B/L. Recipe already validated

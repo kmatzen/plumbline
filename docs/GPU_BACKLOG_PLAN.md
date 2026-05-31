@@ -74,10 +74,11 @@ JSON/S3 provenance only.
 
 **Optional:** Sync result JSON to S3 if missing; mark queue row as investigated.
 
-### 4. Depth Pro Table 1 (defer)
+### 4. Depth Pro Table 1 — Sintel **blocked** (protocol ruled out 2026-05-31)
 
-Sintel δ₁ confirmed off-paper with weights. Next column (ETH3D δ₁ 0.415) needs a
-**metric eval set** definition before GPU — not the chamfer/z-buffer path used for DA-V2.
+Full 1064-frame δ₁ **0.2409** vs paper **0.400** under appendix Table 16 protocol.
+ETH3D δ₁ 0.415 still blocked (metric GT). See
+[`docs/DEPTH_PRO_TABLE1_METRIC_EVAL.md`](DEPTH_PRO_TABLE1_METRIC_EVAL.md).
 
 ### 5. Defer (high friction)
 

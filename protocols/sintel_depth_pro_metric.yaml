@@ -1,0 +1,27 @@
+# Sintel mono-depth — Depth Pro Table 1 metric δ₁ (zero-shot).
+#
+# Appendix C Table 16 (Bochkovskii et al. 2024): valid depth 0.01–80 m,
+# 1064 training samples, GT 436×1024; predictions bilinearly resized to GT.
+# No scale alignment (metric depth).
+
+name: sintel_depth_pro_metric
+description: >
+  Native MPI-Sintel training split for Depth Pro Table 1 δ₁: final pass,
+  valid pixels with 0.01 m ≤ depth < 80 m per paper appendix.
+
+reference:
+  paper: "Bochkovskii et al. 2024, Depth Pro (arXiv:2410.02073), Table 1, Sintel δ₁"
+  appendix: "Appendix C Table 16 — min 0.01 m, max 80 m, 1064 samples"
+
+fixed:
+  dataset:
+    name: sintel
+    split: training
+    kwargs:
+      pass_name: final
+      views_per_sample: 1
+      max_depth: 80.0
+  depth_clip: [0.01, 80.0]
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]

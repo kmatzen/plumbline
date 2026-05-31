@@ -1490,11 +1490,14 @@ or DA-V2 §B benchmark detail), not a broken adapter. MoGe-bundle
 `da-v2-large-sintel-moge` at **0.214** is Table 3, not comparable. JSON:
 `/mnt/localssd/plumbline-work/runs/da_v2_sintel_native_fix_20260530.json`.
 
-Depth Pro on the same `sintel_dav2` protocol (metric, no alignment) still
-**δ₁ 0.2418** vs **0.400** (1064/1064, H100 2026-05-30, `depth_pro.pt` on pod) —
-unchanged from the pre-weight run; pass/cap alone do not close the gap. Upstream
-`ml-depth-pro` publishes boundary metrics only, not Sintel Table-1 eval. JSON:
-`depth_pro_sintel_20260530T220902Z.json`. Queue: `depth-pro-sintel` **blocked**.
+Depth Pro Sintel Table 1 (metric, no alignment): **δ₁ 0.2418** (2026-05-30,
+`sintel_dav2` 0.001–70 m) and **0.2409** (2026-05-31, appendix Table 16
+`sintel_depth_pro_metric` 0.01–80 m) — depth-range levers ruled out. 80-frame
+smoke δ₁ ~**0.48**; full 1064-frame mean pulled down by hard tail scenes.
+Upstream `ml-depth-pro` has no Sintel eval; README notes re-trained public
+weights may not match paper. JSONs: `depth_pro_sintel_*_20260530.json`,
+`depth_pro_sintel_table16_20260531.json`. Queue: `depth-pro-sintel` **blocked**.
+Design: [`docs/DEPTH_PRO_TABLE1_METRIC_EVAL.md`](DEPTH_PRO_TABLE1_METRIC_EVAL.md).
 
 **Pass probe (2026-05-30, `scripts/probe-sintel-pass.py`, 1064 frames):** `final`
 **0.2321** vs `clean` **0.2224** (same `training/depth` GT) — `clean` is slightly
