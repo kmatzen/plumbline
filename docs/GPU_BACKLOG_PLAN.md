@@ -77,6 +77,8 @@ JSON/S3 provenance only.
 
 ### 4. Depth Pro Booster (`depth-pro-booster`): ✅ δ₁ **0.4878** vs **0.466** (2026-05-31, Table 1 match). Staged at `$BOOSTER_ROOT` via `scripts/download-booster.sh`.
 
+### 5. Depth Pro Middlebury (`depth-pro-middlebury`): ⚠️ δ₁ **0.7589** vs **0.605** (2026-05-31, blocked — reads better). `$MIDDLEBURY_ROOT` via `scripts/download-middlebury.sh`.
+
 Depth Pro Table 1 — Sintel **blocked**; iBims sanity **done**
 
 Sintel: δ₁ **0.2409** vs **0.400** (appendix protocol). iBims informational:

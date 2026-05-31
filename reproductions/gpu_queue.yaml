@@ -437,6 +437,23 @@ jobs:
       Pro Table 1 ✅. Training split, booster_depth_pro_metric (0.001–10 m).
       JSON: depth_pro_booster_20260531.json.
 
+  - name: depth-pro-middlebury
+    status: blocked
+    priority: 6
+    blocked_on: >
+      Depth Pro Table 1 Middlebury δ₁ OFF-PAPER: 0.7589 vs 0.605 (+25.5%, reads
+      better) on MiddEval3 trainingF, appendix Table 16 protocol (0.001–10 m).
+    paper_target: "Depth Pro Table 1 — Middlebury δ₁ 0.605 (metric, no alignment)"
+    primary_metric: delta_1
+    datasets: [middlebury]
+    data_footprint_gb: 0.6
+    est_wall_min: 5
+    requires_env: [MIDDLEBURY_ROOT]
+    extras: "./scripts/download-middlebury.sh; depth_pro.pt"
+    notes: >
+      2026-05-31: 15/15 scenes F-res (~2872×1984). JSON:
+      depth_pro_middlebury_20260531.json. Do not tune paper_reference.
+
   # --- New PROTOCOL coverage: DA-V2 own Table 2 on DIODE (native loader,
   #     affine-inv disparity) across variants S/B/L. Recipe already validated
   #     on the ViT-S indoor slice (0.0722 vs 0.073). YAMLs landed 2026-05-28. ---

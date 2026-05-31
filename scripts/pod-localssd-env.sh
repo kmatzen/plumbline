@@ -35,6 +35,7 @@ export DIODE_MOGE_ROOT="${DIODE_MOGE_ROOT:-$PLUMBLINE_WORK/data/diode_moge}"
 export KITTI_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
 export IBIMS1_ROOT="${IBIMS1_ROOT:-$PLUMBLINE_WORK/data/ibims1}"
 export BOOSTER_ROOT="${BOOSTER_ROOT:-$PLUMBLINE_WORK/data/booster}"
+export MIDDLEBURY_ROOT="${MIDDLEBURY_ROOT:-$PLUMBLINE_WORK/data/middlebury}"
 export ETH3D_ROOT="${ETH3D_ROOT:-$PLUMBLINE_WORK/data/eth3d}"
 
 export DAV2_ROOT="${DAV2_ROOT:-$PLUMBLINE_WORK/deps/depth-anything-v2}"
