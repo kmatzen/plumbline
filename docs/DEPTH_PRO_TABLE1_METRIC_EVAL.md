@@ -88,7 +88,7 @@ Keep `depth-pro-sintel` **blocked**; do not tune `paper_reference.value`.
 | Booster | 0.001–10 | 228 | ✅ | δ₁ **0.4878** vs **0.466** (2026-05-31, **match**) |
 | ETH3D | 0.1–200 | 454 | native + moge (chamfer) | blocked (no metric GT path) |
 | Middlebury | 0.001–10 | 15 | ✅ | δ₁ **0.7589** vs **0.605** (blocked, reads better) |
-| NuScenes | 0.001–80 | 881 | ❌ | — |
+| NuScenes | 0.001–80 | 881 | ❌ | loader ready; needs v1.0-trainval |
 | Sintel | 0.01–80 | 1064 | ✅ `$SINTEL_ROOT` | `depth-pro-sintel` **blocked** (δ₁ 0.2409) |
 | Sun-RGBD | 0.001–10 | 5050 | ✅ | δ₁ **0.4505** vs **0.890** (blocked, reads worse) |
 | iBims | 0.1–10 | 100 | ✅ `$IBIMS1_ROOT` | ✅ informational δ₁ **0.8458** (2026-05-31) |
@@ -124,7 +124,7 @@ official weights — not fixable by `max_depth`/`pass_name` alone (already ruled
 | Booster `depth-pro-booster` | GPU | ✅ δ₁ 0.4878 vs 0.466 (2026-05-31) |
 | Middlebury `depth-pro-middlebury` | GPU | ⚠️ δ₁ 0.7589 vs 0.605 (blocked) |
 | Sun-RGBD `depth-pro-sun-rgbd` | GPU | ✅ 0.4505 vs 0.890 (blocked) |
-| NuScenes staging | data | not started |
+| NuScenes loader + `depth-pro-nuscenes` | code/data | pending trainval staging |
 | Repro `depth-pro-eth3d` (new) | GPU | after GT |
 
 ## Queue stance

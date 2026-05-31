@@ -472,6 +472,23 @@ jobs:
       depth_pro_sun_rgbd_20260531.json. Staging: img-{i:06d}.jpg ↔ depth/{i}.png.
       Do not tune paper_reference.
 
+  - name: depth-pro-nuscenes
+    status: pending
+    priority: 6
+    paper_target: "Depth Pro Table 1 — NuScenes δ₁ 0.491 (metric, no alignment)"
+    primary_metric: delta_1
+    datasets: [nuscenes]
+    data_footprint_gb: 300
+    est_wall_min: 60
+    requires_env: [NUSCENES_ROOT]
+    extras: >
+      ./scripts/download-nuscenes.sh depth-pro-val; uv pip install nuscenes-devkit
+      pyquaternion; depth_pro.pt. 881×900×1600 CAM_FRONT LiDAR GT.
+    notes: >
+      Loader + protocol nuscenes_depth_pro_metric (2026-05-31). Subset seed=42 on
+      val CAM_FRONT (paper: random 881 from ~35K val camera keyframes). Blocked
+      until v1.0-trainval staged.
+
   # --- New PROTOCOL coverage: DA-V2 own Table 2 on DIODE (native loader,
   #     affine-inv disparity) across variants S/B/L. Recipe already validated
   #     on the ViT-S indoor slice (0.0722 vs 0.073). YAMLs landed 2026-05-28. ---

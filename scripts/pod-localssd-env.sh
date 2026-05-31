@@ -37,6 +37,7 @@ export IBIMS1_ROOT="${IBIMS1_ROOT:-$PLUMBLINE_WORK/data/ibims1}"
 export BOOSTER_ROOT="${BOOSTER_ROOT:-$PLUMBLINE_WORK/data/booster}"
 export MIDDLEBURY_ROOT="${MIDDLEBURY_ROOT:-$PLUMBLINE_WORK/data/middlebury}"
 export SUN_RGBD_ROOT="${SUN_RGBD_ROOT:-$PLUMBLINE_WORK/data/sun_rgbd}"
+export NUSCENES_ROOT="${NUSCENES_ROOT:-$PLUMBLINE_WORK/data/nuscenes}"
 export ETH3D_ROOT="${ETH3D_ROOT:-$PLUMBLINE_WORK/data/eth3d}"
 
 export DAV2_ROOT="${DAV2_ROOT:-$PLUMBLINE_WORK/deps/depth-anything-v2}"

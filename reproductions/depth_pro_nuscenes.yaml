@@ -1,0 +1,28 @@
+# Depth Pro on nuScenes — metric δ₁ (Depth Pro Table 1).
+#
+# Val CAM_FRONT: 881 random keyframes (appendix Table 16). Paper δ₁ = 0.491 (49.1%).
+
+name: depth-pro-nuscenes
+protocol: nuscenes_depth_pro_metric
+
+model:
+  name: depth-pro
+  kwargs: {}
+
+scale_alignment: none
+device: cuda:0
+
+paper_reference:
+  primary_metric: delta_1
+  value: 0.491
+  tolerance_relative: 0.05
+  citation: >
+    Bochkovskii et al. 2024, Depth Pro Table 1, NuScenes column: δ₁ = 0.491
+    (49.1%). Metric — no scale alignment. Appendix Table 16: 881 samples from
+    val split, 0.001–80 m, 900×1600 GT (LiDAR projected).
+  source_confidence: verified_pdf
+
+notes: >
+  Stage v1.0-trainval at $NUSCENES_ROOT via ./scripts/download-nuscenes.sh.
+  Subset is seed=42 on val CAM_FRONT keyframes (paper used random 881 from ~35K
+  val camera frames — document any δ₁ gap). Requires nuscenes-devkit.

@@ -1,0 +1,24 @@
+# nuScenes val CAM_FRONT — Depth Pro Table 1 metric δ₁.
+#
+# Appendix Table 16: 881 random val samples, valid 0.001–80 m, 900×1600 GT.
+
+name: nuscenes_depth_pro_metric
+description: >
+  nuScenes val CAM_FRONT: LiDAR-projected metric δ₁, no alignment (Depth Pro Table 1).
+
+reference:
+  paper: "Bochkovskii et al. 2024, Depth Pro Table 1 / appendix Table 16 (NuScenes)"
+
+fixed:
+  dataset:
+    name: nuscenes
+    split: val
+    kwargs:
+      version: v1.0-trainval
+      camera_channel: CAM_FRONT
+      subset_size: 881
+      subset_seed: 42
+  depth_clip: [0.001, 80.0]
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]
