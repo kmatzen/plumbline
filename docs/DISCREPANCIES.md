@@ -1,97 +1,32 @@
 # Discrepancies
 
-Catalog of every adapter / loader / protocol / solver / citation mismatch
-surfaced to date. Open entries keep full diagnosis context. Closed entries
-(FIXED + verified, or EXPLAINED-NOT-A-BUG) live at the bottom as one-liners
-with commit SHAs; full history is in git.
+Tracker for **outstanding** adapter / loader / protocol / solver / citation work
+— open, parked, or investigated-but-unresolved cells only. **Resolved** items are
+not kept here: the understanding for them lives in
+[`CONFIDENCE_AUDIT.md`](CONFIDENCE_AUDIT.md) (which localizes every off-paper gap
+to a layer) and the full investigation history is in git.
 
-Status legend:
+> Resolved & closed (see `CONFIDENCE_AUDIT.md` + git): D1, D2, D9, D17, D18, D22,
+> D23, D24, D27, D30, D10b. Removed-code attempts: `docs/blocked/`.
 
-- 🧪 **FIX-PENDING-VERIFY** — change landed, waiting on a GPU re-run.
-- 🔎 **SUSPECTED** — hypothesis + diagnosis path; not yet reproduced.
-- 📅 **DEFERRED** — known root cause, scoped for v0.2+.
+**Category key:** 🔧 model integration · 📐 protocol (eval pipeline diverges from
+paper code) · 📜 paper-side (unreproducible from the public release) · ⏳ untested.
 
-## Triage (2026-05-03)
+## Outstanding issues at a glance
 
-Single glanceable view of every questionable cell. Use this to pick
-where to look (model code? protocol? paper itself?) before opening a
-deeper diagnosis below.
-
-**Category key:**
-
-- 🔧 **Model integration** — adapter is suspect; debug the upstream-vs-
-  plumbline numerical path (dtype, RNG, attention, normalization).
-- 📐 **Protocol** — adapter OK; eval pipeline (alignment, mask, crop,
-  aggregation) diverges from paper code.
-- 📜 **Paper-side** — adapter + protocol audited; cell may be
-  unreproducible from the public release (private eval config,
-  internal checkpoint, undocumented post-processing).
-- 📑 **Citation** — paper cell number is wrong / fabricated /
-  mis-attributed; no actual delta against a real paper cell.
-- ⏳ **Untested** — infra ready, no GPU validation yet.
-- 🚫 **No path** — no paper cell exists for this combination; not a
-  paper-match candidate.
-
-### Per-cell triage
-
-| ID | Cell | Δ vs paper | Cat | Tried & ruled out | Next move |
-|---|---|---|---|---|---|
-| D3 | VGGT-DTU chamfer | +98 % (0.756 vs 0.382 mm) | 📜 | per-view-masked port, Jensen toolkit, PatchmatchNet filter, fp32, 49-view | watch upstream; reproduce structurally only |
-| D4 | VGGT-ETH3D 3-scene | −9.4 % (0.642 vs 0.709 m) | 📐 | per-view-masked path, MLP transform, 1 cm voxel | stage 13 scenes (D10) for apples-to-apples |
-| D9 | Marigold-KITTI | ✅ RESOLVED 2026-05-25 | 📜 | upstream eval-script default repointed v1-0/50-step → v1-1/1-step between paper (CVPR 2024) and current `21_infer_kitti.sh` | EXPLAINED (checkpoint/config delta): Marigold's **own** native pipeline on its **own** prepared `kitti_eigen_split_test.tar` reproduces paper AbsRel 0.099 end-to-end with v1-0 / 50-step / ens-10 (0.0992 on 60-img spread subset, 0.2 % off). Plumbline's 0.109 (v1-1 / 1-step) is the newer distilled checkpoint the current upstream eval script defaults to — a documented checkpoint-generation delta, not a paper-private config and not a plumbline bug. |
-| D10 | VGGT-ETH3D full 13-scene split | n/a (gates D4 verdict) | 📐 | — | stage remaining ~14 GB or demote D4 |
-| D17 | GeoWizard-NYU | ✅ RESOLVED 2026-05-26 | 📜 | dtype, xformers, full `seed_all`, 4 alignment modes, raw vs filled GT, README `--denoise_steps 50` | EXPLAINED (paper-private cherry-pick): paper author confirmed on `fuxiao0719/GeoWizard#36` that paper-time eval runs multiple seeds and **selects the best result for the metric report**. Plumbline's single-seed 0.0574 matches @anonymous's independent 0.0576 on the same protocol; paper 0.052 is best-of-N seeds, not single-seed. 50-step sub60 (this session) also rules out the README's "academic comparison" knob: 0.06704 (10-step) vs 0.06681 (50-step) → Δ 0.3 % noise. |
-| D18 | GeoWizard-KITTI | ✅ RESOLVED 2026-05-26 | 📜 | same checkpoint + same author as D17; KITTI is Table 1's parallel column under the same eval recipe | EXPLAINED (paper-private cherry-pick): same root cause as D17 — paper author's quote on `fuxiao0719/GeoWizard#36` covers both NYU and KITTI columns of Table 1. No separate KITTI GPU run needed. |
-| D22 | Marigold/GeoWizard KITTI umbrella | various | 📜 | (subsumes D9 + D18) | open upstream issues; possibly drop these from v0.1 paper-match |
-| D23 | MASt3R-CO3Dv2 cell verification | ✅ RESOLVED 2026-05-23 | 📑 | WebFetch HTML render only loaded appendix on `2406.09756` (every URL surface) | direct PDF read done: Table 3 row (b) MASt3R = 94.6/91.9/81.8 — matches YAML exactly |
-| D24 | CUT3R NYU/KITTI/Bonn depth (DUSt3R-lineage) | ✅ RESOLVED 2026-05-25 | 📐 | crop, clip, median-align, abs_rel, resize — all ruled out by re-scoring cached preds | EXPLAINED (protocol delta): plumbline's strict protocol differs from the lineage's. **All 3 paper cells confirmed** via CUT3R's own pipeline on its exact sets — NYU 0.08595/0.086, KITTI 0.09219/0.092, Bonn 0.07661/0.078. `cut3r-*` jobs → `blocked` (D24) |
-| D27 | MonST3R-Bonn Table 3 single-frame (also touches MonST3R-Sintel) | ✅ RESOLVED 2026-05-26 | 📜 | per-frame iteration + frame subset + max_depth + view-duplicate averaging — all ruled out by PR #5/#6 | EXPLAINED (paper text vs upstream code): MonST3R paper §4.2 text says "per-frame median scaling"; upstream `depth_metric.ipynb` Bonn cell actually scores via **per-sequence scale+shift LAD2** (`align_with_lad2=True`, `max_depth=70`, weighted-mean across 5 sequences). Plumbline implements the paper-text recipe (per-frame median); paper number 0.076 is the de-facto code recipe. Same lineage as D24 (D17/D9 family of "paper-private eval recipe"). |
-| — | VGGT-CO3Dv2 (Table 1 0.882) | not run | ⏳ | paper cell verified 2026-05-03 | GPU run |
-| — | MASt3R-CO3Dv2 (Table 3 0.818) | not run | ⏳ | adapter rewrite + tests pass; 0 GPU validation; paper cell PDF-verified 2026-05-23 (D23 closed) | GPU run |
-| — | MASt3R N-view rewrite (any non-CO3Dv2 use) | not run | ⏳ | landed 2026-04-27; synthetic + unit tests only | GPU run |
-| — | DA3-CO3Dv2 | n/a (informational) | 🚫 | paper has no CO3Dv2 row | optional GPU run for A/B |
-| — | MoGe-2 ViT-L on any per-dataset cell | n/a | 🚫 | paper publishes only 10-dataset averages (Table 1) and ViT-Base ablations (Table B.4) | accept; no per-dataset paper-row possible for ViT-L |
-| — | Depth Pro on NYU/KITTI | n/a (informational) | 🚫 | paper evaluates Booster/ETH3D/Middlebury/NuScenes/Sintel/Sun-RGBD only | add a paper-actual dataset to get a real paper-row |
-
-### Per-paper trust
-
-How much we should trust each paper's published cells when adopters
-look at the matrix:
-
-| Paper | Verified cells | Trust | Why / action |
-|---|---|---|---|
-| Depth Anything V2 (Yang 2024, arXiv:2406.09414) | **8** (NYU S/B/L, KITTI S/B/L, DIODE L, KITTI-MoGe L) | High | All cells reproduce in tolerance. One fabricated Sintel pin (0.075 vs paper's 0.487) was caught and demoted. |
-| Metric3D-v2 (Hu 2024, arXiv:2404.15506) | **4** (NYU + KITTI L/Giant) | High | All four cells match within ±10 %. No protocol surprises. |
-| MoGe-1 (Wang 2024, arXiv:2410.19115) | **5** (NYU, KITTI, DIODE-both + 2 DA-V2 baseline cells) | High after audit | Systematic Table-2-vs-Table-3 citation error fixed in 2026-04-20 audit; values match once table number corrected. |
-| Marigold (Ke 2024, arXiv:2312.02145) | **2 end-to-end** (NYU + KITTI via Marigold's own pipeline) | High | Both paper cells reproducible end-to-end on Marigold's exact prepared eval sets + native pipeline with the original CVPR **v1-0** checkpoint @ 50 denoise steps × 10 ensemble. NYU 0.0577 / paper 0.055 (plumbline cell, v1-1 / 1-step still matches NYU). KITTI 0.0992 / paper 0.099 (D9 resolution 2026-05-25, v1-0 / 50-step on `kitti_eigen_split_test.tar`, 60-img spread sub). Plumbline's `marigold_v1_1_kitti.yaml` lands ~0.11 because the current upstream eval script defaults to the newer distilled **v1-1 / 1-step** checkpoint, which trades accuracy on outdoor KITTI specifically (v1-1 still matches paper on NYU). Documented checkpoint-generation delta, not a paper-private config and not a plumbline bug. |
-| GeoWizard (Fu 2024) | **0** paper-match + 2 explained off-paper (D17, D18) | **Explained (paper-private eval recipe)** | Both NYU + KITTI cells reproduce at ~0.057 / ~0.11 under single-seed eval — plumbline 0.0574 / @anonymous 0.0576 (`fuxiao0719/GeoWizard#36`) converge. Paper 0.052 / 0.097 is **best-of-N seeds**, per the paper author's own statement on the upstream issue tracker (2026-05-26 D17/D18 resolution; quote: "we perform multiple inferences with different initialized seeds … and select the best result for the metric report"). Adapter is structurally correct (fp32 + xformers + full `seed_all` + alignment matches author's `de_normalized.py`); only the seed-selection step is paper-private. `paper_match: no` on both YAMLs is now *explained*, not suspect. |
-| Depth Pro (Bochkovskii 2024, arXiv:2410.02073) | **1** | Partial | ✅ Booster δ₁ **0.4878** vs **0.466** (2026-05-31). Sintel δ₁ **0.2409** vs **0.400** (reads worse, off-paper). Middlebury/NuScenes/Sun-RGBD loaders **removed pre-release** (no verified anchor — see `docs/blocked/DEPTH_PRO_*_TABLE1.md`). Remaining: ETH3D metric GT. |
-| Depth Anything 3 (Bytedance Seed 2025, arXiv:2511.10647) | **1** (NYU δ₁) | Moderate (limited) | Paper's main Table 4 only reports δ₁ (no AbsRel breakdown), and the chamfer-track / GSO comparisons live in informational rows with no paper target. Per-paper-row policy: NYU is the only paper-comparable cell currently shippable. |
-| MoGe-2 (Wang 2025, arXiv:2507.02546) | **0** | **N/A — no path** | Per-dataset ViT-L cells are not published anywhere in the paper (Table 1 is 10-dataset average; Table B.4 is ViT-Base ablation). Either reproduce the 10-dataset average across all 10 datasets (unwieldy), or accept "no paper-row possible for MoGe-2 ViT-L per-dataset". |
-| VGGT (Wang 2025, arXiv:2503.11651) | **1** paper-match (CO3Dv2 pose, Table 1) | **Mixed** | Table 1 CO3Dv2 pose **✅ AUC@30 0.8964 vs 0.882 (1.6 % over, 2026-05-26 RTX 3090)** — first multi-view pose paper-match in plumbline, v0.1 acceptance #2 met. Table 2 DTU still 2 × over after exhausting all levers (D3, upstream-blocked). Table 3 ETH3D 3-scene 9.4 % under (D4); 13-scene apples-to-apples deferred (D10). Paper §4.2 says "Following MASt3R [62]" for DTU — but MASt3R repo doesn't ship DTU eval, so the paper may rely on unreleased post-processing (TSDF / BA / pose refinement). **Re-read §4.2 + appendix carefully** if D3 stays blocked after a future VGGT release. |
-| MASt3R (Leroy 2024, arXiv:2406.09756) | **1** paper-match (CO3Dv2 pose, Table 3) | **High** | Table 3 CO3Dv2 pose **✅ mAA(30) 0.7960 vs 0.818 (−2.7 %, 2026-05-26 RTX 3090)** — v0.1 acceptance #2 seconded after VGGT (PR #10). Companion RRA@15 = 0.9708. Paper cell PDF-verified 2026-05-23 (D23 resolved): `arxiv.org/pdf/2406.09756`, Table 3 row (b) MASt3R = RRA@15 94.6 / RTA@15 91.9 / mAA(30) 81.8 — `mast3r_co3dv2_pose.yaml` pins 0.946 / 0.919 / 0.818 exactly. §4.3 protocol (41 cat / 10 frames / 45 pairs / no GT focals) confirmed. N-view inference goes through dust3r `PointCloudOptimizer` (init=mst, niter=300); curope CUDA ext built in-session for the MASt3R-dust3r fork (32 % speedup vs the pytorch RoPE2D fallback the adapter ships with). |
-| CUT3R (Wang 2025, arXiv:2501.12387) | **3 end-to-end** (NYU, KITTI, Bonn via CUT3R's own eval); 3 plumbline cells = protocol deltas | **High** | All three paper cells **reproduced end-to-end** on CUT3R's exact prepared sets + native pipeline: NYU 0.08595/0.086, KITTI 0.09219/0.092 (Table 1), Bonn 0.07661/0.078 (Table 2 video, per-seq scale) — all ≤2 % (D24). plumbline's own depth cells read *better* (NYU 0.0522, KITTI 0.0858, Bonn 0.0536) because its strict protocol / eval set differs from the DUSt3R lineage — documented **protocol deltas**, `paper_match: no` is expected and fully explained, not suspect. |
-| MonST3R (Zhang 2024, arXiv:2410.03825) | **1** plumbline ✓ paper-match (NYU Table 3 single-frame; KITTI 5.05% off → ℹ️) + **1 end-to-end pose** (Sintel Table 4 via MonST3R's own `launch.py --mode=eval_pose`) | **High** | Table 3 single-frame depth: NYU 0.0896/0.091 (PR #3) ✓ within ±5 %; KITTI 0.0959/0.101 (PR #4) is 5.05 % — just over ±5 % (ℹ️; was mislabeled 4.1 %, corrected 2026-05-28). Sintel (0.3726/0.345) + Bonn (0.0654/0.076) are ℹ️ documented protocol deltas — paper text §4.2 says "per-frame median scaling" but `depth_metric.ipynb` actually scores per-sequence scale+shift LAD2 (D27, PR #7). Table 4 pose **end-to-end verified 2026-05-27** on Sintel via MonST3R's own pipeline: ATE 0.1134/0.108 (+5.0 %), RPE-trans 0.0446/0.042 (+6.3 %), RPE-rot 0.7921/0.732 (+8.2 %) — all within reasonable tolerance for a stochastic global-alignment pipeline (Adam-optimized GA + RAFT-sintel flow consistency). |
-
-## Open issues at a glance
-
-(Diagnosis-detail counterpart of the triage table above; categories &
-status carry over.)
-
-| ID | One-liner | Status |
+| ID | Cell | Status / next move |
 |---|---|---|
-| D3 | VGGT-DTU chamfer — PatchmatchNet geometric-consistency filter verified on 22-scan re-run (Overall 0.756 mm vs prior 0.758, ~no-op). fp32 probe also verified (0.750, also ~no-op). Adapter + protocol levers exhausted; ~1.98× residual gap is in public VGGT-1B output, not anything plumbline controls | 🔎 upstream-blocked |
-| D4 | VGGT-ETH3D — per-view-masked path landed at Overall 0.642 m on the 3-scene subset (9.4 % UNDER paper 0.709). Apples-to-apples comparison needs the full 13-scene split (D10) | ✅ infra landed; awaits D10 |
-| D9 | Marigold-KITTI — paper cell 0.099 reproduces end-to-end with v1-0 / 50-step on Marigold's exact prepared set (0.0992, 0.2 % off, 60-img spread sub). Plumbline's 0.109 is a documented v1-1 / 1-step (newer distilled checkpoint) protocol delta. | ✅ RESOLVED 2026-05-25 |
-| D10 | VGGT-ETH3D full 13-scene vs 3-scene subset | 📅 deferred |
-| D17 | GeoWizard-NYU — paper number is best-of-N seeds (paper author confirmed on `fuxiao0719/GeoWizard#36`); 50-step sub60 final adapter lever ruled out 2026-05-26 (0.06681 vs 10-step 0.06704, Δ 0.3 %); plumbline single-seed 0.0574 matches @anonymous independent reproducer 0.0576 | ✅ RESOLVED 2026-05-26 |
-| D18 | GeoWizard-KITTI — same root cause as D17 (paper-private cherry-pick across seeds covers both Table 1 columns) | ✅ RESOLVED 2026-05-26 |
-| D22 | Marigold portion REFUTED by D9 (v1-0 / 50-step reproduces paper 0.099). GeoWizard portion closed by D17 / D18: not a paper-private config in the usual sense, but a paper-private *seed-selection* step. | ✅ Marigold portion RESOLVED 2026-05-25 (D9); GeoWizard portion RESOLVED 2026-05-26 (D17 / D18) |
-| D23 | `mast3r_co3dv2_pose.yaml` cell verified by direct PDF read 2026-05-23 — `arxiv.org/pdf/2406.09756` Table 3 row (b) MASt3R CO3Dv2 = 94.6 / 91.9 / 81.8, matching the YAML (0.946 / 0.919 / 0.818) exactly. `source_confidence: verified_pdf` is now genuinely backed by a PDF read | ✅ RESOLVED 2026-05-23 |
-| D24 | CUT3R depth cells (nyuv2/kitti/bonn) all OFF-PAPER better than published — eval-protocol mismatch, NOT a model bug. Re-scoring the SAME cached preds: protocol levers (Eigen crop, clip [1e-3,10], median-align, abs_rel) ruled out (raw + CUT3R-protocol still 0.0526). Source = GT depth field: plumbline `depth_field=raw` (sparse Kinect) vs DUSt3R-lineage dense/filled depth. raw→filled +0.025, +Eigen-crop −0.017; filled+no-crop = 0.0777 vs paper 0.086. Residual closed: CUT3R's OWN pipeline on its exact sets reproduces all 3 cells — NYU 0.08595/0.086, KITTI 0.09219/0.092, Bonn 0.07661/0.078 (video, per-seq scale). | ✅ RESOLVED 2026-05-25 (protocol delta; all 3 paper cells CONFIRMED reproducible end-to-end) |
-| D27 | MonST3R-Bonn Table 3 single-frame AbsRel 0.0654 / paper 0.076 (14 % off, *better*); same `align_with_lad2`+per-sequence-aggregation finding also applies to MonST3R-Sintel (0.3726 / paper 0.345, 8 % off, worse). PR #5 + PR #6 ruled out frame subset, `max_depth`, view-duplicate averaging. Single-record diff against upstream `depth_metric.ipynb` Bonn cell (2026-05-26): paper text §4.2 says "per-frame median scaling, following DUSt3R", but the actual notebook scores via **per-sequence scale+shift LAD2** (`depth_evaluation(..., max_depth=70, align_with_lad2=True)`, predictions stacked per seq, weighted-mean across 5 seqs by valid_pixels). plumbline implements the paper-text recipe; paper number reflects the code recipe. Same upstream-eval-recipe vs paper-text shape as D9 (Marigold checkpoint default) / D17-D18 (GeoWizard best-of-N seeds). | ✅ RESOLVED 2026-05-26 (paper-text-vs-code mismatch in upstream `depth_metric.ipynb`; cells stay `paper_match: no` as documented protocol delta) |
+| D3 | VGGT-DTU chamfer (+98 %, 0.756 vs 0.382 mm) | 📜 upstream-blocked: ~1.98× residual is in the public VGGT-1B output; adapter + protocol levers exhausted (PatchmatchNet filter, fp32, 49-view all no-ops). Watch upstream. |
+| D4 | VGGT-ETH3D 3-scene (−9.4 %, 0.642 vs 0.709 m) | 📐 infra landed; apples-to-apples needs the full 13-scene split (D10). |
+| D10 | VGGT-ETH3D full 13-scene split (+23.5 %) | 📐 investigated: driven entirely by one scene (`terrains`, Comp 10.18 m); 12/13 scenes beat paper. Open: is `terrains` a model failure or a scene-specific GT artifact. |
+| D21 | Prediction cache vs loader-preprocessing change | 🔧 cache key doesn't invalidate when a loader's preprocessing changes. |
+| D28 | DUSt3R Table 2 indoor (NYU/Bonn) | 📜 investigated: indoor scoring recipe is paper-private; KITTI ✅ + CO3Dv2 ✅ anchor the adapter. |
+| D29 | DA-V2 native-DIODE Table 2 (`domain=both`) | 📐 investigated: outdoor preprocessing gap; the MoGe-bundle cells on the same dataset are ✅. |
+| D31 | DA-V2 native-ETH3D Table 2 (−32 %) | 📐 RGB/GT misalignment fixed; residual full-13-scene protocol gap still OPEN. |
+| D32 | DA-V2 native-Sintel Table 2 (under paper) | 📐 parked: sky-mask / aggregation recipe. |
+| D33 | DA-V2 native-ETH3D GT source + recipe | 📜 parked: GT source + eval recipe still diverge from ETH3D official. |
 
----
+(Full diagnosis per entry below.)
 
 ## Open issues
 
@@ -761,72 +696,6 @@ explained by the 3-vs-13-scene subset; the actual ±5 % gate
 properly attaches to D10 (full-split sweep), not to this 3-scene
 configuration.
 
-### D9 · Marigold-KITTI — RESOLVED: checkpoint-generation delta, not a paper-private config   ✅ RESOLVED 2026-05-25
-
-plumbline's `marigold_v1_1_kitti.yaml` reads ~19 % off paper 0.099 because it
-pins the repo's **current** default checkpoint (v1-1 / 1-step distilled), while
-the paper Table 1 cell (arXiv:2312.02145, KITTI "Ours w/ ensemble" = 9.9 / 91.6)
-is the **v1-0 / 50-step** CVPR config. Verified end-to-end on Marigold's own
-`script/depth/{infer,eval}.py` + the authors' prepared `kitti_eigen_split_test.tar`:
-v1-0/50-step → **0.0992** (0.2 % off paper); v1-1/1-step → 0.1111 (matches
-plumbline). So the gap is a documented checkpoint-generation delta, not a
-plumbline bug — and on NYU the same v1-1/1-step config still matches paper
-(0.0577 ✅), confirming it's dataset-shape-dependent. The cell stays a v1-1
-documented-protocol-delta (`paper_match: no`, explained). **Lesson:** check
-whether the repo's eval-default checkpoint still equals the paper's. See
-`docs/CONFIDENCE_AUDIT.md` (L4).
-
-### D18 · GeoWizard-KITTI — same pattern as D9   ✅ RESOLVED 2026-05-26 (via D17)
-
-GeoWizard-KITTI reads off-paper (e.g. `kitti_moge_eval` 0.1103 vs paper 0.097),
-the same diffusion-depth-lineage shape as Marigold. **Closed by D17:** same
-checkpoint, author, and best-of-N-seeds eval recipe as GeoWizard-NYU (the paper
-Table 1 has both columns from one eval). No separate KITTI verification needed —
-the closure is the paper-author quote, not a number to recompute. Cell stays
-`paper_match: no` (explained).
-
-### D22 · Marigold / GeoWizard KITTI paper cells — Marigold portion RESOLVED   ✅ partial RESOLVED 2026-05-25
-
-Umbrella for the "neither plumbline protocol reproduces Marigold 0.099 / GeoWizard
-0.097 on KITTI" hypothesis (paper-private eval config). **Marigold portion:
-REFUTED** by D9 (checkpoint-generation delta, v1-0 vs v1-1; the paper code + cell
-are both public). **GeoWizard portion:** explained by D17/D18 (best-of-N seeds).
-So the original "paper-private eval" framing was wrong for Marigold (public
-checkpoint drift) and correct-but-now-attributed for GeoWizard (seed cherry-pick).
-
-### D24 · CUT3R DUSt3R-lineage depth cells off-paper — eval-protocol, not model   ✅ RESOLVED 2026-05-25
-
-CUT3R's NYU/KITTI/Bonn depth cells all read *better* than paper (NYU 0.0522 vs
-0.086, KITTI 0.0858 vs 0.092, Bonn 0.0536 vs 0.078). Re-scoring the *same cached
-predictions* under CUT3R's own scorer (`eval/monodepth/eval_metrics.py`) isolated
-the cause to the **GT field + crop**, not the model: plumbline pins raw + Eigen-crop
-NYU GT, while the DUSt3R/CUT3R lineage scores against **filled** (dense) GT with
-**no crop** (under CUT3R's protocol, raw→filled = 0.0526→0.0777). Running CUT3R's
-own native pipeline on each cell's exact prepared set reproduces the published
-numbers within ≤2 % (NYU 0.08595/0.086, KITTI 0.09219/0.092, Bonn 0.07661/0.078),
-confirming plumbline's CUT3R integration is correct. plumbline keeps its *stricter*
-raw+crop protocol; the off-paper-better cells stay documented protocol deltas
-(`paper_match: no`, explained), not chased. **Lesson:** the loader comment "every
-paper cites rawDepths" does NOT hold for the DUSt3R lineage. (π³ ran in the same
-session but its adapter was later removed — see `blocked/PI3_RECONSTRUCTION.md`.)
-See `docs/CONFIDENCE_AUDIT.md` (L3).
-
-### D27 · MonST3R-Bonn Table 3 single-frame — paper text vs upstream eval code disagree   ✅ RESOLVED 2026-05-26
-
-MonST3R-Bonn reads 0.0654 vs paper 0.076 (better); Sintel 0.3726 vs 0.345 (worse).
-A code-level single-record diff against MonST3R's `depth_metric.ipynb` Bonn cell
-shows the Table-3 number is produced by **per-sequence scale+shift LAD2** alignment
-(`align_with_lad2=True`, Adam) with **valid-pixel-weighted** aggregation across the
-5 sequences — NOT the paper §4.2 *text*'s "per-frame median". plumbline ships the
-paper-text-faithful recipe (per-frame median), which has far more DoF → strictly
-lower residual, matching the better-than-paper direction. The same per-seq/per-frame
-split also explains Sintel's worse direction (a `temple_2` frame outlier hurts
-plumbline's equal-frame mean more than the paper's pixel-weighted per-seq mean).
-Frame-subset and `max_depth` were ruled out. Both cells stay ℹ️ (`paper_match: no`,
-explained); no code change. **Lesson:** the released eval code can disagree with the
-paper text — read the notebook. Same shape as D9/D17/D24. See
-`docs/CONFIDENCE_AUDIT.md` (L3).
-
 ### D28 · DUSt3R Table 2 indoor cells off-paper — lineage-recipe ≠ DUSt3R-paper-recipe   🔬 INVESTIGATED 2026-05-28
 
 End-to-end GPU run of the three DUSt3R-own-paper depth pins (PR `dust3r-depth-pin`,
@@ -1031,19 +900,6 @@ three jobs `pending`; YAMLs/protocol unchanged (per the no-tune rule). Result
 JSONs: `s3://plumbline-bench/runs/backlog_20260529/results/`. The indoor cell
 (`da-v2-small-diode-indoor`, value:null informational) remains the trustworthy
 native-DIODE DA-V2 reference.
-
-### D30 · ETH3D-MoGe cells used scale_shift not scale_shift_clamped — outdoor blowup   ✅ RESOLVED 2026-05-30
-
-The first ETH3D MoGe-eval run exposed two fixes: (1) the `eth3d-moge-eval` loader
-placeholder was rewritten to the real nested `.index.txt` tree + MoGe FoV-warp
-(mirroring the validated DIODE/KITTI MoGe loaders); (2) the YAMLs pinned
-`scale_alignment: scale_shift`, which on ETH3D's outdoor scenes lets far-depth
-pixels invert to enormous aligned depths (mean AbsRel 169, max sample 44 320).
-MoGe's own eval floors aligned disparity at `1/gt.max()` — i.e.
-**`scale_shift_clamped`**, which every sibling MoGe cell already uses. Switching
-fixed it: **0.0323 vs paper 0.0317** (1.9 %, MATCH). The same fix landed iBims-1
-DA-V2-L (0.0391→**0.0348** vs 0.0348). A protocol-fidelity fix (match the authors'
-alignment), not a tuned knob. **Lesson:** alignment must match the paper's code.
 
 ### D31 · DA-V2 native-ETH3D Table-2 — RGB/GT misalignment (fixed); full 13-scene still under paper   ✅ FIXED / 🔎 OPEN protocol 2026-05-30
 
@@ -1301,43 +1157,4 @@ session:
 The 3-scene subset record stays in `vggt_eth3d_subset_chamfer.yaml`
 as an informational regression detector. Result JSON archived at
 `docs/runs/plumb_vggt_eth3d_13_20260527T163122Z.json`.
-
-### D10b · ETH3D loader stale manifest cache   🔬 FIXED 2026-05-27
-
-Discovered during D10's 13-scene run: the ETH3D loader's manifest
-cache (`<root>/.plumbline_manifest/eth3d_train_vps<N>_v2.jsonl`) is
-keyed only by split + views_per_sample. The first 13-scene run
-silently used the prior 3-scene manifest because the cache file
-predated the 10 new scene downloads. The run reported `n_evaluated:
-137` and 3 unique scene_ids despite the YAML listing 13 scenes — the
-`scenes:` whitelist filtered records *after* the cached load, so a
-manifest written when only 3 scenes existed on disk produced exactly
-those 3 records regardless of what was newly downloaded.
-
-Wasted ~40 min of GPU time before the cause was identified
-(`jq -r .scene` on the manifest revealed only 3 entries).
-
-Manual workaround: delete the manifest, re-run. Code fix to
-auto-invalidate when on-disk scene-dir set differs from manifest's
-scene set lands with this PR in
-`src/plumbline/datasets/eth3d.py:ETH3DDataset.__init__`.
-
-### D17 · GeoWizard-NYU — RESOLVED: paper number is best-of-N seeds, not a fixed-seed metric   ✅ RESOLVED 2026-05-26
-
-After a two-month tail of audits ruled out every plumbline-side lever (dtype,
-xformers, full `seed_all`, 4 alignment modes, raw vs filled GT, and the README's
-50-denoise-steps "academic comparison" config — a verified 0.3 % no-op), the
-closure came from a **paper-author quote** on `fuxiao0719/GeoWizard#36`: they run
-multiple seeds per dataset and **"select the best result for the metric report."**
-Three independent single-seed reproductions converge to ~0.057 (plumbline 0.0574,
-the issue reporter 0.0576, plumbline's 50-step sub60 projects to ~0.0572); the
-paper's 0.052 is the best-of-N minimum — an undocumented eval recipe in no released
-code. Alignment was cross-checked too: GeoWizard's `align_scale_shift`
-(`polyfit deg=1`) ≡ plumbline's `scale_shift_depth`, so the gap is at the prediction
-level, not eval. plumbline keeps a single fixed seed (the defensible zero-shot
-protocol); the cells stay `paper_match: no` (explained). **D18** (GeoWizard-KITTI)
-and the GeoWizard portion of **D22** close by the same evidence. Production YAMLs
-bumped to `num_inference_steps: 50` for paper-protocol intent (a 0.3 % no-op).
-**Lesson:** read the upstream issue tracker before a multi-month adapter audit —
-the issue was titled exactly the discrepancy. See `docs/CONFIDENCE_AUDIT.md` (L3).
 

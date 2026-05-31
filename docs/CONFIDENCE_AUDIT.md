@@ -221,5 +221,29 @@ specify. Sometimes we have **pinned the recipe**; sometimes it remains unknown.
    artifact (everything else on ETH3D is fine).
 
 Each unknown is a single, scoped question — not a vague "doesn't reproduce."
-Cross-references: [`DISCREPANCIES.md`](DISCREPANCIES.md) (D-numbers),
+Cross-references: [`DISCREPANCIES.md`](DISCREPANCIES.md) (outstanding work),
 [`BLOCKED.md`](BLOCKED.md), and the per-cell handoff docs.
+
+---
+
+## Per-paper trust
+
+How much to trust each paper's published cells when reading the matrix. (Moved
+here from DISCREPANCIES.md — this is documented understanding, not outstanding
+work.)
+
+| Paper | Verified ✅ | Trust | Note |
+|---|---|---|---|
+| Depth Anything V2 (2406.09414) | 8 | High | All cells reproduce; one fabricated Sintel pin was caught and demoted. |
+| Metric3D-v2 (2404.15506) | 4 | High | NYU + KITTI L/Giant, all within ±10 %. |
+| MoGe-1 (2410.19115) | 5+ | High | After fixing a Table-2-vs-3 citation error (2026-04-20 audit). |
+| Marigold (2312.02145) | 2 | High | Both cells reproduce end-to-end on Marigold's own pipeline; KITTI gap is a v1-0/v1-1 checkpoint delta (D9, L4). |
+| GeoWizard (Fu 2024) | 0 match / 2 explained | Explained | Paper number is best-of-N seeds (author-confirmed, D17/D18); adapter structurally correct. |
+| Depth Pro (2410.02073) | 1 (Booster) | Partial | Booster ✅; Sintel off-paper; Middlebury/NuScenes/Sun-RGBD loaders removed (no anchor). |
+| Depth Anything 3 (2511.10647) | 1 (NYU δ₁) | Moderate | Paper Table 4 reports only δ₁; NYU is the only paper-comparable cell. |
+| MoGe-2 (2507.02546) | 0 | No path | Paper publishes only 10-dataset averages — no per-dataset ViT-L cell exists. |
+| VGGT (2503.11651) | 1 (CO3Dv2 pose) | Mixed | CO3Dv2 pose ✅; DTU ~2× (D3, upstream checkpoint); ETH3D under/over (D4/D10). |
+| MASt3R (2406.09756) | 1 (CO3Dv2 pose) | High | Table 3 CO3Dv2 ✅; cell PDF-verified (D23). |
+| DUSt3R (2312.14132) | 2 (KITTI, CO3Dv2) | High | Outdoor depth + pose ✅; indoor depth recipe paper-private (D28, L3). |
+| CUT3R (2501.12387) | 0 plumbline-match | High | All 3 paper cells reproduce end-to-end on CUT3R's own pipeline; plumbline cells are stricter-protocol deltas (D24, L3). |
+| MonST3R (2410.03825) | 2 (NYU, Sintel pose) | High | NYU depth ✅ + Sintel trajectory pose ✅; Bonn/Sintel depth are recipe deltas (D27, L3). |
