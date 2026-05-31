@@ -48,15 +48,12 @@ metrics:
 
 ### `eth3d_depth_pro_metric.yaml`
 
-Requires **metric GT** source — not the z-buffer sparse cloud used for DA-V2
-chamfer. Candidates to audit:
+**Primary path (2026-05-31):** official `ground_truth_depth/dslr_images/*.JPG`
+(float32, distorted DSLR grid) + matching `images/dslr_images/*.JPG`. See
+[`ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md`](ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md).
 
-- ETH3D laser scan subsampled to image plane (if paper used scan eval)
-- Official ETH3D **depth** benchmarks (different from multi-view chamfer)
-- Depth Pro authors' unreleased script (none in `ml-depth-pro` today)
-
-**Do not** reuse `eth3d_dav2` / z-buffer projection until a citation ties Table 1
-to that geometry.
+Ruled out for Table 1 δ₁: z-buffer PLY (`eth3d_dav2`), MoGe bundle (`eth3d-moge-eval`),
+chamfer clouds. Depth Pro repo has no public ETH3D eval script.
 
 ## Appendix C Table 16 (confirmed 2026-05-30)
 
@@ -86,7 +83,7 @@ Keep `depth-pro-sintel` **blocked**; do not tune `paper_reference.value`.
 | Dataset | Depth range (m) | n | Staged locally | Plumbline repro |
 |---------|-----------------|---|----------------|-----------------|
 | Booster | 0.001–10 | 228 | ✅ | δ₁ **0.4878** vs **0.466** (2026-05-31, **match**) |
-| ETH3D | 0.1–200 | 454 | native + moge (chamfer) | blocked (no metric GT path) |
+| ETH3D | 0.1–200 | 454 | train 13 scenes (partial official depth) | not run — see [`ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md`](ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md) |
 | Middlebury | 0.001–10 | 15 | ✅ | δ₁ **0.7589** vs **0.605** (blocked, reads better) |
 | NuScenes | 0.001–80 | 881 | ✅ | δ₁ **0.5935** vs **0.491** (blocked, reads better) |
 | Sintel | 0.01–80 | 1064 | ✅ `$SINTEL_ROOT` | `depth-pro-sintel` **blocked** (δ₁ 0.2409) |
@@ -125,7 +122,7 @@ official weights — not fixable by `max_depth`/`pass_name` alone (already ruled
 | Middlebury `depth-pro-middlebury` | GPU | ⚠️ δ₁ 0.7589 vs 0.605 (blocked) |
 | Sun-RGBD `depth-pro-sun-rgbd` | GPU | ✅ 0.4505 vs 0.890 (blocked) |
 | NuScenes `depth-pro-nuscenes` | GPU | ✅ 0.5935 vs 0.491 (blocked) |
-| Repro `depth-pro-eth3d` (new) | GPU | after GT |
+| ETH3D official-depth loader + `depth-pro-eth3d` | data/GPU | after `stage-eth3d-train-scenes.sh` top-up |
 
 ## Queue stance
 

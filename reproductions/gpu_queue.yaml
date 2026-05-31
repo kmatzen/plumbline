@@ -492,6 +492,22 @@ jobs:
       Subset seed=42 on val CAM_FRONT (paper: random 881 from ~35K val cameras).
       Do not tune paper_reference.
 
+  - name: depth-pro-eth3d
+    status: pending
+    priority: 6
+    paper_target: "Depth Pro Table 1 — ETH3D δ₁ 0.415 (metric, no alignment)"
+    primary_metric: delta_1
+    datasets: [eth3d]
+    data_footprint_gb: 15
+    est_wall_min: 180
+    requires_env: [ETH3D_ROOT]
+    extras: >
+      ./scripts/stage-eth3d-train-scenes.sh (all 13 train scenes: dslr_depth +
+      dslr_jpg); plumbline install depth-pro; official depth loader TBD.
+    notes: >
+      Blocked on data: ~454 official depth JPGs. Handoff:
+      docs/ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md. Do not use z-buffer GT.
+
   # --- New PROTOCOL coverage: DA-V2 own Table 2 on DIODE (native loader,
   #     affine-inv disparity) across variants S/B/L. Recipe already validated
   #     on the ViT-S indoor slice (0.0722 vs 0.073). YAMLs landed 2026-05-28. ---

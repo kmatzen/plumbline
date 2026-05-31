@@ -75,15 +75,20 @@ JSON/S3 provenance only.
 
 **Optional:** Sync result JSON to S3 if missing; mark queue row as investigated.
 
-### 4. Depth Pro Booster (`depth-pro-booster`): ✅ δ₁ **0.4878** vs **0.466** (2026-05-31, Table 1 match). Staged at `$BOOSTER_ROOT` via `scripts/download-booster.sh`.
+### 4. Depth Pro Table 1 sweep (2026-05-31) — **closed except ETH3D**
 
-### 5. Depth Pro Middlebury (`depth-pro-middlebury`): ⚠️ δ₁ **0.7589** vs **0.605** (2026-05-31, blocked — reads better). `$MIDDLEBURY_ROOT` via `scripts/download-middlebury.sh`.
+| Dataset | δ₁ ours / paper | Status |
+|---------|-----------------|--------|
+| Booster | 0.488 / 0.466 | ✅ match |
+| Middlebury | 0.759 / 0.605 | blocked (better) |
+| NuScenes | 0.594 / 0.491 | blocked (better) |
+| Sintel | 0.241 / 0.400 | blocked (worse) |
+| Sun-RGBD | 0.451 / 0.890 | blocked (worse) |
+| ETH3D | — / 0.415 | staging official depth — [`ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md`](ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md) |
 
-Depth Pro Table 1 — Sintel **blocked**; iBims sanity **done**
-
-Sintel: δ₁ **0.2409** vs **0.400** (appendix protocol). iBims informational:
-δ₁ **0.8458** on 100 frames — same weights work on indoor GT. ETH3D still blocked.
-See [`docs/DEPTH_PRO_TABLE1_METRIC_EVAL.md`](DEPTH_PRO_TABLE1_METRIC_EVAL.md).
+iBims sanity: δ₁ **0.8458** (adapter OK on indoor GT). Artifacts on S3:
+`tier_depth_pro_nuscenes_20260531` (+ periodic backup). Full matrix:
+[`DEPTH_PRO_TABLE1_METRIC_EVAL.md`](DEPTH_PRO_TABLE1_METRIC_EVAL.md).
 
 ### 5. Defer (high friction)
 
