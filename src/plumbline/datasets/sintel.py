@@ -139,15 +139,9 @@ class SintelDataset(Dataset):
 
         # Manifest key includes the full_seq toggle so the two modes don't
         # share a cache.
-        vps_tag = (
-            f"full_s{self.frame_stride}"
-            if self.full_seq
-            else f"vps{self.views_per_sample}"
-        )
+        vps_tag = f"full_s{self.frame_stride}" if self.full_seq else f"vps{self.views_per_sample}"
         manifest_path = (
-            self.root
-            / ".plumbline_manifest"
-            / f"sintel_{split}_{pass_name}_{vps_tag}.jsonl"
+            self.root / ".plumbline_manifest" / f"sintel_{split}_{pass_name}_{vps_tag}.jsonl"
         )
         if manifest_path.exists():
             records = load_manifest(manifest_path)

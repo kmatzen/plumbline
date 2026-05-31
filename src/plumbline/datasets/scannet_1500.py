@@ -40,6 +40,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
@@ -135,8 +136,7 @@ class ScanNet1500Dataset(Dataset):
         # the loader.
         if img0.shape != img1.shape:
             raise ValueError(
-                f"pair {rec['pair_id']}: image shape mismatch "
-                f"{img0.shape} vs {img1.shape}"
+                f"pair {rec['pair_id']}: image shape mismatch {img0.shape} vs {img1.shape}"
             )
         images = np.stack([img0, img1], axis=0)
         assert_valid_image(images, name=f"scannet1500/{rec['pair_id']}/image")
@@ -194,9 +194,7 @@ def parse_scannet_1500_pairs(path: Path) -> Iterator[dict[str, object]]:
             parts = line.split()
             # 2 image paths + 2 fillers + 9 + 9 + 16 = 38 tokens.
             if len(parts) < 38:
-                raise ValueError(
-                    f"{path}:{line_no}: expected >= 38 tokens, got {len(parts)}"
-                )
+                raise ValueError(f"{path}:{line_no}: expected >= 38 tokens, got {len(parts)}")
             img0, img1 = parts[0], parts[1]
             # parts[2], parts[3] are the legacy overlap buckets — skip.
             K0 = np.asarray([float(x) for x in parts[4:13]], dtype=np.float64).reshape(3, 3)
@@ -216,7 +214,7 @@ def parse_scannet_1500_pairs(path: Path) -> Iterator[dict[str, object]]:
             }
 
 
-def _fetch_pairs_file() -> NDArray:
+def _fetch_pairs_file() -> NDArray[Any]:
     """Placeholder — the canonical source is external. Document the URL in
     the loader's DatasetNotAvailable message and leave retrieval to the
     user (one-time ~200KB download from the SuperGlue repo)."""

@@ -100,7 +100,7 @@ class VGGTAdapter(Model):
             return
         ensure_torch()
         try:
-            from vggt.models.vggt import VGGT  # type: ignore[import-not-found]
+            from vggt.models.vggt import VGGT
         except ImportError as exc:  # pragma: no cover
             from plumbline.install import install_hint
 
@@ -227,7 +227,7 @@ def _run_vggt(
         if torch_dtype is torch.float32 or device.startswith("cpu"):
             preds = model(batched)
         else:
-            with torch.amp.autocast("cuda", dtype=torch_dtype):
+            with torch.amp.autocast("cuda", dtype=torch_dtype):  # type: ignore[attr-defined]
                 preds = model(batched)
 
     # pose_enc: (1, N, 9) → extri (1, N, 3, 4), intri (1, N, 3, 3)

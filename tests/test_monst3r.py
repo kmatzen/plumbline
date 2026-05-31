@@ -49,9 +49,7 @@ def _patch(monkeypatch: pytest.MonkeyPatch, captured: dict[str, Any]) -> None:
         h, w = 4, 5
         depth = np.full((1, h, w), 2.0, dtype=np.float32)
         pmap = np.zeros((1, h, w, 3), dtype=np.float32)
-        K = np.array(
-            [[w, 0, w / 2], [0, w, h / 2], [0, 0, 1]], dtype=np.float32
-        )[None]
+        K = np.array([[w, 0, w / 2], [0, w, h / 2], [0, 0, 1]], dtype=np.float32)[None]
         return depth, pmap, K
 
     monkeypatch.setattr(MonST3RAdapter, "_load", fake_load)

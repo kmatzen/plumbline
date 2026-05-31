@@ -161,7 +161,18 @@ ignore = [
     "E501",   # line length handled by formatter
     "N803",   # argument name should be lowercase — we use K, R, T for camera matrices
     "N806",   # variable in function should be lowercase — ditto
+    "N812",   # lowercase imported as non-lowercase — `torch.nn.functional as F` convention
     "B008",   # function call in default argument — typer uses this pattern
+    # Ambiguous-unicode rules: docstrings/comments intentionally use δ₁, ×, →,
+    # ₁, etc. when discussing metric names and paper notation. Flagging these
+    # is pure noise here.
+    "RUF001", # ambiguous unicode in identifiers (none; defensive)
+    "RUF002", # ambiguous unicode in docstrings
+    "RUF003", # ambiguous unicode in comments
+    # int(round(x)) is deliberate: round() on a numpy scalar returns a numpy
+    # float, so the int() cast is needed to guarantee a Python int. The lint
+    # assumes round() always returns int (true only for Python floats).
+    "RUF046",
 ]
 
 [tool.ruff.lint.per-file-ignores]
@@ -202,5 +213,20 @@ module = [
     "timm.*",
     "einops.*",
     "h5py.*",
+    # Optional adapter / dataset deps — installed only via `plumbline install`
+    # or `pip install`, never in the base (CI) environment, and none ship type
+    # stubs. The adapters that import them are exercised by GPU/weights/data
+    # tests, not the typecheck job.
+    "cv2",
+    "evo.*",
+    "depth_pro",
+    "depth_anything_v2.*",
+    "diffusers.models.dual_transformer_2d",
+    "dust3r.*",
+    "models.geowizard_pipeline",
+    "moge.*",
+    "nuscenes.*",
+    "sam2",
+    "vggt.*",
 ]
 ignore_missing_imports = true

@@ -139,9 +139,7 @@ class PredictionCache:
 
         Only non-None array fields are stored; ``metadata`` becomes a JSON blob.
         """
-        path = self.path_for(
-            model_name, config_hash, dataset_name, sample_id, input_fingerprint
-        )
+        path = self.path_for(model_name, config_hash, dataset_name, sample_id, input_fingerprint)
         path.parent.mkdir(parents=True, exist_ok=True)
 
         arrays: dict[str, np.ndarray] = {}
@@ -169,9 +167,7 @@ class PredictionCache:
         sample_id: str,
         input_fingerprint: str = "",
     ) -> Prediction:
-        path = self.path_for(
-            model_name, config_hash, dataset_name, sample_id, input_fingerprint
-        )
+        path = self.path_for(model_name, config_hash, dataset_name, sample_id, input_fingerprint)
         if not path.exists():
             raise FileNotFoundError(path)
         with np.load(path, allow_pickle=False) as data:

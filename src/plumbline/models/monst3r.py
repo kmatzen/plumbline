@@ -191,7 +191,7 @@ class MonST3RAdapter(Model):
         ensure_torch()
         _ensure_monst3r_on_path()
         try:
-            from dust3r.model import AsymmetricCroCo3DStereo  # type: ignore[import-not-found]
+            from dust3r.model import AsymmetricCroCo3DStereo
         except ImportError as exc:  # pragma: no cover - needs the repo
             from plumbline.install import install_hint
 
@@ -358,7 +358,6 @@ def _monst3r_single_frame_eval(
     doesn't enter the metric; we just need a shape-valid value to satisfy
     :func:`assert_valid_intrinsics`.
     """
-    import torch
     from copy import deepcopy
 
     from dust3r.image_pairs import make_pairs
@@ -414,7 +413,7 @@ def _run_monst3r_video_pose(
     sintel_ckpt: bool,
     use_self_mask: bool,
     sam2_mask_refine: bool,
-) -> dict[str, NDArray[Any]]:
+) -> dict[str, Any]:
     """MonST3R full video-pose pipeline (replicates ``launch.py
     --mode=eval_pose`` for Table 4 rows).
 
@@ -436,14 +435,14 @@ def _run_monst3r_video_pose(
     body can splice it in interchangeably.
     """
     import torch
-
     from dust3r.cloud_opt import GlobalAlignerMode, global_aligner
     from dust3r.image_pairs import make_pairs
     from dust3r.inference import inference
+
     from plumbline.conventions import (
+        invert_pose,
         rebase_to_first_camera,
         world_from_camera_is_identity,
-        invert_pose,
     )
 
     n = int(images.shape[0])
@@ -451,7 +450,7 @@ def _run_monst3r_video_pose(
     pairs = make_pairs(dust3r_imgs, scene_graph=scene_graph_type, prefilter=None, symmetrize=True)
     output = inference(pairs, model, device, batch_size=1, verbose=False)
 
-    with torch.enable_grad():
+    with torch.enable_grad():  # type: ignore[no-untyped-call]
         scene = global_aligner(
             output,
             device=device,

@@ -253,8 +253,7 @@ class SevenScenesDataset(Dataset):
                     continue
                 for start in range(0, len(frame_ids) - width + 1, self.stride):
                     window = [
-                        frame_ids[start + k * self.baseline]
-                        for k in range(self.views_per_sample)
+                        frame_ids[start + k * self.baseline] for k in range(self.views_per_sample)
                     ]
                     first = window[0]
                     yield {
@@ -316,7 +315,9 @@ class SevenScenesDataset(Dataset):
                 "frame_ids": tuple(frame_ids),
                 "split": self.split,
                 "intrinsic_source": (
-                    "user-supplied" if self.intrinsic != SEVEN_SCENES_INTRINSIC else "kinect_v1_default"
+                    "user-supplied"
+                    if self.intrinsic != SEVEN_SCENES_INTRINSIC
+                    else "kinect_v1_default"
                 ),
             },
         )

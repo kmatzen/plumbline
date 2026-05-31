@@ -57,6 +57,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
@@ -84,13 +85,13 @@ def _find_frame(clip_dir: Path, timestamp: int) -> Path | None:
     return None
 
 
-def _parse_camera_txt(txt_path: Path) -> list[dict]:
+def _parse_camera_txt(txt_path: Path) -> list[dict[str, Any]]:
     """Parse a RealEstate10K clip ``.txt`` into per-frame records.
 
     Returns a list of ``{"timestamp": int, "fxfycxcy": (4,), "w2c": (3, 4)}``
     in file order. The first (URL) line is skipped.
     """
-    frames: list[dict] = []
+    frames: list[dict[str, Any]] = []
     for raw in txt_path.read_text().splitlines():
         line = raw.strip()
         if not line or line.startswith("http"):
@@ -156,7 +157,7 @@ class RealEstate10KPoseEvalLoader(Dataset):
         self.seed = int(seed)
         whitelist = set(clips) if clips is not None else None
 
-        self._records: list[dict] = []
+        self._records: list[dict[str, Any]] = []
         for clip_dir in sorted(p for p in root_path.iterdir() if p.is_dir()):
             clip_id = clip_dir.name
             if whitelist is not None and clip_id not in whitelist:
@@ -186,10 +187,10 @@ class RealEstate10KPoseEvalLoader(Dataset):
     def __len__(self) -> int:
         return len(self._records)
 
-    def _load_sample(self, rec: dict, rng: np.random.Generator) -> Sample:
+    def _load_sample(self, rec: dict[str, Any], rng: np.random.Generator) -> Sample:
         clip_id: str = rec["clip_id"]
         clip_dir: Path = rec["dir"]
-        frames: list[dict] = rec["frames"]
+        frames: list[dict[str, Any]] = rec["frames"]
 
         # Sample num_frames (sorted so pair enumeration is order-stable).
         idx = np.sort(rng.choice(len(frames), size=self.num_frames, replace=False))
@@ -199,7 +200,10 @@ class RealEstate10KPoseEvalLoader(Dataset):
         Ks: list[NDArray[np.float64]] = []
         cam_from_world: list[NDArray[np.float64]] = []
         for fr in chosen:
-            img = read_rgb_uint8(_find_frame(clip_dir, fr["timestamp"]))
+            frame_path = _find_frame(clip_dir, fr["timestamp"])
+            if frame_path is None:
+                raise FileNotFoundError(f"frame {fr['timestamp']} missing in {clip_dir}")
+            img = read_rgb_uint8(frame_path)
             H, W = img.shape[:2]
             images.append(img)
             fx, fy, cx, cy = fr["fxfycxcy"]

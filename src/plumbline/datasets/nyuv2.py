@@ -134,9 +134,7 @@ class NYUv2Dataset(Dataset):
 
         self.apply_eigen_crop = bool(apply_eigen_crop)
         if depth_field not in ("raw", "filled"):
-            raise ValueError(
-                f"depth_field must be 'raw' or 'filled'; got {depth_field!r}"
-            )
+            raise ValueError(f"depth_field must be 'raw' or 'filled'; got {depth_field!r}")
         self.depth_field = depth_field
         # Optional pre-fit GT upper bound, matching the Marigold /
         # GeoWizard ``valid_mask = (depth > min) AND (depth < max) AND
@@ -147,9 +145,7 @@ class NYUv2Dataset(Dataset):
         # structural knob for parity and for datasets where the
         # equivalent matters (e.g. KITTI's 80 m bound). Default
         # ``None`` preserves the prior behaviour.
-        self.max_gt_depth = (
-            float(max_gt_depth) if max_gt_depth is not None else None
-        )
+        self.max_gt_depth = float(max_gt_depth) if max_gt_depth is not None else None
 
     def __iter__(self) -> Iterator[Sample]:
         import h5py

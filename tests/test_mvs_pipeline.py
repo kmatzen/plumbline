@@ -208,9 +208,7 @@ class TestMVSPipeline:
         assert "rotation_error_deg_mean" not in report.aggregate_metrics
         assert report.aggregate_metrics["abs_rel"] == 0.0
 
-    def test_point_cloud_metrics_back_project_when_point_map_missing(
-        self, tmp_path: Path
-    ) -> None:
+    def test_point_cloud_metrics_back_project_when_point_map_missing(self, tmp_path: Path) -> None:
         """Chamfer must still fire when the adapter returns depth+K+E but no
         dense point_map — DA3, DA-V2 metric, Depth Pro, etc. only produce
         depth. The runner back-projects depth→world to form the point map

@@ -73,13 +73,9 @@ class _MogeIndexBundleDataset(Dataset):
         split: str = "test",
     ) -> None:
         if split != "test":
-            raise ValueError(
-                f"{spec.display_name} only exposes the test split; got {split!r}"
-            )
+            raise ValueError(f"{spec.display_name} only exposes the test split; got {split!r}")
         root_path = Path(root) if root else env_path(spec.env_var)
-        bundle_root = (
-            root_path / spec.bundle_subdir if root_path is not None else None
-        )
+        bundle_root = root_path / spec.bundle_subdir if root_path is not None else None
         if root_path is None or bundle_root is None or not bundle_root.exists():
             raise DatasetNotAvailable(
                 f"{spec.display_name} MoGe bundle not found. Set --data-root or "
@@ -126,8 +122,7 @@ class _MogeIndexBundleDataset(Dataset):
         ]
         if not self._records:
             raise DatasetNotAvailable(
-                f"No {spec.display_name} samples under {bundle_root} "
-                "(empty .index.txt)."
+                f"No {spec.display_name} samples under {bundle_root} (empty .index.txt)."
             )
 
     def __iter__(self) -> Iterator[Sample]:
@@ -144,9 +139,7 @@ class _MogeIndexBundleDataset(Dataset):
         sample_root = self.root / self.spec.bundle_subdir / rec["sample_path"]
         img_path = _find_image(sample_root)
         if img_path is None:
-            raise ValueError(
-                f"{rec['sample_id']}: no image.{{jpg,png}} in {sample_root}"
-            )
+            raise ValueError(f"{rec['sample_id']}: no image.{{jpg,png}} in {sample_root}")
         image_np = _moge_read_image(img_path)
         depth_np = _moge_read_depth(sample_root / "depth.png")
         meta = json.loads((sample_root / "meta.json").read_text())
@@ -163,9 +156,7 @@ class _MogeIndexBundleDataset(Dataset):
         inst = self._moge_pipe._process_instance(raw)
 
         img_t = inst["image"]
-        image = (img_t.permute(1, 2, 0).numpy() * 255.0).clip(0, 255).astype(
-            np.uint8
-        )
+        image = (img_t.permute(1, 2, 0).numpy() * 255.0).clip(0, 255).astype(np.uint8)
         depth = inst["depth"].numpy().astype(np.float32)
         valid = inst["depth_mask"].numpy().astype(bool)
         depth_clean = np.where(valid, depth, np.float32(1.0))

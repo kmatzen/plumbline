@@ -33,6 +33,7 @@ from __future__ import annotations
 import xml.etree.ElementTree as ET
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
@@ -126,8 +127,7 @@ class BoosterDataset(Dataset):
     ) -> None:
         if split != "training":
             raise ValueError(
-                "BoosterDataset only exposes the training split with public GT; "
-                f"got {split!r}"
+                f"BoosterDataset only exposes the training split with public GT; got {split!r}"
             )
         if setup != "balanced":
             raise ValueError(f"Only setup='balanced' is supported; got {setup!r}")
@@ -160,7 +160,7 @@ class BoosterDataset(Dataset):
         self.root = root_path
         self.setup = setup
         self.use_occlusion_mask = use_occlusion_mask
-        self.frame_records: list[dict[str, Path | float]] = []
+        self.frame_records: list[dict[str, Any]] = []
 
         for scene in scene_names:
             scene_dir = train_root / scene
@@ -199,7 +199,7 @@ class BoosterDataset(Dataset):
         for rec in self.frame_records:
             yield self._load_sample(rec)
 
-    def _load_sample(self, rec: dict[str, Path | float]) -> Sample:
+    def _load_sample(self, rec: dict[str, Any]) -> Sample:
         image_path = rec["image"]
         assert isinstance(image_path, Path)
         scene = str(rec["scene"])
@@ -212,9 +212,7 @@ class BoosterDataset(Dataset):
         h, w, _ = img.shape
         disp = np.load(rec["disp"]).astype(np.float32)
         if disp.shape != (h, w):
-            raise ValueError(
-                f"booster/{scene}/{stem}: disp {disp.shape} != image {(h, w)}"
-            )
+            raise ValueError(f"booster/{scene}/{stem}: disp {disp.shape} != image {(h, w)}")
 
         fx = float(rec["fx"])
         baseline_mm = float(rec["baseline_mm"])

@@ -17,7 +17,7 @@ See ``protocols/nyu_eigen_2014.yaml`` for the reference shape.
 
 from __future__ import annotations
 
-from pathlib import Path
+from collections.abc import Iterator
 from typing import Any
 
 import yaml
@@ -26,8 +26,8 @@ from plumbline.paths import PROTOCOLS_DIR
 
 __all__ = [
     "ProtocolConflictError",
-    "load_protocol",
     "apply_protocol",
+    "load_protocol",
 ]
 
 
@@ -39,9 +39,7 @@ def load_protocol(name: str) -> dict[str, Any]:
     """Load ``protocols/<name>.yaml`` by short name."""
     path = PROTOCOLS_DIR / f"{name}.yaml"
     if not path.exists():
-        raise FileNotFoundError(
-            f"No protocol preset for '{name}'. Looked at {path}."
-        )
+        raise FileNotFoundError(f"No protocol preset for '{name}'. Looked at {path}.")
     with path.open("r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
     if not isinstance(cfg, dict) or "fixed" not in cfg:
@@ -95,7 +93,7 @@ def _find_conflicts(
     fixed: Any,
     repro: Any,
     path: list[str],
-):
+) -> Iterator[tuple[list[str], Any, Any]]:
     """Yield (path, fixed_value, repro_value) tuples for mismatches.
 
     Recurses through dict branches; at leaves (non-dict values), a
@@ -116,7 +114,7 @@ def _find_conflicts(
             child_repro = repro.get(k, _MISSING) if isinstance(repro, dict) else _MISSING
             if child_repro is _MISSING:
                 continue
-            yield from _find_conflicts(v, child_repro, path + [k])
+            yield from _find_conflicts(v, child_repro, [*path, k])
     else:
         if repro is _MISSING:
             return

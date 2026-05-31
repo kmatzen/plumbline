@@ -45,9 +45,7 @@ def _patch(monkeypatch: pytest.MonkeyPatch, captured: dict[str, Any]) -> None:
         h, w = 4, 5
         depth = np.full((1, h, w), 2.0, dtype=np.float32)
         pmap = np.zeros((1, h, w, 3), dtype=np.float32)
-        K = np.array(
-            [[w, 0, w / 2], [0, w, h / 2], [0, 0, 1]], dtype=np.float32
-        )[None]
+        K = np.array([[w, 0, w / 2], [0, w, h / 2], [0, 0, 1]], dtype=np.float32)[None]
         return depth, pmap, K
 
     monkeypatch.setattr(DUSt3RAdapter, "_load", fake_load)
@@ -56,9 +54,7 @@ def _patch(monkeypatch: pytest.MonkeyPatch, captured: dict[str, Any]) -> None:
 
 
 class TestSingleFrame:
-    def test_single_frame_uses_view_duplicate_helper(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_single_frame_uses_view_duplicate_helper(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """DUSt3R v1.1 + paper §4.3: N=1 must route through
         ``_dust3r_single_frame_eval`` (the F(I, I) view-duplicate trick),
         NOT raise as it did in v1.0.

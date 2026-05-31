@@ -148,9 +148,7 @@ def auc(
     raise ValueError(f"unknown auc mode '{mode}' (use 'analytic' or 'vggt_co3d_histogram')")
 
 
-def accuracy_at_threshold(
-    errors: NDArray[Any], thresholds: list[float]
-) -> dict[float, float]:
+def accuracy_at_threshold(errors: NDArray[Any], thresholds: list[float]) -> dict[float, float]:
     """Fraction of errors at or below each threshold.
 
     The shape VGGT / DUSt3R / MASt3R papers report as RRA@τ (rotation

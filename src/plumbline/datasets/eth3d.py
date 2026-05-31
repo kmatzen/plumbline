@@ -102,16 +102,12 @@ def load_eth3d_official_depth_map(
     return depth
 
 
-def _infer_eth3d_official_depth_hw(
-    num_floats: int, *, name: str = ""
-) -> tuple[int, int]:
+def _infer_eth3d_official_depth_hw(num_floats: int, *, name: str = "") -> tuple[int, int]:
     """Infer (H, W) for an official ETH3D depth dump from its pixel count."""
     for h, w in ((4032, 6048), (6048, 4032)):
         if h * w == num_floats:
             return h, w
-    raise ValueError(
-        f"cannot infer ETH3D official depth shape for {name!r}: {num_floats} floats"
-    )
+    raise ValueError(f"cannot infer ETH3D official depth shape for {name!r}: {num_floats} floats")
 
 
 def official_depth_valid_mask(depth: NDArray[np.floating[Any]]) -> NDArray[np.bool_]:
@@ -227,7 +223,7 @@ class ETH3DDataset(Dataset):
         # pattern that OOM-killed D4's scene-aggregation on 2026-04-24.
         # Keyed by (scene_name, tuple-of-relative-paths) so a scene that
         # somehow appears under two GT sources within one run still works.
-        self._gt_cache: dict[tuple, NDArray[np.float32]] = {}
+        self._gt_cache: dict[tuple[str, tuple[str, ...]], NDArray[np.float32]] = {}
         self.with_per_view_gt = bool(with_per_view_gt)
         self.pv_splat_radius = int(pv_splat_radius)
         # Cap rendering resolution; ETH3D native is 6048x4032 which makes
@@ -235,9 +231,7 @@ class ETH3DDataset(Dataset):
         # (3.7 GB / scene) painful. 2048 max-dim keeps per-view cost ~3 sec
         # and per-scene cache ~400 MB while staying well above any typical
         # pred resolution (518 for VGGT).
-        self.pv_render_max_dim = (
-            int(pv_render_max_dim) if pv_render_max_dim is not None else None
-        )
+        self.pv_render_max_dim = int(pv_render_max_dim) if pv_render_max_dim is not None else None
         # When True, resize each RGB view to the per-view GT render resolution
         # (``pv_render_max_dim`` cap) so mono-depth metrics are pixel-aligned.
         # VGGT/π³ chamfer runs keep False — they need native images for the
@@ -264,8 +258,7 @@ class ETH3DDataset(Dataset):
                 continue
             seen.add(scene)
             current = [
-                str(p.relative_to(self.root))
-                for p in _resolve_scan_clean_plys(self.root / scene)
+                str(p.relative_to(self.root)) for p in _resolve_scan_clean_plys(self.root / scene)
             ]
             cached = rec.get("point_cloud_plys")
             if cached is None and rec.get("point_cloud_ply"):
@@ -387,9 +380,7 @@ class ETH3DDataset(Dataset):
                 # Pre-render canvas: native unless mono-depth asks for alignment.
                 if self.resize_images_to_pv_render:
                     render_sizes = [
-                        scene_pv["render_sizes"][
-                            scene_pv["image_id_to_idx"][int(ir["image_id"])]
-                        ]
+                        scene_pv["render_sizes"][scene_pv["image_id_to_idx"][int(ir["image_id"])]]
                         for ir in rec["image_records"]
                         if int(ir["image_id"]) in scene_pv["image_id_to_idx"]
                     ]
@@ -478,11 +469,7 @@ class ETH3DDataset(Dataset):
         if scene in self._pv_depth_cache:
             return self._pv_depth_cache[scene]
 
-        gt_tag = (
-            "dslr_eval"
-            if ply_rels and "dslr_scan_eval" in ply_rels[0]
-            else "scan_clean"
-        )
+        gt_tag = "dslr_eval" if ply_rels and "dslr_scan_eval" in ply_rels[0] else "scan_clean"
         cache_path = (
             self.root
             / ".plumbline_manifest"
@@ -567,7 +554,11 @@ class ETH3DDataset(Dataset):
             cam_from_world[:3, :3] = quat_to_rot(q)
             cam_from_world[:3, 3] = t
             d, v = render_pv_depth_zbuffer(
-                xyz, K_render, cam_from_world, H_render, W_render,
+                xyz,
+                K_render,
+                cam_from_world,
+                H_render,
+                W_render,
                 splat_radius=self.pv_splat_radius,
             )
             depths_list.append(d)
@@ -583,7 +574,9 @@ class ETH3DDataset(Dataset):
         V = len(depths_list)
         depths = np.zeros((V, max_render_h, max_render_w), dtype=np.float32)
         valids = np.zeros((V, max_render_h, max_render_w), dtype=np.bool_)
-        for i, (d, v, (H_r, W_r)) in enumerate(zip(depths_list, valids_list, render_sizes, strict=True)):
+        for i, (d, v, (H_r, W_r)) in enumerate(
+            zip(depths_list, valids_list, render_sizes, strict=True)
+        ):
             depths[i, :H_r, :W_r] = d
             valids[i, :H_r, :W_r] = v
 

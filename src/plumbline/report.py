@@ -132,9 +132,7 @@ class Report:
             tasks=list(data.get("tasks", [])),
             scale_alignment=data.get("scale_alignment", "none"),
             aggregate_metrics=dict(data.get("aggregate_metrics", {})),
-            per_scene_metrics={
-                s: dict(m) for s, m in data.get("per_scene_metrics", {}).items()
-            },
+            per_scene_metrics={s: dict(m) for s, m in data.get("per_scene_metrics", {}).items()},
             per_sample=[
                 SampleResult(
                     sample_id=s["sample_id"],

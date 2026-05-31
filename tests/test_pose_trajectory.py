@@ -14,9 +14,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-pytest.importorskip(
-    "evo", reason="trajectory-pose metrics need `pip install evo` (optional extra)"
-)
+pytest.importorskip("evo", reason="trajectory-pose metrics need `pip install evo` (optional extra)")
 
 from plumbline.metrics.pose import (
     trajectory_ate_rmse_sim3,
@@ -125,9 +123,7 @@ class TestTrajectoryRPE:
         # Each consecutive pair has a +1° relative rotation drift in pred → RPE-rot ≈ 1°.
         # (Sim(3) alignment can null out one global rotation but not the
         # per-frame drift.)
-        assert 0.5 < rpe_r < 2.0, (
-            f"~1°/frame drift should yield RPE-rot ~1°; got {rpe_r}"
-        )
+        assert 0.5 < rpe_r < 2.0, f"~1°/frame drift should yield RPE-rot ~1°; got {rpe_r}"
 
 
 def test_too_few_frames_raises_or_nans() -> None:

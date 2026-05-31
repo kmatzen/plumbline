@@ -143,7 +143,8 @@ class Co3Dv2Dataset(Dataset):
 
         # Enumerate categories on disk.
         all_categories = sorted(
-            p.name for p in root_path.iterdir()
+            p.name
+            for p in root_path.iterdir()
             if p.is_dir() and (p / "frame_annotations.jgz").exists()
         )
         if categories is not None:

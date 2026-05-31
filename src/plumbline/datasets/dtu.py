@@ -434,11 +434,16 @@ class DTUDataset(Dataset):
             # cache key is the scan id alone.
             H, W = images.shape[1], images.shape[2]
             cache_path = (
-                self.root / ".plumbline_manifest"
+                self.root
+                / ".plumbline_manifest"
                 / f"dtu_pv_depth_scan{rec['scan_id']}_HxW{H}x{W}_r{self.pv_splat_radius}.npz"
             )
             depths_per_scan_view, valids_per_scan_view = self._load_or_render_pv_depth(
-                cache_path, rec["scan_id"], pcd_full, H, W,
+                cache_path,
+                rec["scan_id"],
+                pcd_full,
+                H,
+                W,
                 splat_radius=self.pv_splat_radius,
             )
             view_indices = rec["view_indices"]
@@ -497,9 +502,7 @@ class DTUDataset(Dataset):
         valids = np.zeros((len(cam_paths), H, W), dtype=np.bool_)
         for i, cp in enumerate(cam_paths):
             K_v, E_cw_v = load_dtu_cam(cp)
-            d, v = render_pv_depth_zbuffer(
-                xyz, K_v, E_cw_v, H, W, splat_radius=splat_radius
-            )
+            d, v = render_pv_depth_zbuffer(xyz, K_v, E_cw_v, H, W, splat_radius=splat_radius)
             depths[i] = d
             valids[i] = v
         cache_path.parent.mkdir(parents=True, exist_ok=True)
@@ -563,10 +566,10 @@ def render_pv_depth_zbuffer(
         # the index arrays by that factor in lock-step with z.
         offsets = np.arange(-splat_radius, splat_radius + 1, dtype=np.int64)
         dy, dx = np.meshgrid(offsets, offsets, indexing="ij")
-        dy = dy.reshape(-1)
-        dx = dx.reshape(-1)
-        ui_all = (ui_c[:, None] + dx[None, :]).reshape(-1)
-        vi_all = (vi_c[:, None] + dy[None, :]).reshape(-1)
+        dy_flat = dy.reshape(-1)
+        dx_flat = dx.reshape(-1)
+        ui_all = (ui_c[:, None] + dx_flat[None, :]).reshape(-1)
+        vi_all = (vi_c[:, None] + dy_flat[None, :]).reshape(-1)
         z_all = np.broadcast_to(z[:, None], (z.shape[0], dx.shape[0])).reshape(-1)
         ui_c, vi_c, z = ui_all, vi_all, z_all
     in_image = (ui_c >= 0) & (ui_c < width) & (vi_c >= 0) & (vi_c < height)

@@ -325,7 +325,35 @@ class TestETH3D:
         depth_dir = tmp_path / "scene" / "ground_truth_depth" / "dslr_images"
         depth_dir.mkdir(parents=True)
         h, w = 4, 6
-        raw = np.array([1.0, 2.0, np.inf, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0], dtype=np.float32)
+        raw = np.array(
+            [
+                1.0,
+                2.0,
+                np.inf,
+                4.0,
+                5.0,
+                6.0,
+                7.0,
+                8.0,
+                9.0,
+                10.0,
+                11.0,
+                12.0,
+                13.0,
+                14.0,
+                15.0,
+                16.0,
+                17.0,
+                18.0,
+                19.0,
+                20.0,
+                21.0,
+                22.0,
+                23.0,
+                24.0,
+            ],
+            dtype=np.float32,
+        )
         (depth_dir / "DSC_0001.JPG").write_bytes(raw.tobytes())
         loaded = load_eth3d_official_depth_map(depth_dir / "DSC_0001.JPG", height=h, width=w)
         assert loaded.shape == (h, w)
@@ -1610,10 +1638,7 @@ def _encode_moge_depth_png(
     from PIL import Image
     from PIL.PngImagePlugin import PngInfo
 
-    if unit is not None:
-        depth_to_encode = depth / unit
-    else:
-        depth_to_encode = depth
+    depth_to_encode = depth / unit if unit is not None else depth
     # t = log(d/near) / log(far/near); raw = round(t * 65533 + 1).
     mask_nan = np.isnan(depth_to_encode)
     mask_inf = np.isinf(depth_to_encode) & (depth_to_encode > 0)
@@ -1842,7 +1867,7 @@ class TestSevenScenes:
         # Camera 0 should be identity after rebase_to_first_camera.
         np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-5)
         # Intrinsics match Kinect v1 default.
-        fx, fy, cx, cy = SEVEN_SCENES_INTRINSIC
+        fx, fy, _cx, _cy = SEVEN_SCENES_INTRINSIC
         np.testing.assert_allclose(s.intrinsics[0, 0, 0], fx)
         np.testing.assert_allclose(s.intrinsics[0, 1, 1], fy)
 
@@ -2353,9 +2378,7 @@ def _write_fake_moge_index_bundle(
     for sp in sample_paths:
         d = root / sp
         d.mkdir(parents=True)
-        Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
-            d / "image.jpg"
-        )
+        Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(d / "image.jpg")
         _write_fake_moge_depth_png(d / "depth.png", depth_m=2.0, H=H, W=W)
         import json
 

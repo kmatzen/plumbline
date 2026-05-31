@@ -24,6 +24,7 @@ from __future__ import annotations
 import json
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
@@ -46,14 +47,13 @@ _DEFAULT_CAMERA = "CAM_FRONT"
 _DEFAULT_VERSION = "v1.0-trainval"
 
 
-def _require_nuscenes():
+def _require_nuscenes() -> tuple[Any, Any]:
     try:
         from nuscenes.nuscenes import NuScenes
         from nuscenes.utils.splits import create_splits_scenes
     except ImportError as exc:
         raise DatasetNotAvailable(
-            "nuscenes-devkit is required. Install with: "
-            "uv pip install nuscenes-devkit pyquaternion"
+            "nuscenes-devkit is required. Install with: uv pip install nuscenes-devkit pyquaternion"
         ) from exc
     return NuScenes, create_splits_scenes
 
@@ -106,7 +106,7 @@ def project_nuscenes_lidar_depth(
     cs = nusc.get("calibrated_sensor", cam_sd["calibrated_sensor_token"])  # type: ignore[attr-defined]
     K = np.array(cs["camera_intrinsic"], dtype=np.float32)
 
-    explorer = NuScenesExplorer(nusc)  # type: ignore[arg-type]
+    explorer = NuScenesExplorer(nusc)
     points2d, depths, image = explorer.map_pointcloud_to_image(
         lidar_token,
         cam_token,
@@ -182,8 +182,7 @@ class NuscenesDataset(Dataset):
         meta = root_path / version
         if not meta.is_dir():
             raise DatasetNotAvailable(
-                f"Missing nuScenes metadata folder {meta}. "
-                f"Run ./scripts/download-nuscenes.sh"
+                f"Missing nuScenes metadata folder {meta}. Run ./scripts/download-nuscenes.sh"
             )
 
         NuScenes, _ = _require_nuscenes()
@@ -266,18 +265,12 @@ class NuscenesDataset(Dataset):
 
         img = read_rgb_uint8(img_path)
         if img.shape[0] != h or img.shape[1] != w:
-            raise ValueError(
-                f"nuscenes/{name}: image {img.shape[:2]} != lidar projection {(h, w)}"
-            )
+            raise ValueError(f"nuscenes/{name}: image {img.shape[:2]} != lidar projection {(h, w)}")
 
         images = img[None]
         assert_valid_image(images, name=f"nuscenes/{name}")
 
-        valid &= (
-            np.isfinite(depth)
-            & (depth > 0)
-            & (depth < self.max_depth_invalid)
-        )
+        valid &= np.isfinite(depth) & (depth > 0) & (depth < self.max_depth_invalid)
         depth_gt = np.where(valid, depth, 0.0).astype(np.float32)[None]
         depth_valid = valid[None]
 

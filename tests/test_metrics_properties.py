@@ -131,7 +131,9 @@ class TestAlignmentInvariants:
         # denominator (returns NaN). Skip degenerate arrays that land
         # below that guard — the recovery property is defined only when
         # the normal equation is well-posed.
-        assume(float(np.asarray(pred, dtype=np.float64) @ np.asarray(pred, dtype=np.float64)) >= 1e-6)
+        assume(
+            float(np.asarray(pred, dtype=np.float64) @ np.asarray(pred, dtype=np.float64)) >= 1e-6
+        )
         s = align_scale_lstsq(pred, gt)
         assert s == pytest.approx(scale, rel=1e-4)
 

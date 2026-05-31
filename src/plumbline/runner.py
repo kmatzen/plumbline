@@ -432,8 +432,10 @@ def evaluate(
                     # correspondences picks s ≈ 0 and the iterations are
                     # stuck. Bbox-diagonal is the simplest similarity
                     # match that's symmetric and unit-aware.
-                    s0, R0, t0 = _bbox_similarity_warm_start(merged, gt)
-                    s, R, t, _info = icp_similarity(merged, gt, init_s=s0, init_R=R0, init_t=t0)
+                    bbox_s, bbox_R, bbox_t = _bbox_similarity_warm_start(merged, gt)
+                    s, R, t, _info = icp_similarity(
+                        merged, gt, init_s=bbox_s, init_R=bbox_R, init_t=bbox_t
+                    )
                     merged = apply_similarity(merged, s, R, t).astype(np.float32)
                 per_scene[scene] = accuracy_completeness(
                     merged,
@@ -733,20 +735,23 @@ def _aligned_point_map(
                     int(pred_centers.shape[0]),
                 )
     elif pointcloud_alignment == "icp":
-        warm_s = warm_R = warm_t = None
-        if prediction.extrinsics is not None and sample.extrinsics_gt is not None:
-            pred_centers = prediction.extrinsics[:, :3, 3]
-            gt_centers = sample.extrinsics_gt[:, :3, 3]
-            if pred_centers.shape[0] >= 3:
-                warm_s, warm_R, warm_t = umeyama_similarity(pred_centers, gt_centers)
-        s, R, t, _info = icp_similarity(
-            pmap.reshape(-1, 3),
-            sample.point_cloud_gt,
-            init_s=warm_s,
-            init_R=warm_R,
-            init_t=warm_t,
-        )
-        pmap = apply_similarity(pmap, s, R, t).astype(np.float32)
+        if sample.point_cloud_gt is None:
+            log.warning("pointcloud_alignment=icp needs sample.point_cloud_gt; leaving unaligned")
+        else:
+            warm_s = warm_R = warm_t = None
+            if prediction.extrinsics is not None and sample.extrinsics_gt is not None:
+                pred_centers = prediction.extrinsics[:, :3, 3]
+                gt_centers = sample.extrinsics_gt[:, :3, 3]
+                if pred_centers.shape[0] >= 3:
+                    warm_s, warm_R, warm_t = umeyama_similarity(pred_centers, gt_centers)
+            s, R, t, _info = icp_similarity(
+                pmap.reshape(-1, 3),
+                sample.point_cloud_gt,
+                init_s=warm_s,
+                init_R=warm_R,
+                init_t=warm_t,
+            )
+            pmap = apply_similarity(pmap, s, R, t).astype(np.float32)
     elif pointcloud_alignment != "none":
         raise ValueError(
             f"unknown pointcloud_alignment '{pointcloud_alignment}'; "

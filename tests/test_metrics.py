@@ -469,23 +469,17 @@ class TestAccuracyCompleteness:
 
         out_raw = accuracy_completeness(pred, gt, voxel_size=0.01)
         assert out_raw["accuracy"] > 10.0, (
-            f"without outlier filter, expected outlier-dominated Acc; "
-            f"got {out_raw['accuracy']}"
+            f"without outlier filter, expected outlier-dominated Acc; got {out_raw['accuracy']}"
         )
-        out_flt = accuracy_completeness(
-            pred, gt, voxel_size=0.01, outlier_distance=1.0
-        )
+        out_flt = accuracy_completeness(pred, gt, voxel_size=0.01, outlier_distance=1.0)
         assert out_flt["accuracy"] == pytest.approx(0.05, abs=1e-5), (
-            f"with outlier filter, expected inlier-only Acc ≈ 0.05; "
-            f"got {out_flt['accuracy']}"
+            f"with outlier filter, expected inlier-only Acc ≈ 0.05; got {out_flt['accuracy']}"
         )
 
     def test_outlier_distance_all_rejected_returns_nan(self) -> None:
         gt = np.array([[0.0, 0.0, 0.0]])
         pred = np.array([[10.0, 0.0, 0.0]]).astype(np.float32)
-        out = accuracy_completeness(
-            pred, gt, voxel_size=0.01, outlier_distance=0.1
-        )
+        out = accuracy_completeness(pred, gt, voxel_size=0.01, outlier_distance=0.1)
         assert np.isnan(out["accuracy"])
 
     def test_voxel_size_none_skips_downsample(self) -> None:
@@ -517,6 +511,7 @@ class TestAccuracyCompleteness:
         # they're computed from different point counts.
         # We just want to verify the code path is exercised.
         from plumbline.metrics.pointmap import voxel_downsample
+
         ds = voxel_downsample(pred, 0.05)
         assert ds.shape[0] < pred.shape[0]
 
@@ -669,9 +664,7 @@ class TestBoundaryEdgeMask:
         from plumbline.metrics.masks import boundary_edge_mask
 
         # 10×10 depth with a sharp left-vs-right discontinuity (1 m vs 5 m).
-        depth = np.where(
-            np.arange(10)[None, :] < 5, 1.0, 5.0
-        ).astype(np.float32)
+        depth = np.where(np.arange(10)[None, :] < 5, 1.0, 5.0).astype(np.float32)
         depth = np.broadcast_to(depth, (10, 10)).copy()
         valid = np.ones_like(depth, dtype=bool)
         edge = boundary_edge_mask(depth, valid, thickness=1, tol=0.1)

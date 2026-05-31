@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-__all__ = ["REPO_ROOT", "REPRODUCTIONS_DIR", "PROTOCOLS_DIR"]
+__all__ = ["PROTOCOLS_DIR", "REPO_ROOT", "REPRODUCTIONS_DIR"]
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent.parent
 REPRODUCTIONS_DIR: Path = REPO_ROOT / "reproductions"

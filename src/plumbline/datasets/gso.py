@@ -47,7 +47,6 @@ import io
 import json
 from collections.abc import Iterator
 from pathlib import Path
-from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
@@ -103,8 +102,7 @@ class GSODataset(Dataset):
         self.root = root_path
         # Skip non-dir entries like .index.txt that HF bundles.
         all_objects = sorted(
-            p.name for p in root_path.iterdir()
-            if p.is_dir() and (p / "meta.json").exists()
+            p.name for p in root_path.iterdir() if p.is_dir() and (p / "meta.json").exists()
         )
         if objects is not None:
             wanted = set(objects)
@@ -134,9 +132,7 @@ class GSODataset(Dataset):
 
         depth = read_moge_depth_png(sample_dir / "depth.png")
         if depth.shape != (H, W):
-            raise ValueError(
-                f"gso/{name}: depth {depth.shape} mismatches image {(H, W)}"
-            )
+            raise ValueError(f"gso/{name}: depth {depth.shape} mismatches image {(H, W)}")
         # Replace NaN/inf with 0 (plumbline's invalid marker) so metrics
         # treat them as invalid via depth>0.
         depth_valid = np.isfinite(depth) & (depth > 0)
@@ -193,20 +189,16 @@ def read_moge_depth_png(path: Path) -> NDArray[np.float32]:
     pil_image = Image.open(io.BytesIO(data))
     raw = np.array(pil_image)
     if raw.dtype != np.uint16:
-        raise ValueError(
-            f"expected uint16 depth PNG from {path}; got {raw.dtype}"
-        )
+        raise ValueError(f"expected uint16 depth PNG from {path}; got {raw.dtype}")
     info = pil_image.info
     if "near" not in info or "far" not in info:
-        raise ValueError(
-            f"{path}: MoGe depth PNG missing 'near'/'far' in PNG info dict."
-        )
+        raise ValueError(f"{path}: MoGe depth PNG missing 'near'/'far' in PNG info dict.")
     near = float(info["near"])
     far = float(info["far"])
     mask_nan = raw == 0
     mask_inf = raw == 65535
     t = (raw.astype(np.float32) - 1.0) / 65533.0
-    depth = (near ** (1.0 - t) * far ** t).astype(np.float32)
+    depth = (near ** (1.0 - t) * far**t).astype(np.float32)
     if "unit" in info:
         depth *= float(info["unit"])
     depth[mask_nan] = np.nan

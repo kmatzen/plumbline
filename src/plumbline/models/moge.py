@@ -137,9 +137,9 @@ class MoGeAdapter(Model):
         ensure_torch()
         try:
             if self._submodule == "v2":
-                from moge.model.v2 import MoGeModel  # type: ignore[import-not-found]
+                from moge.model.v2 import MoGeModel
             else:
-                from moge.model.v1 import MoGeModel  # type: ignore[import-not-found]
+                from moge.model.v1 import MoGeModel
         except ImportError as exc:  # pragma: no cover — exercised only on real installs
             from plumbline.install import install_hint
 

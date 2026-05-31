@@ -54,7 +54,7 @@ __all__ = ["DepthAnythingV2Adapter"]
 # filename is always `depth_anything_v2_{encoder}.pth`.
 _PAPER_REPOS = {
     "small": ("depth-anything/Depth-Anything-V2-Small", "depth_anything_v2_vits.pth"),
-    "base":  ("depth-anything/Depth-Anything-V2-Base",  "depth_anything_v2_vitb.pth"),
+    "base": ("depth-anything/Depth-Anything-V2-Base", "depth_anything_v2_vitb.pth"),
     "large": ("depth-anything/Depth-Anything-V2-Large", "depth_anything_v2_vitl.pth"),
 }
 
@@ -77,8 +77,8 @@ _HF_CHECKPOINTS = {
 
 # Per-variant DPT head config (from the paper repo's run.py).
 _MODEL_CONFIGS = {
-    "small": {"encoder": "vits", "features": 64,  "out_channels": [48, 96, 192, 384]},
-    "base":  {"encoder": "vitb", "features": 128, "out_channels": [96, 192, 384, 768]},
+    "small": {"encoder": "vits", "features": 64, "out_channels": [48, 96, 192, 384]},
+    "base": {"encoder": "vitb", "features": 128, "out_channels": [96, 192, 384, 768]},
     "large": {"encoder": "vitl", "features": 256, "out_channels": [256, 512, 1024, 1024]},
 }
 

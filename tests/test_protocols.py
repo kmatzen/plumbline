@@ -12,7 +12,6 @@ from pathlib import Path
 import pytest
 import yaml
 
-from plumbline.paths import PROTOCOLS_DIR
 from plumbline.protocols import (
     ProtocolConflictError,
     apply_protocol,
@@ -45,7 +44,9 @@ class TestLoadProtocol:
         with pytest.raises(FileNotFoundError):
             load_protocol("does-not-exist")
 
-    def test_preset_without_fixed_block_rejected(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_preset_without_fixed_block_rejected(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         monkeypatch.setattr("plumbline.protocols.PROTOCOLS_DIR", tmp_path)
         (tmp_path / "bad.yaml").write_text("name: bad\n")
         with pytest.raises(ValueError, match="fixed"):
@@ -58,16 +59,22 @@ class TestApplyProtocol:
         out = apply_protocol(cfg)
         assert out == cfg
 
-    def test_merges_fixed_into_reproduction(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_merges_fixed_into_reproduction(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         monkeypatch.setattr("plumbline.protocols.PROTOCOLS_DIR", tmp_path)
-        (tmp_path / "p.yaml").write_text(yaml.safe_dump({
-            "name": "p",
-            "fixed": {
-                "dataset": {"name": "d", "kwargs": {"a": 1}},
-                "depth_clip": [0.0, 10.0],
-                "tasks": ["mono_depth"],
-            },
-        }))
+        (tmp_path / "p.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "name": "p",
+                    "fixed": {
+                        "dataset": {"name": "d", "kwargs": {"a": 1}},
+                        "depth_clip": [0.0, 10.0],
+                        "tasks": ["mono_depth"],
+                    },
+                }
+            )
+        )
         repro = {
             "protocol": "p",
             "model": {"name": "m"},
@@ -80,51 +87,75 @@ class TestApplyProtocol:
         assert out["model"] == {"name": "m"}  # preserved
         assert out["scale_alignment"] == "median"  # preserved
 
-    def test_raises_on_conflict_at_leaf(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_raises_on_conflict_at_leaf(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         monkeypatch.setattr("plumbline.protocols.PROTOCOLS_DIR", tmp_path)
-        (tmp_path / "p.yaml").write_text(yaml.safe_dump({
-            "name": "p",
-            "fixed": {"depth_clip": [0.001, 10.0]},
-        }))
+        (tmp_path / "p.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "name": "p",
+                    "fixed": {"depth_clip": [0.001, 10.0]},
+                }
+            )
+        )
         repro = {"protocol": "p", "depth_clip": [0.0, 80.0]}
         with pytest.raises(ProtocolConflictError, match="depth_clip"):
             apply_protocol(repro)
 
-    def test_raises_on_conflict_at_nested_leaf(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_raises_on_conflict_at_nested_leaf(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         monkeypatch.setattr("plumbline.protocols.PROTOCOLS_DIR", tmp_path)
-        (tmp_path / "p.yaml").write_text(yaml.safe_dump({
-            "name": "p",
-            "fixed": {"dataset": {"kwargs": {"apply_eigen_crop": True}}},
-        }))
+        (tmp_path / "p.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "name": "p",
+                    "fixed": {"dataset": {"kwargs": {"apply_eigen_crop": True}}},
+                }
+            )
+        )
         repro = {
             "protocol": "p",
             "dataset": {"kwargs": {"apply_eigen_crop": False}},
         }
-        with pytest.raises(ProtocolConflictError, match="dataset.kwargs.apply_eigen_crop"):
+        with pytest.raises(ProtocolConflictError, match=r"dataset\.kwargs\.apply_eigen_crop"):
             apply_protocol(repro)
 
-    def test_redundant_matching_value_is_ok(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_redundant_matching_value_is_ok(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         # If the reproduction explicitly sets a fixed field to the same
         # value the protocol fixes, that's allowed — users may want to
         # keep the field visible in the YAML as self-documentation.
         monkeypatch.setattr("plumbline.protocols.PROTOCOLS_DIR", tmp_path)
-        (tmp_path / "p.yaml").write_text(yaml.safe_dump({
-            "name": "p",
-            "fixed": {"depth_clip": [0.001, 10.0]},
-        }))
+        (tmp_path / "p.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "name": "p",
+                    "fixed": {"depth_clip": [0.001, 10.0]},
+                }
+            )
+        )
         repro = {"protocol": "p", "depth_clip": [0.001, 10.0]}
         out = apply_protocol(repro)
         assert out["depth_clip"] == [0.001, 10.0]
 
-    def test_conflict_error_lists_every_mismatch(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_conflict_error_lists_every_mismatch(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         monkeypatch.setattr("plumbline.protocols.PROTOCOLS_DIR", tmp_path)
-        (tmp_path / "p.yaml").write_text(yaml.safe_dump({
-            "name": "p",
-            "fixed": {
-                "depth_clip": [0.001, 10.0],
-                "tasks": ["mono_depth"],
-            },
-        }))
+        (tmp_path / "p.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "name": "p",
+                    "fixed": {
+                        "depth_clip": [0.001, 10.0],
+                        "tasks": ["mono_depth"],
+                    },
+                }
+            )
+        )
         repro = {
             "protocol": "p",
             "depth_clip": [0.0, 80.0],

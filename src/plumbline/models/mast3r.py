@@ -230,7 +230,6 @@ def _images_to_dust3r_dicts(
     centre-crop to ``patch_size`` multiples with the 3:4 ratio rule for square
     inputs. Yields the same dicts ``dust3r.inference.inference`` expects.
     """
-    import torch
     import torchvision.transforms as tvf
     from PIL import Image as PImage
 
@@ -240,7 +239,7 @@ def _images_to_dust3r_dicts(
         pil = PImage.fromarray(images[idx])
         W1, H1 = pil.size
         S = max(W1, H1)
-        interp = PImage.Resampling.LANCZOS if S > long_edge else PImage.Resampling.BICUBIC
+        interp = PImage.Resampling.LANCZOS if long_edge < S else PImage.Resampling.BICUBIC
         new_size = (int(round(W1 * long_edge / S)), int(round(H1 * long_edge / S)))
         pil = pil.resize(new_size, interp)
         W, H = pil.size
@@ -253,7 +252,7 @@ def _images_to_dust3r_dicts(
         dicts.append(
             {
                 "img": norm(pil)[None],  # (1, 3, H, W)
-                "true_shape": np.int32([pil.size[::-1]]),
+                "true_shape": np.array([pil.size[::-1]], dtype=np.int32),
                 "idx": idx,
                 "instance": str(idx),
             }
@@ -272,7 +271,7 @@ def _run_mast3r(
     ga_schedule: str = "linear",
     ga_init: str = "mst",
     scene_graph: str = "complete",
-) -> dict[str, NDArray[Any]]:
+) -> dict[str, Any]:
     """Run MASt3R on N views; return plumbline-shaped arrays.
 
     Uses dust3r's ``inference`` over the requested ``scene_graph`` (default

@@ -125,7 +125,7 @@ class DUSt3RAdapter(Model):
         ensure_torch()
         _ensure_dust3r_on_path()
         try:
-            from dust3r.model import AsymmetricCroCo3DStereo  # type: ignore[import-not-found]
+            from dust3r.model import AsymmetricCroCo3DStereo
         except ImportError as exc:  # pragma: no cover
             from plumbline.install import install_hint
 
@@ -256,8 +256,8 @@ def _dust3r_single_frame_eval(
     """
     from copy import deepcopy
 
-    from dust3r.image_pairs import make_pairs  # type: ignore[import-not-found]
-    from dust3r.inference import inference  # type: ignore[import-not-found]
+    from dust3r.image_pairs import make_pairs
+    from dust3r.inference import inference
 
     if images.shape[0] != 1:
         raise ValueError(

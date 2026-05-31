@@ -54,6 +54,7 @@ cherry-picking across seed draws.
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import math
 import os
@@ -181,10 +182,8 @@ class GeoWizardAdapter(Model):
         # same. Numerics differ slightly from vanilla SDP but the
         # paper-row was produced with xformers enabled. Speed: ~4-5× for
         # the 10×10 ensemble at processing_res=768 on a 3090.
-        try:
+        with contextlib.suppress(Exception):
             self._pipe.enable_xformers_memory_efficient_attention()
-        except Exception:
-            pass
         # Upstream's __call__ does NOT accept a `generator` kwarg; seed the
         # global RNG right before each sample instead (see predict()).
         self._generator = None
@@ -317,7 +316,7 @@ def _shim_diffusers_for_geowizard() -> None:
     if not hasattr(_dme, "PositionNet"):
         replacement = getattr(_dme, "GLIGENTextBoundingboxProjection", None)
         if replacement is not None:
-            _dme.PositionNet = replacement
+            _dme.PositionNet = replacement  # type: ignore[attr-defined]
 
     try:
         import diffusers.models.dual_transformer_2d  # noqa: F401

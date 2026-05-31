@@ -18,12 +18,12 @@ import plumbline.models.depth_anything_3
 
 # Force import so decorators run.
 import plumbline.models.depth_anything_v2
+import plumbline.models.depth_pro
 import plumbline.models.dust3r
 import plumbline.models.geowizard
+import plumbline.models.marigold
 import plumbline.models.mast3r
 import plumbline.models.metric3d_v2
-import plumbline.models.depth_pro
-import plumbline.models.marigold
 import plumbline.models.moge
 import plumbline.models.pi3
 import plumbline.models.vggt  # noqa: F401
@@ -135,9 +135,7 @@ def test_mast3r_config_hash_depends_on_ga_hyperparams() -> None:
         "schedule": cls(device="cpu", ga_schedule="cosine").config_hash(),  # type: ignore[call-arg]
         "init": cls(device="cpu", ga_init="known_poses").config_hash(),  # type: ignore[call-arg]
     }
-    assert len(set(variants.values())) == len(variants), (
-        f"hashes collided: {variants}"
-    )
+    assert len(set(variants.values())) == len(variants), f"hashes collided: {variants}"
 
 
 def test_dust3r_supports_single_frame() -> None:
@@ -186,9 +184,7 @@ def test_dust3r_config_hash_depends_on_ga_and_scene_graph() -> None:
         # commensurability with MASt3R's "complete" default on CO3Dv2.
         "graph": cls(device="cpu", scene_graph="swinstride-5-noncyclic").config_hash(),  # type: ignore[call-arg]
     }
-    assert len(set(variants.values())) == len(variants), (
-        f"hashes collided: {variants}"
-    )
+    assert len(set(variants.values())) == len(variants), f"hashes collided: {variants}"
 
 
 def test_dust3r_distinct_from_mast3r() -> None:

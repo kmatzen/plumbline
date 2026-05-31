@@ -95,9 +95,7 @@ class SunRgbdDataset(Dataset):
         rgb_dir = root_path / "rgb"
         depth_dir = root_path / "depth"
         if not rgb_dir.is_dir() or not depth_dir.is_dir():
-            raise DatasetNotAvailable(
-                f"Expected {rgb_dir} and {depth_dir} under {root_path}."
-            )
+            raise DatasetNotAvailable(f"Expected {rgb_dir} and {depth_dir} under {root_path}.")
 
         pairs: list[tuple[Path, Path]] = []
         for rgb_path in sorted(rgb_dir.glob("*.jpg")):
@@ -130,15 +128,9 @@ class SunRgbdDataset(Dataset):
         if depth.ndim == 3:
             depth = depth[..., 0]
         if depth.shape != (h, w):
-            raise ValueError(
-                f"sun-rgbd/{name}: depth {depth.shape} != image {(h, w)}"
-            )
+            raise ValueError(f"sun-rgbd/{name}: depth {depth.shape} != image {(h, w)}")
 
-        valid = (
-            np.isfinite(depth)
-            & (depth > 0)
-            & (depth < self.max_depth_invalid)
-        )
+        valid = np.isfinite(depth) & (depth > 0) & (depth < self.max_depth_invalid)
         depth_gt = np.where(valid, depth, 0.0).astype(np.float32)[None]
         depth_valid = valid[None]
 

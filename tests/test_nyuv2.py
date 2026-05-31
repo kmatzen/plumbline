@@ -120,9 +120,7 @@ class TestNYUv2Dataset:
         _write_fake_nyuv2(tmp_path, n=1)
         # Use filled to assert the Eigen-crop rectangle is fully valid;
         # the raw field's holes would punch zeros into the interior.
-        ds = NYUv2Dataset(
-            root=tmp_path, indices=[0], apply_eigen_crop=True, depth_field="filled"
-        )
+        ds = NYUv2Dataset(root=tmp_path, indices=[0], apply_eigen_crop=True, depth_field="filled")
         s = next(iter(ds))
         assert s.depth_valid is not None
         assert s.depth_valid.shape == (1, 480, 640)

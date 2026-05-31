@@ -133,7 +133,7 @@ class DepthProAdapter(Model):
         # adapter works regardless of cwd.
         import dataclasses
 
-        from depth_pro import depth_pro as dp_module  # type: ignore[import-not-found]
+        from depth_pro import depth_pro as dp_module
 
         config = dataclasses.replace(
             dp_module.DEFAULT_MONODEPTH_CONFIG_DICT,

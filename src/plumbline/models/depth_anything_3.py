@@ -162,9 +162,7 @@ class DepthAnything3Adapter(Model):
         return hashlib.sha256(s.encode()).hexdigest()[:16]
 
 
-def _run_depth_anything_3(
-    model: Any, images: NDArray[np.uint8], *, device: str
-) -> dict[str, NDArray[Any]]:
+def _run_depth_anything_3(model: Any, images: NDArray[np.uint8], *, device: str) -> dict[str, Any]:
     """Run DA3 end-to-end on a batch of sRGB uint8 images.
 
     Returns arrays at DA3's processed resolution (long edge = 504,

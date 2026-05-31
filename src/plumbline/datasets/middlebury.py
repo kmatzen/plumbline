@@ -62,7 +62,7 @@ def read_pfm_disparity(path: Path) -> NDArray[np.float32]:
     return data
 
 
-def read_middlebury_calib(calib_path: Path) -> tuple[float, float, float, float, float]:
+def read_middlebury_calib(calib_path: Path) -> tuple[float, float, float, float, float, float]:
     """Return ``(fx, fy, cx, cy, baseline_mm, doffs)`` from MiddEval3 ``calib.txt``."""
     text = calib_path.read_text(encoding="utf-8")
     cam0 = re.search(r"cam0=\[([^\]]+)\]", text)
@@ -123,13 +123,12 @@ class MiddleburyDataset(Dataset):
         use_nocc_mask: bool = True,
     ) -> None:
         if split != "training":
-            raise ValueError(
-                "MiddleburyDataset only exposes MiddEval3 training GT; "
-                f"got {split!r}"
-            )
+            raise ValueError(f"MiddleburyDataset only exposes MiddEval3 training GT; got {split!r}")
         res = resolution.lower()
         if res not in _RESOLUTION_DIRS:
-            raise ValueError(f"resolution must be one of {sorted(_RESOLUTION_DIRS)}; got {resolution!r}")
+            raise ValueError(
+                f"resolution must be one of {sorted(_RESOLUTION_DIRS)}; got {resolution!r}"
+            )
 
         root_path = Path(root) if root else env_path("MIDDLEBURY_ROOT")
         if root_path is None or not root_path.exists():
@@ -141,8 +140,7 @@ class MiddleburyDataset(Dataset):
         train_root = root_path / _RESOLUTION_DIRS[res]
         if not train_root.is_dir():
             raise DatasetNotAvailable(
-                f"Expected {train_root} under {root_path}. "
-                "Run ./scripts/download-middlebury.sh"
+                f"Expected {train_root} under {root_path}. Run ./scripts/download-middlebury.sh"
             )
 
         all_scenes = sorted(
@@ -183,14 +181,10 @@ class MiddleburyDataset(Dataset):
         h, w, _ = img.shape
         disp = read_pfm_disparity(scene_dir / "disp0GT.pfm")
         if disp.shape != (h, w):
-            raise ValueError(
-                f"middlebury/{name}: disp {disp.shape} != image {(h, w)}"
-            )
+            raise ValueError(f"middlebury/{name}: disp {disp.shape} != image {(h, w)}")
 
         fx, fy, cx, cy, baseline_mm, doffs = read_middlebury_calib(scene_dir / "calib.txt")
-        depth = middlebury_disparity_to_depth(
-            disp, fx=fx, baseline_mm=baseline_mm, doffs=doffs
-        )
+        depth = middlebury_disparity_to_depth(disp, fx=fx, baseline_mm=baseline_mm, doffs=doffs)
         depth_gt = depth[None]
 
         valid = np.isfinite(disp) & (disp > 0) & np.isfinite(depth) & (depth > 0)

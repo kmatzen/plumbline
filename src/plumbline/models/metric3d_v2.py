@@ -102,9 +102,7 @@ class Metric3Dv2Adapter(Model):
         # Upstream spelling is ``pretrain`` (no "ed"); passing
         # ``pretrained=True`` is silently swallowed by ``**kwargs`` so weights
         # never load — the model produces NaN on the first forward.
-        model = torch.hub.load(
-            self.repo, _HUB_MODELS[self.variant], pretrain=True, trust_repo=True
-        )
+        model = torch.hub.load(self.repo, _HUB_MODELS[self.variant], pretrain=True, trust_repo=True)
         self._model = model.to(self.device).eval()
 
     def predict(

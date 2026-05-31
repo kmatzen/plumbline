@@ -74,13 +74,9 @@ def boundary_edge_mask(
         ) from exc
 
     if depth.shape != valid.shape:
-        raise ValueError(
-            f"depth and valid must share shape; got {depth.shape} vs {valid.shape}"
-        )
+        raise ValueError(f"depth and valid must share shape; got {depth.shape} vs {valid.shape}")
     if depth.ndim != 2:
-        raise ValueError(
-            f"boundary_edge_mask operates on (H, W); got ndim={depth.ndim}"
-        )
+        raise ValueError(f"boundary_edge_mask operates on (H, W); got ndim={depth.ndim}")
     kernel_size = 2 * thickness + 1
 
     valid_f = valid.astype(np.float32)

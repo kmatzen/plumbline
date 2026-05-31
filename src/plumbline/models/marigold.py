@@ -106,9 +106,7 @@ class MarigoldAdapter(Model):
         processing_res: int | None = None,
     ) -> None:
         if variant not in _HF_CHECKPOINTS:
-            raise ValueError(
-                f"variant must be one of {list(_HF_CHECKPOINTS)}; got {variant!r}"
-            )
+            raise ValueError(f"variant must be one of {list(_HF_CHECKPOINTS)}; got {variant!r}")
         if num_inference_steps < 1:
             raise ValueError(f"num_inference_steps must be >= 1; got {num_inference_steps}")
         if ensemble_size < 1:
@@ -117,8 +115,7 @@ class MarigoldAdapter(Model):
             raise ValueError(f"dtype must be 'float16' or 'float32'; got {dtype!r}")
         if processing_res is not None and processing_res < 0:
             raise ValueError(
-                f"processing_res must be >= 0 (0 = native resolution) or None; "
-                f"got {processing_res}"
+                f"processing_res must be >= 0 (0 = native resolution) or None; got {processing_res}"
             )
         self.device = device
         self.variant = variant
@@ -159,7 +156,7 @@ class MarigoldAdapter(Model):
             kwargs["torch_dtype"] = torch.float16
         else:
             kwargs["torch_dtype"] = torch.float32
-        self._pipe = diffusers.MarigoldDepthPipeline.from_pretrained(
+        self._pipe = diffusers.MarigoldDepthPipeline.from_pretrained(  # type: ignore[no-untyped-call]
             checkpoint, **kwargs
         ).to(self.device)
         # Silence tqdm — plumbline's runner already shows per-sample progress.
@@ -202,9 +199,7 @@ class MarigoldAdapter(Model):
             pred = out.prediction  # shape (1, H, W, 1) typically
             arr = np.asarray(pred).squeeze()
             if arr.shape != (h, w):
-                raise RuntimeError(
-                    f"marigold returned {arr.shape}, expected ({h}, {w})"
-                )
+                raise RuntimeError(f"marigold returned {arr.shape}, expected ({h}, {w})")
             # Output is in [0, 1] (affine-invariant disparity-like). plumbline
             # convention stores depth where 0 = invalid; Marigold's 0 means
             # "nearest plane" which IS valid. Clamp to EPS so the downstream

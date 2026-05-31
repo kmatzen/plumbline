@@ -197,7 +197,7 @@ class BonnDataset(Dataset):
         """Emit one Sample per RGB frame (single-frame Table 3 shape)."""
         sid_base = seq_dir.name.replace("rgbd_bonn_", "")
         k = _intrinsic_matrix(BONN_INTRINSICS)
-        for ts, rgb_rel, depth_rel, w_from_c in self._associations(seq_dir):
+        for ts, rgb_rel, depth_rel, _w_from_c in self._associations(seq_dir):
             image = read_rgb_uint8(seq_dir / rgb_rel)
             d, v = _load_bonn_depth(seq_dir / depth_rel, max_depth=self.max_depth)
             images_arr = image[None]  # (1, H, W, 3)

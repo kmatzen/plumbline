@@ -404,9 +404,7 @@ def load_moge_depth_png(path: Path) -> tuple[NDArray[np.float32], NDArray[np.boo
 
     img = Image.open(path)
     if img.mode != "I;16":
-        raise ValueError(
-            f"expected 16-bit PNG (mode I;16) from {path}; got mode {img.mode!r}"
-        )
+        raise ValueError(f"expected 16-bit PNG (mode I;16) from {path}; got mode {img.mode!r}")
     near = img.info.get("near")
     far = img.info.get("far")
     if near is None or far is None:
@@ -420,12 +418,12 @@ def load_moge_depth_png(path: Path) -> tuple[NDArray[np.float32], NDArray[np.boo
     # t in [0, 1]; the 0 and 65535 sentinels are handled AFTER decoding
     # so we don't divide by 0 here.
     t = (v - 1).astype(np.float64) / 65533.0
-    depth = (near_f ** (1.0 - t)) * (far_f ** t)
+    depth = (near_f ** (1.0 - t)) * (far_f**t)
     depth = depth.astype(np.float32)
     depth[v == 0] = np.float32("nan")
     depth[v == 65535] = np.float32("inf")
     valid = np.isfinite(depth)
-    return depth, valid
+    return depth.astype(np.float32), valid.astype(bool)
 
 
 @register_dataset("diode-moge-eval")
@@ -496,9 +494,7 @@ class DIODEMogeEvalLoader(Dataset):
         # `split` is accepted for protocol-YAML compatibility with the
         # devkit DIODEDataset, but the HF bundle only ships val.
         if split != "val":
-            raise ValueError(
-                f"DIODEMogeEvalLoader only exposes the val split; got {split!r}"
-            )
+            raise ValueError(f"DIODEMogeEvalLoader only exposes the val split; got {split!r}")
         root_path = Path(root) if root else env_path("DIODE_MOGE_ROOT")
         if root_path is None or not (root_path / "DIODE").exists():
             raise DatasetNotAvailable(
@@ -510,9 +506,7 @@ class DIODEMogeEvalLoader(Dataset):
                 "unzip <tmp>/DIODE.zip -d $DIODE_MOGE_ROOT"
             )
         if domain not in ("indoors", "outdoor", "both", "indoor", "outdoors"):
-            raise ValueError(
-                f"domain must be 'indoors' | 'outdoor' | 'both'; got {domain!r}"
-            )
+            raise ValueError(f"domain must be 'indoors' | 'outdoor' | 'both'; got {domain!r}")
         # Normalize alias forms to the on-disk names.
         domain = {"indoor": "indoors", "outdoors": "outdoor"}.get(domain, domain)
 

@@ -197,7 +197,7 @@ class Pi3Adapter(Model):
             if self.dtype == "float32":
                 out = self._model(batch)
             else:
-                with torch.amp.autocast("cuda", dtype=autocast_dtype):
+                with torch.amp.autocast("cuda", dtype=autocast_dtype):  # type: ignore[attr-defined]
                     out = self._model(batch)
 
         # Move to CPU float32 for numpy handoff.

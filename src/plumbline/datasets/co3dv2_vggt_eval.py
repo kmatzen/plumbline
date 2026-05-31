@@ -69,7 +69,6 @@ from plumbline.conventions import (
     assert_valid_extrinsics,
     assert_valid_image,
     assert_valid_intrinsics,
-    invert_pose,
     rebase_to_first_camera,
 )
 from plumbline.datasets._common import (
@@ -215,7 +214,8 @@ class Co3Dv2VGGTPoseEvalLoader(Dataset):
                 frames = anno[seq_name]
                 # Frame sanity filter: drop runaway translations.
                 clean = [
-                    fr for fr in frames
+                    fr
+                    for fr in frames
                     if (fr["T"][0] + fr["T"][1] + fr["T"][2]) <= self.max_translation_sum
                 ]
                 if len(clean) < self.min_num_images:
@@ -230,9 +230,7 @@ class Co3Dv2VGGTPoseEvalLoader(Dataset):
                     "frames": [clean[i] for i in ids_list],
                 }
 
-    def _load_category_annotations(
-        self, cat_dir: Path
-    ) -> dict[str, list[dict[str, Any]]] | None:
+    def _load_category_annotations(self, cat_dir: Path) -> dict[str, list[dict[str, Any]]] | None:
         """Load and filter category annotations.
 
         Two upstream layouts are supported:
@@ -265,15 +263,13 @@ class Co3Dv2VGGTPoseEvalLoader(Dataset):
             subset_lists: dict[str, list[list[Any]]] = json.load(f)
 
         good_quality = {
-            s["sequence_name"]
-            for s in seq_data
-            if s["viewpoint_quality_score"] > self.min_quality
+            s["sequence_name"] for s in seq_data if s["viewpoint_quality_score"] > self.min_quality
         }
 
         # Index frames by (sequence_name, frame_number).
         by_key: dict[tuple[str, int], dict[str, Any]] = {}
-        for fr in frame_data:
-            by_key[(fr["sequence_name"], int(fr["frame_number"]))] = fr
+        for frame in frame_data:
+            by_key[(frame["sequence_name"], int(frame["frame_number"]))] = frame
 
         out: dict[str, list[dict[str, Any]]] = {}
         for seq_name, frame_number, filepath in subset_lists.get("test", []):
@@ -324,9 +320,7 @@ class Co3Dv2VGGTPoseEvalLoader(Dataset):
                     focal_length=tuple(fr["focal_length"]),
                     principal_point=tuple(fr["principal_point"]),
                     size_hw=(H, W),
-                    intrinsics_format=fr.get(
-                        "intrinsics_format", "ndc_norm_image_bounds"
-                    ),
+                    intrinsics_format=fr.get("intrinsics_format", "ndc_norm_image_bounds"),
                 )
             )
             R = np.asarray(fr["R"], dtype=np.float64)

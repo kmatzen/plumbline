@@ -98,9 +98,9 @@ from plumbline.datasets.registry import register_dataset
 __all__ = [
     "KITTIDataset",
     "KITTIMogeEvalLoader",
-    "kitti_benchmark_crop",
     "eigen_crop_mask",
     "garg_crop_mask",
+    "kitti_benchmark_crop",
     "load_kitti_calib",
     "load_kitti_depth_png_to_m",
     "parse_eigen_sample_list",
@@ -228,9 +228,7 @@ class KITTIDataset(Dataset):
                 "pick the one your target paper uses."
             )
         if depth_split is not None and depth_split not in ("train", "val"):
-            raise ValueError(
-                f"depth_split must be None, 'train', or 'val'; got {depth_split!r}"
-            )
+            raise ValueError(f"depth_split must be None, 'train', or 'val'; got {depth_split!r}")
         if max_frames_per_drive is not None and max_frames_per_drive <= 0:
             raise ValueError(
                 f"max_frames_per_drive must be positive or None; got {max_frames_per_drive!r}"
@@ -287,10 +285,7 @@ class KITTIDataset(Dataset):
 
             repo_candidate = REPRODUCTIONS_DIR / sample_list_path
             host_candidate = self.root / sample_list_path
-            if repo_candidate.exists():
-                sample_list_path = repo_candidate
-            else:
-                sample_list_path = host_candidate
+            sample_list_path = repo_candidate if repo_candidate.exists() else host_candidate
         list_tag = sample_list_path.stem if sample_list_path else "scan"
         # Fold the scan-mode kwargs into the manifest filename so a different
         # depth_split / per-drive cap doesn't silently reuse a stale manifest.
@@ -340,9 +335,7 @@ class KITTIDataset(Dataset):
         per drive after sorting by ``frame_id`` (mirrors MonST3R's
         ``prepare_kitti.py [:110]`` lineage-eval selection).
         """
-        splits_to_try = (
-            (self.depth_split,) if self.depth_split is not None else ("train", "val")
-        )
+        splits_to_try = (self.depth_split,) if self.depth_split is not None else ("train", "val")
         raw_drives = sorted(p for p in self.raw_root.rglob("*_sync") if p.is_dir())
         for drive_dir in raw_drives:
             date = drive_dir.parent.name  # e.g. 2011_09_26
@@ -742,9 +735,7 @@ class KITTIMogeEvalLoader(Dataset):
         # Accepted for protocol-YAML compatibility; the bundle only ships
         # one split (MoGe evaluates on the Eigen test 652).
         if split != "test":
-            raise ValueError(
-                f"KITTIMogeEvalLoader only exposes the test split; got {split!r}"
-            )
+            raise ValueError(f"KITTIMogeEvalLoader only exposes the test split; got {split!r}")
         root_path = Path(root) if root else env_path("KITTI_MOGE_ROOT")
         if root_path is None or not (root_path / "KITTI").exists():
             raise DatasetNotAvailable(

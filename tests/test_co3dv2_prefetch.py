@@ -42,7 +42,6 @@ from plumbline.datasets.co3dv2_vggt_eval import (  # noqa: E402
     Co3Dv2VGGTPoseEvalLoader,
 )
 
-
 # ---------------------------------------------------------------------------
 # Synthetic micro-dataset builders
 # ---------------------------------------------------------------------------
@@ -87,9 +86,7 @@ def _write_category(
     for s in range(sequences):
         seq_name = f"{category}_seq_{s:03d}"
         quality = 0.3 if s < bad_quality_seqs else 0.95
-        seq_data.append(
-            {"sequence_name": seq_name, "viewpoint_quality_score": quality}
-        )
+        seq_data.append({"sequence_name": seq_name, "viewpoint_quality_score": quality})
         runaway_threshold = frames_per_seq - runaway_T_per_seq
         for fnum in range(frames_per_seq):
             # Distinct, well-behaved T for keepers; sum > 1e5 for runaways.
@@ -117,9 +114,7 @@ def _write_category(
         json.dump(seq_data, f)
     with gzip.open(cat_dir / "frame_annotations.jgz", "wt", encoding="utf-8") as f:
         json.dump(frame_data, f)
-    with (cat_dir / "set_lists" / "set_lists_fewview_dev.json").open(
-        "wt", encoding="utf-8"
-    ) as f:
+    with (cat_dir / "set_lists" / "set_lists_fewview_dev.json").open("wt", encoding="utf-8") as f:
         json.dump({"train": [], "val": [], "test": test_subset}, f)
 
 
@@ -148,14 +143,12 @@ def _write_image_stubs(root: Path, paths: list[str]) -> None:
 @pytest.mark.parametrize(
     "categories",
     [
-        ("apple",),                       # leading category, RNG-state-zero
+        ("apple",),  # leading category, RNG-state-zero
         ("apple", "backpack", "banana"),  # first three canonical
-        ("backpack", "banana"),           # skip the canonical leader
+        ("backpack", "banana"),  # skip the canonical leader
     ],
 )
-def test_prefetch_matches_loader_path_for_path(
-    tmp_path: Path, categories: tuple[str, ...]
-) -> None:
+def test_prefetch_matches_loader_path_for_path(tmp_path: Path, categories: tuple[str, ...]) -> None:
     """``compute_needed_paths`` and ``_build_records`` enumerate the same set.
 
     Any RNG-state drift between the two implementations would change the
@@ -164,15 +157,13 @@ def test_prefetch_matches_loader_path_for_path(
     # Sequences-per-cat well above sequences_per_category=10 so the
     # py_rng.sample step actually runs (and advances the RNG).
     for cat in categories:
-        _write_category(
-            tmp_path, cat, sequences=15, frames_per_seq=60, bad_quality_seqs=2
-        )
+        _write_category(tmp_path, cat, sequences=15, frames_per_seq=60, bad_quality_seqs=2)
 
     # Loader: build records.
     ds = Co3Dv2VGGTPoseEvalLoader(root=tmp_path, categories=categories)
     loader_paths = sorted(
         (rec["category"], rec["sequence"], fr["filepath"])
-        for rec in ds._records  # noqa: SLF001 — explicit invariant pin
+        for rec in ds._records
         for fr in rec["frames"]
     )
 
@@ -202,15 +193,13 @@ def test_prefetch_skips_categories_missing_metadata_without_rng_advance(
     subset run.
     """
     # Stage metadata for `backpack` only — apple, banana, ... will be skipped.
-    _write_category(
-        tmp_path, "backpack", sequences=15, frames_per_seq=60, bad_quality_seqs=2
-    )
+    _write_category(tmp_path, "backpack", sequences=15, frames_per_seq=60, bad_quality_seqs=2)
 
     # 1) Subset run: loader iterates only ``backpack``.
     ds_subset = Co3Dv2VGGTPoseEvalLoader(root=tmp_path, categories=("backpack",))
     subset_paths = sorted(
         (rec["category"], rec["sequence"], fr["filepath"])
-        for rec in ds_subset._records  # noqa: SLF001
+        for rec in ds_subset._records
         for fr in rec["frames"]
     )
 
@@ -219,7 +208,7 @@ def test_prefetch_skips_categories_missing_metadata_without_rng_advance(
     ds_full = Co3Dv2VGGTPoseEvalLoader(root=tmp_path)
     full_paths = sorted(
         (rec["category"], rec["sequence"], fr["filepath"])
-        for rec in ds_full._records  # noqa: SLF001
+        for rec in ds_full._records
         for fr in rec["frames"]
     )
 
@@ -230,9 +219,7 @@ def test_prefetch_skips_categories_missing_metadata_without_rng_advance(
     )
 
     # Script's compute_needed_paths must mirror this exactly.
-    script_full = sorted(
-        _prefetch.compute_needed_paths(tmp_path, CO3D_VGGT_SEEN_CATEGORIES)
-    )
+    script_full = sorted(_prefetch.compute_needed_paths(tmp_path, CO3D_VGGT_SEEN_CATEGORIES))
     assert script_full == full_paths
 
 
@@ -255,7 +242,7 @@ def test_prefetch_respects_runaway_translation_filter(tmp_path: Path) -> None:
     )
 
     ds = Co3Dv2VGGTPoseEvalLoader(root=tmp_path, categories=("apple",))
-    assert len(ds._records) == 0  # noqa: SLF001
+    assert len(ds._records) == 0
 
     script_paths = _prefetch.compute_needed_paths(tmp_path, ("apple",))
     assert script_paths == []
@@ -269,14 +256,12 @@ def test_prefetch_respects_quality_gate(tmp_path: Path) -> None:
     so the ``fast_eval`` sampling path doesn't trigger and we keep all 9.
     Per-seq frame sampling still draws 10 frames each → 90 records.
     """
-    _write_category(
-        tmp_path, "apple", sequences=12, frames_per_seq=60, bad_quality_seqs=3
-    )
+    _write_category(tmp_path, "apple", sequences=12, frames_per_seq=60, bad_quality_seqs=3)
 
     ds = Co3Dv2VGGTPoseEvalLoader(root=tmp_path, categories=("apple",))
     loader_paths = sorted(
         (rec["category"], rec["sequence"], fr["filepath"])
-        for rec in ds._records  # noqa: SLF001
+        for rec in ds._records
         for fr in rec["frames"]
     )
     assert len(loader_paths) == 90  # 9 kept seqs × 10 frames
@@ -295,9 +280,7 @@ def test_prefetched_layout_feeds_loader_end_to_end(tmp_path: Path) -> None:
     loudly instead of silently FileNotFoundError-ing at GPU time.
     """
     pytest.importorskip("PIL")
-    _write_category(
-        tmp_path, "apple", sequences=15, frames_per_seq=60, bad_quality_seqs=2
-    )
+    _write_category(tmp_path, "apple", sequences=15, frames_per_seq=60, bad_quality_seqs=2)
 
     paths = [fp for _c, _s, fp in _prefetch.compute_needed_paths(tmp_path, ("apple",))]
     _write_image_stubs(tmp_path, paths)
