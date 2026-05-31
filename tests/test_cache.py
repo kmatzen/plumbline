@@ -102,7 +102,11 @@ class TestCacheRoundTrip:
     def test_atomic_write_tmp_cleanup(self, tmp_path: Path) -> None:
         cache = PredictionCache(tmp_path)
         cache.save("m", "cfg", "ds", "s0", _make_prediction())
-        tmp_files = list(tmp_path.rglob("*.npz.tmp"))
+        # The atomic write stages to ``<stem>.tmp`` and np.savez appends
+        # ".npz", so the real temp basename is ``<stem>.tmp.npz``. The old
+        # glob ``*.npz.tmp`` never matched that, so the assertion was
+        # vacuously true and would not have caught a leaked temp file.
+        tmp_files = [p for p in tmp_path.rglob("*.tmp*") if p.is_file()]
         assert tmp_files == []
 
 

@@ -390,6 +390,25 @@ class TestPointMapMetrics:
         with pytest.raises(ValueError):
             chamfer_distance(np.zeros((4, 2)), np.zeros((4, 3)))
 
+    def test_chamfer_matches_bruteforce_without_scipy(self, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+        # Force the no-scipy numpy fallback in _nn_distances and confirm it
+        # still computes correct NN distances over every query row. Uses a
+        # gt with >= 21 points — the size at which the old ``1 << 20 // b``
+        # operator-precedence bug collapsed the chunk to a single row (slow,
+        # but it must still be correct, and stay so after the fix).
+        import sys
+
+        monkeypatch.setitem(sys.modules, "scipy", None)
+        monkeypatch.setitem(sys.modules, "scipy.spatial", None)
+        rng = np.random.default_rng(1)
+        pred = rng.standard_normal((50, 3)).astype(np.float64)
+        gt = rng.standard_normal((37, 3)).astype(np.float64)
+        # chamfer pred->gt only, so the fallback distances drive the result.
+        got = chamfer_distance(pred, gt, two_sided=False)
+        # Brute-force reference NN distance, mean over pred.
+        dists = np.sqrt(((pred[:, None, :] - gt[None, :, :]) ** 2).sum(-1)).min(axis=1)
+        assert got == pytest.approx(float(dists.mean()))
+
 
 class TestVoxelDownsample:
     def test_collapses_within_cell(self) -> None:

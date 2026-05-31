@@ -56,6 +56,30 @@ class _ConstantDepthModel(Model):
         return Prediction(depth=np.ones((n, h, w), dtype=np.float32))
 
 
+class _EmptyPredictionModel(Model):
+    """Declares mono_depth support but returns a prediction with no depth.
+
+    Exercises the footgun where an adapter silently emits nothing for the
+    requested task — the runner must treat this as a skip, not an
+    "evaluated" sample (D28).
+    """
+
+    name = "empty-prediction"
+    version = "1.0"
+    capabilities = ModelCapabilities(
+        tasks=frozenset({"mono_depth"}),
+        is_metric=True,
+        min_views=1,
+        max_views=math.inf,
+    )
+
+    def __init__(self, device: str = "cpu") -> None:
+        self.device = device
+
+    def predict(self, images: np.ndarray, intrinsics: np.ndarray | None = None) -> Prediction:
+        return Prediction(depth=None)
+
+
 class _SyntheticDataset(Dataset):
     name = "synthetic"
     split = "test"
@@ -152,6 +176,23 @@ class TestEvaluate:
 
         with pytest.raises(ValueError, match="does not support"):
             evaluate(model=model, dataset=ds, tasks=["pose"], cache=PredictionCache(tmp_path))
+
+    def test_metricless_prediction_counts_as_skipped(self, tmp_path: Path) -> None:
+        """A prediction that yields no metric must not inflate n_evaluated."""
+        ds = _SyntheticDataset(n_samples=3)
+        model = _EmptyPredictionModel(device="cpu")
+        report = evaluate(
+            model=model,
+            dataset=ds,
+            tasks=["mono_depth"],
+            scale_alignment="none",
+            cache=PredictionCache(tmp_path),
+        )
+        assert report.n_evaluated == 0
+        assert report.n_skipped == 3
+        # Every per-sample row is flagged skipped with a reason.
+        assert all(r.skipped for r in report.per_sample)
+        assert all(r.skip_reason for r in report.per_sample)
 
     def test_alignment_change_does_not_reinference(self, tmp_path: Path) -> None:
         """Verify cache invariance: changing alignment uses cached predictions."""

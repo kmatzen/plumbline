@@ -338,7 +338,11 @@ def evaluate(
                 # unification already; moving it earlier just bounds peak RSS
                 # to ~O(N_scenes × scene_voxels) with no algorithmic change.
                 chunk_pts = aligned.reshape(-1, 3)
-                if chunk_pts.shape[0] > 0:
+                # Guard ``scene_voxel_size > 0`` to match the per-view-masked
+                # path above: ``voxel_downsample`` raises on size <= 0, and
+                # ``scene_voxel_size: 0`` is a documented config (DTU, where
+                # pred ≈ m and gt = mm would otherwise collapse one side).
+                if chunk_pts.shape[0] > 0 and scene_voxel_size and scene_voxel_size > 0:
                     chunk_pts = voxel_downsample(chunk_pts, scene_voxel_size).astype(np.float32)
                 scene_points.setdefault(scene, []).append(chunk_pts)
                 # GT is the same across samples of a scene (subsampled
@@ -383,6 +387,26 @@ def evaluate(
             boundary_thickness=boundary_thickness,
             boundary_tol=boundary_tol,
         )
+        if not sample_metrics:
+            # The adapter returned a prediction but it yielded no metric for
+            # any requested task (e.g. ``tasks=["mono_depth"]`` but the
+            # prediction had ``depth=None``). Counting this as "evaluated"
+            # silently inflates the headline count and lets a fully-broken
+            # adapter read as a healthy "N/N evaluated" while every metric
+            # mean is NaN-over-zero-samples. Route it to skipped with a
+            # reason instead (D28 footgun: the count must reflect what
+            # actually contributed).
+            report.n_skipped += 1
+            report.per_sample.append(
+                SampleResult(
+                    sample_id=sample.sample_id,
+                    metrics={},
+                    skipped=True,
+                    skip_reason=f"prediction produced no metrics for tasks {sorted(tasks)}",
+                    runtime_ms=runtime_ms,
+                )
+            )
+            continue
         report.per_sample.append(
             SampleResult(
                 sample_id=sample.sample_id,
