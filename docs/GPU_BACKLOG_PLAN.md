@@ -75,7 +75,7 @@ JSON/S3 provenance only.
 
 **Optional:** Sync result JSON to S3 if missing; mark queue row as investigated.
 
-### 4. Depth Pro Booster (`depth-pro-booster`): loader + protocol landed 2026-05-31; stage via `scripts/download-booster.sh` ($BOOSTER_ROOT); GPU pending after `booster_gt.zip` unzip (228×12 Mpx).
+### 4. Depth Pro Booster (`depth-pro-booster`): ✅ δ₁ **0.4878** vs **0.466** (2026-05-31, Table 1 match). Staged at `$BOOSTER_ROOT` via `scripts/download-booster.sh`.
 
 Depth Pro Table 1 — Sintel **blocked**; iBims sanity **done**
 

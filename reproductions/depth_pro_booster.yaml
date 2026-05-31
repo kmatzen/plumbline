@@ -25,5 +25,5 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
-  228×4112×3008 frames — Depth Pro resizes to 1536² internally. Stage via
-  ./scripts/download-booster.sh ($BOOSTER_ROOT). High VRAM/time vs iBims/Sintel.
+  2026-05-31 (H100, 228/228): δ₁ **0.4878** vs **0.466** (match). ~7 min.
+  JSON: depth_pro_booster_20260531.json. Stage: ./scripts/download-booster.sh.

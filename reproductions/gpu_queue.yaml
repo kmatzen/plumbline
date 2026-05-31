@@ -421,7 +421,7 @@ jobs:
       JSON: depth_pro_sintel_table16_20260531.json (δ₁ 0.2409); prior 0.2418.
 
   - name: depth-pro-booster
-    status: pending
+    status: done
     priority: 6
     paper_target: "Depth Pro Table 1 — Booster δ₁ 0.466 (metric, no alignment)"
     primary_metric: delta_1
@@ -431,10 +431,11 @@ jobs:
     requires_env: [BOOSTER_ROOT]
     extras: >
       ./scripts/download-booster.sh; plumbline install depth-pro; depth_pro.pt.
-      228×4112×3008 — slow; expect high VRAM per frame.
+      228×4112×3008 (~7 min on H100).
     notes: >
-      Loader + protocol booster_depth_pro_metric (2026-05-31). Training split
-      only (public GT). Blocked until booster_gt.zip staged at $BOOSTER_ROOT.
+      2026-05-31: δ₁ **0.4878** vs **0.466** (+4.7%, within 5% tol) — first Depth
+      Pro Table 1 ✅. Training split, booster_depth_pro_metric (0.001–10 m).
+      JSON: depth_pro_booster_20260531.json.
 
   # --- New PROTOCOL coverage: DA-V2 own Table 2 on DIODE (native loader,
   #     affine-inv disparity) across variants S/B/L. Recipe already validated
