@@ -1,5 +1,12 @@
 # BLOCKED — Depth Pro Table 1 · Middlebury (δ₁)
 
+> **⚠️ Code removed (2026-05-31, pre-release).** The `middlebury` loader, its
+> reproduction config, protocol, and fetch script were removed from the
+> package. No verified result anchored that the loader parsed Middlebury GT
+> correctly; the observed δ₁ **0.759 vs paper 0.605** reads *better* than the
+> paper on a 15-sample set with no public eval — unverifiable. This page is
+> retained to **document the attempt**. See `docs/CONFIDENCE_AUDIT.md`.
+
 | Field | Value |
 |-------|--------|
 | **Status** | 🔒 Fundamentally blocked (off-paper) |

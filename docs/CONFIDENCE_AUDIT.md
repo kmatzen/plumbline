@@ -43,9 +43,9 @@ almost never come from an adapter bug.
 | DA-V2 native Sintel | D32 | better | **L3** recipe | Med | No — sky-mask / aggregation recipe |
 | DA-V2 native DIODE | D29 | worse | **L2/L3** preprocessing | Med | Partly — MoGe-bundle preprocessing explains gap |
 | Depth Pro Sintel | T1 | worse | **L3** recipe | Med | No — aggregation / clip unknown |
-| Depth Pro Middlebury | T1 | better | **L3** recipe | Low | No — 15-sample set, no public eval |
-| Depth Pro NuScenes | T1 | better | **L3** subset | Low | No — random-881 subset seed unknown |
-| Depth Pro Sun-RGBD | T1 | worse | **L2** GT/pairing | Med | No — large miss points at GT/pairing |
+| Depth Pro Middlebury | T1 | better | **REMOVED** (was L3) | — | Loader removed pre-release — no verified anchor |
+| Depth Pro NuScenes | T1 | better | **REMOVED** (was L3) | — | Loader removed pre-release — no verified anchor |
+| Depth Pro Sun-RGBD | T1 | worse | **REMOVED** (was L2) | — | Loader removed pre-release — likely GT/pairing bug |
 | VGGT ETH3D 13-scene | D10 | worse | **L2** scene-specific | High | Localized to `terrains` (12/13 beat paper) |
 | VGGT DTU chamfer | D3 | worse | **L4** checkpoint | High | **Yes** — public VGGT-1B output ~2× off |
 
@@ -80,10 +80,11 @@ in an adapter.
 
 ---
 
-## L2 · Dataset / GT parsing — one confirmed bug, two suspects
+## L2 · Dataset / GT parsing — one confirmed bug, three loaders removed, one suspect
 
 This is where a real, fixable plumbline bug *can* hide, so it gets the most
-scrutiny.
+scrutiny. When a loader had **no verified anchor** and a suspicious result, we
+removed it rather than ship it (the three Depth Pro Table-1 loaders below).
 
 ### Confirmed and fixed — DA-V2 native ETH3D RGB/GT misalignment (D31)
 The clearest L2 case we have found. Per-view GT was rendered at the DA-V2
@@ -97,15 +98,21 @@ are findable and fixable.
 **Confident:** the geometric RGB↔GT alignment is now correct.
 **Unknown:** a residual gap remains *after* the fix — that part is L3 (below).
 
-### Suspected — Depth Pro Sun-RGBD (Table 1)
-δ₁ **0.451 vs paper 0.890** — the only Depth Pro Table-1 cell that reads
-*dramatically worse*. The adapter is cleared by the iBims indoor sanity
+### Suspected → REMOVED — Depth Pro Sun-RGBD / Middlebury / NuScenes (Table 1)
+δ₁ **0.451 vs paper 0.890** on Sun-RGBD — the only Depth Pro Table-1 cell that
+reads *dramatically worse*. The adapter is cleared by the iBims indoor sanity
 (0.8458), so a 2× miss on another indoor set points at **GT decode or RGB↔depth
-pairing** in our Sun-RGBD loader, not the model.
-**Confident:** not the adapter.
-**Unknown:** whether it's the depth unit/scale decode, the sensor-vs-clean GT
-choice, or frame pairing. Needs a single-record GT diff against a known-good
-Sun-RGBD reader.
+pairing** in the Sun-RGBD loader, not the model. Middlebury (0.759 vs 0.605) and
+NuScenes (0.594 vs 0.491) read *better* than paper against an unverifiable
+15-sample set / random-881 subset.
+
+**Resolution (2026-05-31): the three loaders were removed before public
+release** — none had a verified result proving the *loader* parsed GT correctly,
+so their numbers were unverifiable and (for Sun-RGBD) looked like a bug. We do
+not ship code tied to a suspiciously-unverifiable result. The attempts are
+documented in `docs/blocked/DEPTH_PRO_{SUN_RGBD,MIDDLEBURY,NUSCENES}_TABLE1.md`.
+The Depth Pro **adapter** stays (Booster ✅); only the single-purpose loaders
+went.
 
 ### Suspected (scene-specific) — VGGT ETH3D 13-scene `terrains` (D10)
 Aggregate Completeness is dragged from ~0.56 (median of 12 scenes) to the
@@ -162,12 +169,12 @@ specify. Sometimes we have **pinned the recipe**; sometimes it remains unknown.
   upstream preprocessing/aggregation we have not reconstructed.
   **Unknown:** the native Table-2 preprocessing (sky-mask handling on Sintel,
   outdoor depth handling on DIODE, GT source + recipe on ETH3D).
-- **Depth Pro Sintel / Middlebury / NuScenes (Table 1).** Adapter cleared by
-  iBims. Sintel: protocol aligned, gap is aggregation/clip. Middlebury (reads
-  *better*, 15 samples) and NuScenes (reads *better*, random-881 subset) hinge
-  on a **subset seed / aggregation we don't have**.
-  **Unknown:** the exact per-dataset subset + aggregation; these are the least
-  documented Table-1 cells.
+- **Depth Pro Sintel (Table 1).** Adapter cleared by iBims; protocol aligned,
+  gap is aggregation/clip. Runs on the ✅-anchored `sintel` loader, so it stays
+  as a documented ℹ️ finding.
+  **Unknown:** the exact aggregation/clip.
+  _(The sibling Middlebury / NuScenes / Sun-RGBD loaders were **removed**
+  pre-release — no verified anchor; see the L2 section.)_
 
 ---
 
@@ -189,7 +196,9 @@ specify. Sometimes we have **pinned the recipe**; sometimes it remains unknown.
 - No open discrepancy is an adapter (L1) bug. Every model is cross-validated by
   a same-model or same-dataset ✅/sanity cell.
 - The parsing layer (L2) is audited: the one real bug we found (D31 ETH3D
-  RGB/GT) was localized by single-record diff and fixed.
+  RGB/GT) was localized by single-record diff and fixed; the three loaders we
+  could *not* verify (Depth Pro Middlebury / NuScenes / Sun-RGBD) were removed
+  rather than shipped.
 - For the L3-resolved cells, we have *named the exact recipe* the paper used
   (best-of-N, per-seq LAD2, lineage fill, checkpoint version) — usually by
   reading upstream eval code or the issue tracker, not by guessing.
@@ -200,8 +209,8 @@ specify. Sometimes we have **pinned the recipe**; sometimes it remains unknown.
 1. DA-V2 Table-2 **native** preprocessing on ETH3D / Sintel / DIODE (we have ✅
    on these datasets via the MoGe-bundle protocol; the native recipe is open).
 2. DUSt3R **indoor** depth recipe (NYU/Bonn) — paper-private.
-3. Depth Pro Table-1 **subset + aggregation** for Sintel / Middlebury /
-   NuScenes / Sun-RGBD (Sun-RGBD additionally suspected L2 GT/pairing).
+3. Depth Pro Table-1 **Sintel** aggregation/clip (the Middlebury / NuScenes /
+   Sun-RGBD loaders were removed pre-release — see L2).
 4. Whether VGGT-ETH3D **`terrains`** is a model failure or a scene-specific GT
    artifact (everything else on ETH3D is fine).
 

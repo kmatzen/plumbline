@@ -1,5 +1,13 @@
 # BLOCKED — Depth Pro Table 1 · Sun RGB-D (δ₁)
 
+> **⚠️ Code removed (2026-05-31, pre-release).** The `sun_rgbd` loader, its
+> reproduction config, protocol, and fetch script were removed from the
+> package. No verified result anchored that the loader parsed Sun-RGBD GT
+> correctly, and the observed δ₁ **0.451 vs paper 0.890** (2× worse) is the
+> shape of a GT-decode / RGB↔depth pairing bug we could not rule out — exactly
+> the kind of suspiciously-unverifiable result we do not ship. This page is
+> retained to **document the attempt**. See `docs/CONFIDENCE_AUDIT.md`.
+
 | Field | Value |
 |-------|--------|
 | **Status** | 🔒 Fundamentally blocked (off-paper) |

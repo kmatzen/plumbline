@@ -432,54 +432,12 @@ jobs:
       Pro Table 1 ✅. Training split, booster_depth_pro_metric (0.001–10 m).
       JSON: depth_pro_booster_20260531.json.
 
-  - name: depth-pro-middlebury
-    status: blocked
-    priority: 6
-    blocked_on: "Fundamentally blocked — docs/blocked/DEPTH_PRO_MIDDLEBURY_TABLE1.md"
-    paper_target: "Depth Pro Table 1 — Middlebury δ₁ 0.605 (metric, no alignment)"
-    primary_metric: delta_1
-    datasets: [middlebury]
-    data_footprint_gb: 0.6
-    est_wall_min: 5
-    requires_env: [MIDDLEBURY_ROOT]
-    extras: "./scripts/download-middlebury.sh; depth_pro.pt"
-    notes: >
-      2026-05-31: 15/15 scenes F-res (~2872×1984). JSON:
-      depth_pro_middlebury_20260531.json. Do not tune paper_reference.
-
-  - name: depth-pro-sun-rgbd
-    status: blocked
-    priority: 6
-    blocked_on: "Fundamentally blocked — docs/blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md"
-    paper_target: "Depth Pro Table 1 — Sun-RGBD δ₁ 0.890 (metric, no alignment)"
-    primary_metric: delta_1
-    datasets: [sun-rgbd]
-    data_footprint_gb: 0.7
-    est_wall_min: 15
-    requires_env: [SUN_RGBD_ROOT]
-    extras: "./scripts/download-sun-rgbd.sh; depth_pro.pt"
-    notes: >
-      2026-05-31: 5050/5050 frames (~8 min H100). JSON:
-      depth_pro_sun_rgbd_20260531.json. Staging: img-{i:06d}.jpg ↔ depth/{i}.png.
-      Do not tune paper_reference.
-
-  - name: depth-pro-nuscenes
-    status: blocked
-    priority: 6
-    blocked_on: "Fundamentally blocked — docs/blocked/DEPTH_PRO_NUSCENES_TABLE1.md"
-    paper_target: "Depth Pro Table 1 — NuScenes δ₁ 0.491 (metric, no alignment)"
-    primary_metric: delta_1
-    datasets: [nuscenes]
-    data_footprint_gb: 46
-    est_wall_min: 60
-    requires_env: [NUSCENES_ROOT]
-    extras: >
-      ./scripts/download-nuscenes.sh trainval (Motional S3 meta+keyframes ~46 GB);
-      uv pip install nuscenes-devkit pyquaternion; depth_pro.pt.
-    notes: >
-      2026-05-31: 881/881 frames. JSON: depth_pro_nuscenes_20260531.json.
-      Subset seed=42 on val CAM_FRONT (paper: random 881 from ~35K val cameras).
-      Do not tune paper_reference.
+  # NOTE: Depth Pro Table-1 Middlebury / Sun-RGBD / NuScenes jobs were REMOVED
+  # before public release (2026-05-31) along with their loaders. None had a
+  # verified anchor proving the loader parsed GT correctly, and the results were
+  # suspicious (Sun-RGBD read 2× worse — a likely GT/pairing bug; Middlebury /
+  # NuScenes read "too good" against unverifiable subset/recipe). The attempt is
+  # documented in docs/blocked/DEPTH_PRO_*_TABLE1.md and docs/CONFIDENCE_AUDIT.md.
 
   # NOTE: Depth Pro ETH3D (Table 1, δ₁ 0.415) is intentionally NOT a queue
   # job — its official metric-depth loader is unwired and it is blocked on

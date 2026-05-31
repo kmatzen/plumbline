@@ -14,15 +14,23 @@ code** (e.g. `depth-pro-eth3d` before official depth is staged) — see handoff 
 |---------|------------------|---------|------|
 | Booster | 0.488 / 0.466 | — | ✅ match (`depth-pro-booster`) |
 | Sintel | 0.241 / 0.400 | Protocol aligned; gap upstream / aggregation | [`blocked/DEPTH_PRO_SINTEL_TABLE1.md`](blocked/DEPTH_PRO_SINTEL_TABLE1.md) |
-| Middlebury | 0.759 / 0.605 | Reads better; no public eval | [`blocked/DEPTH_PRO_MIDDLEBURY_TABLE1.md`](blocked/DEPTH_PRO_MIDDLEBURY_TABLE1.md) |
-| NuScenes | 0.594 / 0.491 | Reads better; subset / recipe unknown | [`blocked/DEPTH_PRO_NUSCENES_TABLE1.md`](blocked/DEPTH_PRO_NUSCENES_TABLE1.md) |
-| Sun-RGBD | 0.451 / 0.890 | Reads worse; GT/pairing or recipe | [`blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md`](blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md) |
+| Middlebury | 0.759 / 0.605 | **Loader REMOVED pre-release** — no verified anchor; reads better, no public eval | [`blocked/DEPTH_PRO_MIDDLEBURY_TABLE1.md`](blocked/DEPTH_PRO_MIDDLEBURY_TABLE1.md) |
+| NuScenes | 0.594 / 0.491 | **Loader REMOVED pre-release** — no verified anchor; unknown subset/recipe | [`blocked/DEPTH_PRO_NUSCENES_TABLE1.md`](blocked/DEPTH_PRO_NUSCENES_TABLE1.md) |
+| Sun-RGBD | 0.451 / 0.890 | **Loader REMOVED pre-release** — no verified anchor; 2× worse (likely GT/pairing bug) | [`blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md`](blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md) |
 | ETH3D | — / 0.415 | **Not blocked** — implementation + data | [`ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md`](ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md) |
 
 **Appendix Table 16** (depth clip m, sample count): Booster 0.001–10 / 228 · ETH3D 0.1–200 / 454 ·
 Middlebury 0.001–10 / 15 · NuScenes 0.001–80 / 881 · Sintel 0.01–80 / 1064 · Sun-RGBD 0.001–10 / 5050.
 Metric δ₁, no alignment, bilinear pred→GT. **iBims sanity** (100 frames, same weights): δ₁ **0.8458** —
 adapter OK on indoor GT; Sintel gap is dataset-specific.
+
+> **Removed before public release (2026-05-31).** The Middlebury / NuScenes /
+> Sun-RGBD loaders, configs, protocols, and fetch scripts were deleted from the
+> package. The Depth Pro *adapter* is verified (Booster ✅) and stays; what was
+> removed is the per-dataset **loaders**, which had no verified result proving
+> they parsed GT correctly — so their numbers were unverifiable, and Sun-RGBD's
+> 2× miss looked like a parsing bug. The pages above are kept to document the
+> attempt. Sintel stays because it runs on the ✅-anchored `sintel` loader.
 
 Queue: `reproductions/gpu_queue.yaml`.
 

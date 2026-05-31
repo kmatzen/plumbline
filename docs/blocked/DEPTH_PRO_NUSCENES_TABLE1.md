@@ -1,5 +1,12 @@
 # BLOCKED — Depth Pro Table 1 · nuScenes (δ₁)
 
+> **⚠️ Code removed (2026-05-31, pre-release).** The `nuscenes` loader, its
+> reproduction config, protocol, and fetch script were removed from the
+> package. No verified result anchored that the loader parsed nuScenes GT
+> correctly; the observed δ₁ **0.594 vs paper 0.491** reads *better* than the
+> paper against an unverifiable random-881 subset / recipe. This page is
+> retained to **document the attempt**. See `docs/CONFIDENCE_AUDIT.md`.
+
 | Field | Value |
 |-------|--------|
 | **Status** | 🔒 Fundamentally blocked (off-paper) |
