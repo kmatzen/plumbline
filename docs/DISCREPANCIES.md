@@ -728,13 +728,18 @@ coincidentally also matched (0.1086). The lineage KITTI loader enumerates from
 raw `image_02/data` and attaches annotated GT, so a root with sparse raw frames
 under-counts without raising. Re-run on the proper gathered tree
 (`/root/data/kitti_dust3r_lineage`, 1269 frames / 13 drives) gives 0.1049 — the
-verdict held, but only the full-set number is trustworthy. Partial guard landed:
-the runner now routes a prediction that yields no metric for the requested task
-to `n_skipped` (with a reason) instead of silently incrementing `n_evaluated`
-(`runner.evaluate`, regression test `test_metricless_prediction_counts_as_skipped`).
-Still open: a protocol-declared *minimum* `n_evaluated` floor would also catch the
-loader-side under-count above (a sparse data root that legitimately produces
-metrics on too few frames).
+verdict held, but only the full-set number is trustworthy. Guard landed (both
+halves):
+1. The runner routes a prediction that yields no metric for the requested task to
+   `n_skipped` (with a reason) instead of silently incrementing `n_evaluated`
+   (`runner.evaluate`, test `test_metricless_prediction_counts_as_skipped`).
+2. A reproduction may declare `min_samples` — a floor on the evaluated-frame count.
+   If the run evaluates fewer (the sparse data root above), `run_reproduction`
+   forces `paper_match=no` with a COUNT SHORTFALL note instead of letting the
+   metric match on the wrong set (`reproduce.py`, tests
+   `test_min_samples_shortfall_forces_no_match` / `_met_matches_normally`).
+   Adopted on `da-v2-small-diode-indoor` (floor = its 220 pinned ids); other
+   reproductions can opt in with their own verified count.
 
 The lineage protocols (`{nyu,kitti,bonn}_dust3r_lineage*`) are named after DUSt3R
 because the *file paths and prep conventions* trace from DUSt3R, but the *eval

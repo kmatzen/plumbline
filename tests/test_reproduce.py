@@ -255,6 +255,67 @@ device: cpu
         with pytest.raises(KeyError, match="were not found"):
             run_reproduction("repro")
 
+    def test_min_samples_shortfall_forces_no_match(
+        self, repro_dir: Path, registered_fakes: None
+    ) -> None:
+        """A count below ``min_samples`` must fail even if the metric matches.
+
+        Guards the D28 footgun: the metric lands exactly on paper (0.10) but
+        only 3 samples were evaluated against a declared floor of 5, so the
+        run was on the wrong set and must not count as a paper match.
+        """
+        _write_yaml(
+            repro_dir / "repro.yaml",
+            """
+name: repro
+model: {name: test-fixed-depth, kwargs: {target_abs_rel: 0.10}}
+dataset: {name: test-synthetic, kwargs: {n_samples: 3}}
+tasks: [mono_depth]
+scale_alignment: none
+max_views: 1
+device: cpu
+min_samples: 5
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.10
+  tolerance_relative: 0.05
+""".strip(),
+        )
+        result = run_reproduction("repro")
+        assert result.observed == pytest.approx(0.10, abs=1e-6)  # metric matches
+        assert result.paper_match is False  # but forced no-match
+        assert result.count_shortfall is True
+        assert result.n_evaluated == 3
+        assert result.min_samples == 5
+        assert "COUNT SHORTFALL" in result.notes
+        assert "BELOW MINIMUM" in result.to_markdown()
+
+    def test_min_samples_met_matches_normally(
+        self, repro_dir: Path, registered_fakes: None
+    ) -> None:
+        """When the floor is met the gate behaves exactly as without it."""
+        _write_yaml(
+            repro_dir / "repro.yaml",
+            """
+name: repro
+model: {name: test-fixed-depth, kwargs: {target_abs_rel: 0.10}}
+dataset: {name: test-synthetic, kwargs: {n_samples: 4}}
+tasks: [mono_depth]
+scale_alignment: none
+max_views: 1
+device: cpu
+min_samples: 3
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.10
+  tolerance_relative: 0.05
+""".strip(),
+        )
+        result = run_reproduction("repro")
+        assert result.paper_match is True
+        assert result.count_shortfall is False
+        assert result.n_evaluated == 4
+
     def test_to_markdown_renders_status(self, repro_dir: Path, registered_fakes: None) -> None:
         _write_yaml(
             repro_dir / "repro.yaml",

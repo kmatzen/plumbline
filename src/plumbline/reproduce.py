@@ -6,6 +6,10 @@ A reproduction is a YAML file under ``reproductions/<name>.yaml`` declaring:
 - Which dataset + split + sample list.
 - Which tasks, scale alignment, view count, resolution.
 - The published reference: metric, value, and tolerance.
+- Optionally ``min_samples``: a floor on the number of samples the exact
+  eval set should produce. If the run evaluates fewer, the reproduction is
+  forced to ``paper_match=no`` with a COUNT SHORTFALL note — guards against
+  a sparse / mis-pointed data root landing inside tolerance by luck (D28).
 
 Running a reproduction executes :func:`~plumbline.runner.evaluate` with those
 settings and compares the primary metric against the published value, within
@@ -106,6 +110,21 @@ class ReproductionResult:
     tolerance_relative: float
     paper_match: bool | None
     notes: str = ""
+    n_evaluated: int = 0
+    min_samples: int | None = None
+
+    @property
+    def count_shortfall(self) -> bool:
+        """True when a declared ``min_samples`` floor was not met.
+
+        Guards the D28 footgun: a sparse / mis-pointed data root that
+        silently evaluates far fewer frames than the protocol declares can
+        still land a metric inside tolerance by luck (the KITTI 82-frame
+        run that coincidentally matched 0.1086). When the floor is missed,
+        the metric was computed on the wrong sample set and must not count
+        as a paper match.
+        """
+        return self.min_samples is not None and self.n_evaluated < self.min_samples
 
     def to_markdown(self) -> str:
         md = self.report.to_markdown()
@@ -114,6 +133,9 @@ class ReproductionResult:
         md += f"- Observed: {self.observed:.4f}\n"
         md += f"- Published: {self.published:.4f}\n"
         md += f"- Tolerance (relative): {self.tolerance_relative:.2%}\n"
+        if self.min_samples is not None:
+            ok = "" if not self.count_shortfall else "  ⚠️ BELOW MINIMUM"
+            md += f"- Samples evaluated: {self.n_evaluated} (min {self.min_samples}){ok}\n"
         if self.paper_match is not None:
             md += f"- Match: **{'yes' if self.paper_match else 'no'}**\n"
         if self.notes:
@@ -259,6 +281,25 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
     else:
         match = None
 
+    # Optional sample-count floor (D28 footgun guard). A reproduction may
+    # declare ``min_samples`` — the lower bound on frames the protocol's
+    # exact eval set should produce. If the run evaluated fewer (sparse or
+    # mis-pointed data root, an upstream loader silently under-counting),
+    # the metric is off the declared set and cannot count as a match, even
+    # if it lands inside tolerance by luck.
+    min_samples_raw = cfg.get("min_samples")
+    min_samples = int(min_samples_raw) if min_samples_raw is not None else None
+    notes = cfg.get("notes", "")
+    if min_samples is not None and report.n_evaluated < min_samples:
+        match = False
+        shortfall = (
+            f"COUNT SHORTFALL: evaluated {report.n_evaluated} samples but the protocol "
+            f"declares min_samples={min_samples}. The metric was computed on the wrong "
+            f"set — check the data root / sample selection. Forced paper_match=no."
+        )
+        log.warning("reproduction %r: %s", name, shortfall)
+        notes = f"{shortfall}\n\n{notes}" if notes else shortfall
+
     result = ReproductionResult(
         name=name,
         report=report,
@@ -267,7 +308,9 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
         published=published,
         tolerance_relative=tolerance,
         paper_match=match,
-        notes=cfg.get("notes", ""),
+        notes=notes,
+        n_evaluated=report.n_evaluated,
+        min_samples=min_samples,
     )
 
     if output:

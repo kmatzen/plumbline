@@ -21,6 +21,12 @@ dataset:
     domain: indoors
 
 sample_ids_file: diode_val_indoor.samples.txt
+# Floor = the exact pinned-id count (220 non-comment lines in the file
+# above). subset_by_ids raises if any pinned id is missing, so the run
+# yields exactly 220 samples; min_samples catches the case where an
+# in-eval skip silently drops below that and the metric is scored on a
+# short set (D28 footgun guard).
+min_samples: 220
 
 tasks:
   - mono_depth
