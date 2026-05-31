@@ -478,12 +478,12 @@ jobs:
     paper_target: "Depth Pro Table 1 — NuScenes δ₁ 0.491 (metric, no alignment)"
     primary_metric: delta_1
     datasets: [nuscenes]
-    data_footprint_gb: 300
+    data_footprint_gb: 46
     est_wall_min: 60
     requires_env: [NUSCENES_ROOT]
     extras: >
-      ./scripts/download-nuscenes.sh depth-pro-val; uv pip install nuscenes-devkit
-      pyquaternion; depth_pro.pt. 881×900×1600 CAM_FRONT LiDAR GT.
+      ./scripts/download-nuscenes.sh trainval (Motional S3 meta+keyframes ~46 GB);
+      uv pip install nuscenes-devkit pyquaternion; depth_pro.pt.
     notes: >
       Loader + protocol nuscenes_depth_pro_metric (2026-05-31). Subset seed=42 on
       val CAM_FRONT (paper: random 881 from ~35K val camera keyframes). Blocked

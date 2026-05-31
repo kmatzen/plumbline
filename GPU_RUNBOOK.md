@@ -228,7 +228,7 @@ message, then `./scripts/backup-session.sh <tag>`. Do not commit keys to git.
 | Sintel MoGe-eval bundle | 0.5 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'Sintel*' --local-dir /tmp/moge && unzip /tmp/moge/Sintel.zip -d $SINTEL_MOGE_ROOT` (1064 frames, 872×436; MoGe Table 3 — NOT `$SINTEL_ROOT`). |
 | Sintel (depth+cam+RGB) | 6 GB | See § "Sintel — NOT auth-gated" below. Native DA-V2 Table 2 **parked** (OFF-PAPER: ViT-L AbsRel **0.232** vs **0.487**; `clean` pass **0.222** — see [`docs/SINTEL_DAV2_TABLE2_HANDOFF.md`](docs/SINTEL_DAV2_TABLE2_HANDOFF.md)). Probe: `scripts/probe-sintel-pass.py`. |
 | Sun-RGBD test (Depth Pro Table 1) | 0.7 GB | `./scripts/download-sun-rgbd.sh` → `$SUN_RGBD_ROOT` (`rgb/img-*.jpg`, `depth/{i}.png`, uint16÷10000 m). Ahanda mirrors. |
-| nuScenes val (Depth Pro Table 1) | ~300 GB | `./scripts/download-nuscenes.sh depth-pro-val` → `$NUSCENES_ROOT` (v1.0-trainval; `mini` mode ~4 GB smoke). `uv pip install nuscenes-devkit pyquaternion`. |
+| nuScenes val (Depth Pro Table 1) | ~46 GB | `./scripts/download-nuscenes.sh trainval` → `$NUSCENES_ROOT` (Motional public S3: meta + 10× keyframes; `mini` ~4 GB smoke). `uv pip install nuscenes-devkit pyquaternion`. |
 | DTU MVS-22 | 7 GB | `gdown 135oKPefcPTsdtLRzoDAQtPpHuoIrpRI_ -O dtu_test.zip && unzip dtu_test.zip` (MVSNet test, ~554 MB) + `aria2c -x 16 -s 16 https://roboimagedata2.compute.dtu.dk/data/MVS/Points.zip` (GT clouds, ~7 GB). **Do NOT fetch SampleSet.zip — that's a 2-scan demo.** |
 | 7-Scenes | 12 GB | Per scene from `http://download.microsoft.com/download/2/8/5/28564B23-0828-408F-8631-23B1EFF1DAC8/${scene}.zip`, then unzip nested `seq-*.zip`. Scenes: `chess fire heads office pumpkin redkitchen stairs`. |
 
