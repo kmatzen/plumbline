@@ -95,6 +95,23 @@ Keep `depth-pro-sintel` **blocked**; do not tune `paper_reference.value`.
 
 **2026-05-31 iBims sanity check:** `depth-pro-ibims1` → δ₁ **0.8458**, AbsRel **0.161** on 100 MoGe-bundle frames (appendix Table 16 clip). Same `depth_pro.pt` as Sintel (δ₁ **0.2409**) — adapter + weights behave on high-quality indoor GT; Sintel miss is **not** a global metric-depth failure.
 
+**2026-05-31 Sintel per-scene breakdown** (`scripts/analyze-depth-pro-sintel-json.py` on
+`depth_pro_sintel_table16_20260531.json`):
+
+| Finding | Value |
+|---------|--------|
+| Loader order: first 80 frames | δ₁ **0.477** |
+| Frames 81–1064 | δ₁ **0.221** |
+| Equal-scene mean (23 scenes) | δ₁ **0.230** |
+| NaN frames | 19 / 1064 |
+
+Six scenes with scene-mean δ₁ **&lt; 0.05** (300 frames): `mountain_1`, `bandage_1`,
+`sleeping_2`, `bamboo_1`, `temple_2`, `bamboo_2`. Excluding them → frame-mean δ₁
+**~0.31** (still under paper 0.40). Best scenes: `shaman_2` **0.76**, `alley_1` **0.60**.
+
+Hypothesis: paper may use **per-sequence aggregation**, different scene subset, or
+official weights — not fixable by `max_depth`/`pass_name` alone (already ruled out).
+
 ## Implementation checklist
 
 | Step | Owner | Status |

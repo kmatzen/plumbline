@@ -207,6 +207,10 @@ itself — `DIODE_MOGE_ROOT/DIODE/`, `KITTI_MOGE_ROOT/KITTI/`,
 `ETH3D_MOGE_ROOT/ETH3D/` (default `$PLUMBLINE_WORK/data/eth3d_moge`, not `moge_eval/`),
 `DDAD_MOGE_ROOT/DDAD/`, `SINTEL_MOGE_ROOT/Sintel/` (under `$PLUMBLINE_WORK/data/moge_eval/`).
 MoGe upstream DA-V2 audit: `scripts/run-moge-upstream-dav2.sh`.
+Depth Pro Sintel scene breakdown: `scripts/analyze-depth-pro-sintel-json.py`.
+
+**S3 session credentials** (expire ~1 h): paste `export AWS_*` from your token
+message, then `./scripts/backup-session.sh <tag>`. Do not commit keys to git.
 (GSO/iBims point directly at the scene-dir parent.)
 
 | Dataset | Min viable | Fetch |

@@ -405,8 +405,9 @@ jobs:
     blocked_on: >
       Depth Pro Table 1 Sintel δ₁ OFF-PAPER: full 1064-frame δ₁ 0.2409 vs 0.400
       (2026-05-31, appendix Table 16 protocol 0.01–80 m). 80-frame smoke ~0.48 —
-      tail scenes drag mean down. iBims δ₁ 0.846 same weights — not a dead adapter.
-      Upstream README: re-trained weights may not match Sintel paper. No eval script.
+      tail scenes drag mean down. iBims δ₁ 0.846 — adapter OK. Per-scene: 6/23 scenes
+      with δ₁&lt;0.05 (300 fr); excl. them → ~0.33 still under 0.40. See
+      scripts/analyze-depth-pro-sintel-json.py. Upstream README: re-trained weights.
     paper_target: "Depth Pro Table 1 — Sintel δ₁ 0.400 (metric, no alignment; verified_pdf 2026-05-28)"
     primary_metric: delta_1
     datasets: [sintel]
