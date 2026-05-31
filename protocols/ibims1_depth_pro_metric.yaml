@@ -1,0 +1,21 @@
+# iBims-1 metric depth — Depth Pro sanity check (informational).
+#
+# MoGe HF bundle (640×480, log-encoded metric depth). Depth Pro appendix
+# Table 16: iBims valid 0.1–10 m, 100 samples. Not a Depth Pro Table 1
+# column (iBims appears in boundary-eval appendix).
+
+name: ibims1_depth_pro_metric
+description: >
+  iBims-1 mono-depth: MoGe bundle loader, metric δ₁, no alignment.
+
+reference:
+  paper: "Bochkovskii et al. 2024, Depth Pro appendix Table 16 (iBims depth range)"
+
+fixed:
+  dataset:
+    name: ibims1
+    split: test
+  depth_clip: [0.1, 10.0]
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]

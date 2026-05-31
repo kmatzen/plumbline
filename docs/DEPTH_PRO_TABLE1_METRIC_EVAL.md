@@ -91,9 +91,9 @@ Keep `depth-pro-sintel` **blocked**; do not tune `paper_reference.value`.
 | NuScenes | 0.001–80 | 881 | ❌ | — |
 | Sintel | 0.01–80 | 1064 | ✅ `$SINTEL_ROOT` | `depth-pro-sintel` **blocked** (δ₁ 0.2409) |
 | Sun-RGBD | 0.001–10 | 5050 | ❌ | — |
-| iBims | 0.1–10 | 100 | ✅ `$IBIMS1_ROOT` | optional informational |
+| iBims | 0.1–10 | 100 | ✅ `$IBIMS1_ROOT` | ✅ informational δ₁ **0.8458** (2026-05-31) |
 
-Next GPU candidate with lowest friction: **iBims** (100 frames, metric indoor) — not a Table 1 column but validates adapter on laser-scanned GT.
+**2026-05-31 iBims sanity check:** `depth-pro-ibims1` → δ₁ **0.8458**, AbsRel **0.161** on 100 MoGe-bundle frames (appendix Table 16 clip). Same `depth_pro.pt` as Sintel (δ₁ **0.2409**) — adapter + weights behave on high-quality indoor GT; Sintel miss is **not** a global metric-depth failure.
 
 ## Implementation checklist
 

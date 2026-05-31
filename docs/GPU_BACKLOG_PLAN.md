@@ -75,11 +75,11 @@ JSON/S3 provenance only.
 
 **Optional:** Sync result JSON to S3 if missing; mark queue row as investigated.
 
-### 4. Depth Pro Table 1 — Sintel **blocked** (protocol ruled out 2026-05-31)
+### 4. Depth Pro Table 1 — Sintel **blocked**; iBims sanity **done**
 
-Full 1064-frame δ₁ **0.2409** vs paper **0.400** under appendix Table 16 protocol.
-ETH3D δ₁ 0.415 still blocked (metric GT). See
-[`docs/DEPTH_PRO_TABLE1_METRIC_EVAL.md`](DEPTH_PRO_TABLE1_METRIC_EVAL.md).
+Sintel: δ₁ **0.2409** vs **0.400** (appendix protocol). iBims informational:
+δ₁ **0.8458** on 100 frames — same weights work on indoor GT. ETH3D still blocked.
+See [`docs/DEPTH_PRO_TABLE1_METRIC_EVAL.md`](DEPTH_PRO_TABLE1_METRIC_EVAL.md).
 
 ### 5. Defer (high friction)
 

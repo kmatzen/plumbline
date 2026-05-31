@@ -1499,6 +1499,8 @@ weights may not match paper. JSONs: `depth_pro_sintel_*_20260530.json`,
 `depth_pro_sintel_table16_20260531.json`. Queue: `depth-pro-sintel` **blocked**.
 Design: [`docs/DEPTH_PRO_TABLE1_METRIC_EVAL.md`](DEPTH_PRO_TABLE1_METRIC_EVAL.md).
 
+**2026-05-31 iBims sanity:** same weights, metric protocol on MoGe iBims bundle → δ₁ **0.8458** (100/100). Weights/adapter OK on indoor laser GT; Sintel gap is dataset-specific (synthetic, sky, scale), not a broken checkpoint.
+
 **Pass probe (2026-05-30, `scripts/probe-sintel-pass.py`, 1064 frames):** `final`
 **0.2321** vs `clean` **0.2224** (same `training/depth` GT) — `clean` is slightly
 *better*, not worse; pass name does not explain the −52 % gap vs paper.

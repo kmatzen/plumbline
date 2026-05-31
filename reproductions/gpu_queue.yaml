@@ -385,14 +385,28 @@ jobs:
 
   # --- New MODEL coverage: Depth Pro on Sintel (metric δ₁, NO alignment).
   #     Depth Pro's first paper-match candidate (yaml landed 2026-05-28). ---
+  - name: depth-pro-ibims1
+    status: done
+    priority: 6
+    paper_target: "informational — Depth Pro metric δ₁ on iBims (no Table 1 cell)"
+    primary_metric: delta_1
+    datasets: [ibims1]
+    data_footprint_gb: 0.05
+    est_wall_min: 1
+    requires_env: [IBIMS1_ROOT]
+    extras: "plumbline install depth-pro; depth_pro.pt; MoGe iBims-1 bundle at $IBIMS1_ROOT"
+    notes: >
+      2026-05-31: δ₁ 0.8458, AbsRel 0.161 (100/100). Same weights as Sintel —
+      adapter OK on indoor GT. JSON: depth_pro_ibims1_20260531.json.
+
   - name: depth-pro-sintel
     status: blocked
     priority: 6
     blocked_on: >
       Depth Pro Table 1 Sintel δ₁ OFF-PAPER: full 1064-frame δ₁ 0.2409 vs 0.400
       (2026-05-31, appendix Table 16 protocol 0.01–80 m). 80-frame smoke ~0.48 —
-      tail scenes drag mean down. Upstream README: public weights re-trained, may
-      not match paper. No Sintel eval script. Do not tune YAML.
+      tail scenes drag mean down. iBims δ₁ 0.846 same weights — not a dead adapter.
+      Upstream README: re-trained weights may not match Sintel paper. No eval script.
     paper_target: "Depth Pro Table 1 — Sintel δ₁ 0.400 (metric, no alignment; verified_pdf 2026-05-28)"
     primary_metric: delta_1
     datasets: [sintel]

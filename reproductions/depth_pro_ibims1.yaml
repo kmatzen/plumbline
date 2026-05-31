@@ -1,0 +1,26 @@
+# Depth Pro on iBims-1 — informational metric sanity check.
+#
+# Depth Pro Table 1 does not include iBims; appendix Table 16 lists
+# 0.1–10 m, 100 samples. Validates metric δ₁ on laser-scanned indoor GT
+# after Sintel Table-1 miss (δ₁ 0.24 vs 0.40).
+
+name: depth-pro-ibims1
+protocol: ibims1_depth_pro_metric
+
+model:
+  name: depth-pro
+  kwargs: {}
+
+scale_alignment: none
+device: cuda:0
+
+paper_reference:
+  primary_metric: delta_1
+  value: null
+  tolerance_relative: 0.05
+  citation: "Informational — Depth Pro appendix Table 16 iBims setup; no Table 1 cell."
+  source_confidence: informational_no_paper
+
+notes: >
+  ~100 frames, $IBIMS1_ROOT MoGe bundle. Compare qualitatively to Sintel
+  δ₁ 0.2409 on the same weights.
