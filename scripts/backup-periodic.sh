@@ -17,6 +17,10 @@ TAG="${1:-tier_session_$(date -u +%Y%m%d)}"
 INTERVAL_MIN="${2:-30}"
 REPO="${PLUMBLINE_REPO:-/mnt/localssd/plumbline}"
 LOG="$WORK/logs/backup_periodic.log"
+
+# Load AWS + work paths (picks up $PLUMBLINE_WORK/.aws_session when present).
+# shellcheck source=/dev/null
+source "$REPO/scripts/pod-localssd-env.sh" 2>/dev/null || true
 PIDFILE="$WORK/logs/backup_periodic.pid"
 SCRIPT="$REPO/scripts/backup-session.sh"
 

@@ -23,6 +23,6 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
-  Stage v1.0-trainval at $NUSCENES_ROOT via ./scripts/download-nuscenes.sh.
-  Subset is seed=42 on val CAM_FRONT keyframes (paper used random 881 from ~35K
-  val camera frames — document any δ₁ gap). Requires nuscenes-devkit.
+  Stage v1.0-trainval at $NUSCENES_ROOT via ./scripts/download-nuscenes.sh trainval.
+  Run 2026-05-31: δ₁ 0.5935 vs paper 0.491 (blocked, reads better). JSON:
+  depth_pro_nuscenes_20260531.json. Subset seed=42 on val CAM_FRONT keyframes.

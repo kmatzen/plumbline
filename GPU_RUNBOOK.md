@@ -212,8 +212,10 @@ itself — `DIODE_MOGE_ROOT/DIODE/`, `KITTI_MOGE_ROOT/KITTI/`,
 MoGe upstream DA-V2 audit: `scripts/run-moge-upstream-dav2.sh`.
 Depth Pro Sintel scene breakdown: `scripts/analyze-depth-pro-sintel-json.py`.
 
-**S3 session credentials** (expire ~1 h): paste `export AWS_*` from your token
-message, then `./scripts/backup-session.sh <tag>`. Do not commit keys to git.
+**S3 session credentials** (expire ~12 h): paste `export AWS_*` lines into
+`$PLUMBLINE_WORK/.aws_session` (chmod 600), then `source scripts/pod-localssd-env.sh`.
+Run `./scripts/backup-session.sh <tag>` or `./scripts/backup-periodic.sh <tag> 30`.
+Do not commit keys to git.
 (GSO/iBims point directly at the scene-dir parent.)
 
 | Dataset | Min viable | Fetch |

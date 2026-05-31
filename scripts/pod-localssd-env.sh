@@ -25,6 +25,13 @@ if [[ -r "${PLUMBLINE_WORK}/.hf_token" ]]; then
   export HUGGING_FACE_HUB_TOKEN="$HF_TOKEN"
 fi
 
+# AWS session (plumbline-bench): paste exports into $PLUMBLINE_WORK/.aws_session (chmod 600).
+if [[ -r "${PLUMBLINE_WORK}/.aws_session" ]]; then
+  # shellcheck source=/dev/null
+  source "${PLUMBLINE_WORK}/.aws_session"
+fi
+export PLUMBLINE_S3_BUCKET="${PLUMBLINE_S3_BUCKET:-s3://plumbline-bench}"
+
 # MoGe-eval bundles (ROOT = parent of DDAD/, Sintel/, …)
 export DDAD_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
 export SINTEL_MOGE_ROOT="$PLUMBLINE_WORK/data/moge_eval"
