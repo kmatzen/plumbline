@@ -68,7 +68,15 @@ MoGe-bundle Table-3 cells on the same datasets **still ✅** (different preproce
 | `da-v2-large-diode-native` | 0.066 | **0.2142** | +225 % | D29 |
 | `da-v2-*-diode-moge-bundle` (exp.) | 0.073 / 0.068 / 0.066 | **0.062 / 0.059 / 0.054** | −13–18 % | D29 — MoGe GT/mask, still under paper |
 
-Compare: `da-v2-large-eth3d-moge` **0.0473** ✅ · `da-v2-large-sintel-moge` **0.2139** ✅.
+Compare: `da-v2-large-eth3d-moge` **0.0473** ✅ · `da-v2-large-sintel-moge` **0.2139** ✅ ·
+`da-v2-large-diode` **0.0529** ✅ (MoGe Table 3, `scale_shift_clamped`).
+
+**MoGe upstream harness** (2026-05-30, ViT-L `rel`): DIODE **0.0529**, ETH3D **0.0471**,
+Sintel **0.2138** — matches plumbline MoGe-bundle ✅ cells; still ≠ Table 2 paper.
+See [`docs/DA_V2_TABLE2_UPSTREAM_EVAL.md`](docs/DA_V2_TABLE2_UPSTREAM_EVAL.md),
+`scripts/run-moge-upstream-dav2.sh`. Informational crosswalk repros (Table 2 targets on
+MoGe bundles + `scale_shift`): `da-v2-large-{eth3d,sintel}-moge-table2`,
+`da-v2-large-diode-moge-bundle`.
 
 **Adapter v1.0 → v1.1 (2026-05-26, eval-mono-depth-avg null-result):** the suspected single-frame fix — averaging the two symmetric pair predictions (`pred1.pts3d.mean(dim=0)`, MonST3R `eval_mono_depth` shape) instead of routing through the MASt3R-shared PairViewer — was implemented and re-run across all four cells. **Result: all four cells moved by <0.005 AbsRel**, ruling out avg-pred as the cause of the Sintel/Bonn deltas. The v1.1 path is still preserved (it matches MonST3R's upstream eval code verbatim, making the adapter strictly more faithful). The Bonn delta itself was closed shortly after by **D27 (2026-05-26)** via a single-record code-level diff against upstream `depth_metric.ipynb`: paper §4.2 text says "per-frame median scaling" but the actual notebook scores via per-sequence scale+shift LAD2 (`align_with_lad2=True`, valid-pixel-weighted across 5 seqs) — paper-text-vs-code mismatch, not a plumbline bug. Same finding also explains the Sintel direction (per-seq pixel-weighted aggregation dilutes the `temple_2` outlier the equal-frame plumbline mean amplifies). See `docs/DISCREPANCIES.md` D27.
 

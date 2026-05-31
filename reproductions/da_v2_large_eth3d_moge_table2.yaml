@@ -1,0 +1,27 @@
+# Informational: DA-V2 Table 2 paper target on MoGe ETH3D bundle.
+#
+# NOT a paper-match row — DA-V2 Table 2 (0.131) used an unreleased native eval;
+# this uses MoGe HF bundle @ 2048×1365 + Table-2-style scale_shift. Compare to
+# da-v2-large-eth3d-moge (Table 3 MoGe protocol, scale_shift_clamped, ✅ 0.047).
+
+name: da-v2-large-eth3d-moge-table2
+protocol: eth3d_moge
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.131
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, DA-V2 Table 2 ETH3D ViT-L AbsRel 0.131 (native eval, unreleased)."
+  source_confidence: verified_pdf
+
+notes: >
+  Informational crosswalk only. MoGe upstream harness: see
+  docs/DA_V2_TABLE2_UPSTREAM_EVAL.md and scripts/run-moge-upstream-dav2.sh.

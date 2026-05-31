@@ -1282,6 +1282,11 @@ Probes: ``scripts/probe-diode-d29-warp.py``, ``scripts/probe-diode-d29-native-vs
 Handoff: [`docs/D29_DIODE_TABLE2_HANDOFF.md`](D29_DIODE_TABLE2_HANDOFF.md).
 Repros: ``da-v2-*-diode-moge-bundle`` (+ clamped experiment).
 
+**2026-05-30 MoGe upstream harness (ViT-L):** `eval_baseline.py` on HF DIODE
+bundle → ``rel`` **0.0529** (matches plumbline ``da-v2-large-diode``); paper Table 2
+**0.066** still ~20 % higher (harder / different recipe). See
+[`docs/DA_V2_TABLE2_UPSTREAM_EVAL.md`](DA_V2_TABLE2_UPSTREAM_EVAL.md).
+
 **Verdict:** ⚠️ off-paper, protocol gap — NOT a model/adapter bug and NOT tuned.
 Two readings, both consistent with the data and neither verifiable without
 DA-V2's own (unreleased) zero-shot eval script: (a) DA-V2's Table 2 DIODE number

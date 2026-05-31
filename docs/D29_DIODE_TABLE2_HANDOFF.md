@@ -2,6 +2,9 @@
 
 Upstream eval archaeology: [`docs/DA_V2_TABLE2_UPSTREAM_EVAL.md`](DA_V2_TABLE2_UPSTREAM_EVAL.md).
 MoGe `eval_baseline.py` + HF bundle is the closest public Table-2 recipe.
+Run on pod: `scripts/run-moge-upstream-dav2.sh` →
+`$PLUMBLINE_WORK/runs/moge_upstream_da_v2_{diode,eth3d,sintel}_vitl.json`.
+Outreach drafts: [`docs/UPSTREAM_OUTREACH.md`](UPSTREAM_OUTREACH.md).
 
 **Status:** Investigated; native cells stay **blocked**. Outdoor gap **explained**;
 full Table-2 match not closed (bundle path reads *under* paper).

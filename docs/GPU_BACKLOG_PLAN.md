@@ -59,8 +59,10 @@ See [`docs/DA_V2_TABLE2_UPSTREAM_EVAL.md`](DA_V2_TABLE2_UPSTREAM_EVAL.md). MoGe
 `eval_baseline.py` + HF bundles is the reproducible Table-2 path; DA-V2 repo ships
 no native ETH3D/Sintel/DIODE eval.
 
-Optional GPU: run MoGe harness on DIODE/ETH3D/Sintel configs to pin exact upstream
-numbers on this pod.
+**Done (2026-05-30):** `scripts/run-moge-upstream-dav2.sh` — DIODE **0.0529**,
+ETH3D **0.0471**, Sintel **0.2138** (`rel`); matches plumbline MoGe-bundle ✅ cells;
+still under Table 2 paper on DIODE. S3: `tier_moge_upstream_20260530`.
+Outreach: [MoGe #153](https://github.com/microsoft/MoGe/issues/153), DA-V2 #280/#281 comments.
 
 **Also done (archaeology):** DA-V1 has no Table-2 eval; issues [#280](https://github.com/DepthAnything/Depth-Anything-V2/issues/280) / [#281](https://github.com/DepthAnything/Depth-Anything-V2/issues/281); ETH3D frame inventory 454=454 ([handoff](ETH3D_DAV2_TABLE2_HANDOFF.md)).
 

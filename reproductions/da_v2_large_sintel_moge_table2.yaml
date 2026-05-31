@@ -1,0 +1,26 @@
+# Informational: DA-V2 Table 2 paper target on MoGe Sintel bundle.
+#
+# NOT paper-match — Table 2 Sintel 0.487 is native final-pass eval (unreleased).
+# This uses MoGe HF bundle @ 872×436 + scale_shift. Compare da-v2-large-sintel-moge
+# (Table 3, scale_shift_clamped, ✅ 0.214).
+
+name: da-v2-large-sintel-moge-table2
+protocol: sintel_moge
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.487
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, DA-V2 Table 2 Sintel ViT-L AbsRel 0.487 (native eval, unreleased)."
+  source_confidence: verified_pdf
+
+notes: >
+  Informational crosswalk only. MoGe upstream harness: docs/DA_V2_TABLE2_UPSTREAM_EVAL.md.

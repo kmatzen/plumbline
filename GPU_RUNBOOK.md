@@ -204,7 +204,9 @@ below are the fallback when a dataset isn't on S3.
 **ROOT-points-at-parent gotcha:** the MoGe-bundle loaders expect the env var
 to point at the directory *containing* the bundle subdir, not the subdir
 itself — `DIODE_MOGE_ROOT/DIODE/`, `KITTI_MOGE_ROOT/KITTI/`,
-`ETH3D_MOGE_ROOT/ETH3D/`, `DDAD_MOGE_ROOT/DDAD/`, `SINTEL_MOGE_ROOT/Sintel/`.
+`ETH3D_MOGE_ROOT/ETH3D/` (default `$PLUMBLINE_WORK/data/eth3d_moge`, not `moge_eval/`),
+`DDAD_MOGE_ROOT/DDAD/`, `SINTEL_MOGE_ROOT/Sintel/` (under `$PLUMBLINE_WORK/data/moge_eval/`).
+MoGe upstream DA-V2 audit: `scripts/run-moge-upstream-dav2.sh`.
 (GSO/iBims point directly at the scene-dir parent.)
 
 | Dataset | Min viable | Fetch |
@@ -215,7 +217,7 @@ itself — `DIODE_MOGE_ROOT/DIODE/`, `KITTI_MOGE_ROOT/KITTI/`,
 | iBims-1 | 40 MB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'iBims-1.zip' --local-dir /tmp/moge && unzip /tmp/moge/iBims-1.zip -d $IBIMS1_ROOT/..` |
 | GSO | 2 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'GSO.zip' --local-dir /tmp/moge && unzip /tmp/moge/GSO.zip -d $GSO_ROOT/..` |
 | DIODE val | 2.8 GB | `curl -L -O http://diode-dataset.s3.amazonaws.com/val.tar.gz && tar xzf val.tar.gz -C $DIODE_ROOT/..` — native Table-2: see D29 handoff. MoGe bundle: `s3://plumbline-bench/datasets/diode_moge/` → `$DIODE_MOGE_ROOT` (not `moge_eval/`). |
-| ETH3D 3-scene (chamfer) | 8 GB | Per scene: `curl -L --fail -O https://www.eth3d.net/data/${scene}_dslr_undistorted.7z` and `..._scan_clean.7z`, extract with `7z x -y`. Scenes: `courtyard delivery_area facade`. Needs `apt install p7zip-full`. This is `$ETH3D_ROOT` (native), NOT the MoGe mono-depth bundle. |
+?| ETH3D 3-scene (chamfer) | 8 GB | Per scene: `curl -L --fail -O https://www.eth3d.net/data/${scene}_dslr_undistorted.7z` and `..._scan_clean.7z`, extract with `7z x -y`. Scenes: `courtyard delivery_area facade`. Needs `apt install p7zip-full`. This is `$ETH3D_ROOT` (native), NOT the MoGe mono-depth bundle. |
 | ETH3D 13-scene train (DA-V2 Table 2) | ~22 GB + eval extras | Staged ✅; harness OFF-PAPER (~−32 % under paper). **Parked** — return: [`docs/ETH3D_DAV2_TABLE2_HANDOFF.md`](docs/ETH3D_DAV2_TABLE2_HANDOFF.md) (D31/D33). Probe: `scripts/probe-eth3d-official-depth.py`. |
 | ETH3D MoGe-eval bundle | 1.4 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'ETH3D*' --local-dir /tmp/moge && unzip /tmp/moge/ETH3D.zip -d $ETH3D_MOGE_ROOT` (nested `ETH3D/<scene>/<frame>/`, 453 samples; mono-depth, distinct from chamfer ETH3D). |
 | DDAD MoGe-eval bundle | 0.6 GB | `hf download Ruicheng/monocular-geometry-evaluation --repo-type dataset --include 'DDAD*' --local-dir /tmp/moge && unzip /tmp/moge/DDAD.zip -d $DDAD_MOGE_ROOT` (1000 samples, 1400×700 warp; Tier-A Table 3). |

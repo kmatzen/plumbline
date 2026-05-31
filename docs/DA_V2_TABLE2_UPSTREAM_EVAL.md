@@ -102,16 +102,30 @@ $PLUMBLINE_WORK/deps/moge                # eval harness + da_v2 baseline
 
 ## MoGe harness caveat (2026-05-30)
 
-Running `eval_baseline.py` from `$PLUMBLINE_WORK/deps/moge` on this pod hit
-`NameError: read_meta` in `moge/test/dataloader.py` line 96 — upstream should
-use `read_json` (as in `moge/train/dataloader.py`). Also avoid naming conflict:
-`import pipeline` (PyPI `pipeline` package) must not shadow MoGe's pipeline
-when launched from plumbline's venv. **Workaround:** patch `read_meta` →
-`read_json` in the MoGe clone, or install MoGe in an isolated env per
-`moge/docs/eval.md`.
+Upstream `moge/test/dataloader.py` had `read_meta` (undefined); use `read_json`.
+Filed [MoGe #153](https://github.com/microsoft/MoGe/issues/153). Pod script
+`scripts/run-moge-upstream-dav2.sh` applies the patch. Outreach:
+[`docs/UPSTREAM_OUTREACH.md`](UPSTREAM_OUTREACH.md).
 
-Until fixed, plumbline MoGe-bundle repros are the verified cross-check
-(`da-v2-large-diode` Table 3 ✅ 0.053 with `scale_shift_clamped`).
+## MoGe upstream results on this pod (2026-05-30, ViT-L)
+
+Official `eval_baseline.py` + HF bundles (`disparity_affine_invariant.rel`):
+
+| Benchmark | MoGe harness `rel` | DA-V2 Table 2 paper | Plumbline MoGe bundle |
+|-----------|-------------------|---------------------|------------------------|
+| DIODE | **0.0529** | 0.066 | `da-v2-large-diode` ✅ 0.0529 |
+| ETH3D | **0.0471** | 0.131 | `da-v2-large-eth3d-moge` ✅ 0.0473 |
+| Sintel | **0.2138** | 0.487 | `da-v2-large-sintel-moge` ✅ 0.2139 |
+
+JSON: `$PLUMBLINE_WORK/runs/moge_upstream_da_v2_{diode,eth3d,sintel}_vitl.json`.
+S3: `s3://plumbline-bench/runs/tier_moge_upstream_20260530/`.
+
+Sintel uses `scripts/moge_eval_sintel_upstream.json` (no `has_sharp_boundary` —
+plumbline `utils3d` lacks `sliding_window_2d`; `rel`/`delta1` unchanged).
+
+**Conclusion:** Harness ≈ plumbline MoGe-bundle ✅; neither reproduces Table 2 paper
+numbers (native and bundle both read *better* than paper except DIODE bundle ~20 %
+under 0.066).
 
 ## Resume commands
 
