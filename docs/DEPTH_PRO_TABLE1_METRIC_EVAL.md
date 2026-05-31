@@ -81,15 +81,30 @@ Protocol: `sintel_depth_pro_metric.yaml` · probe: `scripts/probe-depth-pro-sint
 reference impl re-trained, may not match paper) or undisclosed frame weighting.
 Keep `depth-pro-sintel` **blocked**; do not tune `paper_reference.value`.
 
+## Table 16 — all Depth Pro Table 1 datasets (staging on pod)
+
+| Dataset | Depth range (m) | n | Staged locally | Plumbline repro |
+|---------|-----------------|---|----------------|-----------------|
+| Booster | 0.001–10 | 228 | ❌ | — |
+| ETH3D | 0.1–200 | 454 | native + moge (chamfer) | blocked (no metric GT path) |
+| Middlebury | 0.001–10 | 15 | ❌ | — |
+| NuScenes | 0.001–80 | 881 | ❌ | — |
+| Sintel | 0.01–80 | 1064 | ✅ `$SINTEL_ROOT` | `depth-pro-sintel` **blocked** (δ₁ 0.2409) |
+| Sun-RGBD | 0.001–10 | 5050 | ❌ | — |
+| iBims | 0.1–10 | 100 | ✅ `$IBIMS1_ROOT` | optional informational |
+
+Next GPU candidate with lowest friction: **iBims** (100 frames, metric indoor) — not a Table 1 column but validates adapter on laser-scanned GT.
+
 ## Implementation checklist
 
 | Step | Owner | Status |
 |------|--------|--------|
 | PDF + appendix: exact δ₁ formula, resize, mask | doc | ✅ Table 16 |
+| Sintel protocol `sintel_depth_pro_metric` | code | ✅ |
+| Full Sintel reproduce | GPU | ✅ 0.2409 vs 0.400 (blocked) |
 | Search Depth Pro repo issues / supp for eval hints | doc | 🔎 open |
-| Define `SintelDepthProDataset` or extend `sintel` with `eval_mode: metric_delta1` | code | pending |
 | ETH3D metric GT staging plan | data | blocked until source defined |
-| Repro `depth-pro-sintel` with new protocol | GPU | after checklist |
+| Booster / NuScenes / Sun-RGBD staging | data | not started |
 | Repro `depth-pro-eth3d` (new) | GPU | after GT |
 
 ## Queue stance

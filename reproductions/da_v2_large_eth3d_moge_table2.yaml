@@ -12,7 +12,8 @@ model:
   kwargs:
     variant: large
 
-scale_alignment: scale_shift
+# Plain scale_shift blows up on MoGe ETH3D (AbsRel ~1200); use MoGe-metric parity.
+scale_alignment: scale_shift_clamped
 device: cuda:0
 
 paper_reference:

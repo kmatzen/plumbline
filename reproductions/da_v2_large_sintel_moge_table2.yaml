@@ -12,7 +12,7 @@ model:
   kwargs:
     variant: large
 
-scale_alignment: scale_shift
+scale_alignment: scale_shift_clamped
 device: cuda:0
 
 paper_reference:

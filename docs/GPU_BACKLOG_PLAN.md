@@ -14,6 +14,7 @@ still governs thrift, S3, and the no-YAML-tune rule.
 | Depth Pro Sintel Table 1 | 🔎 blocked (no public eval) | D32 notes in `DISCREPANCIES.md` |
 | VGGT ETH3D 13-scene chamfer | ✅ ran (D10 MISMATCH documented) | `vggt_eth3d_multiscene_chamfer.yaml` |
 | **D29 native DIODE outdoor** | 🔎 parked (bundle ~under paper) | D29, `DA_V2_TABLE2_UPSTREAM_EVAL.md` |
+| DA-V2 MoGe × Table-2 crosswalk (informational) | ✅ done 2026-05-31 | `REPRODUCTIONS.md` |
 
 ## Execution order
 

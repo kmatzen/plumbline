@@ -42,4 +42,13 @@ _sync_bundle ETH3D eth3d_moge
 _sync_bundle DIODE diode_moge
 _sync_bundle KITTI kitti_moge
 
+if [[ -d "${WORK}/data/eth3d_moge/ETH3D" ]]; then
+  echo "==> eth3d_moge → ${BUCKET}/datasets/eth3d_moge/"
+  aws s3 sync "${WORK}/data/eth3d_moge/" "${BUCKET}/datasets/eth3d_moge/"
+fi
+if [[ -d "${WORK}/data/diode_moge/DIODE" ]]; then
+  echo "==> diode_moge → ${BUCKET}/datasets/diode_moge/"
+  aws s3 sync "${WORK}/data/diode_moge/" "${BUCKET}/datasets/diode_moge/"
+fi
+
 echo "==> done. Code still needs: git add/commit && git push origin main"

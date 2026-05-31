@@ -68,6 +68,14 @@ MoGe-bundle Table-3 cells on the same datasets **still ✅** (different preproce
 | `da-v2-large-diode-native` | 0.066 | **0.2142** | +225 % | D29 |
 | `da-v2-*-diode-moge-bundle` (exp.) | 0.073 / 0.068 / 0.066 | **0.062 / 0.059 / 0.054** | −13–18 % | D29 — MoGe GT/mask, still under paper |
 
+**Informational Table-2 crosswalk on MoGe bundles** (2026-05-31, ViT-L, `scale_shift_clamped` except DIODE bundle uses Table-2 `scale_shift` per `diode_dav2_moge_bundle`):
+
+| Reproduction | Paper T2 | Observed | Notes |
+|---|---|---|---|
+| `da-v2-large-eth3d-moge-table2` | 0.131 | **0.0473** | plain `scale_shift` → AbsRel ~1200 (invalid) |
+| `da-v2-large-sintel-moge-table2` | 0.487 | **0.2139** | same as Table-3 MoGe cell |
+| `da-v2-large-diode-moge-bundle` | 0.066 | **0.0543** | `scale_shift` on bundle |
+
 Compare: `da-v2-large-eth3d-moge` **0.0473** ✅ · `da-v2-large-sintel-moge` **0.2139** ✅ ·
 `da-v2-large-diode` **0.0529** ✅ (MoGe Table 3, `scale_shift_clamped`).
 

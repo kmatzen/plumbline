@@ -148,35 +148,32 @@ jobs:
 
   # ----- Tier 2: informational runs (no paper target; A/B + smoke) -----
   - name: da-v2-large-eth3d-moge-table2
-    status: blocked
+    status: done
     priority: 99
-    paper_target: "informational — DA-V2 Table 2 ETH3D 0.131 on MoGe bundle + scale_shift (crosswalk only)"
+    paper_target: "informational — DA-V2 Table 2 ETH3D 0.131 vs MoGe bundle (crosswalk)"
     primary_metric: abs_rel
     datasets: [eth3d_moge]
-    blocked_on: "Table 2 paper used unreleased native eval; MoGe harness rel 0.0471 matches Table 3 cell."
     notes: >
-      YAML: da_v2_large_eth3d_moge_table2.yaml. Upstream harness 2026-05-30:
-      moge_upstream_da_v2_eth3d_vitl.json rel 0.0471. Do not tune to 0.131.
+      2026-05-31: 0.0473 vs 0.131 (clamped; plain scale_shift invalid ~1200).
+      JSON: da_v2_large_eth3d_moge_table2_20260531.json.
 
   - name: da-v2-large-sintel-moge-table2
-    status: blocked
+    status: done
     priority: 99
-    paper_target: "informational — DA-V2 Table 2 Sintel 0.487 on MoGe bundle + scale_shift"
+    paper_target: "informational — DA-V2 Table 2 Sintel 0.487 vs MoGe bundle"
     primary_metric: abs_rel
     datasets: [sintel_moge]
-    blocked_on: "Table 2 native eval unreleased; MoGe harness rel 0.2138 matches Table 3 cell."
     notes: >
-      YAML: da_v2_large_sintel_moge_table2.yaml. Upstream rel 0.2138 (2026-05-30).
+      2026-05-31: 0.2139 vs 0.487. JSON: da_v2_large_sintel_moge_table2_20260531.json.
 
   - name: da-v2-large-diode-moge-bundle
-    status: blocked
+    status: done
     priority: 99
     paper_target: "informational — DA-V2 Table 2 DIODE 0.066 on MoGe bundle + scale_shift"
     primary_metric: abs_rel
     datasets: [diode_moge]
-    blocked_on: "Bundle+scale_shift 0.054 still under paper 0.066; MoGe harness rel 0.0529."
     notes: >
-      Ran 2026-05-30 (ViT-S 0.0618 / ViT-L 0.0543). MoGe upstream rel 0.0529.
+      2026-05-31 ViT-L: 0.0543 vs 0.066 (−18%). JSON: da_v2_large_diode_moge_bundle_20260531.json.
 
   - name: da3-co3dv2-pose
     status: done
