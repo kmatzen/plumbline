@@ -151,6 +151,7 @@ authoritative 33-cell matrix:
 - [`GPU_RUNBOOK.md`](./GPU_RUNBOOK.md) — GPU bring-up, queue, active work
 - [`REPRODUCTIONS.md`](./REPRODUCTIONS.md) — paper-match matrix
 - [`docs/DISCREPANCIES.md`](./docs/DISCREPANCIES.md) — open issues (D-numbers)
+- [`docs/CONFIDENCE_AUDIT.md`](./docs/CONFIDENCE_AUDIT.md) — where each off-paper gap lives, confirmed vs unknown
 - [`docs/BLOCKED.md`](./docs/BLOCKED.md) — fundamentally blocked cells
 - [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — extend the harness
 - [`CONTRIBUTING.md`](./CONTRIBUTING.md) — dev setup and PR bar

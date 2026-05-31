@@ -291,48 +291,10 @@
       </p>
     </section>
 
-    <!-- ─────────────────── INVESTIGATED (off-paper) ─────────────────── -->
-    <section class="sec" id="investigated">
-      <header class="sec-head">
-        <span class="sec-num">investigated/</span>
-        <h2 class="head">off-paper runs (parked)</h2>
-        <p class="sub">
-          End-to-end harness results that land outside paper tolerance. Documented
-          as findings, not failures — see handoff notes and
-          <a href="https://github.com/kmatzen/plumbline/blob/main/docs/DISCREPANCIES.md">DISCREPANCIES.md</a>
-          (D29–D33).
-        </p>
-      </header>
-      <ul class="cell-list reveal" aria-label="investigated off-paper cells">
-        <li><span class="cm">da-v2 large <span class="proto">native ETH3D</span></span>  <span class="ds">ETH3D · abs_rel</span>    <span class="cv">0.0888 / 0.131</span> <span class="cd wide">−32%</span></li>
-        <li><span class="cm">da-v2 large <span class="proto">native Sintel</span></span> <span class="ds">Sintel · abs_rel</span>   <span class="cv">0.2321 / 0.487</span> <span class="cd wide">−52%</span></li>
-        <li><span class="cm">da-v2 large <span class="proto">native DIODE</span></span>  <span class="ds">DIODE · abs_rel</span>    <span class="cv">0.2142 / 0.066</span> <span class="cd wide">+225%</span></li>
-        <li><span class="cm">depth pro</span>                               <span class="ds">Sintel · δ₁</span>        <span class="cv">0.2409 / 0.400</span> <span class="cd wide">−40%</span></li>
-        <li><span class="cm">depth pro</span>                               <span class="ds">iBims · δ₁</span>        <span class="cv">0.8458 / —</span> <span class="cd near">info</span></li>
-        <li><span class="cm">depth pro</span>                               <span class="ds">Middlebury · δ₁</span>  <span class="cv">0.7589 / 0.605</span> <span class="cd wide">+25%</span></li>
-        <li><span class="cm">depth pro</span>                               <span class="ds">Sun-RGBD · δ₁</span>    <span class="cv">0.4505 / 0.890</span> <span class="cd wide">−49%</span></li>
-        <li><span class="cm">depth pro</span>                               <span class="ds">NuScenes · δ₁</span>    <span class="cv">0.5935 / 0.491</span> <span class="cd wide">+21%</span></li>
-        <li><span class="cm">da-v2 large <span class="proto">MoGe × T2 ref</span></span>  <span class="ds">ETH3D · abs_rel</span>    <span class="cv">0.0473 / 0.131</span> <span class="cd wide">−64%</span></li>
-        <li><span class="cm">da-v2 large <span class="proto">MoGe × T2 ref</span></span>  <span class="ds">Sintel · abs_rel</span>   <span class="cv">0.2139 / 0.487</span> <span class="cd wide">−56%</span></li>
-        <li><span class="cm">da-v2 large <span class="proto">MoGe × T2 ref</span></span>  <span class="ds">DIODE · abs_rel</span>    <span class="cv">0.0543 / 0.066</span> <span class="cd wide">−18%</span></li>
-      </ul>
-      <p class="foot-note">
-        MoGe-eval DA-V2 on ETH3D / Sintel / DIODE / DDAD remains in the verified list above
-        (Table 3 protocol, not DA-V2 Table 2 native).         Handoffs:
-        <a href="https://github.com/kmatzen/plumbline/blob/main/docs/BLOCKED.md">Blocked cells</a>,
-        <a href="https://github.com/kmatzen/plumbline/blob/main/docs/ETH3D_DAV2_TABLE2_HANDOFF.md">ETH3D DA-V2</a>,
-        <a href="https://github.com/kmatzen/plumbline/blob/main/docs/ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md">ETH3D Depth Pro</a>,
-        <a href="https://github.com/kmatzen/plumbline/blob/main/docs/BLOCKED.md">Depth Pro Table 1</a>,
-        <a href="https://github.com/kmatzen/plumbline/blob/main/docs/SINTEL_DAV2_TABLE2_HANDOFF.md">Sintel</a>.
-      </p>
-    </section>
-
     <footer class="foot">
       <span>© 2026 Kevin Blackburn-Matzen</span>
       <span class="sep">/</span>
       <span>apache-2.0</span>
-      <span class="sep">/</span>
-      <span class="ai-note">code written largely by <a class="lk" href="https://claude.ai/code">Claude</a></span>
       <span class="pad"></span>
       <div class="links">
         <a href="https://github.com/kmatzen/plumbline">github</a>

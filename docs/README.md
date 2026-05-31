@@ -11,6 +11,7 @@ content that already lives in a canonical file.
 | [`../REPRODUCTIONS.md`](../REPRODUCTIONS.md) | Paper-match matrix (live status) |
 | [`../GPU_RUNBOOK.md`](../GPU_RUNBOOK.md) | GPU bring-up, queue, single-record diff, S3 |
 | [`DISCREPANCIES.md`](DISCREPANCIES.md) | D-number issue log (canonical narrative) |
+| [`CONFIDENCE_AUDIT.md`](CONFIDENCE_AUDIT.md) | Where each off-paper gap lives (adapter / parsing / paper recipe / checkpoint) — what's confirmed vs unknown |
 | [`BLOCKED.md`](BLOCKED.md) | Index of fundamentally blocked cells |
 | [`../reproductions/gpu_queue.yaml`](../reproductions/gpu_queue.yaml) | Machine-readable run queue |
 
