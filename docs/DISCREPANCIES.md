@@ -763,336 +763,69 @@ configuration.
 
 ### D9 · Marigold-KITTI — RESOLVED: checkpoint-generation delta, not a paper-private config   ✅ RESOLVED 2026-05-25
 
-Three plumbline protocol variants all landed off paper 0.099:
+plumbline's `marigold_v1_1_kitti.yaml` reads ~19 % off paper 0.099 because it
+pins the repo's **current** default checkpoint (v1-1 / 1-step distilled), while
+the paper Table 1 cell (arXiv:2312.02145, KITTI "Ours w/ ensemble" = 9.9 / 91.6)
+is the **v1-0 / 50-step** CVPR config. Verified end-to-end on Marigold's own
+`script/depth/{infer,eval}.py` + the authors' prepared `kitti_eigen_split_test.tar`:
+v1-0/50-step → **0.0992** (0.2 % off paper); v1-1/1-step → 0.1111 (matches
+plumbline). So the gap is a documented checkpoint-generation delta, not a
+plumbline bug — and on NYU the same v1-1/1-step config still matches paper
+(0.0577 ✅), confirming it's dataset-shape-dependent. The cell stays a v1-1
+documented-protocol-delta (`paper_match: no`, explained). **Lesson:** check
+whether the repo's eval-default checkpoint still equals the paper's. See
+`docs/CONFIDENCE_AUDIT.md` (L4).
 
-| Protocol | AbsRel | vs paper |
-|---|---|---|
-| `kitti_eigen_garg` (pre-session) | 0.1146 | +15.8 % |
-| `kitti_moge_eval` | 0.0865 | −12.7 % |
-| `marigold_kitti_eval` | 0.1179 | +19.1 % |
+### D18 · GeoWizard-KITTI — same pattern as D9   ✅ RESOLVED 2026-05-26 (via D17)
 
-`marigold_kitti_eval` is plumbline's faithful port of Marigold's own paper
-pipeline (`kitti_bm_crop` + `valid_mask_crop: eigen` + `scale_shift_depth`,
-per `prs-eth/Marigold/src/dataset/kitti_dataset.py`). That it was *further*
-from paper than `kitti_moge_eval` initially looked like the paper cell
-must come from a private config. End-to-end reproduction on Marigold's
-own native pipeline disproves that hypothesis.
-
-#### 2026-05-25 — end-to-end reproduction on Marigold's exact prepared set
-
-Mirrors the D24 methodology (run the model's own pipeline on its own
-prepared eval set). Set up `prs-eth/Marigold` on a 3090, downloaded
-the authors' prepared `kitti_eigen_split_test.tar` (677 MB, 1551 entries,
-exactly what their eval consumes), pinned `diffusers==0.30.2 /
-transformers==4.44.2 / huggingface_hub==0.24.7` so the vendored
-`marigold.MarigoldDepthPipeline` imports under `torch==2.4.1+cu121`,
-and ran `script/depth/infer.py` + `script/depth/eval.py` (`--alignment
-least_square`) with two configs on the **same** 60-image spread subset
-(every-11th of the 652 valid Eigen-test rows):
-
-| run | AbsRel | δ₁ | vs paper 0.099 / 91.6 |
-|---|---|---|---|
-| **v1-0 / 50-step / ens-10** (paper CVPR config) | **0.09917** | 0.9121 | **0.2 % off (well inside ±5 %)** |
-| v1-1 / 1-step / ens-10 (plumbline pins this) | 0.11107 | 0.8871 | +12 % off paper / matches plumbline's 0.109 full-set within 2 % |
-
-Both runs used `seed=1234`, `processing_res=0` (native, after KITTI
-benchmark 1216×352 bottom-aligned center crop), `--alignment
-least_square` (depth-space LSQ). The DDIM scheduler warnings
-(`timestep_spacing="leading"`, `rescale_betas_zero_snr=False`) for
-v1-0 are **its original CVPR config** — not changed, faithful to paper.
-
-The same v1-1 / 1-step config also reproduces plumbline's recorded
-v1-1 KITTI (0.109 in the matrix; 0.118 under `marigold_kitti_eval`),
-within ~2 % via the every-11th subset. This validates plumbline's
-adapter against native Marigold AND validates the spread subset as
-representative of the full 652 set (the v1-1 cross-check independently
-confirms representativeness, so the v1-0 sub60 number is a faithful
-proxy for the full-set v1-0 number).
-
-#### Root cause = upstream-default checkpoint repointed between paper and current repo
-
-The Marigold README §"Run inference (for academic comparisons)"
-explicitly distinguishes two paper-comparable configs:
-
-- **CVPR depth (paper Table 1):** `prs-eth/marigold-depth-v1-0` with
-  `--denoise_steps 50 --ensemble_size 10`.
-- **Current default:** `prs-eth/marigold-depth-v1-1` with
-  `--denoise_steps 1 --ensemble_size 10` (v1-1 is a later
-  1-step-distilled checkpoint).
-
-The repo's `script/depth/eval/21_infer_kitti.sh` was updated when v1-1
-was released to default to the v1-1 / 1-step path. Plumbline's
-`marigold_v1_1_kitti.yaml` mirrors that current script (v1-1 / 1-step /
-ens-10) but compares against the paper Table 1 number, which is
-v1-0 / 50-step. The distilled v1-1 / 1-step model trades some accuracy
-on KITTI (outdoor / long-range) — on NYU the same v1-1 / 1-step config
-matches paper 0.055 within tolerance (0.0577, ✅), confirming the
-checkpoint-generation effect is dataset-shape-dependent.
-
-So D9's 19 % gap is a **checkpoint-generation delta**, not a
-paper-private config and not a plumbline-side bug. The audit-rejected
-hypotheses from prior sessions (dtype, xformers, full `seed_all`, all
-three protocol variants) were correctly rejected — none could close
-the gap because plumbline was running the wrong checkpoint for the
-paper cell it cites.
-
-Verified paper citation (`scripts`/PDF read 2026-05-25): Marigold
-arXiv:2312.02145 Table 1, KITTI column, "Ours (w/ ensemble)" row =
-AbsRel 9.9 / δ₁ 91.6 (and "w/o ensemble" = 10.5 / 90.4). The README's
-§"Run inference (for academic comparisons)" makes the v1-0 = paper
-identification explicit.
-
-#### Resolution & follow-ups
-
-- D9 + the Marigold portion of D22 → closed (one-liners in the table
-  at bottom). The Marigold per-paper-trust row moves from "Mixed" to
-  "High" with both cells (NYU + KITTI) reproducible end-to-end on
-  Marigold's exact prepared sets + native pipeline.
-- The `marigold_v1_1_kitti.yaml` reproduction stays as a v1-1
-  newer-distilled-checkpoint cell, analogous to CUT3R's documented
-  protocol-delta cells: model is correct, `paper_match: no` is now
-  *explained* (checkpoint generation), not suspect.
-- A future `marigold_v1_0_kitti.yaml` (v1-0 / 50-step / ens-10) would
-  give plumbline a passing paper-match for Marigold KITTI; deferred
-  as a separate ~14 h GPU job (the same per-image cost as the
-  resolution run, just on full 652).
-- Box artifacts (run + cached preds): `~/deps/marigold/output/
-  d9_v1p0_50step_sub60/` and `~/marigold_d9_results.txt` on the 3090.
-
-### D18 · GeoWizard-KITTI — same pattern as D9   🔎 OPEN
-
-| Protocol | AbsRel | vs paper |
-|---|---|---|
-| `kitti_eigen_garg` (pre-session) | 0.131 | +35 % |
-| `kitti_moge_eval` | 0.1103 | +13.7 % |
-| `marigold_kitti_eval` | 0.1406 | +45 % |
-
-Same as D9: `marigold_kitti_eval` is worse than `kitti_moge_eval`.
-GeoWizard shares the diffusion-depth lineage with Marigold; D22
-(paper-private-eval hypothesis) most likely applies to both.
+GeoWizard-KITTI reads off-paper (e.g. `kitti_moge_eval` 0.1103 vs paper 0.097),
+the same diffusion-depth-lineage shape as Marigold. **Closed by D17:** same
+checkpoint, author, and best-of-N-seeds eval recipe as GeoWizard-NYU (the paper
+Table 1 has both columns from one eval). No separate KITTI verification needed —
+the closure is the paper-author quote, not a number to recompute. Cell stays
+`paper_match: no` (explained).
 
 ### D22 · Marigold / GeoWizard KITTI paper cells — Marigold portion RESOLVED   ✅ partial RESOLVED 2026-05-25
 
-Originally raised 2026-04-24 as: neither plumbline's
-`marigold_kitti_eval` (paper-code port) nor `kitti_moge_eval`
-reproduced Marigold 0.099 or GeoWizard 0.097 on KITTI. The
-"paper-private eval config" hypothesis was the working interpretation.
+Umbrella for the "neither plumbline protocol reproduces Marigold 0.099 / GeoWizard
+0.097 on KITTI" hypothesis (paper-private eval config). **Marigold portion:
+REFUTED** by D9 (checkpoint-generation delta, v1-0 vs v1-1; the paper code + cell
+are both public). **GeoWizard portion:** explained by D17/D18 (best-of-N seeds).
+So the original "paper-private eval" framing was wrong for Marigold (public
+checkpoint drift) and correct-but-now-attributed for GeoWizard (seed cherry-pick).
 
-**Marigold portion (this session, 2026-05-25):** REFUTED by D9.
-Running `prs-eth/Marigold`'s native `script/depth/infer.py` +
-`script/depth/eval.py` on the authors' own prepared
-`kitti_eigen_split_test.tar` with **v1-0 / 50-step / ensemble-10**
-reproduces AbsRel 0.0992 vs paper 0.099 (0.2 % off, 60-img spread
-subset). Root cause = checkpoint-generation drift: the current repo's
-eval script defaults to v1-1 / 1-step (newer distilled checkpoint),
-which plumbline mirrored. The paper Table 1 cell is the v1-0 CVPR
-checkpoint at 50 steps. Full diagnosis & numbers in D9.
+### D24 · CUT3R DUSt3R-lineage depth cells off-paper — eval-protocol, not model   ✅ RESOLVED 2026-05-25
 
-**GeoWizard portion (D18):** still 🔎 upstream-blocked under D17.
-Same checkpoint as D17 (lemonaddie/Geowizard), same likely cause
-(public checkpoint vs paper checkpoint, or paper-protocol detail not
-in `run_infer.py`). D17/D18 already fully audited (fp32 + xformers +
-full `seed_all` are not the gap); no GeoWizard equivalent of
-Marigold's v1-0 vs v1-1 checkpoint distinction has surfaced from the
-repo.
-
-The "paper-private eval config" framing of the original D22 stands
-only for GeoWizard now. For Marigold it was wrong — the paper cell is
-public, the paper code is public, only the *default checkpoint* in
-the current eval script differs from the published paper.
-
-### D24 · CUT3R / π³ DUSt3R-lineage depth cells off-paper — eval-protocol, not model   ✅ RESOLVED 2026-05-25
-
-First GPU run of CUT3R (Table 1 single-frame depth + Table 2 Bonn video) and π³
-landed every CUT3R depth cell **below** (better than) the published number:
-
-| Cell | observed | paper | Δ |
-|---|---|---|---|
-| cut3r-nyuv2 | 0.0522 | 0.086 | −39 % |
-| cut3r-kitti | 0.0858 | 0.092 | −7 % |
-| cut3r-bonn | 0.0536 | 0.078 | −31 % |
-
-The consistent direction (every cell better, not scattered) ruled out noise and
-pointed at a shared eval step. Diagnosed by **re-scoring the same cached predictions**
-(`scripts/ablate_nyu_gtfield.py`, no re-inference) under 4 protocol variants × 2 GT
-fields, against CUT3R's own scorer (`eval/monodepth/eval_metrics.py`,
-`depth_evaluation(pred, gt, max_depth=None)` = median scale-only, `gt>0` mask, **no
-spatial crop**, no clip):
-
-| Variant | raw GT | filled GT |
-|---|---|---|
-| A crop + clip **[plumbline `nyu_eigen_2014`]** | **0.0522** | 0.0605 |
-| D no-crop, no-clip **[CUT3R `eval_metrics.py`]** | 0.0526 | **0.0777** |
-
-(Variant A/raw reproduces the live run's 0.0522 exactly → methodology validated.)
-
-**Ruled out** (each moves AbsRel < 0.0005): Eigen crop, post-align clip [1e-3,10],
-median alignment (both sides identical: `median(gt)/median(pred)`), abs_rel formula
-(identical). Raw + CUT3R-protocol still yields 0.0526 — so the protocol pipeline is
-NOT the source.
-
-**Root cause = GT depth field (dominant) + Eigen crop (secondary):**
-
-1. **raw vs filled GT (+0.025):** plumbline pins `depth_field="raw"` (sparse, accurate
-   Kinect); CUT3R's scorer loads `np.load(data/nyu/*.npy)` = the DUSt3R-lineage
-   **dense/filled** NYU depth. Under CUT3R's own protocol, raw→filled = 0.0526→0.0777.
-   The loader's comment ("every paper cites rawDepths") does not hold for the
-   DUSt3R/CUT3R/MonST3R/π³ lineage, which scores against dense depth.
-2. **Eigen crop (−0.017):** plumbline applies it; `eval_metrics.py` applies none. On
-   filled GT the crop drops noisier interpolated borders (0.0605 vs 0.0777).
-3. **Residual 0.0777→0.086 (~10 %):** the exact NYU image set + GT + native
-   preprocessing (CUT3R's prepared `.npy` vs our 654 `.mat` Eigen indices). The
-   pred-resize hypothesis is **ruled out** (cubic 0.0778 vs bilinear 0.0777, a
-   0.0001 no-op). **Confirmed:** running CUT3R's own pipeline on its exact prepared
-   set reproduces **0.08595 vs paper 0.086** (0.06 % — see exact-set reproduction
-   below), so the residual is fully accounted for by the eval set, not the model.
-
-KITTI / Bonn are the same class (eval-set/selection, not model): KITTI plumbline
-Eigen-652 + Garg crop vs CUT3R `val_selection_cropped` (1000 imgs, no crop,
-`max_depth=None`); Bonn plumbline 8 seqs / all-frames / 64-view vs CUT3R 5 seqs
-(`balloon2, crowd2, crowd3, person_tracking2, synchronous`) × 110 frames
-(`rgb_110`/`depth_110`), `max_depth=70`.
-
-**Verdict:** not a model/inference discrepancy — plumbline's CUT3R predictions are
-correct. `nyu_eigen_2014`'s raw+crop default is *stricter* than the DUSt3R-lineage
-dense+no-crop protocol these papers report. Note this is the *opposite* sign from
-D17 (GeoWizard-NYU, which is off-paper *worse* under raw GT) — so a single global
-GT-field switch is not free; it must be scoped per paper lineage.
-
-**Resolution (2026-05-25):** accepted as a documented **protocol delta, not a
-model bug.** The single-record diff the three `cut3r-*` YAMLs were waiting on *is*
-this D24 analysis (re-scoring cached preds under both GT fields × four protocol
-variants) — it confirms plumbline's predictions are correct and that the
-off-paper-*better* numbers come entirely from plumbline's stricter `raw`+crop
-protocol vs the DUSt3R-lineage `filled`+no-crop one. Per project policy (a failed
-paper-match under a *stricter* protocol is a finding, not a number to chase —
-cf. D9 / D17 / D22) we keep the strict protocol and do **not** force a sub-5 %
-match against the softer lineage protocol.
-
-Recorded by: YAML CAVEATs in the three `cut3r-*` reproductions rewritten from
-"⌛ unverified, single-record diff owed" to "protocol delta (explained)"; the
-matching `reproductions/AUDIT.md` rows and the `REPRODUCTIONS.md` matrix row
-updated; and the three `gpu_queue.yaml` jobs moved to `blocked` (`blocked_on:
-D24`). The cells stay pinned to the paper value, so the harness honestly reports
-`paper_match: no` — that `no` is now an *explained* protocol delta, not a suspect
-cell.
-
-**Live re-confirmation (2026-05-25 GPU, `scripts/ablate_nyu_gtfield.py`):** the
-full 2×4 GT-field × protocol table reproduces exactly on the 654-image Eigen set —
-raw A=0.0522 / D=0.0526, filled A=0.0605 / D=0.0777 — and a cubic-resize probe
-**rules out** pred-resize as a residual source (filled+no-crop+cubic = 0.0778 vs
-bilinear 0.0777, a 0.0001 no-op). So the 0.0777→0.086 (~10 %) residual is
-**entirely the exact image set** (CUT3R's prepared `.npy` vs our Eigen-654), not
-resize.
-
-**Exact-set reproduction — all three paper cells CONFIRMED end-to-end (2026-05-25
-GPU):** staged each cell's *exact* prepared eval set and ran CUT3R's **own** native
-pipeline (`eval/monodepth` for Table 1, `eval/video_depth --align scale` for
-Table 2). All reproduce the published numbers:
-
-| cell | exact-set result | paper | Δ | eval path |
-|---|---|---|---|---|
-| NYU (Table 1) | AbsRel 0.08595, δ 0.9087 | 0.086 / 90.9 | 0.06 % | `eval/monodepth` |
-| KITTI (Table 1) | AbsRel 0.09219, δ 0.9129 | 0.092 / 91.3 | 0.2 % | `eval/monodepth` |
-| Bonn (Table 2) | AbsRel 0.07661, δ 0.9376 | 0.078 / 93.7 | 1.8 % | `eval/video_depth`, per-seq scale |
-
-- **NYU:** MonST3R recipe (HF `sayakpaul/nyu_depth_v2` val → 654 `.h5` →
-  `nyu_images/*.png` + dense `nyu_depths/*.npy`); `depth_evaluation(max_depth=None,
-  lr=1e-3)`, `cv2.INTER_CUBIC` resize.
-- **KITTI:** gathered set per `prepare_kitti.py` — first ≤110 annotated-val depth
-  frames × 13 seqs (**1269 pairs**) + the *full* raw `image_02` (the box's plumbline
-  raw is pruned to Eigen frames, so the 13 raw drives were re-downloaded);
-  `max_depth=None`.
-- **Bonn:** `prepare_bonn.py` 110-frame subsets (`rgb_110`/`depth_110`, frames
-  [30:140]) × 5 seqs; this is the **video** eval (per-sequence single scale =
-  Table 2). The single-frame `eval/monodepth` path gives 0.0625 — a different,
-  easier number, *not* the Table 2 target.
-
-So every off-paper-better plumbline cell is fully explained: on each cell's exact
-eval set + native protocol the published number reproduces within ≤2 %. This both
-(a) re-confirms plumbline's CUT3R integration is correct and (b) validates CUT3R
-Table 1 (NYU, KITTI) + Table 2 (Bonn) as faithfully reproducible. plumbline's own
-`cut3r-*` cells stay documented protocol deltas (stricter protocol / different eval
-set → NYU 0.0522, KITTI 0.0858, Bonn 0.0536). Run + cached preds:
-`s3://plumbline-bench/runs/20260525T165647Z/`. The exact prepared eval datasets
-(NYU prepared + KITTI gathered set + the slow eu-central KITTI raw + Bonn `_110`
-subsets) are mirrored to **`s3://plumbline-bench/datasets/cut3r_eval/`** (8507 objs
-/ 5.15 GB) — `rclone copy` them into `$CUT3R_ROOT/data/` to re-run the exact-set
-eval without any re-download/re-prep.
+CUT3R's NYU/KITTI/Bonn depth cells all read *better* than paper (NYU 0.0522 vs
+0.086, KITTI 0.0858 vs 0.092, Bonn 0.0536 vs 0.078). Re-scoring the *same cached
+predictions* under CUT3R's own scorer (`eval/monodepth/eval_metrics.py`) isolated
+the cause to the **GT field + crop**, not the model: plumbline pins raw + Eigen-crop
+NYU GT, while the DUSt3R/CUT3R lineage scores against **filled** (dense) GT with
+**no crop** (under CUT3R's protocol, raw→filled = 0.0526→0.0777). Running CUT3R's
+own native pipeline on each cell's exact prepared set reproduces the published
+numbers within ≤2 % (NYU 0.08595/0.086, KITTI 0.09219/0.092, Bonn 0.07661/0.078),
+confirming plumbline's CUT3R integration is correct. plumbline keeps its *stricter*
+raw+crop protocol; the off-paper-better cells stay documented protocol deltas
+(`paper_match: no`, explained), not chased. **Lesson:** the loader comment "every
+paper cites rawDepths" does NOT hold for the DUSt3R lineage. (π³ ran in the same
+session but its adapter was later removed — see `blocked/PI3_RECONSTRUCTION.md`.)
+See `docs/CONFIDENCE_AUDIT.md` (L3).
 
 ### D27 · MonST3R-Bonn Table 3 single-frame — paper text vs upstream eval code disagree   ✅ RESOLVED 2026-05-26
 
-PR #5 landed MonST3R-Bonn at AbsRel **0.0654** (paper 0.076, 14 % off, *better*) and
-MonST3R-Sintel at **0.3726** (paper 0.345, 8 % off, *worse*). PR #6 v1.1 ("eval-mono-depth-avg")
-ruled out the symmetric-pair-averaging hypothesis (null result, all four cells moved
-<0.005 AbsRel). PR #5/#6 also ruled out frame-subset (re-scoring on MonST3R's exact
-`rgb_110`/`depth_110` × frames [30:140] still gave 0.0635) and `max_depth` (both sides
-use 70). Both cells stayed ℹ️ pending a fresh **single-record diff against MonST3R's
-own `launch.py --mode=eval_depth` output on one sample**.
-
-**Single-record diff (this session, code-level, no GPU):** read MonST3R upstream
-verbatim — `dust3r/depth_eval.py:eval_mono_depth`, `data/evaluation_script.md`,
-`dust3r/eval_metadata.py:process_bonn`, and crucially `depth_metric.ipynb` Bonn cell.
-The notebook is what computes the Table 3 number from per-frame `eval_mono_depth`
-predictions, and its scoring path is:
-
-```python
-# depth_metric.ipynb, Bonn cell (verbatim)
-seq_list = ["balloon2","crowd2","crowd3","person_tracking2","synchronous"]
-pred_pathes = sorted(glob.glob("results/bonn_video_depth/*/frame_*.npy"))
-grouped_pred = group_by_directory(pred_pathes)            # 5 buckets, one per seq
-grouped_gt   = group_by_directory(depth_pathes, idx=-2)
-for key in grouped_gt:
-    gt_depth = np.stack([depth_read(p) for p in grouped_gt[key]], axis=0)  # (N,H,W)
-    pr_depth = np.stack([cv2.resize(np.load(p), (W,H), INTER_CUBIC) for p in grouped_pred[key]], axis=0)
-    # NOTE: align_with_lad2=True → scale+shift LAD via Adam, NOT per-frame median
-    depth_results, *_ = depth_evaluation(pr_depth, gt_depth,
-                                         max_depth=70, align_with_lad2=True, use_gpu=True)
-    gathered_depth_metrics.append(depth_results)
-# weighted average across 5 sequences by valid_pixels
-average_metrics = {k: np.average([m[k] for m in gathered_depth_metrics],
-                                  weights=[m['valid_pixels'] for m in gathered_depth_metrics])
-                   for k in gathered_depth_metrics[0] if k != 'valid_pixels'}
-```
-
-And `depth_evaluation` under `align_with_lad2=True` runs `absolute_value_scaling2`
-(scale+shift LAD in depth space, Adam, `lr=1e-4`, `max_iters=1000`, init at
-`s = median(gt)/median(pred)`, `t = 0`).
-
-**Verdict — three protocol deltas between paper text and upstream code:**
-
-| dimension | paper §4.2 text | upstream `depth_metric.ipynb` (de facto) | plumbline `bonn_dust3r_lineage_single` |
-|---|---|---|---|
-| alignment granularity | per-frame | **per-sequence** (5 fits over 550 frames) | per-frame |
-| alignment formula | median scale-only | **scale + shift, LAD via Adam** | median scale-only |
-| aggregation | (unspecified) | **valid-pixel-weighted mean across seqs** | equal-frame mean |
-
-Plumbline implements the paper-text recipe faithfully. The paper number 0.076 is the
-de-facto code recipe. Per-frame scale-only has 550 DoF over the 5-seq Bonn set vs
-per-sequence scale+shift's 10 DoF — strictly more flexibility → strictly lower
-expected mean residual, which matches the direction (plumbline 0.0654 < paper 0.076).
-
-**Sintel direction (worse, not better):** the same notebook scores Sintel via
-`depth_evaluation(..., max_depth=70, align_with_lad2=True, post_clip_max=70)` per
-sequence with the same valid-pixel-weighted aggregation. Equal-frame plumbline
-aggregation lets a single bad clip (`temple_2`, per-frame AbsRel mean 0.93 / max
-7.87) drive the average up; pixel-weighted per-sequence dilutes it. So the per-seq /
-per-frame split *also* explains Sintel's off-paper-*worse* direction (a frame-level
-outlier hurts equal-frame mean more than pixel-weighted per-seq mean). PR #6's
-`temple_2` model-fragility finding stands; D27 is the *aggregation* layer on top.
-
-**Resolution.** Same shape as D9 / D17 / D18 / D24: the paper number comes from an
-upstream eval recipe that doesn't match the paper's own §4.2 text. plumbline ships
-the paper-text-faithful recipe (per-frame median); both cells stay `paper_match: no`
-(ℹ️) with this entry as the explanation. No code or protocol change. Closing now
-without a confirmation GPU run on the de-facto recipe is the right trade per the
-project's "minimize doc surface / don't run full-dataset" guidance — the diff is
-code-level conclusive (notebook + `absolute_value_scaling2` quoted above) and the
-direction argument is structural. If a future session wants the literal 0.076 cell
-in `paper_match: yes`, the path is to add `aggregation: per_sequence` +
-`scale_alignment: scale_shift_depth` support to the runner and stage a parallel YAML
-`monst3r-bonn-paper-recipe` (Bonn loader already supports per-sequence iteration);
-verification GPU cost ~5 min on a 3090.
+MonST3R-Bonn reads 0.0654 vs paper 0.076 (better); Sintel 0.3726 vs 0.345 (worse).
+A code-level single-record diff against MonST3R's `depth_metric.ipynb` Bonn cell
+shows the Table-3 number is produced by **per-sequence scale+shift LAD2** alignment
+(`align_with_lad2=True`, Adam) with **valid-pixel-weighted** aggregation across the
+5 sequences — NOT the paper §4.2 *text*'s "per-frame median". plumbline ships the
+paper-text-faithful recipe (per-frame median), which has far more DoF → strictly
+lower residual, matching the better-than-paper direction. The same per-seq/per-frame
+split also explains Sintel's worse direction (a `temple_2` frame outlier hurts
+plumbline's equal-frame mean more than the paper's pixel-weighted per-seq mean).
+Frame-subset and `max_depth` were ruled out. Both cells stay ℹ️ (`paper_match: no`,
+explained); no code change. **Lesson:** the released eval code can disagree with the
+paper text — read the notebook. Same shape as D9/D17/D24. See
+`docs/CONFIDENCE_AUDIT.md` (L3).
 
 ### D28 · DUSt3R Table 2 indoor cells off-paper — lineage-recipe ≠ DUSt3R-paper-recipe   🔬 INVESTIGATED 2026-05-28
 
@@ -1301,39 +1034,16 @@ native-DIODE DA-V2 reference.
 
 ### D30 · ETH3D-MoGe cells used scale_shift not scale_shift_clamped — outdoor blowup   ✅ RESOLVED 2026-05-30
 
-First end-to-end run of the ETH3D MoGe-eval cells (H100, 2026-05-29/30) exposed
-two issues, both now fixed:
-
-1. **Loader** (`eth3d-moge-eval`): the placeholder shipped 2026-05-28 assumed a
-   flat `<root>/<scene>` layout and a naive read+scale path. The real ETH3D.zip
-   bundle is a nested, `.index.txt`-driven tree (`<root>/ETH3D/<scene>/<frame>/`,
-   453 samples) and needs MoGe's homographic FoV-warp. Rewrote it to mirror the
-   validated DIODE/KITTI MoGe-eval loaders (delegates to
-   `EvalDataLoaderPipeline._process_instance`, target 2048×1365 per MoGe
-   `configs/eval/all_benchmarks.json`).
-
-2. **Alignment**: `moge_vitl_eth3d_moge.yaml` / `da_v2_large_eth3d_moge.yaml`
-   pinned `scale_alignment: scale_shift`. On ETH3D's outdoor scenes
-   (meadow/playground/terrains) plain scale_shift lets a few far-depth pixels
-   invert to enormous aligned depths — `moge-vitl-eth3d-moge` came back **median
-   AbsRel 0.0234** (≈ paper) but **mean 169** (max sample 44 320). This is the
-   exact failure `scale_shift_clamped` exists to prevent — MoGe's own eval
-   protocol (`moge/test/metrics.py`: floor aligned disparity at `1/gt.max()`),
-   and the alignment every sibling DIODE/KITTI MoGe-eval cell already uses.
-   Verified via `plumbline run --scale-alignment scale_shift_clamped`:
-   **AbsRel 0.0323 vs paper 0.0317** (1.9 %, MATCH). Fixed both YAMLs to
-   `scale_shift_clamped`.
-
-This is a protocol-fidelity fix (match the authors' eval), not a tuned knob:
-the alignment was simply mis-specified relative to MoGe's code and the other
-MoGe cells. Per the "alignment must match the paper" rule, scale_shift on a
-dataset with outdoor far-depth was the bug.
-
-**Same fix on iBims-1 (2026-05-30):** `da-v2-large-ibims1` was off-paper at
-AbsRel 0.0391 under `scale_shift`; switching to `scale_shift_clamped` (MoGe's
-DA-V2 re-eval convention, same as the other MoGe-bundle DA-V2-L cells) landed
-**0.0348 vs 0.0348** (exact, MATCH). Companion `moge-vitl-ibims1` already
-matched under plain `scale_shift` (indoor-only set).
+The first ETH3D MoGe-eval run exposed two fixes: (1) the `eth3d-moge-eval` loader
+placeholder was rewritten to the real nested `.index.txt` tree + MoGe FoV-warp
+(mirroring the validated DIODE/KITTI MoGe loaders); (2) the YAMLs pinned
+`scale_alignment: scale_shift`, which on ETH3D's outdoor scenes lets far-depth
+pixels invert to enormous aligned depths (mean AbsRel 169, max sample 44 320).
+MoGe's own eval floors aligned disparity at `1/gt.max()` — i.e.
+**`scale_shift_clamped`**, which every sibling MoGe cell already uses. Switching
+fixed it: **0.0323 vs paper 0.0317** (1.9 %, MATCH). The same fix landed iBims-1
+DA-V2-L (0.0391→**0.0348** vs 0.0348). A protocol-fidelity fix (match the authors'
+alignment), not a tuned knob. **Lesson:** alignment must match the paper's code.
 
 ### D31 · DA-V2 native-ETH3D Table-2 — RGB/GT misalignment (fixed); full 13-scene still under paper   ✅ FIXED / 🔎 OPEN protocol 2026-05-30
 
@@ -1614,127 +1324,20 @@ scene set lands with this PR in
 
 ### D17 · GeoWizard-NYU — RESOLVED: paper number is best-of-N seeds, not a fixed-seed metric   ✅ RESOLVED 2026-05-26
 
-Two-month tail of audits exhausted every plumbline-side lever: dtype,
-xformers, full ``seed_all`` parity, 4 alignment modes, raw vs filled
-GT, the upstream README's ``--denoise_steps 50`` recommendation.
-None close the residual ~10 % gap. The closure came not from a
-GPU lever but from a paper-author quote on the upstream issue
-tracker:
+After a two-month tail of audits ruled out every plumbline-side lever (dtype,
+xformers, full `seed_all`, 4 alignment modes, raw vs filled GT, and the README's
+50-denoise-steps "academic comparison" config — a verified 0.3 % no-op), the
+closure came from a **paper-author quote** on `fuxiao0719/GeoWizard#36`: they run
+multiple seeds per dataset and **"select the best result for the metric report."**
+Three independent single-seed reproductions converge to ~0.057 (plumbline 0.0574,
+the issue reporter 0.0576, plumbline's 50-step sub60 projects to ~0.0572); the
+paper's 0.052 is the best-of-N minimum — an undocumented eval recipe in no released
+code. Alignment was cross-checked too: GeoWizard's `align_scale_shift`
+(`polyfit deg=1`) ≡ plumbline's `scale_shift_depth`, so the gap is at the prediction
+level, not eval. plumbline keeps a single fixed seed (the defensible zero-shot
+protocol); the cells stay `paper_match: no` (explained). **D18** (GeoWizard-KITTI)
+and the GeoWizard portion of **D22** close by the same evidence. Production YAMLs
+bumped to `num_inference_steps: 50` for paper-protocol intent (a 0.3 % no-op).
+**Lesson:** read the upstream issue tracker before a multi-month adapter audit —
+the issue was titled exactly the discrepancy. See `docs/CONFIDENCE_AUDIT.md` (L3).
 
-> *"Since depth accuracy can be influenced by the initial seed (as
-> it's a generative pipeline), we perform multiple inferences with
-> different initialized seeds for each test dataset, along with the
-> resemble [sic, ensemble] operation, and **select the best result
-> for the metric report.**"*
-> — [@fuxiao0719 (paper author), `fuxiao0719/GeoWizard#36`](https://github.com/fuxiao0719/GeoWizard/issues/36)
-
-That issue (titled exactly "Unable to replicate NYU metrics with the
-GeoWizard Checkpoint") was opened by another independent reproducer
-who, under "the GeoWizard v1 sampling pipeline alongside Marigold's
-evaluation pipeline, with settings of 50 inference steps and an
-ensemble size of 10", measured **AbsRel = 0.0576 / δ₁ = 0.9615** —
-within numerical noise of plumbline's 0.0574 / 0.9594 (D17 prior
-session) and 0.06681 (D17 50-step sub60 this session, scaled by the
-known sub60 bias 0.067/0.057 ≈ 1.17, projects to full-654 ≈ 0.057).
-Three independent single-seed reproductions converge to ~0.057. The
-paper's 0.052 is the **best** across N seed draws, not a single-seed
-mean — an undocumented eval-protocol detail not in any released
-code, README, or paper appendix.
-
-This is the diffusion-depth-lineage analog of D9: the gap is an
-upstream-paper-vs-public-release delta. For D9 it was the
-**checkpoint** (v1-0 vs v1-1). For D17 it's the **evaluation
-recipe** (best-of-N seeds vs single fixed seed).
-
-#### 2026-05-26 — final adapter lever ruled out: denoise_steps
-
-The last untested adapter knob was the upstream README's note:
-
-> *"`--ensemble_size` and `--denoise_steps`: trade-off arguments
-> for speed and performance, more ensembles and denoising steps to
-> get higher accuracy. Default: 3 and 10 (**For academic comparison,
-> please set 10 and 50, respectively**)."*
-> — [`fuxiao0719/GeoWizard/README.md`](https://github.com/fuxiao0719/GeoWizard#%EF%B8%8F-inference)
-
-This is structurally identical to D9's "the README named the
-paper-comparable config but the script default mirrored a different
-one" pattern. Hypothesis: plumbline's pinned ``num_inference_steps:
-10`` (which mirrored ``run_infer.py``'s argparse default) under-
-denoises by 5× relative to paper-protocol, and that's the residual
-gap.
-
-Tested on a 60-image stride-spread subset of the 654 Eigen test
-split (linspace stride via ``subset: 60``, same shape as D9's
-v1-0/50-step sub60), under the already-fp32 / xformers / full-
-``seed_all`` adapter that closed every other lever:
-
-| Probe | Config | AbsRel | δ₁ | vs paper 0.052 |
-|---|---|---|---|---|
-| `geowizard-nyuv2-d17probe-10step-sub60` (cross-check) | 10-step / ens-10 / seed 2024 | **0.06704** | 0.9421 | +28.9 % off, sub60 baseline |
-| `geowizard-nyuv2-d17probe-50step-sub60` (README "academic comparison") | 50-step / ens-10 / seed 2024 | **0.06681** | 0.9416 | +28.5 % off, **Δ vs 10-step = 0.3 % (numerical noise)** |
-
-The denoise_steps hypothesis is **rejected**. 5× more denoising
-steps move the metric by 0.0002 AbsRel — within the per-run noise
-floor of the diffusion stack. The sub60 cross-check at 10 steps
-also independently re-confirms plumbline's prior 5h-wall full-654
-0.0574: linspace-stride sub60 lands at 0.0670, a 17 % upward bias
-relative to full-654 (this stride happens to pick slightly harder
-images). Applying the same bias to the 50-step sub60 0.06681 →
-projected full-654 ≈ **0.0572**, indistinguishable from the prior
-10-step full-654 0.0574 and from the @anonymous issue-#36 reporter's
-0.0576.
-
-Result artifacts (mirrored to S3 to survive box teardown):
-
-- ``s3://plumbline-bench/runs/d17_resolution_20260526/d17_10step_sub60.json``
-- ``s3://plumbline-bench/runs/d17_resolution_20260526/d17_50step_sub60.json``
-- ``s3://plumbline-bench/runs/d17_resolution_20260526/d17_smoke_3img.json``
-- ``s3://plumbline-bench/runs/d17_resolution_20260526/d17_chain.log``
-
-GPU wall: 10-step 28 min + 50-step 1 h 57 min = 2 h 25 min total on
-RTX 3090 (vast.ai box 207.174.105.41).
-
-#### Root cause = paper-private cherry-pick across seeds
-
-Plumbline runs a single fixed seed (``seed=2024``). The paper-time
-eval, per the author's own statement, runs many seeds and reports
-the per-dataset minimum. The exact-fix lever to land on paper 0.052
-from plumbline's side is to add a multi-seed sweep + ``min(...)``
-aggregation step — but that's an evaluation choice we shouldn't
-endorse on `main`. The standard zero-shot benchmark protocol fixes
-a seed; reporting the best of N defeats the point of the
-evaluation. Plumbline's single-seed 0.057 is the methodologically
-defensible number; the paper's 0.052 is reproducible only under a
-non-standard eval recipe.
-
-Also independently corroborated by the alignment-code reading: the
-author's quote points to ``geowizard/utils/de_normalized.py`` for
-their alignment. That file ships three helpers — ``align_scale_shift``
-(``np.polyfit(deg=1)`` over masked depth-space — i.e., lstsq scale
-+ shift fit), ``align_scale`` (median), and ``align_shift`` (median).
-``align_scale_shift`` is structurally identical to plumbline's
-``scale_shift_depth``. So the alignment isn't the gap either —
-confirming the gap is at the prediction level, not the eval level.
-
-#### Resolution & follow-ups
-
-- D17 → **closed (paper-private cherry-pick across seeds)**.
-- D18 (GeoWizard-KITTI) closes by the **same upstream evidence**:
-  same checkpoint, same author, same eval recipe applies (the
-  paper Table 1 has both NYU + KITTI columns from the same eval).
-  No separate KITTI verification needed — the closure is in the
-  paper-author quote, not in a number we'd compute on KITTI.
-- D22 (GeoWizard portion): subsumed by D17/D18 closure — the
-  "paper-private eval config" hypothesis was correct (cherry-pick
-  across seeds), the closure is the documented attribution.
-- Per-paper trust for GeoWizard: promoted from **Suspect** to
-  **Explained (paper-private eval recipe)**. Single-seed
-  reproductions from plumbline + @anonymous (`fuxiao0719/
-  GeoWizard#36`) match each other at 0.057 / 0.96; paper 0.052 /
-  0.966 is reproducible only under non-standard best-of-N seed
-  selection.
-- Production YAMLs (`geowizard_nyuv2.yaml`, `geowizard_kitti.yaml`):
-  bumped to `num_inference_steps: 50` to match upstream README's
-  "academic comparison" intent. This **does not** move the metric
-  meaningfully (verified +0.3 % above) but it's the documented
-  paper-protocol intent. Inline comment cites the verification.
