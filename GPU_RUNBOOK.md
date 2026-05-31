@@ -75,11 +75,14 @@ before stepping away), push artifacts off the box:
 
 ```bash
 source scripts/pod-localssd-env.sh
-./scripts/backup-session.sh <session-tag>   # runs/*.json + MoGe bundles → S3
+./scripts/backup-session.sh <session-tag>   # runs/*.json + logs + staged data → S3
+./scripts/backup-periodic.sh <session-tag> 30   # repeat every 30 min (background)
 git push origin main                         # code + queue bookkeeping
 ```
 
-Session token exports expire (~12 h); re-paste when `aws s3 ls` fails.
+Session token exports expire (~12 h); re-paste when `aws s3 ls` fails. For long
+NuScenes downloads / Depth Pro repros, start `backup-periodic.sh` at job kickoff
+so `runs/*.json`, logs, and finished dataset tgz survive pod loss.
 
 ## Pre-flight
 

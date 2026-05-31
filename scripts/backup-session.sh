@@ -6,7 +6,11 @@
 #
 # Syncs:
 #   $PLUMBLINE_WORK/runs/*.json  → s3://plumbline-bench/runs/<tag>/results/
+#   $PLUMBLINE_WORK/logs/*.log   → s3://plumbline-bench/runs/<tag>/logs/
 #   MoGe-bundle trees (DDAD, Sintel, …) if present → datasets/<name>_moge/
+#   Staged Depth Pro Table-1 datasets (incremental) when present
+#
+# Periodic loop: ./scripts/backup-periodic.sh [tag] [interval_minutes]
 
 set -euo pipefail
 
@@ -25,6 +29,12 @@ if compgen -G "${WORK}/runs/"*.json >/dev/null 2>&1; then
     --exclude '*' --include '*.json'
 else
   echo "    (no JSON in ${WORK}/runs/)"
+fi
+
+if compgen -G "${WORK}/logs/"*.log >/dev/null 2>&1; then
+  echo "==> logs → ${BUCKET}/runs/${TAG}/logs/"
+  aws s3 sync "${WORK}/logs/" "${BUCKET}/runs/${TAG}/logs/" \
+    --exclude '*' --include '*.log'
 fi
 
 _sync_bundle() {
@@ -49,6 +59,43 @@ fi
 if [[ -d "${WORK}/data/diode_moge/DIODE" ]]; then
   echo "==> diode_moge → ${BUCKET}/datasets/diode_moge/"
   aws s3 sync "${WORK}/data/diode_moge/" "${BUCKET}/datasets/diode_moge/"
+fi
+
+# Depth Pro Table 1 staging (incremental; skip in-progress partial tgz)
+if [[ -d "${WORK}/data/nuscenes/v1.0-trainval" ]]; then
+  echo "==> nuscenes metadata → ${BUCKET}/datasets/nuscenes/v1.0-trainval/"
+  aws s3 sync "${WORK}/data/nuscenes/v1.0-trainval/" \
+    "${BUCKET}/datasets/nuscenes/v1.0-trainval/"
+  if [[ -d "${WORK}/data/nuscenes/.plumbline_manifest" ]]; then
+    echo "==> nuscenes depth cache → ${BUCKET}/datasets/nuscenes/.plumbline_manifest/"
+    aws s3 sync "${WORK}/data/nuscenes/.plumbline_manifest/" \
+      "${BUCKET}/datasets/nuscenes/.plumbline_manifest/"
+  fi
+  if compgen -G "${WORK}/data/nuscenes_downloads/"*.tgz >/dev/null 2>&1; then
+    echo "==> nuscenes_downloads (complete tgz only) → ${BUCKET}/datasets/nuscenes_downloads/"
+    aws s3 sync "${WORK}/data/nuscenes_downloads/" \
+      "${BUCKET}/datasets/nuscenes_downloads/" --exclude '*.partial' --exclude '*.tmp'
+  fi
+fi
+
+if [[ -d "${WORK}/data/sun_rgbd/rgb" ]]; then
+  echo "==> sun_rgbd → ${BUCKET}/datasets/sun_rgbd/"
+  aws s3 sync "${WORK}/data/sun_rgbd/" "${BUCKET}/datasets/sun_rgbd/"
+fi
+
+if [[ -d "${WORK}/data/middlebury/trainingF" ]]; then
+  echo "==> middlebury → ${BUCKET}/datasets/middlebury/"
+  aws s3 sync "${WORK}/data/middlebury/" "${BUCKET}/datasets/middlebury/"
+fi
+
+if [[ -d "${WORK}/data/booster/train/balanced" ]]; then
+  echo "==> booster → ${BUCKET}/datasets/booster/"
+  aws s3 sync "${WORK}/data/booster/" "${BUCKET}/datasets/booster/"
+fi
+
+if [[ -d "${WORK}/data/sintel/training" ]]; then
+  echo "==> sintel → ${BUCKET}/datasets/sintel/"
+  aws s3 sync "${WORK}/data/sintel/" "${BUCKET}/datasets/sintel/"
 fi
 
 echo "==> done. Code still needs: git add/commit && git push origin main"
