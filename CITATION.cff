@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use plumbline in your research, please cite it as below."
+title: "plumbline: a reproducible evaluation harness for 3D geometric foundation models"
+abstract: >-
+  plumbline is an evaluation harness for 3D geometric foundation models
+  (monocular depth, multi-view depth, pose, and point maps), with
+  PDF-verified reproductions of published benchmark numbers.
+type: software
+authors:
+  - family-names: "Blackburn-Matzen"
+    given-names: "Kevin"
+repository-code: "https://github.com/kmatzen/plumbline"
+url: "https://plumbline-bench.org"
+license: Apache-2.0
+version: "0.1.0"
+date-released: "2026-05-31"
+keywords:
+  - 3d-vision
+  - depth-estimation
+  - benchmark
+  - reproducibility
+  - foundation-models

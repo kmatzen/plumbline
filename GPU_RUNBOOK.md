@@ -3,6 +3,18 @@
 Spin up → bring up → run → tear down. Single doc; the agent and the
 human see the same instructions.
 
+> **Maintainer-only infrastructure.** This runbook documents the
+> *maintainer's* private result-cache and rental-GPU workflow. The
+> `s3://plumbline-bench/` bucket (result/prediction/HF-cache backups), the
+> `.aws_session` token flow, and the box-provisioning scripts under
+> `scripts/` are **not** required to use plumbline. To run any reproduction
+> yourself you only need the public model weights (auto-downloaded from
+> HuggingFace) and the dataset, pointed at via the documented `*_ROOT` env
+> vars — see [`README.md`](./README.md) and
+> [`REPRODUCTIONS.md`](./REPRODUCTIONS.md). The S3 paths referenced
+> throughout are pointers into that private bucket and will not be
+> publicly readable.
+
 ## The run queue
 
 The backlog of reproductions awaiting a GPU is a machine-readable file,
