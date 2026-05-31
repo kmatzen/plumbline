@@ -156,8 +156,10 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
                 "DAV2_ROOT",
                 "Required by the adapter's DEFAULT source='paper' path: a clone "
                 "of https://github.com/DepthAnything/Depth-Anything-V2 "
-                "(default /workspace/deps/depth-anything-v2). The .pth weights "
-                "auto-download from HF; only the model class comes from the clone.",
+                "(default /workspace/deps/depth-anything-v2), PLUS the clone's "
+                "own deps — notably opencv-python (its dpt.py does `import cv2`); "
+                "`uv pip install opencv-python`. The .pth weights auto-download "
+                "from HF; only the model class comes from the clone.",
             ),
         ),
         notes=(
@@ -166,7 +168,10 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
             "re-exports score ~0.002 AbsRel lower and tip cells off-gate, so "
             "paper-match reproductions use 'paper'). That path needs a clone of "
             "https://github.com/DepthAnything/Depth-Anything-V2 at $DAV2_ROOT "
-            "(default /workspace/deps/depth-anything-v2). Without it every "
+            "(default /workspace/deps/depth-anything-v2) AND its requirements "
+            "(opencv-python — the repo's dpt.py imports cv2 at module top; "
+            "without it the adapter raises a confusing 'needs the repo' error "
+            "even when the clone is present). Without the paper backend every "
             "sample errors out and the run lands n_evaluated=0 / observed=nan. "
             "Pass source='hf' to use the no-clone transformers path instead."
         ),

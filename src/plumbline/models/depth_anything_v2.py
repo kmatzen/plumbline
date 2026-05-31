@@ -175,11 +175,26 @@ class DepthAnythingV2Adapter(Model):
         try:
             from depth_anything_v2.dpt import DepthAnythingV2
         except ImportError as exc:
+            import importlib.util
+
+            # Distinguish "repo not found" from "repo present but one of its
+            # own deps (e.g. opencv-python / cv2) isn't installed". The repo's
+            # dpt.py does `import cv2` at module top, so a missing cv2 raises
+            # ImportError here and the old message wrongly told the user to
+            # clone a repo they already have. Surface the real cause instead.
+            if importlib.util.find_spec("depth_anything_v2") is None:
+                raise ImportError(
+                    "DepthAnythingV2Adapter(source='paper') needs the paper's "
+                    "repo. Clone https://github.com/DepthAnything/Depth-Anything-V2 "
+                    "and point $DAV2_ROOT at it (default "
+                    "/workspace/deps/depth-anything-v2)."
+                ) from exc
             raise ImportError(
-                "DepthAnythingV2Adapter(source='paper') needs the paper's "
-                "repo. Clone https://github.com/DepthAnything/Depth-Anything-V2 "
-                "and point $DAV2_ROOT at it (default "
-                "/workspace/deps/depth-anything-v2)."
+                "DepthAnythingV2Adapter(source='paper'): the repo at "
+                f"$DAV2_ROOT was found but importing it failed ({exc}). Install "
+                "its dependencies (the repo's requirements.txt — notably "
+                "opencv-python), or `plumbline install depth-anything-v2`. "
+                "Alternatively pass source='hf' for the no-clone transformers path."
             ) from exc
         try:
             from huggingface_hub import hf_hub_download

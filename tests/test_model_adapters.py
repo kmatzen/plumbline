@@ -82,6 +82,33 @@ def test_unknown_variant_errors() -> None:
         cls(device="cpu", variant="not-a-size")  # type: ignore[call-arg]
 
 
+def test_dav2_paper_load_error_distinguishes_missing_repo_from_missing_dep(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """`_load_paper` must not say "clone the repo" when the repo is present.
+
+    The repo's dpt.py does `import cv2`, so a missing opencv-python raises
+    ImportError from the same `from depth_anything_v2.dpt import ...` line as
+    a genuinely-absent repo. The two cases need different guidance: clone vs
+    install-its-deps. We drive the branch via find_spec since the repo isn't
+    installed in the test env (so the import always raises here).
+    """
+    import importlib.util
+
+    cls = MODEL_REGISTRY["depth-anything-v2"]
+    model = cls(device="cpu", variant="small", source="paper")  # type: ignore[call-arg]
+
+    # Repo genuinely absent → find_spec None → "clone" guidance.
+    monkeypatch.setattr(importlib.util, "find_spec", lambda name: None)
+    with pytest.raises(ImportError, match="needs the paper's repo"):
+        model._load_paper()
+
+    # Repo present but its import failed (e.g. cv2 missing) → different message.
+    monkeypatch.setattr(importlib.util, "find_spec", lambda name: object())
+    with pytest.raises(ImportError, match="found but importing it failed"):
+        model._load_paper()
+
+
 def test_vggt_enforces_view_bounds() -> None:
     import numpy as np
 
