@@ -37,7 +37,7 @@ Download (no auth): https://www.ipb.uni-bonn.de/data/rgbd-dynamic-dataset/
 Note: the *exact* sequence list + frame sampling MonST3R/CUT3R use for the
 published Bonn number live in MonST3R's eval code. This loader defaults to
 all discovered sequences with even sub-sampling; a reproduction pinning the
-paper cell must match MonST3R's protocol (single-record diff per plan.md §12)
+paper cell must match MonST3R's protocol (single-record diff per GPU_RUNBOOK.md)
 before it counts as a paper-match.
 """
 

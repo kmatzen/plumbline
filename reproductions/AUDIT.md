@@ -228,8 +228,8 @@ cited table/row/column. **2 one-digit transcription slips corrected**
 - **Byte-exact vs a retained result JSON (5):** vggt/mast3r/dust3r
   CO3Dv2 pose, dust3r-kitti, monst3r-sintel-pose — JSONs on
   `s3://plumbline-bench/runs/` (3 also in `docs/runs/`).
-- **Archive-confirmed (~10):** the early mono-depth ✅ cells match
-  `docs/runs/archive/20260421.md` within rounding.
+- **Archive-confirmed (~10):** early mono-depth ✅ cells match 2026-04-21 GPU
+  validation runs (S3 / retained JSONs) within rounding.
 - **No retained JSON yet (5):** monst3r-nyuv2, da-v2-large-diode,
   da-v2-large-kitti-moge, moge-vitl-kitti, moge-vitl-diode-both — run in
   earlier sessions; **queued for a JSON-capturing re-run**

@@ -38,6 +38,5 @@ notes: >
   README: public weights re-trained. Needs `plumbline install
   depth-pro` + the depth_pro.pt weights (manual download to
   ~/.cache/plumbline/weights/depth-pro/; see the adapter docstring).
-  ETH3D (Depth Pro Table 1 δ₁ 0.415) is a separate candidate but its eval
-  set doesn't map cleanly onto plumbline's chamfer-oriented `eth3d`
-  loader — left in the backlog pending eval-set investigation.
+  BLOCKED — docs/blocked/DEPTH_PRO_SINTEL_TABLE1.md. ETH3D Table 1:
+  docs/ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md (not blocked; data pending).

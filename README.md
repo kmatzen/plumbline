@@ -146,18 +146,14 @@ authoritative 32-cell matrix:
 
 ## Documentation
 
-- **GPU backlog plan (active):** [`docs/GPU_BACKLOG_PLAN.md`](docs/GPU_BACKLOG_PLAN.md)
-
-- [`plan.md`](./plan.md) — architecture + v0.1 spec and roadmap.
-- [`GPU_RUNBOOK.md`](./GPU_RUNBOOK.md) — running on a rented GPU,
-  including per-adapter install quirks.
-- [`REPRODUCTIONS.md`](./REPRODUCTIONS.md) — paper-number configs,
-  observed values, tolerances, and protocol notes.
-- [`CONTRIBUTING.md`](./CONTRIBUTING.md) — how to add a model or
-  dataset adapter.
-- [`docs/SOURCE_AUDIT.md`](./docs/SOURCE_AUDIT.md) — per-adapter audit of
-  plumbline's implementation against each method's released upstream
-  source code (preprocessing, forward, output conventions).
+- [`docs/README.md`](./docs/README.md) — map of all docs (start here)
+- [`GPU_RUNBOOK.md`](./GPU_RUNBOOK.md) — GPU bring-up, queue, active work
+- [`REPRODUCTIONS.md`](./REPRODUCTIONS.md) — paper-match matrix
+- [`docs/DISCREPANCIES.md`](./docs/DISCREPANCIES.md) — open issues (D-numbers)
+- [`docs/BLOCKED.md`](./docs/BLOCKED.md) — fundamentally blocked cells
+- [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — extend the harness
+- [`CONTRIBUTING.md`](./CONTRIBUTING.md) — dev setup and PR bar
+- [`docs/SOURCE_AUDIT.md`](./docs/SOURCE_AUDIT.md) — adapter vs upstream source
 
 ## License
 

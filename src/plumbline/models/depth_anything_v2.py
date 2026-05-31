@@ -29,7 +29,7 @@ Two ways to load weights, selected via the ``source`` kwarg:
 Earlier plumbline versions only supported the HF path; the paper's own
 checkpoints produce a small (~0.002 AbsRel) but systematic shift relative
 to the HF re-exports on NYU, enough to tip the Base variant outside the
-5 % paper-match gate. See ``docs/runs/20260421.md § da-v2-base-nyuv2``.
+5 % paper-match gate. See ``reproductions/da_v2_base_nyuv2.yaml`` notes.
 """
 
 from __future__ import annotations

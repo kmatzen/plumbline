@@ -4,7 +4,7 @@
 # sample is warped with MoGe's ``EvalDataLoaderPipeline`` (1024×768) before
 # inference. Targets the D29 hypothesis that outdoor Table-2 miss is
 # preprocessing, not model weights. Does NOT replace ``diode_dav2`` until a
-# full run lands within tolerance — see docs/GPU_BACKLOG_PLAN.md §1.
+# full run lands within tolerance — see docs/D29_DIODE_TABLE2_HANDOFF.md.
 
 name: diode_dav2_moge_warp
 description: >

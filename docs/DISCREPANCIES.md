@@ -1265,7 +1265,7 @@ cell `da-v2-large-diode` (also `domain=both`, 771 samples, via `diode-moge-eval`
 MoGe's reported 0.0533. So MoGe's preprocessing tames outdoor; the native
 protocol's does not.
 
-**2026-05-30 follow-up (`docs/GPU_BACKLOG_PLAN.md` §1):**
+**2026-05-30 follow-up (GPU runbook / D29):**
 
 - ``moge_fov_warp`` on native val is a **no-op** when RGB is already 1024×768
   (FoV warp leaves pixels unchanged; AbsRel identical to native).
@@ -1497,7 +1497,9 @@ smoke δ₁ ~**0.48**; full 1064-frame mean pulled down by hard tail scenes.
 Upstream `ml-depth-pro` has no Sintel eval; README notes re-trained public
 weights may not match paper. JSONs: `depth_pro_sintel_*_20260530.json`,
 `depth_pro_sintel_table16_20260531.json`. Queue: `depth-pro-sintel` **blocked**.
-Design: [`docs/DEPTH_PRO_TABLE1_METRIC_EVAL.md`](DEPTH_PRO_TABLE1_METRIC_EVAL.md).
+**Blocked pages:** [`docs/BLOCKED.md`](BLOCKED.md) ·
+[`docs/blocked/DEPTH_PRO_SINTEL_TABLE1.md`](blocked/DEPTH_PRO_SINTEL_TABLE1.md) ·
+Middlebury / NuScenes / Sun-RGBD in `docs/blocked/`.
 
 **2026-05-31 iBims sanity:** same weights, metric protocol on MoGe iBims bundle → δ₁ **0.8458** (100/100). Weights/adapter OK on indoor laser GT; Sintel gap is dataset-specific (synthetic, sky, scale), not a broken checkpoint.
 
@@ -2020,7 +2022,7 @@ teardown — same numbers re-derivable by re-running the YAML).
 
 **Deferred (v0.2+):**
 - D15 — DA-V2 NYU ~0.002 bias (Eigen-crop + rawDepths interaction).
-- New adapter additions per `plan.md` § 10 Tier 2.
+- New adapter additions per `docs/ARCHITECTURE.md` and `CONTRIBUTING.md`.
 
 **Recently closed (one-liner; full diagnoses in their commits):**
 - D8 ✅ 2026-04-24 — MoGe-KITTI AbsRel 0.0404 vs paper 0.0408.

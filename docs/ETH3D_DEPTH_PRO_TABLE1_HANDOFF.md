@@ -4,7 +4,13 @@ Depth Pro Table 16: **454** samples, valid depth **0.1–200 m**, GT **4032×604
 distorted DSLR). Paper δ₁ = **0.415** (41.5 %). Only Table 1 column not yet run in
 plumbline.
 
-## Why it was “blocked”
+## Status: pending (not fundamentally blocked)
+
+Unlike the four off-paper Table 1 columns, ETH3D is **not** closed as blocked — we
+lack official depth JPGs + a Depth Pro loader, not an exhausted protocol. Off-paper
+cells: [`BLOCKED.md`](BLOCKED.md).
+
+## Why metric δ₁ was not run yet
 
 | Path | GT type | Usable for Table 1 δ₁? |
 |------|---------|------------------------|
@@ -59,6 +65,6 @@ uv run python scripts/probe-eth3d-official-depth.py --scene courtyard
 
 ## Links
 
-- Table 1 design: [`DEPTH_PRO_TABLE1_METRIC_EVAL.md`](DEPTH_PRO_TABLE1_METRIC_EVAL.md)
+- Table 1 matrix: [`BLOCKED.md`](BLOCKED.md)
 - DA-V2 native (parked): [`ETH3D_DAV2_TABLE2_HANDOFF.md`](ETH3D_DAV2_TABLE2_HANDOFF.md)
 - D31 / official depth: `docs/DISCREPANCIES.md`

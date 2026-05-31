@@ -295,3 +295,19 @@ agree on which samples were evaluated. Acceptable mechanisms:
 
 No new reproduction may depend on a file under `$<DATASET>_ROOT` for
 sample selection.
+
+## 10. Known traps
+
+Read before adding adapters or closing off-paper cells:
+
+- **Extrinsic conventions.** Half the field uses `camera_from_world`, half
+  `world_from_camera`. Every loader and adapter is an inversion risk — use
+  assertion helpers.
+- **Depth vs inverse depth.** Adapters must document native output and convert
+  explicitly (disparity / 1/z / meters).
+- **Resize interpolation.** Bilinear for RGB; **nearest** for depth GT and masks.
+- **Focal length after resize.** Unscale predicted intrinsics back to input pixels.
+- **ScanNet poses.** Filter `inf` extrinsics in the loader.
+- **Sintel intrinsics.** Verify against the dataset README; do not assume a default focal.
+- **VGGT non-determinism.** Some CUDA ops vary with seed; document tolerance, not bitwise equality.
+- **Prediction cache.** Cache keys omit loader preprocessing — bump cache or delete shards after loader changes (`DISCREPANCIES.md` D21).

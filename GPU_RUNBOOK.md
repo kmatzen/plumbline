@@ -31,9 +31,21 @@ ETH3D-moge / iBims-1, all PDF-verified) are **done**. Remaining queue work is
 mostly **blocked** off-paper investigations (native ETH3D/Sintel Table 2 →
 handoff docs; DIODE native D29 outdoor) plus **`depth-pro-sintel`** (Depth Pro
 Table 1 δ₁ experiment — upstream ships no Sintel eval script). Use
-`plumbline queue --include-blocked` before re-running anything. Active execution
-plan: [`docs/GPU_BACKLOG_PLAN.md`](docs/GPU_BACKLOG_PLAN.md) (D29 MoGe warp on
-native DIODE is track 1).
+`plumbline queue --include-blocked` before re-running anything. See **Active work** below.
+
+## Active work (2026-05-31)
+
+Queue has **no `pending` jobs**. Do not spend GPU re-tuning off-paper YAMLs.
+
+| Track | Status | Doc |
+|-------|--------|-----|
+| MoGe Table 3 mono-depth sweep | ✅ done | `REPRODUCTIONS.md` |
+| DA-V2 native Table 2 (ETH3D / Sintel / DIODE) | 🔒 parked | `ETH3D_DAV2_TABLE2_HANDOFF.md`, `SINTEL_DAV2_TABLE2_HANDOFF.md`, `D29_DIODE_TABLE2_HANDOFF.md` |
+| Depth Pro Table 1 | ✅ Booster; 🔒 four blocked; ETH3D pending | [`docs/BLOCKED.md`](docs/BLOCKED.md) |
+| VGGT ETH3D 13-scene | ✅ investigated (D10) | `DISCREPANCIES.md` |
+| D29 native DIODE outdoor | 🔒 upstream confirm only | `D29_DIODE_TABLE2_HANDOFF.md` |
+
+Defer: RealEstate10K scrape, ScanNet ToS, upstream-blocked VGGT-DTU / GeoWizard / Marigold re-runs.
 
 ## Hard constraints
 
@@ -166,7 +178,7 @@ attention path; this is what plumbline's CI does).
 
 ## Thrift bootstrap
 
-**Do not bulk-pull the dataset cache.** Per `plan.md § 12`, work is
+**Do not bulk-pull the dataset cache.** Per **Single-record diff workflow** below, work is
 single-record-diff: pick one sample, pull its inputs + GT, run, diff
 against reference code. Full-dataset runs are the *last* step.
 
@@ -248,7 +260,7 @@ unzip -o '*.zip' -d $SINTEL_ROOT   # → training/{final,clean,depth,camdata_lef
 ```
 
 **Auth-gated, deprioritized** (loaders work, data isn't on the v0.1 critical
-path; substitutes already promoted in plan.md § 2):
+path; substitutes already promoted in v0.1 gate):
 
 | Dataset | Why deprioritized |
 |---|---|
@@ -284,7 +296,7 @@ this — pin a sequence/scene whitelist before fetching.
 
 ## Single-record diff workflow
 
-Per plan.md § 12 — the *only* path to closing chamfer / off-paper
+The *only* path to closing chamfer / off-paper
 reproductions where the gap is non-trivial. Don't burn GPU hours on
 full-dataset runs to discover a 130× discrepancy.
 
@@ -316,7 +328,7 @@ upstream-blocked issue (e.g. D22) — document and demote, don't guess.
 | `torch.cuda.OutOfMemoryError` | Halve `--max-views`; if still fails, mark "OOM" |
 | Other exception | Capture full traceback; mark "failed"; continue |
 | Exit 0 + paper_match true | ✅ MATCH |
-| Exit 0 + paper_match false | ⚠️ off paper — record observed vs published, link to a D-number in `docs/DISCREPANCIES.md` |
+| Exit 0 + paper_match false | ⚠️ off paper — record observed vs published, link to a D-number in `docs/DISCREPANCIES.md`; if levers are exhausted, add/update a page under [`docs/BLOCKED.md`](docs/BLOCKED.md) |
 | Exit 0 + paper_match null on a `verified_pdf` row | flag for human review (should not happen) |
 
 **Never** modify YAMLs, edit `paper_reference.value`, edit tolerances,
@@ -344,7 +356,7 @@ aws s3 sync /tmp/logs/ "s3://plumbline-bench/runs/${ts}/logs/"
 
 Gate is **multi-cell**, replacing the original single-reproduction
 gate (`plumbline reproduce vggt-paper-dtu-mvs`) that was retired
-2026-04-27 when D3 hit upstream-block. See `plan.md` § 2.
+2026-04-27 when D3 hit upstream-block.
 
 - **≥ 15 verified_pdf paper-match cells** across ≥ 3 datasets and ≥ 5
   papers — **met 2026-04-27** (16 mono-depth cells across NYU + KITTI

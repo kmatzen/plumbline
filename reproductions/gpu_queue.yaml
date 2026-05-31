@@ -402,12 +402,7 @@ jobs:
   - name: depth-pro-sintel
     status: blocked
     priority: 6
-    blocked_on: >
-      Depth Pro Table 1 Sintel δ₁ OFF-PAPER: full 1064-frame δ₁ 0.2409 vs 0.400
-      (2026-05-31, appendix Table 16 protocol 0.01–80 m). 80-frame smoke ~0.48 —
-      tail scenes drag mean down. iBims δ₁ 0.846 — adapter OK. Per-scene: 6/23 scenes
-      with δ₁&lt;0.05 (300 fr); excl. them → ~0.33 still under 0.40. See
-      scripts/analyze-depth-pro-sintel-json.py. Upstream README: re-trained weights.
+    blocked_on: "Fundamentally blocked — docs/blocked/DEPTH_PRO_SINTEL_TABLE1.md"
     paper_target: "Depth Pro Table 1 — Sintel δ₁ 0.400 (metric, no alignment; verified_pdf 2026-05-28)"
     primary_metric: delta_1
     datasets: [sintel]
@@ -440,9 +435,7 @@ jobs:
   - name: depth-pro-middlebury
     status: blocked
     priority: 6
-    blocked_on: >
-      Depth Pro Table 1 Middlebury δ₁ OFF-PAPER: 0.7589 vs 0.605 (+25.5%, reads
-      better) on MiddEval3 trainingF, appendix Table 16 protocol (0.001–10 m).
+    blocked_on: "Fundamentally blocked — docs/blocked/DEPTH_PRO_MIDDLEBURY_TABLE1.md"
     paper_target: "Depth Pro Table 1 — Middlebury δ₁ 0.605 (metric, no alignment)"
     primary_metric: delta_1
     datasets: [middlebury]
@@ -457,9 +450,7 @@ jobs:
   - name: depth-pro-sun-rgbd
     status: blocked
     priority: 6
-    blocked_on: >
-      Depth Pro Table 1 Sun-RGBD δ₁ OFF-PAPER: 0.4505 vs 0.890 (−49%, reads
-      worse) on Ahanda test pack (5050×530×730), appendix Table 16 (0.001–10 m).
+    blocked_on: "Fundamentally blocked — docs/blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md"
     paper_target: "Depth Pro Table 1 — Sun-RGBD δ₁ 0.890 (metric, no alignment)"
     primary_metric: delta_1
     datasets: [sun-rgbd]
@@ -475,9 +466,7 @@ jobs:
   - name: depth-pro-nuscenes
     status: blocked
     priority: 6
-    blocked_on: >
-      Depth Pro Table 1 NuScenes δ₁ OFF-PAPER: 0.5935 vs 0.491 (+20.9%, reads
-      better) on val CAM_FRONT LiDAR GT, seed-42 subset (881/881).
+    blocked_on: "Fundamentally blocked — docs/blocked/DEPTH_PRO_NUSCENES_TABLE1.md"
     paper_target: "Depth Pro Table 1 — NuScenes δ₁ 0.491 (metric, no alignment)"
     primary_metric: delta_1
     datasets: [nuscenes]

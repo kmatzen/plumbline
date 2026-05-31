@@ -1,6 +1,6 @@
 """Geometry round-trip tests for the canonical conventions.
 
-``plan.md § 9`` calls out coordinate-system bugs as the #1 failure mode for
+``docs/ARCHITECTURE.md`` §10 calls out coordinate-system bugs as the #1 failure mode for
 3D foundation model harnesses. These tests build synthetic scenes with known
 cameras + known 3D points + known depth, exercise every convention-relevant
 function in ``plumbline``, and verify:
