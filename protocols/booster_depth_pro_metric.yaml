@@ -1,0 +1,23 @@
+# Booster metric depth — Depth Pro Table 1 (training split, 228 frames).
+#
+# Appendix C Table 16: valid 0.001–10 m, 228 samples, 3008×4112 GT resolution.
+# GT from disparity + calib (see booster loader). No scale alignment.
+
+name: booster_depth_pro_metric
+description: >
+  Booster balanced training split: metric δ₁, no alignment, Depth Pro Table 1.
+
+reference:
+  paper: "Bochkovskii et al. 2024, Depth Pro Table 1 / appendix Table 16 (Booster)"
+
+fixed:
+  dataset:
+    name: booster
+    split: training
+    kwargs:
+      setup: balanced
+      use_occlusion_mask: true
+  depth_clip: [0.001, 10.0]
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]

@@ -1,0 +1,29 @@
+# Depth Pro on Booster — metric δ₁ (Depth Pro Table 1).
+#
+# Paper Table 1: Depth Pro δ₁ = 0.466 (46.6%) on Booster. Training split
+# (228 frames) is the only split with public GT; same convention as other
+# papers that evaluate on released training GT for zero-shot benchmarks.
+
+name: depth-pro-booster
+protocol: booster_depth_pro_metric
+
+model:
+  name: depth-pro
+  kwargs: {}
+
+scale_alignment: none
+device: cuda:0
+
+paper_reference:
+  primary_metric: delta_1
+  value: 0.466
+  tolerance_relative: 0.05
+  citation: >
+    Bochkovskii et al. 2024, Depth Pro (arXiv:2410.02073), Table 1,
+    Booster column: δ₁ = 0.466 (46.6%). Metric — no scale alignment.
+    Appendix Table 16: 228 samples, 0.001–10 m valid depth.
+  source_confidence: verified_pdf
+
+notes: >
+  228×4112×3008 frames — Depth Pro resizes to 1536² internally. Stage via
+  ./scripts/download-booster.sh ($BOOSTER_ROOT). High VRAM/time vs iBims/Sintel.

@@ -75,7 +75,9 @@ JSON/S3 provenance only.
 
 **Optional:** Sync result JSON to S3 if missing; mark queue row as investigated.
 
-### 4. Depth Pro Table 1 — Sintel **blocked**; iBims sanity **done**
+### 4. Depth Pro Booster (`depth-pro-booster`): loader + protocol landed 2026-05-31; stage via `scripts/download-booster.sh` ($BOOSTER_ROOT); GPU pending after `booster_gt.zip` unzip (228×12 Mpx).
+
+Depth Pro Table 1 — Sintel **blocked**; iBims sanity **done**
 
 Sintel: δ₁ **0.2409** vs **0.400** (appendix protocol). iBims informational:
 δ₁ **0.8458** on 100 frames — same weights work on indoor GT. ETH3D still blocked.

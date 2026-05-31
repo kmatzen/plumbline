@@ -420,6 +420,22 @@ jobs:
       protocol sintel_dav2 (final pass, max_depth 70, sky mask). Weights confirmed
       JSON: depth_pro_sintel_table16_20260531.json (δ₁ 0.2409); prior 0.2418.
 
+  - name: depth-pro-booster
+    status: pending
+    priority: 6
+    paper_target: "Depth Pro Table 1 — Booster δ₁ 0.466 (metric, no alignment)"
+    primary_metric: delta_1
+    datasets: [booster]
+    data_footprint_gb: 80
+    est_wall_min: 120
+    requires_env: [BOOSTER_ROOT]
+    extras: >
+      ./scripts/download-booster.sh; plumbline install depth-pro; depth_pro.pt.
+      228×4112×3008 — slow; expect high VRAM per frame.
+    notes: >
+      Loader + protocol booster_depth_pro_metric (2026-05-31). Training split
+      only (public GT). Blocked until booster_gt.zip staged at $BOOSTER_ROOT.
+
   # --- New PROTOCOL coverage: DA-V2 own Table 2 on DIODE (native loader,
   #     affine-inv disparity) across variants S/B/L. Recipe already validated
   #     on the ViT-S indoor slice (0.0722 vs 0.073). YAMLs landed 2026-05-28. ---

@@ -85,7 +85,7 @@ Keep `depth-pro-sintel` **blocked**; do not tune `paper_reference.value`.
 
 | Dataset | Depth range (m) | n | Staged locally | Plumbline repro |
 |---------|-----------------|---|----------------|-----------------|
-| Booster | 0.001–10 | 228 | ❌ | — |
+| Booster | 0.001–10 | 228 | ⏳ | `depth-pro-booster` **pending** (loader 2026-05-31) |
 | ETH3D | 0.1–200 | 454 | native + moge (chamfer) | blocked (no metric GT path) |
 | Middlebury | 0.001–10 | 15 | ❌ | — |
 | NuScenes | 0.001–80 | 881 | ❌ | — |
@@ -121,7 +121,8 @@ official weights — not fixable by `max_depth`/`pass_name` alone (already ruled
 | Full Sintel reproduce | GPU | ✅ 0.2409 vs 0.400 (blocked) |
 | Search Depth Pro repo issues / supp for eval hints | doc | 🔎 open |
 | ETH3D metric GT staging plan | data | blocked until source defined |
-| Booster / NuScenes / Sun-RGBD staging | data | not started |
+| Booster staging + `depth-pro-booster` | data/code | ⏳ download + GPU pending |
+| NuScenes / Sun-RGBD staging | data | not started |
 | Repro `depth-pro-eth3d` (new) | GPU | after GT |
 
 ## Queue stance
