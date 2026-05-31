@@ -49,12 +49,17 @@ def _dav2_paper_backend_available() -> bool:
     while still running on a configured GPU box.
     """
     try:
-        import importlib.util
-
         from plumbline.models.depth_anything_v2 import _ensure_dav2_on_path
 
         _ensure_dav2_on_path()
-        return importlib.util.find_spec("depth_anything_v2") is not None
+        # Actually attempt the import the adapter performs — find_spec alone
+        # only proves the package dir is on sys.path, not that it imports
+        # (its dpt.py does `import cv2`, so a missing opencv-python makes the
+        # adapter hard-fail). The module docstring promises a skip, not a
+        # failure, when the backend isn't fully installed.
+        import depth_anything_v2.dpt  # noqa: F401
+
+        return True
     except Exception:
         return False
 
