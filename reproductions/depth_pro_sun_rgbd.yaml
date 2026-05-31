@@ -1,0 +1,27 @@
+# Depth Pro on SUN RGB-D — metric δ₁ (Depth Pro Table 1).
+#
+# Test split: 5050 frames. Paper δ₁ = 0.890 (89.0%).
+
+name: depth-pro-sun-rgbd
+protocol: sun_rgbd_depth_pro_metric
+
+model:
+  name: depth-pro
+  kwargs: {}
+
+scale_alignment: none
+device: cuda:0
+
+paper_reference:
+  primary_metric: delta_1
+  value: 0.890
+  tolerance_relative: 0.05
+  citation: >
+    Bochkovskii et al. 2024, Depth Pro Table 1, Sun-RGBD column: δ₁ = 0.890
+    (89.0%). Metric — no scale alignment. Appendix Table 16: 5050 samples,
+    0.001–10 m valid depth.
+  source_confidence: verified_pdf
+
+notes: >
+  Stage via ./scripts/download-sun-rgbd.sh ($SUN_RGBD_ROOT). ~5050×530×730 frames.
+  Run 2026-05-31: δ₁ 0.4505 vs paper 0.890 (blocked). JSON: depth_pro_sun_rgbd_20260531.json.

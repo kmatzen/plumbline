@@ -90,7 +90,7 @@ Keep `depth-pro-sintel` **blocked**; do not tune `paper_reference.value`.
 | Middlebury | 0.001–10 | 15 | ✅ | δ₁ **0.7589** vs **0.605** (blocked, reads better) |
 | NuScenes | 0.001–80 | 881 | ❌ | — |
 | Sintel | 0.01–80 | 1064 | ✅ `$SINTEL_ROOT` | `depth-pro-sintel` **blocked** (δ₁ 0.2409) |
-| Sun-RGBD | 0.001–10 | 5050 | ❌ | — |
+| Sun-RGBD | 0.001–10 | 5050 | ✅ | δ₁ **0.4505** vs **0.890** (blocked, reads worse) |
 | iBims | 0.1–10 | 100 | ✅ `$IBIMS1_ROOT` | ✅ informational δ₁ **0.8458** (2026-05-31) |
 
 **2026-05-31 iBims sanity check:** `depth-pro-ibims1` → δ₁ **0.8458**, AbsRel **0.161** on 100 MoGe-bundle frames (appendix Table 16 clip). Same `depth_pro.pt` as Sintel (δ₁ **0.2409**) — adapter + weights behave on high-quality indoor GT; Sintel miss is **not** a global metric-depth failure.
@@ -123,7 +123,8 @@ official weights — not fixable by `max_depth`/`pass_name` alone (already ruled
 | ETH3D metric GT staging plan | data | blocked until source defined |
 | Booster `depth-pro-booster` | GPU | ✅ δ₁ 0.4878 vs 0.466 (2026-05-31) |
 | Middlebury `depth-pro-middlebury` | GPU | ⚠️ δ₁ 0.7589 vs 0.605 (blocked) |
-| NuScenes / Sun-RGBD staging | data | not started |
+| Sun-RGBD `depth-pro-sun-rgbd` | GPU | ✅ 0.4505 vs 0.890 (blocked) |
+| NuScenes staging | data | not started |
 | Repro `depth-pro-eth3d` (new) | GPU | after GT |
 
 ## Queue stance

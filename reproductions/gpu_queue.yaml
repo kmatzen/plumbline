@@ -454,6 +454,24 @@ jobs:
       2026-05-31: 15/15 scenes F-res (~2872×1984). JSON:
       depth_pro_middlebury_20260531.json. Do not tune paper_reference.
 
+  - name: depth-pro-sun-rgbd
+    status: blocked
+    priority: 6
+    blocked_on: >
+      Depth Pro Table 1 Sun-RGBD δ₁ OFF-PAPER: 0.4505 vs 0.890 (−49%, reads
+      worse) on Ahanda test pack (5050×530×730), appendix Table 16 (0.001–10 m).
+    paper_target: "Depth Pro Table 1 — Sun-RGBD δ₁ 0.890 (metric, no alignment)"
+    primary_metric: delta_1
+    datasets: [sun-rgbd]
+    data_footprint_gb: 0.7
+    est_wall_min: 15
+    requires_env: [SUN_RGBD_ROOT]
+    extras: "./scripts/download-sun-rgbd.sh; depth_pro.pt"
+    notes: >
+      2026-05-31: 5050/5050 frames (~8 min H100). JSON:
+      depth_pro_sun_rgbd_20260531.json. Staging: img-{i:06d}.jpg ↔ depth/{i}.png.
+      Do not tune paper_reference.
+
   # --- New PROTOCOL coverage: DA-V2 own Table 2 on DIODE (native loader,
   #     affine-inv disparity) across variants S/B/L. Recipe already validated
   #     on the ViT-S indoor slice (0.0722 vs 0.073). YAMLs landed 2026-05-28. ---
