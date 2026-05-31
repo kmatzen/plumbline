@@ -16,9 +16,9 @@ First public release.
   registry, dataset-loader registry, named protocol presets, a results
   runner, and the `plumbline` CLI (`list-models`, `list-datasets`, `run`,
   `reproduce`, `queue`, `install`, `doctor`).
-- 13 model adapters: Depth Anything V2 (incl. metric Indoor/Outdoor), Depth
+- 12 model adapters: Depth Anything V2 (incl. metric Indoor/Outdoor), Depth
   Anything 3, Metric3Dv2 (S/L/Giant2), MoGe-1, MoGe-2, Marigold v1-1,
-  GeoWizard, Depth Pro, MASt3R, DUSt3R, VGGT, π³, CUT3R, and MonST3R.
+  GeoWizard, Depth Pro, MASt3R, DUSt3R, VGGT, CUT3R, and MonST3R.
 - 12 dataset loaders: NYUv2, KITTI, DIODE, ETH3D, DTU MVS, CO3Dv2, 7-Scenes,
   GSO, iBims-1, Sintel, ScanNet, and Bonn RGB-D Dynamic.
 - Depth, pose (absolute + pairwise relative-pose AUC, RRA/RTA, trajectory
