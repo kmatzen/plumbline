@@ -37,7 +37,11 @@ def _nn_distances(a: NDArray[Any], b: NDArray[Any]) -> NDArray[Any]:
         b64 = b.astype(np.float64)
         d = np.empty(a64.shape[0], dtype=np.float64)
         # Chunk to avoid blowing up memory when both arrays are large.
-        chunk = max(1, 1 << 20 // max(b64.shape[0], 1))
+        # NB: parenthesise (1 << 20) — ``//`` binds tighter than ``<<`` in
+        # Python, so ``1 << 20 // b`` is ``1 << (20 // b)`` (== 1 for any
+        # b >= 21), which collapses the chunk to a single row and makes the
+        # fallback pathologically slow. We want ~1M / b rows per chunk.
+        chunk = max(1, (1 << 20) // max(b64.shape[0], 1))
         for i in range(0, a64.shape[0], chunk):
             block = a64[i : i + chunk]
             diff = block[:, None, :] - b64[None, :, :]
@@ -168,7 +172,13 @@ def voxel_downsample(points: NDArray[Any], voxel_size: float) -> NDArray[np.floa
     p = points.astype(np.float64)
     keys = np.floor(p / voxel_size).astype(np.int64)
     # Unique voxel indices with an inverse map so we can bincount means.
+    # numpy 2.0/2.1 returned a 2-D ``(N, 1)`` inverse from
+    # ``np.unique(axis=0, return_inverse=True)`` (a regression reverted in
+    # 2.2); ``np.bincount`` rejects a 2-D arg. ``reshape(-1)`` is a no-op on
+    # the 1-D result every other version gives and keeps us correct across
+    # the declared ``numpy>=1.24`` range.
     _, inv = np.unique(keys, axis=0, return_inverse=True)
+    inv = np.reshape(inv, -1)
     n_cells = int(inv.max()) + 1
     counts = np.bincount(inv, minlength=n_cells).astype(np.float64)
     sums = np.zeros((n_cells, 3), dtype=np.float64)

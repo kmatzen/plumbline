@@ -6,8 +6,16 @@ not kept here: the understanding for them lives in
 [`CONFIDENCE_AUDIT.md`](CONFIDENCE_AUDIT.md) (which localizes every off-paper gap
 to a layer) and the full investigation history is in git.
 
-> Resolved & closed (see `CONFIDENCE_AUDIT.md` + git): D1, D2, D9, D17, D18, D22,
-> D23, D24, D27, D30, D10b. Removed-code attempts: `docs/blocked/`.
+> Resolved & closed (see `CONFIDENCE_AUDIT.md` + git): D1, D2, D9, D17, D18, D21,
+> D22, D23, D24, D27, D30, D10b. Removed-code attempts: `docs/blocked/`.
+>
+> D21 (cache vs loader-preprocessing) is fixed: `runner._sample_input_fingerprint`
+> mixes the loaded tensor's shape + dtype + intrinsics + first 1 KB of pixel
+> bytes into the prediction-cache key (`cache.PredictionCache.path_for`'s
+> `input_fingerprint`), so a loader refactor that changes resolution/warp/colour
+> stores to a distinct file and can't serve stale predictions against fresh GT.
+> Residual (heuristic, accepted): a change that preserves all four of those does
+> not invalidate.
 
 **Category key:** 🔧 model integration · 📐 protocol (eval pipeline diverges from
 paper code) · 📜 paper-side (unreproducible from the public release) · ⏳ untested.
@@ -19,7 +27,6 @@ paper code) · 📜 paper-side (unreproducible from the public release) · ⏳ u
 | D3 | VGGT-DTU chamfer (+98 %, 0.756 vs 0.382 mm) | 📜 upstream-blocked: ~1.98× residual is in the public VGGT-1B output; adapter + protocol levers exhausted (PatchmatchNet filter, fp32, 49-view all no-ops). Watch upstream. |
 | D4 | VGGT-ETH3D 3-scene (−9.4 %, 0.642 vs 0.709 m) | 📐 infra landed; apples-to-apples needs the full 13-scene split (D10). |
 | D10 | VGGT-ETH3D full 13-scene split (+23.5 %) | 📐 investigated: driven entirely by one scene (`terrains`, Comp 10.18 m); 12/13 scenes beat paper. Open: is `terrains` a model failure or a scene-specific GT artifact. |
-| D21 | Prediction cache vs loader-preprocessing change | 🔧 cache key doesn't invalidate when a loader's preprocessing changes. |
 | D28 | DUSt3R Table 2 indoor (NYU/Bonn) | 📜 investigated: indoor scoring recipe is paper-private; KITTI ✅ + CO3Dv2 ✅ anchor the adapter. |
 | D29 | DA-V2 native-DIODE Table 2 (`domain=both`) | 📐 investigated: outdoor preprocessing gap; the MoGe-bundle cells on the same dataset are ✅. |
 | D31 | DA-V2 native-ETH3D Table 2 (−32 %) | 📐 RGB/GT misalignment fixed; residual full-13-scene protocol gap still OPEN. |
@@ -721,8 +728,18 @@ coincidentally also matched (0.1086). The lineage KITTI loader enumerates from
 raw `image_02/data` and attaches annotated GT, so a root with sparse raw frames
 under-counts without raising. Re-run on the proper gathered tree
 (`/root/data/kitti_dust3r_lineage`, 1269 frames / 13 drives) gives 0.1049 — the
-verdict held, but only the full-set number is trustworthy. Worth a runner guard
-(assert `n_evaluated` ≥ a protocol-declared minimum, D21-adjacent).
+verdict held, but only the full-set number is trustworthy. Guard landed (both
+halves):
+1. The runner routes a prediction that yields no metric for the requested task to
+   `n_skipped` (with a reason) instead of silently incrementing `n_evaluated`
+   (`runner.evaluate`, test `test_metricless_prediction_counts_as_skipped`).
+2. A reproduction may declare `min_samples` — a floor on the evaluated-frame count.
+   If the run evaluates fewer (the sparse data root above), `run_reproduction`
+   forces `paper_match=no` with a COUNT SHORTFALL note instead of letting the
+   metric match on the wrong set (`reproduce.py`, tests
+   `test_min_samples_shortfall_forces_no_match` / `_met_matches_normally`).
+   Adopted on `da-v2-small-diode-indoor` (floor = its 220 pinned ids); other
+   reproductions can opt in with their own verified count.
 
 The lineage protocols (`{nyu,kitti,bonn}_dust3r_lineage*`) are named after DUSt3R
 because the *file paths and prep conventions* trace from DUSt3R, but the *eval
@@ -1072,20 +1089,6 @@ Middlebury / NuScenes / Sun-RGBD in `docs/blocked/`.
 **Pass probe (2026-05-30, `scripts/probe-sintel-pass.py`, 1064 frames):** `final`
 **0.2321** vs `clean` **0.2224** (same `training/depth` GT) — `clean` is slightly
 *better*, not worse; pass name does not explain the −52 % gap vs paper.
-
-### D21 · Prediction cache doesn't invalidate on loader preprocessing change   🔎 NEW 2026-04-24
-
-Cache key in `src/plumbline/runner.py` `_predict_with_cache` is
-`(model.name, model.config_hash(), dataset_name, sample.sample_id)`.
-It ignores the actual bytes / shape of the input tensor the loader
-produces. Observed 2026-04-24: after porting MoGe's homographic warp
-into `KITTIMogeEvalLoader`, a re-run of `moge-vitl-kitti`
-cache-hit on the previous shard (1242×375 predictions) against the
-new 750×375 GT, silently producing nonsense metrics (AbsRel 0.1895,
-4 × the pre-fix value). Worked around by `rm -rf` of the stale
-shard; a proper fix hashes the first-sample tensor shape + a small
-byte sample into the cache key, or invalidates on `dataset.__class__`
-fingerprint changes.
 
 ### D10 · VGGT-ETH3D 3-scene vs 13-scene split   🔬 INVESTIGATED 2026-05-27
 
