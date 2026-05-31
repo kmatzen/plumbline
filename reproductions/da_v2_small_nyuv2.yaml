@@ -32,7 +32,15 @@ paper_reference:
   value: 0.053
   tolerance_relative: 0.05
   citation: "Yang et al. 2024, Depth Anything V2, Table 2. NYUv2 Eigen test, ViT-S (relative)."
-  source_confidence: verified_pdf
+  # NOT verified_pdf: the 0.053 came from a WebFetch of the paper's
+  # per-variant table (see the UNVERIFIED note above), not a direct PDF
+  # read. The field is corrected to null to match that documented status
+  # and the project's confidence taxonomy (a WebFetch is not a paper
+  # match). Empirical cross-check: plumbline observed AbsRel 0.0510 /
+  # δ₁ 0.9729 on the paper backend (ViT-S, 654-frame Eigen split, GTX
+  # 1080 Ti, 2026-05-31) — consistent with ~0.053, so the value is
+  # plausibly correct, but confirming it still needs a direct paper read.
+  source_confidence: null
 
 notes: >
   Paper-match anchor for the end-to-end mono-depth pipeline. Drifting more
