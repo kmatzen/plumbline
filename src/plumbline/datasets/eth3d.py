@@ -234,7 +234,7 @@ class ETH3DDataset(Dataset):
         self.pv_render_max_dim = int(pv_render_max_dim) if pv_render_max_dim is not None else None
         # When True, resize each RGB view to the per-view GT render resolution
         # (``pv_render_max_dim`` cap) so mono-depth metrics are pixel-aligned.
-        # VGGT/π³ chamfer runs keep False — they need native images for the
+        # VGGT chamfer runs keep False — they need native images for the
         # adapter while GT stays at the capped render res for masking.
         self.resize_images_to_pv_render = bool(resize_images_to_pv_render)
         # Per-scene rendered (depth, valid, image_id_to_idx) cache.

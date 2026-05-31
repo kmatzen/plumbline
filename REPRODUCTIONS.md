@@ -194,7 +194,7 @@ three Tier-1 jobs (`vggt-co3dv2-pose`, `mast3r-co3dv2-pose`,
 
 `docs/SOURCE_AUDIT.md` audits every adapter against its released upstream
 source. Most are faithful; fixes landed for DA-3 (extrinsics shape +
-relative-depth flag) and π³ (confidence shape). One **deferred** item
+relative-depth flag). One **deferred** item
 touches verified cells: the DA-V2 *paper* path passes
 `image_interpolation_method=3` (`cv2.INTER_AREA`) where upstream uses
 `cv2.INTER_CUBIC` (=2). The 8 ✅ DA-V2 cells were validated with INTER_AREA,

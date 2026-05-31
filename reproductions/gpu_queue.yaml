@@ -196,37 +196,14 @@ jobs:
       drift fixed this session). Result JSON:
       s3://plumbline-bench/runs/queue_da3_20260528T160939Z.json.
 
-  - name: pi3-dtu-mvs
-    status: done
-    priority: 5
-    paper_target: "none — π³ chamfer smoke (value: null)"
-    primary_metric: overall
-    datasets: [dtu]
-    data_footprint_gb: 7
-    est_wall_min: 30
-    requires_env: [DTU_ROOT, PI3_ROOT]
-    extras: "π³: git clone https://github.com/yyfz/Pi3 $HOME/deps/pi3; uv pip install -r requirements.txt; export PI3_ROOT=$HOME/deps/pi3"
-    notes: >
-      ✅ RAN 2026-05-28: Overall **17.33 mm** (acc 6.00 / comp 28.67,
-      22/22 scenes finite) — informational (no paper target). This run
-      surfaced + fixed a silent-NaN bug: the yaml's primary_metric was
-      'chamfer' but the scene-MVS path emits 'overall' (now guarded by a
-      test). JSON: s3://plumbline-bench/runs/pi3_dtu_detail_*.json.
-
-  - name: pi3-eth3d-multiscene
-    status: done
-    priority: 6
-    paper_target: "none — π³ ETH3D chamfer smoke (value: null)"
-    primary_metric: overall
-    datasets: [eth3d]
-    data_footprint_gb: 8
-    est_wall_min: 40
-    requires_env: [ETH3D_ROOT, PI3_ROOT]
-    extras: "π³ as above."
-    notes: >
-      ✅ RAN 2026-05-28: overall **3.75 m** (~6× VGGT's 0.64 m subset) —
-      informational only. JSON:
-      s3://plumbline-bench/runs/queue_pi3-eth3d-multiscene_*.json.
+  # NOTE: the π³ (pi3) adapter and its DTU / ETH3D jobs were REMOVED before
+  # public release (2026-05-31). On both datasets — same loader, protocol, and
+  # Umeyama+ICP alignment as VGGT — π³ came out ~6–20× WORSE than VGGT
+  # (DTU 17.33 mm vs 0.76 mm; ETH3D 3.75 m vs 0.64 m), yet the π³ paper
+  # (arXiv:2507.13347, Table 3) reports π³ ≈ VGGT (slightly better). Relative
+  # ordering is convention-invariant, so the inversion points at an adapter
+  # bug, not a units mismatch — and there is no verified ✅ anchoring π³.
+  # Attempt documented in docs/blocked/PI3_RECONSTRUCTION.md.
 
   # ===== NEXT-BOX backlog (2026-05-28 coverage + certainty pass) =====
   # Chosen after a paper-PDF audit. Two prior FABRICATED targets were

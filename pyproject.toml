@@ -68,7 +68,7 @@ geowizard = [
 # `src/plumbline/install.py` (INSTALL_SPECS) is the single source of truth, and
 # `plumbline install <name>` installs them — PyPI ones (depth-anything-3) via
 # pip, git ones (vggt/moge/depth-pro) via `pip install git+...`, clone ones
-# (mast3r/dust3r/monst3r/cut3r/pi3) via `git clone` + an env var. Keeping them
+# (mast3r/dust3r/monst3r/cut3r) via `git clone` + an env var. Keeping them
 # out of pyproject is intentional: git URLs are PEP 508 direct references that
 # PyPI rejects in a published package, and heavy/conflicting trees (e.g.
 # depth-anything-3 pins numpy<2) would pollute uv.lock and downgrade the base

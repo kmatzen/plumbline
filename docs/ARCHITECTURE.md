@@ -183,7 +183,7 @@ class MyModelAdapter(Model):
   diffusion models so cache hits reproduce.
 - Registration-on-import — `cli.py` eager-imports all adapters.
 
-**Upstream-clone adapters** (mast3r, geowizard, pi3): require the user
+**Upstream-clone adapters** (mast3r, geowizard, cut3r): require the user
 to `git clone` and set an env var (`$MAST3R_ROOT` etc.); in `_load()`
 prepend that path to `sys.path`. For upstream code drifted against
 current diffusers/transformers, monkey-patch in a shim (see

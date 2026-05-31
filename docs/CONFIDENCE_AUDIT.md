@@ -67,6 +67,12 @@ adapter bug, because every model is cross-checked:
   indoor metric GT correctly, and the Sun-RGBD/Sintel misses are not a broken
   adapter.
 
+The one adapter that **did** look like an L1 bug — **π³** scoring 6–20× worse
+than VGGT under identical alignment while the paper reports π³ ≈ VGGT — was
+**removed** pre-release rather than shipped unverified (see
+[`blocked/PI3_RECONSTRUCTION.md`](blocked/PI3_RECONSTRUCTION.md)). So the
+statement above holds for what we ship: no *open* cell is an L1 bug.
+
 > The one place L1 contributes is as *fragility*, not a bug: single-frame
 > view-duplicate models (MonST3R/DUSt3R) are genuinely unstable on a few
 > textureless synthetic frames (`temple_2`), which inflates an **equal-frame**

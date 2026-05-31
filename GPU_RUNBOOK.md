@@ -175,7 +175,6 @@ doctor` reports which adapters are present on the current box.
 | dust3r | clone | `git clone --recursive https://github.com/naver/dust3r $HOME/deps/dust3r; uv pip install roma scikit-learn trimesh; export DUST3R_ROOT=$HOME/deps/dust3r` |
 | monst3r | clone | `git clone --recursive https://github.com/Junyi42/monst3r $HOME/deps/monst3r; uv pip install roma scikit-learn trimesh; export MONST3R_ROOT=$HOME/deps/monst3r` |
 | cut3r | clone | `git clone --recursive https://github.com/CUT3R/CUT3R $HOME/deps/cut3r; uv pip install -r $HOME/deps/cut3r/requirements.txt; export CUT3R_ROOT=$HOME/deps/cut3r; export CUT3R_CKPT=...` (512-DPT weights per repo README) |
-| pi3 | clone | `git clone https://github.com/yyfz/Pi3 $HOME/deps/pi3; uv pip install -r $HOME/deps/pi3/requirements.txt; export PI3_ROOT=$HOME/deps/pi3` |
 | geowizard | clone | `git clone https://github.com/fuxiao0719/GeoWizard $HOME/deps/geowizard; export GEOWIZARD_ROOT=$HOME/deps/geowizard` then `uv sync --extra geowizard; uv pip install --force-reinstall 'nvidia-cudnn-cu12==9.1.0.70'` |
 
 If `uv pip install` from a git URL dies with `curl 92 HTTP/2 stream

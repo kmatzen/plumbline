@@ -284,17 +284,6 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         ),
         notes="Deps install via the clone's requirements.txt.",
     ),
-    "pi3": InstallSpec(
-        name="pi3",
-        kind="clone",
-        probe_import="pi3",
-        clone_url="https://github.com/yyfz/Pi3",
-        dest_env="PI3_ROOT",
-        default_dest="$HOME/deps/pi3",
-        requirements_txt=True,
-        weights="hf-auto",
-        notes="Weights: yyfz233/Pi3 (HF auto). Deps install via the clone's requirements.txt.",
-    ),
     "geowizard": InstallSpec(
         name="geowizard",
         kind="clone",

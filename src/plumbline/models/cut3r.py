@@ -25,7 +25,7 @@ Per view the model produces (see upstream ``demo.py::prepare_output``):
 
 Install
 -------
-No PyPI distribution; follow the MASt3R / π³ pattern:
+No PyPI distribution; follow the MASt3R clone pattern:
 
     git clone https://github.com/CUT3R/CUT3R /workspace/deps/cut3r
     cd /workspace/deps/cut3r && pip install -r requirements.txt   # + submodules
@@ -41,7 +41,7 @@ apply that at the runner level via the reproduction's ``scale_alignment`` /
 ``pointcloud_alignment`` — not in the adapter.
 
 Status: adapter + conversion unit tests landed; **GPU validation pending**
-(same state as the π³ adapter). Queued in ``reproductions/gpu_queue.yaml``.
+Queued in ``reproductions/gpu_queue.yaml``.
 """
 
 from __future__ import annotations
@@ -197,7 +197,7 @@ class CUT3RAdapter(Model):
         extrinsics = rebase_to_first_camera(c2w.astype(np.float64))  # (N,4,4), E[0]=I
 
         # Depth = z of the self-view (camera-frame) point map. Non-finite or
-        # non-positive → invalid (0), matching the π³ adapter.
+        # non-positive → invalid (0), our canonical invalid-depth marker.
         depth = self_pts[..., 2].astype(np.float32)
         depth = np.where(np.isfinite(depth) & (depth > 0), depth, 0.0).astype(np.float32)
         assert_valid_depth(depth, name="cut3r/depth")

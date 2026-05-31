@@ -25,7 +25,6 @@ import plumbline.models.marigold
 import plumbline.models.mast3r
 import plumbline.models.metric3d_v2
 import plumbline.models.moge
-import plumbline.models.pi3
 import plumbline.models.vggt  # noqa: F401
 from plumbline.models.registry import MODEL_REGISTRY
 
@@ -40,7 +39,6 @@ EXPECTED_ADAPTERS = [
     "marigold",
     "depth-pro",
     "geowizard",
-    "pi3",
 ]
 
 
@@ -345,37 +343,3 @@ def test_depth_pro_config_hash_varies_by_dtype() -> None:
     h16 = cls(device="cpu", dtype="float16").config_hash()  # type: ignore[call-arg]
     h32 = cls(device="cpu", dtype="float32").config_hash()  # type: ignore[call-arg]
     assert h16 != h32
-
-
-def test_pi3_rejects_bad_variant() -> None:
-    cls = MODEL_REGISTRY["pi3"]
-    with pytest.raises(ValueError, match="variant"):
-        cls(device="cpu", variant="pi4")  # type: ignore[call-arg]
-
-
-def test_pi3_rejects_bad_dtype() -> None:
-    cls = MODEL_REGISTRY["pi3"]
-    with pytest.raises(ValueError, match="dtype"):
-        cls(device="cpu", dtype="int8")  # type: ignore[call-arg]
-
-
-def test_pi3_config_hash_varies_by_variant_and_dtype() -> None:
-    """Pi3 vs Pi3X are different trained models; their cached predictions must
-    not collide. Dtype also changes the cache key so a bf16 run doesn't serve
-    a pre-cached fp32 result (or vice versa)."""
-
-    cls = MODEL_REGISTRY["pi3"]
-    h1 = cls(device="cpu", variant="pi3", dtype="bfloat16").config_hash()  # type: ignore[call-arg]
-    h2 = cls(device="cpu", variant="pi3x", dtype="bfloat16").config_hash()  # type: ignore[call-arg]
-    h3 = cls(device="cpu", variant="pi3x", dtype="float32").config_hash()  # type: ignore[call-arg]
-    assert len({h1, h2, h3}) == 3
-
-
-def test_pi3_capabilities_are_multi_view_metric() -> None:
-    cls = MODEL_REGISTRY["pi3"]
-    caps = cls.capabilities  # type: ignore[attr-defined]
-    assert "mono_depth" in caps.tasks
-    assert "mvs_depth" in caps.tasks
-    assert "pose" in caps.tasks
-    assert caps.is_metric is True
-    assert caps.min_views == 2

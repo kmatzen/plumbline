@@ -49,6 +49,7 @@ Queue: `reproductions/gpu_queue.yaml`.
 | VGGT DTU chamfer | Public checkpoint ~2× off; filters exhausted | [`blocked/VGGT_DTU_CHAMFER.md`](blocked/VGGT_DTU_CHAMFER.md) |
 | GeoWizard / Marigold KITTI | Same class as D17/D18 | [`blocked/UPSTREAM_CHECKPOINT_KITTI.md`](blocked/UPSTREAM_CHECKPOINT_KITTI.md) |
 | CUT3R NYU/KITTI/Bonn | Paper uses lineage pipeline, not plumbline strict | [`blocked/CUT3R_DEPTH_LINEAGE.md`](blocked/CUT3R_DEPTH_LINEAGE.md) |
+| **π³ (pi3) DTU/ETH3D — ADAPTER REMOVED** | 6–20× worse than VGGT under identical alignment (paper says ≈); suspected adapter bug, no verified anchor | [`blocked/PI3_RECONSTRUCTION.md`](blocked/PI3_RECONSTRUCTION.md) |
 
 ## Data-staging blocked (not fundamental)
 

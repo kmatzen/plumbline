@@ -10,7 +10,7 @@ or any adapter dependency (no torch / transformers import):
    set, clone⇒clone_url + dest_env set).
 3. Regression for the original bug: the ``da3-co3dv2-pose`` GPU-queue job no
    longer claims DA3 "ships in the base install" — it needs a pip package.
-4. ``install_plan`` / ``install_hint`` / ``check`` run cleanly for all 13.
+4. ``install_plan`` / ``install_hint`` / ``check`` run cleanly for all 12.
 """
 
 from __future__ import annotations
@@ -38,10 +38,10 @@ _MODELS_DIR = Path(__file__).resolve().parent.parent / "src" / "plumbline" / "mo
 _HINT_CALL = re.compile(r"""install_hint\(\s*['"]([^'"]+)['"]\s*\)""")
 
 
-def test_registry_is_nonempty_and_has_13_entries() -> None:
+def test_registry_is_nonempty_and_has_12_entries() -> None:
     # Guards against a registry that silently emptied (which would make the
     # parametrized cases vacuously pass) and pins the documented count.
-    assert len(INSTALL_SPECS) == 13, sorted(INSTALL_SPECS)
+    assert len(INSTALL_SPECS) == 12, sorted(INSTALL_SPECS)
 
 
 def test_registry_matches_model_registry_exactly() -> None:

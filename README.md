@@ -12,14 +12,14 @@ API will still change before 1.0.
 
 ## What works today
 
-- **13 model adapters**: DA-V2 (6 variants including metric
+- **12 model adapters**: DA-V2 (6 variants including metric
   Indoor/Outdoor), DA3, Metric3Dv2 (S/L/Giant2), MoGe-1, MoGe-2 (incl.
   `*-normal`), Marigold v1-1, GeoWizard, Depth Pro, MASt3R (N-view via
-  PointCloudOptimizer for N≥3, PairViewer for N=2), VGGT, π³, **CUT3R**
+  PointCloudOptimizer for N≥3, PairViewer for N=2), VGGT, **CUT3R**
   (recurrent — video + unordered image collections), and **MonST3R**
   (dynamic-scene video; the v1.2 `video_pose` path wires MonST3R's full
   flow + motion-mask + temporal global alignment, GPU-validated on the
-  Sintel Table-4 trajectory cell). π³ and CUT3R also have GPU smoke runs
+  Sintel Table-4 trajectory cell). CUT3R also has a GPU smoke run
   (informational).
 - **12 datasets**: NYUv2 (Eigen 2014, rawDepths), KITTI (Eigen 652,
   annotated GT, Garg crop), DIODE (FoV-warp loader, MoGe-paper protocol),
