@@ -29,12 +29,23 @@ camera intrinsics" claim, arXiv:2410.02073).
 depth _structure_ is correct everywhere. It is NOT a GT-decode or RGB↔depth
 pairing bug.**
 
-### Evidence A — the full-run δ₁ is bimodal, not uniformly low
-Re-analysing the saved 5050-frame run (`runs/.../depth_pro_sun_rgbd_20260531.json`):
-δ₁ is sharply **bimodal** — 34 % of frames at δ₁<0.1 and 20 % at δ₁>0.9 (45 %
-below 0.3, 31 % above 0.8). A uniform GT-scale/decode bug would shift _every_
-frame equally; this is a **mixed population** (consistent with SUN-RGBD pooling
-four sensors — Kinect v1/v2, RealSense, Xtion — with different intrinsics).
+### Evidence A — the failure is per-sensor, not uniform
+Re-analysing the saved 5050-frame run (`runs/.../depth_pro_sun_rgbd_20260531.json`),
+joined to the test-split→sensor map (`ankurhanda/sunrgbd-meta-data`
+`sunrgbd_testing_images.txt`), δ₁ **splits cleanly by capture sensor**:
+
+| sensor | n | mean δ₁ | frac δ₁>0.8 |
+|---|---|---|---|
+| RealSense | 572 | **0.845** | 0.76 |
+| Xtion | 1688 | 0.610 | 0.45 |
+| Kinect v1 (kv1) | 930 | 0.306 | 0.15 |
+| Kinect v2 (kv2) | 1860 | 0.257 | 0.12 |
+
+A uniform GT-scale/decode bug would shift _every_ frame equally. Instead the
+**RealSense subset alone reaches 0.845 — essentially the paper's 0.890** — while
+the two **Kinect** sensors (55 % of the set) collapse to ~0.26–0.31 and drag the
+aggregate to 0.45. The model and protocol are sound; the failure is specific to
+Depth Pro's **focal estimate on Kinect frames**.
 
 ### Evidence B — GT decode and pairing are correct
 - The depth PNGs are stored as **multiples of 8** (low-3-bits always zero); the
@@ -65,21 +76,28 @@ result `..._20260601.json`). The probe reproduces the original per-frame δ₁
   Depth Pro emits metric depth ~1.46× too large (scale 0.68) → δ₁ collapses,
   even though the relative depth is correct.
 
-**Conclusion:** Depth Pro's focal/FoV head mis-estimates on a ~45 % subset of the
-**ahanda 730×530 reprocessed** test pack, producing correct-structure /
-wrong-metric-scale depth. The paper's 0.890 most likely comes from feeding
-Depth Pro **native-resolution** SUN-RGBD images (where its focal head behaves as
-in the paper), or from supplying **GT per-frame focal**. Neither is available in
-this packaged set (rgb/ + depth/ only; no intrinsics, all resized to 730×530).
+**Conclusion:** Depth Pro's focal/FoV head mis-estimates on SUN-RGBD's **Kinect**
+frames (kv1/kv2), producing correct-structure / wrong-metric-scale depth. Because
+the paper's 0.890 requires the Kinect frames to be metric-accurate, and the model
+self-estimates a wrong focal there, the paper most plausibly fed **GT per-frame
+focal** for Table 1 — a standard "use dataset intrinsics for the metric column"
+choice, despite the model's headline "no intrinsics required" capability. (A
+native-resolution re-stage is **unlikely** to help the dominant kv2 group: SUN-RGBD
+already distributes kv2 registered at ~730×530, so native ≈ the ahanda pack there.)
 
 ## What would unblock (concrete, ranked)
 
-1. **Native-resolution images** — stage original SUN-RGBD (per-sensor native
-   resolution + `depth_bfx/`), run Depth Pro with estimated focal. If δ₁→~0.89,
-   this is the paper protocol → promotable to ✅. (Largest lift; clearest payoff.)
-2. **GT per-frame focal** — stage SUN-RGBD `intrinsics.txt`, pass `f_px` to
-   Depth Pro's `infer()`. Promotable **only if** confirmed the paper used GT
-   focal (Appendix C.4 is silent; do not assume).
+1. **GT per-frame focal** — map each test frame to its SUN-RGBD `intrinsics.txt`
+   (via `sunrgbd_testing_images.txt`), scale `fx` to the 730×530 pack, and pass
+   it as `f_px` to Depth Pro's `infer()`. **Expected to land near 0.89** (the
+   true metric scale is slightly worse than the per-frame-optimal scale that
+   gives the 0.96 oracle, so GT focal should sit between 0.45 and 0.96 — close to
+   the paper). A clean match to 0.890 would identify the under-documented protocol
+   → promotable to ✅. Requires the full SUN-RGBD download for `intrinsics.txt`.
+2. **Confirm via RealSense subset** — the RealSense rows already reach 0.845 with
+   estimated focal; if the eval restricted to a sensor with reliable focal
+   estimation matches the paper, that corroborates the GT-focal reading for the
+   rest.
 
 ## Do not
 
