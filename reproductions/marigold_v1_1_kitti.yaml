@@ -41,4 +41,15 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
-  Placeholder — observed recorded in follow-up commit.
+  Observed AbsRel 0.1095 / δ₁ 0.8884 (GTX 1080 Ti, 2026-06-01, full
+  652-frame Eigen-benchmark split, skipped=0, scale_shift_depth, 1-step
+  ×10-ensemble v1-1 fp32). **+10.6% over paper 0.099 — MISMATCH, and
+  expected.** Same shape as D9 (Marigold-KITTI in docs/DISCREPANCIES /
+  the GPU-run notes): the paper's 0.099 comes from Marigold **v1-0 at
+  50 DDIM steps** (reproduces to 0.0992), whereas this cell pins the
+  post-paper **v1-1 1-step distilled** checkpoint that
+  script/depth/eval/21_infer_kitti.sh now defaults to. The distilled
+  1-step variant trades ~10% accuracy for a ~50x speedup, so it lands
+  off-paper by construction; it is NOT an adapter/protocol bug.
+  (The NYU sibling marigold-v1-1-nyuv2 is likewise ~5% off for the same
+  reason.) To paper-match, a separate v1-0/50-step cell would be needed.
