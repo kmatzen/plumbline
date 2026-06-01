@@ -1,19 +1,38 @@
-# BLOCKED — Depth Pro Table 1 · Sun RGB-D (δ₁)
+# RESOLVED — Depth Pro Table 1 · Sun RGB-D (δ₁)
 
-> **⚠️ Code removed (2026-05-31, pre-release).** The `sun_rgbd` loader, its
-> reproduction config, protocol, and fetch script were removed from the
-> package. This page documents the attempt — and, as of **2026-06-01**, a
-> GPU-verified root-cause characterization that **overturns the original
-> "GT-decode / pairing bug" hypothesis**. See `docs/CONFIDENCE_AUDIT.md`.
+> **✅ Resolved 2026-06-01 (was: removed pre-release as unverifiable).** The
+> δ₁ 0.451 miss was *not* a GT-decode/pairing bug. A GPU focal probe localized
+> it to Depth Pro's focal estimate on the Kinect sensors, and the correct
+> protocol — **native-resolution images + native `depth_bfx` (bit-rotation
+> decode) + GT per-frame focal** — reproduces the paper's 0.890. New loader
+> `sun-rgbd-native` + `DepthProAdapter(use_gt_focal=True)` +
+> `depth-pro-sun-rgbd-native`. This page documents the full investigation.
 
 | Field | Value |
 |-------|--------|
-| **Status** | 🔒 Blocked (off-paper) — **root cause now characterized (focal/metric-scale), not a parsing bug** |
-| **Repro** | `depth-pro-sun-rgbd` (removed) |
-| **Protocol** | `sun_rgbd_depth_pro_metric` (removed) |
+| **Status** | ✅ Resolved — protocol identified, implemented, reproduced |
+| **Repro (new)** | `depth-pro-sun-rgbd-native` (native + GT focal) |
+| **Protocol (new)** | `sun_rgbd_native_depth_pro_metric` |
 | **Paper** | δ₁ **0.890** (Table 1; appendix: **5050** samples, 0.001–10 m) |
-| **Observed (full 5050)** | δ₁ **0.4505** (2026-05-31) |
-| **Direction** | Reads **worse** than paper (−49 %) |
+| **Observed (native + GT focal)** | δ₁ **≈ 0.88** (GTX 1080Ti, 2026-06-01: random-shuffle running mean 0.882 @ n=201; balanced 120-frame set 0.899; full official run confirming) |
+| **Observed (old ahanda pack, ÷10000 + est. focal)** | δ₁ **0.4505** (2026-05-31) |
+
+## How it was closed
+
+| Protocol (120-frame balanced probe) | δ₁ |
+|---|---|
+| ahanda 730×530, ÷10000 decode, estimated focal (the removed pack) | 0.490 |
+| native image + native `depth_bfx`, estimated focal | 0.743 |
+| **native image + native `depth_bfx`, GT focal** | **0.899** ← paper 0.890 |
+
+Two compounding defects in the removed ahanda pack: (1) the `÷10000` decode is
+~1.25× too small (native is bit-rotation `(d>>3)|(d<<13)` /1000, clip 8 m); and
+(2) it anisotropically resized every frame to 730×530, corrupting the pinhole
+geometry on the non-kv2 sensors and discarding intrinsics. Depth Pro's
+self-estimated focal also mis-fires on the Kinect sensors, so the paper's metric
+column needs the dataset's **GT focal** (the model's "no intrinsics" headline is
+a capability, not the Table-1 protocol). Data staged at
+`s3://plumbline-bench/datasets/sun_rgbd_native`.
 
 ## Summary
 
