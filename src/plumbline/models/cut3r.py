@@ -136,7 +136,7 @@ class CUT3RAdapter(Model):
     def _load(self) -> None:
         if self._model is not None:
             return
-        ensure_torch()
+        torch = ensure_torch()
         _ensure_cut3r_on_path()
         try:
             from src.dust3r.model import ARCroco3DStereo  # type: ignore[import-not-found]
@@ -146,7 +146,27 @@ class CUT3RAdapter(Model):
             raise ImportError(f"{type(self).__name__} {install_hint('cut3r')}") from exc
         # demo.py: ARCroco3DStereo.from_pretrained(args.model_path).to(device).eval()
         # `from_pretrained` accepts a local .pth checkpoint path here.
-        self._model = ARCroco3DStereo.from_pretrained(self.checkpoint).to(self.device).eval()
+        #
+        # CUT3R's from_pretrained calls torch.load internally with the default
+        # weights_only. torch>=2.6 (our pinned base dep) defaults that to True,
+        # which refuses this checkpoint because it embeds an omegaconf
+        # ``DictConfig`` (UnpicklingError: Unsupported global
+        # omegaconf.dictconfig.DictConfig). The checkpoint is operator-supplied
+        # via $CUT3R_CKPT and therefore trusted, so force the legacy full
+        # unpickle for the duration of the load (the clone's code, which we
+        # don't control, never passes weights_only itself).
+        orig_load = torch.load
+
+        def _full_unpickle_load(*args: Any, **kwargs: Any) -> Any:
+            kwargs.setdefault("weights_only", False)
+            return orig_load(*args, **kwargs)
+
+        torch.load = _full_unpickle_load
+        try:
+            model = ARCroco3DStereo.from_pretrained(self.checkpoint)
+        finally:
+            torch.load = orig_load
+        self._model = model.to(self.device).eval()
 
     # -- predict ---------------------------------------------------------
 

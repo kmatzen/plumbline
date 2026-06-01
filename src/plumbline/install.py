@@ -291,9 +291,19 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         ),
         weights=(
             "manual: 512-DPT checkpoint cut3r_512_dpt_4_64.pth to $CUT3R_CKPT "
-            "(default $CUT3R_ROOT/src/cut3r_512_dpt_4_64.pth)"
+            "(default $CUT3R_ROOT/src/cut3r_512_dpt_4_64.pth). Public Google "
+            "Drive id 1Asz-ZB3FfpzZYwunhQvNPZEUA8XUNAYD (gdown)."
         ),
-        notes="Deps install via the clone's requirements.txt.",
+        notes=(
+            "Deps install via the clone's requirements.txt (pulls omegaconf via "
+            "hydra-core — needed to deserialise the checkpoint's embedded config; "
+            "the adapter forces torch.load(weights_only=False) so torch>=2.6 "
+            "doesn't reject that config). For GPU inference build the curope CUDA "
+            "ext at $CUT3R_ROOT/src/croco/models/curope (`python setup.py "
+            "build_ext --inplace`): unlike mast3r/dust3r (where curope is just a "
+            "speedup) CUT3R's pure-torch RoPE fallback hits a device-side assert "
+            "in apply_rope1d on some setups, so curope is effectively required."
+        ),
     ),
     "geowizard": InstallSpec(
         name="geowizard",
