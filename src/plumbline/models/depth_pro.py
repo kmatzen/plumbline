@@ -101,11 +101,24 @@ class DepthProAdapter(Model):
         device: str = "cuda:0",
         weights_path: Path | str | None = None,
         dtype: str = "float16",
+        use_gt_focal: bool = False,
     ) -> None:
         if dtype not in ("float16", "float32"):
             raise ValueError(f"dtype must be 'float16' or 'float32'; got {dtype!r}")
         self.device = device
         self.dtype = dtype
+        self.use_gt_focal = use_gt_focal
+        # Depth Pro self-estimates focal length by default (its headline
+        # zero-shot capability). For metric benchmarks whose published number
+        # is produced with the dataset's GT focal (e.g. SUN-RGBD Table 1,
+        # δ₁ 0.890 — reproduces only with GT focal, not the self-estimate),
+        # opt in: the runner then feeds the sample's GT intrinsics and we pass
+        # fx as ``f_px`` to ``infer`` so the estimated focal is ignored. The
+        # default path is unchanged, so Booster et al. are unaffected.
+        if use_gt_focal:
+            import dataclasses as _dc
+
+            self.capabilities = _dc.replace(type(self).capabilities, requires_intrinsics=True)
         self.weights_path = Path(weights_path) if weights_path else _DEFAULT_WEIGHTS_PATH
         self._model: Any = None
         self._transform: Any = None
@@ -170,7 +183,14 @@ class DepthProAdapter(Model):
                 img_t = self._transform(pil)
                 if self.dtype == "float16":
                     img_t = img_t.half()
-                out = self._model.infer(img_t)
+                # When opted in, pass the GT focal (fx, in the input image's
+                # pixel units — the transform keeps native size) so the
+                # estimated focal is ignored. ``infer`` uses ``W / f_px`` to
+                # scale metric depth, so fx must match the image width passed.
+                f_px = None
+                if self.use_gt_focal and intrinsics is not None:
+                    f_px = torch.as_tensor(float(intrinsics[i][0, 0]), device=img_t.device)
+                out = self._model.infer(img_t, f_px=f_px)
                 # depth: (H_out, W_out) — Depth Pro resizes to the input
                 # resolution internally when f_px isn't passed, but belt-
                 # and-suspenders: resize explicitly if shape mismatches.
@@ -214,5 +234,5 @@ class DepthProAdapter(Model):
 
     def config_hash(self) -> str:
         # Version + dtype is enough; the weights are pinned to one URL.
-        s = f"{self.name}@{self.version}/dtype={self.dtype}"
+        s = f"{self.name}@{self.version}/dtype={self.dtype}/gt_focal={self.use_gt_focal}"
         return hashlib.sha256(s.encode()).hexdigest()[:16]

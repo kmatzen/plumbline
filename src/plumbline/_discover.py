@@ -51,6 +51,7 @@ _BUILTIN_ADAPTER_MODULES: tuple[str, ...] = (
     "plumbline.datasets.eth3d_moge_eval",
     "plumbline.datasets.ddad_sintel_moge_eval",
     "plumbline.datasets.bonn",
+    "plumbline.datasets.sun_rgbd_native",
 )
 
 

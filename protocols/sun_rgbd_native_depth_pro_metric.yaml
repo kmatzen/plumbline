@@ -1,0 +1,24 @@
+# SUN RGB-D test split (native) — Depth Pro Table 1 metric δ₁.
+#
+# Appendix Table 16: 5050 samples, valid 0.001–10 m. Native per-sensor
+# resolution + GT focal (the published δ₁ 0.890 reproduces only with the
+# dataset's GT focal — Depth Pro's self-estimated focal mis-fires on the
+# Kinect frames; see docs/blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md). Native
+# depth_bfx is bit-rotation decoded (d>>3 | d<<13) /1000, clip 8 m.
+
+name: sun_rgbd_native_depth_pro_metric
+description: >
+  SUN RGB-D native test split: metric δ₁, no alignment, GT focal (Depth Pro
+  Table 1).
+
+reference:
+  paper: "Bochkovskii et al. 2024, Depth Pro Table 1 / appendix Table 16 (Sun-RGBD)"
+
+fixed:
+  dataset:
+    name: sun-rgbd-native
+    split: test
+  depth_clip: [0.001, 10.0]
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]
