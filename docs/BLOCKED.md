@@ -16,7 +16,7 @@ code** (e.g. `depth-pro-eth3d` before official depth is staged) — see handoff 
 | Sintel | 0.241 / 0.400 | Protocol aligned; gap upstream / aggregation | [`blocked/DEPTH_PRO_SINTEL_TABLE1.md`](blocked/DEPTH_PRO_SINTEL_TABLE1.md) |
 | Middlebury | 0.759 / 0.605 | **Loader REMOVED pre-release** — no verified anchor; reads better, no public eval | [`blocked/DEPTH_PRO_MIDDLEBURY_TABLE1.md`](blocked/DEPTH_PRO_MIDDLEBURY_TABLE1.md) |
 | NuScenes | 0.594 / 0.491 | **Loader REMOVED pre-release** — no verified anchor; unknown subset/recipe | [`blocked/DEPTH_PRO_NUSCENES_TABLE1.md`](blocked/DEPTH_PRO_NUSCENES_TABLE1.md) |
-| Sun-RGBD | 0.451 / 0.890 | **Loader REMOVED pre-release** — no verified anchor; 2× worse (likely GT/pairing bug) | [`blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md`](blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md) |
+| Sun-RGBD | 0.451 / 0.890 | **Loader REMOVED pre-release** — GPU-verified 2026-06-01: **not** a GT/pairing bug. Depth Pro focal/metric-scale failure on ~45 % of frames (structure correct; scale-aligned δ₁ 0.96). Closure path: native-res images or GT focal | [`blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md`](blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md) |
 | ETH3D | — / 0.415 | **Not blocked** — implementation + data | [`ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md`](ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md) |
 
 **Appendix Table 16** (depth clip m, sample count): Booster 0.001–10 / 228 · ETH3D 0.1–200 / 454 ·
@@ -28,9 +28,11 @@ adapter OK on indoor GT; Sintel gap is dataset-specific.
 > Sun-RGBD loaders, configs, protocols, and fetch scripts were deleted from the
 > package. The Depth Pro *adapter* is verified (Booster ✅) and stays; what was
 > removed is the per-dataset **loaders**, which had no verified result proving
-> they parsed GT correctly — so their numbers were unverifiable, and Sun-RGBD's
-> 2× miss looked like a parsing bug. The pages above are kept to document the
-> attempt. Sintel stays because it runs on the ✅-anchored `sintel` loader.
+> they parsed GT correctly. Sun-RGBD's 2× miss originally looked like a parsing
+> bug; a GPU-verified focal probe (2026-06-01) since showed the GT decode and
+> pairing are **correct** and the gap is Depth Pro's per-frame focal/metric-scale
+> estimate on a frame subset — see its page below. The pages are kept to document
+> the attempt. Sintel stays because it runs on the ✅-anchored `sintel` loader.
 
 Queue: `reproductions/gpu_queue.yaml`.
 
