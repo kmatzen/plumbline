@@ -134,9 +134,15 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         weights="hf-auto",
         notes=(
             "Loaded via torch.hub.load('YvanYin/Metric3D', trust_repo=True). "
-            "No extra package. Gotcha: a mismatched xformers wheel makes the "
-            "dinov2 backbone raise NotImplementedError at forward time — "
-            "uninstall xformers or match the wheel."
+            "Its hubconf.py imports `mmcv.utils.Config` at module top, so the "
+            "hub load fails with ModuleNotFoundError: No module named 'mmcv' "
+            "unless mmcv is installed — and it wants the legacy 1.x API "
+            "(`mmcv.utils`, moved to mmengine in 2.x), which has no prebuilt "
+            "wheel for recent torch/CUDA and is painful to build. Treat "
+            "metric3d-v2 as effectively blocked on torch>=2.x boxes until that "
+            "is resolved. Gotcha (once it loads): a mismatched xformers wheel "
+            "makes the dinov2 backbone raise NotImplementedError at forward "
+            "time — uninstall xformers or match the wheel."
         ),
     ),
     "marigold": InstallSpec(
