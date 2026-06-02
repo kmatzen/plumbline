@@ -1,0 +1,86 @@
+# DAGE video pose on Sintel — DAGE Table 4 paper target.
+#
+# Targets DAGE Table 4 ("Camera pose evaluation"), Sintel column, DAGE row:
+# ATE 0.132 / RPE-trans 0.051 / RPE-rot 0.406 (arXiv:2603.03744, 2026).
+#
+# Protocol: DAGE's `evaluation/relpose/eval_pose_dage.py` is built on the
+# MonST3R/Marigold pose-eval lineage — the SAME apparatus plumbline already
+# uses for `monst3r-sintel-pose`:
+#   - The same 14 dynamic Sintel-final clips (DAGE
+#     `evaluation/relpose/metadata.py` `sintel` `seq_list` == plumbline's set).
+#   - TUM-RGBD-style ATE / RPE-RMSE under Sim(3) (Umeyama) alignment via `evo`
+#     (`align=True, correct_scale=True`) — `metrics/pose.py`'s
+#     `trajectory_*_rmse_sim3` make the same `evo` calls, so the metric matches.
+#   - DAGE's camera_poses are camera-to-world (`c2w_to_tumpose`), == plumbline's
+#     `world_from_camera` extrinsics convention.
+#   - DAGE reads pose from its low-res stream at `lr_max_size=252`.
+#
+# Unlike MonST3R (per-scene global alignment), DAGE is feed-forward: one
+# `infer` pass per clip yields the trajectory directly, so this is fully
+# deterministic (no GA stochasticity).
+
+name: dage-sintel-pose
+
+model:
+  name: dage
+  kwargs:
+    # Pose is read from DAGE's low-res stream; the paper's relpose eval uses 252.
+    lr_max_size: 252
+    # fp16 mixed precision: Pascal-compatible (the 1080Ti has no bf16) and roughly
+    # halves activation memory so 50-frame clips fit in 11 GB. DAGE's own infer
+    # autocast (bf16) is disabled; the adapter wraps the call in fp16 autocast.
+    compute_dtype: float16
+
+dataset:
+  name: sintel
+  split: training
+  kwargs:
+    pass_name: final
+    full_seq: true
+    # 14 dynamic-scene clips — DAGE metadata.py `sintel` seq_list (== MonST3R's).
+    scenes:
+      - alley_2
+      - ambush_4
+      - ambush_5
+      - ambush_6
+      - cave_2
+      - cave_4
+      - market_2
+      - market_5
+      - market_6
+      - shaman_3
+      - sleeping_1
+      - sleeping_2
+      - temple_2
+      - temple_3
+
+tasks: [pose]
+pose_trajectory_metrics: true
+# Sintel's longest dynamic clip is ~50 frames.
+max_views: 60
+device: cuda:0
+
+paper_reference:
+  primary_metric: trajectory_ate_rmse
+  value: 0.132
+  tolerance_relative: 0.10
+  citation: "Ngo et al. 2026, DAGE (arXiv:2603.03744), Table 4 (Camera pose evaluation), Sintel column, DAGE row = ATE 0.132 / RPE-trans 0.051 / RPE-rot 0.406. Eval: TUM-RGBD-style ATE/RPE-RMSE under Sim(3) alignment over the 14 dynamic Sintel-final clips, via evo (align=True, correct_scale=True), built on the MonST3R relpose harness."
+  source_confidence: verified_pdf
+
+notes: >
+  Companion metrics from DAGE Table 4: RPE-trans = 0.051, RPE-rot = 0.406
+  (degrees) — plumbline emits trajectory_rpe_trans_rmse / trajectory_rpe_rot_deg_rmse.
+
+  Same protocol as `monst3r-sintel-pose` (14 dynamic clips, Sim(3)-aligned
+  TUM-RGBD ATE/RPE via evo); only the model differs. DAGE is feed-forward, so
+  there is no global-alignment stochasticity — tolerance ±10 % covers small
+  numerical / resolution-handling drift between the DAGE eval harness and
+  plumbline's loader. Requires the DAGE repo at $DAGE_ROOT and the checkpoint
+  (HF TuanNgo/DAGE).
+
+  Result (GTX 1080Ti, 2026-06-02, 14/14, fp16): ATE **0.1417** vs 0.132 (+7.3 %)
+  — MATCH; companions RPE-trans 0.0546 vs 0.051, RPE-rot 0.4133 vs 0.406 (deg).
+  fp16 vs the paper's bf16 + the 11 GB memory adaptations (half() weights with
+  the camera head kept fp32, hr_max_size capped to the lr stream) account for
+  the small ATE drift; pose comes from the lr stream so the hr cap does not
+  affect it.

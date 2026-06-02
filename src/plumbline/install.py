@@ -322,6 +322,32 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
             "Weights: lemonaddie/Geowizard (HF auto)."
         ),
     ),
+    "dage": InstallSpec(
+        name="dage",
+        kind="pypi",
+        probe_import=None,  # vendored `dage` resolves only after the adapter's sys.path munge
+        pip=(
+            "einops",
+            "omegaconf",
+            "safetensors",
+            "kornia",
+            "roma",
+            "segmentation_models_pytorch",
+            # utils3d pinned to 0.0.2 (later versions break get_intrinsics) via a
+            # PEP 508 direct reference.
+            "utils3d @ git+https://github.com/EasternJournalist/utils3d.git@3913c65d81e05e47b9f367250cf8c0f7462a0900",
+        ),
+        weights="hf-auto",
+        notes=(
+            "The DAGE model source is VENDORED in plumbline/_vendor/dage (CC BY-NC "
+            "4.0; see THIRD_PARTY_NOTICES.md), so no clone is needed — install only "
+            "the runtime deps above. utils3d is pinned to 0.0.2 (commit 3913c65): "
+            "later versions break DAGE's get_intrinsics with a device mismatch. "
+            "Weights: TuanNgo/DAGE (HF auto, ~5.5 GB). On pre-Ampere GPUs use "
+            "DAGEAdapter(compute_dtype='float16') (no bf16 on sm_61). $DAGE_ROOT "
+            "overrides the vendored copy for dev against upstream."
+        ),
+    ),
 }
 
 

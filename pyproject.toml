@@ -144,6 +144,9 @@ dev = [
 line-length = 100
 target-version = "py310"
 src = ["src", "tests"]
+# Vendored third-party model source (e.g. _vendor/dage) is kept verbatim under
+# its own license; do not lint/format it.
+extend-exclude = ["src/plumbline/_vendor"]
 
 [tool.ruff.lint]
 select = [
@@ -201,6 +204,8 @@ warn_unused_ignores = true
 # metric/geometry helper and doesn't meaningfully improve correctness.
 warn_return_any = false
 files = ["src"]
+# Vendored third-party source is excluded from type-checking (kept verbatim).
+exclude = ["src/plumbline/_vendor/"]
 
 [[tool.mypy.overrides]]
 module = [
