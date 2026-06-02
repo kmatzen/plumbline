@@ -302,14 +302,15 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
             "Drive id 1Asz-ZB3FfpzZYwunhQvNPZEUA8XUNAYD (gdown)."
         ),
         notes=(
-            "Deps install via the clone's requirements.txt (pulls omegaconf via "
-            "hydra-core — needed to deserialise the checkpoint's embedded config; "
-            "the adapter forces torch.load(weights_only=False) so torch>=2.6 "
-            "doesn't reject that config). For GPU inference build the curope CUDA "
-            "ext at $CUT3R_ROOT/src/croco/models/curope (`python setup.py "
-            "build_ext --inplace`): unlike mast3r/dust3r (where curope is just a "
-            "speedup) CUT3R's pure-torch RoPE fallback hits a device-side assert "
-            "in apply_rope1d on some setups, so curope is effectively required."
+            "CODE IS VENDORED under plumbline/_vendor/cut3r (src/dust3r + "
+            "src/croco); no clone is needed (clone_url/$CUT3R_ROOT are now just a "
+            "dev override). Two install steps remain: (1) build the vendored "
+            "curope CUDA ext at _vendor/cut3r/src/croco/models/curope (`python "
+            "setup.py build_ext --inplace`, needs nvcc + Python dev headers) — "
+            "CUT3R's pure-torch RoPE fallback device-asserts, so curope is "
+            "required; (2) the 512-DPT weight to $CUT3R_CKPT (Google Drive, not on "
+            "HF). The adapter forces torch.load(weights_only=False) so torch>=2.6 "
+            "accepts the checkpoint's embedded omegaconf config."
         ),
     ),
     "geowizard": InstallSpec(
