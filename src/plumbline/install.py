@@ -36,7 +36,7 @@ from __future__ import annotations
 
 import importlib.util
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 __all__ = [
     "INSTALL_SPECS",
@@ -105,6 +105,13 @@ class InstallSpec:
     extra_env: tuple[tuple[str, str], ...] = ()
     weights: str = "hf-auto"
     pyproject_extra: str | None = None
+    # Upstream code license (SPDX-ish), and whether plumbline may **vendor** that
+    # code under ``_vendor/`` (redistribute it in-repo). Vendoring is allowed for
+    # permissive (MIT/BSD/Apache) and NonCommercial (CC BY-NC[-SA]) licenses, but
+    # NOT for GPL/copyleft or unlicensed ("all rights reserved") code. NC vendoring
+    # makes those parts of this Apache-2.0 repo usable non-commercially only.
+    license: str = ""
+    vendorable: bool = False
     notes: str = ""
 
     def how_to(self) -> str:
@@ -349,6 +356,31 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         ),
     ),
 }
+
+
+# Upstream code license per model, and whether plumbline may legally vendor that
+# code in-repo (under _vendor/). Audited 2026-06-02 against each repo's LICENSE.
+# vendorable=True for permissive (MIT/BSD/Apache) and NonCommercial (CC BY-NC[-SA])
+# licenses; False for unlicensed ("all rights reserved") or bespoke licenses whose
+# redistribution clause needs a human read first. NC code, once vendored, makes the
+# corresponding parts of this Apache-2.0 repo usable non-commercially only.
+_LICENSE_INFO: dict[str, tuple[str, bool]] = {
+    "metric3d-v2": ("BSD-2-Clause", True),
+    "marigold": ("Apache-2.0", True),
+    "depth-anything-v2": ("Apache-2.0", True),
+    "depth-anything-3": ("Apache-2.0", True),
+    "moge": ("MIT", True),
+    "vggt": ("VGGT License (custom research/AUP)", False),  # review redistribution clause
+    "depth-pro": ("Apple (custom)", False),  # review redistribution clause
+    "mast3r": ("CC-BY-NC-SA-4.0", True),  # vendor needs croco submodule + curope ext (pure-torch fallback)
+    "dust3r": ("CC-BY-NC-SA-4.0", True),  # ditto
+    "monst3r": ("CC-BY-NC-SA-4.0", True),  # dust3r-lineage
+    "cut3r": ("CC-BY-NC-SA-4.0", True),  # dust3r-lineage
+    "geowizard": ("none (no LICENSE — all rights reserved)", False),  # cannot vendor
+    "dage": ("CC-BY-NC-4.0", True),  # already vendored under _vendor/dage
+}
+for _name, (_lic, _vend) in _LICENSE_INFO.items():
+    INSTALL_SPECS[_name] = replace(INSTALL_SPECS[_name], license=_lic, vendorable=_vend)
 
 
 # ---------------------------------------------------------------------------

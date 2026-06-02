@@ -185,3 +185,19 @@ def test_da3_extras_matches_registry_truth() -> None:
     spec = spec_for("depth-anything-3")
     assert spec.kind == "pypi"
     assert spec.pip == ("depth-anything-3",)
+
+
+def test_every_spec_records_a_license() -> None:
+    # The vendoring policy ("license permitting") is only enforceable if every
+    # model's upstream license is recorded. vendorable is gated on a non-GPL,
+    # non-unlicensed, reviewed license (NonCommercial allowed).
+    for name, spec in INSTALL_SPECS.items():
+        assert spec.license, f"{name}: no upstream license recorded in _LICENSE_INFO"
+
+
+def test_unlicensed_and_custom_are_not_vendorable() -> None:
+    # GeoWizard has no LICENSE (all rights reserved) and must never be vendored;
+    # bespoke licenses (VGGT/Apple) need a human clause-read first.
+    assert INSTALL_SPECS["geowizard"].vendorable is False
+    assert INSTALL_SPECS["vggt"].vendorable is False
+    assert INSTALL_SPECS["depth-pro"].vendorable is False
