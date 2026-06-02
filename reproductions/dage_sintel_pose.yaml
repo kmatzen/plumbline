@@ -26,10 +26,10 @@ model:
   kwargs:
     # Pose is read from DAGE's low-res stream; the paper's relpose eval uses 252.
     lr_max_size: 252
-    # GTX 1080Ti (sm_61) has no bf16; run infer in fp32 (DAGE's default
-    # autocast is bfloat16). No effect on the result vs an Ampere bf16 run
-    # beyond numerical precision.
-    enable_autocast: false
+    # fp16 mixed precision: Pascal-compatible (the 1080Ti has no bf16) and roughly
+    # halves activation memory so 50-frame clips fit in 11 GB. DAGE's own infer
+    # autocast (bf16) is disabled; the adapter wraps the call in fp16 autocast.
+    compute_dtype: float16
 
 dataset:
   name: sintel

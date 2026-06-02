@@ -23,8 +23,9 @@ internal lr resolution (default 252 px max side), so a faithful depth cell needs
 the outputs unscaled back to input-image pixels — handled in a follow-up.
 
 Pascal note: ``infer`` autocasts to **bfloat16** by default, which pre-Ampere
-GPUs (e.g. a GTX 1080Ti, sm_61) do not support. We pass ``enable_autocast=False``
-so it runs in fp32 on such hardware (≈8 GB at 252 px for short clips).
+GPUs (e.g. a GTX 1080Ti, sm_61) do not support. We disable DAGE's bf16 autocast
+and apply our own (``compute_dtype``): fp32 for short clips, or fp16 mixed
+precision (Pascal-compatible) so 50-frame clips fit in 11 GB.
 """
 
 from __future__ import annotations
@@ -78,9 +79,13 @@ class DAGEAdapter(Model):
     lr_max_size
         Max side (px) of the low-resolution stream that pose is read from
         (DAGE's pose eval uses 252).
-    enable_autocast
-        Leave False on pre-Ampere GPUs (no bf16); the default infer path
-        autocasts to bfloat16.
+    compute_dtype
+        Mixed-precision mode for inference: ``"float32"`` (safe, most memory),
+        ``"float16"`` (Pascal-compatible mixed precision — roughly halves
+        activation memory so long clips fit in 11 GB), or ``"bfloat16"``
+        (Ampere+ only). DAGE's own infer autocast is bf16, which pre-Ampere
+        GPUs don't support; we disable it and wrap the call in our own
+        autocast of the chosen dtype instead.
     """
 
     version = "1.0"
@@ -99,12 +104,16 @@ class DAGEAdapter(Model):
         device: str = "cuda:0",
         checkpoint: str | Path = _DEFAULT_CHECKPOINT,
         lr_max_size: int = 252,
-        enable_autocast: bool = False,
+        compute_dtype: str = "float32",
     ) -> None:
+        if compute_dtype not in ("float32", "float16", "bfloat16"):
+            raise ValueError(
+                f"compute_dtype must be float32/float16/bfloat16; got {compute_dtype!r}"
+            )
         self.device = device
         self.checkpoint = str(checkpoint)
         self.lr_max_size = int(lr_max_size)
-        self.enable_autocast = bool(enable_autocast)
+        self.compute_dtype = compute_dtype
         self._model: Any = None
 
     def _load(self) -> None:
@@ -136,11 +145,21 @@ class DAGEAdapter(Model):
         video = torch.from_numpy(np.ascontiguousarray(images)).to(self.device)
         video = video.float().div_(255.0).permute(0, 3, 1, 2).unsqueeze(0).contiguous()
 
-        with torch.inference_mode():
+        # DAGE's own infer autocast is bf16 (Ampere-only); disable it and apply
+        # our own autocast of the requested dtype so fp16 mixed precision runs
+        # on Pascal and long clips fit in 11 GB.
+        dtype = {"float32": torch.float32, "float16": torch.float16, "bfloat16": torch.bfloat16}[
+            self.compute_dtype
+        ]
+        amp_enabled = self.compute_dtype != "float32"
+        with (
+            torch.inference_mode(),
+            torch.autocast(device_type="cuda", dtype=dtype, enabled=amp_enabled),
+        ):
             out = self._model.infer(
                 video,
                 lr_max_size=self.lr_max_size,
-                enable_autocast=self.enable_autocast,
+                enable_autocast=False,
             )
 
         # camera_poses: (N, 4, 4) camera-to-world == world_from_camera, metric.
@@ -156,12 +175,12 @@ class DAGEAdapter(Model):
             metadata={
                 "native_space": "feedforward_pose",
                 "lr_max_size": self.lr_max_size,
-                "enable_autocast": self.enable_autocast,
+                "compute_dtype": self.compute_dtype,
             },
         )
 
     def config_hash(self) -> str:
         import hashlib
 
-        s = f"{self.name}@{self.version}/lr={self.lr_max_size}/autocast={self.enable_autocast}/ckpt={self.checkpoint}"
+        s = f"{self.name}@{self.version}/lr={self.lr_max_size}/dtype={self.compute_dtype}/ckpt={self.checkpoint}"
         return hashlib.sha256(s.encode()).hexdigest()[:16]
