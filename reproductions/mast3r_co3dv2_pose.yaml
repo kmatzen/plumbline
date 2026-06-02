@@ -68,10 +68,18 @@ notes: >
   alignment". Expected per-sample wall time ~20 s on a 3090, so
   410 samples ≈ 2.5 h.
 
-  v0.3 follow-up: replace dust3r's PointCloudOptimizer with
-  mast3r.cloud_opt.sparse_ga.sparse_global_alignment if the paper-row
-  doesn't reproduce. sparse_GA is MASt3R's own optimizer, designed
-  to outperform DUSt3R's on MASt3R's outputs.
+  UPDATE 2026-06-02 — the v0.3 follow-up below is DONE. The adapter now
+  defaults to pose_backend='sparse_ga' (MASt3R's own matching-based
+  sparse_global_alignment), so this cell's `kwargs: {}` now runs the FAITHFUL
+  path — not the dust3r_ga path the historical ✅ 0.796 was measured on.
+  Controlled A/B on a 30-sample 6-cat subset: dust3r_ga 0.835 vs sparse_ga
+  0.858 (only +2.3 pts — CO3Dv2's narrow baselines barely exercise matching;
+  cf. RE10K's +17.6 pts, where the old path collapsed to a DUSt3R near-tie).
+  So the cell SURVIVES the method change (sparse_ga ≥ dust3r_ga, both above
+  0.818 on this easy subset); the exact full-410 sparse_ga number is pending a
+  roomier/curope GPU. Until then, read the 0.796 ✅ as measured on the legacy
+  dust3r_ga backend. (Original v0.3 note: swap dust3r's PointCloudOptimizer for
+  mast3r.cloud_opt.sparse_global_alignment — MASt3R's own optimizer.)
 
   Same loader path as vggt-co3dv2-pose; same caveat about per-category
   aggregation. Needs $CO3DV2_ROOT and $MAST3R_ROOT (with dust3r
