@@ -156,19 +156,30 @@ class DAGEAdapter(Model):
         video = torch.from_numpy(np.ascontiguousarray(images)).to(self.device)
         video = video.to(dtype).div_(255.0).permute(0, 3, 1, 2).unsqueeze(0).contiguous()
 
-        # DAGE's own infer autocast is bf16 (Ampere-only); disable it and apply
-        # our own autocast of the requested dtype so fp16 mixed precision runs
-        # on Pascal and long clips fit in 11 GB.
+        # DAGE's infer opens its OWN autocast hardcoded to bfloat16 (Ampere-only),
+        # and an ``enabled=False`` autocast would override any outer context and
+        # leave fp16-halved weights mismatched against fp32 activations. So when
+        # running fp16 on Pascal we let DAGE's autocast run but monkeypatch its
+        # bf16 → fp16 for the duration of the call.
         amp_enabled = self.compute_dtype != "float32"
-        with (
-            torch.inference_mode(),
-            torch.autocast(device_type="cuda", dtype=dtype, enabled=amp_enabled),
-        ):
-            out = self._model.infer(
-                video,
-                lr_max_size=self.lr_max_size,
-                enable_autocast=False,
-            )
+        orig_autocast = torch.amp.autocast
+
+        def _coerced_autocast(*a: Any, **k: Any) -> Any:
+            if k.get("dtype", None) is torch.bfloat16:
+                k["dtype"] = dtype
+            return orig_autocast(*a, **k)
+
+        if amp_enabled:
+            torch.amp.autocast = _coerced_autocast  # type: ignore[assignment]
+        try:
+            with torch.inference_mode():
+                out = self._model.infer(
+                    video,
+                    lr_max_size=self.lr_max_size,
+                    enable_autocast=amp_enabled,
+                )
+        finally:
+            torch.amp.autocast = orig_autocast  # type: ignore[assignment]
 
         # camera_poses: (N, 4, 4) camera-to-world == world_from_camera, metric.
         E = np.asarray(out["camera_poses"].detach().to("cpu"), dtype=np.float64)
