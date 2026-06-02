@@ -7,10 +7,10 @@ or any adapter dependency (no torch / transformers import):
 1. The registry and ``MODEL_REGISTRY`` are 1:1 — no adapter without an install
    spec, no spec without an adapter.
 2. Each spec is internally consistent for its ``kind`` (pypi⇒pip set, git⇒git
-   set, clone⇒clone_url + dest_env set).
+   set, clone⇒clone_url + dest_env set, vendored⇒pip set + vendorable + no clone).
 3. Regression for the original bug: the ``da3-co3dv2-pose`` GPU-queue job no
    longer claims DA3 "ships in the base install" — it needs a pip package.
-4. ``install_plan`` / ``install_hint`` / ``check`` run cleanly for all 12.
+4. ``install_plan`` / ``install_hint`` / ``check`` run cleanly for all adapters.
 """
 
 from __future__ import annotations
@@ -30,7 +30,7 @@ from plumbline.install import (
 )
 
 _ALL_NAMES = sorted(INSTALL_SPECS)
-_VALID_KINDS = {"base", "pypi", "git", "clone"}
+_VALID_KINDS = {"base", "pypi", "git", "clone", "vendored"}
 
 _GPU_QUEUE_YAML = Path(__file__).resolve().parent.parent / "reproductions" / "gpu_queue.yaml"
 _PYPROJECT = Path(__file__).resolve().parent.parent / "pyproject.toml"
@@ -79,6 +79,12 @@ def test_spec_is_internally_consistent_for_its_kind(name: str) -> None:
         assert spec.clone_url is not None, f"{name}: clone kind must set `clone_url`"
         assert spec.dest_env, f"{name}: clone kind must set `dest_env`"
         assert not spec.pip and not spec.git, f"{name}: clone must not set pip/git"
+    elif spec.kind == "vendored":
+        # Code ships under _vendor/<name>; install surface is the runtime pip
+        # deps. No clone (the env-var override lives in extra_env, not dest_env).
+        assert spec.pip, f"{name}: vendored kind must set `pip` (its runtime deps)"
+        assert spec.clone_url is None and not spec.git, f"{name}: vendored must not set clone/git"
+        assert spec.vendorable, f"{name}: vendored kind must be vendorable"
     else:  # base
         assert not spec.pip and not spec.git and spec.clone_url is None, (
             f"{name}: base kind must not set pip/git/clone"
@@ -126,6 +132,12 @@ def test_install_plan_shape_per_kind() -> None:
         elif spec.kind in ("pypi", "git"):
             assert plan, f"{name}: {spec.kind} plan must have steps"
             assert all(s.startswith("uv pip install") for s in plan), plan
+        elif spec.kind == "vendored":
+            # pip-install lines (+ optional export lines for checkpoint paths);
+            # no clone step (code is bundled under _vendor/).
+            assert plan, f"{name}: vendored plan must have steps"
+            assert all(s.startswith(("uv pip install", "export")) for s in plan), plan
+            assert not any(s.startswith("git clone") for s in plan), plan
         else:  # clone
             assert plan[0].startswith("git clone"), plan
             assert any(s.startswith("export") for s in plan), plan
