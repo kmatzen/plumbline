@@ -76,4 +76,11 @@ notes: >
   there is no global-alignment stochasticity — tolerance ±10 % covers small
   numerical / resolution-handling drift between the DAGE eval harness and
   plumbline's loader. Requires the DAGE repo at $DAGE_ROOT and the checkpoint
-  (HF TuanNgo/DAGE). Runs in fp32 on the GTX 1080Ti (no bf16 on Pascal).
+  (HF TuanNgo/DAGE).
+
+  Result (GTX 1080Ti, 2026-06-02, 14/14, fp16): ATE **0.1417** vs 0.132 (+7.3 %)
+  — MATCH; companions RPE-trans 0.0546 vs 0.051, RPE-rot 0.4133 vs 0.406 (deg).
+  fp16 vs the paper's bf16 + the 11 GB memory adaptations (half() weights with
+  the camera head kept fp32, hr_max_size capped to the lr stream) account for
+  the small ATE drift; pose comes from the lr stream so the hr cap does not
+  affect it.
