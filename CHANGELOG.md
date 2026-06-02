@@ -7,6 +7,18 @@ public API may change between 0.x releases.
 
 ## [Unreleased]
 
+### Added
+- **`python -m plumbline`** now works as an alias for the `plumbline` console
+  script (added `__main__.py`), so the CLI is reachable even where the script
+  isn't on `PATH`.
+- **"Did you mean" typo hints** on unknown `--model` / `--dataset` / adapter
+  names: a single-character slip like `nyuv` → `nyuv2` gets a direct suggestion
+  (`difflib`) ahead of the full `Known:` list.
+- **`sq_rel` and `rmse_log` depth metrics**, completing the classic Eigen /
+  KITTI-split column set (`AbsRel, SqRel, RMSE, RMSE-log, δ₁/₂/₃`). Every depth
+  evaluation now reports them alongside the existing metrics; `log10_error` is
+  also now re-exported from `plumbline.metrics`.
+
 ## [0.2.0] — 2026-06-02
 
 First release that **bundles** the dust3r-lineage + DAGE model code instead of

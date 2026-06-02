@@ -11,7 +11,15 @@ from plumbline.metrics.alignment import (
     align_scale_lstsq,
     align_scale_median,
 )
-from plumbline.metrics.depth import abs_rel, delta_threshold, log10_error, rmse, silog
+from plumbline.metrics.depth import (
+    abs_rel,
+    delta_threshold,
+    log10_error,
+    rmse,
+    rmse_log,
+    silog,
+    sq_rel,
+)
 from plumbline.metrics.pointmap import (
     accuracy_completeness,
     chamfer_distance,
@@ -50,6 +58,31 @@ class TestDepthMetrics:
         pred = np.array([2.0, 2.0], dtype=np.float32)
         # sqrt(mean((1)^2, 0)) = sqrt(0.5)
         assert rmse(pred, gt) == pytest.approx(np.sqrt(0.5))
+
+    def test_sq_rel_perfect(self) -> None:
+        gt = np.array([[1.0, 2.0, 3.0]], dtype=np.float32)
+        assert sq_rel(gt, gt) == pytest.approx(0.0)
+
+    def test_sq_rel_known(self) -> None:
+        gt = np.array([2.0, 4.0], dtype=np.float32)
+        pred = np.array([1.0, 2.0], dtype=np.float32)
+        # ((1-2)^2/2, (2-4)^2/4) = (0.5, 1.0) → mean 0.75
+        assert sq_rel(pred, gt) == pytest.approx(0.75)
+
+    def test_rmse_log_perfect(self) -> None:
+        gt = np.array([1.0, 2.0], dtype=np.float32)
+        assert rmse_log(gt, gt) == pytest.approx(0.0, abs=1e-8)
+
+    def test_rmse_log_known(self) -> None:
+        gt = np.array([1.0, 1.0], dtype=np.float32)
+        pred = np.array([np.e, np.e**3], dtype=np.float32)
+        # log diffs are 1 and 3 → sqrt(mean(1, 9)) = sqrt(5)
+        assert rmse_log(pred, gt) == pytest.approx(np.sqrt(5.0), rel=1e-6)
+
+    def test_rmse_log_not_scale_invariant(self) -> None:
+        # Unlike SILog, scaling the prediction changes RMSE-log.
+        gt = np.array([1.0, 2.0, 3.0], dtype=np.float32)
+        assert rmse_log(gt, gt) != pytest.approx(rmse_log(gt * 10.0, gt))
 
     def test_delta_perfect(self) -> None:
         gt = np.array([1.0, 2.0, 3.0], dtype=np.float32)
@@ -98,7 +131,9 @@ class TestDepthMetrics:
         pred = np.array([1.0, 2.0], dtype=np.float32)
         valid = np.array([False, False])
         assert np.isnan(abs_rel(pred, gt, valid))
+        assert np.isnan(sq_rel(pred, gt, valid))
         assert np.isnan(rmse(pred, gt, valid))
+        assert np.isnan(rmse_log(pred, gt, valid))
         assert np.isnan(delta_threshold(pred, gt, valid))
 
     def test_shape_mismatch(self) -> None:
