@@ -130,7 +130,15 @@ class DAGEAdapter(Model):
                 "install its deps (torch, einops, omegaconf, safetensors, utils3d, "
                 "kornia, roma, segmentation_models_pytorch)."
             ) from exc
-        self._model = DAGE.from_pretrained(self.checkpoint).to(self.device).eval()
+        model = DAGE.from_pretrained(self.checkpoint).to(self.device).eval()
+        # On an 11 GB card the fp32 weights (~5.5 GB) leave too little for a
+        # 50-frame clip's activations. Halving the weights (fp16) frees ~2.7 GB;
+        # combined with the fp16 autocast in predict, long clips then fit.
+        if self.compute_dtype == "float16":
+            model = model.half()
+        elif self.compute_dtype == "bfloat16":
+            model = model.bfloat16()
+        self._model = model
 
     def predict(
         self,
@@ -141,16 +149,16 @@ class DAGEAdapter(Model):
         self._load()
         torch = ensure_torch()
 
-        # (N, H, W, 3) uint8 → (1, N, 3, H, W) float in [0, 1].
+        dtype = {"float32": torch.float32, "float16": torch.float16, "bfloat16": torch.bfloat16}[
+            self.compute_dtype
+        ]
+        # (N, H, W, 3) uint8 → (1, N, 3, H, W) in [0, 1], matching the model dtype.
         video = torch.from_numpy(np.ascontiguousarray(images)).to(self.device)
-        video = video.float().div_(255.0).permute(0, 3, 1, 2).unsqueeze(0).contiguous()
+        video = video.to(dtype).div_(255.0).permute(0, 3, 1, 2).unsqueeze(0).contiguous()
 
         # DAGE's own infer autocast is bf16 (Ampere-only); disable it and apply
         # our own autocast of the requested dtype so fp16 mixed precision runs
         # on Pascal and long clips fit in 11 GB.
-        dtype = {"float32": torch.float32, "float16": torch.float16, "bfloat16": torch.bfloat16}[
-            self.compute_dtype
-        ]
         amp_enabled = self.compute_dtype != "float32"
         with (
             torch.inference_mode(),
@@ -164,9 +172,12 @@ class DAGEAdapter(Model):
 
         # camera_poses: (N, 4, 4) camera-to-world == world_from_camera, metric.
         E = np.asarray(out["camera_poses"].detach().to("cpu"), dtype=np.float64)
-        if E.ndim == 3 and E.shape[1:] == (4, 4):
-            if not world_from_camera_is_identity(E.astype(np.float32)):
-                E = rebase_to_first_camera(E)
+        if (
+            E.ndim == 3
+            and E.shape[1:] == (4, 4)
+            and not world_from_camera_is_identity(E.astype(np.float32))
+        ):
+            E = rebase_to_first_camera(E)
         E = E.astype(np.float32)
         assert_valid_extrinsics(E, name="dage/output_E")
 
