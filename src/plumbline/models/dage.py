@@ -55,13 +55,17 @@ _DEFAULT_CHECKPOINT = "TuanNgo/DAGE"  # HuggingFace hub (model.pt + config)
 
 
 def _ensure_dage_on_path() -> None:
-    """Put the DAGE repo on ``sys.path`` so ``import dage`` resolves.
+    """Put the ``dage`` package on ``sys.path`` so ``import dage`` resolves.
 
-    The repo's editable install does not expose the ``dage`` package on the
-    import path, so (like the CUT3R/MonST3R adapters) we add ``$DAGE_ROOT``
-    explicitly. Defaults to ``~/git/DAGE``.
+    By default this uses the **vendored** copy bundled under
+    ``plumbline/_vendor/dage`` (DAGE is CC BY-NC 4.0 — redistributable with
+    attribution; see ``_vendor/dage/LICENSE`` and ``THIRD_PARTY_NOTICES.md``),
+    so no separate clone is needed. Set ``$DAGE_ROOT`` to a checkout to override
+    (e.g. for development against upstream).
     """
-    root = os.environ.get("DAGE_ROOT", str(Path.home() / "git" / "DAGE"))
+    root = os.environ.get("DAGE_ROOT")
+    if root is None:
+        root = str(Path(__file__).resolve().parent.parent / "_vendor")
     if root not in sys.path:
         sys.path.insert(0, root)
 
@@ -129,12 +133,12 @@ class DAGEAdapter(Model):
         _ensure_dage_on_path()
         try:
             from dage.models.dage import DAGE  # type: ignore[import-not-found]
-        except ImportError as exc:  # pragma: no cover — needs the repo
+        except ImportError as exc:  # pragma: no cover — needs the deps
             raise ImportError(
-                "DAGEAdapter needs the DAGE repo importable: clone "
-                "https://github.com/ngoductuanlhp/DAGE, set $DAGE_ROOT to it, and "
-                "install its deps (torch, einops, omegaconf, safetensors, utils3d, "
-                "kornia, roma, segmentation_models_pytorch)."
+                "DAGEAdapter could not import the (vendored) `dage` package. Its "
+                "runtime deps must be installed: einops, omegaconf, safetensors, "
+                "utils3d==0.0.2 (EasternJournalist@3913c65), kornia, roma, "
+                "segmentation_models_pytorch. (`plumbline install dage`)."
             ) from exc
         model = DAGE.from_pretrained(self.checkpoint).to(self.device).eval()
         # On an 11 GB card the fp32 weights (~5.5 GB) leave too little for a
@@ -177,7 +181,7 @@ class DAGEAdapter(Model):
         orig_autocast = torch.amp.autocast
 
         def _coerced_autocast(*a: Any, **k: Any) -> Any:
-            if k.get("dtype", None) is torch.bfloat16:
+            if k.get("dtype") is torch.bfloat16:
                 k["dtype"] = dtype
             return orig_autocast(*a, **k)
 
