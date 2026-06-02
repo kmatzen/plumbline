@@ -99,7 +99,7 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 
 ### Paper-match count
 
-**29 ✅ mono-depth cells + 4 ✅ pose cells = 33 total** with `source_confidence: verified_pdf`:
+**30 ✅ mono-depth cells + 4 ✅ pose cells = 34 total** with `source_confidence: verified_pdf`:
 
 - NYU (8): DA-V2 S/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3, **MonST3R** (lineage protocol, 2026-05-26)
 - KITTI Eigen+Garg (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
@@ -111,6 +111,7 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 - **ETH3D MoGe-eval mono-depth (2, NEW 2026-05-30): MoGe-1 ViT-L (0.0311 vs 0.0317), DA-V2 ViT-L (0.0473 vs 0.0473)** — `eth3d-moge-eval` loader + `scale_shift_clamped` (D30)
 - **Tier A MoGe Table 3 (4, NEW 2026-05-30): DDAD** — MoGe-1 (0.0902 vs 0.0891), DA-V2-L (0.1310 vs 0.1300); **Sintel MoGe bundle** — MoGe-1 (0.1863 vs 0.1840), DA-V2-L (0.2139 vs 0.2140)
 - Booster (1): **Depth Pro** (δ₁ 0.4878 vs 0.466, Depth Pro Table 1; +4.7%) — present in the grid + site since the Booster Table-1 close but omitted from this breakdown until the 2026-05-31 pre-release audit
+- **Sun-RGBD (1, NEW 2026-06-01): Depth Pro** (δ₁ 0.8682 vs 0.890, Depth Pro Table 1; −2.4%, MATCH) — native res + GT focal via `depth-pro-sun-rgbd-native`; was removed pre-release, [resolved](docs/blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md)
 - _(2026-05-28 confidence audit: DA-V2 Base NYU (6.9% off) and MonST3R KITTI (5.05% off) downgraded ✅→ℹ️. Counts match site/README as of 2026-05-30.)_
 - **CO3Dv2 pose (3): VGGT (AUC@30 0.8964 vs 0.882, +1.6 %) + MASt3R (mAA(30) 0.7960 vs 0.818, −2.7 %) + DUSt3R (mAA(30) 0.7893 vs 0.772, +2.2 %), all on MASt3R Table 3 protocol** — v0.1 acceptance criterion #2 met (VGGT) and twice-seconded (MASt3R / DUSt3R).
 - **Sintel trajectory pose (1): MonST3R Table 4 — ATE 0.1134 vs 0.108 (+5.0 %), plumbline-computed 2026-05-27** via the new adapter v1.2 video-pose path + `metrics/pose.py` ATE/RPE family.
