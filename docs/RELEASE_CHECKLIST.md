@@ -78,9 +78,19 @@ locally.
       PyPI yet, so use a **pending publisher**: PyPI → Account → Publishing → add
       with Owner `kmatzen`, Repo `plumbline`, Workflow `wheels.yml`, Environment
       `pypi`. (Name must be exactly `plumbline-bench`.)
-- [ ] **(Optional) TestPyPI dry-run** first: register a TestPyPI pending publisher
-      + a temporary `publish-test` job, push a `v0.2.0rc1` tag, confirm the OIDC
-      handshake + upload, then delete the rc.
+- [ ] **(Recommended) TestPyPI dry-run** to validate the OIDC handshake before
+      the real publish. The throwaway workflow `.github/workflows/testpypi.yml`
+      already exists — it is **manual-only** (so it can't race `wheels.yml`) and
+      stamps a unique `0.2.0.devN` version per run (so it's re-runnable). To use:
+      1. On **test.pypi.org** → Account → Publishing → add a *pending* publisher:
+         Project `plumbline-bench`, Owner `kmatzen`, Repo `plumbline`, Workflow
+         `testpypi.yml`, Environment `testpypi`.
+      2. Create a **`testpypi`** GitHub environment (Settings → Environments).
+      3. Actions → "testpypi-dryrun" → **Run workflow**. Confirm build + OIDC
+         upload succeed; optionally `pip install -i https://test.pypi.org/simple/
+         --extra-index-url https://pypi.org/simple/ plumbline-bench` in a clean
+         venv (the extra-index lets the real torch/HF deps resolve from PyPI).
+      4. **Delete `.github/workflows/testpypi.yml`** once the handshake is proven.
 
 ---
 
