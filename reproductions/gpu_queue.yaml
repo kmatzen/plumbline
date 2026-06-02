@@ -496,23 +496,26 @@ jobs:
   # ----- Blocked: do NOT run (data not staged, or upstream-blocked) -----
 
   # RealEstate10K pose — loader (`realestate10k-pose-eval`) + `realestate10k_pose`
-  # protocol + 3 reproduction YAMLs + all 3 targets PDF-verified (2026-05-28),
-  # loader smoke-tested on synthetic data. BLOCKED only on data: RE10K ships
-  # camera .txt files but the RGB frames must be scraped from YouTube (yt-dlp,
-  # many source videos offline) — no clean HF/zip bundle. Unblock = stage
-  # <clip_id>/{*.txt,<timestamp>.png} to $REALESTATE10K_ROOT (ideally the
-  # canonical 1.8K test split via the `clips:` kwarg), then flip to pending.
-  # First real run also confirms the cam_from_world→world_from_camera convention.
+  # protocol + 3 reproduction YAMLs + all 3 targets PDF-verified (2026-05-28).
+  # DATA NOW STAGEABLE: scripts/stage_realestate10k.py scrapes frames from
+  # YouTube (94% hit rate on a 2026-06-02 run — link-rot is milder than feared),
+  # writing <clip_id>/{*.txt,<timestamp>.jpg} to $REALESTATE10K_ROOT. 2026-06-02
+  # dust3r + mast3r RAN on a 50-clip subset on the 1080 Ti (see per-entry notes);
+  # the cam_from_world→world_from_camera convention is CONFIRMED (first extrinsic
+  # = identity after rebasing, sane baselines). vggt stays blocked (bf16 → needs
+  # an H100). To tighten the numbers, stage the canonical 1.8K test split and
+  # re-run on a card with the curope CUDA RoPE ext (Pascal falls back to slow
+  # pytorch RoPE — correct, just ~60 s/clip).
   - name: vggt-realestate10k-pose
     status: blocked
     priority: 8
     paper_target: "VGGT Table 1 — RealEstate10K AUC@30 = 0.853 (verified_pdf 2026-05-28)"
     primary_metric: pairwise_pose_auc@30
     datasets: [realestate10k-pose-eval]
-    data_footprint_gb: 20
+    data_footprint_gb: 2
     est_wall_min: 30
     requires_env: [REALESTATE10K_ROOT]
-    blocked_on: "RealEstate10K frames not staged (YouTube scraping required; no clean bundle). Loader + target ready."
+    blocked_on: "Data now stageable (scripts/stage_realestate10k.py), but VGGT is bf16 — won't perform on the Pascal 1080 Ti; needs an H100-class card. Loader + target ready."
     notes: "New dataset coverage on the pose axis. Same protocol as the ✅ co3dv2 pose cells."
   - name: mast3r-realestate10k-pose
     status: blocked
@@ -520,24 +523,45 @@ jobs:
     paper_target: "MASt3R Table 3 — RealEstate10K mAA(30) = 0.764 (verified_pdf 2026-05-28)"
     primary_metric: pairwise_pose_auc@30
     datasets: [realestate10k-pose-eval]
-    data_footprint_gb: 20
-    est_wall_min: 30
+    data_footprint_gb: 2
+    est_wall_min: 70
     requires_env: [REALESTATE10K_ROOT]
     extras: "plumbline install mast3r"
-    blocked_on: "RealEstate10K frames not staged (as above). Loader + target ready."
-    notes: "Same model+protocol as the ✅ mast3r-co3dv2-pose cell."
+    blocked_on: "RAN 2026-06-02 with the fixed sparse_ga backend; off-paper-HIGH on the easy 50-clip subset (not the canonical 1.8K split). Kept blocked pending a full-split run on a curope card."
+    notes: >
+      EXPOSED + FIXED A REAL ADAPTER BUG (2026-06-02). First run used the legacy
+      pose path (dust3r's PointCloudOptimizer on MASt3R pointmaps, matching head
+      DISCARDED): observed pairwise_pose_auc@30 = 0.674 vs DUSt3R's 0.664 — a
+      near-tie, when the paper has MASt3R +15.2 pts ahead. RE10K's wide baselines
+      exposed what CO3Dv2's narrow ones hid: that path is NOT MASt3R's pose
+      method. Fix: MASt3RAdapter now defaults to pose_backend='sparse_ga'
+      (mast3r.cloud_opt.sparse_global_alignment — dense reciprocal matching).
+      Re-run on the SAME 50 clips: 0.674 -> 0.850 (translation RTA@5 0.493 ->
+      0.756), now +18.6 pts over DUSt3R (paper +15.2). Overshoots paper 0.764 by
+      +11% for the same easy-subset reason DUSt3R overshoots 0.612 by +8.5%.
+      TODO: re-run mast3r-co3dv2-pose on sparse_ga — its ✅ 0.796 was via the
+      legacy (wrong) method and must be re-validated.
   - name: dust3r-realestate10k-pose
     status: blocked
     priority: 8
     paper_target: "MASt3R Table 3 — RealEstate10K DUSt3R mAA(30) = 0.612 (verified_pdf 2026-05-28)"
     primary_metric: pairwise_pose_auc@30
     datasets: [realestate10k-pose-eval]
-    data_footprint_gb: 20
-    est_wall_min: 30
+    data_footprint_gb: 2
+    est_wall_min: 60
     requires_env: [REALESTATE10K_ROOT]
     extras: "plumbline install dust3r"
-    blocked_on: "RealEstate10K frames not staged (as above). Loader + target ready."
-    notes: "Same model+protocol as the ✅ dust3r-co3dv2-pose cell."
+    blocked_on: "RAN 2026-06-02; off-paper-HIGH on the easy 50-clip subset (not the canonical 1.8K split). Kept blocked pending a full-split run."
+    notes: >
+      RAN 2026-06-02 on the 1080 Ti (50-clip YouTube-scraped subset via
+      scripts/stage_realestate10k.py): observed pairwise_pose_auc@30 = 0.664
+      vs paper 0.612 (+8.5%, MISMATCH-high). DUSt3R's paper RE10K number is
+      itself the pairwise/pointmap-GA figure, so the adapter (unchanged — GA is
+      DUSt3R's actual method) targets it directly; the +8.5% is the 50-clip
+      subset being easier than the canonical 1.8K split (the same overshoot hits
+      MASt3R-sparse_ga, +11%). Rotations near-perfect (RRA@15 0.99, rot-err
+      ~1.7°); translation AUC is the limit. The MASt3R/DUSt3R gap on this subset
+      is +18.6 pts (paper +15.2) once MASt3R uses its sparse_ga matching path.
 
   - name: vggt-eth3d-multiscene-chamfer
     status: blocked

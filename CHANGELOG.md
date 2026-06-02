@@ -7,6 +7,24 @@ public API may change between 0.x releases.
 
 ## [Unreleased]
 
+### Fixed
+- **MASt3R pose is now actually MASt3R.** For N≥3 the adapter previously
+  recovered pose by running *dust3r's* `PointCloudOptimizer` on MASt3R's point
+  maps with the matching head discarded ("MASt3R-via-dust3r-GA") — not MASt3R's
+  method. `MASt3RAdapter` now defaults to `pose_backend="sparse_ga"`, calling
+  MASt3R's own `sparse_global_alignment` (dense reciprocal matching →
+  two-stage global alignment); the legacy path stays available as
+  `pose_backend="dust3r_ga"`. On a 50-clip RealEstate10K subset this moved
+  MASt3R from 0.674 → **0.850** mAA@30 (vs DUSt3R 0.664), restoring the +18-pt
+  MASt3R-over-DUSt3R lead the paper reports (+15.2) and that the old path
+  collapsed to +1. **Note:** the ✅ `mast3r-co3dv2-pose` cell was measured on
+  the old (incorrect) path and should be re-validated on `sparse_ga`.
+
+### Added
+- **`scripts/stage_realestate10k.py`** — disk-careful RealEstate10K frame
+  scraper (yt-dlp + ffmpeg, low-res, per-clip cleanup, free-space guard,
+  resumable), unblocking the dust3r/mast3r/vggt RealEstate10K pose cells.
+
 ## [0.2.0] — 2026-06-02
 
 First release that **bundles** the dust3r-lineage + DAGE model code instead of

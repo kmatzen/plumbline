@@ -9,20 +9,27 @@ The adapter dispatches based on view count:
 
 - ``N == 2``: feed-forward via dust3r's ``PairViewer`` global aligner.
   Fast (no optimization), deterministic.
-- ``N >= 3``: dust3r's ``PointCloudOptimizer`` global aligner — iterative
-  optimization over the complete pairwise graph, ``init='mst'``,
-  ``niter=300``, ``lr=0.01``, ``schedule='linear'``. NOTE (source audit
-  2026-05-23): ``init='mst'/niter=300/lr=0.01`` match dust3r's documented
-  quick-start, but ``schedule='linear'`` is NOT dust3r's default (which is
-  ``'cosine'`` — both are valid accepted values). The earlier "(paper §4.3
-  default)" claim was unsubstantiated by upstream source and is retracted.
-  Also note this uses *dust3r's* PointCloudOptimizer, not MASt3R's own
-  ``sparse_global_alignment`` — so N>=3 results are "MASt3R-via-dust3r-GA",
-  the v0.3 swap noted below. ~20 s / scene at N=10 on a 3090.
+- ``N >= 3``: pose is recovered by one of two backends, selected via
+  ``pose_backend``:
 
-A future v0.3 may swap PointCloudOptimizer for
-``mast3r.cloud_opt.sparse_ga.sparse_global_alignment`` (MASt3R's own
-sparse GA, designed to outperform DUSt3R's optimizer on its outputs).
+  * ``"sparse_ga"`` (**default**) — MASt3R's OWN
+    ``mast3r.cloud_opt.sparse_ga.sparse_global_alignment``: dense reciprocal
+    feature matching (``fast_reciprocal_NNs``) feeding a two-stage (coarse
+    3D-match → 2D-reproj refine) global alignment. This is MASt3R's defining
+    pose pipeline — the one its papers report — so it is the faithful path.
+    Implemented in :func:`_run_mast3r_sparse_ga`.
+  * ``"dust3r_ga"`` — the legacy path: dust3r's ``PointCloudOptimizer`` over
+    MASt3R's *point maps* with the matching head DISCARDED ("MASt3R-via-
+    dust3r-GA"). ``init='mst'/niter=300/lr=0.01/schedule='linear'``. Kept for
+    A/B and back-compat in :func:`_run_mast3r`.
+
+  Why the default changed (2026-06-02): the ``dust3r_ga`` path is not MASt3R's
+  pose method — it never uses the matching that distinguishes MASt3R from
+  DUSt3R. It happened to land within tolerance on CO3Dv2 (narrow baselines,
+  where pointmap-GA ≈ matching) but fell ~12% short on RealEstate10K (wide
+  baselines, where matching earns MASt3R its +15-pt paper lead over DUSt3R),
+  producing a near-tie with DUSt3R — the fingerprint of "same pose method,
+  different backbone". ``sparse_ga`` is the correct fix.
 
 Install
 -------
@@ -112,18 +119,36 @@ class MASt3RAdapter(Model):
         device: str = "cuda:0",
         checkpoint: str = "naver/MASt3R_ViTLarge_BaseDecoder_512_catmlpdpt_metric",
         long_edge: int = 512,
+        pose_backend: str = "sparse_ga",
         ga_niter: int = 300,
         ga_lr: float = 0.01,
         ga_schedule: str = "linear",
         ga_init: str = "mst",
+        sparse_niter1: int = 500,
+        sparse_niter2: int = 500,
+        sparse_lr1: float = 0.07,
+        sparse_lr2: float = 0.014,
     ) -> None:
+        if pose_backend not in ("sparse_ga", "dust3r_ga"):
+            raise ValueError(
+                f"pose_backend must be 'sparse_ga' or 'dust3r_ga'; got {pose_backend!r}"
+            )
         self.device = device
         self.checkpoint = checkpoint
         self.long_edge = int(long_edge)
+        # 'sparse_ga' = MASt3R's own matching-based sparse global alignment
+        # (mast3r.cloud_opt.sparse_ga) — the faithful pose pipeline, default.
+        # 'dust3r_ga' = the legacy "MASt3R-via-dust3r-GA" path (pointmap-only
+        # PointCloudOptimizer); kept for A/B and back-compat. See module docstring.
+        self.pose_backend = str(pose_backend)
         self.ga_niter = int(ga_niter)
         self.ga_lr = float(ga_lr)
         self.ga_schedule = str(ga_schedule)
         self.ga_init = str(ga_init)
+        self.sparse_niter1 = int(sparse_niter1)
+        self.sparse_niter2 = int(sparse_niter2)
+        self.sparse_lr1 = float(sparse_lr1)
+        self.sparse_lr2 = float(sparse_lr2)
         self._model: Any = None
 
     def _load(self) -> None:
@@ -155,16 +180,28 @@ class MASt3RAdapter(Model):
             )
         self._load()
 
-        out = _run_mast3r(
-            self._model,
-            images,
-            device=self.device,
-            long_edge=self.long_edge,
-            ga_niter=self.ga_niter,
-            ga_lr=self.ga_lr,
-            ga_schedule=self.ga_schedule,
-            ga_init=self.ga_init,
-        )
+        if self.pose_backend == "sparse_ga":
+            out = _run_mast3r_sparse_ga(
+                self._model,
+                images,
+                device=self.device,
+                long_edge=self.long_edge,
+                niter1=self.sparse_niter1,
+                niter2=self.sparse_niter2,
+                lr1=self.sparse_lr1,
+                lr2=self.sparse_lr2,
+            )
+        else:
+            out = _run_mast3r(
+                self._model,
+                images,
+                device=self.device,
+                long_edge=self.long_edge,
+                ga_niter=self.ga_niter,
+                ga_lr=self.ga_lr,
+                ga_schedule=self.ga_schedule,
+                ga_init=self.ga_init,
+            )
 
         point_map = out["point_map"]  # (N, H, W, 3), world frame (view 0)
         depth = out["depth"]  # (N, H, W), camera-frame depth
@@ -194,9 +231,12 @@ class MASt3RAdapter(Model):
         # Include GA hyperparams: changing them changes predictions for N>=3.
         s = (
             f"{self.name}@{self.version}/{self.checkpoint}"
-            f"/le{self.long_edge}/ga_n{self.ga_niter}_lr{self.ga_lr}"
-            f"_sch{self.ga_schedule}_init{self.ga_init}"
+            f"/le{self.long_edge}/pose{self.pose_backend}"
         )
+        if self.pose_backend == "sparse_ga":
+            s += f"/sn1{self.sparse_niter1}_sn2{self.sparse_niter2}_sl1{self.sparse_lr1}_sl2{self.sparse_lr2}"
+        else:
+            s += f"/ga_n{self.ga_niter}_lr{self.ga_lr}_sch{self.ga_schedule}_init{self.ga_init}"
         return hashlib.sha256(s.encode()).hexdigest()[:16]
 
 
@@ -345,6 +385,104 @@ def _run_mast3r(
         "extrinsics": E_rebased.astype(np.float32),
         "point_map": point_map,
         "confidence": conf_per_view,
+    }
+
+
+def _run_mast3r_sparse_ga(
+    model: Any,
+    images: NDArray[np.uint8],
+    *,
+    device: str,
+    long_edge: int = 512,
+    niter1: int = 500,
+    niter2: int = 500,
+    lr1: float = 0.07,
+    lr2: float = 0.014,
+    scene_graph: str = "complete",
+) -> dict[str, Any]:
+    """Run MASt3R's OWN matching-based sparse global alignment.
+
+    Unlike :func:`_run_mast3r` — which discards MASt3R's descriptor head and
+    recovers pose from the regressed point maps via dust3r's
+    ``PointCloudOptimizer`` ("MASt3R-via-dust3r-GA") — this calls
+    ``mast3r.cloud_opt.sparse_ga.sparse_global_alignment``: dense reciprocal
+    feature matching (``fast_reciprocal_NNs``) feeding a two-stage global
+    alignment (coarse 3D-match then 2D-reprojection refinement). This is
+    MASt3R's defining pose pipeline and the one its papers report, so it is the
+    faithful path for the pose task. ``sparse_global_alignment`` reads images
+    from disk, so we stage the in-memory views to a scratch dir. Returns the
+    same plumbline-shaped dict as :func:`_run_mast3r`.
+    """
+    import os
+    import tempfile
+
+    import torch
+    from dust3r.utils.geometry import geotrf
+    from dust3r.utils.image import load_images
+    from mast3r.cloud_opt.sparse_ga import sparse_global_alignment  # type: ignore[import-not-found]
+    from mast3r.image_pairs import make_pairs as mast3r_make_pairs  # type: ignore[import-not-found]
+    from PIL import Image as PImage
+
+    n = int(images.shape[0])
+    with tempfile.TemporaryDirectory(prefix="mast3r_sga_") as tmp:
+        img_dir = os.path.join(tmp, "imgs")
+        cache_dir = os.path.join(tmp, "cache")
+        os.makedirs(img_dir, exist_ok=True)
+        os.makedirs(cache_dir, exist_ok=True)
+        filelist = []
+        for i in range(n):
+            fp = os.path.join(img_dir, f"{i:04d}.png")
+            PImage.fromarray(images[i]).save(fp)
+            filelist.append(fp)
+
+        imgs = load_images(filelist, size=long_edge, verbose=False)
+        pairs = mast3r_make_pairs(
+            imgs, scene_graph=scene_graph, prefilter=None, symmetrize=True
+        )
+        scene = sparse_global_alignment(
+            filelist, pairs, cache_dir, model,
+            lr1=lr1, niter1=niter1, lr2=lr2, niter2=niter2, device=device,
+        )
+
+        focals = scene.get_focals().detach().cpu().numpy().reshape(-1)
+        pps = scene.get_principal_points().detach().cpu().numpy().reshape(n, 2)
+        E_scene = scene.get_im_poses().detach().cpu().numpy().astype(np.float64)  # cam2w
+        pts3d_flat, depth_flat, _conf = scene.get_dense_pts3d(clean_depth=True)
+        true_shapes = [(int(im["true_shape"][0][0]), int(im["true_shape"][0][1])) for im in imgs]
+
+    K = np.zeros((n, 3, 3), dtype=np.float32)
+    for i in range(n):
+        K[i] = np.array(
+            [[focals[i], 0.0, pps[i, 0]], [0.0, focals[i], pps[i, 1]], [0.0, 0.0, 1.0]],
+            dtype=np.float32,
+        )
+
+    # World_from_camera poses; rebase so view 0 = identity (CO3Dv2 convention).
+    E_rebased = E_scene if world_from_camera_is_identity(E_scene) else rebase_to_first_camera(E_scene)
+    T_rebase = invert_pose(E_scene[0])
+
+    def _to_np(x: Any) -> NDArray[Any]:
+        return x.detach().cpu().numpy() if hasattr(x, "detach") else np.asarray(x)
+
+    depth_list, pmap_list = [], []
+    for i in range(n):
+        h, w = true_shapes[i]
+        d = _to_np(depth_flat[i]).reshape(h, w)
+        p = _to_np(pts3d_flat[i]).reshape(h, w, 3).astype(np.float64)
+        p_world = geotrf(torch.from_numpy(T_rebase), torch.from_numpy(p)).numpy()
+        depth_list.append(d.astype(np.float32))
+        pmap_list.append(p_world.astype(np.float32))
+
+    depth = np.stack(depth_list, axis=0)
+    point_map = np.stack(pmap_list, axis=0)
+    depth = np.where(np.isfinite(depth) & (depth > 0), depth, 0.0).astype(np.float32)
+
+    return {
+        "depth": depth,
+        "intrinsics": K,
+        "extrinsics": E_rebased.astype(np.float32),
+        "point_map": point_map,
+        "confidence": None,
     }
 
 
