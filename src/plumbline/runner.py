@@ -49,7 +49,15 @@ from plumbline.metrics.alignment import (
     icp_similarity,
     umeyama_similarity,
 )
-from plumbline.metrics.depth import abs_rel, delta_threshold, log10_error, rmse, silog
+from plumbline.metrics.depth import (
+    abs_rel,
+    delta_threshold,
+    log10_error,
+    rmse,
+    rmse_log,
+    silog,
+    sq_rel,
+)
 from plumbline.metrics.pointmap import (
     accuracy_completeness,
     chamfer_distance,
@@ -1118,7 +1126,9 @@ def _depth_metrics(
 
     metrics: dict[str, float] = {
         "abs_rel": abs_rel(aligned, gt_flat, valid_flat),
+        "sq_rel": sq_rel(aligned, gt_flat, valid_flat),
         "rmse": rmse(aligned, gt_flat, valid_flat),
+        "rmse_log": rmse_log(aligned, gt_flat, valid_flat),
         "log10": log10_error(aligned, gt_flat, valid_flat),
         "silog": silog(aligned, gt_flat, valid_flat),
     }
@@ -1128,7 +1138,15 @@ def _depth_metrics(
 
 
 def _depth_metric_keys(deltas: tuple[float, ...]) -> list[str]:
-    return ["abs_rel", "rmse", "log10", "silog", *[f"delta_{i}" for i in range(1, len(deltas) + 1)]]
+    return [
+        "abs_rel",
+        "sq_rel",
+        "rmse",
+        "rmse_log",
+        "log10",
+        "silog",
+        *[f"delta_{i}" for i in range(1, len(deltas) + 1)],
+    ]
 
 
 def _flatten_pred_gt(

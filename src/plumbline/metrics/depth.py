@@ -1,4 +1,4 @@
-"""Depth metrics: ``AbsRel``, ``RMSE``, ``δ₁/₂/₃``, ``SILog``.
+"""Depth metrics: ``AbsRel``, ``SqRel``, ``RMSE``, ``RMSE-log``, ``δ₁/₂/₃``, ``SILog``, ``log10``.
 
 All functions are pure numpy and side-effect free. Inputs are float arrays in
 canonical conventions; ``valid`` is a boolean mask of the same shape as
@@ -26,7 +26,15 @@ from numpy.typing import NDArray
 
 from plumbline.conventions import EPS
 
-__all__ = ["abs_rel", "delta_threshold", "log10_error", "rmse", "silog"]
+__all__ = [
+    "abs_rel",
+    "delta_threshold",
+    "log10_error",
+    "rmse",
+    "rmse_log",
+    "silog",
+    "sq_rel",
+]
 
 
 def _flat_valid(
@@ -58,12 +66,38 @@ def abs_rel(pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None = N
     return float(np.mean(np.abs(p - g) / np.maximum(g, EPS)))
 
 
+def sq_rel(pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None = None) -> float:
+    """Squared relative error: ``mean((pred - gt)**2 / gt)``.
+
+    Eigen et al. (2014); a standard column in every KITTI Eigen-split depth
+    table alongside ``AbsRel``. Penalises large errors more than ``abs_rel``.
+    """
+    p, g = _flat_valid(pred, gt, valid)
+    if p.size == 0:
+        return float("nan")
+    return float(np.mean((p - g) ** 2 / np.maximum(g, EPS)))
+
+
 def rmse(pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None = None) -> float:
     """Root mean squared error, in the same units as the input."""
     p, g = _flat_valid(pred, gt, valid)
     if p.size == 0:
         return float("nan")
     return float(np.sqrt(np.mean((p - g) ** 2)))
+
+
+def rmse_log(pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None = None) -> float:
+    """RMSE in log space: ``sqrt(mean((log(pred) - log(gt))**2))``.
+
+    Eigen et al. (2014), natural log (matching :func:`silog`). The fourth
+    classic KITTI Eigen-split column (``AbsRel, SqRel, RMSE, RMSE-log``).
+    Unlike :func:`silog` it is *not* scale-invariant.
+    """
+    p, g = _flat_valid(pred, gt, valid)
+    if p.size == 0:
+        return float("nan")
+    d = np.log(p) - np.log(g)
+    return float(np.sqrt(np.mean(d**2)))
 
 
 def delta_threshold(

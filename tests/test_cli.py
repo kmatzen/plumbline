@@ -2,13 +2,30 @@
 
 from __future__ import annotations
 
+import subprocess
+import sys
 from pathlib import Path
 
 from typer.testing import CliRunner
 
-from plumbline.cli import app
+from plumbline.cli import _unknown, app
 
 runner = CliRunner()
+
+
+def test_unknown_suggests_close_match() -> None:
+    # A single-character slip should get a direct "Did you mean" nudge.
+    err = _unknown("dataset", "nyuv", ["nyuv2", "kitti", "bonn"])
+    assert "Did you mean 'nyuv2'?" in str(err)
+    # The full known list still follows the hint.
+    assert "Known:" in str(err) and "kitti" in str(err)
+
+
+def test_unknown_no_suggestion_for_gibberish() -> None:
+    # Nothing close enough → no misleading suggestion, just the known list.
+    err = _unknown("model", "zzzzzz", ["vggt", "moge", "dust3r"])
+    assert "Did you mean" not in str(err)
+    assert "Known:" in str(err)
 
 
 def test_version() -> None:
@@ -50,6 +67,15 @@ def test_run_unknown_model_errors() -> None:
     )
 
 
+def test_run_typo_model_suggests() -> None:
+    result = runner.invoke(app, ["run", "--model", "vgt", "--dataset", "nyuv2"])
+    assert result.exit_code != 0
+    combined = result.output + (result.stderr if hasattr(result, "stderr") else "")
+    # Rich wraps the error box; normalise whitespace before matching.
+    normalised = " ".join(combined.split())
+    assert "Did you mean 'vggt'?" in normalised
+
+
 def test_cache_info_empty(tmp_path: Path) -> None:
     result = runner.invoke(app, ["cache-info", "--cache-dir", str(tmp_path)])
     assert result.exit_code == 0
@@ -59,6 +85,20 @@ def test_cache_info_empty(tmp_path: Path) -> None:
 def test_clear_cache_empty(tmp_path: Path) -> None:
     result = runner.invoke(app, ["clear-cache", "--cache-dir", str(tmp_path)])
     assert result.exit_code == 0
+
+
+def test_python_m_entrypoint() -> None:
+    # ``python -m plumbline`` must work even where the console script isn't on
+    # PATH (relies only on __main__.py + the package being importable).
+    r = subprocess.run(
+        [sys.executable, "-m", "plumbline", "--version"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+        check=False,
+    )
+    assert r.returncode == 0, r.stderr
+    assert r.stdout.strip().startswith("plumbline ")
 
 
 def test_parse_kv_value_types() -> None:

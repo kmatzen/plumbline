@@ -6,11 +6,12 @@ Uses typer (click under the hood). Kept thin: it's a view over
 
 from __future__ import annotations
 
-import json
+import difflib
 import os
 import shlex
 import subprocess
 import sys
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
@@ -416,8 +417,7 @@ def install_cmd(
         return
 
     if name not in INSTALL_SPECS:
-        options = ", ".join(sorted(INSTALL_SPECS))
-        raise typer.BadParameter(f"Unknown adapter '{name}'. Known: {options}")
+        raise _unknown("adapter", name, INSTALL_SPECS)
 
     spec = spec_for(name)
     steps = install_plan(name)
@@ -456,8 +456,7 @@ def doctor_cmd(
     adapter is MISSING, so CI can gate on a specific adapter being present.
     """
     if name is not None and name not in INSTALL_SPECS:
-        options = ", ".join(sorted(INSTALL_SPECS))
-        raise typer.BadParameter(f"Unknown adapter '{name}'. Known: {options}")
+        raise _unknown("adapter", name, INSTALL_SPECS)
 
     names = [name] if name is not None else sorted(INSTALL_SPECS)
     table = Table(title="Adapter doctor")
@@ -579,16 +578,25 @@ def cache_info(
     console.print(f"{count} entries, {total / 1024 / 1024:.1f} MiB at {pred_dir}")
 
 
+def _unknown(kind: str, key: str, options: Iterable[str]) -> typer.BadParameter:
+    """Build a ``BadParameter`` for an unrecognised name, with a typo hint.
+
+    Surfaces the closest known name (``difflib``) so a single-character slip
+    like ``nyuv`` → ``nyuv2`` gets a direct "Did you mean" nudge before the
+    full ``Known:`` list.
+    """
+    opts = sorted(options)
+    close = difflib.get_close_matches(key, opts, n=1)
+    hint = f" Did you mean '{close[0]}'?" if close else ""
+    return typer.BadParameter(f"Unknown {kind} '{key}'.{hint} Known: {', '.join(opts)}")
+
+
 def _require(registry: dict[str, Any], key: str, *, kind: str) -> type:
     if key not in registry:
-        options = ", ".join(sorted(registry))
-        raise typer.BadParameter(f"Unknown {kind} '{key}'. Known: {options}")
+        raise _unknown(kind, key, registry)
     return registry[key]
 
 
-# Expose for module-level scripts.
+# Expose for module-level scripts and ``python -m plumbline``.
 def main() -> None:  # pragma: no cover
     app()
-
-
-_ = json  # kept for potential future use in this module
