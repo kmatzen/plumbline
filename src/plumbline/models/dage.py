@@ -186,7 +186,7 @@ class DAGEAdapter(Model):
             return orig_autocast(*a, **k)
 
         if amp_enabled:
-            torch.amp.autocast = _coerced_autocast  # type: ignore[assignment]
+            torch.amp.autocast = _coerced_autocast
         try:
             with torch.inference_mode():
                 out = self._model.infer(
@@ -196,7 +196,7 @@ class DAGEAdapter(Model):
                     enable_autocast=amp_enabled,
                 )
         finally:
-            torch.amp.autocast = orig_autocast  # type: ignore[assignment]
+            torch.amp.autocast = orig_autocast
 
         # camera_poses: (N, 4, 4) camera-to-world == world_from_camera, metric.
         E = np.asarray(out["camera_poses"].detach().to("cpu"), dtype=np.float64)
@@ -206,11 +206,11 @@ class DAGEAdapter(Model):
             and not world_from_camera_is_identity(E.astype(np.float32))
         ):
             E = rebase_to_first_camera(E)
-        E = E.astype(np.float32)
-        assert_valid_extrinsics(E, name="dage/output_E")
+        extrinsics: NDArray[np.float32] = E.astype(np.float32)
+        assert_valid_extrinsics(extrinsics, name="dage/output_E")
 
         return Prediction(
-            extrinsics=E,
+            extrinsics=extrinsics,
             metadata={
                 "native_space": "feedforward_pose",
                 "lr_max_size": self.lr_max_size,
