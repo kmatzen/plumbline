@@ -4,7 +4,13 @@ A reproducible evaluation harness for 3D geometric foundation models —
 think `lm-evaluation-harness`, but for models like **VGGT**, **Depth
 Anything 3**, **MASt3R**, **Metric3Dv2**, and **Depth Anything V2**.
 
-**Status:** v0.1 in development. **34 paper-match cells** — 30 mono-depth
+> **License note:** plumbline's own code is Apache-2.0, but the package
+> **bundles** vendored upstream model code (DAGE / CUT3R / DUSt3R / MASt3R /
+> MonST3R) under **NonCommercial** licenses (CC BY-NC[-SA]). The distribution as
+> a whole is therefore usable for **non-commercial purposes only**. See
+> [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
+
+**Status:** v0.2 in development. **34 paper-match cells** — 30 mono-depth
 (NYU / KITTI / DIODE / GSO / iBims-1 / ETH3D MoGe-eval / DDAD / Sintel MoGe /
 Depth Pro Booster + Sun-RGBD) + 4 multi-view pose/trajectory (CO3Dv2 / Sintel) —
 each verified against the source PDF.
@@ -77,6 +83,14 @@ pip install plumbline-bench   # from PyPI
 The base install pulls torch + the HF stack. CUDA flavor is whatever
 your pip resolves (PyPI default: cu124 on Linux, CPU/MPS on macOS); to
 override, install your preferred torch first and pip will reuse it.
+
+The DAGE and dust3r-lineage (CUT3R / DUSt3R / MASt3R / MonST3R) model
+code is **vendored** in the wheel — no clones. Each adapter needs only a
+few runtime pip deps, installed via `plumbline install <model>` (e.g.
+`plumbline install dust3r` → `roma scikit-learn trimesh`); `plumbline
+doctor` reports what's missing. CUT3R additionally builds the vendored
+`curope` CUDA ext and needs its 512-DPT checkpoint. `install.py` is the
+single source of truth for every adapter's dependencies.
 
 For Metric3Dv2 you also need the `mmengine` + `mmcv-lite` imports the
 upstream hub repo expects, and `xformers` must be absent (or exactly
@@ -159,4 +173,13 @@ authoritative 34-cell matrix:
 
 ## License
 
-Apache-2.0.
+plumbline's own source code is **Apache-2.0** (see [LICENSE](./LICENSE)).
+
+The distributed package additionally **bundles** vendored upstream model code
+under `src/plumbline/_vendor/` — DAGE (CC BY-NC 4.0) and CUT3R / DUSt3R / MASt3R
+/ MonST3R (CC BY-NC-SA 4.0). Because these are **NonCommercial** licenses, the
+package as a whole may be used for **non-commercial purposes only**. Each
+vendored tree keeps its own `LICENSE`; the full inventory is in
+[THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md). Models whose licenses do not
+permit redistribution (GeoWizard, and bespoke-license VGGT / Depth Pro) are
+**not** vendored — they install from their upstream source.

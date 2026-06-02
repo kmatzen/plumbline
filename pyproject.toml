@@ -1,10 +1,15 @@
 [project]
 name = "plumbline-bench"
-version = "0.1.0"
+version = "0.2.0"
 description = "Reproducible evaluation harness for 3D geometric foundation models."
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "Apache-2.0" }
+# plumbline's OWN source is Apache-2.0. The published wheel ALSO bundles vendored
+# upstream model code (src/plumbline/_vendor/*) under NonCommercial licenses
+# (CC BY-NC[-SA]); see THIRD_PARTY_NOTICES.md. The aggregate distribution is
+# therefore usable for non-commercial purposes only — reflected in the SPDX
+# expression below and the "Free for non-commercial use" classifier.
+license = { text = "Apache-2.0 AND CC-BY-NC-4.0 AND CC-BY-NC-SA-4.0" }
 authors = [
     { name = "Kevin Blackburn-Matzen" },
 ]
@@ -12,7 +17,10 @@ keywords = ["3d", "depth", "evaluation", "benchmark", "computer-vision"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: Apache Software License",
+    # The wheel bundles NonCommercial vendored model code, so the aggregate is
+    # not OSI-approved-open-source as a whole. plumbline's own code stays
+    # Apache-2.0 (see LICENSE / THIRD_PARTY_NOTICES.md).
+    "License :: Free for non-commercial use",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -118,6 +126,12 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/plumbline"]
+# The wheel bundles the NonCommercial _vendor/* trees, so the top-level LICENSE
+# and the third-party notices must travel inside the distribution (they live at
+# the repo root, outside the package dir, so force-include them into the package).
+[tool.hatch.build.targets.wheel.force-include]
+"LICENSE" = "plumbline/LICENSE"
+"THIRD_PARTY_NOTICES.md" = "plumbline/THIRD_PARTY_NOTICES.md"
 
 [tool.hatch.build.targets.sdist]
 include = [
@@ -126,6 +140,8 @@ include = [
     "/reproductions",
     "/README.md",
     "/LICENSE",
+    "/THIRD_PARTY_NOTICES.md",
+    "/CHANGELOG.md",
 ]
 
 [dependency-groups]

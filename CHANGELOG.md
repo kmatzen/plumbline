@@ -7,6 +7,36 @@ public API may change between 0.x releases.
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-06-02
+
+First release that **bundles** the dust3r-lineage + DAGE model code instead of
+cloning it. As a result the published wheel now contains NonCommercial vendored
+source — **the distribution as a whole is usable for non-commercial purposes
+only** (plumbline's own code stays Apache-2.0). See
+[`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
+
+### Added
+- **Vendored model code** under `src/plumbline/_vendor/` for DAGE, CUT3R,
+  DUSt3R, MASt3R, and MonST3R (CC BY-NC[-SA]) — no clones needed; `$<m>_ROOT`
+  still overrides the vendored path for a dev checkout. The `curope` CUDA RoPE
+  extension is vendored as source (required for CUT3R, optional speedup for the
+  others). GPL/unlicensed models (GeoWizard) stay clone-only.
+- **DAGE adapter** (feed-forward video geometry + pose) plus its Table-4
+  baseline reproductions (DAGE / CUT3R Sintel pose).
+- **SUN-RGBD native loader** + `DepthProAdapter(use_gt_focal=True)`, closing the
+  Depth Pro Table-1 δ₁ cell.
+
+### Changed
+- **`install.py` is now the unified Python-dependency view.** Vendored models use
+  a new `kind="vendored"` whose only install surface is explicit runtime `pip`
+  deps (+ checkpoint/curope build where noted) — no `git clone`, no cloned
+  `requirements.txt`. `plumbline doctor` probes a signature dep per model.
+- Per-model upstream-license audit with a `vendorable` gate (permissive +
+  NonCommercial may be vendored; GPL/unlicensed/bespoke may not).
+- The published wheel bundles the NonCommercial `_vendor/*` trees; the package
+  metadata (SPDX expression + "Free for non-commercial use" classifier) and the
+  bundled `LICENSE` + `THIRD_PARTY_NOTICES.md` reflect this.
+
 ### Fixed
 - CPU-side correctness and robustness bugs found in a code-review sweep
   (#22): a pointmap nearest-neighbour chunk size that collapsed to one row
@@ -52,5 +82,6 @@ First public release.
   pose/trajectory), each audited table-+-column-+-row against the source
   paper. See [`REPRODUCTIONS.md`](./REPRODUCTIONS.md).
 
-[Unreleased]: https://github.com/kmatzen/plumbline/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/kmatzen/plumbline/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/kmatzen/plumbline/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/kmatzen/plumbline/releases/tag/v0.1.0
