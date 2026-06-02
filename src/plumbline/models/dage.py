@@ -104,6 +104,7 @@ class DAGEAdapter(Model):
         device: str = "cuda:0",
         checkpoint: str | Path = _DEFAULT_CHECKPOINT,
         lr_max_size: int = 252,
+        hr_max_size: int | None = None,
         compute_dtype: str = "float32",
     ) -> None:
         if compute_dtype not in ("float32", "float16", "bfloat16"):
@@ -113,6 +114,11 @@ class DAGEAdapter(Model):
         self.device = device
         self.checkpoint = str(checkpoint)
         self.lr_max_size = int(lr_max_size)
+        # Pose comes from the low-res stream; the high-res stream only refines
+        # local_points. Capping hr_max_size shrinks the HR upsampling (the memory
+        # bottleneck on an 11 GB card) without changing camera_poses. Defaults to
+        # lr_max_size so pose-only runs stay cheap.
+        self.hr_max_size = int(hr_max_size) if hr_max_size is not None else int(lr_max_size)
         self.compute_dtype = compute_dtype
         self._model: Any = None
 
@@ -182,6 +188,7 @@ class DAGEAdapter(Model):
                 out = self._model.infer(
                     video,
                     lr_max_size=self.lr_max_size,
+                    hr_max_size=self.hr_max_size,
                     enable_autocast=amp_enabled,
                 )
         finally:
@@ -210,5 +217,5 @@ class DAGEAdapter(Model):
     def config_hash(self) -> str:
         import hashlib
 
-        s = f"{self.name}@{self.version}/lr={self.lr_max_size}/dtype={self.compute_dtype}/ckpt={self.checkpoint}"
+        s = f"{self.name}@{self.version}/lr={self.lr_max_size}/hr={self.hr_max_size}/dtype={self.compute_dtype}/ckpt={self.checkpoint}"
         return hashlib.sha256(s.encode()).hexdigest()[:16]
