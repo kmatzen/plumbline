@@ -147,18 +147,41 @@ def test_mast3r_rejects_too_many_views() -> None:
         model.predict(over)
 
 
-def test_mast3r_config_hash_depends_on_ga_hyperparams() -> None:
-    """Changing PointCloudOptimizer hyperparams changes predictions for
-    N>=3, so the prediction cache must invalidate when they change."""
+def test_mast3r_config_hash_depends_on_pose_backend() -> None:
+    """The faithful 'sparse_ga' pose backend is the default; switching to the
+    legacy 'dust3r_ga' path must change the hash so caches invalidate."""
     cls = MODEL_REGISTRY["mast3r"]
-    base = cls(device="cpu")  # type: ignore[call-arg]
-    # Each hyperparam should produce a distinct hash.
+    default = cls(device="cpu")  # type: ignore[call-arg]
+    assert default.pose_backend == "sparse_ga"  # faithful matching-based path
+    legacy = cls(device="cpu", pose_backend="dust3r_ga")  # type: ignore[call-arg]
+    assert default.config_hash() != legacy.config_hash()
+
+
+def test_mast3r_config_hash_depends_on_sparse_ga_hyperparams() -> None:
+    """sparse_ga's two-stage niter/lr change predictions, so each must hash
+    distinctly under the default backend."""
+    cls = MODEL_REGISTRY["mast3r"]
     variants = {
-        "default": base.config_hash(),
-        "niter": cls(device="cpu", ga_niter=50).config_hash(),  # type: ignore[call-arg]
-        "lr": cls(device="cpu", ga_lr=0.005).config_hash(),  # type: ignore[call-arg]
-        "schedule": cls(device="cpu", ga_schedule="cosine").config_hash(),  # type: ignore[call-arg]
-        "init": cls(device="cpu", ga_init="known_poses").config_hash(),  # type: ignore[call-arg]
+        "default": cls(device="cpu").config_hash(),  # type: ignore[call-arg]
+        "niter1": cls(device="cpu", sparse_niter1=200).config_hash(),  # type: ignore[call-arg]
+        "niter2": cls(device="cpu", sparse_niter2=200).config_hash(),  # type: ignore[call-arg]
+        "lr1": cls(device="cpu", sparse_lr1=0.05).config_hash(),  # type: ignore[call-arg]
+        "lr2": cls(device="cpu", sparse_lr2=0.01).config_hash(),  # type: ignore[call-arg]
+    }
+    assert len(set(variants.values())) == len(variants), f"hashes collided: {variants}"
+
+
+def test_mast3r_config_hash_depends_on_ga_hyperparams() -> None:
+    """Under the legacy 'dust3r_ga' backend, PointCloudOptimizer hyperparams
+    change predictions for N>=3, so they must still invalidate the cache."""
+    cls = MODEL_REGISTRY["mast3r"]
+    kw = {"device": "cpu", "pose_backend": "dust3r_ga"}
+    variants = {
+        "default": cls(**kw).config_hash(),  # type: ignore[call-arg]
+        "niter": cls(**kw, ga_niter=50).config_hash(),  # type: ignore[call-arg]
+        "lr": cls(**kw, ga_lr=0.005).config_hash(),  # type: ignore[call-arg]
+        "schedule": cls(**kw, ga_schedule="cosine").config_hash(),  # type: ignore[call-arg]
+        "init": cls(**kw, ga_init="known_poses").config_hash(),  # type: ignore[call-arg]
     }
     assert len(set(variants.values())) == len(variants), f"hashes collided: {variants}"
 

@@ -22,7 +22,7 @@ the released *checkpoint* doesn't match the paper (e.g. GeoWizard).
 | metric3d-v2 | YvanYin/Metric3D | faithful | canonical-camera de-scale uses *scaled* fx correctly; only sub-pixel resize-rounding deviation |
 | moge | microsoft/MoGe | faithful | correct affine/metric split; only a 0.5px principal-point offset vs utils3d |
 | vggt | facebookresearch/vggt | **faithful** | extrinsics correctly inverted camera_from_world→world_from_camera; autocast keeps fp32 weights |
-| mast3r | naver/mast3r (+dust3r) | faithful (dust3r-GA) | `get_im_poses` is cam→world (correct); uses dust3r PCO not MASt3R sparse-GA (disclosed) |
+| mast3r | naver/mast3r (+dust3r) | **needs-fix → fixed** | pose now defaults to MASt3R's own `sparse_global_alignment` (matching-based), not dust3r PCO — fixed 2026-06-02 (PR #42); the old dust3r-GA path discarded the matching head and tied DUSt3R on wide-baseline RE10K. `get_im_poses` cam→world correct. Legacy path kept as `pose_backend="dust3r_ga"` |
 | marigold | prs-eth/marigold (diffusers) | faithful | forward + depth-space alignment correct; defaults differ from paper protocol (exposed as kwargs) |
 | geowizard | fuxiao0719/GeoWizard | faithful | seed_all/xformers/no-generator/domain all match; `--half_precision` is a dead upstream flag |
 | depth-pro | apple/ml-depth-pro | faithful | metric depth + focal handling correct; never passes GT `f_px` (intended no-intrinsics mode) |
@@ -80,9 +80,16 @@ the released *checkpoint* doesn't match the paper (e.g. GeoWizard).
   released eval runs fp32 (GeoWizard's `--half_precision` is a dead flag).
   Both expose `dtype="float32"` and the reproduction YAMLs pin the paper
   protocol — config, not a code defect.
-- **mast3r / monst3r N>=3 use dust3r's PointCloudOptimizer**, not the
-  models' own sparse-GA / flow-refined alignment. Disclosed in both
-  docstrings; a faithful sparse-GA / flow path is a v0.3 follow-up.
+- **mast3r N>=3 pose — FIXED 2026-06-02 (PR #42).** It used dust3r's
+  PointCloudOptimizer on MASt3R's point maps with the matching head discarded
+  — not MASt3R's method. Now defaults to `pose_backend="sparse_ga"`
+  (`mast3r.cloud_opt.sparse_global_alignment`, dense reciprocal matching).
+  Wide-baseline RealEstate10K exposed it (old path: MASt3R 0.674 ≈ DUSt3R
+  0.664; fixed: 0.850, +18.6 pts over DUSt3R). A controlled CO3Dv2 A/B shows
+  only a +2.3-pt gap there — narrow baselines hid it, which is why the old
+  CO3Dv2 ✅ passed on the wrong method (it must be re-validated full-410 on
+  `sparse_ga`; the 30-sample subset confirms it survives). **monst3r N>=3**
+  still uses dust3r's PCO (flow-refined path is a remaining follow-up).
 
 ---
 

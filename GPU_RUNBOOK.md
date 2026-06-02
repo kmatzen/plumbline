@@ -188,6 +188,16 @@ forward time. Either install a matching xformers wheel, or
 `uv pip uninstall xformers` (Metric3D falls back to a pure-PyTorch
 attention path; this is what plumbline's CI does).
 
+**MASt3R pose backend (2026-06-02):** for N≥3 the adapter now defaults to
+`pose_backend="sparse_ga"` — MASt3R's own matching-based
+`sparse_global_alignment` (the faithful path; the old pointmap-only
+`PointCloudOptimizer` is `pose_backend="dust3r_ga"`). `sparse_ga` writes
+per-scene match caches to a scratch dir (cleaned per call) and is slower
+(~2–3 min/clip at N=10 on a Pascal card with the PyTorch RoPE fallback vs
+~60 s for `dust3r_ga`). Without the `curope` CUDA ext you'll see "cannot find
+cuda-compiled version of RoPE2D" — correct, just slow. See the `reproduce-pose`
+skill and `REPRODUCTIONS.md`.
+
 ## Thrift bootstrap
 
 **Do not bulk-pull the dataset cache.** Per **Single-record diff workflow** below, work is
@@ -258,6 +268,8 @@ Do not commit keys to git.
 | Sintel (depth+cam+RGB) | 6 GB | See § "Sintel — NOT auth-gated" below. Native DA-V2 Table 2 **parked** (OFF-PAPER: ViT-L AbsRel **0.232** vs **0.487**; `clean` pass **0.222** — see [`docs/SINTEL_DAV2_TABLE2_HANDOFF.md`](docs/SINTEL_DAV2_TABLE2_HANDOFF.md)). Probe: `scripts/probe-sintel-pass.py`. |
 | DTU MVS-22 | 7 GB | `gdown 135oKPefcPTsdtLRzoDAQtPpHuoIrpRI_ -O dtu_test.zip && unzip dtu_test.zip` (MVSNet test, ~554 MB) + `aria2c -x 16 -s 16 https://roboimagedata2.compute.dtu.dk/data/MVS/Points.zip` (GT clouds, ~7 GB). **Do NOT fetch SampleSet.zip — that's a 2-scan demo.** |
 | 7-Scenes | 12 GB | Per scene from `http://download.microsoft.com/download/2/8/5/28564B23-0828-408F-8631-23B1EFF1DAC8/${scene}.zip`, then unzip nested `seq-*.zip`. Scenes: `chess fire heads office pumpkin redkitchen stairs`. |
+| CO3Dv2 (pose eval) | ~0.5–4 GB | `scripts/co3dv2_prefetch.py --root $CO3DV2_ROOT` (full 41 SEEN cats) or `… --categories <list> --sequences-per-category N` for a subset. Selective HTTP-Range over per-cat zips; **metadata ~70 MB/category**, frames tiny. Match the eval's `categories`/`sequences_per_category` + `seed`. |
+| RealEstate10K (pose eval) | ~1 MB/clip | `scripts/stage_realestate10k.py --meta <test/.txt dir> --out $REALESTATE10K_ROOT --target N` — scrapes frames from YouTube (yt-dlp + ffmpeg, ~94 % hit, deletes each video after extract, resumable). Test camera `.txt`: stream-extract `RealEstate10K/test/` from `https://storage.googleapis.com/realestate10k-public-files/RealEstate10K.tar.gz` (anon-public host; downloads 720 MB, writes only ~248 MB). `uv pip install yt-dlp` first. See the `reproduce-pose` skill. |
 
 **Sintel — NOT actually auth-gated (corrected 2026-05-30).** The MPI-Sintel
 depth + camera + image training archives are direct downloads, no

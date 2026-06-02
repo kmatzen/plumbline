@@ -42,7 +42,7 @@ cells are now ℹ️ instead of ✅.
 | **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ℹ️ **0.1090** vs 0.099 _(v1-1 / 1-step is the newer distilled checkpoint; paper cell is v1-0 / 50-step — D9 RESOLVED 2026-05-25: 0.0992 reproduces end-to-end on Marigold's own pipeline. Documented checkpoint-generation delta, not a paper-match cell.)_ | — | — | — | — | — |
 | **GeoWizard** | ℹ️ **0.0574** vs 0.052 _(10.5% off — D17 RESOLVED 2026-05-26: paper number is best-of-N seeds, not single-seed; plumbline's 0.0574 matches `fuxiao0719/GeoWizard#36` reproducer @0.0576; paper-author-confirmed cherry-pick eval recipe)_ | ℹ️ **0.131** vs 0.097 _(35.2% off — D18 RESOLVED 2026-05-26 by same root cause)_ | — | — | — | — | — |
 | **Depth Pro** | ℹ️ δ₁ **0.9347** _(no NYU row in paper)_ | — | ⌛ ETH3D δ₁ **0.415** _(not blocked — [handoff](docs/ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md))_ | ✅ Booster **0.4878** / **0.466** _(Table 1 match)_ | — | — | ℹ️ iBims **0.8458** _(info)_ · ✅ **Sun-RGBD 0.8682 / 0.890** _(Table 1 MATCH, 2.4% off; resolved 2026-06-01 — native + GT focal via `depth-pro-sun-rgbd-native`, full 5050/5050 official run. See [page](docs/blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md))_ · Table 1 🔒 blocked: [Sintel](docs/blocked/DEPTH_PRO_SINTEL_TABLE1.md) · Midd / NuScenes **loaders removed pre-release** (no verified anchor — [BLOCKED.md](docs/BLOCKED.md)) |
-| **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ✅ AUC@30 **0.7960** vs 0.818 _(2.7 % off, verified 2026-05-26 on RTX 3090; companion RRA@15 = 0.9708; dust3r PointCloudOptimizer N=10, init=mst, niter=300, curope CUDA ext built)_ | — |
+| **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ✅ AUC@30 **0.7960** vs 0.818 _(2.7 % off, verified 2026-05-26 on RTX 3090; companion RRA@15 = 0.9708)_ · ⚠️ **measured on the legacy `dust3r_ga` path**; adapter now defaults to faithful `sparse_ga` (matching) — 30-sample A/B confirms survival (dust3r_ga 0.835 ↔ sparse_ga 0.858), full-410 re-run pending. See [MASt3R pose-fidelity note](#mast3r-pose-the-matching-path-2026-06-02). | — |
 | **VGGT** | — | — | — | ⚠️ 0.875 m vs 0.709 _(D10 13-scene investigated 2026-05-27, +23.5 % over paper; one outlier `terrains` Comp 10.18 m drives the aggregate — without it 12-scene mean is 0.515, 27 % tighter than paper. See docs/DISCREPANCIES.md D10.)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ✅ AUC@30 **0.8964** vs 0.882 _(1.6 % over, verified 2026-05-26 on RTX 3090; CO3Dv2 staged via scripts/co3dv2_prefetch.py at ~3 GB)_ | — |
 | **CUT3R** _(video + unordered)_ | ℹ️ **0.0522** vs 0.086 _(better — D24 protocol delta: strict raw+crop vs lineage filled+no-crop; model correct, not a paper-match)_ | ℹ️ **0.0858** vs 0.092 _(better — D24 protocol delta: Eigen-652+Garg vs lineage val_selection_cropped)_ | — | — | — | ℹ️ recurrent/online — handles ordered video & unordered sets | — |
 | **MonST3R** _(dynamic / video, base path)_ | ✅ **0.0896** vs 0.091 _(1.5% off, Table 3 single-frame, `nyu_dust3r_lineage` protocol; verified 2026-05-26, adapter v1.1)_ | ℹ️ **0.0959** vs 0.101 _(5.05% off — just over ±5% tol, Table 3 single-frame, `kitti_dust3r_lineage` protocol — 1269-frame gathered set; verified 2026-05-26, adapter v1.1)_ | — | — | — | — | — |
@@ -118,6 +118,35 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 
 Each cell is verified against the source PDF (table + col + row) per
 `reproductions/AUDIT.md`.
+
+### MASt3R pose: the matching path (2026-06-02)
+
+For N≥3 the MASt3R adapter used to recover pose by running **dust3r's**
+`PointCloudOptimizer` on MASt3R's point maps — with the **matching head
+discarded**. That is MASt3R's backbone driven by DUSt3R's pose method, not
+MASt3R. It's now fixed: `MASt3RAdapter` defaults to
+`pose_backend="sparse_ga"` (MASt3R's own `sparse_global_alignment` — dense
+reciprocal matching → two-stage global alignment); the legacy path remains as
+`pose_backend="dust3r_ga"` (PR #42).
+
+**RealEstate10K** (newly stageable via `scripts/stage_realestate10k.py`, 94 %
+YouTube hit rate) is where the gap shows — wide baselines are where matching
+earns MASt3R its paper lead. Same 50-clip subset, GTX 1080 Ti:
+
+| backend | mAA@30 | vs DUSt3R (0.664) |
+|---|---|---|
+| MASt3R `dust3r_ga` (old) | 0.674 | +1.0 pt ❌ |
+| MASt3R **`sparse_ga`** (fixed) | **0.850** | **+18.6 pt** ✅ (paper +15.2) |
+
+A **controlled A/B** on the same 30 CO3Dv2 samples shows only **+2.3 pt**
+(dust3r_ga 0.835 → sparse_ga 0.858) — CO3Dv2's narrow baselines barely exercise
+matching, which is exactly why the **CO3Dv2 ✅ above passed on the wrong
+method**. The CO3Dv2 cell *survives* the fix (sparse_ga ≥ dust3r_ga); its exact
+full-410 `sparse_ga` number is pending a roomier/curope GPU. These RealEstate10K
+cells stay **off-paper** (subset-inflated, like DUSt3R's +8.5% there) — they're
+informational, not new ✅ cells; `vggt-realestate10k-pose` stays blocked (bf16 →
+needs an H100). See `docs/SOURCE_AUDIT.md` and the
+`mast3r-realestate10k-pose` gpu_queue entry.
 
 **Multi-view ✅ cells**: 0 (paper-match). Two structurally-correct
 reproductions on `main`:
