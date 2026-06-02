@@ -136,6 +136,12 @@ class DAGEAdapter(Model):
         # combined with the fp16 autocast in predict, long clips then fit.
         if self.compute_dtype == "float16":
             model = model.half()
+            # DAGE casts the camera-head input to fp32 (dage.py: `camera_hidden =
+            # camera_hidden.float()` before `self.camera_head(...)`), so the head
+            # must stay fp32 or its weights mismatch the fp32 activations. It is
+            # tiny (512-dim MLPs), so this costs no meaningful memory.
+            if hasattr(model, "camera_head"):
+                model.camera_head.float()
         elif self.compute_dtype == "bfloat16":
             model = model.bfloat16()
         self._model = model
