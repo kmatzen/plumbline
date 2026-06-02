@@ -214,7 +214,13 @@ def _ensure_mast3r_on_path() -> None:
     import os
     import sys
 
-    mast3r_root = os.environ.get("MAST3R_ROOT", "/workspace/deps/mast3r")
+    # Default to the vendored copy under plumbline/_vendor/mast3r (MASt3R is
+    # CC-BY-NC-SA — redistributable; see _vendor/mast3r/LICENSE and
+    # THIRD_PARTY_NOTICES.md); $MAST3R_ROOT/$DUST3R_ROOT override for a dev
+    # checkout. curope is optional (pure-torch RoPE), so no build step.
+    mast3r_root = os.environ.get("MAST3R_ROOT")
+    if mast3r_root is None:
+        mast3r_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), "_vendor", "mast3r")
     dust3r_root = os.environ.get("DUST3R_ROOT", os.path.join(mast3r_root, "dust3r"))
     for p in (mast3r_root, dust3r_root):
         if p not in sys.path and os.path.isdir(p):

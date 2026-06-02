@@ -222,7 +222,13 @@ def _ensure_dust3r_on_path() -> None:
     import os
     import sys
 
-    root = os.environ.get("DUST3R_ROOT", "/workspace/deps/dust3r")
+    # Default to the vendored copy under plumbline/_vendor/dust3r (DUSt3R is
+    # CC-BY-NC-SA — redistributable; see _vendor/dust3r/LICENSE and
+    # THIRD_PARTY_NOTICES.md); $DUST3R_ROOT overrides for a dev checkout. curope
+    # is optional for DUSt3R (pure-torch RoPE is just slower), so no build step.
+    root = os.environ.get("DUST3R_ROOT")
+    if root is None:
+        root = os.path.join(os.path.dirname(os.path.dirname(__file__)), "_vendor", "dust3r")
     if root not in sys.path and os.path.isdir(root):
         sys.path.insert(0, root)
 
