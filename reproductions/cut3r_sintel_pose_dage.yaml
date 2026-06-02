@@ -1,0 +1,67 @@
+# CUT3R video pose on Sintel — DAGE Table 4 *baseline* target (reproducing a
+# competitor row from the DAGE paper, not CUT3R's own paper).
+#
+# DAGE Table 4 ("Camera pose evaluation"), Sintel column, CUT3R row:
+# ATE 0.217 / RPE-trans 0.070 / RPE-rot 0.636 (Ngo et al. 2026, arXiv:2603.03744).
+# Same 14-clip Sim(3)-aligned TUM-RGBD ATE/RPE protocol as dage-sintel-pose /
+# monst3r-sintel-pose; only the model differs. CUT3R is feed-forward/online
+# (per-view pose decode, no global alignment), so it fits an 11 GB GPU.
+#
+# DAGE evaluated competitors at 518 px (long side); CUT3R's 512-DPT checkpoint
+# runs at size=512 (the adapter default), the closest standard setting.
+
+name: cut3r-sintel-pose-dage
+
+model:
+  name: cut3r
+  kwargs:
+    size: 512
+
+dataset:
+  name: sintel
+  split: training
+  kwargs:
+    pass_name: final
+    full_seq: true
+    scenes:
+      - alley_2
+      - ambush_4
+      - ambush_5
+      - ambush_6
+      - cave_2
+      - cave_4
+      - market_2
+      - market_5
+      - market_6
+      - shaman_3
+      - sleeping_1
+      - sleeping_2
+      - temple_2
+      - temple_3
+
+tasks: [pose]
+pose_trajectory_metrics: true
+max_views: 60
+device: cuda:0
+
+paper_reference:
+  primary_metric: trajectory_ate_rmse
+  value: 0.217
+  tolerance_relative: 0.10
+  citation: "Ngo et al. 2026, DAGE (arXiv:2603.03744), Table 4 (Camera pose evaluation), Sintel column, CUT3R row = ATE 0.217 / RPE-trans 0.070 / RPE-rot 0.636. TUM-RGBD-style ATE/RPE-RMSE under Sim(3) alignment over the 14 dynamic Sintel-final clips (via evo), built on the MonST3R relpose harness."
+  source_confidence: verified_pdf
+
+notes: >
+  Reproduces a *baseline* (CUT3R) row from the DAGE paper. Companion DAGE-Table-4
+  CUT3R numbers: RPE-trans 0.070, RPE-rot 0.636 (deg). Tolerance ±10 % (the gate
+  cap) — this is a cross-measurement (DAGE measuring CUT3R vs plumbline measuring
+  CUT3R; same model, same Sim(3)-aligned protocol, but DAGE's exact CUT3R inference
+  pipeline / resolution may differ). If plumbline lands outside ±10 % it stays
+  informational (documented), not force-matched. Requires the CUT3R clone at $CUT3R_ROOT, its
+  512-DPT checkpoint at $CUT3R_CKPT, and a built curope CUDA ext (CUT3R's
+  pure-torch RoPE fallback hits a device-side assert). curope's kernels.cu needs
+  a torch>=2.5 patch (tokens.type() -> tokens.scalar_type()) to compile.
+
+  Result (GTX 1080Ti, 2026-06-02, 14/14): ATE **0.2138** vs 0.217 (−1.5 %) —
+  MATCH; companions RPE-trans 0.0683 vs 0.070, RPE-rot 0.6320 vs 0.636 (deg).
+  All three within ~2 % of DAGE's reported CUT3R numbers.
