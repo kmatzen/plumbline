@@ -128,8 +128,13 @@ class CUT3RAdapter(Model):
         env = os.environ.get("CUT3R_CKPT")
         if env:
             return env
-        root = os.environ.get("CUT3R_ROOT", "/workspace/deps/cut3r")
-        return os.path.join(root, _DEFAULT_CKPT)
+        # The 512-DPT weight (~3 GB, Google Drive — not on HF, not vendored)
+        # lives in the plumbline weights cache by default; $CUT3R_CKPT overrides.
+        # If a $CUT3R_ROOT dev checkout is set, fall back to its in-tree weight.
+        root = os.environ.get("CUT3R_ROOT")
+        if root:
+            return os.path.join(root, _DEFAULT_CKPT)
+        return os.path.expanduser("~/.cache/plumbline/weights/cut3r/cut3r_512_dpt_4_64.pth")
 
     # -- lazy load -------------------------------------------------------
 
@@ -262,7 +267,15 @@ def _ensure_cut3r_on_path() -> None:
     Upstream imports are rooted at the repo (``src.dust3r.*``), mirroring how
     ``demo.py`` calls ``add_path_to_dust3r``.
     """
-    root = os.environ.get("CUT3R_ROOT", "/workspace/deps/cut3r")
+    # Default to the vendored copy under plumbline/_vendor/cut3r (CUT3R is
+    # CC-BY-NC-SA — redistributable; see _vendor/cut3r/LICENSE and
+    # THIRD_PARTY_NOTICES.md). $CUT3R_ROOT overrides it (e.g. a dev checkout).
+    # NB: curope (the CUDA RoPE ext) is *not* prebuilt in the vendor tree; it
+    # must be compiled once (`plumbline install cut3r`) — the pure-torch
+    # fallback device-asserts.
+    root = os.environ.get("CUT3R_ROOT")
+    if root is None:
+        root = os.path.join(os.path.dirname(os.path.dirname(__file__)), "_vendor", "cut3r")
     if os.path.isdir(root) and root not in sys.path:
         sys.path.insert(0, root)
     # `src.dust3r.*` resolves from the repo root, but dust3r internally does a

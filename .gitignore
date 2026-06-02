@@ -67,3 +67,7 @@ tmp/
 .claude/
 box_backup_*/
 runs_*_drain_*/
+
+# Vendored CUDA-extension build artifacts (rebuilt per-env at install)
+src/plumbline/_vendor/**/build/
+src/plumbline/_vendor/**/*.so
