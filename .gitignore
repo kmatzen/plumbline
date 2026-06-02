@@ -63,8 +63,11 @@ tmp/
 
 # Local session artifacts — never commit (intentionally repo-external):
 # result-JSON backups already live on s3://plumbline-bench/runs/;
-# .claude/ is local Claude Code config (hooks/settings).
-.claude/
+# .claude/ is local Claude Code config (hooks/settings), EXCEPT shared
+# project skills under .claude/skills/ which are versioned with the repo.
+# Use .claude/* (not .claude/) so git descends and the skills negation applies.
+.claude/*
+!.claude/skills/
 box_backup_*/
 runs_*_drain_*/
 
