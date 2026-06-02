@@ -41,7 +41,7 @@ cells are now ℹ️ instead of ✅.
 | **MoGe-2 metric** | ⌛ 0.0899 informational | — | — | — | — | — | — |
 | **Marigold v1-1** | ✅ **0.0577** vs 0.055 | ℹ️ **0.1090** vs 0.099 _(v1-1 / 1-step is the newer distilled checkpoint; paper cell is v1-0 / 50-step — D9 RESOLVED 2026-05-25: 0.0992 reproduces end-to-end on Marigold's own pipeline. Documented checkpoint-generation delta, not a paper-match cell.)_ | — | — | — | — | — |
 | **GeoWizard** | ℹ️ **0.0574** vs 0.052 _(10.5% off — D17 RESOLVED 2026-05-26: paper number is best-of-N seeds, not single-seed; plumbline's 0.0574 matches `fuxiao0719/GeoWizard#36` reproducer @0.0576; paper-author-confirmed cherry-pick eval recipe)_ | ℹ️ **0.131** vs 0.097 _(35.2% off — D18 RESOLVED 2026-05-26 by same root cause)_ | — | — | — | — | — |
-| **Depth Pro** | ℹ️ δ₁ **0.9347** _(no NYU row in paper)_ | — | ⌛ ETH3D δ₁ **0.415** _(not blocked — [handoff](docs/ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md))_ | ✅ Booster **0.4878** / **0.466** _(Table 1 match)_ | — | — | ℹ️ iBims **0.8458** _(info)_ · Table 1 🔒 blocked: [Sintel](docs/blocked/DEPTH_PRO_SINTEL_TABLE1.md) · Midd / NuScenes / Sun-RGBD **loaders removed pre-release** (no verified anchor — attempts documented in [BLOCKED.md](docs/BLOCKED.md)) |
+| **Depth Pro** | ℹ️ δ₁ **0.9347** _(no NYU row in paper)_ | — | ⌛ ETH3D δ₁ **0.415** _(not blocked — [handoff](docs/ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md))_ | ✅ Booster **0.4878** / **0.466** _(Table 1 match)_ | — | — | ℹ️ iBims **0.8458** _(info)_ · ✅ **Sun-RGBD 0.8682 / 0.890** _(Table 1 MATCH, 2.4% off; resolved 2026-06-01 — native + GT focal via `depth-pro-sun-rgbd-native`, full 5050/5050 official run. See [page](docs/blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md))_ · Table 1 🔒 blocked: [Sintel](docs/blocked/DEPTH_PRO_SINTEL_TABLE1.md) · Midd / NuScenes **loaders removed pre-release** (no verified anchor — [BLOCKED.md](docs/BLOCKED.md)) |
 | **MASt3R** (N-view post-2026-04-27) | — | — | — | 2-view pose sweep | — | ✅ AUC@30 **0.7960** vs 0.818 _(2.7 % off, verified 2026-05-26 on RTX 3090; companion RRA@15 = 0.9708; dust3r PointCloudOptimizer N=10, init=mst, niter=300, curope CUDA ext built)_ | — |
 | **VGGT** | — | — | — | ⚠️ 0.875 m vs 0.709 _(D10 13-scene investigated 2026-05-27, +23.5 % over paper; one outlier `terrains` Comp 10.18 m drives the aggregate — without it 12-scene mean is 0.515, 27 % tighter than paper. See docs/DISCREPANCIES.md D10.)_ | ⚠️ 0.756 m vs 0.382 mm _(D3 upstream-blocked: PatchmatchNet filter + fp32 verified no-op, residual ~2× is in public VGGT-1B output)_ | ✅ AUC@30 **0.8964** vs 0.882 _(1.6 % over, verified 2026-05-26 on RTX 3090; CO3Dv2 staged via scripts/co3dv2_prefetch.py at ~3 GB)_ | — |
 | **CUT3R** _(video + unordered)_ | ℹ️ **0.0522** vs 0.086 _(better — D24 protocol delta: strict raw+crop vs lineage filled+no-crop; model correct, not a paper-match)_ | ℹ️ **0.0858** vs 0.092 _(better — D24 protocol delta: Eigen-652+Garg vs lineage val_selection_cropped)_ | — | — | — | ℹ️ recurrent/online — handles ordered video & unordered sets | — |
@@ -99,7 +99,7 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 
 ### Paper-match count
 
-**29 ✅ mono-depth cells + 4 ✅ pose cells = 33 total** with `source_confidence: verified_pdf`:
+**30 ✅ mono-depth cells + 4 ✅ pose cells = 34 total** with `source_confidence: verified_pdf`:
 
 - NYU (8): DA-V2 S/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3, **MonST3R** (lineage protocol, 2026-05-26)
 - KITTI Eigen+Garg (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
@@ -111,6 +111,7 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 - **ETH3D MoGe-eval mono-depth (2, NEW 2026-05-30): MoGe-1 ViT-L (0.0311 vs 0.0317), DA-V2 ViT-L (0.0473 vs 0.0473)** — `eth3d-moge-eval` loader + `scale_shift_clamped` (D30)
 - **Tier A MoGe Table 3 (4, NEW 2026-05-30): DDAD** — MoGe-1 (0.0902 vs 0.0891), DA-V2-L (0.1310 vs 0.1300); **Sintel MoGe bundle** — MoGe-1 (0.1863 vs 0.1840), DA-V2-L (0.2139 vs 0.2140)
 - Booster (1): **Depth Pro** (δ₁ 0.4878 vs 0.466, Depth Pro Table 1; +4.7%) — present in the grid + site since the Booster Table-1 close but omitted from this breakdown until the 2026-05-31 pre-release audit
+- **Sun-RGBD (1, NEW 2026-06-01): Depth Pro** (δ₁ 0.8682 vs 0.890, Depth Pro Table 1; −2.4%, MATCH) — native res + GT focal via `depth-pro-sun-rgbd-native`; was removed pre-release, [resolved](docs/blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md)
 - _(2026-05-28 confidence audit: DA-V2 Base NYU (6.9% off) and MonST3R KITTI (5.05% off) downgraded ✅→ℹ️. Counts match site/README as of 2026-05-30.)_
 - **CO3Dv2 pose (3): VGGT (AUC@30 0.8964 vs 0.882, +1.6 %) + MASt3R (mAA(30) 0.7960 vs 0.818, −2.7 %) + DUSt3R (mAA(30) 0.7893 vs 0.772, +2.2 %), all on MASt3R Table 3 protocol** — v0.1 acceptance criterion #2 met (VGGT) and twice-seconded (MASt3R / DUSt3R).
 - **Sintel trajectory pose (1): MonST3R Table 4 — ATE 0.1134 vs 0.108 (+5.0 %), plumbline-computed 2026-05-27** via the new adapter v1.2 video-pose path + `metrics/pose.py` ATE/RPE family.

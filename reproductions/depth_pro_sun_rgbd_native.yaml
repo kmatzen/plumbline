@@ -1,0 +1,41 @@
+# Depth Pro on SUN RGB-D (native) — metric δ₁ (Depth Pro Table 1).
+#
+# Test split: 5050 frames. Paper δ₁ = 0.890 (89.0%).
+#
+# Reproduces the paper with native-resolution images + native depth_bfx +
+# GT per-frame focal (DepthProAdapter(use_gt_focal=True)). The earlier ahanda
+# 730×530 pack (÷10000 decode, no intrinsics, self-estimated focal) scored
+# 0.451 and was removed as unverifiable; a GPU focal probe localized the gap
+# to Depth Pro's focal estimate on the Kinect sensors and identified this
+# protocol. See docs/blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md.
+
+name: depth-pro-sun-rgbd-native
+protocol: sun_rgbd_native_depth_pro_metric
+
+model:
+  name: depth-pro
+  kwargs:
+    use_gt_focal: true
+
+scale_alignment: none
+device: cuda:0
+
+# The pinned test split is 5050 frames; guard against a short/mis-pointed root
+# silently scoring a subset (D28 footgun).
+min_samples: 5000
+
+paper_reference:
+  primary_metric: delta_1
+  value: 0.890
+  tolerance_relative: 0.05
+  citation: >
+    Bochkovskii et al. 2024, Depth Pro (arXiv:2410.02073), Table 1, Sun-RGBD
+    column: δ₁ = 0.890 (89.0%). Metric — no scale alignment. Appendix Table 16:
+    5050 samples, 0.001–10 m valid depth.
+  source_confidence: verified_pdf
+
+notes: >
+  Stage: s3://plumbline-bench/datasets/sun_rgbd_native ($SUN_RGBD_NATIVE_ROOT;
+  rgb/ + depth/ + intrinsics/, 5050 each). Native res + GT focal + bit-rotation
+  depth decode. Full run (GTX 1080Ti, 2026-06-01, 5050/5050): δ₁ **0.8682** vs
+  paper **0.890** (2.4% off) — **MATCH**. config_hash d9a443f62f35e106.
