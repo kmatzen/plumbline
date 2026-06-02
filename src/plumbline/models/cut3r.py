@@ -265,6 +265,11 @@ def _ensure_cut3r_on_path() -> None:
     root = os.environ.get("CUT3R_ROOT", "/workspace/deps/cut3r")
     if os.path.isdir(root) and root not in sys.path:
         sys.path.insert(0, root)
+    # `src.dust3r.*` resolves from the repo root, but dust3r internally does a
+    # bare ``import croco`` which lives under ``src/`` — add that too.
+    src = os.path.join(root, "src")
+    if os.path.isdir(src) and src not in sys.path:
+        sys.path.insert(0, src)
 
 
 def _transform_points(extrinsics: np.ndarray, pts: np.ndarray) -> np.ndarray:
