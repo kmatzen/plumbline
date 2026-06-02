@@ -372,7 +372,10 @@ _LICENSE_INFO: dict[str, tuple[str, bool]] = {
     "moge": ("MIT", True),
     "vggt": ("VGGT License (custom research/AUP)", False),  # review redistribution clause
     "depth-pro": ("Apple (custom)", False),  # review redistribution clause
-    "mast3r": ("CC-BY-NC-SA-4.0", True),  # vendor needs croco submodule + curope ext (pure-torch fallback)
+    "mast3r": (
+        "CC-BY-NC-SA-4.0",
+        True,
+    ),  # vendor needs croco submodule + curope ext (pure-torch fallback)
     "dust3r": ("CC-BY-NC-SA-4.0", True),  # ditto
     "monst3r": ("CC-BY-NC-SA-4.0", True),  # dust3r-lineage
     "cut3r": ("CC-BY-NC-SA-4.0", True),  # dust3r-lineage
