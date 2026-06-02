@@ -16,7 +16,7 @@ code** (e.g. `depth-pro-eth3d` before official depth is staged) — see handoff 
 | Sintel | 0.241 / 0.400 | Protocol aligned; gap upstream / aggregation | [`blocked/DEPTH_PRO_SINTEL_TABLE1.md`](blocked/DEPTH_PRO_SINTEL_TABLE1.md) |
 | Middlebury | 0.759 / 0.605 | **Loader REMOVED pre-release** — no verified anchor; reads better, no public eval | [`blocked/DEPTH_PRO_MIDDLEBURY_TABLE1.md`](blocked/DEPTH_PRO_MIDDLEBURY_TABLE1.md) |
 | NuScenes | 0.594 / 0.491 | **Loader REMOVED pre-release** — no verified anchor; unknown subset/recipe | [`blocked/DEPTH_PRO_NUSCENES_TABLE1.md`](blocked/DEPTH_PRO_NUSCENES_TABLE1.md) |
-| Sun-RGBD | ✅ ~0.88 / 0.890 | **RESOLVED 2026-06-01** — was a GT-decode (÷10000 vs bit-rotation) + anisotropic-resize + estimated-focal artifact of the removed ahanda pack. New `sun-rgbd-native` loader + `DepthProAdapter(use_gt_focal=True)` reproduces 0.890 | [`blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md`](blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md) |
+| Sun-RGBD | ✅ 0.8682 / 0.890 | **RESOLVED 2026-06-01** (MATCH, 2.4% off) — was a GT-decode (÷10000 vs bit-rotation) + anisotropic-resize + estimated-focal artifact of the removed ahanda pack. New `sun-rgbd-native` loader + `DepthProAdapter(use_gt_focal=True)` reproduces 0.890 | [`blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md`](blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md) |
 | ETH3D | — / 0.415 | **Not blocked** — implementation + data | [`ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md`](ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md) |
 
 **Appendix Table 16** (depth clip m, sample count): Booster 0.001–10 / 228 · ETH3D 0.1–200 / 454 ·

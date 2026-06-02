@@ -14,7 +14,7 @@
 | **Repro (new)** | `depth-pro-sun-rgbd-native` (native + GT focal) |
 | **Protocol (new)** | `sun_rgbd_native_depth_pro_metric` |
 | **Paper** | δ₁ **0.890** (Table 1; appendix: **5050** samples, 0.001–10 m) |
-| **Observed (native + GT focal)** | δ₁ **≈ 0.88** (GTX 1080Ti, 2026-06-01: random-shuffle running mean 0.882 @ n=201; balanced 120-frame set 0.899; full official run confirming) |
+| **Observed (native + GT focal)** | δ₁ **0.8682** — **MATCH** (GTX 1080Ti, 2026-06-01, full official `plumbline reproduce`, 5050/5050; 2.4% from paper 0.890, within ±5%) |
 | **Observed (old ahanda pack, ÷10000 + est. focal)** | δ₁ **0.4505** (2026-05-31) |
 
 ## How it was closed
