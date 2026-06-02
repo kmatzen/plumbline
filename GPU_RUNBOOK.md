@@ -171,10 +171,11 @@ doctor` reports which adapters are present on the current box.
 | moge | git | `uv pip install 'git+https://github.com/microsoft/MoGe.git'` |
 | vggt | git | `uv pip install 'git+https://github.com/facebookresearch/vggt'` |
 | depth-pro | git | `uv pip install 'git+https://github.com/apple/ml-depth-pro.git'` |
-| mast3r | clone | `git clone --recursive https://github.com/naver/mast3r $HOME/deps/mast3r; uv pip install roma scikit-learn trimesh; export MAST3R_ROOT=$HOME/deps/mast3r; export DUST3R_ROOT=...` (see notes) |
-| dust3r | clone | `git clone --recursive https://github.com/naver/dust3r $HOME/deps/dust3r; uv pip install roma scikit-learn trimesh; export DUST3R_ROOT=$HOME/deps/dust3r` |
-| monst3r | clone | `git clone --recursive https://github.com/Junyi42/monst3r $HOME/deps/monst3r; uv pip install roma scikit-learn trimesh; export MONST3R_ROOT=$HOME/deps/monst3r` |
-| cut3r | clone | `git clone --recursive https://github.com/CUT3R/CUT3R $HOME/deps/cut3r; uv pip install -r $HOME/deps/cut3r/requirements.txt; export CUT3R_ROOT=$HOME/deps/cut3r; export CUT3R_CKPT=...` (512-DPT weights per repo README) |
+| mast3r | vendored | `uv pip install roma scikit-learn trimesh` (code vendored under `_vendor/mast3r`, no clone; optional curope CUDA build — see notes. `$MAST3R_ROOT` overrides for a dev checkout) |
+| dust3r | vendored | `uv pip install roma scikit-learn trimesh` (code vendored under `_vendor/dust3r`, no clone) |
+| monst3r | vendored | `uv pip install roma scikit-learn trimesh evo` (code vendored under `_vendor/monst3r`, no clone; `evo` is a hard dep — its dust3r fork imports it at load) |
+| cut3r | vendored | `uv pip install roma scikit-learn trimesh omegaconf` (code vendored under `_vendor/cut3r`, no clone; then build the vendored curope ext + set `$CUT3R_CKPT` to the 512-DPT weight — see notes) |
+| dage | vendored | `uv pip install einops omegaconf safetensors kornia roma segmentation_models_pytorch 'utils3d @ git+https://github.com/EasternJournalist/utils3d.git@3913c65'` (code vendored under `_vendor/dage`, no clone) |
 | geowizard | clone | `git clone https://github.com/fuxiao0719/GeoWizard $HOME/deps/geowizard; export GEOWIZARD_ROOT=$HOME/deps/geowizard` then `uv sync --extra geowizard; uv pip install --force-reinstall 'nvidia-cudnn-cu12==9.1.0.70'` |
 
 If `uv pip install` from a git URL dies with `curl 92 HTTP/2 stream
