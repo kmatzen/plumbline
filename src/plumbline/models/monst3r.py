@@ -523,7 +523,14 @@ def _ensure_monst3r_on_path() -> None:
 
     MonST3R ships its own ``dust3r`` fork at the repo root.
     """
-    root = os.environ.get("MONST3R_ROOT", "/workspace/deps/monst3r")
+    # Default to the vendored copy under plumbline/_vendor/monst3r (MonST3R is
+    # CC-BY-NC-SA — redistributable; see _vendor/monst3r/LICENSE and
+    # THIRD_PARTY_NOTICES.md); $MONST3R_ROOT overrides for a dev checkout. The
+    # vendor ships dust3r + croco + third_party/RAFT but NOT sam2 (the adapter
+    # shims it below — it's import-only) nor curope (optional pure-torch RoPE).
+    root = os.environ.get("MONST3R_ROOT")
+    if root is None:
+        root = os.path.join(os.path.dirname(os.path.dirname(__file__)), "_vendor", "monst3r")
     if os.path.isdir(root) and root not in sys.path:
         sys.path.insert(0, root)
     _shim_sam2_for_monst3r()
