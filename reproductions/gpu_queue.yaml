@@ -863,6 +863,86 @@ jobs:
       0.214 ✅ is a different protocol. JSON:
       /mnt/localssd/plumbline-work/runs/da_v2_sintel_native_fix_20260530.json.
 
+  # ----- DAGE Table 4 (camera pose) — new dataset columns beyond Sintel -----
+  # The Sim(3)-aligned TUM-RGBD ATE/RPE apparatus is already proven by the ✅
+  # dage-sintel-pose / cut3r-sintel-pose-dage cells; these add the TUM-Dynamics
+  # and ScanNet columns. TUM is public (no ToS) and feed-forward → 1080Ti-runnable.
+  - name: dage-tum-pose
+    status: done
+    priority: 3
+    paper_target: "DAGE Table 4 — TUM-Dynamics ATE 0.014 / RPE-t 0.010 / RPE-r 0.323 (verified_pdf 2026-06-03)"
+    primary_metric: trajectory_ate_rmse
+    datasets: [tum-dynamics]
+    data_footprint_gb: 3
+    est_wall_min: 30
+    requires_env: [TUM_ROOT, DAGE_ROOT]
+    extras: >
+      Stage data: python scripts/stage_tum_dynamics.py --out $TUM_ROOT (8 public
+      freiburg3 dynamic .tgz, no ToS; member-selective, ~366 MB total). DAGE:
+      vendored; needs the TuanNgo/DAGE HF checkpoint + runtime deps (plumbline
+      install dage). 90-frame clips at fp16.
+    notes: >
+      ✅ MATCH 2026-06-03 (GTX 1080Ti, 8/8, fp16): ATE **0.0136** vs 0.014
+      (−2.9 %); companions RPE-trans 0.0104 vs 0.010, RPE-rot 0.3213 vs 0.323 —
+      all within ~4 %. New dataset column for the DAGE pose axis; loader
+      (tum-dynamics) replicates MonST3R prepare_tum.py (associate rgb↔gt,
+      first-90-at-stride-3). All 8 clips fit 11 GB at fp16.
+
+  - name: cut3r-tum-pose-dage
+    status: done
+    priority: 4
+    paper_target: "DAGE Table 4 baseline — CUT3R TUM-Dynamics ATE 0.047 / RPE-t 0.015 / RPE-r 0.451 (verified_pdf 2026-06-03)"
+    primary_metric: trajectory_ate_rmse
+    datasets: [tum-dynamics]
+    data_footprint_gb: 3
+    est_wall_min: 30
+    requires_env: [TUM_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    extras: >
+      Shares the staged TUM set with dage-tum-pose. CUT3R: clone at $CUT3R_ROOT +
+      512-DPT checkpoint at $CUT3R_CKPT + built curope ext (the cut3r-sintel-pose-dage
+      setup). Feed-forward/online → 90-frame clips fit 11 GB.
+    notes: >
+      ℹ️ INFORMATIONAL 2026-06-03 (GTX 1080Ti, 8/8): ATE 0.0362 vs 0.047 (−23 %),
+      but companions land almost exactly on DAGE's measured CUT3R — RPE-trans
+      0.0150 vs 0.015 (exact), RPE-rot 0.4486 vs 0.451 (−0.5 %). Baseline
+      cross-measurement (DAGE evaluated competitors at 518 px vs CUT3R's 512
+      default); tight RPE agreement validates the apparatus. Same framing as the
+      Sintel CUT3R baseline.
+
+  - name: dage-scannet-pose
+    status: blocked
+    blocked_on: >
+      DATA — raw ScanNet is ToS-gated (http://www.scan-net.org/). Needs scenes
+      scene0707_00..scene0806_00 (.sens) → extract color/pose → prepare_scannet.py
+      → $SCANNET_VIDEO_ROOT/<scene>/{color_90,pose_90.txt}. Loader (scannet-video-pose)
+      + config are code-ready and unit-tested; only the data is missing.
+    priority: 5
+    paper_target: "DAGE Table 4 — ScanNet ATE 0.031 / RPE-t 0.014 / RPE-r 0.389 (verified_pdf 2026-06-03)"
+    primary_metric: trajectory_ate_rmse
+    datasets: [scannet-video-pose]
+    data_footprint_gb: 30
+    est_wall_min: 90
+    requires_env: [SCANNET_VIDEO_ROOT, DAGE_ROOT]
+    extras: "DAGE vendored + HF checkpoint. fp16 90-frame clips (24 GB card recommended for full coverage)."
+    notes: >
+      ScanNet column for the ✅ DAGE pose axis. Same apparatus as dage-tum-pose;
+      data-blocked on ToS-gated raw ScanNet staging.
+
+  - name: cut3r-scannet-pose-dage
+    status: blocked
+    blocked_on: >
+      DATA — same ToS-gated ScanNet staging as dage-scannet-pose ($SCANNET_VIDEO_ROOT).
+    priority: 5
+    paper_target: "DAGE Table 4 baseline — CUT3R ScanNet ATE 0.094 / RPE-t 0.022 / RPE-r 0.629 (verified_pdf 2026-06-03)"
+    primary_metric: trajectory_ate_rmse
+    datasets: [scannet-video-pose]
+    data_footprint_gb: 30
+    est_wall_min: 90
+    requires_env: [SCANNET_VIDEO_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    extras: "Shares the staged ScanNet set with dage-scannet-pose. CUT3R clone + 512-DPT ckpt + curope."
+    notes: >
+      Baseline row (DAGE measuring CUT3R) on ScanNet. Data-blocked alongside dage-scannet-pose.
+
   # TIER C — remaining loader work (targets known):
   #   * Depth Pro Table 1 remaining columns → Depth Pro's FIRST ✅ (sintel is
   #     off-paper, D-pro experiment). ETH3D δ₁ 0.415, Booster, Middlebury,

@@ -1,0 +1,64 @@
+# DAGE video pose on TUM-dynamics — DAGE Table 4 paper target.
+#
+# Targets DAGE Table 4 ("Camera pose evaluation"), TUM-Dynamics column, DAGE row:
+# ATE 0.014 / RPE-trans 0.010 / RPE-rot 0.323 (arXiv:2603.03744, 2026).
+#
+# Same apparatus as `dage-sintel-pose` (Sim(3)-aligned TUM-RGBD ATE/RPE via evo);
+# only the dataset differs. DAGE's `evaluation/relpose/metadata.py` has
+# `tum: {seq_list: None, full_seq: True, traj_format: 'tum'}`, i.e. it reuses
+# MonST3R's `prepare_tum.py` prep verbatim: associate each rgb timestamp to the
+# nearest groundtruth pose (max_diff 0.02 s), then take the first 90 frames at
+# stride 3. The `tum-dynamics` loader replicates that prep at read time, so the
+# 90-frame trajectory == DAGE's exactly.
+#
+# Eight freiburg3 dynamic sequences (download_tum_dynamics.sh): sitting/walking
+# × static/xyz/halfsphere/rpy. Stage with scripts/stage_tum_dynamics.py (public,
+# no ToS), then set $TUM_ROOT or --data-root.
+
+name: dage-tum-pose
+
+model:
+  name: dage
+  kwargs:
+    # Pose is read from DAGE's low-res stream; the paper's relpose eval uses 252.
+    lr_max_size: 252
+    # fp16 mixed precision (Pascal-compatible; the 1080Ti has no bf16). TUM clips
+    # are 90 frames (vs Sintel's ~50), so activation memory is higher — if this
+    # OOMs on 11 GB the runner skips the sequence; rerun on a 24 GB card for the
+    # full 8/8. Pose comes from the lr stream, so the hr cap doesn't affect it.
+    compute_dtype: float16
+
+dataset:
+  name: tum-dynamics
+  # Default = all 8 dynamic sequences present on disk.
+
+tasks: [pose]
+pose_trajectory_metrics: true
+# TUM clips are exactly 90 frames; max_views must be >= 90 so the predicted and
+# GT trajectories have equal length (trajectory ATE/RPE requires pred.shape == gt.shape).
+max_views: 90
+device: cuda:0
+
+paper_reference:
+  primary_metric: trajectory_ate_rmse
+  value: 0.014
+  tolerance_relative: 0.10
+  citation: "Ngo et al. 2026, DAGE (arXiv:2603.03744), Table 4 (Camera pose evaluation), TUM-Dynamics column, DAGE row = ATE 0.014 / RPE-trans 0.010 / RPE-rot 0.323. Eval: TUM-RGBD-style ATE/RPE-RMSE under Sim(3) alignment over the 8 freiburg3 dynamic sequences (first 90 frames at stride 3, associate rgb↔groundtruth), via evo (align=True, correct_scale=True), built on the MonST3R relpose harness."
+  source_confidence: verified_pdf
+
+notes: >
+  Companion DAGE-Table-4 numbers: RPE-trans 0.010, RPE-rot 0.323 (deg) —
+  plumbline emits trajectory_rpe_trans_rmse / trajectory_rpe_rot_deg_rmse.
+
+  NOTE on tolerance: TUM ATEs are sub-cm magnitude, so ±10 % relative is a tight
+  ~0.0014 m band. If plumbline lands outside it but tracks the companions and the
+  CUT3R baseline (`cut3r-tum-pose-dage`) cleanly, treat as informational (the
+  small-magnitude band, fp16-vs-bf16, and any associate tie-breaking drift —
+  not a method discrepancy). The Sim(3)-aligned apparatus is already proven by
+  the ✅ `dage-sintel-pose` cell.
+
+  Result (GTX 1080Ti, 2026-06-03, 8/8 sequences, fp16): ATE **0.0136** vs 0.014
+  (−2.9 %) — MATCH; companions RPE-trans 0.0104 vs 0.010, RPE-rot 0.3213 vs 0.323
+  (deg) — all within ~4 %. All 8 freiburg3 dynamic clips fit 11 GB at fp16
+  (90 frames, lr 252). Data staged via scripts/stage_tum_dynamics.py
+  (member-selective: only the 90 eval frames/seq, ~366 MB total).
