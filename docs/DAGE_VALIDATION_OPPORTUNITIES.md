@@ -58,6 +58,41 @@ plumbline already emits exactly the three metrics this needs
 apparatus are done**; what's missing for the new columns is data staging + a
 loader that emits a full-clip trajectory.
 
+## Methods DAGE compares against (can we add baselines?)
+
+Every baseline row across DAGE's tables, vs whether plumbline has the adapter:
+
+| Method | DAGE tables | plumbline adapter? | Runnable today? |
+|--------|-------------|--------------------|-----------------|
+| CUT3R | 1,2,3,4 | ✅ `cut3r` | ✅ pose done (Sintel+TUM); 1080Ti |
+| VGGT | 1,2,3,4 | ✅ `vggt` | ⚠️ pose: bf16 (→H100) **and** `max_views=49` < 90-frame clips |
+| Pi3 (π³) | 1,2,3,4 | ❌ removed (63ada6a, "no anchor") | depth/chamfer: 1080Ti fp16; pose: `max_views=16` caps it |
+| DepthPro | 1,2 | ✅ `depth-pro` | needs Rel^p / F1 metrics (Table 1/2) |
+| MoGe | 1 | ✅ `moge` | needs Rel^p metric |
+| MoGe-2 | 1,2 | ✅ `moge` (moge2 cfgs) | needs Rel^p / F1 metrics |
+| DUSt3R | related work | ✅ `dust3r` | — |
+| DepthAnything-V2 | related work | ✅ `depth-anything-v2` | — |
+| Fast3R | 3,4 | ❌ no adapter | new adapter |
+| FLARE | 3,4 | ❌ no adapter | new adapter |
+| MapAnything | 3 | ❌ no adapter | new adapter |
+| GeoCrafter | 1,2 | ❌ no adapter | new adapter |
+
+**Takeaways:**
+- **7 of DAGE's baselines already have adapters** (CUT3R, VGGT, Pi3-ish, DepthPro,
+  MoGe, MoGe-2, DUSt3R, DA-V2) — but cross-validating their DAGE rows is gated by
+  *metrics* (Rel^p, F1/C_PDBE, NC) and *DAGE's own depth/pointmap output* not yet
+  wired, not by the adapters.
+- **Pose (Table 4) is the only fully-wired metric**, and there CUT3R is the only
+  present baseline that's also trajectory-capable (done). VGGT (`max_views=49`) and
+  Pi3 (`max_views=16`) can't hold the 90-frame clips without chunking, and VGGT
+  needs bf16.
+- **Pi3 is re-introducible with a fresh justification**: it was removed for "no
+  anchor", and DAGE now *supplies* anchors (Table 4 pose 0.074/0.014/0.031, Table 1/3
+  rows). It runs on the 1080Ti at fp16 for depth/chamfer (Table 1/3), though its
+  pose cells are view-capped.
+- New adapters (Fast3R, FLARE, MapAnything, GeoCrafter) are larger lifts and less
+  standard.
+
 ## Prioritized opportunities
 
 ### Tier 1 — new pose columns, models already fit the 1080Ti
