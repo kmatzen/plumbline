@@ -75,10 +75,12 @@ notes: >
   Controlled A/B on a 30-sample 6-cat subset: dust3r_ga 0.835 vs sparse_ga
   0.858 (only +2.3 pts — CO3Dv2's narrow baselines barely exercise matching;
   cf. RE10K's +17.6 pts, where the old path collapsed to a DUSt3R near-tie).
-  So the cell SURVIVES the method change (sparse_ga ≥ dust3r_ga, both above
-  0.818 on this easy subset); the exact full-410 sparse_ga number is pending a
-  roomier/curope GPU. Until then, read the 0.796 ✅ as measured on the legacy
-  dust3r_ga backend. (Original v0.3 note: swap dust3r's PointCloudOptimizer for
+  FULL 410-sample sparse_ga re-run DONE 2026-06-03 (1080 Ti, ~6 h): observed
+  mAA@30 = 0.8581 vs paper 0.818 (+4.9%, MATCH; companions RRA@15 0.9697 vs
+  0.946, RTA@15 0.9308 vs 0.919 — all three MATCH), +6.2 pts over the legacy
+  dust3r_ga 0.796. The cell is now re-validated on the FAITHFUL matching method;
+  the historical 0.796 ✅ is retained only as the "right number, wrong method"
+  note. (Original v0.3 note: swap dust3r's PointCloudOptimizer for
   mast3r.cloud_opt.sparse_global_alignment — MASt3R's own optimizer.)
 
   Same loader path as vggt-co3dv2-pose; same caveat about per-category

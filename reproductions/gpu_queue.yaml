@@ -543,10 +543,11 @@ jobs:
       6-cat subset): dust3r_ga 0.835 vs sparse_ga 0.858 — only +2.3 pts, vs the
       +17.6 pts the same A/B shows on RE10K (0.674 -> 0.850). Direct proof that
       CO3Dv2's narrow baselines HIDE the matching gap (so the old ✅ 0.796 passed
-      on the wrong method), while wide-baseline RE10K exposes it. The CO3Dv2 cell
-      SURVIVES the fix (sparse_ga >= dust3r_ga, both above paper 0.818 on this
-      easy subset). Exact full-410 sparse_ga number still wants a roomier/curope
-      GPU (anima disk-bound).
+      on the wrong method), while wide-baseline RE10K exposes it. FULL 410-sample
+      sparse_ga re-run DONE 2026-06-03 (1080 Ti, ~6 h, freed KITTI for disk):
+      mAA@30 = 0.8581 vs paper 0.818 (+4.9%, MATCH; companions RRA@15 0.9697,
+      RTA@15 0.9308 also MATCH) — +6.2 pts over the legacy dust3r_ga 0.796. The
+      CO3Dv2 ✅ is re-validated on the faithful matching method.
   - name: dust3r-realestate10k-pose
     status: blocked
     priority: 8
