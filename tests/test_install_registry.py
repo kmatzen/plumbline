@@ -39,10 +39,10 @@ _MODELS_DIR = Path(__file__).resolve().parent.parent / "src" / "plumbline" / "mo
 _HINT_CALL = re.compile(r"""install_hint\(\s*['"]([^'"]+)['"]\s*\)""")
 
 
-def test_registry_is_nonempty_and_has_17_entries() -> None:
+def test_registry_is_nonempty_and_has_18_entries() -> None:
     # Guards against a registry that silently emptied (which would make the
     # parametrized cases vacuously pass) and pins the documented count.
-    assert len(INSTALL_SPECS) == 17, sorted(INSTALL_SPECS)
+    assert len(INSTALL_SPECS) == 18, sorted(INSTALL_SPECS)
 
 
 def test_registry_matches_model_registry_exactly() -> None:

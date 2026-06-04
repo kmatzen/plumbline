@@ -327,6 +327,22 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         git=("git+https://github.com/microsoft/MoGe.git",),
         weights="hf-auto",
     ),
+    "vggt-omega": InstallSpec(
+        name="vggt-omega",
+        kind="git",
+        # FAIR Noncommercial Research License (custom, non-redistributable) +
+        # gated weights -> NOT vendored; git-install like VGGT. The operator must
+        # accept the gated-weights terms on HF for facebook/VGGT-Omega.
+        probe_import="vggt_omega",
+        git=("git+https://github.com/facebookresearch/vggt-omega",),
+        weights="hf-auto",
+        notes=(
+            "pip install git+https://github.com/facebookresearch/vggt-omega. "
+            "Weights GATED: request access to facebook/VGGT-Omega on HF, then HF "
+            "auto-download. bf16/Ampere-class (VGGT backbone). Inference wiring "
+            "not GPU-validated (gated + no Ampere available)."
+        ),
+    ),
     "vggt": InstallSpec(
         name="vggt",
         kind="git",
@@ -509,7 +525,8 @@ _LICENSE_INFO: dict[str, tuple[str, bool]] = {
     "pi3": ("BSD-3-Clause", True),  # permissive — vendorable
     "streamvggt": ("CC-BY-NC-SA-4.0", True),  # NonCommercial — vendorable
     "moge": ("MIT", True),
-    "vggt": ("VGGT License (custom research/AUP)", False),  # review redistribution clause
+    "vggt": ("VGGT License (custom research/AUP)", False),
+    "vggt-omega": ("FAIR Noncommercial Research License v1", False),  # review redistribution clause
     "depth-pro": ("Apple (custom)", False),  # review redistribution clause
     "mast3r": (
         "CC-BY-NC-SA-4.0",
