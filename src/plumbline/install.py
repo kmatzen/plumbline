@@ -199,6 +199,31 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
             "Pass source='hf' to use the no-clone transformers path instead."
         ),
     ),
+    "unik3d": InstallSpec(
+        name="unik3d",
+        kind="vendored",
+        # Vendored as the inference subset of the CC-BY-NC-SA package
+        # (_vendor/unik3d). Its runtime deps — timm, scipy, opencv-python — are
+        # all in the base install (the depth path is numpy-2 clean; xformers is
+        # guarded-optional in the vendored DINOv2 layers), so a plain `uv sync`
+        # is enough. Probe the vendored package itself.
+        probe_import="unik3d",
+        pip=(),
+        extra_env=(
+            (
+                "UNIK3D_ROOT",
+                "Optional: override the vendored _vendor/unik3d path with a dev checkout.",
+            ),
+        ),
+        weights="hf-auto",
+        notes=(
+            "Code vendored under plumbline/_vendor/unik3d (inference subset of the "
+            "CC-BY-NC-SA release; datasets/ops trees pruned). Deps (timm/scipy/"
+            "opencv-python) are in the base install. Weights: lpiccinelli/unik3d-"
+            "vitl (HF auto). UniK3D predicts metric depth — runs fp32/fp16 (no "
+            "bf16 requirement), so fine on pre-Ampere GPUs."
+        ),
+    ),
     "depth-anything-3": InstallSpec(
         name="depth-anything-3",
         kind="vendored",
@@ -408,6 +433,7 @@ _LICENSE_INFO: dict[str, tuple[str, bool]] = {
     "marigold": ("Apache-2.0", True),
     "depth-anything-v2": ("Apache-2.0", True),
     "depth-anything-3": ("Apache-2.0", True),
+    "unik3d": ("CC-BY-NC-SA-4.0", True),  # NonCommercial — vendorable, like dust3r-lineage
     "moge": ("MIT", True),
     "vggt": ("VGGT License (custom research/AUP)", False),  # review redistribution clause
     "depth-pro": ("Apple (custom)", False),  # review redistribution clause

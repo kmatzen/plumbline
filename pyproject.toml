@@ -66,6 +66,10 @@ dependencies = [
     "addict>=2.4",
     "omegaconf>=2.3",
     "opencv-python>=4.8",
+    # UniK3D (vendored, _vendor/unik3d, CC-BY-NC-SA) needs scipy at inference
+    # (spherical-harmonics / geometric utils); timm + opencv already above. Light
+    # and numpy-2 clean, so it joins the vendored-model deps in base.
+    "scipy>=1.11",
 ]
 
 [project.optional-dependencies]
@@ -263,6 +267,7 @@ module = [
     "dust3r.*",
     "models.geowizard_pipeline",
     "moge.*",
+    "unik3d.*",
     "nuscenes.*",
     "sam2",
     "vggt.*",
