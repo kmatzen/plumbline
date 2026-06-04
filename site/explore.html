@@ -68,6 +68,11 @@
     .cell.near .v { color: var(--acc); } .cell.close .v { color: var(--fg); } .cell.wide .v { color: var(--fg-dim); }
     .cell .dd { display: block; font-size: 10px; margin-top: 2px; color: var(--fg-dim); font-variant-numeric: tabular-nums; }
     .cell .multi { position: absolute; top: 4px; right: 5px; font-size: 9px; color: var(--acc-dim); }
+    .cell.info .v, .cell.target .v { color: var(--fg-mute) !important; font-style: italic; }
+    .cell.info, .cell.target { background-image: repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.014) 6px 7px); }
+    .cell .dd.nt { color: var(--fg-dim); font-style: italic; }
+    .sbadge { position: absolute; top: 3px; right: 5px; font-size: 10px; line-height: 1; }
+    .sbadge.info { color: var(--fg-mute); } .sbadge.target { color: var(--fg-dim); }
 
     /* hover popover */
     .pop {
@@ -83,6 +88,10 @@
     .pop .p-nums { display: flex; align-items: baseline; gap: 14px; margin: 11px 0 0; }
     .pop .p-obs { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
     .pop .p-obs.near { color: var(--acc); } .pop .p-obs.close { color: var(--fg); } .pop .p-obs.wide { color: var(--fg-dim); }
+    .pop .p-obs.na { color: var(--fg-mute); font-style: italic; }
+    .pop .p-status { font-size: 11px; padding: 2px 7px; border: 1px solid var(--rule); border-radius: 2px; white-space: nowrap; }
+    .pop .p-status.ok { color: var(--acc); border-color: var(--acc-dim); }
+    .pop .p-status.info { color: var(--fg-mute); } .pop .p-status.target { color: var(--fg-dim); }
     .pop .p-paper { color: var(--fg-dim); font-size: 13px; } .pop .p-paper b { color: var(--fg-mute); font-weight: 500; }
     .pop .p-delta { font-size: 12px; padding: 2px 7px; border: 1px solid var(--rule); border-radius: 2px; color: var(--fg-mute); font-variant-numeric: tabular-nums; }
     .pop .p-cite { margin: 13px 0 0; padding: 11px 0 0; border-top: 1px solid var(--rule); font-size: 12px; color: var(--fg-mute); line-height: 1.55; }
@@ -90,15 +99,12 @@
     .pop .p-cite .loc { color: var(--acc); }
     .pop .p-cite a { color: var(--fg-mute); text-decoration: underline; text-underline-offset: 2px; pointer-events: auto; }
     .pop .p-cite a:hover { color: var(--acc); }
-    .pop .p-shot {
-      margin: 12px 0 0; border: 1px dashed var(--rule); border-radius: 2px; padding: 14px;
-      color: var(--fg-dim); font-size: 11px; text-align: center; line-height: 1.5; background: rgba(0,0,0,0.2);
-    }
-    .pop .p-shot .sk { color: var(--fg-mute); }
 
     .xlegend { display: flex; gap: 20px 26px; flex-wrap: wrap; align-items: center; margin: 22px 0 0; color: var(--fg-mute); font-size: 12px; }
     .xlegend .sw { width: 11px; height: 11px; border-radius: 2px; display: inline-block; vertical-align: -1px; margin-right: 7px; }
     .xlegend .sw.near { background: var(--acc); } .xlegend .sw.close { background: var(--fg); } .xlegend .sw.wide { background: var(--fg-dim); }
+    .xlegend .lglyph { margin-right: 5px; }
+    .xlegend .lglyph.info { color: var(--fg-mute); } .xlegend .lglyph.target { color: var(--fg-dim); }
     .xfoot { margin-top: 30px; color: var(--fg-dim); font-size: 12.5px; line-height: 1.7; max-width: 76ch; }
     .xfoot a { color: var(--fg-mute); } .xfoot a:hover { color: var(--acc); }
   </style>
@@ -121,11 +127,13 @@
       <span class="xnum">verified/ provenance matrix</span>
       <h1>Model × benchmark, every number <em>traced to its paper</em>.</h1>
       <p class="xlede">
-        Each filled cell is a plumbline reproduction whose observed number lands
-        within tolerance of the value reported in the source paper. <b>Switch the
+        Every plumbline run vs its source paper. <b>&#10003; verified</b> cells
+        (coloured by closeness) land within their pinned tolerance; <b>&#8505; off-paper</b>
+        cells are real numbers that don't — paper-private eval recipes, protocol
+        deltas, model limits (the hover names which); <b>&#9671;</b> cells have no
+        paper target. Only the 36 verified ones are safe to cite. <b>Switch the
         metric</b> with the tabs; <b>hover any number</b> for observed vs paper,
-        the deviation, and the citation it was audited against — paper, table,
-        column, row.
+        the deviation, and the citation — paper, table, column, row.
       </p>
     </div>
 
@@ -135,10 +143,13 @@
     <div class="matwrap"><table class="matrix" id="matrix"></table></div>
 
     <div class="xlegend">
-      <span><span class="sw near"></span>≤2% off paper</span>
-      <span><span class="sw close"></span>2–5% off</span>
-      <span><span class="sw wide"></span>&gt;5% off</span>
-      <span style="margin-left:auto; color:var(--fg-dim)">colour = distance from paper · Δ vs paper on hover</span>
+      <span style="color:var(--fg-soft)">&#10003; verified —</span>
+      <span><span class="sw near"></span>≤2%</span>
+      <span><span class="sw close"></span>2–5%</span>
+      <span><span class="sw wide"></span>&gt;5%</span>
+      <span style="margin-left:14px"><span class="lglyph info">&#8505;</span> off-paper</span>
+      <span><span class="lglyph target">&#9671;</span> no paper target</span>
+      <span style="margin-left:auto; color:var(--fg-dim)">Δ vs paper on hover</span>
     </div>
 
     <p class="xfoot">
@@ -230,13 +241,40 @@
   ]
   </script>
 
+  <!-- Informational / off-paper cells: real plumbline numbers that DON'T land
+       within their tolerance (status "info") or have no paper target (status
+       "target"). Shown to make the evaluation surface complete; clearly NOT
+       paper-matches, and excluded from the 36 verified count. -->
+  <script type="application/json" id="info-cells">
+  [
+    {"model":"CUT3R","ds":"NYU","metric":"abs_rel","obs":"0.0522","paper":"0.086","d":-39.3,"status":"info","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 1 · NYU — D24 protocol delta (off-paper better)"}},
+    {"model":"CUT3R","ds":"KITTI","metric":"abs_rel","obs":"0.0858","paper":"0.092","d":-6.7,"status":"info","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 1 · KITTI — D24 protocol delta"}},
+    {"model":"CUT3R","ds":"Bonn","metric":"abs_rel","obs":"0.0536","paper":"0.078","d":-31.3,"status":"info","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 2 · Bonn — D24 protocol delta"}},
+    {"model":"MonST3R","ds":"KITTI","metric":"abs_rel","obs":"0.0959","paper":"0.101","d":-5.0,"status":"info","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 · KITTI — 5.05%, just over the ±5% gate"}},
+    {"model":"MonST3R","ds":"Bonn","metric":"abs_rel","obs":"0.0654","paper":"0.076","d":-13.9,"status":"info","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 · Bonn — D27 paper-private recipe"}},
+    {"model":"MonST3R","ds":"Sintel","metric":"abs_rel","obs":"0.3726","paper":"0.345","d":8.0,"status":"info","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 · Sintel — D27 (temple_2 outlier + recipe)"}},
+    {"model":"DUSt3R","ds":"NYU","metric":"abs_rel","obs":"0.0777","paper":"0.065","d":19.5,"status":"info","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 · NYU — D28 paper-private indoor recipe"}},
+    {"model":"DUSt3R","ds":"Bonn","metric":"abs_rel","obs":"0.1337","paper":"0.0808","d":65.5,"status":"info","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 · Bonn — D28 (not a dynamic model)"}},
+    {"model":"DA-V2 Base","ds":"NYU","metric":"abs_rel","obs":"0.0456","paper":"0.049","d":-6.9,"status":"info","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 · NYU · ViT-B — 6.9%, downgraded ✅→ℹ️ (2026-05-28 audit)"}},
+    {"model":"DA3","ds":"GSO","metric":"abs_rel","obs":"0.0150","paper":"","d":null,"status":"target","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"","loc":"GSO · abs_rel — no paper target (informational A/B)"}},
+    {"model":"Depth Pro","ds":"NYU","metric":"delta_1","obs":"0.9347","paper":"","d":null,"status":"target","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"NYU · δ₁ — paper has no NYU row"}},
+    {"model":"Depth Pro","ds":"iBims-1","metric":"delta_1","obs":"0.8458","paper":"","d":null,"status":"target","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"iBims-1 · δ₁ — informational"}},
+    {"model":"VGGT","ds":"DTU","metric":"chamfer","obs":"0.756","paper":"0.382","d":97.9,"status":"info","cite":{"src":"VGGT","who":"Wang et al. 2025","arxiv":"2503.11651","loc":"Table 2 · DTU · overall (mm) — D3 upstream-blocked"}},
+    {"model":"VGGT","ds":"ETH3D","metric":"chamfer","obs":"0.875","paper":"0.709","d":23.4,"status":"info","cite":{"src":"VGGT","who":"Wang et al. 2025","arxiv":"2503.11651","loc":"Table 3 · ETH3D · overall (m) — D10 (terrains outlier)"}},
+    {"model":"DA3","ds":"ETH3D","metric":"chamfer","obs":"7.14","paper":"","d":null,"status":"target","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"","loc":"ETH3D · chamfer — protocol gap, no target"}}
+  ]
+  </script>
+
   <script>
     (() => {
-      const cells = [
-        ...JSON.parse(document.getElementById("verified-cells").textContent),
-        ...JSON.parse(document.getElementById("companion-cells").textContent),
-      ];
-      cells.forEach(c => { c.cls = Math.abs(c.d) <= 2 ? "near" : Math.abs(c.d) <= 5 ? "close" : "wide"; });
+      const verified = JSON.parse(document.getElementById("verified-cells").textContent);
+      const companion = JSON.parse(document.getElementById("companion-cells").textContent);
+      const info = JSON.parse(document.getElementById("info-cells").textContent);
+      const cells = [...verified, ...companion, ...info];
+      cells.forEach(c => {
+        c.status = c.status || "ok";          // verified + companion = ok; info block carries its own
+        c.cls = c.d == null ? "" : Math.abs(c.d) <= 2 ? "near" : Math.abs(c.d) <= 5 ? "close" : "wide";
+      });
 
       const METRICS = [
         { key: "abs_rel", label: "AbsRel", group: "depth", desc: "absolute relative depth error", dir: "lower is better" },
@@ -247,9 +285,10 @@
         { key: "ate", label: "ATE", group: "traj", desc: "absolute trajectory error, Sim(3)-aligned", dir: "lower is better" },
         { key: "rpe_t", label: "RPE-trans", group: "traj", desc: "relative pose error — translation (RMSE)", dir: "lower is better" },
         { key: "rpe_r", label: "RPE-rot°", group: "traj", desc: "relative pose error — rotation, degrees (RMSE)", dir: "lower is better" },
+        { key: "chamfer", label: "chamfer", group: "recon", desc: "point-cloud reconstruction error, Acc/Comp overall", dir: "lower is better" },
       ];
-      const MODEL_ORDER = ["DA-V2 Small","DA-V2 Base","DA-V2 Large","MoGe ViT-L","Metric3D-v2 L","Metric3D-v2 G","Marigold v1-1","DA3","Depth Pro","MonST3R","DUSt3R","MASt3R","VGGT","DAGE"];
-      const DS_ORDER = ["NYU","KITTI","DIODE","ETH3D","GSO","iBims-1","DDAD","Sintel","Sun-RGBD","Booster","CO3Dv2","TUM-Dyn"];
+      const MODEL_ORDER = ["DA-V2 Small","DA-V2 Base","DA-V2 Large","MoGe ViT-L","Metric3D-v2 L","Metric3D-v2 G","Marigold v1-1","DA3","Depth Pro","CUT3R","MonST3R","DUSt3R","MASt3R","VGGT","DAGE"];
+      const DS_ORDER = ["NYU","KITTI","DIODE","ETH3D","DTU","GSO","iBims-1","DDAD","Sintel","Bonn","Sun-RGBD","Booster","CO3Dv2","TUM-Dyn"];
 
       const bar = document.getElementById("metricbar");
       const desc = document.getElementById("metric-desc");
@@ -300,10 +339,14 @@
             const g = groups[mname + " " + d];
             if (!g) { html += `<td><span class="cell empty" aria-hidden="true"></span></td>`; return; }
             const c = g[0];
-            const multi = g.length > 1 ? `<span class="multi">·${g.length}</span>` : "";
-            const dd = `${c.d > 0 ? "+" : ""}${c.d}%`;
-            html += `<td><button class="cell has ${c.cls}" data-key="${mname} ${d}" aria-label="${mname} on ${d}: ${c.obs}, ${dd} from paper">
-              ${multi}<span class="v">${c.obs}</span><span class="dd">${dd}</span></button></td>`;
+            const badge = c.status === "info" ? '<span class="sbadge info" title="off-paper">&#8505;</span>'
+              : c.status === "target" ? '<span class="sbadge target" title="no paper target">&#9671;</span>'
+              : (g.length > 1 ? `<span class="multi">&middot;${g.length}</span>` : "");
+            const dd = c.d == null ? '<span class="dd nt">no target</span>'
+              : `<span class="dd">${c.d > 0 ? "+" : ""}${c.d}%</span>`;
+            const al = c.d == null ? `${mname} on ${d}: ${c.obs}, no paper target`
+              : `${mname} on ${d}: ${c.obs}, ${c.d > 0 ? "+" : ""}${c.d}% from paper`;
+            html += `<td><button class="cell has ${c.status} ${c.cls}" data-key="${mname} ${d}" aria-label="${al}">${badge}<span class="v">${c.obs}</span>${dd}</button></td>`;
           });
           html += "</tr>";
         });
@@ -329,9 +372,14 @@
             <br><span class="loc">${x.cite.loc}</span>
             ${g.length > 1 ? `<br><span style="color:var(--fg-dim)">plumbline ${x.obs} vs paper ${x.paper} (${x.d > 0 ? "+" : ""}${x.d}%)</span>` : ""}
           </div>`).join("");
+        const chip = c.status === "ok" ? '<span class="p-status ok">&#10003; verified</span>'
+          : c.status === "info" ? '<span class="p-status info">&#8505; off-paper</span>'
+          : '<span class="p-status target">&#9671; no paper target</span>';
+        const paperBit = c.paper ? `<span class="p-paper">paper <b>${c.paper}</b></span>` : "";
+        const deltaBit = c.d == null ? "" : `<span class="p-delta">&Delta; ${c.d > 0 ? "+" : ""}${c.d}%</span>`;
         pop.innerHTML =
           `<div class="p-top"><span class="p-model">${c.model}</span><span class="p-ds">${c.ds} · ${METRICS.find(m=>m.key===c.metric).label}</span></div>
-           <div class="p-nums"><span class="p-obs ${c.cls}">${c.obs}</span><span class="p-paper">paper <b>${c.paper}</b></span><span class="p-delta">Δ ${c.d > 0 ? "+" : ""}${c.d}%</span></div>
+           <div class="p-nums"><span class="p-obs ${c.status === "ok" ? c.cls : "na"}">${c.obs}</span>${paperBit}${deltaBit}${chip}</div>
            ${blocks}`;
         pop.classList.add("show");
         const r = el.getBoundingClientRect();
