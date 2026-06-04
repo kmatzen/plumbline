@@ -203,9 +203,9 @@ jobs:
   # cross-checks the verified 0.974), PDF re-verify pending before any ✅.
   # All assume DA3 vendored (_vendor/depth_anything_3, PR #56) — deps in base.
   - name: da3-kitti
-    status: pending
+    status: done
     priority: 12
-    paper_target: "DA3 Table 4 — KITTI δ₁ = 0.953 (ar5iv; PDF re-verify pending)"
+    paper_target: "DA3 Table 4 — KITTI δ₁ = 0.953 (PDF-verified arxiv.org/html/2511.10647)"
     primary_metric: delta_1
     datasets: [kitti]
     data_footprint_gb: 6
@@ -213,8 +213,10 @@ jobs:
     requires_env: [KITTI_ROOT]
     extras: "DA3: vendored (_vendor/depth_anything_3, PR #56); deps in base — no install step."
     notes: >
-      DA3 mono-depth δ₁ on KITTI Eigen, scale+shift (mirrors da-v2-large-kitti).
-      Sibling of the reproduced da3-nyuv2. Confirm against the PDF before ✅.
+      ✅ RAN 2026-06-04 (1080 Ti): δ₁ 0.9534 vs 0.953 (MATCH) at process_res=1008.
+      Default 504 gave 0.9265 (MISMATCH) — a resolution artifact on KITTI's 3.3:1
+      frames, NOT protocol/checkpoint: DA-V2-Large reproduces its own KITTI δ₁
+      0.946 (we got 0.9561) + AbsRel 0.074 on this exact kitti_eigen_garg path.
   - name: da3-eth3d
     status: pending
     priority: 12
