@@ -51,6 +51,11 @@ dependencies = [
     "safetensors>=0.4",
     "diffusers>=0.27",
     "accelerate>=0.28",
+    # kornia (pulls the kornia_rs Rust ext) — diffusers' Marigold depth
+    # pipeline imports it at load time. Pin it here so `uv sync` installs it
+    # deterministically; a missing transitive kornia_rs is otherwise silent
+    # env-churn that only surfaces when the marigold adapter is loaded.
+    "kornia>=0.7.3",
 ]
 
 [project.optional-dependencies]

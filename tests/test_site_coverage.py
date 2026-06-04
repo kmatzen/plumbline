@@ -26,6 +26,7 @@ from plumbline.models.registry import MODEL_REGISTRY
 from plumbline.paths import REPO_ROOT
 
 SITE_HTML = REPO_ROOT / "site" / "index.html"
+EXPLORE_HTML = REPO_ROOT / "site" / "explore.html"
 REPRODUCTIONS_MD = REPO_ROOT / "REPRODUCTIONS.md"
 README_MD = REPO_ROOT / "README.md"
 
@@ -100,15 +101,23 @@ def _site_verified_count() -> int:
     return int(m.group(1))
 
 
-def _site_verified_list_count() -> int:
-    html = SITE_HTML.read_text(encoding="utf-8")
+def _explore_verified_cells() -> list[dict]:
+    """The verified-cell data backing the interactive deviation field on
+    site/explore.html (moved off the landing page 2026-06-04)."""
+    import json
+
+    html = EXPLORE_HTML.read_text(encoding="utf-8")
     block = re.search(
-        r'<ul class="cell-list[^"]*"[^>]*aria-label="verified paper-match cells">(.*?)</ul>',
+        r'<script type="application/json" id="verified-cells">(.*?)</script>',
         html,
         re.DOTALL,
     )
-    assert block, "could not find the verified paper-match cell list on the site"
-    return len(re.findall(r"<li[ >]", block.group(1)))
+    assert block, "could not find the verified-cells JSON in site/explore.html"
+    return json.loads(block.group(1))
+
+
+def _site_verified_list_count() -> int:
+    return len(_explore_verified_cells())
 
 
 def _reproductions_verified_total() -> int:
@@ -124,8 +133,8 @@ class TestVerifiedCountConsistency:
     def test_site_stat_matches_listed_cells(self) -> None:
         stat, listed = _site_verified_count(), _site_verified_list_count()
         assert stat == listed, (
-            f"site 'verified results' stat ({stat}) != number of listed verified "
-            f"cells ({listed}) — update site/index.html"
+            f"site 'verified results' stat ({stat}, site/index.html) != number of "
+            f"verified-cell entries ({listed}, site/explore.html #verified-cells)"
         )
 
     def test_site_matches_reproductions_total(self) -> None:
