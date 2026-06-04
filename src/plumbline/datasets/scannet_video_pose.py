@@ -185,9 +185,7 @@ class ScanNetVideoPoseDataset(Dataset):
         poses = load_scannet_pose_90(self.root / rec["pose_path"])
         image_paths = rec["image_paths"]
         if poses.shape[0] != len(image_paths):
-            raise ValueError(
-                f"{rec['scene']}: {poses.shape[0]} poses vs {len(image_paths)} frames"
-            )
+            raise ValueError(f"{rec['scene']}: {poses.shape[0]} poses vs {len(image_paths)} frames")
         # Drop dropped-tracker frames (non-finite pose) — image + pose together.
         finite = np.array([bool(np.all(np.isfinite(p))) for p in poses])
         if finite.sum() < 3:

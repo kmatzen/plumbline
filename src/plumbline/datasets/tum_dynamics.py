@@ -155,7 +155,9 @@ def associate_tum(
     return matches
 
 
-def tum_pose_to_matrix(tx: float, ty: float, tz: float, qx: float, qy: float, qz: float, qw: float) -> NDArray[np.float64]:
+def tum_pose_to_matrix(
+    tx: float, ty: float, tz: float, qx: float, qy: float, qz: float, qw: float
+) -> NDArray[np.float64]:
     """TUM ``(t, quaternion)`` → 4x4 ``world_from_camera`` (c2w).
 
     Quaternion order is ``(qx, qy, qz, qw)`` (TUM convention); normalized here
@@ -179,9 +181,7 @@ def tum_pose_to_matrix(tx: float, ty: float, tz: float, qx: float, qy: float, qz
     return E
 
 
-def select_tum_frames(
-    rgb_txt: Path, gt_txt: Path
-) -> tuple[list[str], list[list[str]]]:
+def select_tum_frames(rgb_txt: Path, gt_txt: Path) -> tuple[list[str], list[list[str]]]:
     """Run MonST3R's prepare_tum.py selection on a sequence's rgb/gt files.
 
     Single source of truth for "which 90 frames + poses" — used both by the
@@ -241,9 +241,7 @@ class TUMDynamicsDataset(Dataset):
         # Key the manifest on the set of sequences actually present, so staging
         # more sequences after a first (partial) scan invalidates the cache
         # rather than silently serving the old, smaller set.
-        present = sorted(
-            s for s in TUM_DYNAMIC_SEQUENCES if (self.root / s / "rgb.txt").exists()
-        )
+        present = sorted(s for s in TUM_DYNAMIC_SEQUENCES if (self.root / s / "rgb.txt").exists())
         tag = hashlib.sha256("|".join(present).encode()).hexdigest()[:12]
         manifest_path = self.root / ".plumbline_manifest" / f"tum_dynamics_pose_{tag}.jsonl"
         if manifest_path.exists():
