@@ -67,10 +67,10 @@
     .cell.has:hover, .cell.has:focus-visible { background: rgba(212,240,0,0.07); outline: none; }
     .cell.has:focus-visible { box-shadow: inset 0 0 0 1.5px var(--acc); }
     .cell .v { font-weight: 600; font-variant-numeric: tabular-nums; }
-    .cell.near .v { color: var(--acc); } .cell.close .v { color: var(--fg); } .cell.wide .v { color: var(--fg-dim); }
+    /* .v colour is set inline = within-column performance (greener = better); see perfColor() */
     .cell .dd { display: block; font-size: 10px; margin-top: 2px; color: var(--fg-dim); font-variant-numeric: tabular-nums; }
     .cell .multi { position: absolute; top: 4px; right: 5px; font-size: 9px; color: var(--acc-dim); }
-    .cell.info .v, .cell.target .v { color: var(--fg-mute) !important; font-style: italic; }
+    .cell.info .v, .cell.target .v { font-style: italic; }  /* off-paper kept italic; colour still = perf */
     .cell.info, .cell.target { background-image: repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.014) 6px 7px); }
     .cell .dd.nt { color: var(--fg-dim); font-style: italic; }
     .sbadge { position: absolute; top: 3px; right: 5px; font-size: 10px; line-height: 1; }
@@ -88,9 +88,7 @@
     .pop .p-model { font-size: 15px; font-weight: 600; color: var(--fg); }
     .pop .p-ds { color: var(--fg-mute); font-size: 12px; }
     .pop .p-nums { display: flex; align-items: baseline; gap: 14px; margin: 11px 0 0; }
-    .pop .p-obs { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
-    .pop .p-obs.near { color: var(--acc); } .pop .p-obs.close { color: var(--fg); } .pop .p-obs.wide { color: var(--fg-dim); }
-    .pop .p-obs.na { color: var(--fg-mute); font-style: italic; }
+    .pop .p-obs { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--fg); }
     .pop .p-status { font-size: 11px; padding: 2px 7px; border: 1px solid var(--rule); border-radius: 2px; white-space: nowrap; }
     .pop .p-status.ok { color: var(--acc); border-color: var(--acc-dim); }
     .pop .p-status.info { color: var(--fg-mute); } .pop .p-status.target { color: var(--fg-dim); }
@@ -105,8 +103,8 @@
     .pop .p-comp b { color: var(--fg-soft); font-weight: 500; font-variant-numeric: tabular-nums; }
 
     .xlegend { display: flex; gap: 20px 26px; flex-wrap: wrap; align-items: center; margin: 22px 0 0; color: var(--fg-mute); font-size: 12px; }
-    .xlegend .sw { width: 11px; height: 11px; border-radius: 2px; display: inline-block; vertical-align: -1px; margin-right: 7px; }
-    .xlegend .sw.near { background: var(--acc); } .xlegend .sw.close { background: var(--fg); } .xlegend .sw.wide { background: var(--fg-dim); }
+    .xlegend .swgrad { width: 72px; height: 10px; border-radius: 2px; display: inline-block; vertical-align: 0;
+      background: linear-gradient(90deg, #6c6960, #d6d1c4 55%, #d4f000); }
     .xlegend .lglyph { margin-right: 5px; }
     .xlegend .lglyph.info { color: var(--fg-mute); } .xlegend .lglyph.target { color: var(--fg-dim); }
     .xfoot { margin-top: 30px; color: var(--fg-dim); font-size: 12.5px; line-height: 1.7; max-width: 76ch; }
@@ -131,13 +129,16 @@
       <span class="xnum">verified/ provenance matrix</span>
       <h1>Model × benchmark, every number <em>traced to its paper</em>.</h1>
       <p class="xlede">
-        Every plumbline run vs its source paper. <b>&#10003; verified</b> cells
-        (coloured by closeness) land within their pinned tolerance; <b>&#8505; off-paper</b>
-        cells are real numbers that don't — paper-private eval recipes, protocol
-        deltas, model limits (the hover names which); <b>&#9671;</b> cells have no
-        paper target. Only the 36 verified ones are safe to cite. <b>Switch the
-        metric</b> with the tabs; <b>hover any number</b> for observed vs paper,
-        the deviation, and the citation — paper, table, column, row.
+        Every number is a plumbline run, <b>shaded by performance</b> — the
+        greenest cell is the <b>best result in its column</b> (that benchmark);
+        dimmer is weaker. <b>Provenance rides the glyph, not the colour:</b>
+        <b>&#10003; verified</b> numbers land within their pinned tolerance of the
+        source paper, <b>&#8505; off-paper</b> ones don't (paper-private recipes,
+        protocol deltas, model limits — the hover names which), and <b>&#9671;</b>
+        have no paper target. Only the 36 verified are safe to cite. <b>Switch the
+        metric</b> with the tabs; <b>hover any number</b> for observed vs paper, the
+        deviation, and the citation. Each row follows its own paper's eval protocol,
+        so read the shading as a within-column ranking, not a controlled head-to-head.
       </p>
     </div>
 
@@ -147,11 +148,11 @@
     <div class="matwrap"><table class="matrix" id="matrix"></table></div>
 
     <div class="xlegend">
-      <span style="color:var(--fg-soft)">&#10003; verified —</span>
-      <span><span class="sw near"></span>≤2%</span>
-      <span><span class="sw close"></span>2–5%</span>
-      <span><span class="sw wide"></span>&gt;5%</span>
-      <span style="margin-left:14px"><span class="lglyph info">&#8505;</span> off-paper</span>
+      <span style="color:var(--fg-soft)">colour = performance</span>
+      <span><span class="swgrad"></span> weaker&nbsp;→&nbsp;best <span style="color:var(--fg-dim)">(within column)</span></span>
+      <span style="margin-left:14px; color:var(--fg-soft)">provenance —</span>
+      <span><span class="lglyph" style="color:var(--acc)">&#10003;</span> verified</span>
+      <span><span class="lglyph info">&#8505;</span> off-paper</span>
       <span><span class="lglyph target">&#9671;</span> no paper target</span>
       <span style="margin-left:auto; color:var(--fg-dim)">Δ vs paper on hover</span>
     </div>
@@ -470,10 +471,37 @@
       const companion = JSON.parse(document.getElementById("companion-cells").textContent);
       const info = JSON.parse(document.getElementById("info-cells").textContent);
       const cells = [...verified, ...companion, ...info];
+      cells.forEach(c => { c.status = c.status || "ok"; });  // verified+companion = ok; info carries its own
+
+      // Colour channel = relative PERFORMANCE within each column (metric × dataset):
+      // greenest is the best result on that benchmark, dim is the weakest. Provenance
+      // (verified / off-paper / no-target) rides the glyph + hover, never the colour —
+      // so "green" can't be misread as "matches paper well".
+      const LOWER = new Set(["abs_rel", "ate", "rpe_t", "rpe_r"]);  // lower-is-better metrics
+      const colVals = {};
       cells.forEach(c => {
-        c.status = c.status || "ok";          // verified + companion = ok; info block carries its own
-        c.cls = c.d == null ? "" : Math.abs(c.d) <= 2 ? "near" : Math.abs(c.d) <= 5 ? "close" : "wide";
+        const v = parseFloat(c.obs);
+        c.val = isFinite(v) ? v : null;
+        if (c.val == null) return;
+        const k = c.metric + "|" + c.ds;
+        (colVals[k] = colVals[k] || []).push(c.val);
       });
+      cells.forEach(c => {
+        c.perf = null;                                    // null → neutral (nothing to rank against)
+        if (c.val == null) return;
+        const vs = colVals[c.metric + "|" + c.ds];
+        if (!vs || vs.length < 2) return;                 // need ≥2 in the column to compare
+        const mn = Math.min(...vs), mx = Math.max(...vs);
+        if (mx === mn) return;
+        c.perf = LOWER.has(c.metric) ? (mx - c.val) / (mx - mn) : (c.val - mn) / (mx - mn);  // 1 = best
+      });
+      const perfColor = p => {                            // gray (weak) → bone → lime (best)
+        if (p == null) return "var(--fg-soft)";
+        const dim = [108, 105, 96], soft = [214, 209, 196], acc = [212, 240, 0];
+        const a = p < 0.5 ? dim : soft, b = p < 0.5 ? soft : acc, t = p < 0.5 ? p / 0.5 : (p - 0.5) / 0.5;
+        const rgb = a.map((x, i) => Math.round(x + (b[i] - x) * t));
+        return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+      };
 
       const METRICS = [
         { key: "abs_rel", label: "AbsRel", group: "depth", desc: "absolute relative depth error", dir: "lower is better" },
@@ -540,7 +568,7 @@
               : `<span class="dd">${c.d > 0 ? "+" : ""}${c.d}%</span>`;
             const al = c.d == null ? `${mname} on ${d}: ${c.obs}, no paper target`
               : `${mname} on ${d}: ${c.obs}, ${c.d > 0 ? "+" : ""}${c.d}% from paper`;
-            html += `<td><button class="cell has ${c.status} ${c.cls}" data-key="${mname} ${d}" aria-label="${al}">${badge}<span class="v">${c.obs}</span>${dd}</button></td>`;
+            html += `<td><button class="cell has ${c.status}" data-key="${mname} ${d}" aria-label="${al}">${badge}<span class="v" style="color:${perfColor(c.perf)}">${c.obs}</span>${dd}</button></td>`;
           });
           html += "</tr>";
         });
@@ -577,7 +605,7 @@
         const deltaBit = c.d == null ? "" : `<span class="p-delta">&Delta; ${c.d > 0 ? "+" : ""}${c.d}%</span>`;
         pop.innerHTML =
           `<div class="p-top"><span class="p-model">${c.model}</span><span class="p-ds">${c.ds} · ${METRICS.find(m=>m.key===c.metric).label}</span></div>
-           <div class="p-nums"><span class="p-obs ${c.status === "ok" ? c.cls : "na"}">${c.obs}</span>${paperBit}${deltaBit}${chip}</div>
+           <div class="p-nums"><span class="p-obs" style="color:${perfColor(c.perf)}">${c.obs}</span>${paperBit}${deltaBit}${chip}</div>
            ${blocks}${compHtml}`;
         pop.classList.add("show");
         const r = el.getBoundingClientRect();
