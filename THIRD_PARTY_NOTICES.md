@@ -18,6 +18,7 @@ is NonCommercial makes the corresponding parts of this repository usable for
 | UniK3D | `_vendor/unik3d/` | https://github.com/lpiccinelli-eth/UniK3D | CC BY-NC-SA 4.0 (`_vendor/unik3d/LICENSE`) |
 | Video Depth Anything | `_vendor/vda/` | https://github.com/DepthAnything/Video-Depth-Anything | Apache-2.0 code (`_vendor/vda/LICENSE`); Base/Large *weights* CC BY-NC 4.0 |
 | π³ (Pi3) | `_vendor/pi3/` | https://github.com/yyfz/Pi3 | BSD-3-Clause (`_vendor/pi3/LICENSE`) |
+| StreamVGGT | `_vendor/streamvggt/` | https://github.com/wzzheng/StreamVGGT | CC BY-NC-SA 4.0 (`_vendor/streamvggt/LICENSE.txt`) |
 
 These DUSt3R-lineage models each bundle their own `dust3r` + Naver `croco`
 subtrees (MASt3R also `mast3r/`; MonST3R also `third_party/RAFT` for flow). All
