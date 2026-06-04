@@ -99,10 +99,10 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 
 ### Paper-match count
 
-**30 ✅ mono-depth cells + 6 ✅ pose cells = 36 total** with `source_confidence: verified_pdf`:
+**31 ✅ mono-depth cells + 6 ✅ pose cells = 37 total** with `source_confidence: verified_pdf`:
 
 - NYU (8): DA-V2 S/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3, **MonST3R** (lineage protocol, 2026-05-26)
-- KITTI Eigen+Garg (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
+- KITTI Eigen+Garg (6): DA-V2 S/B/L, Metric3D-v2 L/Giant, **DA3** (δ₁ 0.9534 vs 0.953, `process_res=1008`; the 504 default underperforms on KITTI's 3.3:1 frames — root-caused 2026-06-04, DA-V2 reproduces its own KITTI δ₁/AbsRel on the same protocol)
 - KITTI MoGe-eval (2): MoGe-1 ViT-L (D8 close), DA-V2 ViT-L (2026-04-27)
 - KITTI dust3r-lineage (1): **DUSt3R** (0.1049/0.1074, −2.3%) — was present in the grid + site but omitted from this breakdown
 - DIODE (2): MoGe-1 ViT-L, DA-V2 ViT-L (FoV-warp loader, 2026-04-26/27)
