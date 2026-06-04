@@ -548,7 +548,7 @@
       function render() {
         const sub = cells.filter(c => c.metric === metric);
         const groups = {};
-        sub.forEach(c => { (groups[c.model + " " + c.ds] = groups[c.model + " " + c.ds] || []).push(c); });
+        sub.forEach(c => { (groups[c.model + " " + c.ds] = groups[c.model + " " + c.ds] || []).push(c); });
         const rows = MODEL_ORDER.filter(m => sub.some(c => c.model === m));
         const colsAll = DS_ORDER.filter(d => sub.some(c => c.ds === d));
 
@@ -558,7 +558,7 @@
         rows.forEach(mname => {
           html += `<tr><th scope="row">${mname}</th>`;
           colsAll.forEach(d => {
-            const g = groups[mname + " " + d];
+            const g = groups[mname + " " + d];
             if (!g) { html += `<td><span class="cell empty" aria-hidden="true"></span></td>`; return; }
             const c = g[0];
             const badge = c.status === "info" ? '<span class="sbadge info" title="off-paper">&#8505;</span>'
