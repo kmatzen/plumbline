@@ -197,6 +197,64 @@ jobs:
       step is no longer needed. Result JSON:
       s3://plumbline-bench/runs/queue_da3_20260528T160939Z.json.
 
+  # DA3 mono-depth δ₁, the rest of Table 4 (public DA3-LARGE-1.1). NYU is
+  # already reproduced (da3-nyuv2: δ₁ 0.9684 vs 0.974). These four are the
+  # remaining Table-4 columns; targets read via ar5iv (the table's NYU row
+  # cross-checks the verified 0.974), PDF re-verify pending before any ✅.
+  # All assume DA3 vendored (_vendor/depth_anything_3, PR #56) — deps in base.
+  - name: da3-kitti
+    status: pending
+    priority: 12
+    paper_target: "DA3 Table 4 — KITTI δ₁ = 0.953 (ar5iv; PDF re-verify pending)"
+    primary_metric: delta_1
+    datasets: [kitti]
+    data_footprint_gb: 6
+    est_wall_min: 30
+    requires_env: [KITTI_ROOT]
+    extras: "DA3: vendored (_vendor/depth_anything_3, PR #56); deps in base — no install step."
+    notes: >
+      DA3 mono-depth δ₁ on KITTI Eigen, scale+shift (mirrors da-v2-large-kitti).
+      Sibling of the reproduced da3-nyuv2. Confirm against the PDF before ✅.
+  - name: da3-eth3d
+    status: pending
+    priority: 12
+    paper_target: "DA3 Table 4 — ETH3D δ₁ = 0.986 (ar5iv; PDF re-verify pending)"
+    primary_metric: delta_1
+    datasets: [eth3d]
+    data_footprint_gb: 3
+    est_wall_min: 20
+    requires_env: [ETH3D_MOGE_ROOT]
+    extras: "DA3: vendored (_vendor/depth_anything_3, PR #56); deps in base — no install step."
+    notes: >
+      DA3 δ₁ on the MoGe ETH3D bundle, scale_shift_clamped (plain scale_shift
+      blows up there). Protocol match is a hypothesis; confirm protocol + PDF.
+  - name: da3-diode
+    status: pending
+    priority: 12
+    paper_target: "DA3 Table 4 — DIODE δ₁ = 0.954 (ar5iv; PDF re-verify pending)"
+    primary_metric: delta_1
+    datasets: [diode]
+    data_footprint_gb: 3
+    est_wall_min: 20
+    requires_env: [DIODE_MOGE_ROOT]
+    extras: "DA3: vendored (_vendor/depth_anything_3, PR #56); deps in base — no install step."
+    notes: >
+      DA3 δ₁ on the MoGe DIODE bundle (mirrors da-v2-large-diode-moge-bundle).
+      Protocol match is a hypothesis; confirm protocol + PDF target.
+  - name: da3-sintel
+    status: pending
+    priority: 12
+    paper_target: "DA3 Table 4 — Sintel δ₁ = 0.755 (ar5iv; PDF re-verify pending)"
+    primary_metric: delta_1
+    datasets: [sintel]
+    data_footprint_gb: 2
+    est_wall_min: 15
+    requires_env: [SINTEL_MOGE_ROOT]
+    extras: "DA3: vendored (_vendor/depth_anything_3, PR #56); deps in base — no install step."
+    notes: >
+      DA3 δ₁ on the MoGe Sintel bundle, scale_shift_clamped — DA3's weakest
+      δ₁ benchmark (0.755). Protocol match is a hypothesis; confirm protocol + PDF.
+
   # NOTE: the π³ (pi3) adapter and its DTU / ETH3D jobs were REMOVED before
   # public release (2026-05-31). On both datasets — same loader, protocol, and
   # Umeyama+ICP alignment as VGGT — π³ came out ~6–20× WORSE than VGGT

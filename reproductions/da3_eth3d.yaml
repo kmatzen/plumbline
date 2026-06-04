@@ -1,0 +1,25 @@
+# Depth Anything 3 (Large) on ETH3D (MoGe HF eval bundle)
+#
+# DA3 paper Table 4: ETH3D δ₁ = 0.986 (98.6) for the public DA3 release.
+# scale_shift_clamped — plain scale_shift blows up on the MoGe ETH3D bundle
+# (see da-v2-large-eth3d-moge-table2). Target via ar5iv (NYU row of the same
+# table cross-checks 0.974); PDF re-verify pending before ✅.
+name: da3-eth3d
+protocol: eth3d_moge
+model:
+  name: depth-anything-3
+  kwargs:
+    variant: large
+    checkpoint: depth-anything/DA3-LARGE-1.1
+scale_alignment: scale_shift_clamped
+device: cuda:0
+paper_reference:
+  primary_metric: delta_1
+  value: 0.986
+  tolerance_relative: 0.02
+  citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. ETH3D, δ₁ (scale+shift aligned)."
+  source_confidence: approximate
+notes: >
+  DA3 vendored — no install step. Protocol/scale_alignment mirror
+  da-v2-large-eth3d-moge. The DA3 eval protocol for ETH3D is a hypothesis
+  (MoGe bundle); confirm both the protocol match and the PDF target.
