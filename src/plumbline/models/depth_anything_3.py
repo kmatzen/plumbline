@@ -120,6 +120,7 @@ class DepthAnything3Adapter(Model):
         device: str = "cuda:0",
         variant: str = "large",
         checkpoint: str | None = None,
+        process_res: int = 504,
     ) -> None:
         if checkpoint is None and variant not in _HF_CHECKPOINTS:
             raise ValueError(
@@ -129,6 +130,11 @@ class DepthAnything3Adapter(Model):
         self.device = device
         self.variant = variant
         self.checkpoint = checkpoint or _HF_CHECKPOINTS[variant]
+        # DA3's internal long-edge processing resolution. The 504 default suits
+        # near-square inputs (NYU reproduces at 504), but wide-aspect datasets
+        # collapse to too few rows — KITTI (3.3:1) becomes ~154 px tall at 504 and
+        # underperforms; 1008 (308 px tall) reproduces DA3 Table 4's KITTI delta_1.
+        self.process_res = process_res
         self._model: Any = None
 
     def _load(self) -> None:
@@ -152,7 +158,9 @@ class DepthAnything3Adapter(Model):
         assert_valid_image(images, name="da3/input")
         self._load()
 
-        out = _run_depth_anything_3(self._model, images, device=self.device)
+        out = _run_depth_anything_3(
+            self._model, images, device=self.device, process_res=self.process_res
+        )
 
         depth = out["depth"].astype(np.float32)
         K = out.get("intrinsics")
@@ -181,11 +189,13 @@ class DepthAnything3Adapter(Model):
         )
 
     def config_hash(self) -> str:
-        s = f"{self.name}@{self.version}/variant={self.variant}/ckpt={self.checkpoint}"
+        s = f"{self.name}@{self.version}/variant={self.variant}/ckpt={self.checkpoint}/res={self.process_res}"
         return hashlib.sha256(s.encode()).hexdigest()[:16]
 
 
-def _run_depth_anything_3(model: Any, images: NDArray[np.uint8], *, device: str) -> dict[str, Any]:
+def _run_depth_anything_3(
+    model: Any, images: NDArray[np.uint8], *, device: str, process_res: int = 504
+) -> dict[str, Any]:
     """Run DA3 end-to-end on a batch of sRGB uint8 images.
 
     Returns arrays at DA3's processed resolution (long edge = 504,
@@ -203,7 +213,9 @@ def _run_depth_anything_3(model: Any, images: NDArray[np.uint8], *, device: str)
         # export_dir=None skips all file writes; export_format must be a
         # non-None string because upstream does ``if "gs" in export_format``
         # before checking export_dir.
-        pred = model.inference(imgs_list, export_dir=None, export_format="mini_npz")
+        pred = model.inference(
+            imgs_list, export_dir=None, export_format="mini_npz", process_res=process_res
+        )
 
     depth_np = np.asarray(pred.depth)  # (N, H, W), relative/affine-invariant
     intr_np = np.asarray(pred.intrinsics)  # (N, 3, 3)
