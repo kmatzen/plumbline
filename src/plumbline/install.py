@@ -199,6 +199,31 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
             "Pass source='hf' to use the no-clone transformers path instead."
         ),
     ),
+    "vda": InstallSpec(
+        name="vda",
+        kind="vendored",
+        # Vendored as the inference subset of the Apache-2.0 Video-Depth-Anything
+        # package (_vendor/vda). Its only non-base runtime dep is easydict (in
+        # base); opencv/einops/tqdm already base, xformers guarded-optional.
+        # Probe the vendored package itself.
+        probe_import="video_depth_anything",
+        pip=(),
+        extra_env=(
+            (
+                "VDA_ROOT",
+                "Optional: override the vendored _vendor/vda path with a dev checkout.",
+            ),
+        ),
+        weights="hf-auto",
+        notes=(
+            "Code vendored under plumbline/_vendor/vda (inference subset of the "
+            "Apache-2.0 release; benchmark/loss/scripts pruned). Deps (easydict/"
+            "opencv-python) in base. Weights: depth-anything/Video-Depth-Anything-"
+            "{Small,Base,Large} (Small=Apache, Base/Large=CC-BY-NC) or the Metric-* "
+            "repos. Runs fp16/fp32 — on Pascal use VideoDepthAnythingAdapter("
+            "compute_fp32=True). Video model: feed a whole clip."
+        ),
+    ),
     "unik3d": InstallSpec(
         name="unik3d",
         kind="vendored",
@@ -434,6 +459,7 @@ _LICENSE_INFO: dict[str, tuple[str, bool]] = {
     "depth-anything-v2": ("Apache-2.0", True),
     "depth-anything-3": ("Apache-2.0", True),
     "unik3d": ("CC-BY-NC-SA-4.0", True),  # NonCommercial — vendorable, like dust3r-lineage
+    "vda": ("Apache-2.0", True),  # code Apache; Base/Large *weights* are CC-BY-NC (Small Apache)
     "moge": ("MIT", True),
     "vggt": ("VGGT License (custom research/AUP)", False),  # review redistribution clause
     "depth-pro": ("Apple (custom)", False),  # review redistribution clause

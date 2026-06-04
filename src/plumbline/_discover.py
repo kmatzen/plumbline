@@ -35,6 +35,7 @@ _BUILTIN_ADAPTER_MODULES: tuple[str, ...] = (
     "plumbline.models.monst3r",
     "plumbline.models.dage",
     "plumbline.models.unik3d",
+    "plumbline.models.vda",
     "plumbline.datasets.sintel",
     "plumbline.datasets.scannet",
     "plumbline.datasets.eth3d",

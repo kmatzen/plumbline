@@ -70,6 +70,9 @@ dependencies = [
     # (spherical-harmonics / geometric utils); timm + opencv already above. Light
     # and numpy-2 clean, so it joins the vendored-model deps in base.
     "scipy>=1.11",
+    # Video Depth Anything (vendored, _vendor/vda, Apache-2.0) reads its model
+    # config via easydict; xformers stays guarded-optional in its DINOv2 layers.
+    "easydict>=1.10",
 ]
 
 [project.optional-dependencies]
@@ -268,6 +271,7 @@ module = [
     "models.geowizard_pipeline",
     "moge.*",
     "unik3d.*",
+    "video_depth_anything.*",
     "nuscenes.*",
     "sam2",
     "vggt.*",
