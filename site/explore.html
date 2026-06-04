@@ -56,11 +56,13 @@
       border-right: 1px solid var(--rule); z-index: 1; font-size: 12.5px;
     }
     table.matrix tbody tr:nth-child(even) th { background: var(--bg-1); }
-    table.matrix tbody td { border-bottom: 1px solid var(--rule-2); border-right: 1px solid var(--rule-2); min-width: 78px; }
-    table.matrix tbody tr:last-child td { border-bottom: 0; }
+    /* no per-cell grid lines: empties recede to blank space, filled cells form the picture */
+    table.matrix tbody td { min-width: 80px; }
+    table.matrix tbody td:has(.cell.has) { background: rgba(212,240,0,0.022); }
+    table.matrix tbody tr:hover td { background: rgba(255,255,255,0.015); }
 
     .cell { display: block; width: 100%; padding: 11px 8px; cursor: default; position: relative; transition: background 0.14s var(--ease); }
-    .cell.empty { color: var(--rule); } .cell.empty::after { content: "·"; }
+    .cell.empty::after { content: ""; }
     .cell.has { cursor: pointer; }
     .cell.has:hover, .cell.has:focus-visible { background: rgba(212,240,0,0.07); outline: none; }
     .cell.has:focus-visible { box-shadow: inset 0 0 0 1.5px var(--acc); }
@@ -99,6 +101,8 @@
     .pop .p-cite .loc { color: var(--acc); }
     .pop .p-cite a { color: var(--fg-mute); text-decoration: underline; text-underline-offset: 2px; pointer-events: auto; }
     .pop .p-cite a:hover { color: var(--acc); }
+    .pop .p-comp { margin: 11px 0 0; padding: 9px 0 0; border-top: 1px solid var(--rule); font-size: 12px; color: var(--fg-mute); }
+    .pop .p-comp b { color: var(--fg-soft); font-weight: 500; font-variant-numeric: tabular-nums; }
 
     .xlegend { display: flex; gap: 20px 26px; flex-wrap: wrap; align-items: center; margin: 22px 0 0; color: var(--fg-mute); font-size: 12px; }
     .xlegend .sw { width: 11px; height: 11px; border-radius: 2px; display: inline-block; vertical-align: -1px; margin-right: 7px; }
@@ -280,11 +284,7 @@
         { key: "abs_rel", label: "AbsRel", group: "depth", desc: "absolute relative depth error", dir: "lower is better" },
         { key: "delta_1", label: "δ₁", group: "depth", desc: "inlier ratio at 1.25", dir: "higher is better" },
         { key: "maa", label: "mAA@30", group: "pose", desc: "mean average accuracy of relative camera pose", dir: "higher is better" },
-        { key: "rra", label: "RRA@15", group: "pose", desc: "relative rotation accuracy at 15°", dir: "higher is better" },
-        { key: "rta", label: "RTA@15", group: "pose", desc: "relative translation accuracy at 15°", dir: "higher is better" },
         { key: "ate", label: "ATE", group: "traj", desc: "absolute trajectory error, Sim(3)-aligned", dir: "lower is better" },
-        { key: "rpe_t", label: "RPE-trans", group: "traj", desc: "relative pose error — translation (RMSE)", dir: "lower is better" },
-        { key: "rpe_r", label: "RPE-rot°", group: "traj", desc: "relative pose error — rotation, degrees (RMSE)", dir: "lower is better" },
         { key: "chamfer", label: "chamfer", group: "recon", desc: "point-cloud reconstruction error, Acc/Comp overall", dir: "lower is better" },
       ];
       const MODEL_ORDER = ["DA-V2 Small","DA-V2 Base","DA-V2 Large","MoGe ViT-L","Metric3D-v2 L","Metric3D-v2 G","Marigold v1-1","DA3","Depth Pro","CUT3R","MonST3R","DUSt3R","MASt3R","VGGT","DAGE"];
@@ -364,6 +364,10 @@
 
       function show(g, el) {
         const c = g[0];
+        const compMetrics = c.metric === "maa" ? ["rra","rta"] : c.metric === "ate" ? ["rpe_t","rpe_r"] : [];
+        const compLabel = {rra:"RRA@15", rta:"RTA@15", rpe_t:"RPE-trans", rpe_r:"RPE-rot\u00b0"};
+        const comps = compMetrics.flatMap(mk => cells.filter(x => x.model===c.model && x.ds===c.ds && x.metric===mk));
+        const compHtml = comps.length ? `<div class="p-comp">${comps.map(x => `${compLabel[x.metric]} <b>${x.obs}</b> / ${x.paper}`).join(" &nbsp;\u00b7&nbsp; ")}</div>` : "";
         const blocks = g.map(x => `
           <div class="p-cite">
             ${g.length > 1 ? `<div style="color:var(--fg-dim);font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px">${x.cite.src.includes("protocol") ? "alt protocol" : "source"}</div>` : ""}
@@ -380,7 +384,7 @@
         pop.innerHTML =
           `<div class="p-top"><span class="p-model">${c.model}</span><span class="p-ds">${c.ds} · ${METRICS.find(m=>m.key===c.metric).label}</span></div>
            <div class="p-nums"><span class="p-obs ${c.status === "ok" ? c.cls : "na"}">${c.obs}</span>${paperBit}${deltaBit}${chip}</div>
-           ${blocks}`;
+           ${blocks}${compHtml}`;
         pop.classList.add("show");
         const r = el.getBoundingClientRect();
         const pw = pop.offsetWidth, ph = pop.offsetHeight;
