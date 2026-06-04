@@ -1,0 +1,29 @@
+# Depth Anything 3 (Large) on KITTI Eigen test split
+#
+# DA3 paper (arXiv:2511.10647) Table 4 reports δ₁ on KITTI for the public
+# DA3 release at 0.953 (95.3 in the table). δ₁ only — Table 4 reports no
+# AbsRel for DA3. Same scale+shift relative-depth protocol as da3-nyuv2
+# (which reproduced: 0.9684 vs 0.974). Target read via ar5iv; the NYU row
+# of the same table cross-checks the verified 0.974, so the read is
+# trustworthy — but confirm against the PDF before promoting to ✅.
+name: da3-kitti
+protocol: kitti_eigen_garg
+model:
+  name: depth-anything-3
+  kwargs:
+    variant: large
+    checkpoint: depth-anything/DA3-LARGE-1.1
+dataset:
+  name: kitti
+scale_alignment: scale_shift
+device: cuda:0
+paper_reference:
+  primary_metric: delta_1
+  value: 0.953
+  tolerance_relative: 0.02
+  citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. KITTI Eigen test, δ₁ (scale+shift aligned)."
+  source_confidence: approximate
+notes: >
+  DA3 vendored (_vendor/depth_anything_3; deps in base) — no install step.
+  Protocol mirrors da-v2-large-kitti (kitti_eigen_garg). Target from Table 4
+  via ar5iv; PDF re-verify pending.

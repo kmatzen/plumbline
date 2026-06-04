@@ -1,0 +1,23 @@
+# Depth Anything 3 (Large) on DIODE (MoGe HF eval bundle)
+#
+# DA3 paper Table 4: DIODE δ₁ = 0.954 (95.4) for the public DA3 release.
+# Target via ar5iv (NYU row of the same table cross-checks 0.974); PDF
+# re-verify pending before ✅.
+name: da3-diode
+protocol: diode_dav2_moge_bundle
+model:
+  name: depth-anything-3
+  kwargs:
+    variant: large
+    checkpoint: depth-anything/DA3-LARGE-1.1
+scale_alignment: scale_shift
+device: cuda:0
+paper_reference:
+  primary_metric: delta_1
+  value: 0.954
+  tolerance_relative: 0.02
+  citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. DIODE, δ₁ (scale+shift aligned)."
+  source_confidence: approximate
+notes: >
+  DA3 vendored — no install step. Protocol mirrors da-v2-large-diode-moge-bundle.
+  DA3 eval protocol for DIODE is a hypothesis; confirm protocol + PDF target.
