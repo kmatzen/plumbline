@@ -99,7 +99,7 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 
 ### Paper-match count
 
-**30 ✅ mono-depth cells + 4 ✅ pose cells = 34 total** with `source_confidence: verified_pdf`:
+**30 ✅ mono-depth cells + 6 ✅ pose cells = 36 total** with `source_confidence: verified_pdf`:
 
 - NYU (8): DA-V2 S/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3, **MonST3R** (lineage protocol, 2026-05-26)
 - KITTI Eigen+Garg (5): DA-V2 S/B/L, Metric3D-v2 L/Giant
@@ -113,8 +113,9 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 - Booster (1): **Depth Pro** (δ₁ 0.4878 vs 0.466, Depth Pro Table 1; +4.7%) — present in the grid + site since the Booster Table-1 close but omitted from this breakdown until the 2026-05-31 pre-release audit
 - **Sun-RGBD (1, NEW 2026-06-01): Depth Pro** (δ₁ 0.8682 vs 0.890, Depth Pro Table 1; −2.4%, MATCH) — native res + GT focal via `depth-pro-sun-rgbd-native`; was removed pre-release, [resolved](docs/blocked/DEPTH_PRO_SUN_RGBD_TABLE1.md)
 - _(2026-05-28 confidence audit: DA-V2 Base NYU (6.9% off) and MonST3R KITTI (5.05% off) downgraded ✅→ℹ️. Counts match site/README as of 2026-05-30.)_
-- **CO3Dv2 pose (3): VGGT (AUC@30 0.8964 vs 0.882, +1.6 %) + MASt3R (mAA(30) 0.7960 vs 0.818, −2.7 %) + DUSt3R (mAA(30) 0.7893 vs 0.772, +2.2 %), all on MASt3R Table 3 protocol** — v0.1 acceptance criterion #2 met (VGGT) and twice-seconded (MASt3R / DUSt3R).
+- **CO3Dv2 pose (3): VGGT (AUC@30 0.8964 vs 0.882, +1.6 %) + MASt3R (mAA(30) 0.8581 vs 0.818, +4.9 %) + DUSt3R (mAA(30) 0.7893 vs 0.772, +2.2 %), all on MASt3R Table 3 protocol** — v0.1 acceptance criterion #2 met (VGGT) and twice-seconded (MASt3R / DUSt3R). MASt3R re-validated 2026-06-03 on the faithful `sparse_ga` matching path (supersedes the legacy `dust3r_ga` 0.7960, which matched on the wrong pose method; PR #42).
 - **Sintel trajectory pose (1): MonST3R Table 4 — ATE 0.1134 vs 0.108 (+5.0 %), plumbline-computed 2026-05-27** via the new adapter v1.2 video-pose path + `metrics/pose.py` ATE/RPE family.
+- **DAGE Table 4 pose (2, NEW 2026-06-03): Sintel** — ATE **0.1417 vs 0.132** (+7.3 %, fp16, 14/14 dynamic clips, 2026-06-02); **TUM-Dynamics** — ATE **0.0136 vs 0.014** (−2.9 %, fp16, 8/8 freiburg3 clips, 2026-06-03 — companions RPE-trans 0.0104/0.010, RPE-rot 0.3213/0.323 all within ~4 %). Same Sim(3)-aligned TUM-RGBD ATE/RPE apparatus as the MonST3R Sintel cell; feed-forward DAGE adapter (pose-only), `tum-dynamics` loader. PR #44.
 
 Each cell is verified against the source PDF (table + col + row) per
 `reproductions/AUDIT.md`.
