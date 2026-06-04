@@ -432,51 +432,6 @@
 }
 },
 {
-"model": "VGGT",
-"ds": "DTU",
-"metric": "chamfer",
-"obs": "0.756",
-"paper": "0.382",
-"d": 97.9,
-"status": "info",
-"cite": {
-"src": "VGGT",
-"who": "Wang et al. 2025",
-"arxiv": "2503.11651",
-"loc": "Table 2 \u00b7 DTU \u00b7 overall (mm) \u2014 D3 upstream-blocked"
-}
-},
-{
-"model": "VGGT",
-"ds": "ETH3D",
-"metric": "chamfer",
-"obs": "0.875",
-"paper": "0.709",
-"d": 23.4,
-"status": "info",
-"cite": {
-"src": "VGGT",
-"who": "Wang et al. 2025",
-"arxiv": "2503.11651",
-"loc": "Table 3 \u00b7 ETH3D \u00b7 overall (m) \u2014 D10 (terrains outlier)"
-}
-},
-{
-"model": "DA3",
-"ds": "ETH3D",
-"metric": "chamfer",
-"obs": "7.14",
-"paper": "",
-"d": null,
-"status": "target",
-"cite": {
-"src": "Depth Anything 3",
-"who": "ByteDance Seed 2025",
-"arxiv": "",
-"loc": "ETH3D \u00b7 chamfer \u2014 protocol gap, no target"
-}
-},
-{
 "model": "MASt3R",
 "ds": "RE10K",
 "metric": "maa",
@@ -525,10 +480,9 @@
         { key: "delta_1", label: "δ₁", group: "depth", desc: "inlier ratio at 1.25", dir: "higher is better" },
         { key: "maa", label: "mAA@30", group: "pose", desc: "mean average accuracy of relative camera pose", dir: "higher is better" },
         { key: "ate", label: "ATE", group: "traj", desc: "absolute trajectory error, Sim(3)-aligned", dir: "lower is better" },
-        { key: "chamfer", label: "chamfer", group: "recon", desc: "point-cloud reconstruction error, Acc/Comp overall", dir: "lower is better" },
       ];
       const MODEL_ORDER = ["DA-V2 Small","DA-V2 Base","DA-V2 Large","MoGe ViT-L","Metric3D-v2 L","Metric3D-v2 G","Marigold v1-1","DA3","Depth Pro","CUT3R","MonST3R","DUSt3R","MASt3R","VGGT","DAGE"];
-      const DS_ORDER = ["NYU","KITTI","DIODE","ETH3D","DTU","GSO","iBims-1","DDAD","Sintel","Bonn","Sun-RGBD","Booster","CO3Dv2","RE10K","TUM-Dyn"];
+      const DS_ORDER = ["NYU","KITTI","DIODE","ETH3D","GSO","iBims-1","DDAD","Sintel","Bonn","Sun-RGBD","Booster","CO3Dv2","RE10K","TUM-Dyn"];
 
       const bar = document.getElementById("metricbar");
       const desc = document.getElementById("metric-desc");
