@@ -17,6 +17,7 @@ is NonCommercial makes the corresponding parts of this repository usable for
 | Depth Anything 3 | `_vendor/depth_anything_3/` | PyPI `depth-anything-3` (ByteDance Seed) | Apache-2.0 (`_vendor/depth_anything_3/LICENSE`) |
 | UniK3D | `_vendor/unik3d/` | https://github.com/lpiccinelli-eth/UniK3D | CC BY-NC-SA 4.0 (`_vendor/unik3d/LICENSE`) |
 | Video Depth Anything | `_vendor/vda/` | https://github.com/DepthAnything/Video-Depth-Anything | Apache-2.0 code (`_vendor/vda/LICENSE`); Base/Large *weights* CC BY-NC 4.0 |
+| π³ (Pi3) | `_vendor/pi3/` | https://github.com/yyfz/Pi3 | BSD-3-Clause (`_vendor/pi3/LICENSE`) |
 
 These DUSt3R-lineage models each bundle their own `dust3r` + Naver `croco`
 subtrees (MASt3R also `mast3r/`; MonST3R also `third_party/RAFT` for flow). All

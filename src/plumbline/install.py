@@ -199,6 +199,29 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
             "Pass source='hf' to use the no-clone transformers path instead."
         ),
     ),
+    "pi3": InstallSpec(
+        name="pi3",
+        kind="vendored",
+        # Vendored (BSD-3-Clause, permissive) under _vendor/pi3. Inference deps
+        # (torch/einops/safetensors/huggingface-hub) are all base; the RoPE2D
+        # CUDA ext is optional (pure-torch fallback). Probe the vendored package.
+        probe_import="pi3",
+        pip=(),
+        extra_env=(
+            (
+                "PI3_ROOT",
+                "Optional: override the vendored _vendor/pi3 path with a dev checkout.",
+            ),
+        ),
+        weights="hf-auto",
+        notes=(
+            "Code vendored under plumbline/_vendor/pi3 (BSD-3-Clause; bundles its "
+            "own DINOv2). Weights: yyfz233/Pi3 (and yyfz233/Pi3X) via HF auto. "
+            "Trained in bf16 — on pre-Ampere GPUs use Pi3Adapter(dtype='float16') "
+            "or 'float32'. Pose ✓; the reconstruction/point-map path stays blocked "
+            "on the documented chamfer bug (docs/blocked/PI3_RECONSTRUCTION.md)."
+        ),
+    ),
     "vda": InstallSpec(
         name="vda",
         kind="vendored",
@@ -460,6 +483,7 @@ _LICENSE_INFO: dict[str, tuple[str, bool]] = {
     "depth-anything-3": ("Apache-2.0", True),
     "unik3d": ("CC-BY-NC-SA-4.0", True),  # NonCommercial — vendorable, like dust3r-lineage
     "vda": ("Apache-2.0", True),  # code Apache; Base/Large *weights* are CC-BY-NC (Small Apache)
+    "pi3": ("BSD-3-Clause", True),  # permissive — vendorable
     "moge": ("MIT", True),
     "vggt": ("VGGT License (custom research/AUP)", False),  # review redistribution clause
     "depth-pro": ("Apple (custom)", False),  # review redistribution clause
