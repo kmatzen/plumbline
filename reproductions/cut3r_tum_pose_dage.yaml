@@ -1,0 +1,52 @@
+# CUT3R video pose on TUM-dynamics — DAGE Table 4 *baseline* target.
+#
+# DAGE Table 4 ("Camera pose evaluation"), TUM-Dynamics column, CUT3R row:
+# ATE 0.047 / RPE-trans 0.015 / RPE-rot 0.451 (Ngo et al. 2026, arXiv:2603.03744).
+# Same 8-sequence Sim(3)-aligned TUM-RGBD ATE/RPE protocol as dage-tum-pose /
+# dage-sintel-pose; only the model differs. CUT3R is feed-forward/online
+# (per-view pose decode, no global alignment), so 90-frame clips fit an 11 GB GPU.
+#
+# Reproduces a *baseline* row from the DAGE paper (DAGE measuring CUT3R), the
+# TUM-dynamics analog of the ✅ `cut3r-sintel-pose-dage` cell.
+
+name: cut3r-tum-pose-dage
+
+model:
+  name: cut3r
+  kwargs:
+    size: 512
+
+dataset:
+  name: tum-dynamics
+  # Default = all 8 dynamic sequences present on disk.
+
+tasks: [pose]
+pose_trajectory_metrics: true
+max_views: 90
+device: cuda:0
+
+paper_reference:
+  primary_metric: trajectory_ate_rmse
+  value: 0.047
+  tolerance_relative: 0.10
+  citation: "Ngo et al. 2026, DAGE (arXiv:2603.03744), Table 4 (Camera pose evaluation), TUM-Dynamics column, CUT3R row = ATE 0.047 / RPE-trans 0.015 / RPE-rot 0.451. TUM-RGBD-style ATE/RPE-RMSE under Sim(3) alignment over the 8 freiburg3 dynamic sequences (first 90 frames at stride 3), via evo, built on the MonST3R relpose harness."
+  source_confidence: verified_pdf
+
+notes: >
+  Reproduces a *baseline* (CUT3R) row from the DAGE paper. Companion
+  DAGE-Table-4 CUT3R numbers: RPE-trans 0.015, RPE-rot 0.451 (deg). This is a
+  cross-measurement (DAGE measuring CUT3R vs plumbline measuring CUT3R; same
+  model, same Sim(3)-aligned protocol, but DAGE's exact CUT3R inference
+  pipeline / resolution may differ). If plumbline lands outside ±10 % it stays
+  informational, not force-matched — as with the ✅ `cut3r-sintel-pose-dage`
+  cell (which landed −1.5 %). Requires the CUT3R clone at $CUT3R_ROOT, its
+  512-DPT checkpoint at $CUT3R_CKPT, and a built curope CUDA ext.
+
+  Result (GTX 1080Ti, 2026-06-03, 8/8 sequences): ATE 0.0362 vs 0.047 (−23 %) —
+  ℹ️ INFORMATIONAL, but the companions land almost exactly on DAGE's measured
+  CUT3R: RPE-trans **0.0150 vs 0.015** (exact), RPE-rot **0.4486 vs 0.451**
+  (−0.5 %). The tight RPE agreement validates the apparatus; the ATE gap is the
+  expected baseline cross-measurement (DAGE evaluated competitors at 518 px,
+  plumbline runs CUT3R's 512-DPT default — trajectory-level/global-drift
+  sensitivity, not a method discrepancy). Same informational framing as the
+  Sintel CUT3R baseline.

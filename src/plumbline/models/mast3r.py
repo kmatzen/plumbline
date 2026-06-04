@@ -436,12 +436,17 @@ def _run_mast3r_sparse_ga(
             filelist.append(fp)
 
         imgs = load_images(filelist, size=long_edge, verbose=False)
-        pairs = mast3r_make_pairs(
-            imgs, scene_graph=scene_graph, prefilter=None, symmetrize=True
-        )
+        pairs = mast3r_make_pairs(imgs, scene_graph=scene_graph, prefilter=None, symmetrize=True)
         scene = sparse_global_alignment(
-            filelist, pairs, cache_dir, model,
-            lr1=lr1, niter1=niter1, lr2=lr2, niter2=niter2, device=device,
+            filelist,
+            pairs,
+            cache_dir,
+            model,
+            lr1=lr1,
+            niter1=niter1,
+            lr2=lr2,
+            niter2=niter2,
+            device=device,
         )
 
         focals = scene.get_focals().detach().cpu().numpy().reshape(-1)
@@ -458,7 +463,9 @@ def _run_mast3r_sparse_ga(
         )
 
     # World_from_camera poses; rebase so view 0 = identity (CO3Dv2 convention).
-    E_rebased = E_scene if world_from_camera_is_identity(E_scene) else rebase_to_first_camera(E_scene)
+    E_rebased = (
+        E_scene if world_from_camera_is_identity(E_scene) else rebase_to_first_camera(E_scene)
+    )
     T_rebase = invert_pose(E_scene[0])
 
     def _to_np(x: Any) -> NDArray[Any]:
