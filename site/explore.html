@@ -250,24 +250,264 @@
        "target"). Shown to make the evaluation surface complete; clearly NOT
        paper-matches, and excluded from the 36 verified count. -->
   <script type="application/json" id="info-cells">
-  [
-    {"model":"CUT3R","ds":"NYU","metric":"abs_rel","obs":"0.0522","paper":"0.086","d":-39.3,"status":"info","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 1 · NYU — D24 protocol delta (off-paper better)"}},
-    {"model":"CUT3R","ds":"KITTI","metric":"abs_rel","obs":"0.0858","paper":"0.092","d":-6.7,"status":"info","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 1 · KITTI — D24 protocol delta"}},
-    {"model":"CUT3R","ds":"Bonn","metric":"abs_rel","obs":"0.0536","paper":"0.078","d":-31.3,"status":"info","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 2 · Bonn — D24 protocol delta"}},
-    {"model":"MonST3R","ds":"KITTI","metric":"abs_rel","obs":"0.0959","paper":"0.101","d":-5.0,"status":"info","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 · KITTI — 5.05%, just over the ±5% gate"}},
-    {"model":"MonST3R","ds":"Bonn","metric":"abs_rel","obs":"0.0654","paper":"0.076","d":-13.9,"status":"info","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 · Bonn — D27 paper-private recipe"}},
-    {"model":"MonST3R","ds":"Sintel","metric":"abs_rel","obs":"0.3726","paper":"0.345","d":8.0,"status":"info","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 · Sintel — D27 (temple_2 outlier + recipe)"}},
-    {"model":"DUSt3R","ds":"NYU","metric":"abs_rel","obs":"0.0777","paper":"0.065","d":19.5,"status":"info","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 · NYU — D28 paper-private indoor recipe"}},
-    {"model":"DUSt3R","ds":"Bonn","metric":"abs_rel","obs":"0.1337","paper":"0.0808","d":65.5,"status":"info","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 · Bonn — D28 (not a dynamic model)"}},
-    {"model":"DA-V2 Base","ds":"NYU","metric":"abs_rel","obs":"0.0456","paper":"0.049","d":-6.9,"status":"info","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 · NYU · ViT-B — 6.9%, downgraded ✅→ℹ️ (2026-05-28 audit)"}},
-    {"model":"DA3","ds":"GSO","metric":"abs_rel","obs":"0.0150","paper":"","d":null,"status":"target","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"","loc":"GSO · abs_rel — no paper target (informational A/B)"}},
-    {"model":"Depth Pro","ds":"NYU","metric":"delta_1","obs":"0.9347","paper":"","d":null,"status":"target","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"NYU · δ₁ — paper has no NYU row"}},
-    {"model":"Depth Pro","ds":"iBims-1","metric":"delta_1","obs":"0.8458","paper":"","d":null,"status":"target","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"iBims-1 · δ₁ — informational"}},
-    {"model":"VGGT","ds":"DTU","metric":"chamfer","obs":"0.756","paper":"0.382","d":97.9,"status":"info","cite":{"src":"VGGT","who":"Wang et al. 2025","arxiv":"2503.11651","loc":"Table 2 · DTU · overall (mm) — D3 upstream-blocked"}},
-    {"model":"VGGT","ds":"ETH3D","metric":"chamfer","obs":"0.875","paper":"0.709","d":23.4,"status":"info","cite":{"src":"VGGT","who":"Wang et al. 2025","arxiv":"2503.11651","loc":"Table 3 · ETH3D · overall (m) — D10 (terrains outlier)"}},
-    {"model":"DA3","ds":"ETH3D","metric":"chamfer","obs":"7.14","paper":"","d":null,"status":"target","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"","loc":"ETH3D · chamfer — protocol gap, no target"}}
-  ]
-  </script>
+[
+{
+"model": "CUT3R",
+"ds": "NYU",
+"metric": "abs_rel",
+"obs": "0.0522",
+"paper": "0.086",
+"d": -39.3,
+"status": "info",
+"cite": {
+"src": "CUT3R",
+"who": "Wang et al. 2025",
+"arxiv": "2501.12387",
+"loc": "Table 1 \u00b7 NYU \u2014 D24 protocol delta (off-paper better)"
+}
+},
+{
+"model": "CUT3R",
+"ds": "KITTI",
+"metric": "abs_rel",
+"obs": "0.0858",
+"paper": "0.092",
+"d": -6.7,
+"status": "info",
+"cite": {
+"src": "CUT3R",
+"who": "Wang et al. 2025",
+"arxiv": "2501.12387",
+"loc": "Table 1 \u00b7 KITTI \u2014 D24 protocol delta"
+}
+},
+{
+"model": "CUT3R",
+"ds": "Bonn",
+"metric": "abs_rel",
+"obs": "0.0536",
+"paper": "0.078",
+"d": -31.3,
+"status": "info",
+"cite": {
+"src": "CUT3R",
+"who": "Wang et al. 2025",
+"arxiv": "2501.12387",
+"loc": "Table 2 \u00b7 Bonn \u2014 D24 protocol delta"
+}
+},
+{
+"model": "MonST3R",
+"ds": "KITTI",
+"metric": "abs_rel",
+"obs": "0.0959",
+"paper": "0.101",
+"d": -5.0,
+"status": "info",
+"cite": {
+"src": "MonST3R",
+"who": "Zhang et al. 2024",
+"arxiv": "2410.03825",
+"loc": "Table 3 \u00b7 KITTI \u2014 5.05%, just over the \u00b15% gate"
+}
+},
+{
+"model": "MonST3R",
+"ds": "Bonn",
+"metric": "abs_rel",
+"obs": "0.0654",
+"paper": "0.076",
+"d": -13.9,
+"status": "info",
+"cite": {
+"src": "MonST3R",
+"who": "Zhang et al. 2024",
+"arxiv": "2410.03825",
+"loc": "Table 3 \u00b7 Bonn \u2014 D27 paper-private recipe"
+}
+},
+{
+"model": "MonST3R",
+"ds": "Sintel",
+"metric": "abs_rel",
+"obs": "0.3726",
+"paper": "0.345",
+"d": 8.0,
+"status": "info",
+"cite": {
+"src": "MonST3R",
+"who": "Zhang et al. 2024",
+"arxiv": "2410.03825",
+"loc": "Table 3 \u00b7 Sintel \u2014 D27 (temple_2 outlier + recipe)"
+}
+},
+{
+"model": "DUSt3R",
+"ds": "NYU",
+"metric": "abs_rel",
+"obs": "0.0777",
+"paper": "0.065",
+"d": 19.5,
+"status": "info",
+"cite": {
+"src": "DUSt3R",
+"who": "Wang et al. 2024",
+"arxiv": "2312.14132",
+"loc": "Table 2 \u00b7 NYU \u2014 D28 paper-private indoor recipe"
+}
+},
+{
+"model": "DUSt3R",
+"ds": "Bonn",
+"metric": "abs_rel",
+"obs": "0.1337",
+"paper": "0.0808",
+"d": 65.5,
+"status": "info",
+"cite": {
+"src": "DUSt3R",
+"who": "Wang et al. 2024",
+"arxiv": "2312.14132",
+"loc": "Table 2 \u00b7 Bonn \u2014 D28 (not a dynamic model)"
+}
+},
+{
+"model": "DA-V2 Base",
+"ds": "NYU",
+"metric": "abs_rel",
+"obs": "0.0456",
+"paper": "0.049",
+"d": -6.9,
+"status": "info",
+"cite": {
+"src": "Depth Anything V2",
+"who": "Yang et al. 2024",
+"arxiv": "2406.09414",
+"loc": "Table 2 \u00b7 NYU \u00b7 ViT-B \u2014 6.9%, downgraded \u2705\u2192\u2139\ufe0f (2026-05-28 audit)"
+}
+},
+{
+"model": "DA3",
+"ds": "GSO",
+"metric": "abs_rel",
+"obs": "0.0150",
+"paper": "",
+"d": null,
+"status": "target",
+"cite": {
+"src": "Depth Anything 3",
+"who": "ByteDance Seed 2025",
+"arxiv": "",
+"loc": "GSO \u00b7 abs_rel \u2014 no paper target (informational A/B)"
+}
+},
+{
+"model": "Depth Pro",
+"ds": "NYU",
+"metric": "delta_1",
+"obs": "0.9347",
+"paper": "",
+"d": null,
+"status": "target",
+"cite": {
+"src": "Depth Pro",
+"who": "Bochkovskii et al. 2024",
+"arxiv": "2410.02073",
+"loc": "NYU \u00b7 \u03b4\u2081 \u2014 paper has no NYU row"
+}
+},
+{
+"model": "Depth Pro",
+"ds": "iBims-1",
+"metric": "delta_1",
+"obs": "0.8458",
+"paper": "",
+"d": null,
+"status": "target",
+"cite": {
+"src": "Depth Pro",
+"who": "Bochkovskii et al. 2024",
+"arxiv": "2410.02073",
+"loc": "iBims-1 \u00b7 \u03b4\u2081 \u2014 informational"
+}
+},
+{
+"model": "VGGT",
+"ds": "DTU",
+"metric": "chamfer",
+"obs": "0.756",
+"paper": "0.382",
+"d": 97.9,
+"status": "info",
+"cite": {
+"src": "VGGT",
+"who": "Wang et al. 2025",
+"arxiv": "2503.11651",
+"loc": "Table 2 \u00b7 DTU \u00b7 overall (mm) \u2014 D3 upstream-blocked"
+}
+},
+{
+"model": "VGGT",
+"ds": "ETH3D",
+"metric": "chamfer",
+"obs": "0.875",
+"paper": "0.709",
+"d": 23.4,
+"status": "info",
+"cite": {
+"src": "VGGT",
+"who": "Wang et al. 2025",
+"arxiv": "2503.11651",
+"loc": "Table 3 \u00b7 ETH3D \u00b7 overall (m) \u2014 D10 (terrains outlier)"
+}
+},
+{
+"model": "DA3",
+"ds": "ETH3D",
+"metric": "chamfer",
+"obs": "7.14",
+"paper": "",
+"d": null,
+"status": "target",
+"cite": {
+"src": "Depth Anything 3",
+"who": "ByteDance Seed 2025",
+"arxiv": "",
+"loc": "ETH3D \u00b7 chamfer \u2014 protocol gap, no target"
+}
+},
+{
+"model": "MASt3R",
+"ds": "RE10K",
+"metric": "maa",
+"obs": "0.850",
+"paper": "",
+"d": null,
+"status": "target",
+"cite": {
+"src": "MASt3R",
+"who": "Leroy et al. 2024",
+"arxiv": "2406.09756",
+"loc": "RealEstate10K 50-clip subset \u00b7 mAA@30 \u2014 off-paper (no published RE10K target; faithful sparse_ga matching path, +18.6 pt over DUSt3R, PR #42)"
+}
+},
+{
+"model": "DUSt3R",
+"ds": "RE10K",
+"metric": "maa",
+"obs": "0.664",
+"paper": "",
+"d": null,
+"status": "target",
+"cite": {
+"src": "DUSt3R",
+"who": "Wang et al. 2024",
+"arxiv": "2312.14132",
+"loc": "RealEstate10K 50-clip subset \u00b7 mAA@30 \u2014 off-paper wide-baseline baseline (PR #42)"
+}
+}
+]
+</script>
 
   <script>
     (() => {
@@ -288,7 +528,7 @@
         { key: "chamfer", label: "chamfer", group: "recon", desc: "point-cloud reconstruction error, Acc/Comp overall", dir: "lower is better" },
       ];
       const MODEL_ORDER = ["DA-V2 Small","DA-V2 Base","DA-V2 Large","MoGe ViT-L","Metric3D-v2 L","Metric3D-v2 G","Marigold v1-1","DA3","Depth Pro","CUT3R","MonST3R","DUSt3R","MASt3R","VGGT","DAGE"];
-      const DS_ORDER = ["NYU","KITTI","DIODE","ETH3D","DTU","GSO","iBims-1","DDAD","Sintel","Bonn","Sun-RGBD","Booster","CO3Dv2","TUM-Dyn"];
+      const DS_ORDER = ["NYU","KITTI","DIODE","ETH3D","DTU","GSO","iBims-1","DDAD","Sintel","Bonn","Sun-RGBD","Booster","CO3Dv2","RE10K","TUM-Dyn"];
 
       const bar = document.getElementById("metricbar");
       const desc = document.getElementById("metric-desc");
