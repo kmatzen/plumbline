@@ -199,6 +199,29 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
             "Pass source='hf' to use the no-clone transformers path instead."
         ),
     ),
+    "streamvggt": InstallSpec(
+        name="streamvggt",
+        kind="vendored",
+        # Vendored (CC-BY-NC-SA) under _vendor/streamvggt — self-contained model
+        # subset (no vggt/dust3r/croco needed). Inference deps (torch/einops/
+        # transformers/huggingface-hub) all base. Probe the vendored package.
+        probe_import="streamvggt",
+        pip=(),
+        extra_env=(
+            (
+                "STREAMVGGT_ROOT",
+                "Optional: override the vendored _vendor/streamvggt path with a dev checkout.",
+            ),
+        ),
+        weights="hf-auto",
+        notes=(
+            "Code vendored under plumbline/_vendor/streamvggt (model subset of the "
+            "CC-BY-NC-SA release; datasets/train/eval/dust3r/croco trees not "
+            "included). Weights: lch01/StreamVGGT (HF auto). bf16 on Ampere+, fp16 "
+            "on older GPUs (StreamVGGTAdapter(dtype='float16')); FlashAttention is "
+            "the fast path. Inference wiring not yet GPU-validated (needs Ampere)."
+        ),
+    ),
     "pi3": InstallSpec(
         name="pi3",
         kind="vendored",
@@ -484,6 +507,7 @@ _LICENSE_INFO: dict[str, tuple[str, bool]] = {
     "unik3d": ("CC-BY-NC-SA-4.0", True),  # NonCommercial — vendorable, like dust3r-lineage
     "vda": ("Apache-2.0", True),  # code Apache; Base/Large *weights* are CC-BY-NC (Small Apache)
     "pi3": ("BSD-3-Clause", True),  # permissive — vendorable
+    "streamvggt": ("CC-BY-NC-SA-4.0", True),  # NonCommercial — vendorable
     "moge": ("MIT", True),
     "vggt": ("VGGT License (custom research/AUP)", False),  # review redistribution clause
     "depth-pro": ("Apple (custom)", False),  # review redistribution clause
