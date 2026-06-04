@@ -35,7 +35,7 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
-  depth_anything_3 package needed (`uv pip install depth-anything-3`).
+  depth_anything_3 is vendored (_vendor/depth_anything_3; deps in base) — no install step.
   Adapter feeds a single-view list into model.inference and drops the
   multi-view outputs (pose/intrinsics are unused on a mono run). First
   run downloads ~1.5 GB weights.

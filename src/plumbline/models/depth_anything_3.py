@@ -1,7 +1,8 @@
 """Depth Anything 3 adapter.
 
 Upstream: https://github.com/ByteDance-Seed/Depth-Anything-3
-Package: ``depth_anything_3`` (pip-installable).
+Package: ``depth_anything_3`` — VENDORED (mono-depth subset) under
+``plumbline/_vendor/depth_anything_3``; deps in base. See THIRD_PARTY_NOTICES.md.
 
 Depth Anything 3 is the multi-view successor to DA-V2. Feed-forward
 prediction of depth + camera pose + intrinsics from 1..N views.
@@ -17,9 +18,9 @@ Verified against upstream source 2026-05-23 — see docs/SOURCE_AUDIT.md.
 
 Install
 -------
-::
-
-    uv pip install depth-anything-3
+Vendored — no install step. A plain ``uv sync`` provides the three runtime
+deps (addict / omegaconf / opencv-python) from the base install. ``$DA3_ROOT``
+overrides the vendored path with a dev checkout.
 
 Models (as of release, HuggingFace):
 
@@ -53,6 +54,8 @@ from __future__ import annotations
 
 import hashlib
 import math
+import os
+import sys
 from typing import Any
 
 import numpy as np
@@ -72,6 +75,25 @@ from plumbline.models.base import Model, ModelCapabilities, Prediction
 from plumbline.models.registry import register_model
 
 __all__ = ["DepthAnything3Adapter"]
+
+
+def _ensure_da3_on_path() -> None:
+    """Put the vendored ``depth_anything_3`` package on ``sys.path``.
+
+    DA3 is vendored under ``plumbline/_vendor/depth_anything_3`` (the mono-depth
+    subset of the Apache-2.0 package; see THIRD_PARTY_NOTICES.md). Its internal
+    imports are absolute (``from depth_anything_3.cfg import …``), so the vendor
+    root — the directory *containing* the ``depth_anything_3/`` package — must be
+    importable. ``$DA3_ROOT`` overrides it for a dev checkout.
+    """
+    root = os.environ.get("DA3_ROOT")
+    if not root:
+        root = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "_vendor", "depth_anything_3"
+        )
+    if os.path.isdir(root) and root not in sys.path:
+        sys.path.insert(0, root)
+
 
 _HF_CHECKPOINTS = {
     "large": "depth-anything/DA3-LARGE",
@@ -113,6 +135,7 @@ class DepthAnything3Adapter(Model):
         if self._model is not None:
             return
         ensure_torch()
+        _ensure_da3_on_path()
         try:
             from depth_anything_3.api import DepthAnything3  # type: ignore[import-not-found]
         except ImportError as exc:  # pragma: no cover

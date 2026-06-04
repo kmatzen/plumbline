@@ -45,6 +45,6 @@ notes: >
   essentially at-ceiling for synthetic clean-GT, just quantized
   differently by their training distributions.
 
-  Informational-only until the paper GSO number is pinned. Needs
-  `uv pip install depth-anything-3`. First run downloads ~1.5 GB
-  weights.
+  Informational-only until the paper GSO number is pinned. DA3 is
+  vendored (_vendor/depth_anything_3; deps in base) — no install step.
+  First run downloads ~1.5 GB weights.
