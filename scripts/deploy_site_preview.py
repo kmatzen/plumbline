@@ -1,19 +1,28 @@
 #!/usr/bin/env python3
 """Deploy the static site as a Cloudflare Worker behind HTTP Basic Auth.
 
-All Cloudflare API calls go through the local `doorman` proxy, which injects
-the CF API token (cred name ``cloudflare``) — the token never touches this
-process. The site is a single Worker that inlines site/index.html +
-site/styles.css and gates them with Basic Auth.
+Two transports, auto-selected:
+  - **CI / direct:** set ``CLOUDFLARE_API_TOKEN`` → talk to the Cloudflare API
+    directly over TLS with ``Authorization: Bearer``. This is what the GitHub
+    Actions ``deploy-site`` job uses (token + ``PREVIEW_PASS`` from repo secrets).
+  - **local:** no token → all calls route through the local ``doorman`` proxy,
+    which injects the CF API token (cred name ``cloudflare``) so it never touches
+    this process.
+
+The site is a single Worker that inlines site/index.html + site/styles.css and
+gates them with Basic Auth.
 
 To make the site PUBLIC later: re-run with --no-auth (or delete the auth block),
 which redeploys the same Worker without the 401 gate.
 
-Usage:
+Usage (local, via doorman):
     PREVIEW_PASS=... python scripts/deploy_site_preview.py \
         --domain preview.example.com [--user plumbline] [--no-auth]
+Usage (CI / direct token):
+    CLOUDFLARE_API_TOKEN=... PREVIEW_PASS=... python scripts/deploy_site_preview.py \
+        --domain plumbline-bench.org
 
-Requires: a `cloudflare` cred in ~/.config/doorman/doorman.yaml with
+Local mode requires a `cloudflare` cred in ~/.config/doorman/doorman.yaml with
 `hosts: [api.cloudflare.com]`, `tls: true`, an "Edit Cloudflare Workers" token.
 """
 
@@ -29,13 +38,22 @@ import requests
 
 DOORMAN = "http://127.0.0.1:18443"
 CRED = "cloudflare"
-API = "http://api.cloudflare.com/client/v4"  # http scheme -> doorman forwards over TLS
 SCRIPT_NAME = "plumbline-site"
 SITE = Path(__file__).resolve().parent.parent / "site"
 
+# Transport: a direct CLOUDFLARE_API_TOKEN (CI) talks to the API over TLS;
+# otherwise route through the local doorman proxy, which injects the token.
+_TOKEN = os.environ.get("CLOUDFLARE_API_TOKEN")
 S = requests.Session()
-S.proxies = {"http": DOORMAN}
-S.headers["X-Doorman-Cred"] = CRED
+if _TOKEN:
+    API = "https://api.cloudflare.com/client/v4"  # direct TLS, no proxy
+    S.headers["Authorization"] = f"Bearer {_TOKEN}"
+    TRANSPORT = "direct token"
+else:
+    API = "http://api.cloudflare.com/client/v4"  # http scheme -> doorman forwards over TLS
+    S.proxies = {"http": DOORMAN}
+    S.headers["X-Doorman-Cred"] = CRED
+    TRANSPORT = "doorman proxy"
 
 
 def call(method: str, path: str, **kw):
@@ -125,7 +143,7 @@ def main() -> None:
     css = (SITE / "styles.css").read_text()
     worker = build_worker(html, css, with_auth=not args.no_auth)
 
-    print("• verifying token via doorman…")
+    print(f"• verifying Cloudflare token ({TRANSPORT})…")
     call("GET", "/user/tokens/verify")
     account_id = call("GET", "/accounts?per_page=1")[0]["id"]
     print(f"• account {account_id}")
@@ -166,7 +184,11 @@ def main() -> None:
     print("\n✅ deployed.")
     print(f"   https://{args.domain}")
     if not args.no_auth:
-        print(f"   user: {args.user}\n   pass: {password}")
+        # Don't echo the password in token (CI) mode — it would land in the
+        # Actions log. Locally (doorman) it's the operator's own terminal.
+        print(f"   user: {args.user}")
+        if not _TOKEN:
+            print(f"   pass: {password}")
 
 
 if __name__ == "__main__":
