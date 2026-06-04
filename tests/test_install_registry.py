@@ -7,9 +7,10 @@ or any adapter dependency (no torch / transformers import):
 1. The registry and ``MODEL_REGISTRY`` are 1:1 — no adapter without an install
    spec, no spec without an adapter.
 2. Each spec is internally consistent for its ``kind`` (pypi⇒pip set, git⇒git
-   set, clone⇒clone_url + dest_env set, vendored⇒pip set + vendorable + no clone).
-3. Regression for the original bug: the ``da3-co3dv2-pose`` GPU-queue job no
-   longer claims DA3 "ships in the base install" — it needs a pip package.
+   set, clone⇒clone_url + dest_env set, vendored⇒vendorable + tree on disk + no
+   clone; its deps live in ``pip`` or — for a light slice like DA3 — base).
+3. The ``da3-co3dv2-pose`` GPU-queue job tells the truth about DA3's install
+   path (now vendored with deps in base; formerly a pip package).
 4. ``install_plan`` / ``install_hint`` / ``check`` run cleanly for all adapters.
 """
 
@@ -80,11 +81,17 @@ def test_spec_is_internally_consistent_for_its_kind(name: str) -> None:
         assert spec.dest_env, f"{name}: clone kind must set `dest_env`"
         assert not spec.pip and not spec.git, f"{name}: clone must not set pip/git"
     elif spec.kind == "vendored":
-        # Code ships under _vendor/<name>; install surface is the runtime pip
-        # deps. No clone (the env-var override lives in extra_env, not dest_env).
-        assert spec.pip, f"{name}: vendored kind must set `pip` (its runtime deps)"
+        # Code ships under _vendor/<name> (the env-var override lives in
+        # extra_env, not dest_env). Runtime deps install via `pip` OR — for a
+        # slice light enough to live in base (DA3: addict/omegaconf/opencv) —
+        # via base pyproject, in which case `pip` is empty. No clone/git, must
+        # be vendorable, and the tree must actually exist on disk.
         assert spec.clone_url is None and not spec.git, f"{name}: vendored must not set clone/git"
         assert spec.vendorable, f"{name}: vendored kind must be vendorable"
+        vdir = _PYPROJECT.parent / "src" / "plumbline" / "_vendor" / name.replace("-", "_")
+        assert vdir.is_dir(), (
+            f"{name}: vendored kind but {vdir.relative_to(_PYPROJECT.parent)} is missing"
+        )
     else:  # base
         assert not spec.pip and not spec.git and spec.clone_url is None, (
             f"{name}: base kind must not set pip/git/clone"
@@ -144,8 +151,10 @@ def test_install_plan_shape_per_kind() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Regression for the original bug: the GPU queue once lied that DA3 ships in
-# the base install. The fix re-points it at the pip package.
+# DA3 install story. Originally a bug (queue lied DA3 ships in base → fixed by
+# pointing at the pip package). As of the 2026-06-04 vendor, DA3 *is* base-
+# usable: the mono-depth subset is vendored under _vendor/depth_anything_3 and
+# its light deps live in base pyproject, so no install step is needed.
 # ---------------------------------------------------------------------------
 
 
@@ -159,17 +168,16 @@ def test_gpu_queue_yaml_parses() -> None:
     assert jobs, "gpu_queue.yaml has no jobs"
 
 
-def test_da3_job_no_longer_claims_base_install() -> None:
+def test_da3_job_reflects_vendored_in_base() -> None:
     jobs = _load_queue_jobs()
     da3 = next((j for j in jobs if j["name"] == "da3-co3dv2-pose"), None)
     assert da3 is not None, "da3-co3dv2-pose job missing from gpu_queue.yaml"
     extras = da3.get("extras", "")
-    assert "base install" in extras, "expected the extras line to mention 'base install' (negated)"
-    # The lie we fixed: it must NOT claim DA3 *ships in* the base install.
-    assert "base install (transformers)" not in extras, extras
-    assert "ships in the base install" not in extras, extras
-    # And it must point operators at the real install path.
-    assert "depth-anything-3" in extras, extras
+    # New truth: vendored, deps in base, no pip/install step.
+    assert "vendored" in extras.lower(), extras
+    assert "base install" in extras, extras
+    assert "plumbline install depth-anything-3" not in extras, extras
+    assert "pip install depth-anything-3" not in extras, extras
 
 
 # ---------------------------------------------------------------------------
@@ -193,10 +201,12 @@ def test_adapter_install_hint_args_are_valid_registry_names() -> None:
 
 
 def test_da3_extras_matches_registry_truth() -> None:
-    # The fixed extras text must agree with the registry: DA3 is a pypi adapter.
+    # DA3 is now VENDORED (mono-depth subset under _vendor/depth_anything_3) with
+    # its light deps (addict/omegaconf/opencv-python) declared in base pyproject,
+    # so there is nothing to pip-install — the registry must reflect that.
     spec = spec_for("depth-anything-3")
-    assert spec.kind == "pypi"
-    assert spec.pip == ("depth-anything-3",)
+    assert spec.kind == "vendored"
+    assert spec.pip == ()
 
 
 def test_every_spec_records_a_license() -> None:

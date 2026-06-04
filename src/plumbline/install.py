@@ -201,10 +201,28 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
     ),
     "depth-anything-3": InstallSpec(
         name="depth-anything-3",
-        kind="pypi",
+        kind="vendored",
+        # Vendored as the mono-depth subset of the Apache-2.0 package
+        # (_vendor/depth_anything_3). Its three runtime deps — addict, omegaconf,
+        # opencv-python — are declared in base pyproject (the slice is numpy-2
+        # clean; xformers/gsplat/e3nn are guarded-optional, evo is lazy), so a
+        # plain `uv sync` is enough — nothing to pip-install here. Probe the
+        # vendored package itself.
         probe_import="depth_anything_3",
-        pip=("depth-anything-3",),
+        pip=(),
+        extra_env=(
+            (
+                "DA3_ROOT",
+                "Optional: override the vendored _vendor/depth_anything_3 path with a dev checkout.",
+            ),
+        ),
         weights="hf-auto",
+        notes=(
+            "Code vendored under plumbline/_vendor/depth_anything_3 (mono-depth "
+            "subset of the Apache-2.0 release; bench/app/services/export trees "
+            "pruned). Deps (addict/omegaconf/opencv-python) are in the base "
+            "install. Weights: depth-anything/DA3-LARGE-1.1 (HF auto, ~1.5 GB)."
+        ),
     ),
     "moge": InstallSpec(
         name="moge",

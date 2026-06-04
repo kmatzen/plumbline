@@ -187,13 +187,14 @@ jobs:
     data_footprint_gb: 4
     est_wall_min: 60
     requires_env: [CO3DV2_ROOT]
-    extras: "DA3: `plumbline install depth-anything-3` (pip package `depth-anything-3`; NOT in the base install)."
+    extras: "DA3: vendored under `_vendor/depth_anything_3`; deps (addict/omegaconf/opencv-python) in the base install — no extra install step."
     notes: >
       ✅ RAN 2026-05-28 (RTX 3090): AUC@30 **0.882**, RRA@15 0.974 —
       informational A/B (sits between VGGT 0.896 and MASt3R 0.796); no
-      paper target. Required `plumbline install depth-anything-3` (NOT
-      the base install — the old "ships in base install" note was the
-      drift fixed this session). Result JSON:
+      paper target. As of the 2026-06-04 vendor, DA3 is bundled under
+      `_vendor/depth_anything_3` (mono-depth subset) with its deps in the
+      base install — the earlier `plumbline install depth-anything-3` pip
+      step is no longer needed. Result JSON:
       s3://plumbline-bench/runs/queue_da3_20260528T160939Z.json.
 
   # NOTE: the π³ (pi3) adapter and its DTU / ETH3D jobs were REMOVED before

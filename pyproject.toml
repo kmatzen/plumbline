@@ -56,6 +56,16 @@ dependencies = [
     # deterministically; a missing transitive kornia_rs is otherwise silent
     # env-churn that only surfaces when the marigold adapter is loaded.
     "kornia>=0.7.3",
+    # Depth-Anything-3 is VENDORED (src/plumbline/_vendor/depth_anything_3, the
+    # depth subset of the Apache-2.0 package) rather than pip-installed, so its
+    # runtime deps live in base. The full upstream tree is hostile to base
+    # (numpy<2, xformers, gsplat/pycolmap/moviepy pins) — but the mono-depth
+    # slice needs only these three light, numpy-2-clean deps. xformers/gsplat/
+    # e3nn are optional accel/GS paths (guarded try/except in the vendored code)
+    # and evo (multi-view pose) is lazy-imported, so none are required.
+    "addict>=2.4",
+    "omegaconf>=2.3",
+    "opencv-python>=4.8",
 ]
 
 [project.optional-dependencies]
@@ -79,13 +89,15 @@ geowizard = [
 ]
 # NOTE: adapter install deps are deliberately NOT pyproject extras.
 # `src/plumbline/install.py` (INSTALL_SPECS) is the single source of truth, and
-# `plumbline install <name>` installs them — PyPI ones (depth-anything-3) via
-# pip, git ones (vggt/moge/depth-pro) via `pip install git+...`, clone ones
-# (mast3r/dust3r/monst3r/cut3r) via `git clone` + an env var. Keeping them
-# out of pyproject is intentional: git URLs are PEP 508 direct references that
-# PyPI rejects in a published package, and heavy/conflicting trees (e.g.
-# depth-anything-3 pins numpy<2) would pollute uv.lock and downgrade the base
-# install. `geowizard` stays an extra only for its lone PyPI dep (xformers).
+# `plumbline install <name>` installs them — git ones (vggt/moge/depth-pro) via
+# `pip install git+...`, vendored ones (mast3r/dust3r/monst3r/cut3r/
+# depth-anything-3) shipped in `_vendor/` with their runtime deps in pip (or, for
+# DA3's light slice, in base above). Keeping the heavy ones out of pyproject is
+# intentional: git URLs are PEP 508 direct references that PyPI rejects in a
+# published package, and conflicting trees would pollute uv.lock and downgrade
+# the base install. DA3 is the exception — vendoring it to the mono-depth subset
+# strips the hostile deps (numpy<2 / xformers / gsplat), leaving only three light
+# deps that live safely in base. `geowizard` stays an extra for its lone PyPI dep.
 scipy = [
     "scipy>=1.11",
 ]
