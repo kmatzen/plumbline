@@ -211,7 +211,7 @@
     {"model":"Marigold v1-1","ds":"NYU","metric":"abs_rel","obs":"0.0577","paper":"0.055","d":4.9,"task":"depth","cite":{"src":"Marigold","who":"Ke et al. 2024","arxiv":"2312.02145","loc":"Table 1 · NYU · Marigold row"}},
     {"model":"MonST3R","ds":"NYU","metric":"abs_rel","obs":"0.0896","paper":"0.091","d":-1.5,"task":"depth","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 · NYU · MonST3R row"}},
     {"model":"DUSt3R","ds":"KITTI","metric":"abs_rel","obs":"0.1049","paper":"0.1074","d":-2.3,"task":"depth","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 · KITTI · F(I,I)"}},
-    {"model":"DA3","ds":"NYU","metric":"delta_1","obs":"0.9684","paper":"0.974","d":-0.6,"task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"","loc":"Table 4 · NYU · δ₁"}},
+    {"model":"DA3","ds":"NYU","metric":"delta_1","obs":"0.9684","paper":"0.974","d":-0.6,"task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"Table 4 · NYU · δ₁"}},
     {"model":"Depth Pro","ds":"Sun-RGBD","metric":"delta_1","obs":"0.8682","paper":"0.890","d":-2.4,"task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"Table 1 · Sun-RGBD · δ₁"}},
     {"model":"Depth Pro","ds":"Booster","metric":"delta_1","obs":"0.4878","paper":"0.466","d":4.7,"task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"Table 1 · Booster · δ₁"}},
     {"model":"VGGT","ds":"CO3Dv2","metric":"maa","obs":"0.8964","paper":"0.882","d":1.6,"task":"pose","cite":{"src":"VGGT","who":"Wang et al. 2025","arxiv":"2503.11651","loc":"Table 1 · CO3Dv2 · AUC@30"}},
@@ -398,7 +398,7 @@
 "cite": {
 "src": "Depth Anything 3",
 "who": "ByteDance Seed 2025",
-"arxiv": "",
+"arxiv": "2511.10647",
 "loc": "GSO \u00b7 abs_rel \u2014 no paper target (informational A/B)"
 }
 },
@@ -460,6 +460,21 @@
 "who": "Wang et al. 2024",
 "arxiv": "2312.14132",
 "loc": "RealEstate10K 50-clip subset \u00b7 mAA@30 \u2014 off-paper wide-baseline baseline (PR #42)"
+}
+},
+{
+"model": "DA3",
+"ds": "CO3Dv2",
+"metric": "maa",
+"obs": "0.8819",
+"paper": "",
+"d": null,
+"status": "target",
+"cite": {
+"src": "Depth Anything 3",
+"who": "ByteDance Seed 2025",
+"arxiv": "2511.10647",
+"loc": "CO3Dv2 \u00b7 mAA@30 \u2014 no paper target (DA3 uses CO3Dv2 for training only; informational A/B vs VGGT/MASt3R/DUSt3R)"
 }
 }
 ]
