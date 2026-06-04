@@ -19,7 +19,9 @@ public API may change between 0.x releases.
   MASt3R-over-DUSt3R lead the paper reports (+15.2) and that the old path
   collapsed to +1. A controlled CO3Dv2 A/B (+2.3 pt vs RE10K's +17.6 pt)
   confirms narrow baselines hid the gap; the ✅ `mast3r-co3dv2-pose` cell was
-  measured on the old path and survives the fix (full-410 re-run pending).
+  measured on the old path and survives the fix — full-410 re-run landed
+  2026-06-03 on the `sparse_ga` path at **0.8581 vs 0.818** (+4.9 %, MATCH),
+  superseding the legacy 0.7960.
 
 ### Added
 - **`python -m plumbline`** now works as an alias for the `plumbline` console
@@ -36,7 +38,16 @@ public API may change between 0.x releases.
   scraper (yt-dlp + ffmpeg, low-res, per-clip cleanup, free-space guard,
   resumable), unblocking the dust3r/mast3r/vggt RealEstate10K pose cells.
 - **`reproduce-pose` project skill** (`.claude/skills/`) codifying
-  stage-pose-dataset → reproduce → compare-mAA on the GPU box.
+  stage-pose-dataset → reproduce → compare-mAA on the GPU box (now also covers
+  the trajectory-ATE family: dage/cut3r/monst3r on Sintel / TUM-Dynamics).
+- **DAGE Table 4 pose — TUM-Dynamics & ScanNet columns.** New `tum-dynamics`
+  loader (8 freiburg3 dynamic sequences, MonST3R `prepare_tum.py` prep replicated
+  at read time) and `scannet-video-pose` loader (MonST3R `color_90`/`pose_90`
+  layout), extending the Sim(3)-aligned trajectory-ATE apparatus beyond Sintel.
+  `dage-tum-pose` is a new ✅ cell — **ATE 0.0136 vs 0.014** (−2.9 %, 8/8 clips,
+  GTX 1080 Ti). Staged via `scripts/stage_tum_dynamics.py` (public, no ToS;
+  member-selective ~366 MB). ScanNet cells are code-ready, data-blocked on
+  ToS-gated raw ScanNet. (#44)
 
 ## [0.2.0] — 2026-06-02
 
