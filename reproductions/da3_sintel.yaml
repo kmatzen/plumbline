@@ -1,24 +1,38 @@
-# Depth Anything 3 (Large) on Sintel (MoGe HF eval bundle)
+# Depth Anything 3 (Large) on Sintel (native, DA-V2 Table-2 protocol)
 #
-# DA3 paper Table 4: Sintel δ₁ = 0.755 (75.5) for the public DA3 release —
-# notably DA3's weakest δ₁ benchmark. scale_shift_clamped (MoGe Sintel bundle,
-# like da-v2-large-sintel). Target via ar5iv (NYU row cross-checks 0.974);
-# PDF re-verify pending before ✅.
+# DA3 paper (arXiv:2511.10647) Table 4 reports δ₁ on Sintel = 0.755 (DA2 0.772).
+# Table 4 defers to DA-V2's benchmark, so this uses sintel_dav2 (native loader,
+# final pass, sky masked at 70 m, scale_shift) — the SAME protocol that
+# reproduces DA-V2's own Sintel AbsRel 0.487 (verified) — NOT the MoGe-warp
+# sintel_moge (wrong family; also needs the moge package). Native loader, so no
+# moge dependency.
+#
+# OFF-PAPER (2026-06-04, 1080 Ti): δ₁ 0.6342 vs 0.755 (−16%, MISMATCH) at
+# process_res=1008; 0.6091 at 504. Unlike KITTI, this is NOT a resolution
+# artifact — the bump barely moves it. The protocol is validated (DA-V2 AbsRel
+# 0.487 reproduces under sintel_dav2). DA3's profile here is odd — good AbsRel
+# (0.28, better than DA-V2's 0.487) but poor δ₁ (0.63) — a depth-distribution
+# issue on Sintel's extreme synthetic range (sky/cap × scale_shift) that the
+# paper's exact (unpublished) Sintel recipe handled and we can't match without
+# it. A genuine DA3-side gap, not protocol/checkpoint-on-our-side.
 name: da3-sintel
-protocol: sintel_moge
+protocol: sintel_dav2
 model:
   name: depth-anything-3
   kwargs:
     variant: large
     checkpoint: depth-anything/DA3-LARGE-1.1
-scale_alignment: scale_shift_clamped
+    process_res: 1008  # wide-aspect handling (KITTI lesson); helps marginally on Sintel
+scale_alignment: scale_shift
 device: cuda:0
 paper_reference:
   primary_metric: delta_1
   value: 0.755
   tolerance_relative: 0.02
-  citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. Sintel, δ₁ (scale+shift aligned)."
-  source_confidence: approximate
+  citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. Sintel, δ₁ (DA-V2 protocol). PDF-verified arxiv.org/html/2511.10647."
+  source_confidence: verified_pdf
 notes: >
-  DA3 vendored — no install step. Protocol mirrors da-v2-large-sintel-moge.
-  DA3 eval protocol for Sintel is a hypothesis; confirm protocol + PDF target.
+  OFF-PAPER (δ₁ 0.6342 vs 0.755). Correct protocol (sintel_dav2, native, no
+  moge) + resolution ruled out (504→0.609, 1008→0.634). Genuine DA3-side Sintel
+  gap; see header. Sibling da3-kitti reproduced at process_res=1008 — Sintel did
+  not, so this stays informational, not a verified ✅.
