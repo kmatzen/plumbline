@@ -1,25 +1,32 @@
-# Depth Anything 3 (Large) on ETH3D (MoGe HF eval bundle)
+# Depth Anything 3 (Large) on ETH3D high-res train (native, DA-V2 Table-2)
 #
-# DA3 paper Table 4: ETH3D δ₁ = 0.986 (98.6) for the public DA3 release.
-# scale_shift_clamped — plain scale_shift blows up on the MoGe ETH3D bundle
-# (see da-v2-large-eth3d-moge-table2). Target via ar5iv (NYU row of the same
-# table cross-checks 0.974); PDF re-verify pending before ✅.
+# DA3 paper (arXiv:2511.10647) Table 4: ETH3D δ₁ = 0.986 (DA2 0.865). Table 4
+# defers to DA-V2's benchmark, so this uses eth3d_dav2 (native loader, per-view
+# laser-scan GT render, scale_shift, [1e-3,80] m) — the protocol that reproduces
+# DA-V2's own ETH3D AbsRel 0.131 (da-v2-large-eth3d-native) — NOT eth3d_moge
+# (MoGe warp, wrong family + needs the moge package).
+#
+# BLOCKED ON DISK (2026-06-04): the native ETH3D loader needs the high-res train
+# split (10 scenes of 6K DSLR images + laser-scan PLYs, ~20-40 GB). anima's 1080
+# Ti box had only ~11 GB free, so this hasn't been run. Protocol is corrected and
+# ready; needs a box with the staged ETH3D high-res data (see
+# scripts/stage-eth3d-train-scenes.sh).
 name: da3-eth3d
-protocol: eth3d_moge
+protocol: eth3d_dav2
 model:
   name: depth-anything-3
   kwargs:
     variant: large
     checkpoint: depth-anything/DA3-LARGE-1.1
-scale_alignment: scale_shift_clamped
+    process_res: 1008
+scale_alignment: scale_shift
 device: cuda:0
 paper_reference:
   primary_metric: delta_1
   value: 0.986
   tolerance_relative: 0.02
-  citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. ETH3D, δ₁ (scale+shift aligned)."
-  source_confidence: approximate
+  citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. ETH3D, δ₁ (DA-V2 protocol). PDF-verified arxiv.org/html/2511.10647."
+  source_confidence: verified_pdf
 notes: >
-  DA3 vendored — no install step. Protocol/scale_alignment mirror
-  da-v2-large-eth3d-moge. The DA3 eval protocol for ETH3D is a hypothesis
-  (MoGe bundle); confirm both the protocol match and the PDF target.
+  Protocol corrected to eth3d_dav2 (native, no moge). NOT YET RUN — blocked on
+  staging the ~20-40 GB ETH3D high-res train data (anima disk-limited).

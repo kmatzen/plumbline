@@ -1,23 +1,26 @@
-# Depth Anything 3 (Large) on DIODE (MoGe HF eval bundle)
+# Depth Anything 3 (Large) on DIODE val (native, DA-V2 Table-2 protocol)
 #
-# DA3 paper Table 4: DIODE δ₁ = 0.954 (95.4) for the public DA3 release.
-# Target via ar5iv (NYU row of the same table cross-checks 0.974); PDF
-# re-verify pending before ✅.
+# DA3 paper (arXiv:2511.10647) Table 4: DIODE δ₁ = 0.954 (DA2 0.952). Table 4
+# defers to DA-V2's benchmark, so this uses diode_dav2 (native `diode` loader,
+# domain=both, scale_shift, [1e-3,50] m) — the protocol that reproduces DA-V2's
+# own DIODE AbsRel 0.066 (verified) — NOT diode_dav2_moge_bundle (MoGe warp,
+# wrong family + needs the moge package). Native loader, no moge dependency.
 name: da3-diode
-protocol: diode_dav2_moge_bundle
+protocol: diode_dav2
 model:
   name: depth-anything-3
   kwargs:
     variant: large
     checkpoint: depth-anything/DA3-LARGE-1.1
+    process_res: 1008  # wide-aspect handling (KITTI lesson)
 scale_alignment: scale_shift
 device: cuda:0
 paper_reference:
   primary_metric: delta_1
   value: 0.954
   tolerance_relative: 0.02
-  citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. DIODE, δ₁ (scale+shift aligned)."
-  source_confidence: approximate
+  citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. DIODE, δ₁ (DA-V2 protocol). PDF-verified arxiv.org/html/2511.10647."
+  source_confidence: verified_pdf
 notes: >
-  DA3 vendored — no install step. Protocol mirrors da-v2-large-diode-moge-bundle.
-  DA3 eval protocol for DIODE is a hypothesis; confirm protocol + PDF target.
+  DA3 vendored — no install step. Native DIODE val (domain=both); no moge.
+  Result recorded on run (2026-06-04 staging in progress).
