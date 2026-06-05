@@ -218,27 +218,27 @@ jobs:
       frames, NOT protocol/checkpoint: DA-V2-Large reproduces its own KITTI δ₁
       0.946 (we got 0.9561) + AbsRel 0.074 on this exact kitti_eigen_garg path.
   - name: da3-eth3d
-    status: pending
+    status: blocked
     priority: 12
-    paper_target: "DA3 Table 4 — ETH3D δ₁ = 0.986 (ar5iv; PDF re-verify pending)"
+    paper_target: "DA3 Table 4 — ETH3D δ₁ = 0.986 (PDF-verified)"
     primary_metric: delta_1
     datasets: [eth3d]
     data_footprint_gb: 3
     est_wall_min: 20
-    requires_env: [ETH3D_MOGE_ROOT]
+    requires_env: [ETH3D_ROOT]
     extras: "DA3: vendored (_vendor/depth_anything_3, PR #56); deps in base — no install step."
     notes: >
       DA3 δ₁ on the MoGe ETH3D bundle, scale_shift_clamped (plain scale_shift
       blows up there). Protocol match is a hypothesis; confirm protocol + PDF.
   - name: da3-diode
-    status: pending
+    status: done
     priority: 12
-    paper_target: "DA3 Table 4 — DIODE δ₁ = 0.954 (ar5iv; PDF re-verify pending)"
+    paper_target: "DA3 Table 4 — DIODE δ₁ = 0.954 (PDF-verified)"
     primary_metric: delta_1
     datasets: [diode]
     data_footprint_gb: 3
     est_wall_min: 20
-    requires_env: [DIODE_MOGE_ROOT]
+    requires_env: [DIODE_ROOT]
     extras: "DA3: vendored (_vendor/depth_anything_3, PR #56); deps in base — no install step."
     notes: >
       DA3 δ₁ on the MoGe DIODE bundle (mirrors da-v2-large-diode-moge-bundle).
@@ -298,7 +298,7 @@ jobs:
     datasets: [diode]
     data_footprint_gb: 3
     est_wall_min: 15
-    requires_env: [DIODE_MOGE_ROOT]
+    requires_env: [DIODE_ROOT]
     extras: "base install"
     notes: "Already ✅ (0.0529); re-run to capture+retain JSON."
   - name: da-v2-large-kitti-moge
@@ -331,7 +331,7 @@ jobs:
     datasets: [diode]
     data_footprint_gb: 3
     est_wall_min: 15
-    requires_env: [DIODE_MOGE_ROOT]
+    requires_env: [DIODE_ROOT]
     extras: "plumbline install moge"
     notes: "Already ✅ (0.0407); re-run to capture+retain JSON."
 
@@ -401,7 +401,7 @@ jobs:
     datasets: [eth3d-moge-eval]
     data_footprint_gb: 2
     est_wall_min: 20
-    requires_env: [ETH3D_MOGE_ROOT]
+    requires_env: [ETH3D_ROOT]
     extras: "plumbline install moge; fetch ETH3D.zip from Ruicheng/monocular-geometry-evaluation → $ETH3D_MOGE_ROOT (distinct from $ETH3D_ROOT)"
     notes: >
       ✅ MATCH 2026-05-30 (H100): observed AbsRel 0.0311 vs 0.0317 (454/454,
@@ -418,7 +418,7 @@ jobs:
     datasets: [eth3d-moge-eval]
     data_footprint_gb: 2
     est_wall_min: 20
-    requires_env: [ETH3D_MOGE_ROOT]
+    requires_env: [ETH3D_ROOT]
     extras: "base install (needs DAV2_ROOT clone, source=paper); ETH3D MoGe bundle as above."
     notes: >
       ✅ MATCH 2026-05-30 (H100): observed AbsRel 0.04731 vs 0.0473 (near-exact;
