@@ -570,7 +570,7 @@ def render_pv_depth_zbuffer(
         dx_flat = dx.reshape(-1)
         ui_all = (ui_c[:, None] + dx_flat[None, :]).reshape(-1)
         vi_all = (vi_c[:, None] + dy_flat[None, :]).reshape(-1)
-        z_all = np.broadcast_to(z[:, None], (z.shape[0], dx.shape[0])).reshape(-1)
+        z_all = np.broadcast_to(z[:, None], (z.shape[0], dx_flat.shape[0])).reshape(-1)
         ui_c, vi_c, z = ui_all, vi_all, z_all
     in_image = (ui_c >= 0) & (ui_c < width) & (vi_c >= 0) & (vi_c < height)
     ui_c = ui_c[in_image]
