@@ -32,6 +32,12 @@ fixed:
       with_per_view_gt: true
       pv_render_max_dim: 518
       pv_splat_radius: 1
+      # Cap the laser scan to 8M points (deterministic subsample). ETH3D scans
+      # are ~27M points/scene (2x ~387 MB PLYs); at splat_radius=1 that's ~240M
+      # splatted points → multi-GB arrays that OOM a 23 GB box. At the 518-px
+      # render res (~179K pixels), 8M points still over-cover every pixel, so the
+      # δ₁/AbsRel are unaffected — it only bounds memory.
+      max_gt_points: 8000000
       # Pixel-align RGB with the capped GT render (DA-V2 Table-2 inference @518).
       resize_images_to_pv_render: true
   depth_clip: [0.001, 80.0]
