@@ -22,5 +22,11 @@ paper_reference:
   citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. DIODE, δ₁ (DA-V2 protocol). PDF-verified arxiv.org/html/2511.10647."
   source_confidence: verified_pdf
 notes: >
-  DA3 vendored — no install step. Native DIODE val (domain=both); no moge.
-  Result recorded on run (2026-06-04 staging in progress).
+  OFF-PAPER (2026-06-04, 1080 Ti): δ₁ 0.7529 vs 0.954 (−21%) at process_res=1008
+  under diode_dav2 (native, no moge — the right family; reproduces DA-V2's DIODE
+  AbsRel 0.066 at source=paper). Like Sintel, not a resolution artifact and the
+  good-AbsRel(0.205)/poor-δ₁ split points to a depth-distribution mismatch on
+  DIODE's wide-range val. The hf-source DA-V2 anchor is unreliable here (its
+  AbsRel 0.214 ≠ the verified source=paper 0.066), and it lands at the SAME δ₁
+  (0.752) as DA3 — so genuine-DA3-gap vs DIODE-domain/mask-detail is unresolved
+  without DA-V2's paper-source δ₁ (needs the clone). Informational, not ✅.
