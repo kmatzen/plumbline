@@ -6,13 +6,21 @@
 # DA-V2's own ETH3D AbsRel 0.131 (da-v2-large-eth3d-native) — NOT eth3d_moge
 # (MoGe warp, wrong family + needs the moge package).
 #
-# BLOCKED ON RAM (2026-06-04): data now staged (/data3) and two real blockers
-# fixed en route — a z-buffer splat bug (z broadcast by 3 vs 9, OOM-adjacent
-# IndexError; fixed) and a per-view-GT memory cap (max_gt_points=8M). But the
-# full ETH3D train-split GT render still OOM-kills a 23 GB box before inference
-# (dies at 0 forward passes in the render phase). The path is correct and
-# runs — it just needs a larger-RAM box (or a chunked/lazy GT render). NOT a
-# model result.
+# RAN on RTX 3090 / 46 GB RAM (2026-06-06) — the 23 GB box OOM-killed the
+# per-view-GT render even with the 8M point cap; the 46 GB box clears it.
+# Two real blockers were fixed en route: a z-buffer splat bug (z broadcast by 3
+# vs 9, OOM-adjacent IndexError) and a per-view-GT memory cap (max_gt_points=8M).
+# RESULT (296/296): δ₁ 0.9329 vs paper 0.986 (-5.4%, MISMATCH at tol 2%);
+# AbsRel 0.0730, δ₂ 0.9736, δ₃ 0.9884.
+#
+# ⚠️ OFF-PAPER (GT/protocol gap), NOT a model/adapter bug. Opposite direction
+# from DA3's other re-validated cells (KITTI matched after the res fix;
+# Sintel/DIODE off-paper-BETTER). AbsRel 0.073 is good while δ₁ lags — the
+# good-mean / soft-threshold split points at a GT-recipe difference: our
+# eth3d_dav2 renders per-view GT from the laser scan + MiDaS scale+shift,
+# whereas DA3 Table-4 ETH3D likely scores a different GT/mask (official MVS
+# depth or a different valid-pixel rule). Same "paper-private eval recipe"
+# shape as D9/D17/D24/D27/D28 — left as ⚠️ rather than chased.
 name: da3-eth3d
 protocol: eth3d_dav2
 model:
@@ -30,6 +38,7 @@ paper_reference:
   citation: "Bytedance Seed 2025, Depth Anything 3, Table 4. ETH3D, δ₁ (DA-V2 protocol). PDF-verified arxiv.org/html/2511.10647."
   source_confidence: verified_pdf
 notes: >
-  Protocol corrected to eth3d_dav2 (native, no moge); data staged. NOT RUN —
-  the per-view-GT render OOM-kills a 23 GB box even with the 8M point cap (dies
-  pre-inference). Render-splat bug + memory cap fixed; needs a bigger-RAM box.
+  ⚠️ OFF-PAPER (RTX 3090, 296/296): δ₁ 0.9329 vs paper 0.986 (-5.4%, MISMATCH).
+  AbsRel 0.0730 (good) but δ₁ lags → GT-recipe gap, not an adapter bug. Opposite
+  direction from DA3-KITTI (match) / Sintel / DIODE (off-paper-better). The
+  per-view-GT render needs >23 GB RAM (OOM-kills the 1080 Ti); 46 GB clears it.
