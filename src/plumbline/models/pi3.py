@@ -110,6 +110,7 @@ class Pi3Adapter(Model):
         device: str = "cuda:0",
         variant: str = "pi3x",
         dtype: str = "bfloat16",
+        pixel_limit: int = 255000,
     ) -> None:
         if variant not in _VARIANT_HF:
             raise ValueError(f"variant must be one of {sorted(_VARIANT_HF)}; got {variant!r}")
@@ -118,6 +119,10 @@ class Pi3Adapter(Model):
         self.device = device
         self.variant = variant
         self.dtype = dtype
+        # π³'s DINOv2 input-size cap (~505px at the 255000 default = DAGE's full-res
+        # Pi3 row). Lower it (e.g. 63504 = 252x252) for the DAGE "Pi3 (252px)" row
+        # and to fit long clips in limited VRAM. Folded into config_hash.
+        self.pixel_limit = int(pixel_limit)
         self._model: Any = None
 
     # -- lazy load -------------------------------------------------------
@@ -173,7 +178,7 @@ class Pi3Adapter(Model):
         # input constraint belongs in the adapter (cf. the VGGT adapter's
         # 518-px / multiple-of-14 preprocessing). The runner resizes predicted
         # depth back to GT resolution for metric computation.
-        tw, th = _pi3_target_size(w, h)
+        tw, th = _pi3_target_size(w, h, self.pixel_limit)
         if (th, tw) != (h, w):
             from PIL import Image as _PImage
 
@@ -249,7 +254,7 @@ class Pi3Adapter(Model):
         )
 
     def config_hash(self) -> str:
-        s = f"{self.name}@{self.version}/variant={self.variant}/dtype={self.dtype}"
+        s = f"{self.name}@{self.version}/variant={self.variant}/dtype={self.dtype}/px={self.pixel_limit}"
         return hashlib.sha256(s.encode()).hexdigest()[:16]
 
 

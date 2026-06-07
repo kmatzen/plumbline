@@ -191,3 +191,56 @@ single-sequence value, not the 8-sequence mean).
 
 **Next:** ScanNet stays blocked until raw ScanNet is staged + run through
 `prepare_scannet.py` (`scannet-video-pose` loader + configs are code-ready).
+
+## Status (2026-06-05) — re-scope after the model-roster + storage work
+
+Three session changes materially update the DAGE opportunity landscape:
+
+**1. Pi3 is back (vendored, PR #60) — DAGE's strongest pose baseline is now
+validatable.** The 2026-06-03 scope said "Pi3 adapter removed → can't validate its
+rows." That's stale. In Table 4 Pi3 actually *beats* DAGE on pose (Sintel
+0.074 vs 0.132; ScanNet 0.031 vs 0.031 tie), so its rows are worth landing.
+- **Full-res Pi3 (~505px, PIXEL_LIMIT=255000 = DAGE's full-res row, ATE 0.074)
+  OOMs the 1080 Ti** on the 50-frame Sintel clips (Pi3 has no lr-downscale
+  stream like DAGE's `lr_max_size:252`).
+- Added a **`pixel_limit` kwarg** (PR `feat/pi3-pixel-limit`) so Pi3 can run at
+  **252px → the DAGE "Pi3 (252px)" row, Sintel ATE 0.153** — ~4× less VRAM, fits.
+  `pi3-sintel-pose` @ 252px running 2026-06-05 (result appended below).
+- TUM-Dyn/ScanNet Pi3 rows stay capped: those clips are 90 frames > Pi3
+  `max_views=64`; full-res also OOMs. Pi3 full-res anywhere needs an Ampere/
+  bigger-VRAM box.
+
+**2. Full VGGT-family coverage.** vggt + **streamvggt** + **vggt-omega** all have
+adapters now (roster PRs #56–#62). All are DAGE-comparable (VGGT is a Table-1..4
+baseline), but all are **bf16/Ampere-blocked on the 1080 Ti** — same wall as
+before, just more models behind it.
+
+**3. Storage fixed — ScanNet's blocker is ToS, not disk.** The box now has 3.3 TB
+free on /data3 (eval data + caches relocated there). So the ScanNet pose cells
+(DAGE/CUT3R/Pi3 ScanNet, Table 4) are **gated on the ToS-signed raw ScanNet
+download**, not capacity — the `scannet-video-pose` loader + configs are
+code-ready (2026-06-03). ETH3D etc. that were disk-blocked are now stageable.
+
+### Updated runnable-today matrix (1080 Ti)
+| cell | status |
+|---|---|
+| DAGE Sintel/TUM pose | ✅ verified |
+| CUT3R Sintel/TUM pose | ✅ done (Sintel ✅, TUM ℹ) |
+| **Pi3 Sintel pose @ 252px (target 0.153)** | ▶ running 2026-06-05 |
+| Pi3 Sintel pose full-res (0.074) | ⛔ OOM (needs Ampere) |
+| DAGE/CUT3R/Pi3 ScanNet pose | ⛔ ToS-gated ScanNet data |
+| VGGT/StreamVGGT/VGGT-Ω pose | ⛔ bf16 (needs H100) |
+| DAGE Table 3 recon (7-Scenes) | ⛔ needs DAGE point-map output + NC metric |
+
+### Pi3-Sintel-pose result (2026-06-06)
+
+`pi3-sintel-pose` ran on the 1080 Ti (variant=pi3, 252px/pixel_limit=63504, fp32,
+14/14 clips): **ATE 0.0826, RPE-t 0.0491, RPE-r 0.3397** — INFORMATIONAL. It
+**brackets DAGE's two Pi3 rows** (full-res 0.074 / 252px 0.153), landing closest
+to full-res (+11.6%). Pi3 pose is strongly resolution-sensitive; pixel_limit=63504
+(~385px long-edge) is between DAGE's two resolution points. Wiring fixed en route:
+`evo` was missing (trajectory metrics silently skip without it) and the adapter
+defaults to `pi3x` (DAGE tables plain `pi3`). To land DAGE's exact points: full-res
+0.074 needs an Ampere/bigger-VRAM box (OOMs the 1080 Ti); 252px 0.153 needs
+pixel_limit≈27k. **Net: Pi3 confirmed as a runnable DAGE baseline — the first new
+DAGE-axis cell since TUM, informational pending the exact-resolution match.**
