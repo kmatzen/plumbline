@@ -1,0 +1,42 @@
+# Pi3 (π³) on Sintel camera pose — DAGE Table 4 baseline cross-check
+#
+# DAGE (arXiv:2603.03744) Table 4 reports Pi3 pose on Sintel at TWO resolutions:
+# full-res (PIXEL_LIMIT 255000, ~505px) ATE 0.074, and "Pi3 (252px)" ATE 0.153.
+# Pi3 was re-vendored 2026-06-04 (PR #60), so its DAGE rows are now reproducible.
+#
+# variant=pi3 (NOT the default pi3x — DAGE tables the plain Pi3). 252px (full-res
+# OOMs the 1080 Ti on 50-frame clips — Pi3 has no lr-downscale stream like DAGE's
+# lr_max_size:252). RESULT (1080 Ti, 2026-06-06, 14/14): ATE 0.0826, RPE-t 0.0491,
+# RPE-r 0.3397 — INFORMATIONAL. It brackets DAGE's two Pi3 rows (0.074 full /
+# 0.153 @252px), closest to full-res (+11.6%): pixel_limit=63504 (~385px long-edge)
+# is between DAGE's two resolution points, and Pi3 pose is strongly res-sensitive.
+# Full-res 0.074 needs an Ampere/bigger-VRAM box; DAGE's 252px needs pixel_limit~27k.
+name: pi3-sintel-pose
+model:
+  name: pi3
+  kwargs:
+    variant: pi3
+    dtype: float32      # Pascal 1080 Ti: no bf16
+    pixel_limit: 63504  # fits VRAM; intermediate res (DAGE's 252px is lower)
+dataset:
+  name: sintel
+  split: training
+  kwargs:
+    pass_name: final
+    full_seq: true
+    scenes: [alley_2, ambush_4, ambush_5, ambush_6, cave_2, cave_4, market_2, market_5, market_6, shaman_3, sleeping_1, sleeping_2, temple_2, temple_3]
+tasks: [pose]
+pose_trajectory_metrics: true
+max_views: 60
+device: cuda:0
+paper_reference:
+  primary_metric: trajectory_ate_rmse
+  value: 0.074
+  tolerance_relative: 0.10
+  citation: "Ngo et al. 2026, DAGE (arXiv:2603.03744) Table 4, Sintel, Pi3 row = ATE 0.074 (full-res); Pi3 (252px) = 0.153. Sim(3)-aligned TUM-RGBD ATE/RPE over 14 dynamic Sintel-final clips (MonST3R relpose harness)."
+  source_confidence: verified_pdf
+notes: >
+  INFORMATIONAL (res-bracketed). Pi3 pose is resolution-sensitive; our
+  pixel_limit=63504 (~385px) gives ATE 0.0826, between DAGE's full-res 0.074 and
+  252px 0.153, closest to full-res (+11.6%, just over ±10%). The exact full-res
+  0.074 needs an Ampere box (full-res OOMs the 1080 Ti).
