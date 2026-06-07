@@ -1,0 +1,25 @@
+# VGGT on Sintel camera pose — DAGE Table 4 baseline (VERIFIED on RTX 3090).
+# DAGE (arXiv:2603.03744) Table 4 VGGT row = ATE 0.167 / RPE-trans 0.062 / RPE-rot 0.491.
+# bf16 → needs Ampere (1080 Ti can't). RESULT (3090, 2026-06-06, 14/14, bf16):
+# ATE 0.1675 (+0.3%), RPE-trans 0.0605 (-2.4%), RPE-rot 0.4708 (-4.1%) — MATCH.
+name: vggt-sintel-pose
+model:
+  name: vggt
+  kwargs: {dtype: bfloat16}
+dataset:
+  name: sintel
+  split: training
+  kwargs: {pass_name: final, full_seq: true, scenes: [alley_2, ambush_4, ambush_5, ambush_6, cave_2, cave_4, market_2, market_5, market_6, shaman_3, sleeping_1, sleeping_2, temple_2, temple_3]}
+tasks: [pose]
+pose_trajectory_metrics: true
+max_views: 49   # VGGT's view cap
+device: cuda:0
+paper_reference:
+  primary_metric: trajectory_ate_rmse
+  value: 0.167
+  tolerance_relative: 0.10
+  citation: "Ngo et al. 2026, DAGE (arXiv:2603.03744) Table 4 Sintel, VGGT row = ATE 0.167 / RPE-trans 0.062 / RPE-rot 0.491 (Sim(3) ATE/RPE over 14 dynamic clips, MonST3R relpose harness)."
+  source_confidence: verified_pdf
+notes: >
+  MATCH (RTX 3090, bf16, 14/14): ATE 0.1675 vs 0.167 (+0.3%), companions within ~4%.
+  bf16-only → needs Ampere. Cross-validates the DAGE VGGT baseline row.
