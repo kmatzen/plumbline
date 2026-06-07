@@ -38,15 +38,20 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
-  Next-box EXPERIMENT (2026-05-28 coverage pass) — new RealEstate10K dataset
-  coverage on the pose axis, via the new `realestate10k-pose-eval` loader
-  (mirrors the CO3Dv2 pose loader's Sample/extrinsics path). THREE unknowns
-  to resolve on the first real run (none affect the PDF-verified target 0.853):
-  (1) DATA — RealEstate10K frames must be scraped from YouTube (many source
-  videos offline); stage to $REALESTATE10K_ROOT as <clip_id>/{*.txt,
-  <timestamp>.png}. (2) CLIP SUBSET — pass the canonical 1.8K test split via
-  `clips:` to match the paper; otherwise every clip on disk is used. (3) POSE
-  CONVENTION — the loader treats the .txt 3x4 as cam_from_world and inverts to
-  world_from_camera (CO3Dv2 convention); a w2c/c2w mixup would tank mAA, so
-  confirm first. Aggregation caveat is the same as the CO3Dv2 pose cell
+  ⚠️ RAN on RTX 3090 (2026-06-07, bf16, 50/50): AUC@30 0.7184 vs paper 0.853
+  (-15.7%, MISMATCH at tol 5%). Rotation is NEAR-PERFECT (pairwise_RRA@15 1.000,
+  rot_err 1.24°) — the geometry/pose convention (unknown #3) is correct, NOT a
+  w2c/c2w mixup. The whole gap is TRANSLATION (trans_cos_err 11.1°, RTA@5 0.508),
+  which is exactly what a SUBSET mismatch (unknown #2) produces: this ran on a
+  50-clip YouTube-scraped subset (`scripts/stage_realestate10k.py`, 93% hit,
+  seed 0), NOT VGGT's canonical 1.8K Re10K test split. Translation-AUC on
+  indoor Re10K is highly subset-sensitive (clip difficulty/baseline varies), so
+  a 50-clip availability-biased sample plausibly accounts for ~16%. To close:
+  stage the canonical 1.8K split and pass it via `clips:`. Left ⚠️ (subset gap,
+  not an adapter bug). Companion: rotation reproduces cleanly.
+  ---
+  History: new RealEstate10K dataset coverage on the pose axis via the
+  `realestate10k-pose-eval` loader (mirrors the CO3Dv2 pose loader). Frames are
+  scraped from YouTube (many source videos offline) to $REALESTATE10K_ROOT as
+  <clip_id>/{*.txt,<timestamp>.jpg}. Aggregation caveat as the CO3Dv2 pose cell
   (per-sample vs per-group AUC, ~1-2%).
