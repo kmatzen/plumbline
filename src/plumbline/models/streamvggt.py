@@ -206,7 +206,10 @@ def _run_streamvggt(
             )
             for t in tensors
         ]
-    frames = [{"img": t.to(device)} for t in tensors]
+    # Each frame's img needs a leading S=1 dim: StreamVGGT.inference() does one
+    # more unsqueeze(0) (-> B), and the aggregator unpacks (B, S, C, H, W). So pass
+    # (1, C, H, W) per frame, not (C, H, W).
+    frames = [{"img": t.unsqueeze(0).to(device)} for t in tensors]
 
     torch_dtype = {"bfloat16": torch.bfloat16, "float16": torch.float16, "float32": torch.float32}[
         dtype
