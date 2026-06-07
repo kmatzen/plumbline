@@ -16,8 +16,7 @@ model:
   name: pi3
   kwargs:
     variant: pi3
-    dtype: float32      # Pascal 1080 Ti: no bf16
-    pixel_limit: 63504  # fits VRAM; intermediate res (DAGE's 252px is lower)
+    dtype: bfloat16    # 3090 (Ampere) supports bf16
 dataset:
   name: sintel
   split: training
@@ -36,7 +35,10 @@ paper_reference:
   citation: "Ngo et al. 2026, DAGE (arXiv:2603.03744) Table 4, Sintel, Pi3 row = ATE 0.074 (full-res); Pi3 (252px) = 0.153. Sim(3)-aligned TUM-RGBD ATE/RPE over 14 dynamic Sintel-final clips (MonST3R relpose harness)."
   source_confidence: verified_pdf
 notes: >
-  INFORMATIONAL (res-bracketed). Pi3 pose is resolution-sensitive; our
-  pixel_limit=63504 (~385px) gives ATE 0.0826, between DAGE's full-res 0.074 and
-  252px 0.153, closest to full-res (+11.6%, just over ±10%). The exact full-res
-  0.074 needs an Ampere box (full-res OOMs the 1080 Ti).
+  Near-MATCH at full-res (RTX 3090, bf16, 2026-06-06, 14/14): ATE 0.0818 vs 0.074
+  (+10.5%, just over the ±10% gate) but companions MATCH — RPE-trans 0.0411 vs
+  0.040 (+2.7%), RPE-rot 0.2835 vs 0.282 (+0.5%). The companions confirm the
+  apparatus + Pi3's pose; the small ATE drift mirrors DAGE's own Sintel cell
+  (+7.3%) — bf16 + Sim(3)-alignment numerics. Full-res OOMs the 1080 Ti, so this
+  needs the 3090. Informational (ATE marginally over ±10%); DAGE's lower "252px"
+  row (0.153) needs pixel_limit~27k. variant=pi3 (NOT the default pi3x).

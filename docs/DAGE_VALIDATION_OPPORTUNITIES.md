@@ -244,3 +244,14 @@ defaults to `pi3x` (DAGE tables plain `pi3`). To land DAGE's exact points: full-
 0.074 needs an Ampere/bigger-VRAM box (OOMs the 1080 Ti); 252px 0.153 needs
 pixel_limit≈27k. **Net: Pi3 confirmed as a runnable DAGE baseline — the first new
 DAGE-axis cell since TUM, informational pending the exact-resolution match.**
+
+### Pi3-Sintel-pose FULL-RES (RTX 3090, 2026-06-06)
+
+A Vast.ai RTX 3090 (Ampere/bf16, 24 GB) was added — full-res Pi3 fits there (the
+1080 Ti OOM'd). Pi3 full-res Sintel pose (variant=pi3, bf16, 14/14):
+**ATE 0.0818 vs DAGE 0.074 (+10.5%), RPE-trans 0.0411 vs 0.040 (+2.7%), RPE-rot
+0.2835 vs 0.282 (+0.5%)** — a near-MATCH: companions confirm the apparatus + Pi3's
+pose; ATE is marginally over ±10%, same drift shape as DAGE's own Sintel cell
+(+7.3%, bf16 + Sim(3)-alignment). Informational. The 3090 unblocks the rest of the
+bf16/Ampere-gated DAGE work (VGGT-family pose) + the roster's StreamVGGT/VGGT-Ω
+forward-pass validation. See [[project_3090_host]].
