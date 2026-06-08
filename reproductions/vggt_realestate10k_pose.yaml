@@ -52,7 +52,19 @@ notes: >
   translation precision specifically (rotation is robust to it). PoseDiffusion's
   eval uses native RE10K frames + its own (tighter) sampling. To close, the
   scrape would need native-res frames and the paper's frame-window protocol;
-  left ⚠️ (data-fidelity gap, adapter geometry validated by perfect rotation).
+  left ⚠️ (data-fidelity gap, NOT an implementation bug — see cross-check).
+  ---
+  IMPLEMENTATION CROSS-CHECK (rules out an adapter/harness bug): every code path
+  here is shared with a PASSING cell except the RE10K data. (1) The SAME VGGT
+  adapter + SAME `vggt_co3d_histogram` AUC + SAME `pose_translation_antipodal`
+  reproduces CO3Dv2 AUC@30 0.8964 vs 0.882 (REPRODUCTIONS.md) — CO3Dv2's AUC
+  fully exercises translation on native-res data, so the predicted-pose
+  translation extraction is validated. (2) The SAME loader `invert_pose`/rebase
+  + metric reproduces DUSt3R-CO3Dv2 0.789 vs 0.772 (PR #17) — a `[Rᵀ|−t]`
+  translation-inversion bug would have broken both CO3Dv2 cells. (3) RE10K's own
+  GT parse is sound: rotation is perfect (RRA@15 0.998) and R,t come from the
+  same 12-float `.txt` block. Conclusion: code validated; the gap is the ≤480p
+  wide-baseline scrape vs the paper's native frames.
   ---
   History: 50-clip run first gave AUC@30 0.7184 (same shape); the 1.8K re-scrape
   + run was to test subset variance (ruled out). New RealEstate10K dataset
