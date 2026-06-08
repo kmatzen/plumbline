@@ -38,20 +38,25 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
-  ⚠️ RAN on RTX 3090 (2026-06-07, bf16, 50/50): AUC@30 0.7184 vs paper 0.853
-  (-15.7%, MISMATCH at tol 5%). Rotation is NEAR-PERFECT (pairwise_RRA@15 1.000,
-  rot_err 1.24°) — the geometry/pose convention (unknown #3) is correct, NOT a
-  w2c/c2w mixup. The whole gap is TRANSLATION (trans_cos_err 11.1°, RTA@5 0.508),
-  which is exactly what a SUBSET mismatch (unknown #2) produces: this ran on a
-  50-clip YouTube-scraped subset (`scripts/stage_realestate10k.py`, 93% hit,
-  seed 0), NOT VGGT's canonical 1.8K Re10K test split. Translation-AUC on
-  indoor Re10K is highly subset-sensitive (clip difficulty/baseline varies), so
-  a 50-clip availability-biased sample plausibly accounts for ~16%. To close:
-  stage the canonical 1.8K split and pass it via `clips:`. Left ⚠️ (subset gap,
-  not an adapter bug). Companion: rotation reproduces cleanly.
+  ⚠️ RAN at 1.8K scale on RTX 3090 (2026-06-07, bf16, 1800/1800): AUC@30 0.7288
+  vs paper 0.853 (-14.6%, MISMATCH at tol 5%). **The subset-variance hypothesis
+  is DISPROVEN**: scaling 50→1800 clips moved AUC@30 only +1% (0.7184→0.7288),
+  not toward 0.853. The gap is REAL and STABLE, and entirely TRANSLATION:
+  rotation is near-perfect at both scales (pairwise_RRA@15 0.998, rot_err 1.20°
+  → geometry/pose convention correct, NOT a w2c/c2w mixup), while trans_cos_err
+  is dead-stable at ~10.8° (RTA@5 0.514). Translation-direction error this size,
+  invariant to sample count, points at a DATA-FIDELITY gap in the scrape recipe,
+  NOT a VGGT adapter bug: `scripts/stage_realestate10k.py` pulls ≤480p YouTube
+  RE-ENCODES and samples 16 EVENLY-SPACED frames across the full multi-second
+  clip → low-res features + very wide baselines, both of which degrade
+  translation precision specifically (rotation is robust to it). PoseDiffusion's
+  eval uses native RE10K frames + its own (tighter) sampling. To close, the
+  scrape would need native-res frames and the paper's frame-window protocol;
+  left ⚠️ (data-fidelity gap, adapter geometry validated by perfect rotation).
   ---
-  History: new RealEstate10K dataset coverage on the pose axis via the
-  `realestate10k-pose-eval` loader (mirrors the CO3Dv2 pose loader). Frames are
-  scraped from YouTube (many source videos offline) to $REALESTATE10K_ROOT as
-  <clip_id>/{*.txt,<timestamp>.jpg}. Aggregation caveat as the CO3Dv2 pose cell
-  (per-sample vs per-group AUC, ~1-2%).
+  History: 50-clip run first gave AUC@30 0.7184 (same shape); the 1.8K re-scrape
+  + run was to test subset variance (ruled out). New RealEstate10K dataset
+  coverage on the pose axis via the `realestate10k-pose-eval` loader (mirrors the
+  CO3Dv2 pose loader). Frames scraped from YouTube (many source videos offline,
+  92% hit) to $REALESTATE10K_ROOT as <clip_id>/{*.txt,<timestamp>.jpg}.
+  Aggregation caveat as the CO3Dv2 pose cell (per-sample vs per-group, ~1-2%).
