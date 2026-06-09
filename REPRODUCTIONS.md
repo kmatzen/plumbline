@@ -202,6 +202,29 @@ touches verified cells: the DA-V2 *paper* path passes
 so switching to the faithful INTER_CUBIC needs a GPU re-validation of those
 cells before it lands (behavior left unchanged for now).
 
+### Vendoring validation (2026-06-09)
+
+The `chore/vendor-dust3r-lineage` branch moves DUSt3R / MASt3R / MonST3R /
+CUT3R (+ Pi3, DAGE) under `src/plumbline/_vendor/`, rewriting their import
+paths. Re-validated the lineage root and a sibling end-to-end on the GTX
+1080 Ti to confirm the move is behaviour-preserving (NYUv2 Eigen 654-image
+split, fp32):
+
+- **DUSt3R-NYU** (vendored `_vendor/dust3r`) — AbsRel **0.0777**, bit-equal
+  to the pre-vendor number (D28); confirms the vendored copy resolves on
+  `sys.path` and produces identical predictions.
+- **MonST3R-NYU** (vendored `_vendor/monst3r`) — AbsRel **0.0896** vs paper
+  0.091 ✅ (re-run 2026-06-04).
+
+All seven vendored adapters and their `_vendor.*` packages import cleanly.
+
+**DA3 is NOT vendored on this branch** — `src/plumbline/_vendor/depth_anything_3/`
+has no git-tracked files (no `api.py`), so the adapter correctly raises
+`ImportError` until `depth-anything-3` is installed (`uv pip install
+depth-anything-3`). With the pip package, DA3-NYU reproduces δ₁ **0.9684**
+vs paper 0.974 ✅ (`nyu_eigen_2014` protocol, scale+shift). DA3 vendoring is
+tracked separately.
+
 ### Biggest open gaps (in order of per-cell leverage)
 
 1. ~~**CO3Dv2 GPU run**~~ — ✅ closed 2026-05-26 (VGGT 0.8964, MASt3R
