@@ -39,32 +39,37 @@ paper_reference:
 
 notes: >
   ⚠️ RAN at 1.8K scale on RTX 3090 (2026-06-07, bf16, 1800/1800): AUC@30 0.7288
-  vs paper 0.853 (-14.6%, MISMATCH at tol 5%). **The subset-variance hypothesis
-  is DISPROVEN**: scaling 50→1800 clips moved AUC@30 only +1% (0.7184→0.7288),
-  not toward 0.853. The gap is REAL and STABLE, and entirely TRANSLATION:
-  rotation is near-perfect at both scales (pairwise_RRA@15 0.998, rot_err 1.20°
-  → geometry/pose convention correct, NOT a w2c/c2w mixup), while trans_cos_err
-  is dead-stable at ~10.8° (RTA@5 0.514). Translation-direction error this size,
-  invariant to sample count, points at a DATA-FIDELITY gap in the scrape recipe,
-  NOT a VGGT adapter bug: `scripts/stage_realestate10k.py` pulls ≤480p YouTube
-  RE-ENCODES and samples 16 EVENLY-SPACED frames across the full multi-second
-  clip → low-res features + very wide baselines, both of which degrade
-  translation precision specifically (rotation is robust to it). PoseDiffusion's
-  eval uses native RE10K frames + its own (tighter) sampling. To close, the
-  scrape would need native-res frames and the paper's frame-window protocol;
-  left ⚠️ (data-fidelity gap, NOT an implementation bug — see cross-check).
+  vs paper 0.853 (-14.6%, MISMATCH at tol 5%). Subset variance DISPROVEN (50→1800
+  moved it only +1%). Gap is stable + entirely TRANSLATION (rot near-perfect
+  RRA@15 0.998 / 1.20°; trans_cos ~10.8° stable).
   ---
-  IMPLEMENTATION CROSS-CHECK (rules out an adapter/harness bug): every code path
-  here is shared with a PASSING cell except the RE10K data. (1) The SAME VGGT
-  adapter + SAME `vggt_co3d_histogram` AUC + SAME `pose_translation_antipodal`
-  reproduces CO3Dv2 AUC@30 0.8964 vs 0.882 (REPRODUCTIONS.md) — CO3Dv2's AUC
-  fully exercises translation on native-res data, so the predicted-pose
-  translation extraction is validated. (2) The SAME loader `invert_pose`/rebase
-  + metric reproduces DUSt3R-CO3Dv2 0.789 vs 0.772 (PR #17) — a `[Rᵀ|−t]`
-  translation-inversion bug would have broken both CO3Dv2 cells. (3) RE10K's own
-  GT parse is sound: rotation is perfect (RRA@15 0.998) and R,t come from the
-  same 12-float `.txt` block. Conclusion: code validated; the gap is the ≤480p
-  wide-baseline scrape vs the paper's native frames.
+  CROSS-MODEL CONTROL (2026-06-08, GTX 1080 Ti, IDENTICAL 50-clip subset
+  `re10k_sub50` = first-50-sorted; the decisive test). Same loader+metric+data,
+  three models:
+    MASt3R  AUC@30 0.8452  (target 0.764, +11% — EXCEEDS, trans_cos 7.6°)
+    DUSt3R  AUC@30 0.6556  (target 0.612,  +7% — EXCEEDS, trans_cos 14.8°)
+    VGGT    AUC@30 0.6724  (target 0.853, -21% — MISSES, trans_cos 13.6°, fp32)
+  **This OVERTURNS the earlier "data-fidelity" conclusion.** Both optimization-
+  based models CLEAR their RE10K targets on the exact same ≤480p scraped clips,
+  so the data is NOT a blanket limiter. The published ranking
+  (VGGT 0.853 > MASt3R 0.764 > DUSt3R 0.612) INVERTS on our data (MASt3R top,
+  VGGT bottom) — VGGT is the lone outlier. The gap is therefore VGGT-SPECIFIC ON
+  RE10K, not generic data and not a found adapter bug (VGGT-CO3Dv2 0.8964 ✓,
+  preprocessing mirrors upstream mode=crop, GT/metric validated by the two
+  passing models here). LEADING HYPOTHESES (open): (a) VGGT feed-forward
+  translation is far more sensitive to the scrape's ≤480p + wide 16-evenly-
+  spaced-frame baselines than MASt3R/DUSt3R's 500-iter global optimization, which
+  refines against correspondences and recovers; (b) a VGGT × wide-aspect
+  interaction (RE10K 16:9 → 518×294 vs CO3Dv2's ~518×518) — NOT excluded. Next
+  test to disambiguate: re-scrape a few clips with DENSE frames and re-run VGGT
+  with tight baselines (would isolate (a)).
+  ---
+  CO3Dv2 cross-check (still valid, rules out a GLOBAL adapter/harness bug): SAME
+  VGGT adapter + AUC mode + antipodal handling reproduces CO3Dv2 0.8964 vs 0.882;
+  SAME loader invert_pose/metric reproduces DUSt3R-CO3Dv2 0.789 vs 0.772 (a
+  `[Rᵀ|−t]` inversion bug would have broken both); RE10K rotation perfect
+  validates its GT parse. So the code is right in general — the failure is the
+  VGGT×RE10K-recipe interaction above.
   ---
   History: 50-clip run first gave AUC@30 0.7184 (same shape); the 1.8K re-scrape
   + run was to test subset variance (ruled out). New RealEstate10K dataset
