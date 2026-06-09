@@ -56,13 +56,17 @@ notes: >
   VGGT bottom) — VGGT is the lone outlier. The gap is therefore VGGT-SPECIFIC ON
   RE10K, not generic data and not a found adapter bug (VGGT-CO3Dv2 0.8964 ✓,
   preprocessing mirrors upstream mode=crop, GT/metric validated by the two
-  passing models here). LEADING HYPOTHESES (open): (a) VGGT feed-forward
-  translation is far more sensitive to the scrape's ≤480p + wide 16-evenly-
-  spaced-frame baselines than MASt3R/DUSt3R's 500-iter global optimization, which
-  refines against correspondences and recovers; (b) a VGGT × wide-aspect
-  interaction (RE10K 16:9 → 518×294 vs CO3Dv2's ~518×518) — NOT excluded. Next
-  test to disambiguate: re-scrape a few clips with DENSE frames and re-run VGGT
-  with tight baselines (would isolate (a)).
+  passing models here). WHY VGGT specifically (narrowed 2026-06-09): two of
+  three hypotheses ruled out — (i) FRAME SAMPLING ruled out: MASt3R/DUSt3R EXCEED
+  their targets on our exact 16-frame sampling, so it isn't harder than the
+  paper's; (ii) WIDE ASPECT ruled out: the paper ran native RE10K through the
+  same crop→518×wide and still got 0.853. PRIME SUSPECT = (iii) RESOLUTION: our
+  scrape caps at ≤480p YouTube re-encodes (upscaled to 518); MASt3R/DUSt3R
+  correspondence-matching is robust to soft frames, VGGT's feed-forward
+  translation REGRESSION is not. Fix = feed VGGT native ~720p frames. The
+  disambiguating re-scrape (native-res, or a dense/tight-baseline control) is
+  BLOCKED: heavy scraping tripped YouTube bot-detection on anima's IP ("Sign in
+  to confirm you're not a bot") — needs cookies or a cooldown.
   ---
   CO3Dv2 cross-check (still valid, rules out a GLOBAL adapter/harness bug): SAME
   VGGT adapter + AUC mode + antipodal handling reproduces CO3Dv2 0.8964 vs 0.882;
