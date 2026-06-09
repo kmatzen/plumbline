@@ -99,7 +99,7 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 
 ### Paper-match count
 
-**31 ✅ mono-depth cells + 6 ✅ pose cells = 37 total** with `source_confidence: verified_pdf`:
+**31 ✅ mono-depth cells + 7 ✅ pose cells = 38 total** with `source_confidence: verified_pdf`:
 
 - NYU (8): DA-V2 S/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3, **MonST3R** (lineage protocol, 2026-05-26)
 - KITTI Eigen+Garg (6): DA-V2 S/B/L, Metric3D-v2 L/Giant, **DA3** (δ₁ 0.9534 vs 0.953, `process_res=1008`; the 504 default underperforms on KITTI's 3.3:1 frames — root-caused 2026-06-04, DA-V2 reproduces its own KITTI δ₁/AbsRel on the same protocol)
@@ -116,6 +116,7 @@ faithful MonST3R-video cell awaits the flow-path follow-up.
 - **CO3Dv2 pose (3): VGGT (AUC@30 0.8964 vs 0.882, +1.6 %) + MASt3R (mAA(30) 0.8581 vs 0.818, +4.9 %) + DUSt3R (mAA(30) 0.7893 vs 0.772, +2.2 %), all on MASt3R Table 3 protocol** — v0.1 acceptance criterion #2 met (VGGT) and twice-seconded (MASt3R / DUSt3R). MASt3R re-validated 2026-06-03 on the faithful `sparse_ga` matching path (supersedes the legacy `dust3r_ga` 0.7960, which matched on the wrong pose method; PR #42).
 - **Sintel trajectory pose (1): MonST3R Table 4 — ATE 0.1134 vs 0.108 (+5.0 %), plumbline-computed 2026-05-27** via the new adapter v1.2 video-pose path + `metrics/pose.py` ATE/RPE family.
 - **DAGE Table 4 pose (2, NEW 2026-06-03): Sintel** — ATE **0.1417 vs 0.132** (+7.3 %, fp16, 14/14 dynamic clips, 2026-06-02); **TUM-Dynamics** — ATE **0.0136 vs 0.014** (−2.9 %, fp16, 8/8 freiburg3 clips, 2026-06-03 — companions RPE-trans 0.0104/0.010, RPE-rot 0.3213/0.323 all within ~4 %). Same Sim(3)-aligned TUM-RGBD ATE/RPE apparatus as the MonST3R Sintel cell; feed-forward DAGE adapter (pose-only), `tum-dynamics` loader. PR #44.
+- **DAGE Table 4 baseline (1, CUT3R-Sintel): CUT3R** — ATE **0.2138 vs 0.217** (−1.5 %, 14/14 dynamic clips; companions RPE-trans 0.0683/0.070, RPE-rot 0.632/0.636 — all within ~2.5 %). Vendored CUT3R + built curope, same Sim(3)-aligned TUM-RGBD harness; `cut3r-sintel-pose-dage`. Run 2026-06-02, re-confirmed bit-identical 2026-06-09 on the vendored `main`. Completes the DAGE Table 4 Sintel column (DAGE/MonST3R/Pi3/CUT3R).
 
 Each cell is verified against the source PDF (table + col + row) per
 `reproductions/AUDIT.md`.
