@@ -30,6 +30,15 @@ Adapter "kinds"
 - ``clone`` — a repo that must be ``git clone``d to a path named by an env var
   and added to ``sys.path`` by the adapter (not pip-installable). ``check``
   passes iff ``dest_env`` is set and points at an existing directory.
+- ``vendored`` — upstream model code is bundled in-repo under
+  ``src/plumbline/_vendor/<name>/`` (license permitting; see
+  ``THIRD_PARTY_NOTICES.md``), so there is **no clone**. The only install
+  surface is the model's runtime pip deps (``pip``) — and, where noted, a
+  checkpoint download and/or a CUDA-extension build. This makes ``install.py``
+  the unified, accurate view of every adapter's Python dependencies: the deps
+  live here as explicit ``pip`` lists rather than in a cloned ``requirements.txt``.
+  ``check`` passes iff ``probe_import`` (a signature runtime dep, e.g. ``roma``)
+  imports; ``$<name>_ROOT`` still overrides the vendored path for a dev checkout.
 """
 
 from __future__ import annotations
@@ -57,7 +66,8 @@ class InstallSpec:
     name:
         Registered model name (matches ``@register_model`` / ``MODEL_REGISTRY``).
     kind:
-        One of ``"base" | "pypi" | "git" | "clone"`` (see module docstring).
+        One of ``"base" | "pypi" | "git" | "clone" | "vendored"`` (see module
+        docstring).
     probe_import:
         Importable module name used to detect presence, or ``None`` when the
         adapter has no clean import probe (e.g. torch.hub-only, or a clone whose
@@ -122,6 +132,9 @@ class InstallSpec:
             return f"plumbline install {self.name}  (pip: {' '.join(self.pip)})"
         if self.kind == "git":
             return f"plumbline install {self.name}  (pip+git)"
+        if self.kind == "vendored":
+            extra = f"; pip: {' '.join(self.pip)}" if self.pip else ""
+            return f"plumbline install {self.name}  (code vendored{extra})"
         # clone
         dest = self.dest_env or "<dest>"
         return f"plumbline install {self.name}  (git clone -> ${dest})"
@@ -191,10 +204,28 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
     ),
     "depth-anything-3": InstallSpec(
         name="depth-anything-3",
-        kind="pypi",
+        kind="vendored",
+        # Vendored as the mono-depth subset of the Apache-2.0 package
+        # (_vendor/depth_anything_3). Its three runtime deps — addict, omegaconf,
+        # opencv-python — are declared in base pyproject (the slice is numpy-2
+        # clean; xformers/gsplat/e3nn are guarded-optional, evo is lazy), so a
+        # plain `uv sync` is enough — nothing to pip-install here. Probe the
+        # vendored package itself.
         probe_import="depth_anything_3",
-        pip=("depth-anything-3",),
+        pip=(),
+        extra_env=(
+            (
+                "DA3_ROOT",
+                "Optional: override the vendored _vendor/depth_anything_3 path with a dev checkout.",
+            ),
+        ),
         weights="hf-auto",
+        notes=(
+            "Code vendored under plumbline/_vendor/depth_anything_3 (mono-depth "
+            "subset of the Apache-2.0 release; bench/app/services/export trees "
+            "pruned). Deps (addict/omegaconf/opencv-python) are in the base "
+            "install. Weights: depth-anything/DA3-LARGE-1.1 (HF auto, ~1.5 GB)."
+        ),
     ),
     "moge": InstallSpec(
         name="moge",
@@ -223,88 +254,98 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
     ),
     "mast3r": InstallSpec(
         name="mast3r",
-        kind="clone",
-        probe_import="mast3r",
-        clone_url="https://github.com/naver/mast3r",
-        clone_recursive=True,
-        dest_env="MAST3R_ROOT",
-        default_dest="$HOME/deps/mast3r",
-        extra_pip=_TRIMESH_STACK,
+        kind="vendored",
+        probe_import="roma",  # signature dust3r-lineage runtime dep
+        pip=_TRIMESH_STACK,
         extra_env=(
             (
-                "DUST3R_ROOT",
-                "Path to the bundled dust3r submodule (default $MAST3R_ROOT/dust3r).",
+                "MAST3R_ROOT",
+                "Optional: override the vendored _vendor/mast3r path with a dev checkout.",
             ),
         ),
         weights="hf-auto",
         notes=(
-            "Optional curope CUDA build at $MAST3R_ROOT/dust3r/croco/models/curope "
-            "for a speedup: `python setup.py build_ext --inplace` with "
-            "CUDA_HOME=/usr/local/cuda-12.1. Only ONE dust3r-family model "
-            "(mast3r/dust3r/monst3r) can be used per process — Python caches "
-            "`import dust3r`."
+            "Code vendored under plumbline/_vendor/mast3r (bundles its own dust3r "
+            "+ croco subtrees; no clone). Optional curope CUDA build at "
+            "_vendor/mast3r/dust3r/croco/models/curope for a speedup (pure-torch "
+            "RoPE works without it): `python setup.py build_ext --inplace` with "
+            "CUDA_HOME set. Only ONE dust3r-family model (mast3r/dust3r/monst3r) "
+            "per process — Python caches `import dust3r`."
         ),
     ),
     "dust3r": InstallSpec(
         name="dust3r",
-        kind="clone",
-        probe_import="dust3r",
-        clone_url="https://github.com/naver/dust3r",
-        clone_recursive=True,
-        dest_env="DUST3R_ROOT",
-        default_dest="$HOME/deps/dust3r",
-        extra_pip=_TRIMESH_STACK,
+        kind="vendored",
+        probe_import="roma",  # signature dust3r-lineage runtime dep
+        pip=_TRIMESH_STACK,
+        extra_env=(
+            (
+                "DUST3R_ROOT",
+                "Optional: override the vendored _vendor/dust3r path with a dev checkout.",
+            ),
+        ),
         weights="hf-auto",
         notes=(
-            "Weights: naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt (HF auto). Only "
-            "ONE dust3r-family model (mast3r/dust3r/monst3r) per process."
+            "Code vendored under plumbline/_vendor/dust3r (no clone). Weights: "
+            "naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt (HF auto). Only ONE "
+            "dust3r-family model (mast3r/dust3r/monst3r) per process — Python "
+            "caches `import dust3r`."
         ),
     ),
     "monst3r": InstallSpec(
         name="monst3r",
-        kind="clone",
-        probe_import=None,  # ships its own dust3r fork; resolves after sys.path munge
-        clone_url="https://github.com/Junyi42/monst3r",
-        clone_recursive=True,
-        dest_env="MONST3R_ROOT",
-        default_dest="$HOME/deps/monst3r",
+        kind="vendored",
         # MonST3R's dust3r fork imports `evo` at module load (dust3r/utils/
         # vo_eval.py), so it is required even for the mono-depth path — not
         # just trajectory metrics. roma/scikit-learn/trimesh are the shared
-        # dust3r-family deps.
-        extra_pip=(*_TRIMESH_STACK, "evo"),
+        # dust3r-family deps. Probe on `evo` since it's the monst3r-specific dep.
+        probe_import="evo",
+        pip=(*_TRIMESH_STACK, "evo"),
+        extra_env=(
+            (
+                "MONST3R_ROOT",
+                "Optional: override the vendored _vendor/monst3r path with a dev checkout.",
+            ),
+        ),
         weights="hf-auto",
         notes=(
-            "Ships its own dust3r fork — only ONE dust3r-family model "
-            "(mast3r/dust3r/monst3r) can be used per process (Python caches "
-            "`import dust3r`). The fork imports `evo` at load time, so it is a "
-            "hard dependency (in extra_pip)."
+            "Code vendored under plumbline/_vendor/monst3r (bundles its own dust3r "
+            "fork + third_party/RAFT; no clone). The fork imports `evo` at load "
+            "time, so it is a hard dependency (in pip). MonST3R's `sam2` import is "
+            "shimmed in the adapter (import-only), so sam2 is not needed. Only ONE "
+            "dust3r-family model (mast3r/dust3r/monst3r) per process — Python "
+            "caches `import dust3r`."
         ),
     ),
     "cut3r": InstallSpec(
         name="cut3r",
-        kind="clone",
-        probe_import=None,  # resolves `src.dust3r...` only after sys.path munge
-        clone_url="https://github.com/CUT3R/CUT3R",
-        clone_recursive=True,
-        dest_env="CUT3R_ROOT",
-        default_dest="$HOME/deps/cut3r",
-        requirements_txt=True,
+        kind="vendored",
+        probe_import="roma",  # signature dust3r-lineage runtime dep
+        # CUT3R's upstream requirements.txt is training-heavy; the inference path
+        # the adapter drives needs the shared dust3r-lineage stack plus omegaconf
+        # (the checkpoint embeds an omegaconf config that torch.load rebuilds).
+        pip=(*_TRIMESH_STACK, "omegaconf"),
         extra_env=(
             (
                 "CUT3R_CKPT",
-                "Path to the 512-DPT checkpoint (default $CUT3R_ROOT/src/cut3r_512_dpt_4_64.pth).",
+                "Path to the 512-DPT checkpoint (default "
+                "_vendor/cut3r/src/cut3r_512_dpt_4_64.pth).",
+            ),
+            (
+                "CUT3R_ROOT",
+                "Optional: override the vendored _vendor/cut3r path with a dev checkout.",
             ),
         ),
         weights=(
             "manual: 512-DPT checkpoint cut3r_512_dpt_4_64.pth to $CUT3R_CKPT "
-            "(default $CUT3R_ROOT/src/cut3r_512_dpt_4_64.pth). Public Google "
+            "(default _vendor/cut3r/src/cut3r_512_dpt_4_64.pth). Public Google "
             "Drive id 1Asz-ZB3FfpzZYwunhQvNPZEUA8XUNAYD (gdown)."
         ),
         notes=(
-            "CODE IS VENDORED under plumbline/_vendor/cut3r (src/dust3r + "
-            "src/croco); no clone is needed (clone_url/$CUT3R_ROOT are now just a "
-            "dev override). Two install steps remain: (1) build the vendored "
+            "Code vendored under plumbline/_vendor/cut3r (src/dust3r + "
+            "src/croco); no clone is needed ($CUT3R_ROOT is now just a "
+            "dev override). Two install steps remain beyond the pip deps: "
+            "(1) build the vendored "
             "curope CUDA ext at _vendor/cut3r/src/croco/models/curope (`python "
             "setup.py build_ext --inplace`, needs nvcc + Python dev headers) — "
             "CUT3R's pure-torch RoPE fallback device-asserts, so curope is "
@@ -332,8 +373,8 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
     ),
     "dage": InstallSpec(
         name="dage",
-        kind="pypi",
-        probe_import=None,  # vendored `dage` resolves only after the adapter's sys.path munge
+        kind="vendored",
+        probe_import="kornia",  # signature DAGE runtime dep (vendored `dage` itself resolves post-munge)
         pip=(
             "einops",
             "omegaconf",
@@ -430,6 +471,16 @@ def install_hint(name: str) -> str:
             f"needs the `{mod}` package from {url}. "
             f"Install with `plumbline install {name}` (or `uv pip install {url}`)."
         )
+    if spec.kind == "vendored":
+        # Code is bundled under _vendor/<name>; the failure is a missing runtime
+        # dep (or, where noted, an unbuilt CUDA ext / missing checkpoint).
+        deps = " ".join(spec.pip)
+        weight = " + a model checkpoint" if spec.weights.startswith("manual") else ""
+        return (
+            f"is vendored under plumbline/_vendor/{name}, but needs its runtime "
+            f"deps{f' ({deps})' if deps else ''}{weight}. "
+            f"Install with `plumbline install {name}`."
+        )
     # clone
     dest = spec.dest_env or "<dest>"
     return (
@@ -442,10 +493,12 @@ def install_hint(name: str) -> str:
 def install_plan(name: str) -> list[str]:
     """Return ordered shell commands to install ``name``.
 
-    - ``base``  → empty list (nothing to do).
-    - ``pypi``  → one ``uv pip install <pkg>`` per package.
-    - ``git``   → one ``uv pip install <url>`` per URL.
-    - ``clone`` → ``git clone`` + extra-pip / requirements.txt + ``export`` lines
+    - ``base``     → empty list (nothing to do).
+    - ``pypi``     → one ``uv pip install <pkg>`` per package.
+    - ``git``      → one ``uv pip install <url>`` per URL.
+    - ``vendored`` → ``uv pip install`` of the runtime deps + ``export`` lines for
+      any ``extra_env`` vars (checkpoint paths). No clone (code is in ``_vendor``).
+    - ``clone``    → ``git clone`` + extra-pip / requirements.txt + ``export`` lines
       for ``dest_env`` and any ``extra_env`` vars the operator must set.
     """
     spec = spec_for(name)
@@ -455,6 +508,17 @@ def install_plan(name: str) -> list[str]:
         return [f"uv pip install {pkg}" for pkg in spec.pip]
     if spec.kind == "git":
         return [f"uv pip install '{url}'" for url in spec.git]
+
+    if spec.kind == "vendored":
+        # No clone: code ships under _vendor/<name>. Install only the runtime
+        # pip deps (one per line so PEP 508 direct refs with spaces survive),
+        # then any export lines for checkpoint paths (extra_env).
+        plan = [
+            f"uv pip install {pkg!r}" if " " in pkg else f"uv pip install {pkg}" for pkg in spec.pip
+        ]
+        for var, _note in spec.extra_env:
+            plan.append(f"export {var}=...  # see notes")
+        return plan
 
     # clone
     dest = spec.default_dest or f"${spec.dest_env}"
@@ -483,8 +547,10 @@ def _module_importable(module: str) -> bool:
 def check(name: str) -> tuple[bool, str]:
     """Report whether ``name`` looks installed. Returns ``(ok, detail)``.
 
-    - For ``base`` / ``pypi`` / ``git`` adapters with a ``probe_import``: OK iff
-      the module is importable (checked via ``find_spec`` — no heavy import).
+    - For ``base`` / ``pypi`` / ``git`` / ``vendored`` adapters with a
+      ``probe_import``: OK iff the module is importable (checked via ``find_spec``
+      — no heavy import). For ``vendored`` the probe is a signature runtime dep
+      (e.g. ``roma``), since the bundled model code always resolves.
     - For ``clone`` adapters (and anything without a clean probe): OK iff
       ``dest_env`` is set *and* points at an existing directory.
     """

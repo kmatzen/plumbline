@@ -187,7 +187,7 @@ jobs:
     data_footprint_gb: 4
     est_wall_min: 60
     requires_env: [CO3DV2_ROOT]
-    extras: "DA3: `plumbline install depth-anything-3` (pip package `depth-anything-3`; NOT in the base install)."
+    extras: "DA3: vendored under `_vendor/depth_anything_3`; deps (addict/omegaconf/opencv-python) in the base install — no extra install step."
     notes: >
       ✅ RAN 2026-05-28 (RTX 3090): AUC@30 **0.882**, RRA@15 0.974 —
       informational A/B (sits between VGGT 0.896 and MASt3R 0.796); no
