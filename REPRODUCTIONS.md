@@ -235,6 +235,24 @@ touches verified cells: the DA-V2 *paper* path passes
 so switching to the faithful INTER_CUBIC needs a GPU re-validation of those
 cells before it lands (behavior left unchanged for now).
 
+### Vendoring validation (2026-06-09)
+
+Re-validated the `_vendor/`-bundled adapters end-to-end on a GTX 1080 Ti
+(Pascal, fp32) to confirm the import-path rewrite is behaviour-preserving —
+the vendored copies resolve on `sys.path` and reproduce their known numbers
+(NYUv2 Eigen, 654-image split):
+
+- **DUSt3R-NYU** (`_vendor/dust3r`) — AbsRel **0.0777**, bit-equal to the
+  pre-vendor number (D28); the dust3r-lineage root that MASt3R/MonST3R also
+  bundle a copy of.
+- **MonST3R-NYU** (`_vendor/monst3r`) — AbsRel **0.0896** vs paper 0.091 ✅.
+- **DA3-NYU** (`_vendor/depth_anything_3`) — δ₁ **0.9684** / AbsRel 0.0506 vs
+  paper 0.974 ✅. Run with the `depth-anything-3` PyPI package **uninstalled**,
+  so the result comes from the vendored mono-depth subset alone (the adapter's
+  `_ensure_da3_on_path()` shadows any pip install).
+
+All seven vendored adapters and their `_vendor.*` packages import cleanly.
+
 ### Biggest open gaps (in order of per-cell leverage)
 
 1. ~~**CO3Dv2 GPU run**~~ — ✅ closed 2026-05-26 (VGGT 0.8964, MASt3R
