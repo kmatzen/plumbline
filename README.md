@@ -10,9 +10,9 @@ Anything 3**, **MASt3R**, **Metric3Dv2**, and **Depth Anything V2**.
 > a whole is therefore usable for **non-commercial purposes only**. See
 > [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
 
-**Status:** v0.2 in development. **37 paper-match cells** — 30 mono-depth
+**Status:** v0.2 in development. **38 paper-match cells** — 31 mono-depth
 (NYU / KITTI / DIODE / GSO / iBims-1 / ETH3D MoGe-eval / DDAD / Sintel MoGe /
-Depth Pro Booster + Sun-RGBD) + 6 multi-view pose/trajectory (CO3Dv2 / Sintel /
+Depth Pro Booster + Sun-RGBD) + 7 multi-view pose/trajectory (CO3Dv2 / Sintel /
 TUM-Dynamics) — each verified against the source PDF.
 API will still change before 1.0.
 
@@ -34,7 +34,7 @@ API will still change before 1.0.
   (RGB + flow; depth gated), ScanNet (gated), Bonn RGB-D Dynamic
   (video depth, one-sample-per-sequence), **TUM-Dynamics** (freiburg3
   video-pose, MonST3R/DAGE Table 4 trajectory eval).
-- **37 paper-match reproductions** with `source_confidence: verified_pdf`
+- **38 paper-match reproductions** with `source_confidence: verified_pdf`
   — see [REPRODUCTIONS.md](./REPRODUCTIONS.md). Each cell audited
   table-+-column-+-row against the source paper
   ([reproductions/AUDIT.md](./reproductions/AUDIT.md)).
@@ -132,7 +132,7 @@ plumbline run --model vggt --dataset eth3d --tasks pose \
 
 A handful of representative ✅ reproductions across the three
 datasets — see [REPRODUCTIONS.md](./REPRODUCTIONS.md) for the
-authoritative 37-cell matrix:
+authoritative 38-cell matrix:
 
 | Reproduction | Paper | Observed | Status |
 |---|---|---|---|
