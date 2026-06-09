@@ -62,12 +62,23 @@ def _ensure_dage_on_path() -> None:
     attribution; see ``_vendor/dage/LICENSE`` and ``THIRD_PARTY_NOTICES.md``),
     so no separate clone is needed. Set ``$DAGE_ROOT`` to a checkout to override
     (e.g. for development against upstream).
+
+    DAGE's bundled MoGe code imports the small ``utils3d`` geometry library,
+    which is **also vendored** (MIT) under ``plumbline/_vendor/utils3d`` to avoid
+    a git-pinned dependency (PyPI rejects PEP 508 git refs in a published wheel).
+    We always add the ``_vendor`` dir so that copy resolves, even when
+    ``$DAGE_ROOT`` repoints the dage package elsewhere; ``$UTILS3D_ROOT``
+    overrides the vendored utils3d for a dev checkout.
     """
-    root = os.environ.get("DAGE_ROOT")
-    if root is None:
-        root = str(Path(__file__).resolve().parent.parent / "_vendor")
-    if root not in sys.path:
-        sys.path.insert(0, root)
+    vendor = str(Path(__file__).resolve().parent.parent / "_vendor")
+    # dage package (vendored by default; $DAGE_ROOT overrides to a dev checkout)
+    dage_root = os.environ.get("DAGE_ROOT") or vendor
+    # vendored utils3d lives under _vendor/utils3d; ensure _vendor is on the path
+    # independently of $DAGE_ROOT so `import utils3d` resolves either way.
+    utils3d_root = os.environ.get("UTILS3D_ROOT") or vendor
+    for root in (dage_root, utils3d_root):
+        if root not in sys.path:
+            sys.path.insert(0, root)
 
 
 @register_model("dage")
@@ -137,8 +148,9 @@ class DAGEAdapter(Model):
             raise ImportError(
                 "DAGEAdapter could not import the (vendored) `dage` package. Its "
                 "runtime deps must be installed: einops, omegaconf, safetensors, "
-                "utils3d==0.0.2 (EasternJournalist@3913c65), kornia, roma, "
-                "segmentation_models_pytorch. (`plumbline install dage`)."
+                "kornia, roma, segmentation_models_pytorch. (`plumbline install "
+                "dage`). The `utils3d` geometry lib DAGE imports is vendored under "
+                "_vendor/utils3d, so it is not a separate install."
             ) from exc
         model = DAGE.from_pretrained(self.checkpoint).to(self.device).eval()
         # On an 11 GB card the fp32 weights (~5.5 GB) leave too little for a

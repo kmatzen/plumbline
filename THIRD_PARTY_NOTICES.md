@@ -19,6 +19,7 @@ is NonCommercial makes the corresponding parts of this repository usable for
 | Video Depth Anything | `_vendor/vda/` | https://github.com/DepthAnything/Video-Depth-Anything | Apache-2.0 code (`_vendor/vda/LICENSE`); Base/Large *weights* CC BY-NC 4.0 |
 | π³ (Pi3) | `_vendor/pi3/` | https://github.com/yyfz/Pi3 | BSD-3-Clause (`_vendor/pi3/LICENSE`) |
 | StreamVGGT | `_vendor/streamvggt/` | https://github.com/wzzheng/StreamVGGT | CC BY-NC-SA 4.0 (`_vendor/streamvggt/LICENSE.txt`) |
+| utils3d *(lib)* | `_vendor/utils3d/` | https://github.com/EasternJournalist/utils3d | MIT (`_vendor/utils3d/LICENSE`) |
 
 These DUSt3R-lineage models each bundle their own `dust3r` + Naver `croco`
 subtrees (MASt3R also `mast3r/`; MonST3R also `third_party/RAFT` for flow). All
@@ -40,6 +41,17 @@ pulled in. The slice's three runtime deps (`addict`, `omegaconf`,
 guarded-optional in the retained code and `evo` is lazy-imported, so none are
 required. One local patch: `api.py`'s top-level `utils.export` import is made
 lazy (the pruned tree is only reached on an explicit export call).
+
+**utils3d** is a small MIT geometry library (`_vendor/utils3d/`), not a model —
+DAGE's bundled MoGe code imports it (`utils3d.torch` / `utils3d.numpy` intrinsics
+/ depth-unprojection helpers). It is vendored, frozen at the **0.0.2 / commit
+`3913c65`** that DAGE needs (later releases break `get_intrinsics`), because the
+exact-commit pin can only be expressed as a PEP 508 git direct reference, which
+PyPI rejects in a published wheel — vendoring the 28-file pure-Python tree keeps
+`plumbline-bench` publishable. Only the geometry subset is reached; its optional
+`moderngl`/`glcontext` rasterization deps are lazy-imported and never loaded on
+DAGE's path. The DAGE adapter puts `_vendor/` on `sys.path` so `import utils3d`
+resolves the vendored copy; `$UTILS3D_ROOT` overrides for a dev checkout.
 
 Vendored code is upstream source (apart from the noted build-compat patches);
 plumbline's adaptations live in the adapters (`src/plumbline/models/`). Runtime

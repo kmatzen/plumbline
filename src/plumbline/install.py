@@ -491,19 +491,18 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
             "kornia",
             "roma",
             "segmentation_models_pytorch",
-            # utils3d pinned to 0.0.2 (later versions break get_intrinsics) via a
-            # PEP 508 direct reference.
-            "utils3d @ git+https://github.com/EasternJournalist/utils3d.git@3913c65d81e05e47b9f367250cf8c0f7462a0900",
         ),
         weights="hf-auto",
         notes=(
             "The DAGE model source is VENDORED in plumbline/_vendor/dage (CC BY-NC "
             "4.0; see THIRD_PARTY_NOTICES.md), so no clone is needed — install only "
-            "the runtime deps above. utils3d is pinned to 0.0.2 (commit 3913c65): "
-            "later versions break DAGE's get_intrinsics with a device mismatch. "
-            "Weights: TuanNgo/DAGE (HF auto, ~5.5 GB). On pre-Ampere GPUs use "
-            "DAGEAdapter(compute_dtype='float16') (no bf16 on sm_61). $DAGE_ROOT "
-            "overrides the vendored copy for dev against upstream."
+            "the runtime deps above. The small `utils3d` geometry lib DAGE imports "
+            "is ALSO vendored (MIT, _vendor/utils3d, frozen at the 0.0.2 / commit "
+            "3913c65 the model needs — later versions break get_intrinsics), so it "
+            "is no longer a (git-pinned) pip dep — that pin used to block the "
+            "publishable wheel. Weights: TuanNgo/DAGE (HF auto, ~5.5 GB). On "
+            "pre-Ampere GPUs use DAGEAdapter(compute_dtype='float16') (no bf16 on "
+            "sm_61). $DAGE_ROOT overrides the vendored copy for dev against upstream."
         ),
     ),
 }
