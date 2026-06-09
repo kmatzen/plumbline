@@ -175,7 +175,7 @@ doctor` reports which adapters are present on the current box.
 | dust3r | vendored | `uv pip install roma scikit-learn trimesh` (code vendored under `_vendor/dust3r`, no clone) |
 | monst3r | vendored | `uv pip install roma scikit-learn trimesh evo` (code vendored under `_vendor/monst3r`, no clone; `evo` is a hard dep — its dust3r fork imports it at load) |
 | cut3r | vendored | `uv pip install roma scikit-learn trimesh omegaconf` (code vendored under `_vendor/cut3r`, no clone; then build the vendored curope ext + set `$CUT3R_CKPT` to the 512-DPT weight — see notes) |
-| dage | vendored | `uv pip install einops omegaconf safetensors kornia roma segmentation_models_pytorch 'utils3d @ git+https://github.com/EasternJournalist/utils3d.git@3913c65'` (code vendored under `_vendor/dage`, no clone) |
+| dage | vendored | `uv pip install einops omegaconf safetensors kornia roma segmentation_models_pytorch` (code + the `utils3d` geometry lib both vendored under `_vendor/`, no clone) |
 | geowizard | clone | `git clone https://github.com/fuxiao0719/GeoWizard $HOME/deps/geowizard; export GEOWIZARD_ROOT=$HOME/deps/geowizard` then `uv sync --extra geowizard; uv pip install --force-reinstall 'nvidia-cudnn-cu12==9.1.0.70'` |
 
 If `uv pip install` from a git URL dies with `curl 92 HTTP/2 stream
