@@ -38,6 +38,36 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
+  RESOLUTION SWEEP — the VGGT gap is INPUT-ARTIFACT, not low-resolution
+  (2026-06-09, GTX 1080 Ti, fp32, `re10k_sub50` 50-clip; new
+  `downsample_long_side` loader knob, same pose recipe; the native point
+  reproduces the cross-model control's 0.6724 EXACTLY, validating the
+  apparatus). BICUBIC-downsampling the staged 360x640 frames BEFORE VGGT's
+  internal 518-wide resize traces a clean INVERTED-U in AUC@30, peaking well
+  below native resolution:
+    long-side  640(native) 384    288(PEAK) 192    128    96
+    AUC@30     0.6724      0.7141 0.7731    0.6846 0.4960 0.4359
+    trans_cos  13.56       11.45  9.69      13.58  19.38  22.77
+  RRA@15 stays ~0.99 until 128 (then rotation also collapses as 128x72 loses
+  real geometry). The 288 peak recovers ~64% of the 0.6724->0.853 gap, ENTIRELY
+  on translation — matching the documented gap shape. Since VGGT resizes to 518
+  either way, the gain from PRE-downsampling means our native YouTube-scraped
+  frames carry HARMFUL high-frequency content (re-encode blocking / aliasing)
+  that a low-pass removes; the residual gap is spatial-frequency/artifact-driven,
+  NOT pixel-count-driven. This OVERTURNS the prior "feed VGGT native ~720p"
+  suspect (the blocked re-scrape) — higher source res would add MORE artifacts,
+  not fewer; the lever is a low-pass / anti-alias prefilter. VGGT-SPECIFICITY:
+  the cross-model control already shows MASt3R/DUSt3R EXCEED their RE10K targets
+  on these exact clips while VGGT alone misses (correspondence matching is robust
+  to the frequency content; VGGT's feed-forward translation regression is not).
+  A per-model MASt3R resolution control (does it ALSO peak below native, or stay
+  flat?) was attempted but abandoned: MASt3R `sparse_ga` runs a 2-stage global
+  alignment ~90 s/clip on the 1080 (~75 min for one res=96 point), too costly
+  for confirmation the native cross-model control already provides. Diagnostic
+  only — NOT a paper recipe (pose GT is
+  resolution-independent, protocol uses no GT focals). Driver:
+  scripts/_re10k_resolution_sweep.py.
+  ---
   ⚠️ RAN at 1.8K scale on RTX 3090 (2026-06-07, bf16, 1800/1800): AUC@30 0.7288
   vs paper 0.853 (-14.6%, MISMATCH at tol 5%). Subset variance DISPROVEN (50→1800
   moved it only +1%). Gap is stable + entirely TRANSLATION (rot near-perfect

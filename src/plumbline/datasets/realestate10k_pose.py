@@ -127,6 +127,14 @@ class RealEstate10KPoseEvalLoader(Dataset):
         RNG seed for the per-clip frame sample (default 0). Note: exact frame
         selection cannot bit-match any one paper (VGGT and MASt3R use
         different codebases); mAA over 45 pairs is fairly stable to this.
+    downsample_long_side
+        If set, each served frame is BICUBIC-resized so its longer side equals
+        this many pixels (frames already smaller are left untouched). A
+        diagnostic knob, NOT a paper recipe: pose GT is resolution-independent
+        and the protocol uses no GT focals, so feeding deliberately softer
+        frames isolates each model's sensitivity to input resolution — the
+        prime suspect for the VGGT-RE10K pose gap (correspondence-based
+        DUSt3R/MASt3R vs feed-forward VGGT). ``None`` = serve frames as-staged.
     """
 
     split: str = "test"
@@ -138,9 +146,14 @@ class RealEstate10KPoseEvalLoader(Dataset):
         clips: list[str] | None = None,
         num_frames: int = 10,
         seed: int = 0,
+        downsample_long_side: int | None = None,
     ) -> None:
         if num_frames < 2:
             raise ValueError(f"num_frames must be >= 2 for pose eval; got {num_frames}")
+        if downsample_long_side is not None and downsample_long_side < 14:
+            raise ValueError(
+                f"downsample_long_side must be >= 14 if set; got {downsample_long_side}"
+            )
         root_path = Path(root) if root else env_path("REALESTATE10K_ROOT")
         if root_path is None or not root_path.exists():
             raise DatasetNotAvailable(
@@ -155,6 +168,9 @@ class RealEstate10KPoseEvalLoader(Dataset):
         self.root = root_path
         self.num_frames = int(num_frames)
         self.seed = int(seed)
+        self.downsample_long_side = (
+            int(downsample_long_side) if downsample_long_side is not None else None
+        )
         whitelist = set(clips) if clips is not None else None
 
         self._records: list[dict[str, Any]] = []
@@ -204,6 +220,25 @@ class RealEstate10KPoseEvalLoader(Dataset):
             if frame_path is None:
                 raise FileNotFoundError(f"frame {fr['timestamp']} missing in {clip_dir}")
             img = read_rgb_uint8(frame_path)
+            if self.downsample_long_side is not None:
+                h0, w0 = img.shape[:2]
+                long_side = max(h0, w0)
+                if long_side > self.downsample_long_side:
+                    # Simulate a lower-resolution / softer source frame. Pose GT
+                    # is resolution-independent and the protocol uses no GT
+                    # focals, so this isolates each model's sensitivity to input
+                    # resolution (the prime suspect for the VGGT-RE10K gap).
+                    from PIL import Image as _PImage
+
+                    scale = self.downsample_long_side / long_side
+                    new_w = max(1, round(w0 * scale))
+                    new_h = max(1, round(h0 * scale))
+                    img = np.asarray(
+                        _PImage.fromarray(img).resize(
+                            (new_w, new_h), _PImage.Resampling.BICUBIC
+                        ),
+                        dtype=np.uint8,
+                    )
             H, W = img.shape[:2]
             images.append(img)
             fx, fy, cx, cy = fr["fxfycxcy"]
