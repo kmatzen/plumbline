@@ -38,15 +38,76 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
-  Next-box EXPERIMENT (2026-05-28 coverage pass) — new RealEstate10K dataset
-  coverage on the pose axis, via the new `realestate10k-pose-eval` loader
-  (mirrors the CO3Dv2 pose loader's Sample/extrinsics path). THREE unknowns
-  to resolve on the first real run (none affect the PDF-verified target 0.853):
-  (1) DATA — RealEstate10K frames must be scraped from YouTube (many source
-  videos offline); stage to $REALESTATE10K_ROOT as <clip_id>/{*.txt,
-  <timestamp>.png}. (2) CLIP SUBSET — pass the canonical 1.8K test split via
-  `clips:` to match the paper; otherwise every clip on disk is used. (3) POSE
-  CONVENTION — the loader treats the .txt 3x4 as cam_from_world and inverts to
-  world_from_camera (CO3Dv2 convention); a w2c/c2w mixup would tank mAA, so
-  confirm first. Aggregation caveat is the same as the CO3Dv2 pose cell
-  (per-sample vs per-group AUC, ~1-2%).
+  RESOLUTION SWEEP — the VGGT gap is INPUT-ARTIFACT, not low-resolution
+  (2026-06-09, GTX 1080 Ti, fp32, `re10k_sub50` 50-clip; new
+  `downsample_long_side` loader knob, same pose recipe; the native point
+  reproduces the cross-model control's 0.6724 EXACTLY, validating the
+  apparatus). BICUBIC-downsampling the staged 360x640 frames BEFORE VGGT's
+  internal 518-wide resize traces a clean INVERTED-U in AUC@30, peaking well
+  below native resolution:
+    long-side  640(native) 384    288(PEAK) 192    128    96
+    AUC@30     0.6724      0.7141 0.7731    0.6846 0.4960 0.4359
+    trans_cos  13.56       11.45  9.69      13.58  19.38  22.77
+  RRA@15 stays ~0.99 until 128 (then rotation also collapses as 128x72 loses
+  real geometry). The 288 peak recovers ~64% of the 0.6724->0.853 gap, ENTIRELY
+  on translation — matching the documented gap shape. Since VGGT resizes to 518
+  either way, the gain from PRE-downsampling means our native YouTube-scraped
+  frames carry HARMFUL high-frequency content (re-encode blocking / aliasing)
+  that a low-pass removes; the residual gap is spatial-frequency/artifact-driven,
+  NOT pixel-count-driven. This OVERTURNS the prior "feed VGGT native ~720p"
+  suspect (the blocked re-scrape) — higher source res would add MORE artifacts,
+  not fewer; the lever is a low-pass / anti-alias prefilter. VGGT-SPECIFICITY:
+  the cross-model control already shows MASt3R/DUSt3R EXCEED their RE10K targets
+  on these exact clips while VGGT alone misses (correspondence matching is robust
+  to the frequency content; VGGT's feed-forward translation regression is not).
+  A per-model MASt3R resolution control (does it ALSO peak below native, or stay
+  flat?) was attempted but abandoned: MASt3R `sparse_ga` runs a 2-stage global
+  alignment ~90 s/clip on the 1080 (~75 min for one res=96 point), too costly
+  for confirmation the native cross-model control already provides. Diagnostic
+  only — NOT a paper recipe (pose GT is
+  resolution-independent, protocol uses no GT focals). Driver:
+  scripts/_re10k_resolution_sweep.py.
+  ---
+  ⚠️ RAN at 1.8K scale on RTX 3090 (2026-06-07, bf16, 1800/1800): AUC@30 0.7288
+  vs paper 0.853 (-14.6%, MISMATCH at tol 5%). Subset variance DISPROVEN (50→1800
+  moved it only +1%). Gap is stable + entirely TRANSLATION (rot near-perfect
+  RRA@15 0.998 / 1.20°; trans_cos ~10.8° stable).
+  ---
+  CROSS-MODEL CONTROL (2026-06-08, GTX 1080 Ti, IDENTICAL 50-clip subset
+  `re10k_sub50` = first-50-sorted; the decisive test). Same loader+metric+data,
+  three models:
+    MASt3R  AUC@30 0.8452  (target 0.764, +11% — EXCEEDS, trans_cos 7.6°)
+    DUSt3R  AUC@30 0.6556  (target 0.612,  +7% — EXCEEDS, trans_cos 14.8°)
+    VGGT    AUC@30 0.6724  (target 0.853, -21% — MISSES, trans_cos 13.6°, fp32)
+  **This OVERTURNS the earlier "data-fidelity" conclusion.** Both optimization-
+  based models CLEAR their RE10K targets on the exact same ≤480p scraped clips,
+  so the data is NOT a blanket limiter. The published ranking
+  (VGGT 0.853 > MASt3R 0.764 > DUSt3R 0.612) INVERTS on our data (MASt3R top,
+  VGGT bottom) — VGGT is the lone outlier. The gap is therefore VGGT-SPECIFIC ON
+  RE10K, not generic data and not a found adapter bug (VGGT-CO3Dv2 0.8964 ✓,
+  preprocessing mirrors upstream mode=crop, GT/metric validated by the two
+  passing models here). WHY VGGT specifically (narrowed 2026-06-09): two of
+  three hypotheses ruled out — (i) FRAME SAMPLING ruled out: MASt3R/DUSt3R EXCEED
+  their targets on our exact 16-frame sampling, so it isn't harder than the
+  paper's; (ii) WIDE ASPECT ruled out: the paper ran native RE10K through the
+  same crop→518×wide and still got 0.853. PRIME SUSPECT = (iii) RESOLUTION: our
+  scrape caps at ≤480p YouTube re-encodes (upscaled to 518); MASt3R/DUSt3R
+  correspondence-matching is robust to soft frames, VGGT's feed-forward
+  translation REGRESSION is not. Fix = feed VGGT native ~720p frames. The
+  disambiguating re-scrape (native-res, or a dense/tight-baseline control) is
+  BLOCKED: heavy scraping tripped YouTube bot-detection on anima's IP ("Sign in
+  to confirm you're not a bot") — needs cookies or a cooldown.
+  ---
+  CO3Dv2 cross-check (still valid, rules out a GLOBAL adapter/harness bug): SAME
+  VGGT adapter + AUC mode + antipodal handling reproduces CO3Dv2 0.8964 vs 0.882;
+  SAME loader invert_pose/metric reproduces DUSt3R-CO3Dv2 0.789 vs 0.772 (a
+  `[Rᵀ|−t]` inversion bug would have broken both); RE10K rotation perfect
+  validates its GT parse. So the code is right in general — the failure is the
+  VGGT×RE10K-recipe interaction above.
+  ---
+  History: 50-clip run first gave AUC@30 0.7184 (same shape); the 1.8K re-scrape
+  + run was to test subset variance (ruled out). New RealEstate10K dataset
+  coverage on the pose axis via the `realestate10k-pose-eval` loader (mirrors the
+  CO3Dv2 pose loader). Frames scraped from YouTube (many source videos offline,
+  92% hit) to $REALESTATE10K_ROOT as <clip_id>/{*.txt,<timestamp>.jpg}.
+  Aggregation caveat as the CO3Dv2 pose cell (per-sample vs per-group, ~1-2%).

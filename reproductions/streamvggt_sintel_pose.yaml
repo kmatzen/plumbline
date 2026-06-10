@@ -1,0 +1,27 @@
+# StreamVGGT on Sintel camera pose — adapter forward-pass validation.
+# StreamVGGT is NOT a DAGE-tabled baseline; this confirms the vendored adapter
+# (PR #61, shipped import-only) runs end-to-end. RESULT (3090, 2026-06-06,
+# 14/14, bf16): ATE 0.2367. The frame-img dim bug (4D vs 5D aggregator) was
+# found + fixed via this run. No paper target — informational/functional.
+name: streamvggt-sintel-pose
+model:
+  name: streamvggt
+  kwargs: {dtype: bfloat16}
+dataset:
+  name: sintel
+  split: training
+  kwargs: {pass_name: final, full_seq: true, scenes: [alley_2, ambush_4, ambush_5, ambush_6, cave_2, cave_4, market_2, market_5, market_6, shaman_3, sleeping_1, sleeping_2, temple_2, temple_3]}
+tasks: [pose]
+pose_trajectory_metrics: true
+max_views: 60
+device: cuda:0
+paper_reference:
+  primary_metric: trajectory_ate_rmse
+  value: 0.2367
+  tolerance_relative: 0.10
+  citation: "No DAGE/paper target — functional adapter validation (ATE self-recorded 2026-06-06)."
+  source_confidence: approximate
+notes: >
+  Functional validation only (StreamVGGT isn't in DAGE's tables). 14/14, ATE
+  0.2367 on the 3090. Confirms the vendored adapter (#61) runs after the
+  frame-dim fix. bf16 → needs Ampere.
