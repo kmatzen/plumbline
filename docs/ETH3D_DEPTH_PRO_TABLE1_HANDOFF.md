@@ -4,11 +4,36 @@ Depth Pro Table 16: **454** samples, valid depth **0.1–200 m**, GT **4032×604
 distorted DSLR). Paper δ₁ = **0.415** (41.5 %). Only Table 1 column not yet run in
 plumbline.
 
-## Status: pending (not fundamentally blocked)
+## Status: RAN 2026-06-11 — ℹ️ off-paper (explained)
 
-Unlike the four off-paper Table 1 columns, ETH3D is **not** closed as blocked — we
-lack official depth JPGs + a Depth Pro loader, not an exhausted protocol. Off-paper
-cells: [`BLOCKED.md`](BLOCKED.md).
+Loader + run landed 2026-06-11 (GTX 1080Ti). Loader `eth3d-native-depth`
+(distorted RGB + official float32 depth, GT focal = undistorted pinhole scaled
+to distorted size), protocol `eth3d_depth_pro_metric`, reproduction
+`depth-pro-eth3d`. Staging: `scripts/stage-eth3d-depth-pro.sh` (curl + py7zr,
+no system 7z) for `*_dslr_{depth,jpg}.7z`; calibration via
+`*_dslr_undistorted.7z`. All **13 scenes → exactly 454 frames**, a precise
+match to the Table 16 manifest below.
+
+| Run (454/454, no align, clip 0.1–200 m) | δ₁ | abs_rel | vs paper 0.415 |
+|------------------------------------------|------|---------|----------------|
+| GT focal (`use_gt_focal=true`, canonical) | **0.3648** | 0.360 | −12.1% |
+| self-focal (Depth Pro default)            | **0.3339** | 0.378 | −19.5% |
+
+**Diagnosis (not tuned).** Bimodal by scene: close indoor scenes match the
+paper well (kicker 0.90, office 0.92, pipes 0.93) but 3 far-range outdoor
+scenes collapse to δ₁≈0 (meadow 0.00, terrace 0.07, facade 0.00 @ GT focal).
+Depth Pro **under-scales far metric depth** — meadow GT median 8.2 m (to 30 m)
+vs pred median 2.2 m (~3.7× compression), so the depth ratio is ≫1.25
+everywhere on those scenes. Focal is correct (fx≈3323, same scaling gives the
+high indoor scores); GT focal lifts mid scenes (terrains 0.43→0.89) but cannot
+rescue the far-saturated ones. The residual gap to the paper's already-low
+0.415 is therefore concentrated in far-depth handling — likely a paper-private
+preprocessing/clip nuance (same shape as the other off-paper Table 1 cells),
+not a loader or model-load bug. Result JSONs:
+`runlogs/depth_pro_eth3d_{gtfocal,selffocal}_20260611.json`
+(config_hash d9a443f62f35e106 / eecb9cb273b5f0e7).
+
+Off-paper cells: [`BLOCKED.md`](BLOCKED.md).
 
 ## Why metric δ₁ was not run yet
 

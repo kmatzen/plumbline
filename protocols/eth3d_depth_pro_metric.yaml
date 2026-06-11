@@ -1,0 +1,25 @@
+# ETH3D high-res native — Depth Pro Table 1 metric δ₁.
+#
+# Depth Pro appendix Table 16: ETH3D = 454 samples, valid depth 0.1–200 m,
+# δ₁ = 0.415. Distorted DSLR RGB paired with ETH3D's official float32 depth
+# at native resolution; metric (no scale alignment). GT focal carried by the
+# loader (undistorted pinhole scaled to distorted size) — feed it with
+# DepthProAdapter(use_gt_focal=True), or run the adapter default to let Depth
+# Pro self-estimate the focal. See docs/ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md.
+
+name: eth3d_depth_pro_metric
+description: >
+  ETH3D native official-depth mono-depth: metric δ₁, no alignment (Depth Pro
+  Table 1 / appendix Table 16).
+
+reference:
+  paper: "Bochkovskii et al. 2024, Depth Pro Table 1 / appendix Table 16 (ETH3D)"
+
+fixed:
+  dataset:
+    name: eth3d-native-depth
+    split: train
+  depth_clip: [0.1, 200.0]
+  mask_boundaries: false
+  max_views: 1
+  tasks: [mono_depth]
