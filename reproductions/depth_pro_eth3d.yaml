@@ -1,0 +1,53 @@
+# Depth Pro on ETH3D high-res (native) — metric δ₁ (Depth Pro Table 1).
+#
+# Test set: 454 frames across the 13 high-res train scenes. Paper δ₁ = 0.415
+# (41.5%) — the lowest of Depth Pro's Table 1 columns (ETH3D is high-res,
+# wide-range outdoor, valid depth out to 200 m).
+#
+# Distorted DSLR RGB paired with ETH3D's official rendered float32 depth at
+# native resolution; metric, no scale alignment. Run with GT focal
+# (use_gt_focal=true) for consistency with the sibling Depth Pro Table 1 cell
+# (Sun-RGBD δ₁ 0.890 reproduces only with GT focal) — the loader carries it as
+# the undistorted pinhole scaled to distorted size. See
+# docs/ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md.
+
+name: depth-pro-eth3d
+protocol: eth3d_depth_pro_metric
+
+model:
+  name: depth-pro
+  kwargs:
+    use_gt_focal: true
+
+scale_alignment: none
+device: cuda:0
+
+paper_reference:
+  primary_metric: delta_1
+  value: 0.415
+  tolerance_relative: 0.05
+  citation: >
+    Bochkovskii et al. 2024, Depth Pro (arXiv:2410.02073), Table 1, ETH3D
+    column: δ₁ = 0.415 (41.5%). Metric — no scale alignment. Appendix Table 16:
+    454 samples, 0.1–200 m valid depth.
+  source_confidence: verified_pdf
+
+notes: >
+  Stage: scripts/stage-eth3d-depth-pro.sh ($ETH3D_ROOT; *_dslr_jpg.7z +
+  *_dslr_depth.7z per scene; calibration via *_dslr_undistorted.7z). Distorted
+  RGB + official depth at native res; exactly **454 frames / 13 scenes** — a
+  precise match to Depth Pro appendix Table 16's manifest. The only Depth Pro
+  Table 1 column not previously run in plumbline (handoff
+  docs/ETH3D_DEPTH_PRO_TABLE1_HANDOFF.md).
+
+  ℹ️ OFF-PAPER 2026-06-11 (GTX 1080Ti, 454/454): δ₁ **0.3648** vs paper
+  **0.415** (12.1% under) with GT focal; self-focal (Depth Pro default) is
+  **0.3339** (19.5% under). config_hash d9a443f62f35e106 (GT) /
+  eecb9cb273b5f0e7 (self). NOT tuned. The gap is concentrated in 3 far-range
+  outdoor scenes that collapse to δ₁≈0 (meadow/terrace/facade): Depth Pro
+  under-scales far metric depth — meadow GT median 8.2 m (to 30 m) but pred
+  median 2.2 m (~3.7× compression) — while close indoor scenes match the paper
+  well (kicker 0.90, office 0.92, pipes 0.93). Bimodal: metric-accurate near,
+  saturating far. GT focal helps (terrains 0.43→0.89) but cannot lift the
+  far-saturated scenes. Same paper-private-recipe shape as the other off-paper
+  Table 1 cells; residual likely a far-depth preprocessing/clip nuance.
