@@ -38,6 +38,31 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
+  NATIVE-RES LOW-PASS CONFIRMS THE FIX (2026-06-10, GTX 1080 Ti, fp32,
+  `re10k_sub50` 50-clip; new `lowpass_sigma` loader knob, driver
+  scripts/_re10k_lowpass_sweep.py, JSON runlogs/vggt_re10k_lowpass_20260610.json
+  on anima). The downsample sweep below confounded two effects — HF-band removal
+  vs the bicubic-down/VGGT-up RESIZE ROUND-TRIP — so it could not prove the gap
+  is spatial-frequency-driven. This sweep isolates it: a Gaussian blur applied
+  IN PLACE at native 640px (same pixel count, aspect, and VGGT internal 518
+  resize path as native; ONLY the high-frequency band attenuated). It traces a
+  clean INVERTED-U that PEAKS ABOVE the downsample proxy:
+    sigma(px)  0.0(native) 0.5    1.0    1.5(PEAK) 2.0    3.0
+    AUC@30     0.6724      0.6758 0.7181 0.8205    0.8179 0.7765
+    trans_cos  13.56       13.57  11.78  7.80      8.33   9.56
+  RRA@15 stays ~0.99 throughout (rotation untouched). sigma=0 reproduces the
+  recorded native 0.6724 EXACTLY (apparatus gate; sub50 reconstructed as the
+  first-50-sorted-usable clips of the 1800-root). The sigma=1.5 peak 0.8205
+  recovers **82%** of the 0.6724->0.853 gap — MORE than the downsample proxy's
+  0.7731/64%, and ENTIRELY on translation. Because pixel count, aspect, and the
+  resize path are all held at native, this RULES OUT the resize round-trip and
+  pixel-count as the lever: the gap is purely HARMFUL HIGH-FREQUENCY CONTENT
+  (YouTube re-encode blocking / aliasing) that VGGT's feed-forward translation
+  regression is sensitive to and a low-pass removes. The actionable fix is a
+  ~sigma 1.5 anti-alias PREFILTER on the staged ~480p frames (NOT a re-scrape,
+  NOT a resolution change). Diagnostic only — NOT a paper recipe (pose GT is
+  resolution-independent; protocol uses no GT focals).
+  ---
   RESOLUTION SWEEP — the VGGT gap is INPUT-ARTIFACT, not low-resolution
   (2026-06-09, GTX 1080 Ti, fp32, `re10k_sub50` 50-clip; new
   `downsample_long_side` loader knob, same pose recipe; the native point
