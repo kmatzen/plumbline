@@ -1,0 +1,28 @@
+# DIODE Indoor — UniK3D zero-shot metric depth (UniK3D Table 22).
+#
+# UniK3D (Piccinelli et al., CVPR 2025) reports zero-shot METRIC depth on the
+# DIODE *Indoor* validation split in supplementary Table 22. UniK3D's own
+# DiodeIndoor dataset class (unik3d/datasets/diode.py) uses min_depth=0.01,
+# max_depth=25.0 over DIODE's official indoor val list (test_split="val.txt").
+# We mirror that: GT outside [0.01, 25] m is masked, and predictions are
+# clipped to the same range before scoring. Metric — no scale alignment.
+
+name: diode_indoor_unik3d_metric
+description: >
+  DIODE indoor-val mono-depth: metric (no alignment), GT and prediction capped
+  at [0.01, 25] m to match UniK3D's DiodeIndoor dataset class (UniK3D
+  supplementary Table 22).
+
+reference:
+  paper: "Piccinelli et al. 2025, UniK3D (CVPR 2025), supplementary Table 22 (Diode Indoor)"
+
+fixed:
+  dataset:
+    name: diode
+    split: val
+    kwargs:
+      domain: indoors
+      depth_range: [0.01, 25.0]
+  depth_clip: [0.01, 25.0]
+  max_views: 1
+  tasks: [mono_depth]

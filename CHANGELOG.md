@@ -37,6 +37,20 @@ public API may change between 0.x releases.
   0.259 — 654/654 on a GTX 1080 Ti, UniK3D's default inference bounds (no
   `resolution_level` tuning). Brings the verified-cell count to 39 (32
   mono-depth) and adds UniK3D as a new model family in the matrix.
+- **Two more UniK3D zero-shot metric cells** (ℹ️ off-paper, metric/no-align):
+  `unik3d-large-eth3d` (UniK3D Table 21) and `unik3d-large-diode` (Table 22),
+  each pinned to UniK3D's own dataset-class depth cap ([0.01, 50] m for ETH3D,
+  [0.01, 25] m for DIODE Indoor) via new `eth3d_unik3d_metric` /
+  `diode_indoor_unik3d_metric` protocols. **DIODE Indoor**: AbsRel 0.1509 vs
+  0.161 (6.3% under; δ₁ 0.754 / RMSE 0.718 both better) on the exact 325/325
+  official indoor val set — a tight reproduction that narrowly misses the 5%
+  band. **ETH3D**: AbsRel 0.1544 vs 0.236, δ₁ 0.814 vs 0.687, RMSE 1.07 vs 2.63
+  — off-paper *better* on the 454 native-resolution DSLR frames; the residual
+  is a frame-set/resolution protocol difference vs UniK3D's HDF5-packed eval.
+  Both stay ℹ️ (no verified-count change).
+- **DIODE loader `depth_range` kwarg** (default `None` = no cap, so every
+  existing affine-invariant DIODE cell is unchanged) — masks GT outside a
+  metric depth range, needed for the UniK3D DIODE Indoor [0.01, 25] m cell.
 - **`python -m plumbline`** now works as an alias for the `plumbline` console
   script (added `__main__.py`), so the CLI is reachable even where the script
   isn't on `PATH`.

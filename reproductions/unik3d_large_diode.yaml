@@ -1,0 +1,46 @@
+# UniK3D (ViT-L) on DIODE Indoor — zero-shot metric depth, NO alignment.
+#
+# UniK3D (Piccinelli et al., CVPR 2025, arXiv:2503.16591) predicts metric depth
+# (meters) from a single RGB with no GT camera input. is_metric=True, so this
+# cell runs with scale_alignment: none — the strict metric test matching the
+# paper's zero-shot metric columns.
+#
+# Paper target: supplementary Table 22 ("Comparison on zero-shot evaluation for
+# Diode (Indoor)"), UniK3D-Large row, metric columns:
+#   δ₁ 71.3 | A.Rel 16.1 | RMSE 0.767 | δ₁^SSI 97.9 | F_A 53.8 | ρ_A 79.5
+# i.e. AbsRel 0.161, δ₁ 0.713, RMSE 0.767 m. UniK3D's DiodeIndoor class caps
+# depth at [0.01, 25] m over DIODE's official indoor val split (the
+# diode_indoor_unik3d_metric protocol mirrors that).
+#
+# Third UniK3D reproduction cell (after nyuv2, eth3d). Same vendored inference
+# subset; needs the build_losses no-op fix to load.
+
+name: unik3d-large-diode
+protocol: diode_indoor_unik3d_metric
+
+model:
+  name: unik3d
+  kwargs:
+    variant: vitl
+
+# Metric model — no scale/shift alignment (matches the paper's metric columns).
+scale_alignment: none
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.161
+  tolerance_relative: 0.05
+  citation: "Piccinelli et al. 2025, UniK3D (CVPR 2025), supplementary Table 22 (zero-shot Diode Indoor), UniK3D-Large metric A.Rel 16.1 (no alignment); δ₁ 71.3, RMSE 0.767. PDF-verified CVPR2025 supplemental (Table 22)."
+  source_confidence: verified_pdf
+
+notes: >
+  ℹ️ NEAR-MATCH (off-paper better) 2026-06-13 (anima GTX 1080 Ti, 325/325 exact
+  DIODE indoor val, metric, no alignment, GT+pred capped at [0.01, 25] m):
+  AbsRel **0.1509** vs paper **0.161** (6.3% under — just outside the 5%
+  band); δ₁ **0.7544** vs 0.713; RMSE **0.7181** vs 0.767. Companions δ₂ 0.970
+  / δ₃ 0.995 / log10 0.0686 / silog 9.78. config_hash 15921f5efdc017f4. NOT
+  tuned. All three headline metrics land ~6% better than the paper and in
+  mutual agreement on the exact 325-image official indoor val set (unlike
+  ETH3D, the sample set matches), so this is a tight reproduction that narrowly
+  misses the 5% tolerance — classified ℹ️ rather than ✅.
