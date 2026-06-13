@@ -8,6 +8,12 @@ public API may change between 0.x releases.
 ## [Unreleased]
 
 ### Fixed
+- **UniK3D now loads for inference.** The vendored inference subset prunes
+  `unik3d.ops.losses`, but `UniK3D.build_losses` (run from `__init__` →
+  `from_pretrained`) imported it unconditionally, so the model raised
+  `ModuleNotFoundError` and could not be instantiated at all. `build_losses`
+  now no-ops when the pruned module is absent (the loss dict is read only on the
+  training/loss path, never in `infer`).
 - **MASt3R pose is now actually MASt3R.** For N≥3 the adapter previously
   recovered pose by running *dust3r's* `PointCloudOptimizer` on MASt3R's point
   maps with the matching head discarded ("MASt3R-via-dust3r-GA") — not MASt3R's
@@ -24,6 +30,13 @@ public API may change between 0.x releases.
   superseding the legacy 0.7960.
 
 ### Added
+- **UniK3D's first reproduction cell** (`unik3d-large-nyuv2`). UniK3D-Large
+  (CVPR 2025) on the NYUv2 Eigen test, metric depth with **no alignment**,
+  reproduces the paper's Table 18 zero-shot NYUv2 row out of the box: AbsRel
+  **0.0749** vs 0.074 (+1.2%, ✅), δ₁ 0.9656 vs 0.965 (≈exact), RMSE 0.2632 vs
+  0.259 — 654/654 on a GTX 1080 Ti, UniK3D's default inference bounds (no
+  `resolution_level` tuning). Brings the verified-cell count to 39 (32
+  mono-depth) and adds UniK3D as a new model family in the matrix.
 - **`python -m plumbline`** now works as an alias for the `plumbline` console
   script (added `__main__.py`), so the CLI is reachable even where the script
   isn't on `PATH`.

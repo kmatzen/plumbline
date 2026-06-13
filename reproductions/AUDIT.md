@@ -333,3 +333,15 @@ Earlier audits noted ar5iv sometimes labels the depth table “Table 2”; the
 canonical arxiv v1 HTML uses **Table 3** for depth and **Table 4** for FOV.
 Plumbline YAMLs should keep citing **Table 3** + **affine-invariant disparity**
 to match the six existing MoGe-eval ✅ cells.
+
+## 2026-06-11 — UniK3D first cell (`unik3d-large-nyuv2`)
+
+New `verified_pdf` YAML pinning **UniK3D-Large NYUv2 metric AbsRel 0.074**.
+Audited against the source PDF (arXiv:2503.16591, downloaded 4.2 MB, read
+p.17): **Appendix C.2, Table 18 "Comparison on zero-shot evaluation for
+NYUv2"**, UniK3D-Large row, the **metric** columns (δ₁ 96.5 / A.Rel 7.4 /
+RMSE 0.259) — NOT the δ₁ˢˢⁱ scale-shift column (98.2). `pdftotext` scrambles
+the two-column layout; the value/table/column/row were confirmed from the
+rendered page image, not the linearised text. Citation **VERIFIED**
+(value 0.074 = A.Rel 7.4, table + column + row all match). Cell landed ✅ at
+0.0749 (1.2 % over) — see REPRODUCTIONS.md.
