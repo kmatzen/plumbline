@@ -1,8 +1,16 @@
 # ETH3D — Depth Pro Table 1 handoff (2026-05-31)
 
+> **✅ COMPLETED 2026-06-11 — kept for the implementation record only.** This was
+> a to-do handoff; the cell has since run (ℹ️ off-paper) and the canonical
+> root-cause classification now lives in
+> [`CONFIDENCE_AUDIT.md`](CONFIDENCE_AUDIT.md) (L3 recipe — far-range
+> metric-scale). The status table here is in
+> [`BLOCKED.md`](BLOCKED.md#depth-pro-table-1-metric-δ₁-no-alignment). The notes
+> below document *how* it was implemented and *why* it lands off-paper.
+
 Depth Pro Table 16: **454** samples, valid depth **0.1–200 m**, GT **4032×6048** (native
-distorted DSLR). Paper δ₁ = **0.415** (41.5 %). Only Table 1 column not yet run in
-plumbline.
+distorted DSLR). Paper δ₁ = **0.415** (41.5 %). This was the last Table 1 column
+to be run in plumbline.
 
 ## Status: RAN 2026-06-11 — ℹ️ off-paper (explained)
 
