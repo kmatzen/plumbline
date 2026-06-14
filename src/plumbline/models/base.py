@@ -7,6 +7,7 @@ native output into plumbline :mod:`~plumbline.conventions`.
 
 from __future__ import annotations
 
+import hashlib
 import math
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
@@ -15,7 +16,22 @@ from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 
-__all__ = ["Model", "ModelCapabilities", "Prediction"]
+__all__ = ["Model", "ModelCapabilities", "Prediction", "config_digest"]
+
+
+def config_digest(s: str) -> str:
+    """Stable 16-hex-char digest of an adapter's config string.
+
+    Every adapter's :meth:`Model.config_hash` ends by hashing a string of its
+    tunable knobs through this one function. The prediction cache keys on the
+    result, so the algorithm (SHA-256, first 16 hex chars) MUST be identical
+    across adapters — two models sharing a digest would serve one's cached
+    predictions for the other. Centralising it here (rather than copy-pasting
+    ``hashlib.sha256(s.encode()).hexdigest()[:16]`` into each adapter) keeps that
+    guarantee a single line. ``test_config_hashes_are_unique_across_adapters``
+    is the backstop.
+    """
+    return hashlib.sha256(s.encode()).hexdigest()[:16]
 
 
 @dataclass
@@ -158,6 +174,4 @@ class Model(ABC):
         Default: combination of name + version. Adapters that expose tunable
         knobs (resolution, view count, precision) must include them.
         """
-        import hashlib
-
-        return hashlib.sha256(f"{self.name}@{self.version}".encode()).hexdigest()[:16]
+        return config_digest(f"{self.name}@{self.version}")

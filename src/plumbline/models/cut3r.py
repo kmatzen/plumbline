@@ -46,7 +46,6 @@ Queued in ``reproductions/gpu_queue.yaml``.
 
 from __future__ import annotations
 
-import hashlib
 import os
 import sys
 from typing import Any
@@ -62,7 +61,7 @@ from plumbline.conventions import (
     rebase_to_first_camera,
 )
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
 
 __all__ = ["CUT3RAdapter"]
@@ -253,7 +252,7 @@ class CUT3RAdapter(Model):
 
     def config_hash(self) -> str:
         s = f"{self.name}@{self.version}/ckpt={os.path.basename(self.checkpoint)}/size={self.size}"
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)
 
 
 # ---------------------------------------------------------------------------

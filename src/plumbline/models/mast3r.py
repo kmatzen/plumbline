@@ -74,7 +74,6 @@ Implementation notes
 
 from __future__ import annotations
 
-import hashlib
 from typing import Any
 
 import numpy as np
@@ -91,7 +90,7 @@ from plumbline.conventions import (
     world_from_camera_is_identity,
 )
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
 
 __all__ = ["MASt3RAdapter"]
@@ -237,7 +236,7 @@ class MASt3RAdapter(Model):
             s += f"/sn1{self.sparse_niter1}_sn2{self.sparse_niter2}_sl1{self.sparse_lr1}_sl2{self.sparse_lr2}"
         else:
             s += f"/ga_n{self.ga_niter}_lr{self.ga_lr}_sch{self.ga_schedule}_init{self.ga_init}"
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)
 
 
 # ---------------------------------------------------------------------------

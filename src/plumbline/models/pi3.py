@@ -44,7 +44,6 @@ apply that at the runner level — not in the adapter.
 
 from __future__ import annotations
 
-import hashlib
 import math
 import os
 import sys
@@ -60,7 +59,7 @@ from plumbline.conventions import (
     rebase_to_first_camera,
 )
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
 
 __all__ = ["Pi3Adapter"]
@@ -255,7 +254,7 @@ class Pi3Adapter(Model):
 
     def config_hash(self) -> str:
         s = f"{self.name}@{self.version}/variant={self.variant}/dtype={self.dtype}/px={self.pixel_limit}"
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)
 
 
 # ---------------------------------------------------------------------------

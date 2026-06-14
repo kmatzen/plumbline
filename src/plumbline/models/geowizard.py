@@ -55,7 +55,6 @@ cherry-picking across seed draws.
 from __future__ import annotations
 
 import contextlib
-import hashlib
 import math
 import os
 import random
@@ -67,7 +66,7 @@ from numpy.typing import NDArray
 
 from plumbline.conventions import assert_valid_depth, assert_valid_image
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
 
 __all__ = ["GeoWizardAdapter"]
@@ -273,7 +272,7 @@ class GeoWizardAdapter(Model):
             # the new path runs fresh.
             "/rng_mode=once_at_startup_v3_xformers"
         )
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)
 
 
 # ---------------------------------------------------------------------------

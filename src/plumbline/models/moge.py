@@ -42,7 +42,6 @@ adapter.
 
 from __future__ import annotations
 
-import hashlib
 import math
 from typing import Any
 
@@ -55,7 +54,7 @@ from plumbline.conventions import (
     assert_valid_intrinsics,
 )
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
 
 __all__ = ["MoGeAdapter"]
@@ -222,4 +221,4 @@ class MoGeAdapter(Model):
 
     def config_hash(self) -> str:
         s = f"{self.name}@{self.version}/variant={self.variant}"
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)
