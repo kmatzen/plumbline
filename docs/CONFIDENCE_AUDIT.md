@@ -48,6 +48,9 @@ almost never come from an adapter bug.
 | Depth Pro Sun-RGBD | T1 | worse | **REMOVED** (was L2) | — | Loader removed pre-release — likely GT/pairing bug |
 | VGGT ETH3D 13-scene | D10 | worse | **L2** scene-specific | High | Localized to `terrains` (12/13 beat paper) |
 | VGGT DTU chamfer | D3 | worse | **L4** checkpoint | High | **Yes** — public VGGT-1B output ~2× off |
+| UniK3D ETH3D (Table 21) | T21 | better | **L3** recipe | Med | Partly — native 454-frame set vs UniK3D's HDF5 fixed-res eval |
+| UniK3D DIODE (Table 22) | T22 | better | **L3** recipe (small) | Med | Partly — ~6% on the *exact* 325-img set; minor clip/align within [0.01, 25] m |
+| Depth Pro ETH3D (Table 1) | T1 | worse | **L3** recipe | Med | No — far-range metric-scale saturates (indoor ✅, far outdoor →0) |
 
 ---
 
@@ -181,6 +184,26 @@ specify. Sometimes we have **pinned the recipe**; sometimes it remains unknown.
   **Unknown:** the exact aggregation/clip.
   _(The sibling Middlebury / NuScenes / Sun-RGBD loaders were **removed**
   pre-release — no verified anchor; see the L2 section.)_
+- **Depth Pro ETH3D (Table 1).** Ran 2026-06-11 (454/454, exact Table 16
+  manifest): δ₁ **0.3648** (GT focal) / 0.3339 (self-focal) vs paper **0.415** —
+  bimodal by scene. Close indoor scenes match the paper (kicker 0.90, office
+  0.92, pipes 0.93); three far-range outdoor scenes collapse to δ₁≈0 because
+  Depth Pro under-scales far metric depth (meadow GT median 8.2 m → pred 2.2 m,
+  ~3.7× compression). Same paper-private far-depth recipe shape as the other
+  Depth Pro Table 1 cells. NOT tuned.
+  **Unknown:** the far-depth preprocessing/clip nuance the paper applied.
+- **UniK3D ETH3D / DIODE (Tables 21/22).** Both metric, no-alignment cells read
+  *better* than the paper (ETH3D AbsRel 0.1544 vs 0.236, 35% tighter; DIODE
+  0.1509 vs 0.161, 6.3% under). DIODE scores the **exact** 325-image official
+  indoor val set with UniK3D's own [0.01, 25] m clip and lands ~6% better on all
+  three headline metrics in mutual agreement — a tight repro that narrowly
+  misses the ±5% band (→ ℹ️, not ✅). ETH3D's larger margin is a
+  frame-set/resolution delta: `eth3d-native-depth` scores the 454
+  native-resolution DSLR frames over the 13 high-res train scenes, whereas
+  UniK3D's own eval reads an HDF5-packed ETH3D (`test_split=train.txt`) at a
+  fixed smaller `image_shape` — a different, likely-harder sample/resolution
+  mix. NOT tuned.
+  **Unknown:** UniK3D's exact ETH3D HDF5 frame list + eval resolution.
 
 ---
 
