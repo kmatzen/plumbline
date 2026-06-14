@@ -146,6 +146,37 @@ jobs:
       an explained protocol/selection delta (D24). Demonstrates the video
       task end-to-end.
 
+  # ----- Follow-up: convert CUT3R's exact-set paper-trust reproductions
+  # (NYU 0.08595 / KITTI 0.09219 / Bonn 0.07661, all within 0.06-1.8% of
+  # paper, via CUT3R's OWN pipeline) into plumbline-native ✓ matrix cells. -----
+  - name: cut3r-eval-native
+    status: blocked
+    priority: 30
+    blocked_on: >
+      Loader not yet built. plumbline's standard NYU/KITTI/Bonn loaders give
+      off-paper numbers because CUT3R only reproduces on its OWN prepared
+      .npy eval sets (the nyu_dust3r_lineage protocol reproduces MonST3R, not
+      CUT3R — re-scores to ~0.0777 vs 0.086). Needs: (1) a `cut3r_eval`
+      dataset loader over the prepared sets staged at
+      s3://plumbline-bench/datasets/cut3r_eval/, emitting the same image +
+      GT + valid-mask CUT3R's eval/monodepth consumes; (2) a GPU with nvcc
+      to build curope. Goal: plumbline's CUT3R adapter on the prepared set
+      lands ~0.086/0.092/0.078 → real harness ✓. If it instead lands ~0.0777,
+      a single-record diff of plumbline-adapter-output vs CUT3R's own
+      inference (the method that byte-verified DUSt3R) isolates the gap.
+    paper_target: "CUT3R Table 1/2 — NYU 0.086 / KITTI 0.092 / Bonn 0.078 (verified_pdf 2026-05-23)"
+    primary_metric: abs_rel
+    datasets: [cut3r_eval]
+    data_footprint_gb: 5
+    est_wall_min: 90
+    requires_env: [CUT3R_ROOT, CUT3R_CKPT, CUT3R_EVAL_ROOT]
+    extras: "CUT3R + curope as for cut3r-nyuv2; plus a new cut3r_eval loader (not yet implemented)."
+    notes: >
+      Surfaced 2026-06-14: the matrix now cross-links the paper-trust
+      reproductions, but they are CUT3R-own-pipeline, not plumbline-computed.
+      This job converts them to plumbline-native ✓ cells. See REPRODUCTIONS.md
+      "Paper-trust verifications" + docs/DISCREPANCIES.md D24.
+
   # ----- Tier 2: informational runs (no paper target; A/B + smoke) -----
   - name: da-v2-large-eth3d-moge-table2
     status: done
