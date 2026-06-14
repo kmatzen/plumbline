@@ -186,9 +186,7 @@ class RealEstate10KPoseEvalLoader(Dataset):
         self.downsample_long_side = (
             int(downsample_long_side) if downsample_long_side is not None else None
         )
-        self.lowpass_sigma = (
-            float(lowpass_sigma) if lowpass_sigma is not None else None
-        )
+        self.lowpass_sigma = float(lowpass_sigma) if lowpass_sigma is not None else None
         whitelist = set(clips) if clips is not None else None
 
         self._records: list[dict[str, Any]] = []
@@ -252,9 +250,7 @@ class RealEstate10KPoseEvalLoader(Dataset):
                     new_w = max(1, round(w0 * scale))
                     new_h = max(1, round(h0 * scale))
                     img = np.asarray(
-                        _PImage.fromarray(img).resize(
-                            (new_w, new_h), _PImage.Resampling.BICUBIC
-                        ),
+                        _PImage.fromarray(img).resize((new_w, new_h), _PImage.Resampling.BICUBIC),
                         dtype=np.uint8,
                     )
             if self.lowpass_sigma is not None and self.lowpass_sigma > 0:
@@ -266,9 +262,7 @@ class RealEstate10KPoseEvalLoader(Dataset):
                 from PIL import ImageFilter as _PFilter
 
                 img = np.asarray(
-                    _PImage.fromarray(img).filter(
-                        _PFilter.GaussianBlur(radius=self.lowpass_sigma)
-                    ),
+                    _PImage.fromarray(img).filter(_PFilter.GaussianBlur(radius=self.lowpass_sigma)),
                     dtype=np.uint8,
                 )
             H, W = img.shape[:2]

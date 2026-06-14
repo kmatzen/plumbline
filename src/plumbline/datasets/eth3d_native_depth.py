@@ -85,7 +85,9 @@ class ETH3DNativeDepthDataset(Dataset):
         depth_range: tuple[float, float] = (0.1, 200.0),
     ) -> None:
         if split != "train":
-            raise ValueError(f"ETH3D native-depth only exposes 'train' (no public test GT); got {split!r}")
+            raise ValueError(
+                f"ETH3D native-depth only exposes 'train' (no public test GT); got {split!r}"
+            )
         root_path = Path(root) if root else env_path("ETH3D_ROOT")
         if root_path is None or not root_path.exists():
             raise DatasetNotAvailable(
@@ -106,10 +108,16 @@ class ETH3DNativeDepthDataset(Dataset):
             calib = scene_dir / "dslr_calibration_undistorted"
             depth_dir = scene_dir / "ground_truth_depth" / "dslr_images"
             dist_dir = scene_dir / "images" / "dslr_images"
-            if not (calib / "images.txt").exists() or not depth_dir.is_dir() or not dist_dir.is_dir():
+            if (
+                not (calib / "images.txt").exists()
+                or not depth_dir.is_dir()
+                or not dist_dir.is_dir()
+            ):
                 continue
             cam_hw = _parse_colmap_cameras_hw(calib / "cameras.txt")
-            for ir in sorted(parse_colmap_images(calib / "images.txt"), key=lambda x: x["image_id"]):
+            for ir in sorted(
+                parse_colmap_images(calib / "images.txt"), key=lambda x: x["image_id"]
+            ):
                 stem = Path(ir["name"]).name
                 rgb_path = dist_dir / stem
                 depth_path = depth_dir / stem
