@@ -34,7 +34,50 @@ first run) and are marked `@pytest.mark.weights`. To exercise them::
 
 DA-V2 small runs in ~200ms per frame on Apple Silicon MPS; ~300ms on CPU.
 
+## Extending plumbline *without* cloning it (plugins)
+
+You do **not** need to fork or clone this repo to add your own model or dataset.
+`pip install plumbline-bench`, then ship the adapter in *your own* package and
+advertise it through the `plumbline.adapters` entry-point group — plumbline
+discovers and imports it automatically, so it shows up in `plumbline list-models`
+/ `list-datasets`, `run`, and `reproduce` just like a built-in.
+
+In your package:
+
+```python
+# my_package/adapters.py
+from plumbline import Model, ModelCapabilities, Prediction, register_model
+
+@register_model("my-model")
+class MyAdapter(Model):
+    capabilities = ModelCapabilities(tasks=frozenset({"mono_depth"}), is_metric=True)
+
+    def __init__(self, device: str = "cuda:0") -> None:
+        self.device = device
+
+    def predict(self, images, intrinsics=None) -> Prediction:
+        ...  # return depth/extrinsics in canonical conventions (see below)
+```
+
+In your `pyproject.toml`:
+
+```toml
+[project.entry-points."plumbline.adapters"]
+my_adapters = "my_package.adapters"   # a module (imported) or "module:callable"
+```
+
+That's it. `register_dataset` works the same way for datasets. The same
+convention rules below apply (a plugin adapter must convert to canonical
+conventions exactly as a built-in does). A plugin that fails to import (missing
+optional dep) is a soft error — it won't block the rest of the harness — and a
+plugin may not reuse a name already taken by a built-in.
+
 ## Adding a model adapter
+
+> The steps below are for adapters contributed **into this repo** (the built-in
+> roster). For out-of-tree adapters shipped from your own package, see *Extending
+> plumbline without cloning* above — only step 4 differs (entry point vs. the
+> built-in import list).
 
 1. Pick a short kebab-case name (e.g. `vggt`, `mast3r`).
 2. Create `src/plumbline/models/<name>.py` with:

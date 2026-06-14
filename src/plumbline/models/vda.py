@@ -47,7 +47,7 @@ from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 
-from plumbline.conventions import assert_valid_depth, assert_valid_image
+from plumbline.conventions import EPS, assert_valid_depth, assert_valid_image
 from plumbline.models._torch_utils import ensure_torch
 from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
@@ -193,7 +193,16 @@ class VideoDepthAnythingAdapter(Model):
             device=device_type,
             fp32=self.compute_fp32,
         )
-        depth = np.asarray(depths).astype(np.float32)  # (N, H, W)
+        raw = np.asarray(depths).astype(np.float32)  # (N, H, W)
+        # Relative VDA variants emit DISPARITY (inverse depth) from the
+        # Depth-Anything-V2 DPT head: the vendored `video_depth.py` returns
+        # `F.relu(head(...))` and the temporal aligner fits `scale*x+shift` in
+        # that disparity space. Convert to depth so the harness's `scale_shift`
+        # alignment (which itself fits in inverse-depth space, `1/pred`) operates
+        # on actual depth — exactly as the sibling DA-V2 adapter does. Returning
+        # disparity-as-depth would make scale_shift fit `s/D + b` instead of the
+        # correct MiDaS `s*D + b`. Metric variants already emit meters.
+        depth = raw if is_metric else (1.0 / np.maximum(raw, EPS)).astype(np.float32)
         assert_valid_depth(depth, name="vda/output_depth")
 
         return Prediction(
