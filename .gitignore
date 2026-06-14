@@ -70,6 +70,8 @@ tmp/
 !.claude/skills/
 box_backup_*/
 runs_*_drain_*/
+# Local GPU-run result JSONs; canonical copies go to s3://plumbline-bench/runs/.
+runlogs/
 
 # Vendored CUDA-extension build artifacts (rebuilt per-env at install)
 src/plumbline/_vendor/**/build/
