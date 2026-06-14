@@ -445,6 +445,17 @@ class UniK3D(
 
     def build_losses(self, config):
         self.losses = {}
+        # plumbline vendor: ``unik3d.ops.losses`` is pruned from the inference
+        # subset (see ops/__init__.py). ``self.losses`` is only read in the
+        # training/loss path (compute_loss), never in ``infer``, so for the
+        # inference-only vendor we skip building them when the module is absent.
+        try:
+            import importlib.util
+
+            if importlib.util.find_spec("unik3d.ops.losses") is None:
+                return
+        except (ImportError, ModuleNotFoundError):
+            return
         for loss_name, loss_config in config["training"]["losses"].items():
             mod = importlib.import_module("unik3d.ops.losses")
             loss_factory = getattr(mod, loss_config["name"])

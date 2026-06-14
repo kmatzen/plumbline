@@ -40,7 +40,6 @@ failure and skips the sample when it doesn't fit.
 
 from __future__ import annotations
 
-import hashlib
 from typing import Any
 
 import numpy as np
@@ -56,7 +55,7 @@ from plumbline.conventions import (
     world_from_camera_is_identity,
 )
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
 
 __all__ = ["VGGTAdapter"]
@@ -151,7 +150,7 @@ class VGGTAdapter(Model):
 
     def config_hash(self) -> str:
         s = f"{self.name}@{self.version}/ckpt={self.checkpoint}/dtype={self.dtype}"
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)
 
 
 def _run_vggt(

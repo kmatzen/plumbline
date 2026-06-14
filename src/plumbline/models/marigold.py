@@ -34,7 +34,6 @@ as a kwarg.
 
 from __future__ import annotations
 
-import hashlib
 import math
 from typing import Any
 
@@ -43,7 +42,7 @@ from numpy.typing import NDArray
 
 from plumbline.conventions import assert_valid_depth, assert_valid_image
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
 
 __all__ = ["MarigoldAdapter"]
@@ -231,4 +230,4 @@ class MarigoldAdapter(Model):
             f"/dtype={self.dtype}/seed={self.seed}"
             f"/processing_res={self.processing_res}"
         )
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)

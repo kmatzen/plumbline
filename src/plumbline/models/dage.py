@@ -46,7 +46,7 @@ from plumbline.conventions import (
     world_from_camera_is_identity,
 )
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
 
 __all__ = ["DAGEAdapter"]
@@ -231,7 +231,5 @@ class DAGEAdapter(Model):
         )
 
     def config_hash(self) -> str:
-        import hashlib
-
         s = f"{self.name}@{self.version}/lr={self.lr_max_size}/hr={self.hr_max_size}/dtype={self.compute_dtype}/ckpt={self.checkpoint}"
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)

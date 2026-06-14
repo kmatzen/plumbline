@@ -333,3 +333,37 @@ Earlier audits noted ar5iv sometimes labels the depth table “Table 2”; the
 canonical arxiv v1 HTML uses **Table 3** for depth and **Table 4** for FOV.
 Plumbline YAMLs should keep citing **Table 3** + **affine-invariant disparity**
 to match the six existing MoGe-eval ✅ cells.
+
+## 2026-06-11 — UniK3D first cell (`unik3d-large-nyuv2`)
+
+New `verified_pdf` YAML pinning **UniK3D-Large NYUv2 metric AbsRel 0.074**.
+Audited against the source PDF (arXiv:2503.16591, downloaded 4.2 MB, read
+p.17): **Appendix C.2, Table 18 "Comparison on zero-shot evaluation for
+NYUv2"**, UniK3D-Large row, the **metric** columns (δ₁ 96.5 / A.Rel 7.4 /
+RMSE 0.259) — NOT the δ₁ˢˢⁱ scale-shift column (98.2). `pdftotext` scrambles
+the two-column layout; the value/table/column/row were confirmed from the
+rendered page image, not the linearised text. Citation **VERIFIED**
+(value 0.074 = A.Rel 7.4, table + column + row all match). Cell landed ✅ at
+0.0749 (1.2 % over) — see REPRODUCTIONS.md.
+
+## 2026-06-13 — UniK3D ETH3D + DIODE Indoor metric cells (ℹ️ off-paper)
+
+Two more `verified_pdf` YAMLs pinning UniK3D-Large zero-shot **metric** rows
+from the **CVPR2025 supplemental** (downloaded 2.0 MB, read pp.5–6; the
+per-dataset tables are in the supplement, not the main PDF):
+
+- `unik3d-large-eth3d` → **Table 21** "Comparison on zero-shot evaluation for
+  ETH3D", UniK3D-Large metric columns **δ₁ 68.7 / A.Rel 23.6 / RMSE 2.63**.
+  This is the pinhole ETH3D (Table 21), explicitly **NOT** the ETH3D_Dist
+  fisheye variant (Table 25, δ₁ 67.0 / A.Rel 22.1). Pinned value 0.236.
+- `unik3d-large-diode` → **Table 22** "Comparison on zero-shot evaluation for
+  Diode (Indoor)", UniK3D-Large metric columns **δ₁ 71.3 / A.Rel 16.1 / RMSE
+  0.767**. Pinned value 0.161.
+
+Both depth caps were taken from UniK3D's own dataset classes
+(`unik3d/datasets/eth3d.py`: max_depth 50.0; `diode.py` `DiodeIndoor`:
+max_depth 25.0), not invented. Citations **VERIFIED** (table + column + row
+match). Both landed **ℹ️** (outside the 5 % band): DIODE 0.1509 (6.3 % under,
+all metrics better, exact 325/325 indoor val); ETH3D 0.1544 (off-paper better,
+frame-set/resolution protocol difference vs UniK3D's HDF5-packed eval). See
+REPRODUCTIONS.md and the yaml notes.

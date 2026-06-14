@@ -46,7 +46,6 @@ Same canonical shapes as MASt3R: ``depth (N,H,W)``, ``intrinsics (N,3,3)``,
 
 from __future__ import annotations
 
-import hashlib
 from typing import Any
 
 import numpy as np
@@ -60,7 +59,7 @@ from plumbline.conventions import (
     assert_valid_point_map,
 )
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.mast3r import (
     _images_to_dust3r_dicts,
     _run_mast3r,  # share the dust3r runner
@@ -210,7 +209,7 @@ class DUSt3RAdapter(Model):
             f"_sch{self.ga_schedule}_init{self.ga_init}"
             f"/sg{self.scene_graph}"
         )
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)
 
 
 def _ensure_dust3r_on_path() -> None:

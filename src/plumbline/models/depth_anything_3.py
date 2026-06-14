@@ -52,7 +52,6 @@ Implementation notes
 
 from __future__ import annotations
 
-import hashlib
 import math
 import os
 import sys
@@ -71,7 +70,7 @@ from plumbline.conventions import (
     world_from_camera_is_identity,
 )
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
 
 __all__ = ["DepthAnything3Adapter"]
@@ -190,7 +189,7 @@ class DepthAnything3Adapter(Model):
 
     def config_hash(self) -> str:
         s = f"{self.name}@{self.version}/variant={self.variant}/ckpt={self.checkpoint}/res={self.process_res}"
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)
 
 
 def _run_depth_anything_3(

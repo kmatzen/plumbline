@@ -44,7 +44,6 @@ first (Python caches it). Run one DUSt3R-family model per process.
 
 from __future__ import annotations
 
-import hashlib
 import os
 import sys
 from typing import Any
@@ -60,7 +59,7 @@ from plumbline.conventions import (
     assert_valid_point_map,
 )
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 
 # Reuse the MASt3R adapter's tested dust3r runner. ``_run_mast3r`` is
 # model-agnostic: it runs dust3r ``inference`` over the complete pairwise
@@ -332,7 +331,7 @@ class MonST3RAdapter(Model):
             )
         else:
             s += "/noflow"
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)
 
 
 def _monst3r_single_frame_eval(

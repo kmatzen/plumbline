@@ -1,11 +1,12 @@
-"""Smoke tests for model adapters.
+"""Adapter-*specific* behavioural tests (variant validation, view bounds,
+config-hash sensitivity to knobs, capability invariants).
 
-These exercise:
-- Module import (no torch required at import time).
-- Registry registration.
-- Capability declarations.
-- Deterministic ``config_hash`` values.
-- Adapter instantiation (does not load weights).
+The generic per-adapter smoke net — "every registered adapter imports,
+instantiates on CPU, declares valid capabilities, and hashes uniquely" — lives
+in :mod:`tests.test_adapter_smoke`, which derives its coverage from the
+registry so new adapters are picked up automatically. Add new *behavioural*
+assertions (knob X must change the hash, variant Y must raise) here; you should
+not need to touch a hand-maintained adapter list for plain coverage.
 
 Actual inference tests require GPU + weights and are marked ``weights``/``gpu``.
 """
@@ -27,39 +28,6 @@ import plumbline.models.metric3d_v2
 import plumbline.models.moge
 import plumbline.models.vggt  # noqa: F401
 from plumbline.models.registry import MODEL_REGISTRY
-
-EXPECTED_ADAPTERS = [
-    "depth-anything-v2",
-    "metric3d-v2",
-    "mast3r",
-    "dust3r",
-    "vggt",
-    "depth-anything-3",
-    "moge",
-    "marigold",
-    "depth-pro",
-    "geowizard",
-]
-
-
-@pytest.mark.parametrize("name", EXPECTED_ADAPTERS)
-def test_adapter_is_registered(name: str) -> None:
-    assert name in MODEL_REGISTRY
-
-
-@pytest.mark.parametrize("name", EXPECTED_ADAPTERS)
-def test_capabilities_present(name: str) -> None:
-    cls = MODEL_REGISTRY[name]
-    caps = cls.capabilities  # type: ignore[attr-defined]
-    assert len(caps.tasks) > 0
-    assert caps.min_views >= 1
-
-
-@pytest.mark.parametrize("name", EXPECTED_ADAPTERS)
-def test_can_instantiate_without_gpu(name: str) -> None:
-    cls = MODEL_REGISTRY[name]
-    # cpu-only; should not attempt to load weights in __init__.
-    cls(device="cpu")  # type: ignore[call-arg]
 
 
 def test_config_hash_is_deterministic() -> None:

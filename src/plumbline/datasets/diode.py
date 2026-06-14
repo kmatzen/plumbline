@@ -140,6 +140,7 @@ class DIODEDataset(Dataset):
         intrinsic: tuple[float, float, float, float] | None = None,
         scenes: list[str] | None = None,
         moge_fov_warp: bool = False,
+        depth_range: tuple[float, float] | None = None,
     ) -> None:
         root_path = Path(root) if root else env_path("DIODE_ROOT")
         if root_path is None or not root_path.exists():
@@ -166,6 +167,14 @@ class DIODEDataset(Dataset):
         self.domain = domain
         self.intrinsic = intrinsic or DIODE_INTRINSIC
         self.moge_fov_warp = moge_fov_warp
+        # Optional GT depth-range cap (metres). Default None = no cap (preserves
+        # every existing affine-invariant cell, which masks only via DIODE's own
+        # LiDAR-return mask). Metric protocols that bound the valid range — e.g.
+        # UniK3D's DiodeIndoor class uses [0.01, 25] m — pass it to mask GT
+        # outside the range invalid before scoring.
+        self.depth_range = (
+            (float(depth_range[0]), float(depth_range[1])) if depth_range is not None else None
+        )
         self._K: NDArray[np.float32] = _intrinsic_matrix(self.intrinsic)
         self._moge_pipe = None
         if moge_fov_warp:
@@ -214,6 +223,19 @@ class DIODEDataset(Dataset):
 
     def __len__(self) -> int:
         return len(self._records)
+
+    def _apply_depth_range(
+        self, depth: NDArray[np.float32], valid: NDArray[np.bool_]
+    ) -> NDArray[np.bool_]:
+        """Intersect the LiDAR-return mask with the optional ``depth_range`` cap.
+
+        No-op when ``depth_range`` is None (the default for every affine-invariant
+        cell). Otherwise GT outside ``[lo, hi]`` metres is marked invalid.
+        """
+        if self.depth_range is None:
+            return valid
+        lo, hi = self.depth_range
+        return valid & (depth >= lo) & (depth <= hi)
 
     # -- scanning --------------------------------------------------------
 
@@ -275,7 +297,7 @@ class DIODEDataset(Dataset):
         depth_gt = depth[None]  # (1, H, W)
 
         mask = load_diode_depth_mask(self.root / rec["mask_path"])
-        depth_valid = mask[None]  # (1, H, W) bool
+        depth_valid = self._apply_depth_range(depth, mask)[None]  # (1, H, W) bool
 
         K_stack = self._K[None]  # (1, 3, 3)
         E_eye = np.eye(4, dtype=np.float32)[None]  # (1, 4, 4)
@@ -312,8 +334,8 @@ class DIODEDataset(Dataset):
             intrinsic=self.intrinsic,
         )
         images = image[None]
+        depth_valid = self._apply_depth_range(depth_gt, depth_valid)[None]
         depth_gt = depth_gt[None]
-        depth_valid = depth_valid[None]
         K_stack = K_pix[None]
         E_eye = np.eye(4, dtype=np.float32)[None]
 

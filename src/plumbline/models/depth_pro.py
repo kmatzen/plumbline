@@ -43,7 +43,6 @@ Depth Pro is designed for metric evaluation (no scale alignment); the
 
 from __future__ import annotations
 
-import hashlib
 import math
 from pathlib import Path
 from typing import Any
@@ -57,7 +56,7 @@ from plumbline.conventions import (
     assert_valid_intrinsics,
 )
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
 
 __all__ = ["DepthProAdapter"]
@@ -235,4 +234,4 @@ class DepthProAdapter(Model):
     def config_hash(self) -> str:
         # Version + dtype is enough; the weights are pinned to one URL.
         s = f"{self.name}@{self.version}/dtype={self.dtype}/gt_focal={self.use_gt_focal}"
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)

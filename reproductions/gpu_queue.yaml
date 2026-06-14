@@ -290,6 +290,17 @@ jobs:
     requires_env: [NYUV2_ROOT, MONST3R_ROOT]
     extras: "plumbline install monst3r"
     notes: "Already ✅ (0.0896 vs 0.091); re-run captures+retains a result JSON → s3 runs/. Closes the provenance gap."
+  - name: unik3d-large-nyuv2
+    status: done
+    priority: 3
+    paper_target: "UniK3D Table 18 — NYUv2 metric AbsRel 0.074 / δ₁ 0.965 (verified_pdf 2026-06-11)"
+    primary_metric: abs_rel
+    datasets: [nyuv2]
+    data_footprint_gb: 3
+    est_wall_min: 13
+    requires_env: [NYUV2_ROOT]
+    extras: "Vendored — no install. First UniK3D cell; needs the build_losses no-op fix to load."
+    notes: "✅ MATCH (0.0749 vs 0.074, 1.2%; δ₁ 0.9656 ≈ exact) on the 1080 Ti, 654/654, no alignment. UniK3D's first ✅."
   - name: da-v2-large-diode
     status: done
     priority: 3

@@ -39,7 +39,6 @@ Canonical conversion
 
 from __future__ import annotations
 
-import hashlib
 import os
 import sys
 from typing import Any
@@ -49,7 +48,7 @@ from numpy.typing import NDArray
 
 from plumbline.conventions import assert_valid_depth, assert_valid_image, assert_valid_intrinsics
 from plumbline.models._torch_utils import ensure_torch
-from plumbline.models.base import Model, ModelCapabilities, Prediction
+from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
 
 __all__ = ["UniK3DAdapter"]
@@ -149,7 +148,7 @@ class UniK3DAdapter(Model):
 
     def config_hash(self) -> str:
         s = f"{self.name}@{self.version}/variant={self.variant}/ckpt={self.checkpoint}"
-        return hashlib.sha256(s.encode()).hexdigest()[:16]
+        return config_digest(s)
 
 
 def _run_unik3d(model: Any, images: NDArray[np.uint8], *, device: str) -> dict[str, Any]:

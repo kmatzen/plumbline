@@ -1,0 +1,51 @@
+# UniK3D (ViT-L) on ETH3D — zero-shot metric depth, NO alignment.
+#
+# UniK3D (Piccinelli et al., CVPR 2025, arXiv:2503.16591) predicts metric depth
+# (meters) from a single RGB with no GT camera input. The adapter declares
+# is_metric=True, so this cell runs with scale_alignment: none — the strict
+# metric test, matching the paper's zero-shot metric columns.
+#
+# Paper target: supplementary Table 21 ("Comparison on zero-shot evaluation for
+# ETH3D"), UniK3D-Large row, metric columns:
+#   δ₁ 68.7 | A.Rel 23.6 | RMSE 2.63 | δ₁^SSI 95.9 | F_A 53.6 | ρ_A 81.3
+# i.e. AbsRel 0.236, δ₁ 0.687, RMSE 2.63 m. UniK3D's ETH3D class caps depth at
+# [0.01, 50] m over the 13 high-res train scenes (the eth3d_unik3d_metric
+# protocol mirrors that). This is the pinhole ETH3D (Table 21), NOT the
+# ETH3D_Dist fisheye variant (Table 25).
+#
+# Second UniK3D reproduction cell (after unik3d-large-nyuv2). Same vendored
+# inference subset; needs the build_losses no-op fix to load.
+
+name: unik3d-large-eth3d
+protocol: eth3d_unik3d_metric
+
+model:
+  name: unik3d
+  kwargs:
+    variant: vitl
+
+# Metric model — no scale/shift alignment (matches the paper's metric columns).
+scale_alignment: none
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.236
+  tolerance_relative: 0.05
+  citation: "Piccinelli et al. 2025, UniK3D (CVPR 2025), supplementary Table 21 (zero-shot ETH3D), UniK3D-Large metric A.Rel 23.6 (no alignment); δ₁ 68.7, RMSE 2.63. PDF-verified CVPR2025 supplemental (Table 21)."
+  source_confidence: verified_pdf
+
+notes: >
+  ℹ️ OFF-PAPER (BETTER) 2026-06-11 (anima GTX 1080 Ti, 454/454, metric, no
+  alignment, GT+pred capped at [0.01, 50] m): AbsRel **0.1544** vs paper
+  **0.236** (35% tighter); δ₁ **0.8140** vs 0.687; RMSE **1.073** vs 2.63.
+  Companions δ₂ 0.984 / δ₃ 0.999 / log10 0.0616 / silog 4.55. config_hash
+  15921f5efdc017f4. NOT tuned. plumbline is tighter than the paper on every
+  metric — the residual is almost certainly a protocol/frame-set difference:
+  the eth3d-native-depth loader scores the 454 native-resolution DSLR frames
+  over the 13 high-res train scenes, whereas UniK3D's own eval reads an
+  HDF5-packed ETH3D ("ETH3D.hdf5", test_split "train.txt") at a fixed smaller
+  image_shape — a different (likely harder, lower-res) sample/resolution mix.
+  Same off-paper-better shape as the CUT3R/MonST3R depth cells. Stays ℹ️ (a
+  paper-faithful ✅ would require matching UniK3D's exact HDF5 frame list +
+  eval resolution).
