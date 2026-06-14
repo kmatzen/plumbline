@@ -36,9 +36,12 @@ We map to plumbline's canonical Prediction:
   back-projection fallback (commit 27995a1) populates it on demand for
   chamfer evaluations.
 
-Depth Pro is designed for metric evaluation (no scale alignment); the
-``is_metric=True`` capability flag directs the runner to default to
-``scale_alignment: none`` unless the YAML overrides.
+Depth Pro is designed for metric evaluation (no scale alignment). Note the
+``is_metric=True`` capability flag does **not** change the runner's alignment
+default (which is ``scale_alignment: median`` regardless of model); a metric
+reproduction must set ``scale_alignment: none`` explicitly in its YAML.
+Running a metric model under a rescaling alignment emits a runtime warning,
+because scale-aligning a metric prediction hides its true metric error.
 """
 
 from __future__ import annotations

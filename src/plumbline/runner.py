@@ -128,6 +128,23 @@ def evaluate(
             f"capabilities: {sorted(model.capabilities.tasks)}"
         )
 
+    # A metric model scored under a rescaling alignment is silently scale-fit to
+    # the GT, which hides its true metric error and inflates the result. The
+    # runner's default is "median" regardless of is_metric, so a metric cell that
+    # forgets `scale_alignment: none` would mis-report. Warn loudly.
+    if (
+        model.capabilities.is_metric
+        and scale_alignment not in (None, "none")
+        and {"mono_depth", "mvs_depth"} & set(tasks)
+    ):
+        log.warning(
+            "Model '%s' is metric (is_metric=True) but scale_alignment=%r rescales the "
+            "prediction to GT, hiding its true metric error. Set scale_alignment: none "
+            "for a faithful metric evaluation.",
+            model.name,
+            scale_alignment,
+        )
+
     report = Report(
         model=model.name,
         model_version=getattr(model, "version", ""),

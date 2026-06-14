@@ -162,6 +162,31 @@ authoritative 39-cell matrix:
 - `depth-pro-sintel` — Depth Pro δ₁ **0.242** vs **0.400** (metric depth; separate
   from DA-V2 native Sintel above).
 
+## Extend it without cloning
+
+Add your own model or dataset from a **separate** pip package — no fork required.
+`pip install plumbline-bench`, register an adapter, and advertise it via the
+`plumbline.adapters` entry-point group:
+
+```python
+# my_package/adapters.py
+from plumbline import Model, ModelCapabilities, Prediction, register_model
+
+@register_model("my-model")
+class MyAdapter(Model):
+    capabilities = ModelCapabilities(tasks=frozenset({"mono_depth"}), is_metric=True)
+    def predict(self, images, intrinsics=None) -> Prediction: ...
+```
+
+```toml
+# my_package/pyproject.toml
+[project.entry-points."plumbline.adapters"]
+my_adapters = "my_package.adapters"
+```
+
+plumbline auto-discovers it — `plumbline list-models` and `plumbline run my-model …`
+just work. See [`CONTRIBUTING.md`](./CONTRIBUTING.md#extending-plumbline-without-cloning-it-plugins).
+
 ## Documentation
 
 - [`docs/README.md`](./docs/README.md) — map of all docs (start here)
