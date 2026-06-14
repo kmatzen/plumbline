@@ -7,7 +7,34 @@ public API may change between 0.x releases.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [0.2.0] — 2026-06-14
+
+First release that **bundles** the dust3r-lineage + DAGE model code instead of
+cloning it. As a result the published wheel now contains NonCommercial vendored
+source — **the distribution as a whole is usable for non-commercial purposes
+only** (plumbline's own code stays Apache-2.0). See
+[`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
+
 ### Fixed
+- **VDA relative variants now emit depth, not disparity.** The relative
+  Video-Depth-Anything variants return the Depth-Anything-V2 DPT head output,
+  which is *disparity* (inverse depth); the adapter passed it through as `depth`,
+  so the harness's `scale_shift` alignment (which itself fits in inverse-depth
+  space) fit `s/D + b` instead of the correct MiDaS `s·D + b`. Relative variants
+  now invert disparity→depth, matching the sibling DA-V2 adapter; metric variants
+  are unchanged (already meters).
+- **Package version no longer drifts from `pyproject`.**
+  `src/plumbline/_version.py` reported `0.1.0` while `pyproject.toml` was
+  `0.2.0`, so an installed package's `__version__` / `plumbline --version` was
+  wrong. Synced to `0.2.0` and guarded by `test_version_sync` so the two can't
+  diverge again.
+- **Metric models scored under a rescaling alignment now warn.** The runner
+  defaults `scale_alignment` to `median` regardless of `is_metric`, so a metric
+  cell that forgets `scale_alignment: none` was silently scale-fit to GT (hiding
+  its true metric error). The runner now emits a loud warning, and a false
+  `depth_pro` docstring claiming `is_metric` auto-selects `none` is corrected.
 - **UniK3D now loads for inference.** The vendored inference subset prunes
   `unik3d.ops.losses`, but `UniK3D.build_losses` (run from `__init__` →
   `from_pretrained`) imported it unconditionally, so the model raised
@@ -28,8 +55,25 @@ public API may change between 0.x releases.
   measured on the old path and survives the fix — full-410 re-run landed
   2026-06-03 on the `sparse_ga` path at **0.8581 vs 0.818** (+4.9 %, MATCH),
   superseding the legacy 0.7960.
+- CPU-side correctness and robustness bugs found in a code-review sweep
+  (#22): a pointmap nearest-neighbour chunk size that collapsed to one row
+  per chunk (operator precedence in `1 << 20 // b`), a NumPy 2.0/2.1
+  `np.unique(axis=0, return_inverse=True)` 2-D-inverse regression in
+  `voxel_downsample`, a `voxel_downsample` call on `scene_voxel_size <= 0`,
+  and silent inflation of the evaluated-sample count when a prediction
+  produced no metrics. Adds a `min_samples` reproduction floor that forces
+  `paper_match=no` on a sample-count shortfall (the D28 footgun).
+- CUT3R checkpoint loading under torch ≥ 2.6, which now defaults
+  `weights_only=True` and rejects the checkpoint's embedded
+  `omegaconf.DictConfig` (#26).
+- Corrected a mislabeled `source_confidence` on `da-v2-small-nyuv2` (#24).
 
 ### Added
+- **Out-of-tree adapter discovery.** Third-party packages can register models /
+  datasets via the `plumbline.adapters` entry-point group (loaded after builtins
+  so a plugin can't shadow a builtin name; broken plugins are soft errors), and
+  `register_model` / `register_dataset` are now exported at the top level — so
+  `pip install plumbline-bench` then adding your own algorithm needs no clone.
 - **UniK3D's first reproduction cell** (`unik3d-large-nyuv2`). UniK3D-Large
   (CVPR 2025) on the NYUv2 Eigen test, metric depth with **no alignment**,
   reproduces the paper's Table 18 zero-shot NYUv2 row out of the box: AbsRel
@@ -75,16 +119,6 @@ public API may change between 0.x releases.
   GTX 1080 Ti). Staged via `scripts/stage_tum_dynamics.py` (public, no ToS;
   member-selective ~366 MB). ScanNet cells are code-ready, data-blocked on
   ToS-gated raw ScanNet. (#44)
-
-## [0.2.0] — 2026-06-02
-
-First release that **bundles** the dust3r-lineage + DAGE model code instead of
-cloning it. As a result the published wheel now contains NonCommercial vendored
-source — **the distribution as a whole is usable for non-commercial purposes
-only** (plumbline's own code stays Apache-2.0). See
-[`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
-
-### Added
 - **Vendored model code** under `src/plumbline/_vendor/` for DAGE, CUT3R,
   DUSt3R, MASt3R, and MonST3R (CC BY-NC[-SA]) — no clones needed; `$<m>_ROOT`
   still overrides the vendored path for a dev checkout. The `curope` CUDA RoPE
@@ -105,22 +139,6 @@ only** (plumbline's own code stays Apache-2.0). See
 - The published wheel bundles the NonCommercial `_vendor/*` trees; the package
   metadata (SPDX expression + "Free for non-commercial use" classifier) and the
   bundled `LICENSE` + `THIRD_PARTY_NOTICES.md` reflect this.
-
-### Fixed
-- CPU-side correctness and robustness bugs found in a code-review sweep
-  (#22): a pointmap nearest-neighbour chunk size that collapsed to one row
-  per chunk (operator precedence in `1 << 20 // b`), a NumPy 2.0/2.1
-  `np.unique(axis=0, return_inverse=True)` 2-D-inverse regression in
-  `voxel_downsample`, a `voxel_downsample` call on `scene_voxel_size <= 0`,
-  and silent inflation of the evaluated-sample count when a prediction
-  produced no metrics. Adds a `min_samples` reproduction floor that forces
-  `paper_match=no` on a sample-count shortfall (the D28 footgun).
-- CUT3R checkpoint loading under torch ≥ 2.6, which now defaults
-  `weights_only=True` and rejects the checkpoint's embedded
-  `omegaconf.DictConfig` (#26).
-- Corrected a mislabeled `source_confidence` on `da-v2-small-nyuv2` (#24).
-
-### Changed
 - Clearer Depth Anything V2 paper-backend errors that distinguish "repo not
   found" from "repo present but a dependency (e.g. opencv-python) is missing",
   with a matching install note (#23).
