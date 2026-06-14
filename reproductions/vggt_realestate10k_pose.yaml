@@ -38,6 +38,58 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
+  CROSS-MODEL LOW-PASS CONTROL — the fix is VGGT-SPECIFIC, not a generic
+  quality knob (2026-06-11, GTX 1080 Ti, fp32 for VGGT; IDENTICAL `re10k_sub50`
+  50-clip subset, same `lowpass_sigma` loader knob + pose recipe + AUC metric;
+  drivers scripts/_re10k_lowpass_sweep.py, JSONs runlogs/{dust3r,mast3r}_re10k_lowpass_20260610.json).
+  The native low-pass below shows a sigma=1.5 Gaussian recovers 82% of VGGT's
+  gap — but that alone can't tell whether the low-pass is a TRUE VGGT-HF-fix or
+  just a generic "blur helps everything" artifact of the metric/data. This
+  control settles it by running the SAME sigma=1.5 low-pass through the two
+  correspondence-based models that already CLEAR their RE10K targets natively:
+    model    native(sigma=0)  sigma=1.5   dAUC@30   trans_cos(0->1.5)
+    VGGT     0.6724           0.8205      +0.148    13.56 -> 7.80 deg
+    MASt3R   0.8452           0.8241      -0.021     7.60 -> 8.16 deg
+    DUSt3R   0.6556           0.5896      -0.066    14.78 -> 20.54 deg
+  Both sigma=0 points reproduce the cross-model control EXACTLY (MASt3R 0.8452,
+  DUSt3R 0.6556 — apparatus gate). The low-pass moves VGGT and the two matchers
+  in OPPOSITE directions: it HELPS VGGT strongly (+0.148) while DEGRADING both
+  MASt3R (-0.021) and DUSt3R (-0.066, trans_cos +5.8 deg). So the sigma=1.5
+  prefilter is NOT a generic input-quality lever — VGGT's feed-forward
+  translation regression is uniquely rescued by removing high-frequency content,
+  whereas correspondence matching NEEDS that HF texture (blurring it removes the
+  features it triangulates on). RRA@15 stays ~0.99 for all three (the entire
+  effect is translation, never rotation), matching the documented gap shape.
+  This CONFIRMS the HF-sensitivity is VGGT-specific and validates the anti-alias
+  prefilter as a sound VGGT-only fix — closing the control the resolution sweep
+  flagged as missing (the abandoned per-model MASt3R sweep). Diagnostic only —
+  NOT a paper recipe.
+  ---
+  NATIVE-RES LOW-PASS CONFIRMS THE FIX (2026-06-10, GTX 1080 Ti, fp32,
+  `re10k_sub50` 50-clip; new `lowpass_sigma` loader knob, driver
+  scripts/_re10k_lowpass_sweep.py, JSON runlogs/vggt_re10k_lowpass_20260610.json
+  on anima). The downsample sweep below confounded two effects — HF-band removal
+  vs the bicubic-down/VGGT-up RESIZE ROUND-TRIP — so it could not prove the gap
+  is spatial-frequency-driven. This sweep isolates it: a Gaussian blur applied
+  IN PLACE at native 640px (same pixel count, aspect, and VGGT internal 518
+  resize path as native; ONLY the high-frequency band attenuated). It traces a
+  clean INVERTED-U that PEAKS ABOVE the downsample proxy:
+    sigma(px)  0.0(native) 0.5    1.0    1.5(PEAK) 2.0    3.0
+    AUC@30     0.6724      0.6758 0.7181 0.8205    0.8179 0.7765
+    trans_cos  13.56       13.57  11.78  7.80      8.33   9.56
+  RRA@15 stays ~0.99 throughout (rotation untouched). sigma=0 reproduces the
+  recorded native 0.6724 EXACTLY (apparatus gate; sub50 reconstructed as the
+  first-50-sorted-usable clips of the 1800-root). The sigma=1.5 peak 0.8205
+  recovers **82%** of the 0.6724->0.853 gap — MORE than the downsample proxy's
+  0.7731/64%, and ENTIRELY on translation. Because pixel count, aspect, and the
+  resize path are all held at native, this RULES OUT the resize round-trip and
+  pixel-count as the lever: the gap is purely HARMFUL HIGH-FREQUENCY CONTENT
+  (YouTube re-encode blocking / aliasing) that VGGT's feed-forward translation
+  regression is sensitive to and a low-pass removes. The actionable fix is a
+  ~sigma 1.5 anti-alias PREFILTER on the staged ~480p frames (NOT a re-scrape,
+  NOT a resolution change). Diagnostic only — NOT a paper recipe (pose GT is
+  resolution-independent; protocol uses no GT focals).
+  ---
   RESOLUTION SWEEP — the VGGT gap is INPUT-ARTIFACT, not low-resolution
   (2026-06-09, GTX 1080 Ti, fp32, `re10k_sub50` 50-clip; new
   `downsample_long_side` loader knob, same pose recipe; the native point

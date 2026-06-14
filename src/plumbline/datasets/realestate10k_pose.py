@@ -135,6 +135,18 @@ class RealEstate10KPoseEvalLoader(Dataset):
         frames isolates each model's sensitivity to input resolution — the
         prime suspect for the VGGT-RE10K pose gap (correspondence-based
         DUSt3R/MASt3R vs feed-forward VGGT). ``None`` = serve frames as-staged.
+    lowpass_sigma
+        If set, each served frame is Gaussian-blurred in place at NATIVE
+        resolution (no resize) with this sigma in source pixels. The decisive
+        companion to ``downsample_long_side``: the downsample sweep's gain is
+        confounded by the bicubic-down/VGGT-up resize round-trip, so it cannot
+        distinguish "removing harmful high-frequency content helps" from "the
+        288px scale itself matters". This knob isolates pure spatial-frequency
+        content — same pixel count, aspect, and VGGT resize path as native,
+        only the high-frequency band is attenuated. If AUC recovers toward the
+        downsample-sweep peak under a native-res low-pass, the gap is
+        artifact/HF-driven and the fix is an anti-alias prefilter. Diagnostic
+        only, NOT a paper recipe. ``None`` = no blur.
     """
 
     split: str = "test"
@@ -147,6 +159,7 @@ class RealEstate10KPoseEvalLoader(Dataset):
         num_frames: int = 10,
         seed: int = 0,
         downsample_long_side: int | None = None,
+        lowpass_sigma: float | None = None,
     ) -> None:
         if num_frames < 2:
             raise ValueError(f"num_frames must be >= 2 for pose eval; got {num_frames}")
@@ -154,6 +167,8 @@ class RealEstate10KPoseEvalLoader(Dataset):
             raise ValueError(
                 f"downsample_long_side must be >= 14 if set; got {downsample_long_side}"
             )
+        if lowpass_sigma is not None and lowpass_sigma < 0:
+            raise ValueError(f"lowpass_sigma must be >= 0 if set; got {lowpass_sigma}")
         root_path = Path(root) if root else env_path("REALESTATE10K_ROOT")
         if root_path is None or not root_path.exists():
             raise DatasetNotAvailable(
@@ -170,6 +185,9 @@ class RealEstate10KPoseEvalLoader(Dataset):
         self.seed = int(seed)
         self.downsample_long_side = (
             int(downsample_long_side) if downsample_long_side is not None else None
+        )
+        self.lowpass_sigma = (
+            float(lowpass_sigma) if lowpass_sigma is not None else None
         )
         whitelist = set(clips) if clips is not None else None
 
@@ -239,6 +257,20 @@ class RealEstate10KPoseEvalLoader(Dataset):
                         ),
                         dtype=np.uint8,
                     )
+            if self.lowpass_sigma is not None and self.lowpass_sigma > 0:
+                # Attenuate the high-frequency band at native resolution (no
+                # resize) to test whether the downsample sweep's gain is HF/
+                # artifact removal rather than the resize round-trip or the
+                # pixel-count change. Gaussian sigma is in source pixels.
+                from PIL import Image as _PImage
+                from PIL import ImageFilter as _PFilter
+
+                img = np.asarray(
+                    _PImage.fromarray(img).filter(
+                        _PFilter.GaussianBlur(radius=self.lowpass_sigma)
+                    ),
+                    dtype=np.uint8,
+                )
             H, W = img.shape[:2]
             images.append(img)
             fx, fy, cx, cy = fr["fxfycxcy"]
