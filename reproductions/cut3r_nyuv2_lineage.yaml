@@ -1,0 +1,51 @@
+# CUT3R single-frame depth on NYUv2 — lineage-protocol EXPERIMENT.
+#
+# Runs the same CUT3R Table 1 NYU cell (paper 0.086, verified_pdf 2026-05-23)
+# under plumbline's `nyu_dust3r_lineage` protocol (filled GT, no Eigen crop,
+# no clip, per-frame median) — the recipe CUT3R §4.1 states ("per-frame
+# median scaling per DUSt3R") and the one that reproduces MonST3R-NYU within
+# 1.7 %. This is the apples-to-apples comparison the strict `cut3r-nyuv2`
+# cell (0.0522, nyu_eigen_2014) deliberately is not.
+#
+# PURPOSE: settle the D24 open question — under this lineage recipe, a
+# re-scoring of cached plumbline CUT3R preds landed at ~0.0777 (still ~10 %
+# under 0.086) while CUT3R's OWN pipeline lands 0.08595. This cell runs
+# plumbline's CUT3R adapter end-to-end under the lineage protocol to confirm
+# whether the gap is the eval recipe (→ would now match) or plumbline's
+# inference vs CUT3R's own (→ would sit at ~0.0777, pointing to a
+# single-record inference diff next).
+#
+# RESULT — RAN 2026-06-14 on anima (GTX 1080 Ti, pytorch-RoPE fallback,
+# 654/654, 0 skipped): AbsRel **0.07770** vs paper 0.086 (**9.6 % under**,
+# ℹ️ NOT a match); companions δ₁ 0.9146, RMSE 0.4030. This matches the D24
+# cached-pred re-score to 4 decimals, so the lineage PROTOCOL is NOT the
+# missing piece — feeding CUT3R the filled-GT/no-crop/median recipe gets
+# plumbline to 0.0777, not 0.086. The residual ~10 % vs CUT3R's own-pipeline
+# 0.08595 is plumbline's inference and/or NYU eval-set vs CUT3R's prepared
+# set, isolated next by a single-record inference diff (see the
+# cut3r-eval-native queue job + REPRODUCTIONS.md "Paper-trust verifications").
+
+name: cut3r-nyuv2-lineage
+protocol: nyu_dust3r_lineage
+
+model:
+  name: cut3r
+  kwargs:
+    size: 512
+
+scale_alignment: median
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.086
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2025, CUT3R (arXiv:2501.12387), Table 1 (Single-frame Depth Evaluation), NYU-v2 Abs Rel column, 'Ours' row = 0.086 (companion δ<1.25 = 90.9; protocol: per-frame median scaling per DUSt3R). Verified by direct PDF read 2026-05-23 (PDF page 5)."
+  source_confidence: verified_pdf
+
+notes: >
+  Faithful-protocol sibling of `cut3r-nyuv2` (strict nyu_eigen_2014, 0.0522).
+  Same checkpoint + adapter; only the eval protocol differs. Sister to
+  `dust3r-nyuv2` / `monst3r-nyuv2` on the identical `nyu_dust3r_lineage`
+  protocol. See REPRODUCTIONS.md "Paper-trust verifications" and the
+  cut3r-eval-native queue job for the broader plan.
