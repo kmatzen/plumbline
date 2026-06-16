@@ -29,11 +29,19 @@
 # `median(gt)/median(pred)` -> 0.08584. Different scale estimator, ~10% apart.
 # Confirmed both ways on the cached preds (scripts/_cut3r_nyu_median_probe.py).
 # Inference was already byte-identical (scripts/_cut3r_nyu_input_diff.py,
-# max|Δ|=0), and the data barely matters (labeled.mat gives the same 0.0777
-# under median-of-ratios) — it was the estimator all along. Fixed by the new
-# `median_lineage` scale_alignment mode. The `nyu-cut3r-eval` loader serves
-# CUT3R's exact prepared set and is reusable for the MonST3R/DUSt3R NYU cells,
-# which can also adopt `median_lineage` for exactness (follow-up).
+# max|Δ|=0), and the data is irrelevant: labeled.mat gives the same 0.0777
+# under median-of-ratios AND the same 0.08583 under median_lineage (confirmed
+# 2026-06-15) — it was the estimator all along. Fixed by the new
+# `median_lineage` scale_alignment mode, which matches CUT3R's eval_metrics.py
+# default (ratio-of-medians).
+#
+# IMPORTANT — the estimator is PAPER-SPECIFIC, not lineage-wide: a check on
+# 2026-06-15 found MonST3R-NYU reproduces under plumbline's `median`
+# (median-of-ratios) at 0.0896 vs 0.091 (✅) and gets WORSE under
+# `median_lineage` (0.1013). So do NOT blanket-apply `median_lineage` to the
+# lineage — each cell needs the estimator matching its own paper's eval code.
+# The `nyu-cut3r-eval` loader is reusable as DATA for MonST3R/DUSt3R, but they
+# keep `median`. Follow-up applies `median_lineage` to CUT3R KITTI/Bonn only.
 
 name: cut3r-nyuv2-prepared
 

@@ -162,8 +162,9 @@ jobs:
       on the exact staged data. The `nyu-cut3r-eval` loader (HF sayakpaul/
       nyu_depth_v2 val, staged via scripts/stage_nyu_cut3r_eval.sh) serves
       CUT3R's exact prepared set; cut3r-nyuv2-prepared lands 0.08584 vs 0.086
-      (0.2%, MATCH). KITTI/Bonn prepared cells + MonST3R/DUSt3R median_lineage
-      adoption are the follow-up.
+      (0.2%, MATCH). NOTE the estimator is paper-specific: MonST3R-NYU stays on
+      `median` (0.0896 ✅; median_lineage makes it 0.1013, worse). Follow-up is
+      CUT3R KITTI/Bonn under median_lineage only — NOT a lineage-wide change.
     paper_target: "CUT3R Table 1 — NYU 0.086 (verified_pdf 2026-05-23)"
     primary_metric: abs_rel
     datasets: [nyu-cut3r-eval]
