@@ -149,34 +149,31 @@ jobs:
   # ----- Follow-up: convert CUT3R's exact-set paper-trust reproductions
   # (NYU 0.08595 / KITTI 0.09219 / Bonn 0.07661, all within 0.06-1.8% of
   # paper, via CUT3R's OWN pipeline) into plumbline-native ✓ matrix cells. -----
-  - name: cut3r-eval-native
-    status: blocked
+  - name: cut3r-nyuv2-prepared
+    status: done
     priority: 30
     blocked_on: >
-      Loader not yet built — but now DE-RISKED to a pure data task.
-      2026-06-14 findings (anima): (a) cut3r-nyuv2-lineage ran end-to-end =
-      0.07770 vs 0.086 (9.6% under), so the lineage PROTOCOL is not the
-      missing piece; (b) the single-record inference diff is DONE —
-      plumbline's `_build_views` is byte-identical (max|Δ|=0) to CUT3R's own
-      `load_images_for_eval`, and the adapter uses CUT3R's own inference(),
-      so inference is byte-verified faithful and the entire gap is the
-      eval set/GT. Remaining work is ONLY: (1) a `cut3r_eval` dataset loader
-      over the prepared sets at s3://plumbline-bench/datasets/cut3r_eval/,
-      emitting the same images + GT + valid-mask CUT3R's eval/monodepth
-      consumes; (2) a GPU (curope NOT required — pytorch RoPE fallback works
-      on the 1080 Ti). Goal: plumbline's adapter on the prepared set lands
-      ~0.086/0.092/0.078 → real harness ✓. No adapter fix needed.
-    paper_target: "CUT3R Table 1/2 — NYU 0.086 / KITTI 0.092 / Bonn 0.078 (verified_pdf 2026-05-23)"
+      DONE 2026-06-15 — first plumbline-native CUT3R ✓. The CUT3R off-paper
+      saga resolved to the median scale ESTIMATOR, not data or inference:
+      plumbline's `median` is median(gt/pred) -> 0.0777; the dust3r-lineage
+      eval code is median(gt)/median(pred) -> 0.0858 (new `median_lineage`
+      alignment mode). Inference was byte-verified identical
+      (scripts/_cut3r_nyu_input_diff.py) and CUT3R's own pipeline gives 0.08595
+      on the exact staged data. The `nyu-cut3r-eval` loader (HF sayakpaul/
+      nyu_depth_v2 val, staged via scripts/stage_nyu_cut3r_eval.sh) serves
+      CUT3R's exact prepared set; cut3r-nyuv2-prepared lands 0.08584 vs 0.086
+      (0.2%, MATCH). KITTI/Bonn prepared cells + MonST3R/DUSt3R median_lineage
+      adoption are the follow-up.
+    paper_target: "CUT3R Table 1 — NYU 0.086 (verified_pdf 2026-05-23)"
     primary_metric: abs_rel
-    datasets: [cut3r_eval]
-    data_footprint_gb: 5
-    est_wall_min: 90
-    requires_env: [CUT3R_ROOT, CUT3R_CKPT, CUT3R_EVAL_ROOT]
-    extras: "CUT3R as for cut3r-nyuv2 (curope optional — pytorch RoPE fallback works on the 1080 Ti); plus a new cut3r_eval loader (not yet implemented)."
+    datasets: [nyu-cut3r-eval]
+    data_footprint_gb: 2
+    est_wall_min: 10
+    requires_env: [CUT3R_ROOT, CUT3R_CKPT, NYU_CUT3R_EVAL_ROOT]
+    extras: "CUT3R as for cut3r-nyuv2 (curope optional — pytorch RoPE fallback works on the 1080 Ti); stage data via scripts/stage_nyu_cut3r_eval.sh."
     notes: >
-      Surfaced 2026-06-14: the matrix now cross-links the paper-trust
-      reproductions, but they are CUT3R-own-pipeline, not plumbline-computed.
-      This job converts them to plumbline-native ✓ cells. See REPRODUCTIONS.md
+      ✅ MATCH 2026-06-15 (1080 Ti): AbsRel 0.08584 vs 0.086, δ₁ 0.9087.
+      Closes the CUT3R-NYU thread end-to-end. See REPRODUCTIONS.md
       "Paper-trust verifications" + docs/DISCREPANCIES.md D24.
 
   # ----- Tier 2: informational runs (no paper target; A/B + smoke) -----

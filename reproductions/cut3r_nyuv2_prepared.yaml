@@ -18,19 +18,22 @@
 # Eval recipe = CUT3R's: per-frame median scale, no depth cap (max_depth=None),
 # valid mask = gt>0. Stage the data with scripts/stage_nyu_cut3r_eval.sh.
 #
-# RESULT — RAN 2026-06-14 on anima (654/654): AbsRel **0.07770** vs paper 0.086
-# (9.6% under) — *identical* to `cut3r-nyuv2-lineage` (0.07770 on labeled.mat).
-# SURPRISE / KEY FINDING: scoring CUT3R's EXACT prepared data did NOT close the
-# gap, so the residual is NOT the eval data — it is plumbline's eval MECHANICS
-# vs CUT3R's `depth_evaluation`. Both use plain median (median(gt)/median(pred))
-# + abs_rel = mean(|pred-gt|/gt), and inference is byte-identical (max|Δ|=0),
-# so the ~10% lives in (a) eval resolution — CUT3R `cv2.resize`s pred UP to GT
-# 640x480 (eval_metrics.py:171); plumbline tends to downsample GT to pred-res —
-# and/or (b) the masked-pixel set the median+metric are computed over. The
-# decisive next step is a re-score of plumbline's cached preds through CUT3R's
-# `depth_evaluation` to pinpoint the knob (no GPU). Until then this is ℹ️, same
-# documented scoring-mechanics shape as D27/D28. The loader itself is correct
-# (it serves CUT3R's exact prepared set) and reusable for the lineage.
+# RESULT — RESOLVED ✅ 2026-06-15 on anima (654/654): AbsRel **0.08584** vs
+# paper 0.086 (**0.2% off, MATCH**); δ₁ 0.9087 (paper 90.9), RMSE 0.4092 — all
+# matching CUT3R's own pipeline (which gives 0.08595 on this exact data, run
+# in-session). First plumbline-native CUT3R ✓.
+#
+# ROOT CAUSE (the whole CUT3R saga in one line): plumbline's `median` alignment
+# is **median-of-ratios** `median(gt/pred)` -> 0.07770; the dust3r-lineage eval
+# code (CUT3R/MonST3R/DUSt3R `depth_evaluation`) is **ratio-of-medians**
+# `median(gt)/median(pred)` -> 0.08584. Different scale estimator, ~10% apart.
+# Confirmed both ways on the cached preds (scripts/_cut3r_nyu_median_probe.py).
+# Inference was already byte-identical (scripts/_cut3r_nyu_input_diff.py,
+# max|Δ|=0), and the data barely matters (labeled.mat gives the same 0.0777
+# under median-of-ratios) — it was the estimator all along. Fixed by the new
+# `median_lineage` scale_alignment mode. The `nyu-cut3r-eval` loader serves
+# CUT3R's exact prepared set and is reusable for the MonST3R/DUSt3R NYU cells,
+# which can also adopt `median_lineage` for exactness (follow-up).
 
 name: cut3r-nyuv2-prepared
 
@@ -43,9 +46,11 @@ dataset:
   name: nyu-cut3r-eval
 
 tasks: [mono_depth]
-# Per-frame median scaling, no clip (CUT3R eval/monodepth: depth_evaluation
-# max_depth=None, lr=1e-3 -> median).
-scale_alignment: median
+# Per-frame median scaling, no clip. CUT3R's depth_evaluation default is
+# s = median(gt)/median(pred) (RATIO-of-medians); plumbline's `median` mode is
+# median(gt/pred) (median-of-ratios) and lands 0.0777, while `median_lineage`
+# is the lineage estimator and reproduces 0.0858 (see header RESULT).
+scale_alignment: median_lineage
 device: cuda:0
 
 paper_reference:
