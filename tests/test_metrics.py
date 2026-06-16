@@ -10,6 +10,7 @@ from plumbline.metrics.alignment import (
     align_scale_and_shift,
     align_scale_lstsq,
     align_scale_median,
+    align_scale_ratio_of_medians,
 )
 from plumbline.metrics.depth import (
     abs_rel,
@@ -177,6 +178,24 @@ class TestAlignment:
         out = align_depth(pred, gt, mode="median")
         # Should now equal gt (up to floating point).
         np.testing.assert_allclose(out, gt, rtol=1e-6)
+
+    def test_ratio_of_medians_differs_from_median_of_ratios(self) -> None:
+        # The dust3r-lineage estimator s = median(gt)/median(pred) is a DIFFERENT
+        # scalar from align_scale_median's median-of-ratios median(gt/pred) when
+        # the per-pixel ratios are not constant — the crux of the CUT3R repro.
+        pred = np.array([1.0, 1.0, 1.0, 10.0], dtype=np.float32)
+        gt = np.array([1.0, 2.0, 3.0, 4.0], dtype=np.float32)
+        rom = align_scale_ratio_of_medians(pred, gt)  # median(2.5)/median(1.0)
+        mor = align_scale_median(pred, gt)  # median([1,2,3,0.4])
+        assert rom == pytest.approx(2.5, rel=1e-6)
+        assert mor == pytest.approx(1.5, rel=1e-6)
+        assert rom != pytest.approx(mor, rel=1e-3)
+
+    def test_align_depth_median_lineage_dispatch(self) -> None:
+        pred = np.array([1.0, 1.0, 1.0, 10.0], dtype=np.float32)
+        gt = np.array([1.0, 2.0, 3.0, 4.0], dtype=np.float32)
+        out = align_depth(pred, gt, mode="median_lineage")
+        np.testing.assert_allclose(out, 2.5 * pred, rtol=1e-6)
 
     def test_align_depth_lstsq_then_perfect(self) -> None:
         gt = np.array([1.0, 2.0, 3.0, 4.0], dtype=np.float32)

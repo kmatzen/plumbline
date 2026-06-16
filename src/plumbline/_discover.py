@@ -49,6 +49,7 @@ _BUILTIN_ADAPTER_MODULES: tuple[str, ...] = (
     "plumbline.datasets.eth3d",
     "plumbline.datasets.eth3d_native_depth",
     "plumbline.datasets.nyuv2",
+    "plumbline.datasets.nyu_cut3r_eval",
     "plumbline.datasets.kitti",
     "plumbline.datasets.diode",
     "plumbline.datasets.dtu",

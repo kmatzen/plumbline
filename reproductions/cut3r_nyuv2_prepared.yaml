@@ -1,0 +1,76 @@
+# CUT3R single-frame depth on NYUv2 — PREPARED-SET reproduction (Table 1).
+#
+# Targets CUT3R Table 1 "Single-frame Depth Evaluation" (Wang et al. 2025,
+# arXiv:2501.12387), NYU-v2 "Ours" row: Abs Rel = 0.086 (δ<1.25 = 90.9;
+# verified_pdf 2026-05-23, PDF page 5) — evaluated on CUT3R's OWN prepared
+# eval set, the apples-to-apples reproduction of the paper number.
+#
+# THE POINT: this cell pairs the byte-verified CUT3R adapter with the exact
+# data CUT3R's paper uses. The companion `cut3r-nyuv2` (strict nyu_eigen_2014,
+# 0.0522) and `cut3r-nyuv2-lineage` (filled-GT labeled.mat, 0.0777) both read
+# off-paper-better purely because they score DIFFERENT NYU data; inference is
+# byte-identical to CUT3R's own (scripts/_cut3r_nyu_input_diff.py, max|Δ|=0).
+# Here the `nyu-cut3r-eval` loader reads the MonST3R-prepared set (HF
+# sayakpaul/nyu_depth_v2 val, 654 .h5 -> nyu_images PNG + nyu_depths .npy)
+# that CUT3R's eval/monodepth consumes, so plumbline's harness should land
+# at ~0.086 → a real plumbline ✓.
+#
+# Eval recipe = CUT3R's: per-frame median scale, no depth cap (max_depth=None),
+# valid mask = gt>0. Stage the data with scripts/stage_nyu_cut3r_eval.sh.
+#
+# RESULT — RESOLVED ✅ 2026-06-15 on anima (654/654): AbsRel **0.08584** vs
+# paper 0.086 (**0.2% off, MATCH**); δ₁ 0.9087 (paper 90.9), RMSE 0.4092 — all
+# matching CUT3R's own pipeline (which gives 0.08595 on this exact data, run
+# in-session). First plumbline-native CUT3R ✓.
+#
+# ROOT CAUSE (the whole CUT3R saga in one line): plumbline's `median` alignment
+# is **median-of-ratios** `median(gt/pred)` -> 0.07770; the dust3r-lineage eval
+# code (CUT3R/MonST3R/DUSt3R `depth_evaluation`) is **ratio-of-medians**
+# `median(gt)/median(pred)` -> 0.08584. Different scale estimator, ~10% apart.
+# Confirmed both ways on the cached preds (scripts/_cut3r_nyu_median_probe.py).
+# Inference was already byte-identical (scripts/_cut3r_nyu_input_diff.py,
+# max|Δ|=0), and the data is irrelevant: labeled.mat gives the same 0.0777
+# under median-of-ratios AND the same 0.08583 under median_lineage (confirmed
+# 2026-06-15) — it was the estimator all along. Fixed by the new
+# `median_lineage` scale_alignment mode, which matches CUT3R's eval_metrics.py
+# default (ratio-of-medians).
+#
+# IMPORTANT — the estimator is PAPER-SPECIFIC, not lineage-wide: a check on
+# 2026-06-15 found MonST3R-NYU reproduces under plumbline's `median`
+# (median-of-ratios) at 0.0896 vs 0.091 (✅) and gets WORSE under
+# `median_lineage` (0.1013). So do NOT blanket-apply `median_lineage` to the
+# lineage — each cell needs the estimator matching its own paper's eval code.
+# The `nyu-cut3r-eval` loader is reusable as DATA for MonST3R/DUSt3R, but they
+# keep `median`. Follow-up applies `median_lineage` to CUT3R KITTI/Bonn only.
+
+name: cut3r-nyuv2-prepared
+
+model:
+  name: cut3r
+  kwargs:
+    size: 512
+
+dataset:
+  name: nyu-cut3r-eval
+
+tasks: [mono_depth]
+# Per-frame median scaling, no clip. CUT3R's depth_evaluation default is
+# s = median(gt)/median(pred) (RATIO-of-medians); plumbline's `median` mode is
+# median(gt/pred) (median-of-ratios) and lands 0.0777, while `median_lineage`
+# is the lineage estimator and reproduces 0.0858 (see header RESULT).
+scale_alignment: median_lineage
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.086
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2025, CUT3R (arXiv:2501.12387), Table 1 (Single-frame Depth Evaluation), NYU-v2 Abs Rel column, 'Ours' row = 0.086 (companion δ<1.25 = 90.9; protocol: per-frame median scaling per DUSt3R, on the MonST3R-prepared NYU-v2 val set). Verified by direct PDF read 2026-05-23 (PDF page 5)."
+  source_confidence: verified_pdf
+
+notes: >
+  Prepared-set reproduction (vs the strict `cut3r-nyuv2` and lineage
+  `cut3r-nyuv2-lineage` siblings, which score different NYU data). Needs
+  $CUT3R_ROOT + $CUT3R_CKPT (512-DPT; curope optional — pytorch RoPE fallback
+  works) + $NYU_CUT3R_EVAL_ROOT (stage via scripts/stage_nyu_cut3r_eval.sh).
+  The `nyu-cut3r-eval` loader is reusable for the MonST3R / DUSt3R NYU cells.

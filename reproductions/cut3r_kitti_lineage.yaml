@@ -1,0 +1,42 @@
+# CUT3R single-frame depth on KITTI — lineage protocol + median_lineage (Table 1).
+#
+# Targets CUT3R Table 1 "Single-frame Depth Evaluation" (Wang et al. 2025,
+# arXiv:2501.12387), KITTI "Ours" row: Abs Rel = 0.092 (δ<1.25 = 91.3;
+# verified_pdf 2026-05-23, PDF page 5).
+#
+# Companion to cut3r-nyuv2-prepared. Same root cause + fix as NYU: CUT3R's
+# eval_metrics.py KITTI path is `depth_evaluation(max_depth=None)` →
+# ratio-of-medians (median(gt)/median(pred)), NOT plumbline's default median
+# (median-of-ratios). Uses the existing `kitti_dust3r_lineage` protocol (val
+# drives, first 110 frames/drive, image_02, annotated uint16 GT /256, no crop)
+# — the same set DUSt3R-KITTI reproduces on (0.1049 vs 0.1074) and the same
+# set CUT3R's prepare_kitti.py builds (sorted glob [:110] per drive) — with
+# `scale_alignment: median_lineage`.
+#
+# Data: stage via scripts/stage_kitti_cut3r.sh (KITTI data_depth_annotated.zip
+# + the 13 raw sync drives, public/no-account) into $KITTI_ROOT/{raw,annotated}.
+
+name: cut3r-kitti-lineage
+protocol: kitti_dust3r_lineage
+
+model:
+  name: cut3r
+  kwargs:
+    size: 512
+
+# Ratio-of-medians (CUT3R eval_metrics default), NOT plumbline's median-of-ratios.
+scale_alignment: median_lineage
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.092
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2025, CUT3R (arXiv:2501.12387), Table 1 (Single-frame Depth Evaluation), KITTI Abs Rel column, 'Ours' row = 0.092 (companion δ<1.25 = 91.3; protocol: per-frame median scaling per DUSt3R). Verified by direct PDF read 2026-05-23 (PDF page 5)."
+  source_confidence: verified_pdf
+
+notes: >
+  Sibling of cut3r-nyuv2-prepared (the NYU ✓). Same checkpoint + adapter;
+  `median_lineage` matches CUT3R's eval_metrics ratio-of-medians estimator.
+  Needs $KITTI_ROOT/{raw,annotated} (scripts/stage_kitti_cut3r.sh) + $CUT3R_ROOT
+  + $CUT3R_CKPT (curope optional — pytorch RoPE fallback works on the 1080 Ti).

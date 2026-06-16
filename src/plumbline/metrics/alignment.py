@@ -12,8 +12,12 @@ re-running inference.
 Modes
 -----
 - ``"none"``      — identity. Use for metric models.
-- ``"median"``    — scalar ``s`` minimizing ``|s*pred / gt|`` via median ratio.
+- ``"median"``    — scalar ``s = median(gt / pred)`` (median-of-ratios).
                     Cheap, robust to outliers, standard for "up-to-scale" eval.
+- ``"median_lineage"`` — scalar ``s = median(gt) / median(pred)`` (ratio-of-
+                    medians), the dust3r-lineage (CUT3R/MonST3R/DUSt3R) eval
+                    code's "median scaling". Distinct from ``"median"``; needed
+                    to reproduce those papers' depth numbers exactly.
 - ``"lstsq"``     — scalar ``s`` minimizing ``||s*pred - gt||_2``. Closed form.
 - ``"scale_shift"`` — affine ``(s, b)`` minimizing ``||s*pred + b - gt||_2`` in
                     inverse-depth or log-depth space. Used by MiDaS-family
@@ -37,6 +41,7 @@ __all__ = [
     "align_scale_and_shift_robust",
     "align_scale_lstsq",
     "align_scale_median",
+    "align_scale_ratio_of_medians",
     "apply_similarity",
     "icp_similarity",
     "umeyama_similarity",
@@ -54,6 +59,29 @@ def align_scale_median(
     if p.size == 0:
         return float("nan")
     return float(np.median(g / np.maximum(p, EPS)))
+
+
+def align_scale_ratio_of_medians(
+    pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None = None
+) -> float:
+    """Return the scalar ``s = median(gt) / median(pred)`` over valid pixels.
+
+    This is the **dust3r-lineage** per-frame "median scaling" — the exact
+    estimator CUT3R / MonST3R / DUSt3R's released depth-eval code uses
+    (``depth_evaluation``: ``s = median(gt) / median(pred)``), *distinct* from
+    :func:`align_scale_median`'s median-of-ratios ``median(gt / pred)``. The two
+    agree within a few percent on some models but diverge ~10% on others
+    (CUT3R-NYU: 0.0858 vs 0.0777) — so reproducing a lineage paper number needs
+    this one. Verified 2026-06-15 on the prepared NYU set: CUT3R's own pipeline
+    and this estimator both give 0.0858 (paper 0.086).
+    """
+    p, g, _ = _valid_pairs(pred, gt, valid)
+    if p.size == 0:
+        return float("nan")
+    mp = float(np.median(p))
+    if abs(mp) < EPS:
+        return float("nan")
+    return float(np.median(g) / mp)
 
 
 def align_scale_lstsq(
@@ -228,6 +256,14 @@ def align_depth(
     out = pred.astype(np.float64, copy=True)
     if mode == "median":
         s = align_scale_median(pred, gt, valid)
+        if np.isfinite(s):
+            out *= s
+        return out
+    if mode == "median_lineage":
+        # dust3r-lineage (CUT3R/MonST3R/DUSt3R) eval code's "median scaling":
+        # s = median(gt)/median(pred), NOT median-of-ratios. See
+        # align_scale_ratio_of_medians.
+        s = align_scale_ratio_of_medians(pred, gt, valid)
         if np.isfinite(s):
             out *= s
         return out
