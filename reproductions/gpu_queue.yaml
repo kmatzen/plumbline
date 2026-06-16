@@ -177,6 +177,30 @@ jobs:
       Closes the CUT3R-NYU thread end-to-end. See REPRODUCTIONS.md
       "Paper-trust verifications" + docs/DISCREPANCIES.md D24.
 
+  - name: cut3r-kitti-lineage
+    status: blocked
+    priority: 31
+    blocked_on: >
+      Cell + staging script ready; blocked on the KITTI data stage, which is
+      SLOW from anima — KITTI's eu-central S3 serves ~1 MB/s, so
+      data_depth_annotated.zip (~14 GB) is ~3 h. Reuses the existing `kitti`
+      loader + `kitti_dust3r_lineage` protocol (val drives, first 110/drive,
+      image_02) with the new `median_lineage` alignment — no new loader. High
+      confidence it reproduces ~0.092 (the NYU fix is data-independent and
+      median_lineage matches CUT3R's eval_metrics ratio-of-medians), but
+      UNRUN until staged. Stage with scripts/stage_kitti_cut3r.sh (detached).
+    paper_target: "CUT3R Table 1 — KITTI 0.092 (verified_pdf 2026-05-23)"
+    primary_metric: abs_rel
+    datasets: [kitti]
+    data_footprint_gb: 19
+    est_wall_min: 30
+    requires_env: [KITTI_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    extras: "CUT3R as for cut3r-nyuv2; stage KITTI via scripts/stage_kitti_cut3r.sh (~14 GB annotated + 13 raw drives, slow S3)."
+    notes: >
+      KITTI sibling of cut3r-nyuv2-prepared (the NYU ✓). median_lineage matches
+      CUT3R's eval_metrics. Bonn is separate (per-sequence VIDEO eval, not
+      per-frame median_lineage).
+
   # ----- Tier 2: informational runs (no paper target; A/B + smoke) -----
   - name: da-v2-large-eth3d-moge-table2
     status: done
