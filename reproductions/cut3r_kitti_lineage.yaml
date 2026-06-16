@@ -14,7 +14,15 @@
 # `scale_alignment: median_lineage`.
 #
 # Data: stage via scripts/stage_kitti_cut3r.sh (KITTI data_depth_annotated.zip
-# + the 13 raw sync drives, public/no-account) into $KITTI_ROOT/{raw,annotated}.
+# + 13 raw sync drives + 5 calib zips, public/no-account) into
+# $KITTI_ROOT/{raw/<date>/...,depth_annotated/val/...}.
+#
+# RESULT — ✅ MATCH 2026-06-16 on anima (1080 Ti, 1269/1269, 0 skipped):
+# AbsRel **0.09530** vs paper 0.092 (+3.6%, within ±5%); δ₁ 0.9056. Control
+# under plumbline's `median` (median-of-ratios) = 0.08865 (−3.6%); paper 0.092
+# sits BETWEEN the two estimators and median_lineage (CUT3R's eval_metrics
+# ratio-of-medians) is the faithful one. Second plumbline-native CUT3R ✓ after
+# cut3r-nyuv2-prepared. Same 1269-frame / 13-drive val set as dust3r-kitti.
 
 name: cut3r-kitti-lineage
 protocol: kitti_dust3r_lineage
