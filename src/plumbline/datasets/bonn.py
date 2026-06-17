@@ -243,7 +243,9 @@ class BonnDataset(Dataset):
     def _load_sequence(self, seq_dir: Path) -> Sample:
         assoc = self._associations(seq_dir)
         if self.frame_selection == "first":
-            idxs = list(range(self.frame_start, min(self.frame_start + self.num_frames, len(assoc))))
+            idxs = list(
+                range(self.frame_start, min(self.frame_start + self.num_frames, len(assoc)))
+            )
         else:
             idxs = _even_indices(len(assoc), self.num_frames)
         images: list[NDArray[np.uint8]] = []
