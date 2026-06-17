@@ -42,6 +42,7 @@ __all__ = [
     "align_scale_lstsq",
     "align_scale_median",
     "align_scale_ratio_of_medians",
+    "align_scale_weiszfeld",
     "apply_similarity",
     "icp_similarity",
     "umeyama_similarity",
@@ -95,6 +96,36 @@ def align_scale_lstsq(
     if p.size == 0 or float(p @ p) < EPS:
         return float("nan")
     return float((p @ g) / (p @ p))
+
+
+def align_scale_weiszfeld(
+    pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None = None, *, n_iter: int = 10
+) -> float:
+    """Robust scale-only fit via Weiszfeld IRLS — the dust3r-lineage *video*
+    per-sequence scale (CUT3R `eval/video_depth --align scale`,
+    ``align_with_scale=True``).
+
+    Minimizes ``sum |s*pred - gt|`` over valid pixels: init ``s = mean(gt)/mean(pred)``,
+    then ``n_iter`` rounds of ``w = 1/(|s*pred - gt| + 1e-8)`` followed by the
+    weighted closed form ``s = sum(w*pred*gt) / sum(w*pred^2)``; clamped to
+    ``>= 1e-3``. Distinct from ``median``/``median_lineage`` (median scalings)
+    and ``lstsq`` (plain L2 scale). CUT3R Table 2 (video depth) uses this for
+    Bonn/Sintel/KITTI per-sequence eval.
+    """
+    p, g, _ = _valid_pairs(pred, gt, valid)
+    if p.size == 0:
+        return float("nan")
+    mp = float(np.mean(p))
+    if abs(mp) < EPS:
+        return float("nan")
+    s = float(np.mean(g)) / mp
+    for _ in range(n_iter):
+        w = 1.0 / (np.abs(s * p - g) + 1e-8)
+        denom = float(np.sum(w * p * p))
+        if denom < EPS:
+            break
+        s = float(np.sum(w * p * g)) / denom
+    return max(s, 1e-3)
 
 
 def align_scale_and_shift(
@@ -264,6 +295,13 @@ def align_depth(
         # s = median(gt)/median(pred), NOT median-of-ratios. See
         # align_scale_ratio_of_medians.
         s = align_scale_ratio_of_medians(pred, gt, valid)
+        if np.isfinite(s):
+            out *= s
+        return out
+    if mode == "scale_weiszfeld":
+        # dust3r-lineage VIDEO per-sequence scale (CUT3R --align scale):
+        # robust scale-only Weiszfeld IRLS. See align_scale_weiszfeld.
+        s = align_scale_weiszfeld(pred, gt, valid)
         if np.isfinite(s):
             out *= s
         return out

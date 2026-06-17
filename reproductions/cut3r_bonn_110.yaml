@@ -1,0 +1,55 @@
+# CUT3R VIDEO depth on Bonn — exact-set + Weiszfeld scale (Table 2).
+#
+# Targets CUT3R Table 2 "Video Depth Evaluation" (Wang et al. 2025,
+# arXiv:2501.12387), Per-sequence scale, BONN "Ours" row = 0.078
+# (δ<1.25 = 93.7; verified_pdf 2026-05-23, PDF page 6).
+#
+# The third CUT3R cell, after the NYU + KITTI per-frame ✓s. Bonn is CUT3R's
+# VIDEO eval (one Sample = one sequence, ONE scale fit over the whole clip),
+# and — unlike NYU/KITTI which use ratio-of-medians — Bonn uses CUT3R's
+# `eval/video_depth --align scale` = a robust scale-only Weiszfeld IRLS fit
+# (`align_with_scale=True`). plumbline's new `scale_weiszfeld` mode ports it.
+#
+# Exact set: the 5 Table-2 sequences (balloon2, crowd2, crowd3,
+# person_tracking2, synchronous) × first 110 frames, max_depth=70.
+#
+# FIDELITY CAVEAT: CUT3R's `rgb_110` is the first 110 contiguous frames; the
+# bonn loader's `num_frames` sub-samples. If the run misses, that selection is
+# the first thing to check (same rgb_110 subtlety as D27 for MonST3R-Bonn).
+#
+# Data: stage the 5 per-sequence zips (public, no account) via
+# scripts/stage_bonn_cut3r.sh into $BONN_ROOT.
+
+name: cut3r-bonn-110
+
+model:
+  name: cut3r
+  kwargs:
+    size: 512
+
+dataset:
+  name: bonn
+  kwargs:
+    sequences: [balloon2, crowd2, crowd3, person_tracking2, synchronous]
+    num_frames: 110
+    max_depth: 70.0
+
+tasks: [mono_depth]
+# Per-sequence scale (one Sample = one sequence) via CUT3R's video --align scale
+# = robust scale-only Weiszfeld IRLS, NOT median.
+scale_alignment: scale_weiszfeld
+max_views: 110
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.078
+  tolerance_relative: 0.05
+  citation: "Wang et al. 2025, CUT3R (arXiv:2501.12387), Table 2 (Video Depth Evaluation), Per-sequence scale, BONN Abs Rel column, 'Ours' row = 0.078 (companion δ<1.25 = 93.7). Verified by direct PDF read 2026-05-23 (PDF page 6)."
+  source_confidence: verified_pdf
+
+notes: >
+  CUT3R Table 2 Bonn video cell. Exact 5-seq × 110-frame set + `scale_weiszfeld`
+  (CUT3R's video --align scale). Distinct from `cut3r-bonn` (all-seqs / 60-frame,
+  median, off-paper 0.0536). Needs $BONN_ROOT (5 rgbd_bonn_<name>/ dirs) +
+  $CUT3R_ROOT + $CUT3R_CKPT (curope optional — pytorch RoPE fallback works).
