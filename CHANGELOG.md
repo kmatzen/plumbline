@@ -7,7 +7,38 @@ public API may change between 0.x releases.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+- **CUT3R now reproduces on all three depth benchmarks** (NYU, KITTI, Bonn) —
+  plumbline-native, closing the off-paper gaps that previously showed only as
+  `ℹ️` cells:
+  - `cut3r-nyuv2-prepared` — **AbsRel 0.0858 vs 0.086** (Table 1). New
+    `nyu-cut3r-eval` loader over CUT3R's exact prepared NYU set (HuggingFace
+    `sayakpaul/nyu_depth_v2` val), staged by `scripts/stage_nyu_cut3r_eval.sh`.
+  - `cut3r-kitti-lineage` — **AbsRel 0.0953 vs 0.092** (Table 1), 1269/1269, on
+    the existing `kitti_dust3r_lineage` protocol. Staged via
+    `scripts/stage_kitti_cut3r.sh`.
+  - `cut3r-bonn-110` — **AbsRel 0.0768 vs 0.078** (Table 2, video/per-sequence
+    scale). Staged via `scripts/stage_bonn_cut3r.sh`.
+- **`median_lineage` alignment mode** (`align_scale_ratio_of_medians`) — the
+  dust3r-lineage eval code's `s = median(gt)/median(pred)` (ratio-of-medians),
+  distinct from `median`'s `median(gt/pred)` (median-of-ratios). This was the
+  root cause of CUT3R's per-frame off-paper gap (NYU 0.0777 → 0.0858). The
+  estimator is **paper-specific**: MonST3R-NYU stays on `median` (median_lineage
+  makes it *worse*), so it is applied only to the CUT3R cells.
+- **`scale_weiszfeld` alignment mode** (`align_scale_weiszfeld`) — CUT3R's video
+  `eval/video_depth --align scale` (robust scale-only Weiszfeld IRLS), used by
+  the Bonn per-sequence cell.
+- **Bonn loader `frame_selection` / `frame_start`** — `frame_start=30` selects
+  CUT3R's `rgb_110 = sorted(frames)[30:140]` set (per MonST3R's
+  `prepare_bonn.py`); the prior `[0:110]` was the wrong set.
+
+### Verified (analysis, no code change)
+- **CUT3R inference is byte-verified faithful** to upstream: plumbline's
+  `_build_views` preprocessing is byte-identical (`max|Δ|=0`) to CUT3R's
+  `load_images_for_eval`, and the adapter calls CUT3R's own `inference()`
+  (`scripts/_cut3r_nyu_input_diff.py`). So every CUT3R off-paper number was an
+  eval-recipe/data difference, not an adapter bug — each root-caused and fixed
+  above rather than tuned.
 
 ## [0.2.0] — 2026-06-14
 
