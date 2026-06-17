@@ -11,6 +11,7 @@ from plumbline.metrics.alignment import (
     align_scale_lstsq,
     align_scale_median,
     align_scale_ratio_of_medians,
+    align_scale_weiszfeld,
 )
 from plumbline.metrics.depth import (
     abs_rel,
@@ -196,6 +197,28 @@ class TestAlignment:
         gt = np.array([1.0, 2.0, 3.0, 4.0], dtype=np.float32)
         out = align_depth(pred, gt, mode="median_lineage")
         np.testing.assert_allclose(out, 2.5 * pred, rtol=1e-6)
+
+    def test_weiszfeld_recovers_clean_scale(self) -> None:
+        # CUT3R's `--align scale` (video per-sequence). On a clean scale it
+        # recovers the exact factor; init s=mean(gt)/mean(pred) is already exact.
+        pred = np.array([1.0, 2.0, 3.0, 4.0], dtype=np.float32)
+        gt = 3.0 * pred
+        assert align_scale_weiszfeld(pred, gt) == pytest.approx(3.0, rel=1e-5)
+
+    def test_weiszfeld_robust_to_outlier(self) -> None:
+        # L1/Weiszfeld scale resists a single gross outlier better than L2 lstsq.
+        pred = np.array([1.0, 2.0, 3.0, 4.0, 5.0], dtype=np.float32)
+        gt = 2.0 * pred.copy()
+        gt[-1] = 100.0  # outlier
+        s_w = align_scale_weiszfeld(pred, gt)
+        s_l = align_scale_lstsq(pred, gt)
+        assert abs(s_w - 2.0) < abs(s_l - 2.0)
+
+    def test_align_depth_scale_weiszfeld_dispatch(self) -> None:
+        pred = np.array([1.0, 2.0, 3.0, 4.0], dtype=np.float32)
+        gt = 2.5 * pred
+        out = align_depth(pred, gt, mode="scale_weiszfeld")
+        np.testing.assert_allclose(out, gt, rtol=1e-4)
 
     def test_align_depth_lstsq_then_perfect(self) -> None:
         gt = np.array([1.0, 2.0, 3.0, 4.0], dtype=np.float32)

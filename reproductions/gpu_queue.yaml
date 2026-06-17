@@ -199,6 +199,29 @@ jobs:
       sibling of cut3r-nyuv2-prepared. median_lineage matches CUT3R's
       eval_metrics. Bonn is separate (per-sequence VIDEO eval, not per-frame).
 
+  - name: cut3r-bonn-110
+    status: done
+    priority: 32
+    blocked_on: >
+      DONE 2026-06-16 — third plumbline-native CUT3R ✓. AbsRel 0.0768 vs paper
+      0.078 (−1.5%, MATCH; 5/5 seqs) with scale_weiszfeld (CUT3R's video --align
+      scale, newly ported). The whole gap was the FRAME SET: rgb_110 =
+      sorted(frames)[30:140] per MonST3R prepare_bonn.py, NOT first-110 ([0:110]
+      gave a catastrophic ~0.42 under every alignment because it includes the 30
+      warmup frames CUT3R skips). Fixed via the bonn loader's frame_start=30.
+      Alignment is secondary on the right set (weiszfeld 0.0768 / median 0.0770 /
+      median_lineage 0.0774 all match). Data staged via scripts/stage_bonn_cut3r.sh.
+    paper_target: "CUT3R Table 2 — Bonn video depth (per-seq scale) 0.078 (verified_pdf 2026-05-23)"
+    primary_metric: abs_rel
+    datasets: [bonn]
+    data_footprint_gb: 2
+    est_wall_min: 15
+    requires_env: [BONN_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    extras: "CUT3R as for cut3r-nyuv2; stage 5 Bonn seqs via scripts/stage_bonn_cut3r.sh."
+    notes: >
+      ✅ MATCH 2026-06-16 (1080 Ti): AbsRel 0.0768 vs 0.078, δ₁ 0.9201. Completes
+      the CUT3R set (NYU + KITTI + Bonn all reproduce). Cause was rgb_110=[30:140].
+
   # ----- Tier 2: informational runs (no paper target; A/B + smoke) -----
   - name: da-v2-large-eth3d-moge-table2
     status: done
