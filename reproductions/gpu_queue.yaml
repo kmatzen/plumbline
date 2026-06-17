@@ -202,22 +202,17 @@ jobs:
       per-frame median_lineage).
 
   - name: cut3r-bonn-110
-    status: blocked
+    status: done
     priority: 32
     blocked_on: >
-      INVESTIGATED 2026-06-16 — does NOT reproduce; cause is the VIDEO path, not
-      alignment. scale_weiszfeld (CUT3R's video --align scale) is ported + correct,
-      but on the faithful first-110 contiguous frames CUT3R's recurrent preds are
-      catastrophic via plumbline's video path: AbsRel ~0.42 under ALL alignments
-      (weiszfeld 0.416 / median 0.429 / median_lineage 0.406; paper 0.078), every
-      seq bad. Even-subsampled 110 frames give ~0.060 (off-paper-better) — the
-      opposite of coherent recurrent behaviour. Two unseparated causes: (a)
-      plumbline's CUT3R multi-frame/recurrent inference diverges from
-      eval/video_depth (per-frame path is byte-verified; video path is NOT), or
-      (b) rgb_110 (MonST3R prepare_bonn) differs from first-110-of-associations.
-      DECISIVE NEXT: run CUT3R's own eval/video_depth on this staged data
-      (~/data/bonn_cut3r/root) — 0.078 → plumbline video bug; ~0.42 → data set
-      mismatch. Data staged via scripts/stage_bonn_cut3r.sh.
+      DONE 2026-06-16 — third plumbline-native CUT3R ✓. AbsRel 0.0768 vs paper
+      0.078 (−1.5%, MATCH; 5/5 seqs) with scale_weiszfeld (CUT3R's video --align
+      scale, newly ported). The whole gap was the FRAME SET: rgb_110 =
+      sorted(frames)[30:140] per MonST3R prepare_bonn.py, NOT first-110 ([0:110]
+      gave a catastrophic ~0.42 under every alignment because it includes the 30
+      warmup frames CUT3R skips). Fixed via the bonn loader's frame_start=30.
+      Alignment is secondary on the right set (weiszfeld 0.0768 / median 0.0770 /
+      median_lineage 0.0774 all match). Data staged via scripts/stage_bonn_cut3r.sh.
     paper_target: "CUT3R Table 2 — Bonn video depth (per-seq scale) 0.078 (verified_pdf 2026-05-23)"
     primary_metric: abs_rel
     datasets: [bonn]
@@ -226,8 +221,8 @@ jobs:
     requires_env: [BONN_ROOT, CUT3R_ROOT, CUT3R_CKPT]
     extras: "CUT3R as for cut3r-nyuv2; stage 5 Bonn seqs via scripts/stage_bonn_cut3r.sh."
     notes: >
-      ℹ️ off-paper / unresolved (video-path divergence). The per-frame CUT3R ✓s
-      (NYU, KITTI) don't transfer to the recurrent video eval. See cell header.
+      ✅ MATCH 2026-06-16 (1080 Ti): AbsRel 0.0768 vs 0.078, δ₁ 0.9201. Completes
+      the CUT3R set (NYU + KITTI + Bonn all reproduce). Cause was rgb_110=[30:140].
 
   # ----- Tier 2: informational runs (no paper target; A/B + smoke) -----
   - name: da-v2-large-eth3d-moge-table2
