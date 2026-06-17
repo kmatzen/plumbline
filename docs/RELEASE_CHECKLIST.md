@@ -54,6 +54,13 @@ locally.
       it — add a hatch `force-include` (and add `THIRD_PARTY_NOTICES.md` +
       `CHANGELOG.md` to the sdist `include` list, currently README+LICENSE only).
       The per-vendor `_vendor/<m>/LICENSE` files already travel inside `_vendor`.
+- [ ] **Lint + format + tests pass locally** (the `wheels.yml` `test` job gates
+      the publish on all three, so a failure here = no publish): run
+      `uv run ruff format --check src tests && uv run ruff check src tests && uv run pytest -q`.
+      NOTE `ruff check` (lint) and `ruff format --check` (formatting) are
+      **separate** — v0.2.1's first tag failed the format check because only
+      lint was run locally. `pre-commit` covers both but only if installed as a
+      git hook (`pre-commit install`); this line is the belt-and-braces.
 - [ ] **Build + inspect locally:** `uv build`, then unzip the wheel and confirm
       (a) `_vendor/**` present (or absent, per decision), (b) curope `.cu/.cpp/.h`
       source included, (c) **no** `*.so` / `build/` / model weights, (d) wheel
