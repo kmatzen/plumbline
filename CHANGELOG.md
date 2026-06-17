@@ -7,6 +7,10 @@ public API may change between 0.x releases.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [0.2.1] — 2026-06-16
+
 ### Added
 - **CUT3R now reproduces on all three depth benchmarks** (NYU, KITTI, Bonn) —
   plumbline-native, closing the off-paper gaps that previously showed only as
@@ -200,6 +204,7 @@ First public release.
   pose/trajectory), each audited table-+-column-+-row against the source
   paper. See [`REPRODUCTIONS.md`](./REPRODUCTIONS.md).
 
-[Unreleased]: https://github.com/kmatzen/plumbline/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/kmatzen/plumbline/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/kmatzen/plumbline/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/kmatzen/plumbline/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/kmatzen/plumbline/releases/tag/v0.1.0
