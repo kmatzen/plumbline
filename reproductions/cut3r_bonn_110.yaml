@@ -13,9 +13,27 @@
 # Exact set: the 5 Table-2 sequences (balloon2, crowd2, crowd3,
 # person_tracking2, synchronous) × first 110 frames, max_depth=70.
 #
-# FIDELITY CAVEAT: CUT3R's `rgb_110` is the first 110 contiguous frames; the
-# bonn loader's `num_frames` sub-samples. If the run misses, that selection is
-# the first thing to check (same rgb_110 subtlety as D27 for MonST3R-Bonn).
+# RESULT — ℹ️ OFF-PAPER / UNRESOLVED (ran 2026-06-16 on anima, 5/5 seqs):
+# Unlike the per-frame NYU/KITTI ✓s, Bonn does NOT reproduce, and the cause is
+# the VIDEO path, not the alignment:
+#   - first-110 (faithful rgb_110) + scale_weiszfeld: AbsRel **0.41577** (paper
+#     0.078) — and median 0.4287 / median_lineage 0.4061 too, i.e. ~0.42 under
+#     ALL alignments, every sequence bad (0.22–0.77).
+#   - even-subsampled 110 frames: ~0.060 under all alignments (off-paper-better).
+# So alignment is NOT the gap (scale_weiszfeld is still the correct CUT3R video
+# `--align scale` port). CUT3R's recurrent predictions on first-110 CONTIGUOUS
+# frames are catastrophic via plumbline's video path while even-subsampled is
+# fine — the OPPOSITE of what a coherent recurrent model should do. Two
+# candidate causes, not yet separated:
+#   (a) plumbline's CUT3R VIDEO/recurrent inference diverges from CUT3R's
+#       eval/video_depth pipeline (the per-frame path is byte-verified; the
+#       multi-frame recurrent path is NOT), or
+#   (b) CUT3R's `rgb_110` (MonST3R prepare_bonn.py) is constructed differently
+#       than first-110-of-associations, so this isn't the exact set.
+# DECISIVE NEXT STEP (deferred): run CUT3R's own eval/video_depth on this staged
+# data — 0.078 → (a) plumbline video bug; ~0.42 → (b) data/frame-set mismatch.
+# Kept on the faithful first-110 config so the cell EXPOSES the gap honestly
+# rather than hiding behind even-subsample's nicer 0.060. NOT a paper-match.
 #
 # Data: stage the 5 per-sequence zips (public, no account) via
 # scripts/stage_bonn_cut3r.sh into $BONN_ROOT.
@@ -32,6 +50,7 @@ dataset:
   kwargs:
     sequences: [balloon2, crowd2, crowd3, person_tracking2, synchronous]
     num_frames: 110
+    frame_selection: first   # CUT3R's rgb_110 = first 110 contiguous frames
     max_depth: 70.0
 
 tasks: [mono_depth]

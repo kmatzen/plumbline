@@ -118,11 +118,18 @@ class BonnDataset(Dataset):
         num_frames: int = 90,
         max_depth: float = 10.0,
         per_frame: bool = False,
+        frame_selection: str = "even",
     ) -> None:
         self.split = split
         self.num_frames = int(num_frames)
         self.max_depth = float(max_depth)
         self.per_frame = bool(per_frame)
+        if frame_selection not in ("even", "first"):
+            raise ValueError(f"frame_selection must be 'even' or 'first'; got {frame_selection!r}")
+        # "even" sub-samples across the whole sequence (DepthCrafter-style);
+        # "first" takes the first N contiguous frames — CUT3R/MonST3R's
+        # ``rgb_110`` Table-2 convention.
+        self.frame_selection = frame_selection
         resolved = env_path("BONN_ROOT", Path(root) if root is not None else None)
         if resolved is None or not Path(resolved).is_dir():
             raise DatasetNotAvailable(
@@ -231,7 +238,10 @@ class BonnDataset(Dataset):
 
     def _load_sequence(self, seq_dir: Path) -> Sample:
         assoc = self._associations(seq_dir)
-        idxs = _even_indices(len(assoc), self.num_frames)
+        if self.frame_selection == "first":
+            idxs = list(range(min(self.num_frames, len(assoc))))
+        else:
+            idxs = _even_indices(len(assoc), self.num_frames)
         images: list[NDArray[np.uint8]] = []
         depths: list[NDArray[np.float32]] = []
         valids: list[NDArray[np.bool_]] = []
