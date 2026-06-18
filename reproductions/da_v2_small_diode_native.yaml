@@ -25,11 +25,14 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
-  HIGH-CONFIDENCE next-box run (not blind): the sibling
-  da-v2-small-diode-indoor ran this exact recipe (native `diode` +
-  scale_shift + [1e-3,50] clip) on the val-indoor slice (325 imgs) at
-  AbsRel 0.0722 — a 1.1% match to this 0.073 target. This cell only
-  switches to domain=both (full val, 325 indoor + 446 outdoor) for the
-  strictly-comparable combined-val number DA-V2 reports. If it lands off,
-  the DIODE-outdoor depth clip (>50 m far returns) is the lever (see the
-  diode_dav2 protocol). Needs DIODE val unpacked at $DIODE_ROOT (~2.7 GB).
+  ⚠️ RAN 2026-06-18 (anima 1080 Ti, vendored DA-V2 paper path, 771/771
+  domain=both, 0 skipped): AbsRel **0.2196** vs paper **0.073** — a 3×
+  MISMATCH. NOT tuned (the DIODE-outdoor far-depth >50 m clip is a known
+  lever but tuning it to chase a number is off-limits). The result instead
+  CONFIRMS that DA-V2 Table 2's DIODE 0.073 is the **indoor** convention,
+  not combined-val: the sibling da-v2-small-diode-indoor reproduces 0.073 at
+  AbsRel 0.0722 (325-img indoor val, 1.1% off), matching the indoor-only
+  DIODE protocol the rest of the literature uses (e.g. UniK3D's 325-img
+  indoor val). So the paper-faithful cell is the indoor one; this domain=both
+  variant is an informational off-paper experiment, superseded. Needs DIODE
+  val unpacked at $DIODE_ROOT (~2.7 GB).
