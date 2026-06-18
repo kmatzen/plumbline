@@ -165,6 +165,9 @@ def fit(cells, prior_sd=0.8, noise_sd=0.35, calib=1.0):
         "metric_task": METRIC_TASK,
         "cap": {m: CAPABILITY.get(m, ["depth", "pose"]) for m in methods},
         "calib": round(calib, 4),
+        # which metrics each dataset actually scores (it has GT for) — the site masks
+        # the cube to these, so no AbsRel-on-CO3Dv2 / mAA-on-NYU nonsense is shown.
+        "supports": {d: sorted({c["metric"] for c in cells if c["ds"] == d}) for d in datasets},
     }
     return methods, datasets, protos, predict, info_gain, model
 
