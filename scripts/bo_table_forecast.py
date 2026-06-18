@@ -39,6 +39,9 @@ EXPLORE = "site/explore.html"
 PRIMARY = ("abs_rel", "delta_1", "maa", "ate")
 SIGN = {"delta_1": +1, "maa": +1, "abs_rel": -1, "ate": -1}  # +1 = higher is better
 METRIC_TASK = {"abs_rel": "depth", "delta_1": "depth", "maa": "pose", "ate": "pose"}
+# valid output range per metric — predictions (and their bands) clamp here. δ₁ and
+# mAA are accuracy fractions ≤ 1; abs_rel/ate are unbounded-positive (exp ⇒ ≥0).
+RANGE = {"delta_1": (0.0, 1.0), "maa": (0.0, 1.0)}
 
 # What each method can actually DO — from the adapters' `tasks` (mono_depth vs pose).
 # We never predict a metric for a method that doesn't do that task.
@@ -156,7 +159,9 @@ def fit(cells, prior_sd=0.8, noise_sd=0.35, calib=1.0):
         mu, sd = stats[metric]
         lm = mu + SIGN[metric] * sd * gm           # back to log-score
         ls = sd * gs * calib                       # log-score std, LOO-calibrated
-        return float(np.exp(lm)), float(np.exp(lm - ls)), float(np.exp(lm + ls))
+        lo_b, hi_b = RANGE.get(metric, (0.0, float("inf")))
+        clip = lambda v: min(max(v, lo_b), hi_b)   # never predict outside the metric's range
+        return clip(float(np.exp(lm))), clip(float(np.exp(lm - ls))), clip(float(np.exp(lm + ls)))
 
     grid = [feat(m, d, p, t) for (m, t) in mtasks for d in datasets for p in protos]
 
@@ -173,6 +178,7 @@ def fit(cells, prior_sd=0.8, noise_sd=0.35, calib=1.0):
         "Sigma": [[round(float(v), 5) for v in row] for row in Sigma],
         "stats": {k: [round(stats[k][0], 5), round(stats[k][1], 5), SIGN[k]] for k in stats},
         "metric_task": METRIC_TASK,
+        "range": {k: list(v) for k, v in RANGE.items()},   # clamp predictions to valid range
         "cap": {m: CAPABILITY.get(m, ["depth", "pose"]) for m in methods},
         "calib": round(calib, 4),
         # which metrics each dataset actually scores (it has GT for) — the site masks
