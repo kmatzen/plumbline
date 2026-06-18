@@ -135,7 +135,7 @@
         <b>&#10003; verified</b> numbers land within their pinned tolerance of the
         source paper, <b>&#8505; off-paper</b> ones don't (paper-private recipes,
         protocol deltas, model limits — the hover names which), and <b>&#9671;</b>
-        have no paper target. Only the 36 verified are safe to cite. <b>Switch the
+        have no paper target. Only the 42 verified are safe to cite. <b>Switch the
         metric</b> with the tabs; <b>hover any number</b> for observed vs paper, the
         deviation, and the citation. Each row follows its own paper's eval protocol,
         so read the shading as a within-column ranking, not a controlled head-to-head.
@@ -161,9 +161,9 @@
       Metrics are grouped <b>depth</b> · <b>pose</b> · <b>trajectory</b>. The pose and
       trajectory tabs include the companion numbers each paper row also reports
       (RRA@15 / RTA@15, RPE-trans / RPE-rot°), audited the same way; the
-      “36 verified results” counts the <em>primary</em> metric per reproduction, not
+      “42 verified results” counts the <em>primary</em> metric per reproduction, not
       these companions.
-      Tolerance is pinned per-cell: <b>±5% for 32 of the 36 cells</b>, ±10% for the
+      Tolerance is pinned per-cell: <b>±5% for nearly all cells</b>, ±10% for the
       three video/trajectory-pose cells (sub-cm ATEs amplify small fp16-vs-bf16 drift),
       and ±2% for DA3 on NYU. Only one cell exceeds 5% — DAGE Sintel at +7.3%, inside
       its ±10% band. Cells outside their pinned tolerance don't count as verified and
@@ -179,7 +179,7 @@
 
   <div class="pop" id="pop" role="status" aria-live="polite"></div>
 
-  <!-- Verified cells (36). The array length is the single count the site stat,
+  <!-- Verified cells (42). The array length is the single count the site stat,
        REPRODUCTIONS.md "= N total" and the README all agree with
        (tests/test_site_coverage.py). -->
   <script type="application/json" id="verified-cells">
@@ -222,14 +222,17 @@
     {"model":"DAGE","ds":"Sintel","metric":"ate","obs":"0.1417","paper":"0.132","d":7.3,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 · Sintel · ATE"}},
     {"model":"DAGE","ds":"TUM-Dyn","metric":"ate","obs":"0.0136","paper":"0.014","d":-2.9,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 · TUM-Dynamics · ATE"}},
     {"model":"CUT3R","ds":"Sintel","metric":"ate","obs":"0.2138","paper":"0.217","d":-1.5,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 · Sintel · CUT3R row"}},
-    {"model":"UniK3D Large","ds":"NYU","metric":"abs_rel","obs":"0.0749","paper":"0.074","d":1.2,"task":"depth","cite":{"src":"UniK3D","who":"Piccinelli et al. 2025","arxiv":"2503.16591","loc":"Table 18 · NYUv2 · UniK3D-L metric (no align)"}}
+    {"model":"UniK3D Large","ds":"NYU","metric":"abs_rel","obs":"0.0749","paper":"0.074","d":1.2,"task":"depth","cite":{"src":"UniK3D","who":"Piccinelli et al. 2025","arxiv":"2503.16591","loc":"Table 18 · NYUv2 · UniK3D-L metric (no align)"}},
+    {"model":"CUT3R","ds":"NYU","metric":"abs_rel","obs":"0.0858","paper":"0.086","d":-0.2,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 1 · NYU · prepared set + median_lineage (plumbline-native)"}},
+    {"model":"CUT3R","ds":"KITTI","metric":"abs_rel","obs":"0.0953","paper":"0.092","d":3.6,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 1 · KITTI · lineage + median_lineage"}},
+    {"model":"CUT3R","ds":"Bonn","metric":"abs_rel","obs":"0.0768","paper":"0.078","d":-1.5,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 2 · Bonn · video rgb_110 + scale_weiszfeld"}}
   ]
   </script>
 
   <!-- Companion metrics: additional numbers audited from the SAME paper rows as
        the verified cells (e.g. a pose table reports mAA/RRA/RTA together; a
        Table-4 trajectory row reports ATE/RPE-trans/RPE-rot). Display-only — these
-       do NOT count toward the verified-results stat (that's the 36 primary cells). -->
+       do NOT count toward the verified-results stat (that's the 42 primary cells). -->
   <script type="application/json" id="companion-cells">
   [
     {"model":"DUSt3R","ds":"KITTI","metric":"delta_1","obs":"0.8661","paper":"0.8660","d":0.0,"task":"depth","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 · KITTI · δ₁ F(I,I)"}},
@@ -252,54 +255,9 @@
   <!-- Informational / off-paper cells: real plumbline numbers that DON'T land
        within their tolerance (status "info") or have no paper target (status
        "target"). Shown to make the evaluation surface complete; clearly NOT
-       paper-matches, and excluded from the 36 verified count. -->
+       paper-matches, and excluded from the 42 verified count. -->
   <script type="application/json" id="info-cells">
 [
-{
-"model": "CUT3R",
-"ds": "NYU",
-"metric": "abs_rel",
-"obs": "0.0522",
-"paper": "0.086",
-"d": -39.3,
-"status": "info",
-"cite": {
-"src": "CUT3R",
-"who": "Wang et al. 2025",
-"arxiv": "2501.12387",
-"loc": "Table 1 \u00b7 NYU \u2014 D24 protocol delta (off-paper better)"
-}
-},
-{
-"model": "CUT3R",
-"ds": "KITTI",
-"metric": "abs_rel",
-"obs": "0.0858",
-"paper": "0.092",
-"d": -6.7,
-"status": "info",
-"cite": {
-"src": "CUT3R",
-"who": "Wang et al. 2025",
-"arxiv": "2501.12387",
-"loc": "Table 1 \u00b7 KITTI \u2014 D24 protocol delta"
-}
-},
-{
-"model": "CUT3R",
-"ds": "Bonn",
-"metric": "abs_rel",
-"obs": "0.0536",
-"paper": "0.078",
-"d": -31.3,
-"status": "info",
-"cite": {
-"src": "CUT3R",
-"who": "Wang et al. 2025",
-"arxiv": "2501.12387",
-"loc": "Table 2 \u00b7 Bonn \u2014 D24 protocol delta"
-}
-},
 {
 "model": "MonST3R",
 "ds": "KITTI",
