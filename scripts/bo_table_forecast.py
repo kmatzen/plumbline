@@ -109,11 +109,16 @@ def fit(cells, prior_sd=0.8, noise_sd=0.35, calib=1.0):
     methods = sorted({c["model"] for c in cells})
     datasets = sorted({c["ds"] for c in cells})
     protos = sorted({c["proto"] for c in cells})
-    mi = {m: i for i, m in enumerate(methods)}
+    # skill is PER TASK: (method, task) is the unit, so a method's pose results do
+    # NOT inform its depth predictions. An unobserved (method, task) — e.g. MASt3R
+    # depth — reverts to the prior (≈ average) with wide uncertainty instead of
+    # inheriting the method's skill from the other task.
+    mtasks = sorted({(m, t) for m in methods for t in CAPABILITY.get(m, ["depth", "pose"])})
+    mti = {mt: i for i, mt in enumerate(mtasks)}
     di = {d: i for i, d in enumerate(datasets)}
     pi = {p: i for i, p in enumerate(protos)}
-    nM, nD, nP = len(methods), len(datasets), len(protos)
-    P = 1 + nM + nD + nP
+    nMT, nD, nP = len(mtasks), len(datasets), len(protos)
+    P = 1 + nMT + nD + nP
 
     # per-metric standardisation of log-score → direction-aware goodness g
     stats = {}
@@ -126,15 +131,15 @@ def fit(cells, prior_sd=0.8, noise_sd=0.35, calib=1.0):
         mu, sd = stats[c["metric"]]
         return SIGN[c["metric"]] * (np.log(c["y"]) - mu) / sd
 
-    def feat(m, d, p):
+    def feat(m, d, p, task):
         x = np.zeros(P)
         x[0] = 1.0
-        x[1 + mi[m]] = 1.0
-        x[1 + nM + di[d]] = 1.0
-        x[1 + nM + nD + pi[p]] = 1.0
+        x[1 + mti[(m, task)]] = 1.0
+        x[1 + nMT + di[d]] = 1.0
+        x[1 + nMT + nD + pi[p]] = 1.0
         return x
 
-    X = np.array([feat(c["model"], c["ds"], c["proto"]) for c in cells])
+    X = np.array([feat(c["model"], c["ds"], c["proto"], METRIC_TASK[c["metric"]]) for c in cells])
     g = np.array([good(c) for c in cells])
     tau = np.full(P, prior_sd**2)
     tau[0] = 10.0**2
@@ -142,7 +147,10 @@ def fit(cells, prior_sd=0.8, noise_sd=0.35, calib=1.0):
     mu_w = Sigma @ (X.T @ g) / noise_sd**2
 
     def predict(m, d, p, metric):
-        x = feat(m, d, p)
+        task = METRIC_TASK[metric]
+        if (m, task) not in mti:
+            return None
+        x = feat(m, d, p, task)
         gm = float(x @ mu_w)
         gs = float(np.sqrt(x @ Sigma @ x + noise_sd**2))
         mu, sd = stats[metric]
@@ -150,15 +158,17 @@ def fit(cells, prior_sd=0.8, noise_sd=0.35, calib=1.0):
         ls = sd * gs * calib                       # log-score std, LOO-calibrated
         return float(np.exp(lm)), float(np.exp(lm - ls)), float(np.exp(lm + ls))
 
-    grid = [feat(m, d, p) for m in methods for d in datasets for p in protos]
+    grid = [feat(m, d, p, t) for (m, t) in mtasks for d in datasets for p in protos]
 
-    def info_gain(m, d, p):
-        Sx = Sigma @ feat(m, d, p)
-        return float(sum((z @ Sx) ** 2 for z in grid) / (noise_sd**2 + feat(m, d, p) @ Sx))
+    def info_gain(m, d, p, task):
+        x = feat(m, d, p, task)
+        Sx = Sigma @ x
+        return float(sum((z @ Sx) ** 2 for z in grid) / (noise_sd**2 + x @ Sx))
 
     model = {  # the fitted model, small enough to embed + evaluate in JS
         "methods": methods, "datasets": datasets, "protos": protos,
-        "nM": nM, "nD": nD, "noise2": noise_sd**2,
+        "method_tasks": [f"{m}|{t}" for (m, t) in mtasks],
+        "nMT": nMT, "nD": nD, "noise2": noise_sd**2,
         "mu": [round(float(v), 5) for v in mu_w],
         "Sigma": [[round(float(v), 5) for v in row] for row in Sigma],
         "stats": {k: [round(stats[k][0], 5), round(stats[k][1], 5), SIGN[k]] for k in stats},
@@ -179,9 +189,12 @@ def calibrate(cells):
         c = cells[i]
         try:
             _, _, _, pr, _, _ = fit(cells[:i] + cells[i + 1:])
-            mean, lo, hi = pr(c["model"], c["ds"], c["proto"], c["metric"])
+            out = pr(c["model"], c["ds"], c["proto"], c["metric"])
         except KeyError:
             continue
+        if out is None:        # held-out cell was the only obs of its (method, task) — skip
+            continue
+        mean, lo, hi = out
         ls = max((np.log(hi) - np.log(lo)) / 2, 1e-9)        # log-space predictive std
         z.append(abs(np.log(c["y"]) - np.log(mean)) / ls)    # |standardised residual|
     return float(np.percentile(z, 68)) if z else 1.0          # 68th pct → 68% coverage at ±1σ
@@ -231,7 +244,7 @@ def suggest(cells, measured, methods, datasets, predict, info_gain, topk=15):
                 if not p or (m, d, k, p) in measured:
                     continue
                 try:
-                    ig, pred = info_gain(m, d, p), predict(m, d, p, k)[0]
+                    ig, pred = info_gain(m, d, p, METRIC_TASK[k]), predict(m, d, p, k)[0]
                 except KeyError:
                     continue
                 c = cost(d, m)
@@ -271,10 +284,13 @@ def main():
             c = cells[i]
             _, _, _, pr, _, _ = fit(cells[:i] + cells[i + 1:], calib=kappa)
             try:
-                mean, lo, hi = pr(c["model"], c["ds"], c["proto"], c["metric"])
+                out = pr(c["model"], c["ds"], c["proto"], c["metric"])
             except KeyError:  # held-out cell was the sole observation of some level
+                out = None
+            if out is None:   # also sole obs of its (method, task) → can't predict
                 cold += 1
                 continue
+            mean, lo, hi = out
             errs[c["metric"]].append(abs(mean - c["y"]) / c["y"])
             tot += 1
             hits += lo <= c["y"] <= hi
@@ -306,7 +322,10 @@ def main():
     if args.json:
         out = []
         for m, d, p, k in gaps():
-            mean, lo, hi = predict(m, d, p, k)
+            pr = predict(m, d, p, k)
+            if pr is None:
+                continue
+            mean, lo, hi = pr
             out.append({"model": m, "ds": d, "proto": p, "metric": k,
                         "pred": round(mean, 4), "lo": round(lo, 4), "hi": round(hi, 4)})
         print(json.dumps(out, separators=(",", ":")))
@@ -322,7 +341,10 @@ def main():
 
     print(f"\nACQUISITION — top {args.topk} (method, dataset, protocol) by info gain:")
     seen = {(c["model"], c["ds"], c["proto"]) for c in cells}
-    cand = sorted(((m, d, p, info_gain(m, d, p)) for m in methods for d in datasets for p in protos
+
+    def ig_mdp(m, d, p):  # best info-gain over the tasks this method can do
+        return max(info_gain(m, d, p, t) for t in CAPABILITY.get(m, ["depth", "pose"]))
+    cand = sorted(((m, d, p, ig_mdp(m, d, p)) for m in methods for d in datasets for p in protos
                    if (m, d, p) not in seen), key=lambda r: -r[3])[: args.topk]
     for i, (m, d, p, ig) in enumerate(cand, 1):
         print(f"  {i:<3} {m:13} {d:8} ·{p:28} ig {ig:.2f}")
