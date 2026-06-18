@@ -105,7 +105,7 @@ def load_cells():
     return out
 
 
-def fit(cells, prior_sd=0.8, noise_sd=0.35):
+def fit(cells, prior_sd=0.8, noise_sd=0.35, calib=1.0):
     methods = sorted({c["model"] for c in cells})
     datasets = sorted({c["ds"] for c in cells})
     protos = sorted({c["proto"] for c in cells})
@@ -146,8 +146,8 @@ def fit(cells, prior_sd=0.8, noise_sd=0.35):
         gm = float(x @ mu_w)
         gs = float(np.sqrt(x @ Sigma @ x + noise_sd**2))
         mu, sd = stats[metric]
-        lm = mu + SIGN[metric] * sd * gm          # back to log-score
-        ls = sd * gs                               # log-score std
+        lm = mu + SIGN[metric] * sd * gm           # back to log-score
+        ls = sd * gs * calib                       # log-score std, LOO-calibrated
         return float(np.exp(lm)), float(np.exp(lm - ls)), float(np.exp(lm + ls))
 
     grid = [feat(m, d, p) for m in methods for d in datasets for p in protos]
@@ -164,8 +164,24 @@ def fit(cells, prior_sd=0.8, noise_sd=0.35):
         "stats": {k: [round(stats[k][0], 5), round(stats[k][1], 5), SIGN[k]] for k in stats},
         "metric_task": METRIC_TASK,
         "cap": {m: CAPABILITY.get(m, ["depth", "pose"]) for m in methods},
+        "calib": round(calib, 4),
     }
     return methods, datasets, protos, predict, info_gain, model
+
+
+def calibrate(cells):
+    """LOO factor κ s.t. the inflated ±1σ band covers ~68% of held-out scores."""
+    z = []
+    for i in range(len(cells)):
+        c = cells[i]
+        try:
+            _, _, _, pr, _, _ = fit(cells[:i] + cells[i + 1:])
+            mean, lo, hi = pr(c["model"], c["ds"], c["proto"], c["metric"])
+        except KeyError:
+            continue
+        ls = max((np.log(hi) - np.log(lo)) / 2, 1e-9)        # log-space predictive std
+        z.append(abs(np.log(c["y"]) - np.log(mean)) / ls)    # |standardised residual|
+    return float(np.percentile(z, 68)) if z else 1.0          # 68th pct → 68% coverage at ±1σ
 
 
 def suggest(cells, measured, methods, datasets, predict, info_gain, topk=15):
@@ -238,19 +254,19 @@ def main():
 
     cells = load_cells()
     measured = {(c["model"], c["ds"], c["metric"], c["proto"]) for c in cells}
-    methods, datasets, protos, predict, info_gain, model = fit(cells)
+    kappa = calibrate(cells)
+    methods, datasets, protos, predict, info_gain, model = fit(cells, calib=kappa)
 
     if args.model:
         print(json.dumps(model, separators=(",", ":")))
         return
 
     if args.loo:
-        import statistics
         errs = {k: [] for k in PRIMARY}
         hits = tot = cold = 0
         for i in range(len(cells)):
             c = cells[i]
-            _, _, _, pr, _, _ = fit(cells[:i] + cells[i + 1:])
+            _, _, _, pr, _, _ = fit(cells[:i] + cells[i + 1:], calib=kappa)
             try:
                 mean, lo, hi = pr(c["model"], c["ds"], c["proto"], c["metric"])
             except KeyError:  # held-out cell was the sole observation of some level
@@ -259,7 +275,7 @@ def main():
             errs[c["metric"]].append(abs(mean - c["y"]) / c["y"])
             tot += 1
             hits += lo <= c["y"] <= hi
-        print(f"LEAVE-ONE-OUT CV  ({len(cells)} cells)\n")
+        print(f"LEAVE-ONE-OUT CV  ({len(cells)} cells, calibration κ={kappa:.2f})\n")
         for k in PRIMARY:
             if errs[k]:
                 print(f"  {k:8} median rel-err {statistics.median(errs[k]) * 100:5.1f}%  "
