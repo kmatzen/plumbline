@@ -26,15 +26,27 @@ import numpy as np
 
 EXPLORE = "site/explore.html"
 
-# Protocol identity = (citing paper, table). Two cells share a protocol iff they
-# were scored under the same paper's same eval table — the recipe that makes scores
-# comparable. (MoGe Table 3 unifies MoGe + DA-V2 baselines across 8 datasets; DUSt3R
-# Table 2 and MonST3R Table 3 stay separate — different crops.) Mirrored by the site.
+# Protocol = the eval RECIPE, read from the recorded recipe (which paper's eval
+# TABLE the score is scored under, + dataset) — NOT the method. This reproduces the
+# plumbline `protocol:` family per cell: the eval source `src` is the paper whose
+# recipe was used (e.g. a DA-V2 baseline row in MoGe's Table 3 has src=MoGe →
+# moge-eval, regardless that the method is DA-V2). Method never appears here, so
+# protocol is an independent tensor axis. Mirrored by recipeOf() in the site.
 def proto_of(model, ds, src, loc):
-    src = re.sub(r"\s*\(.*?\)", "", src or "").strip()  # drop parentheticals
-    src = {"Depth Anything V2": "DA-V2", "Metric3D v2": "Metric3D", "Depth Anything 3": "DA3"}.get(src, src)
-    m = re.search(r"Table [IVXLC]+\b|Table \d+\w*", loc or "")
-    return f"{src} {m.group(0) if m else 'Table ?'}"
+    s = re.sub(r"\s*\(.*?\)", "", src or "").strip()
+    if s == "MoGe":
+        return "moge-eval (affine)"                       # *_moge
+    if s == "DUSt3R":
+        return "dust3r-table2 (eigen+ratio-med)" if ds == "NYU" else "dust3r-lineage (median, no-crop)"
+    if s == "MonST3R":
+        return "dust3r-lineage (median, no-crop)"         # *_dust3r_lineage
+    if s == "CUT3R":
+        return "video (per-sequence)" if ds == "Bonn" else "dust3r-lineage (median, no-crop)"
+    if s == "UniK3D":
+        return "metric (no-align)"                        # *_metric
+    if s == "Depth Pro":
+        return "metric (no-align)" if ds in ("Booster", "ETH3D", "iBims-1", "Sun-RGBD") else "eigen-2014 (crop+median)"
+    return "eigen-2014 (crop+median)"                     # nyu_eigen_2014 / kitti_eigen_garg
 
 
 def load_cells():
@@ -45,15 +57,13 @@ def load_cells():
         for c in json.loads(m.group(1)):
             if c.get("task") != "depth" or c.get("metric") != "abs_rel":
                 continue
-            k = (c["model"], c["ds"])
+            cite = c.get("cite") or {}
+            proto = proto_of(c["model"], c["ds"], cite.get("src", ""), cite.get("loc", ""))
+            k = (c["model"], c["ds"], proto)  # a model+dataset can be measured under 2 recipes
             if k in seen:
                 continue
             seen.add(k)
-            cite = c.get("cite") or {}
-            out.append({
-                "model": c["model"], "ds": c["ds"], "y": float(c["obs"]),
-                "proto": proto_of(c["model"], c["ds"], cite.get("src", ""), cite.get("loc", "")),
-            })
+            out.append({"model": c["model"], "ds": c["ds"], "y": float(c["obs"]), "proto": proto})
     return out
 
 
@@ -112,14 +122,13 @@ def main():
     args = ap.parse_args()
 
     cells = load_cells()
-    measured = {(c["model"], c["ds"], c["proto"]) for c in cells}  # measured is PER protocol
+    measured = {(c["model"], c["ds"], c["proto"]) for c in cells}
     models, datasets, protos, predict, info_gain = fit(cells)
-    pds = proto_datasets(cells)
 
-    # Per protocol, fill its table for ALL models on its datasets (the leaderboard);
-    # cells measured under a *different* protocol are counterfactual predictions here.
+    # FULL TENSOR: every (model, dataset, protocol) — measured or predicted. No
+    # restriction to a protocol's "own" datasets; the protocol is a free axis.
     def gaps_for(p):
-        return [(m, d) for m in models for d in sorted(pds[p]) if (m, d, p) not in measured]
+        return [(m, d) for m in models for d in datasets if (m, d, p) not in measured]
 
     if args.json:
         out = []
@@ -135,25 +144,21 @@ def main():
         print(json.dumps(out, separators=(",", ":")))
         return
 
-    print(f"{len(cells)} cells · {len(models)} models × {len(datasets)} datasets × "
-          f"{len(protos)} protocols\n")
-    print("PER-PROTOCOL leaderboard fill-in (one protocol per table → scores comparable):")
-    for p in sorted(protos, key=lambda p: -len(pds[p])):
-        ds = sorted(pds[p])
-        run = sum(1 for m in models for d in ds if (m, d, p) in measured)
-        gaps = gaps_for(p)
-        print(f"\n  ◇ {p}  ({len(models)} models × {len(ds)} datasets · {run} run, {len(gaps)} predicted)")
-        for m, d in gaps[:3]:
-            mean, sd = predict(m, d, p)
-            print(f"      {m:14} {d:9} ~{mean:.4f}  (1σ {np.exp(np.log(mean)-sd):.4f}–{np.exp(np.log(mean)+sd):.4f})")
-        if len(gaps) > 3:
-            print(f"      … +{len(gaps)-3} more")
+    cube = len(models) * len(datasets) * len(protos)
+    print(f"{len(cells)} observed cells → full tensor {len(models)} models × "
+          f"{len(datasets)} datasets × {len(protos)} protocols = {cube} cells "
+          f"({len(cells)} observed, {cube - len(cells)} predicted)\n")
+    print("PROTOCOLS (recipe, read per-cell from the recorded eval — never the method):")
+    for p in protos:
+        n = sum(1 for c in cells if c["proto"] == p)
+        ms = sorted({c["model"] for c in cells if c["proto"] == p})
+        print(f"  ◇ {p:32} {n:2} obs · methods: {', '.join(ms)}")
 
-    print(f"\nACQUISITION — top {args.topk} (model, dataset, protocol) evals by info gain:")
-    cand = [(m, d, p, *predict(m, d, p)[:1], info_gain(m, d, p))
+    print(f"\nACQUISITION — top {args.topk} (model, dataset, protocol) by info gain:")
+    cand = [(m, d, p, predict(m, d, p)[0], info_gain(m, d, p))
             for p in protos for m, d in gaps_for(p)]
     for i, (m, d, p, mean, ig) in enumerate(sorted(cand, key=lambda r: -r[4])[: args.topk], 1):
-        print(f"  {i:<3} {m:14} {d:9} ·{p:18} ~{mean:.4f}   infogain {ig:.2f}")
+        print(f"  {i:<3} {m:14} {d:9} ·{p:32} ~{mean:.4f}   infogain {ig:.2f}")
 
 
 if __name__ == "__main__":
