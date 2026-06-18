@@ -59,6 +59,10 @@
       border-bottom: 1px solid var(--rule); white-space: nowrap; z-index: 2;
     }
     table.matrix thead th.corner { text-align: left; color: var(--fg-dim); position: sticky; left: 0; z-index: 3; }
+    table.matrix thead th.dcol { cursor: pointer; user-select: none; }
+    table.matrix thead th.dcol:hover { color: var(--fg-soft); background: rgba(212,240,0,0.05); }
+    table.matrix thead th.sorted { color: var(--acc); border-bottom-color: var(--acc-dim); }
+    table.matrix thead th.corner.sortable { cursor: pointer; } table.matrix thead th.corner.sortable:hover { color: var(--acc); }
     table.matrix tbody th {
       text-align: left; color: var(--fg-soft); font-weight: 600; white-space: nowrap;
       padding: 11px 18px 11px 16px; position: sticky; left: 0; background: var(--bg-1);
@@ -409,6 +413,7 @@
 
       const protobar = document.getElementById("protobar");
       let proto = new URLSearchParams(location.search).get("proto") || null;
+      let sortCol = new URLSearchParams(location.search).get("sort") || null;  // rank methods by this column
 
       // EVERY protocol is available for EVERY metric (the cube is rectangular);
       // count = how many cells are actually observed under (metric, protocol).
@@ -463,6 +468,16 @@
         const lowerBetter = (METRICS.find(x => x.key === metric).dir || "").includes("lower");
         const val = (m, d) => groups[m + "|" + d] ? +groups[m + "|" + d][0].obs
           : (predict(m, d, proto, metric) || {}).pred;
+
+        // sort methods by the clicked column, best on top (nulls last)
+        if (sortCol && cols.includes(sortCol)) {
+          const dir = lowerBetter ? 1 : -1;
+          rows.sort((a, b) => {
+            const va = val(a, sortCol), vb = val(b, sortCol);
+            if (va == null) return 1; if (vb == null) return -1;
+            return dir * (va - vb);
+          });
+        }
         const colRange = {};
         cols.forEach(d => {
           const vs = rows.map(m => val(m, d)).filter(v => v != null);
@@ -474,8 +489,8 @@
         };
         const bestV = d => lowerBetter ? colRange[d].lo : colRange[d].hi;  // best score in column
 
-        let html = "<thead><tr><th class='corner'>model \\ benchmark</th>";
-        cols.forEach(d => html += `<th scope="col">${d}</th>`);
+        let html = `<thead><tr><th class='corner${sortCol ? " sortable" : ""}' title="${sortCol ? "clear sort" : "click a benchmark to rank methods"}">model \\ benchmark</th>`;
+        cols.forEach(d => html += `<th scope="col" class="dcol${sortCol === d ? " sorted" : ""}" data-col="${d}" title="rank methods by ${d}">${d}${sortCol === d ? (lowerBetter ? " ↑" : " ↓") : ""}</th>`);
         html += "</tr></thead><tbody>";
         rows.forEach(mname => {
           html += `<tr><th scope="row">${mname}</th>`;
@@ -508,6 +523,11 @@
           el.addEventListener("focus", () => show(g, el));
           el.addEventListener("blur", hide);
         });
+        matrix.querySelectorAll("th.dcol").forEach(th => th.addEventListener("click", () => {
+          sortCol = sortCol === th.dataset.col ? null : th.dataset.col;  // click again to clear
+          render();
+        }));
+        matrix.querySelector("th.corner").addEventListener("click", () => { sortCol = null; render(); });
       }
 
       function show(g, el) {
