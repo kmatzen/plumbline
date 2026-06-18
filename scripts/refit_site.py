@@ -29,9 +29,11 @@ def main():
 
     print("• re-embedding the model into the site…")
     h = open("site/explore.html").read()
-    h2 = re.sub(r'(<script type="application/json" id="model-fit">\n).*?(\n  </script>)',
-                lambda m: m.group(1) + model + m.group(2), h, flags=re.S)
-    if h2 == h:
+    # Use subn's count, not h2 == h: an unchanged fit (already embedded) is a
+    # no-op substitution, NOT a missing block — keying on equality false-errors.
+    h2, n = re.subn(r'(<script type="application/json" id="model-fit">\n).*?(\n  </script>)',
+                    lambda m: m.group(1) + model + m.group(2), h, flags=re.S)
+    if n == 0:
         sys.exit("ERROR: model-fit block not found in site/explore.html")
     open("site/explore.html", "w").write(h2)
 
