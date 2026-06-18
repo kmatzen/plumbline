@@ -88,12 +88,20 @@ def _is_metric_variant(variant: str) -> bool:
 
 
 def _ensure_dav2_on_path() -> None:
-    """Add ``$DAV2_ROOT`` to ``sys.path`` so `depth_anything_v2.dpt` imports.
+    """Put the vendored ``depth_anything_v2`` package on ``sys.path``.
 
-    Default: ``/workspace/deps/depth-anything-v2``. Clone via
-    ``git clone https://github.com/DepthAnything/Depth-Anything-V2 <root>``.
+    DA-V2's paper inference code is vendored under
+    ``plumbline/_vendor/depth_anything_v2`` (Apache-2.0; see
+    THIRD_PARTY_NOTICES.md). dpt.py uses package-relative imports
+    (``from .dinov2 import …``), so the directory *containing* the
+    ``depth_anything_v2/`` package must be importable. ``$DAV2_ROOT`` overrides
+    it for a dev checkout of the upstream github repo.
     """
-    root = os.environ.get("DAV2_ROOT", "/workspace/deps/depth-anything-v2")
+    root = os.environ.get("DAV2_ROOT")
+    if not root:
+        root = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "_vendor", "depth_anything_v2"
+        )
     if os.path.isdir(root) and root not in sys.path:
         sys.path.insert(0, root)
 
@@ -176,17 +184,18 @@ class DepthAnythingV2Adapter(Model):
         except ImportError as exc:
             import importlib.util
 
-            # Distinguish "repo not found" from "repo present but one of its
-            # own deps (e.g. opencv-python / cv2) isn't installed". The repo's
-            # dpt.py does `import cv2` at module top, so a missing cv2 raises
-            # ImportError here and the old message wrongly told the user to
-            # clone a repo they already have. Surface the real cause instead.
+            # Distinguish "package not found" from "package present but one of
+            # its own deps (e.g. opencv-python / cv2) isn't installed". The
+            # vendored dpt.py does `import cv2` at module top, so a missing cv2
+            # raises ImportError here — surface the real cause rather than
+            # blaming the (now vendored) package.
             if importlib.util.find_spec("depth_anything_v2") is None:
                 raise ImportError(
-                    "DepthAnythingV2Adapter(source='paper') needs the paper's "
-                    "repo. Clone https://github.com/DepthAnything/Depth-Anything-V2 "
-                    "and point $DAV2_ROOT at it (default "
-                    "/workspace/deps/depth-anything-v2)."
+                    "DepthAnythingV2Adapter(source='paper') could not import the "
+                    "vendored depth_anything_v2 package "
+                    "(plumbline/_vendor/depth_anything_v2). The install is likely "
+                    "corrupt; reinstall plumbline, or set $DAV2_ROOT to an "
+                    "upstream Depth-Anything-V2 checkout."
                 ) from exc
             raise ImportError(
                 "DepthAnythingV2Adapter(source='paper'): the repo at "
