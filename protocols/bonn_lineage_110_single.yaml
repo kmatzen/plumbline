@@ -1,0 +1,50 @@
+# Bonn single-frame depth on the lineage's pre-extracted rgb_110 set.
+#
+# Identical to `bonn_dust3r_lineage_single` EXCEPT it scores on the
+# `rgb_110/` + `depth_110/` 110-frame subsets paired by sorted index —
+# the EXACT frames MonST3R/CUT3R `eval_metadata.py` globs (their Table 3
+# DUSt3R baseline and video-depth cells both use this set). Plain
+# per-frame iteration over all frames (`bonn_dust3r_lineage_single`)
+# instead spans ~250-450 frames/seq and lands on a slightly different
+# number; this protocol is the like-for-like comparison to MonST3R's
+# published baselines.
+#
+# Empirical (scripts/_dust3r_bonn_rgb110_probe.py, 2026-06-18): DUSt3R
+# F(I,I) on this set = AbsRel 0.1384 / δ₁ 0.8331 vs MonST3R Table 3's
+# DUSt3R baseline 0.141 / 0.825 (−1.8 % / +1.0 %, MATCH). The
+# all-frames protocol gives 0.1337 (−5.2 %, just outside tolerance) —
+# same model, different frame subset.
+
+name: bonn_lineage_110_single
+description: >
+  Bonn RGB-D Dynamic single-frame depth on the MonST3R/CUT3R rgb_110
+  set: 5 sequences (balloon2, crowd2, crowd3, person_tracking2,
+  synchronous), the pre-extracted 110-frame rgb_110/+depth_110/ subset
+  paired by sorted index, one Sample per frame, max_depth=70, valid-mask
+  = gt > 0, per-frame median scaling. This is the frame set MonST3R
+  Table 3's DUSt3R baseline is scored on.
+
+reference:
+  paper_lineage: >
+    MonST3R (Zhang 2024, arXiv:2410.03825) Table 3 DUSt3R baseline;
+    DUSt3R (Wang 2024c, arXiv:2312.14132).
+  gt_source: "Palazzolo et al. 2019, Bonn RGB-D Dynamic dataset (Asus Xtion, 5000 units/m uint16 depth PNGs)"
+  sequence_list_source: >
+    MonST3R `dust3r/eval_metadata.py` `bonn` entry: seq_list +
+    `rgb_110`/`depth_110` glob.
+
+fixed:
+  dataset:
+    name: bonn
+    kwargs:
+      per_frame: true
+      prepared_110: true
+      max_depth: 70
+      sequences:
+        - balloon2
+        - crowd2
+        - crowd3
+        - person_tracking2
+        - synchronous
+  max_views: 1
+  tasks: [mono_depth]

@@ -1,8 +1,16 @@
-# NYUv2 evaluation under the DUSt3R / MonST3R / CUT3R lineage.
+# NYUv2 evaluation under the MonST3R / CUT3R lineage (no Eigen crop).
 #
-# The DUSt3R-family of papers (DUSt3R, MASt3R, CUT3R, MonST3R, Spann3R,
-# π³, VGGT) all share a NYUv2 protocol that differs from the canonical
-# `nyu_eigen_2014` in three ways:
+# IMPORTANT (2026-06-18): despite the name, DUSt3R's OWN Table 2 number
+# does NOT reproduce under this protocol — DUSt3R (2023) used the
+# classical Eigen-2014 crop and ratio-of-medians, which this protocol
+# drops. Use `nyu_dust3r_table2` for DUSt3R's own cell. This protocol
+# correctly reproduces the LATER papers' own cells (MonST3R, CUT3R,
+# etc.) AND MonST3R's *re-scored* DUSt3R baseline (Table 3 = 0.080, the
+# no-crop number — plumbline's no-crop DUSt3R is 0.0777). The no-crop
+# convention is a MonST3R/CUT3R-era choice, not DUSt3R's.
+#
+# These later papers share a NYUv2 protocol that differs from the
+# canonical `nyu_eigen_2014` in three ways:
 #
 # 1. **GT field = `filled` (colorized-interpolated dense depth)** rather
 #    than `raw` Kinect measurements. The lineage trains and evaluates
@@ -30,8 +38,9 @@
 #
 # Use `protocol: nyu_eigen_2014` for adapters whose paper-table cells
 # are under the modern mono-depth convention (DA-V2, Metric3D-v2, MoGe,
-# Marigold, GeoWizard, Depth Pro, DA3); use `protocol: nyu_dust3r_lineage`
-# for DUSt3R-family adapters.
+# Marigold, GeoWizard, Depth Pro, DA3); `nyu_dust3r_lineage` for
+# MonST3R / CUT3R / Spann3R / π³ / VGGT own cells; and
+# `nyu_dust3r_table2` for DUSt3R's own Table-2 cell (Eigen crop).
 
 name: nyu_dust3r_lineage
 description: >

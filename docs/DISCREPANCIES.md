@@ -27,7 +27,7 @@ paper code) · 📜 paper-side (unreproducible from the public release) · ⏳ u
 | D3 | VGGT-DTU chamfer (+98 %, 0.756 vs 0.382 mm) | 📜 upstream-blocked: ~1.98× residual is in the public VGGT-1B output; adapter + protocol levers exhausted (PatchmatchNet filter, fp32, 49-view all no-ops). Watch upstream. |
 | D4 | VGGT-ETH3D 3-scene (−9.4 %, 0.642 vs 0.709 m) | 📐 infra landed; apples-to-apples needs the full 13-scene split (D10). |
 | D10 | VGGT-ETH3D full 13-scene split (+23.5 %) | 📐 investigated: driven entirely by one scene (`terrains`, Comp 10.18 m); 12/13 scenes beat paper. Open: is `terrains` a model failure or a scene-specific GT artifact. |
-| D28 | DUSt3R Table 2 indoor (NYU/Bonn) | 📜 investigated: indoor scoring recipe is paper-private; KITTI ✅ + CO3Dv2 ✅ anchor the adapter. |
+| D28 | DUSt3R Table 2 indoor (NYU/Bonn) | ✅ **RESOLVED 2026-06-18**: both were wrong-recipe/wrong-target, not paper-private. NYU → Eigen-2014 crop + ratio-of-medians (`nyu_dust3r_table2`) = 0.0637/0.065 ✅. Bonn → re-target to MonST3R Table 3's DUSt3R baseline (0.141, same rgb_110 seqs) = 0.1384/0.141 ✅. "Static model" claim retracted. |
 | D29 | DA-V2 native-DIODE Table 2 (`domain=both`) | 📐 investigated: outdoor preprocessing gap; the MoGe-bundle cells on the same dataset are ✅. |
 | D31 | DA-V2 native-ETH3D Table 2 (−32 %) | 📐 RGB/GT misalignment fixed; residual full-13-scene protocol gap still OPEN. |
 | D32 | DA-V2 native-Sintel Table 2 (under paper) | 📐 parked: sky-mask / aggregation recipe. |
@@ -703,7 +703,54 @@ explained by the 3-vs-13-scene subset; the actual ±5 % gate
 properly attaches to D10 (full-split sweep), not to this 3-scene
 configuration.
 
-### D28 · DUSt3R Table 2 indoor cells off-paper — lineage-recipe ≠ DUSt3R-paper-recipe   🔬 INVESTIGATED 2026-05-28
+### D28 · DUSt3R Table 2 indoor cells off-paper — lineage-recipe ≠ DUSt3R-paper-recipe   ✅ RESOLVED 2026-06-18
+
+> **RESOLVED 2026-06-18 (anima, official `plumbline reproduce` runs).** The
+> 2026-05-28 "paper-private indoor recipe" conclusion below was wrong — both
+> cells were fixable, and one explanation it gave was self-contradictory.
+>
+> **NYU (0.0777 → 0.0637 vs 0.065 ✅).** The cell inherited `nyu_dust3r_lineage`
+> (filled GT, **no Eigen crop**, median-of-ratios) on the false premise that
+> "DUSt3R is the origin of the lineage protocol." But the no-crop convention is a
+> *later* MonST3R/CUT3R choice; DUSt3R (2023) reports under the **classical
+> Eigen-2014 crop + ratio-of-medians** (its own §4.3: "the medians of the
+> predicted depths and the ground-truth ones"). A 654-image recipe sweep over one
+> byte-faithful inference pass (`scripts/_dust3r_nyu_recipe_probe.py`):
+>
+> | recipe (filled GT) | AbsRel | δ₁ |
+> |---|---|---|
+> | no-crop + median (old cell) | 0.0777 | 0.9101 |
+> | Eigen-crop + median | 0.0577 | 0.9495 |
+> | **Eigen-crop + median_lineage** | **0.0637** | **0.9456** |
+> | (paper) | 0.0650 | 0.9402 |
+>
+> Independently corroborated: **MonST3R Table 3 re-scores DUSt3R-NYU *no-crop* at
+> 0.080** — exactly plumbline's 0.0777 — while DUSt3R's *own* crop gives 0.065 ≈
+> plumbline's 0.0637. The Eigen crop *is* the 0.065↔0.080 gap. Fix: protocol →
+> `nyu_dust3r_table2`, estimator → `median_lineage`.
+>
+> **Bonn (0.1337 → 0.1384 vs 0.141 ✅).** The "DUSt3R is a static model, it fails
+> on dynamic Bonn" explanation was **self-contradictory** — DUSt3R's own paper
+> reports 0.0808 on Bonn, so the model handles the data. A per-sequence probe
+> (`scripts/_dust3r_bonn_recipe_probe.py`) ruled out *every* recipe lever (cap
+> 10/70/none, estimator, per-seq vs per-frame scale — all near-no-ops); the gap is
+> purely the **sequence set**. DUSt3R reproduces the paper on the simpler seqs
+> (balloon2 0.085 ≈ 0.0808) and blows up only on the dense crowds. plumbline
+> evaluates **MonST3R's 2024 hard-5 selection** (hard-coded in their
+> `eval_metadata.py`), which DUSt3R's 2023 Table 2 predates and does not specify
+> (no eval code shipped to recover it). The apples-to-apples target is therefore
+> **MonST3R Table 3's DUSt3R baseline, 0.141**, scored on exactly that 5-seq
+> `rgb_110` set (PDF-verified, ICLR 2025 p.8). plumbline on `rgb_110`
+> (`bonn_lineage_110_single`, new loader `prepared_110`) = **0.1384 / δ₁ 0.8331**,
+> −1.8 % (the all-frames variant lands 0.1337, −5.2 %). Same pattern as
+> `dust3r-co3dv2-pose` targeting MASt3R's DUSt3R baseline.
+>
+> The full MonST3R Table 3 DUSt3R row cross-checks all three plumbline numbers:
+> NYU 0.080 (no-crop) ✓, KITTI 0.112 (plumbline 0.1049, also matches DUSt3R-own
+> 0.1074) ✓, Bonn 0.141 ✓.
+
+#### Original 2026-05-28 investigation (superseded by the above)
+
 
 End-to-end GPU run of the three DUSt3R-own-paper depth pins (PR `dust3r-depth-pin`,
 RTX 3090, 2026-05-28), against DUSt3R Table 2 "DUSt3R 512" row (Wang 2024, CVPR,

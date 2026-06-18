@@ -120,11 +120,18 @@ class BonnDataset(Dataset):
         per_frame: bool = False,
         frame_selection: str = "even",
         frame_start: int = 0,
+        prepared_110: bool = False,
     ) -> None:
         self.split = split
         self.num_frames = int(num_frames)
         self.max_depth = float(max_depth)
         self.per_frame = bool(per_frame)
+        # prepared_110: use MonST3R/CUT3R's pre-extracted `rgb_110/`+`depth_110/`
+        # 110-frame subsets, paired by SORTED INDEX (not timestamp), exactly as
+        # their eval_metadata.py globs them. This is the frame set DUSt3R's
+        # MonST3R-Table-3 baseline (and the lineage video-depth cells) are
+        # scored on; per-frame iteration only.
+        self.prepared_110 = bool(prepared_110)
         if frame_selection not in ("even", "first"):
             raise ValueError(f"frame_selection must be 'even' or 'first'; got {frame_selection!r}")
         # "even" sub-samples across the whole sequence (DepthCrafter-style);
@@ -204,11 +211,36 @@ class BonnDataset(Dataset):
             raise DatasetNotAvailable(f"{seq_dir.name}: no rgb/depth/pose timestamp matches")
         return assoc
 
+    def _prepared_110_pairs(
+        self, seq_dir: Path
+    ) -> list[tuple[float, str, str, NDArray[np.float64]]]:
+        """rgb_110/depth_110 paired by SORTED INDEX (MonST3R Table-3 set).
+
+        MonST3R/CUT3R glob ``rgb_110/*.png`` and ``depth_110/*.png`` sorted and
+        pair them positionally (the subsets were pre-extracted aligned), rather
+        than by timestamp association. Pose is unused for single-frame depth.
+        """
+        rgbs = sorted((seq_dir / "rgb_110").glob("*.png"))
+        deps = sorted((seq_dir / "depth_110").glob("*.png"))
+        if not rgbs or len(rgbs) != len(deps):
+            raise DatasetNotAvailable(
+                f"{seq_dir.name}: prepared_110 needs aligned rgb_110/ + depth_110/ "
+                f"(got {len(rgbs)} rgb, {len(deps)} depth)."
+            )
+        eye = np.eye(4, dtype=np.float64)
+        return [
+            (float(i), f"rgb_110/{r.name}", f"depth_110/{d.name}", eye)
+            for i, (r, d) in enumerate(zip(rgbs, deps, strict=True))
+        ]
+
     def _iter_per_frame(self, seq_dir: Path) -> Iterator[Sample]:
         """Emit one Sample per RGB frame (single-frame Table 3 shape)."""
         sid_base = seq_dir.name.replace("rgbd_bonn_", "")
         k = _intrinsic_matrix(BONN_INTRINSICS)
-        for ts, rgb_rel, depth_rel, _w_from_c in self._associations(seq_dir):
+        frames = (
+            self._prepared_110_pairs(seq_dir) if self.prepared_110 else self._associations(seq_dir)
+        )
+        for ts, rgb_rel, depth_rel, _w_from_c in frames:
             image = read_rgb_uint8(seq_dir / rgb_rel)
             d, v = _load_bonn_depth(seq_dir / depth_rel, max_depth=self.max_depth)
             images_arr = image[None]  # (1, H, W, 3)
@@ -219,7 +251,7 @@ class BonnDataset(Dataset):
             # pose contract holds; downstream pose metrics aren't meaningful
             # for a 1-view sample and are skipped by the runner.
             extrinsics = np.eye(4, dtype=np.float32)[None]
-            sid = f"{sid_base}/{rgb_rel.removeprefix('rgb/').removesuffix('.png')}"
+            sid = f"{sid_base}/{rgb_rel.split('/')[-1].removesuffix('.png')}"
             assert_valid_image(images_arr, name=f"bonn/{sid}/image")
             assert_valid_intrinsics(intrinsics, name=f"bonn/{sid}/intrinsics")
             assert_valid_extrinsics(extrinsics, name=f"bonn/{sid}/extrinsics")
