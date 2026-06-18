@@ -45,16 +45,18 @@ paper_reference:
   primary_metric: abs_rel
   # Audit 2026-04-20: the MoGe Table 3 DIODE cell (Reld 5.33 = 0.0533)
   # cited by the earlier pin is for DA-V2 **ViT-L**, not ViT-S — MoGe
-  # Table 3 is labeled "all methods utilize ViT-Large as backbone."
-  # DA-V2's own Table 2 reports ViT-S DIODE AbsRel=0.073 under a
-  # different (non-affine-invariant-disparity) protocol.
-  # No published ViT-S DIODE number exists under the affine-invariant
-  # disparity protocol this YAML uses. Paper-match pivots to the
-  # ViT-L variant (see moge-vitl-diode-both for the closest apples-
-  # to-apples run on the same protocol).
+  # CORRECTED 2026-06-18: DA-V2 Table 2 DOES report ViT-S DIODE
+  # AbsRel=0.073 / δ₁=0.942 (PDF-verified, ar5iv 2406.09414), and the
+  # affine-invariant scale_shift protocol reproduces it — see the
+  # da-v2-small-diode-indoor-full sibling (full 325-img indoor val →
+  # AbsRel 0.0720 / δ₁ 0.9431, MATCH). This variant stays informational
+  # only because it pins the DIODE devkit's 220-sample subset
+  # (diode_val_indoor.samples.txt), which lands at AbsRel 0.0806 — the
+  # subset, not the protocol, is why it misses. Use -indoor-full for the
+  # paper match.
   value: null
   tolerance_relative: null
-  citation: "Informational only. No published ViT-S DIODE number under affine-invariant disparity protocol. Paper-match variant is ViT-L (see moge-vitl-diode-both)."
+  citation: "Informational only (DIODE devkit 220-sample subset). The paper-matching run is da-v2-small-diode-indoor-full (full 325-img indoor val, AbsRel 0.0720 vs DA-V2 Table 2 ViT-S 0.073)."
   source_confidence: null
 
 notes: >

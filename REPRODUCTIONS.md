@@ -107,7 +107,7 @@ follow-up.
 
 ### Paper-match count
 
-**37 ✅ mono-depth cells + 7 ✅ pose cells = 44 total** with `source_confidence: verified_pdf`:
+**38 ✅ mono-depth cells + 7 ✅ pose cells = 45 total** with `source_confidence: verified_pdf`:
 
 - NYU (8): DA-V2 S/L, Metric3D-v2 L/Giant, MoGe-1 ViT-L, Marigold, DA3, **MonST3R** (lineage protocol, 2026-05-26)
 - **NYU metric / no-align (1, NEW 2026-06-11): UniK3D-Large** (AbsRel 0.0749 vs 0.074, δ₁ 0.9656 vs 0.965) — UniK3D Table 18 zero-shot NYUv2 metric columns; first UniK3D cell, ran on the 1080 Ti

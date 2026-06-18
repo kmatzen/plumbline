@@ -1,0 +1,44 @@
+# Depth Anything V2 (small) on the FULL DIODE-indoor val (325 imgs) — DA-V2 Table 2.
+#
+# DA-V2 Table 2's DIODE 0.073 (ViT-S) is the indoor-conventional number, the
+# same protocol the rest of the site uses for DIODE (UniK3D's 325-img indoor
+# val, MoGe's domain=indoors). Confirmed indoor — NOT combined-val — by the
+# da-v2-small-diode-native domain=both run (AbsRel 0.2196, outdoor-dominated;
+# see that yaml). This cell evaluates all 325 indoor triples (no devkit
+# sample pin, unlike the informational da-v2-small-diode-indoor sibling).
+
+name: da-v2-small-diode-indoor-full
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: small
+
+dataset:
+  name: diode
+  split: val
+  kwargs:
+    domain: indoors
+
+# DA-V2 predicts affine-invariant inverse depth (MiDaS-style disparity).
+tasks:
+  - mono_depth
+scale_alignment: scale_shift
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 50.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.073
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), DIODE column, Depth-Anything-V2 ViT-S row: AbsRel = 0.073. Affine-invariant inverse depth (per table caption). DIODE is evaluated indoor-conventional. Verified by ar5iv PDF read 2026-05-28."
+  source_confidence: verified_pdf
+
+notes: >
+  Full 325-img DIODE-indoor val, the site-consistent DIODE protocol (cf.
+  unik3d-large-diode 325, moge-vitl-diode-indoor). Recorded earlier at AbsRel
+  0.0722 (RTX 3090 Ti, full 325) — a 1.1% match to paper 0.073. Distinct from
+  da-v2-small-diode-indoor (devkit 220-sample pin → 0.0806) and
+  da-v2-small-diode-native (domain=both → 0.2196, outdoor-dominated).
+  Needs DIODE val at $DIODE_ROOT.
