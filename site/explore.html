@@ -39,6 +39,15 @@
     .msep { align-self: center; width: 1px; height: 16px; background: var(--rule); margin: 0 4px 12px; }
     .metric-desc { margin: 12px 0 0; color: var(--fg-dim); font-size: 12.5px; min-height: 1.2em; }
     .metric-desc .dir { color: var(--fg-mute); }
+    /* protocol selector — one protocol per table */
+    .protorow { display: flex; align-items: center; gap: 12px; margin: 12px 0 0; flex-wrap: wrap; }
+    .protolabel { color: var(--fg-dim); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; }
+    .protobar { display: flex; gap: 8px; flex-wrap: wrap; }
+    .ptab { background: var(--bg-2); border: 1px solid var(--rule); border-radius: 3px; color: var(--fg-mute); font: 500 11.5px/1 var(--mono); padding: 6px 10px; cursor: pointer; white-space: nowrap; transition: color 0.14s var(--ease), border-color 0.14s var(--ease); }
+    .ptab:hover { color: var(--fg-soft); }
+    .ptab[aria-selected="true"] { color: var(--acc); border-color: var(--acc-dim); background: rgba(212,240,0,0.06); }
+    .ptab .mc { color: var(--fg-dim); margin-left: 6px; font-weight: 400; }
+    .ptab[aria-selected="true"] .mc { color: var(--acc-dim); }
 
     /* matrix */
     .matwrap { margin: 16px 0 0; overflow-x: auto; border: 1px solid var(--rule); border-radius: 3px; background: var(--bg-1); }
@@ -71,14 +80,22 @@
     .cell .sbadge.ok { color: var(--acc); }
     .cell .sbadge.info { color: #e0a73c; }
     .cell .sbadge.target { color: var(--fg-dim); }
-    .cell .dd { display: inline; font-size: 12.5px; font-weight: 600; color: var(--fg-soft); font-variant-numeric: tabular-nums; }
-    .cell.ok .dd { color: var(--fg); }
-    .cell.info .dd { color: #e0a73c; font-style: italic; }
-    .cell .dd.nt { color: var(--fg-dim); font-style: italic; }
+    /* the score (metric value) is the headline; colour = provenance, not performance rank */
+    .cell .v { display: inline; font-size: 13px; font-weight: 600; color: var(--fg); font-variant-numeric: tabular-nums; }
+    .cell.best .v { font-weight: 800; font-style: normal; }  /* best method in the column */
+    .cell.info .v { color: #e0a73c; font-style: italic; }
+    .cell.target .v { color: var(--fg-soft); }
     .cell .proto { display: block; font-size: 9px; color: var(--fg-dim); margin-top: 3px; letter-spacing: 0.03em; }
     .cell .multi { position: absolute; top: 4px; right: 5px; font-size: 9px; color: var(--acc-dim); }
     .cell.info, .cell.target { background-image: repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.014) 6px 7px); }
     .colmix { display: block; font-size: 9px; font-weight: 400; color: #e0a73c; margin-top: 3px; letter-spacing: 0.03em; }
+    /* BO-predicted fill-in: ghosted, never counted, distinct from runs */
+    /* predicted cells: full-strength colour (so within-column comparison holds);
+       distinguished only by the ~ prefix, italics, and a dashed cell background. */
+    .cell.pred { font-size: 13px; font-variant-numeric: tabular-nums; cursor: help; }
+    .cell.pred .v { font-weight: 600; }
+    .cell.pred:hover, .cell.pred:focus-visible { background: rgba(255,255,255,0.04); outline: none; }
+    table.matrix tbody td:has(.cell.pred) { background: repeating-linear-gradient(45deg, transparent 0 5px, rgba(255,255,255,0.02) 5px 6px); }
 
     /* hover popover */
     .pop {
@@ -130,37 +147,43 @@
     </div>
 
     <div class="xhead">
-      <span class="xnum">reproduction-fidelity matrix</span>
-      <h1>How faithfully we reproduce <em>each paper's own number</em>.</h1>
+      <span class="xnum">model × benchmark scores · one protocol at a time</span>
+      <h1>Benchmark scores under <em>one protocol at a time</em>.</h1>
       <p class="xlede">
-        <b>This is a reproduction harness, not a leaderboard.</b> Each cell answers
-        one question — <em>did a plumbline run land on THAT paper's published number,
-        under THAT paper's protocol?</em> The headline is the <b>deviation Δ</b> from
-        the paper's target; <b>&#10003; verified</b> is within the pinned tolerance,
-        <b>&#8505; off-paper</b> is outside it (the hover says why — protocol delta,
-        prediction method, model limit), <b>&#9671;</b> has no paper target.
-        <b>The protocol tag (·eigen-crop, ·no-crop, ·video&hellip;) matters:</b> two
-        cells in the same column can target different papers, datasets-subsets, crops,
-        or estimators, so <b>a column is NOT a ranking</b> — a “mixed” marker flags
-        the columns where the cells aren't comparable. Only the 44 verified are safe to
-        cite. <b>Switch the metric</b> with the tabs; <b>hover any cell</b> for
-        observed vs paper, the protocol, the eval-set, and the citation.
+        Scores are only comparable under the same eval recipe, so you pick a
+        <b>protocol</b> (a paper's eval table) and the matrix shows just that one —
+        every column is then a <b>fair comparison</b>, and colour ranks weak→best
+        within it. Each cell is the <b>score</b> (the metric value): <b>&#10003;</b>
+        our run <b>reproduces that paper's number</b>, <b>&#8505;</b> it <b>differs</b>
+        (hover for the deviation + why), <b>&#9671;</b> has no paper target.
+        <b>~values</b> are <b>predictions</b> — a Bayesian fit over
+        <b>(method × dataset × protocol × metric)</b> that shares method-skill across
+        metrics (a method seen only in δ₁ still gets an AbsRel score), filling each
+        unrun cell <em>a method can actually produce</em> — depth-only methods are
+        absent from the pose tabs and vice-versa. The <b>best in each column is
+        bold</b>. Only the 44 <b>&#10003;</b> scores are paper-verified. <b>Switch metric</b> with the
+        tabs, <b>protocol</b> with the pills; <b>hover any cell</b> for the paper
+        number, the deviation, and the citation.
       </p>
     </div>
 
     <div class="metricbar" id="metricbar" role="tablist" aria-label="metric"></div>
     <p class="metric-desc" id="metric-desc"></p>
+    <div class="protorow">
+      <span class="protolabel">protocol</span>
+      <div class="protobar" id="protobar" role="tablist" aria-label="protocol"></div>
+    </div>
 
     <div class="matwrap"><table class="matrix" id="matrix"></table></div>
 
     <div class="xlegend">
-      <span style="color:var(--fg-soft)">cell = <b>Δ</b> from <b>that paper's</b> number</span>
-      <span><span class="lglyph" style="color:var(--acc)">&#10003;</span> verified (in tolerance)</span>
-      <span><span class="lglyph info" style="color:#e0a73c">&#8505;</span> off-paper</span>
+      <span style="color:var(--fg-soft)">cell = the <b>score</b></span>
+      <span><span class="swgrad"></span> weak&nbsp;→&nbsp;best <span style="color:var(--fg-dim)">(in column)</span></span>
+      <span style="margin-left:10px"><span class="lglyph" style="color:var(--acc)">&#10003;</span> reproduces paper</span>
+      <span><span class="lglyph info" style="color:#e0a73c">&#8505;</span> differs</span>
       <span><span class="lglyph target">&#9671;</span> no target</span>
-      <span style="margin-left:12px; color:var(--fg-dim)">·tag = protocol</span>
-      <span style="color:#e0a73c">⚠ mixed column ≠ ranking</span>
-      <span style="margin-left:auto; color:var(--fg-dim)">value + citation on hover</span>
+      <span style="font-style:italic">~val = BO-predicted (full-strength, hover for ±1σ)</span>
+      <span style="margin-left:auto; color:var(--fg-dim)">paper Δ + citation on hover</span>
     </div>
 
     <p class="xfoot">
@@ -189,76 +212,76 @@
        REPRODUCTIONS.md "= N total" and the README all agree with
        (tests/test_site_coverage.py). -->
   <script type="application/json" id="verified-cells">
-  [
-    {"model":"DA-V2 Small","ds":"NYU","metric":"abs_rel","obs":"0.0510","paper":"0.053","d":-3.8,"task":"depth","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 · NYU · ViT-S"}},
-    {"model":"DA-V2 Small","ds":"KITTI","metric":"abs_rel","obs":"0.0770","paper":"0.078","d":-1.3,"task":"depth","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 · KITTI · ViT-S"}},
-    {"model":"DA-V2 Base","ds":"KITTI","metric":"abs_rel","obs":"0.0756","paper":"0.078","d":-3.1,"task":"depth","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 · KITTI · ViT-B"}},
-    {"model":"DA-V2 Large","ds":"NYU","metric":"abs_rel","obs":"0.0428","paper":"0.0420","d":1.9,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · NYU · DA-V2 row"}},
-    {"model":"DA-V2 Large","ds":"KITTI","metric":"abs_rel","obs":"0.0710","paper":"0.074","d":-4.1,"task":"depth","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 · KITTI · ViT-L"}},
-    {"model":"DA-V2 Large","ds":"KITTI","metric":"abs_rel","obs":"0.0569","paper":"0.0561","d":1.4,"task":"depth","cite":{"src":"MoGe (MoGe-eval protocol)","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · KITTI · DA-V2 row"}},
-    {"model":"DA-V2 Large","ds":"DIODE","metric":"abs_rel","obs":"0.0529","paper":"0.0533","d":-0.8,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · DIODE · DA-V2 row"}},
-    {"model":"DA-V2 Large","ds":"ETH3D","metric":"abs_rel","obs":"0.0473","paper":"0.0473","d":0.0,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · ETH3D · DA-V2 row"}},
-    {"model":"DA-V2 Large","ds":"GSO","metric":"abs_rel","obs":"0.0125","paper":"0.0125","d":-0.2,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · GSO · DA-V2 row"}},
-    {"model":"DA-V2 Large","ds":"iBims-1","metric":"abs_rel","obs":"0.0348","paper":"0.0348","d":0.0,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · iBims-1 · DA-V2 row"}},
-    {"model":"DA-V2 Large","ds":"DDAD","metric":"abs_rel","obs":"0.1310","paper":"0.1300","d":0.8,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · DDAD · DA-V2 row"}},
-    {"model":"DA-V2 Large","ds":"Sintel","metric":"abs_rel","obs":"0.2139","paper":"0.2140","d":-0.1,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · Sintel · DA-V2 row"}},
-    {"model":"MoGe ViT-L","ds":"NYU","metric":"abs_rel","obs":"0.0342","paper":"0.0341","d":0.3,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · NYU · MoGe row"}},
-    {"model":"MoGe ViT-L","ds":"KITTI","metric":"abs_rel","obs":"0.0404","paper":"0.0408","d":-1.0,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · KITTI · MoGe row"}},
-    {"model":"MoGe ViT-L","ds":"DIODE","metric":"abs_rel","obs":"0.0407","paper":"0.0400","d":1.7,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · DIODE · MoGe row"}},
-    {"model":"MoGe ViT-L","ds":"ETH3D","metric":"abs_rel","obs":"0.0311","paper":"0.0317","d":-1.9,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · ETH3D · MoGe row"}},
-    {"model":"MoGe ViT-L","ds":"GSO","metric":"abs_rel","obs":"0.00958","paper":"0.00944","d":1.5,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · GSO · MoGe row"}},
-    {"model":"MoGe ViT-L","ds":"iBims-1","metric":"abs_rel","obs":"0.0316","paper":"0.0320","d":-1.3,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · iBims-1 · MoGe row"}},
-    {"model":"MoGe ViT-L","ds":"DDAD","metric":"abs_rel","obs":"0.0902","paper":"0.0891","d":1.2,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · DDAD · MoGe row"}},
-    {"model":"MoGe ViT-L","ds":"Sintel","metric":"abs_rel","obs":"0.1863","paper":"0.1840","d":1.2,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 · Sintel · MoGe row"}},
-    {"model":"Metric3D-v2 L","ds":"NYU","metric":"abs_rel","obs":"0.0660","paper":"0.063","d":4.8,"task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Table I · NYU · ViT-L"}},
-    {"model":"Metric3D-v2 L","ds":"KITTI","metric":"abs_rel","obs":"0.0495","paper":"0.052","d":-4.8,"task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Table I · KITTI · ViT-L"}},
-    {"model":"Metric3D-v2 G","ds":"NYU","metric":"abs_rel","obs":"0.0702","paper":"0.067","d":4.8,"task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Table I · NYU · ViT-g"}},
-    {"model":"Metric3D-v2 G","ds":"KITTI","metric":"abs_rel","obs":"0.0503","paper":"0.051","d":-1.4,"task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Table I · KITTI · ViT-g"}},
-    {"model":"Marigold v1-1","ds":"NYU","metric":"abs_rel","obs":"0.0577","paper":"0.055","d":4.9,"task":"depth","cite":{"src":"Marigold","who":"Ke et al. 2024","arxiv":"2312.02145","loc":"Table 1 · NYU · Marigold row"}},
-    {"model":"MonST3R","ds":"NYU","metric":"abs_rel","obs":"0.0896","paper":"0.091","d":-1.5,"task":"depth","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 · NYU · MonST3R row"}},
-    {"model":"DUSt3R","ds":"KITTI","metric":"abs_rel","obs":"0.1049","paper":"0.1074","d":-2.3,"task":"depth","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 · KITTI · F(I,I)"}},
-    {"model":"DA3","ds":"NYU","metric":"delta_1","obs":"0.9684","paper":"0.974","d":-0.6,"task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"Table 4 · NYU · δ₁"}},
-    {"model":"DA3","ds":"KITTI","metric":"delta_1","obs":"0.9534","paper":"0.953","d":0.0,"task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"Table 4 · KITTI · δ₁ (process_res=1008; default 504 underperforms on KITTI 3.3:1 frames)"}},
-    {"model":"Depth Pro","ds":"Sun-RGBD","metric":"delta_1","obs":"0.8682","paper":"0.890","d":-2.4,"task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"Table 1 · Sun-RGBD · δ₁"}},
-    {"model":"Depth Pro","ds":"Booster","metric":"delta_1","obs":"0.4878","paper":"0.466","d":4.7,"task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"Table 1 · Booster · δ₁"}},
-    {"model":"VGGT","ds":"CO3Dv2","metric":"maa","obs":"0.8964","paper":"0.882","d":1.6,"task":"pose","cite":{"src":"VGGT","who":"Wang et al. 2025","arxiv":"2503.11651","loc":"Table 1 · CO3Dv2 · AUC@30"}},
-    {"model":"DUSt3R","ds":"CO3Dv2","metric":"maa","obs":"0.7893","paper":"0.772","d":2.2,"task":"pose","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"Table 3 · CO3Dv2 · DUSt3R row"}},
-    {"model":"MASt3R","ds":"CO3Dv2","metric":"maa","obs":"0.8581","paper":"0.818","d":4.9,"task":"pose","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"Table 3 · CO3Dv2 · MASt3R row"}},
-    {"model":"MonST3R","ds":"Sintel","metric":"ate","obs":"0.1134","paper":"0.108","d":5.0,"task":"pose","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 4 · Sintel · ATE"}},
-    {"model":"DAGE","ds":"Sintel","metric":"ate","obs":"0.1417","paper":"0.132","d":7.3,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 · Sintel · ATE"}},
-    {"model":"DAGE","ds":"TUM-Dyn","metric":"ate","obs":"0.0136","paper":"0.014","d":-2.9,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 · TUM-Dynamics · ATE"}},
-    {"model":"CUT3R","ds":"Sintel","metric":"ate","obs":"0.2138","paper":"0.217","d":-1.5,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 · Sintel · CUT3R row"}},
-    {"model":"UniK3D Large","ds":"NYU","metric":"abs_rel","obs":"0.0749","paper":"0.074","d":1.2,"task":"depth","cite":{"src":"UniK3D","who":"Piccinelli et al. 2025","arxiv":"2503.16591","loc":"Table 18 · NYUv2 · UniK3D-L metric (no align)"}},
-    {"model":"CUT3R","ds":"NYU","metric":"abs_rel","obs":"0.0858","paper":"0.086","d":-0.2,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 1 · NYU · prepared set + median_lineage (plumbline-native)"}},
-    {"model":"CUT3R","ds":"KITTI","metric":"abs_rel","obs":"0.0953","paper":"0.092","d":3.6,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 1 · KITTI · lineage + median_lineage"}},
-    {"model":"CUT3R","ds":"Bonn","metric":"abs_rel","obs":"0.0768","paper":"0.078","d":-1.5,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 2 · Bonn · video rgb_110 + scale_weiszfeld"}},
-    {"model":"DUSt3R","ds":"NYU","metric":"abs_rel","obs":"0.0637","paper":"0.065","d":-2.0,"task":"depth","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 · NYU · F(I,I) + Eigen-2014 crop + ratio-of-medians (DUSt3R's own 2023 convention, not the lineage no-crop)"}},
-    {"model":"DUSt3R","ds":"Bonn","metric":"abs_rel","obs":"0.1384","paper":"0.141","d":-1.8,"task":"depth","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 · Bonn · DUSt3R baseline, rgb_110 single-frame (DUSt3R's own Table-2 used unrecoverable 2023 seqs)"}}
-  ]
-  </script>
+[
+{"model":"DA-V2 Small","ds":"NYU","metric":"abs_rel","obs":"0.0510","paper":"0.053","d":-3.8,"task":"depth","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 \u00b7 NYU \u00b7 ViT-S"},"proto":"eigen-2014 (crop+median)"},
+{"model":"DA-V2 Small","ds":"KITTI","metric":"abs_rel","obs":"0.0770","paper":"0.078","d":-1.3,"task":"depth","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 \u00b7 KITTI \u00b7 ViT-S"},"proto":"eigen-2014 (crop+median)"},
+{"model":"DA-V2 Base","ds":"KITTI","metric":"abs_rel","obs":"0.0756","paper":"0.078","d":-3.1,"task":"depth","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 \u00b7 KITTI \u00b7 ViT-B"},"proto":"eigen-2014 (crop+median)"},
+{"model":"DA-V2 Large","ds":"NYU","metric":"abs_rel","obs":"0.0428","paper":"0.0420","d":1.9,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 NYU \u00b7 DA-V2 row"},"proto":"moge-eval (affine)"},
+{"model":"DA-V2 Large","ds":"KITTI","metric":"abs_rel","obs":"0.0710","paper":"0.074","d":-4.1,"task":"depth","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 \u00b7 KITTI \u00b7 ViT-L"},"proto":"eigen-2014 (crop+median)"},
+{"model":"DA-V2 Large","ds":"KITTI","metric":"abs_rel","obs":"0.0569","paper":"0.0561","d":1.4,"task":"depth","cite":{"src":"MoGe (MoGe-eval protocol)","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 KITTI \u00b7 DA-V2 row"},"proto":"moge-eval (affine)"},
+{"model":"DA-V2 Large","ds":"DIODE","metric":"abs_rel","obs":"0.0529","paper":"0.0533","d":-0.8,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 DIODE \u00b7 DA-V2 row"},"proto":"moge-eval (affine)"},
+{"model":"DA-V2 Large","ds":"ETH3D","metric":"abs_rel","obs":"0.0473","paper":"0.0473","d":0.0,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 ETH3D \u00b7 DA-V2 row"},"proto":"moge-eval (affine)"},
+{"model":"DA-V2 Large","ds":"GSO","metric":"abs_rel","obs":"0.0125","paper":"0.0125","d":-0.2,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 GSO \u00b7 DA-V2 row"},"proto":"moge-eval (affine)"},
+{"model":"DA-V2 Large","ds":"iBims-1","metric":"abs_rel","obs":"0.0348","paper":"0.0348","d":0.0,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 iBims-1 \u00b7 DA-V2 row"},"proto":"moge-eval (affine)"},
+{"model":"DA-V2 Large","ds":"DDAD","metric":"abs_rel","obs":"0.1310","paper":"0.1300","d":0.8,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 DDAD \u00b7 DA-V2 row"},"proto":"moge-eval (affine)"},
+{"model":"DA-V2 Large","ds":"Sintel","metric":"abs_rel","obs":"0.2139","paper":"0.2140","d":-0.1,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 Sintel \u00b7 DA-V2 row"},"proto":"moge-eval (affine)"},
+{"model":"MoGe ViT-L","ds":"NYU","metric":"abs_rel","obs":"0.0342","paper":"0.0341","d":0.3,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 NYU \u00b7 MoGe row"},"proto":"moge-eval (affine)"},
+{"model":"MoGe ViT-L","ds":"KITTI","metric":"abs_rel","obs":"0.0404","paper":"0.0408","d":-1.0,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 KITTI \u00b7 MoGe row"},"proto":"moge-eval (affine)"},
+{"model":"MoGe ViT-L","ds":"DIODE","metric":"abs_rel","obs":"0.0407","paper":"0.0400","d":1.7,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 DIODE \u00b7 MoGe row"},"proto":"moge-eval (affine)"},
+{"model":"MoGe ViT-L","ds":"ETH3D","metric":"abs_rel","obs":"0.0311","paper":"0.0317","d":-1.9,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 ETH3D \u00b7 MoGe row"},"proto":"moge-eval (affine)"},
+{"model":"MoGe ViT-L","ds":"GSO","metric":"abs_rel","obs":"0.00958","paper":"0.00944","d":1.5,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 GSO \u00b7 MoGe row"},"proto":"moge-eval (affine)"},
+{"model":"MoGe ViT-L","ds":"iBims-1","metric":"abs_rel","obs":"0.0316","paper":"0.0320","d":-1.3,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 iBims-1 \u00b7 MoGe row"},"proto":"moge-eval (affine)"},
+{"model":"MoGe ViT-L","ds":"DDAD","metric":"abs_rel","obs":"0.0902","paper":"0.0891","d":1.2,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 DDAD \u00b7 MoGe row"},"proto":"moge-eval (affine)"},
+{"model":"MoGe ViT-L","ds":"Sintel","metric":"abs_rel","obs":"0.1863","paper":"0.1840","d":1.2,"task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"Table 3 \u00b7 Sintel \u00b7 MoGe row"},"proto":"moge-eval (affine)"},
+{"model":"Metric3D-v2 L","ds":"NYU","metric":"abs_rel","obs":"0.0660","paper":"0.063","d":4.8,"task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Table I \u00b7 NYU \u00b7 ViT-L"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Metric3D-v2 L","ds":"KITTI","metric":"abs_rel","obs":"0.0495","paper":"0.052","d":-4.8,"task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Table I \u00b7 KITTI \u00b7 ViT-L"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Metric3D-v2 G","ds":"NYU","metric":"abs_rel","obs":"0.0702","paper":"0.067","d":4.8,"task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Table I \u00b7 NYU \u00b7 ViT-g"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Metric3D-v2 G","ds":"KITTI","metric":"abs_rel","obs":"0.0503","paper":"0.051","d":-1.4,"task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Table I \u00b7 KITTI \u00b7 ViT-g"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Marigold v1-1","ds":"NYU","metric":"abs_rel","obs":"0.0577","paper":"0.055","d":4.9,"task":"depth","cite":{"src":"Marigold","who":"Ke et al. 2024","arxiv":"2312.02145","loc":"Table 1 \u00b7 NYU \u00b7 Marigold row"},"proto":"eigen-2014 (crop+median)"},
+{"model":"MonST3R","ds":"NYU","metric":"abs_rel","obs":"0.0896","paper":"0.091","d":-1.5,"task":"depth","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 \u00b7 NYU \u00b7 MonST3R row"},"proto":"dust3r-lineage (median, no-crop)"},
+{"model":"DUSt3R","ds":"KITTI","metric":"abs_rel","obs":"0.1049","paper":"0.1074","d":-2.3,"task":"depth","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 \u00b7 KITTI \u00b7 F(I,I)"},"proto":"dust3r-lineage (median, no-crop)"},
+{"model":"DA3","ds":"NYU","metric":"delta_1","obs":"0.9684","paper":"0.974","d":-0.6,"task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"Table 4 \u00b7 NYU \u00b7 \u03b4\u2081"},"proto":"eigen-2014 (crop+median)"},
+{"model":"DA3","ds":"KITTI","metric":"delta_1","obs":"0.9534","paper":"0.953","d":0.0,"task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"Table 4 \u00b7 KITTI \u00b7 \u03b4\u2081 (process_res=1008; default 504 underperforms on KITTI 3.3:1 frames)"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Depth Pro","ds":"Sun-RGBD","metric":"delta_1","obs":"0.8682","paper":"0.890","d":-2.4,"task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"Table 1 \u00b7 Sun-RGBD \u00b7 \u03b4\u2081"},"proto":"metric (no-align)"},
+{"model":"Depth Pro","ds":"Booster","metric":"delta_1","obs":"0.4878","paper":"0.466","d":4.7,"task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"Table 1 \u00b7 Booster \u00b7 \u03b4\u2081"},"proto":"metric (no-align)"},
+{"model":"VGGT","ds":"CO3Dv2","metric":"maa","obs":"0.8964","paper":"0.882","d":1.6,"task":"pose","cite":{"src":"VGGT","who":"Wang et al. 2025","arxiv":"2503.11651","loc":"Table 1 \u00b7 CO3Dv2 \u00b7 AUC@30"},"proto":"PoseDiff (10-frame)"},
+{"model":"DUSt3R","ds":"CO3Dv2","metric":"maa","obs":"0.7893","paper":"0.772","d":2.2,"task":"pose","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"Table 3 \u00b7 CO3Dv2 \u00b7 DUSt3R row"},"proto":"PoseDiff (10-frame)"},
+{"model":"MASt3R","ds":"CO3Dv2","metric":"maa","obs":"0.8581","paper":"0.818","d":4.9,"task":"pose","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"Table 3 \u00b7 CO3Dv2 \u00b7 MASt3R row"},"proto":"PoseDiff (10-frame)"},
+{"model":"MonST3R","ds":"Sintel","metric":"ate","obs":"0.1134","paper":"0.108","d":5.0,"task":"pose","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 4 \u00b7 Sintel \u00b7 ATE"},"proto":"trajectory (Sim3 ATE)"},
+{"model":"DAGE","ds":"Sintel","metric":"ate","obs":"0.1417","paper":"0.132","d":7.3,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 \u00b7 Sintel \u00b7 ATE"},"proto":"trajectory (Sim3 ATE)"},
+{"model":"DAGE","ds":"TUM-Dyn","metric":"ate","obs":"0.0136","paper":"0.014","d":-2.9,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 \u00b7 TUM-Dynamics \u00b7 ATE"},"proto":"trajectory (Sim3 ATE)"},
+{"model":"CUT3R","ds":"Sintel","metric":"ate","obs":"0.2138","paper":"0.217","d":-1.5,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 \u00b7 Sintel \u00b7 CUT3R row"},"proto":"trajectory (Sim3 ATE)"},
+{"model":"UniK3D Large","ds":"NYU","metric":"abs_rel","obs":"0.0749","paper":"0.074","d":1.2,"task":"depth","cite":{"src":"UniK3D","who":"Piccinelli et al. 2025","arxiv":"2503.16591","loc":"Table 18 \u00b7 NYUv2 \u00b7 UniK3D-L metric (no align)"},"proto":"metric (no-align)"},
+{"model":"CUT3R","ds":"NYU","metric":"abs_rel","obs":"0.0858","paper":"0.086","d":-0.2,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 1 \u00b7 NYU \u00b7 prepared set + median_lineage (plumbline-native)"},"proto":"dust3r-lineage (median, no-crop)"},
+{"model":"CUT3R","ds":"KITTI","metric":"abs_rel","obs":"0.0953","paper":"0.092","d":3.6,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 1 \u00b7 KITTI \u00b7 lineage + median_lineage"},"proto":"dust3r-lineage (median, no-crop)"},
+{"model":"CUT3R","ds":"Bonn","metric":"abs_rel","obs":"0.0768","paper":"0.078","d":-1.5,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 2 \u00b7 Bonn \u00b7 video rgb_110 + scale_weiszfeld"},"proto":"video (per-sequence)"},
+{"model":"DUSt3R","ds":"NYU","metric":"abs_rel","obs":"0.0637","paper":"0.065","d":-2.0,"task":"depth","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 \u00b7 NYU \u00b7 F(I,I) + Eigen-2014 crop + ratio-of-medians (DUSt3R's own 2023 convention, not the lineage no-crop)"},"proto":"dust3r-table2 (eigen+ratio-med)"},
+{"model":"DUSt3R","ds":"Bonn","metric":"abs_rel","obs":"0.1384","paper":"0.141","d":-1.8,"task":"depth","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 \u00b7 Bonn \u00b7 DUSt3R baseline, rgb_110 single-frame (DUSt3R's own Table-2 used unrecoverable 2023 seqs)"},"proto":"dust3r-lineage (median, no-crop)"}
+]
+</script>
 
   <!-- Companion metrics: additional numbers audited from the SAME paper rows as
        the verified cells (e.g. a pose table reports mAA/RRA/RTA together; a
        Table-4 trajectory row reports ATE/RPE-trans/RPE-rot). Display-only — these
        do NOT count toward the verified-results stat (that's the 44 primary cells). -->
   <script type="application/json" id="companion-cells">
-  [
-    {"model":"DUSt3R","ds":"KITTI","metric":"delta_1","obs":"0.8661","paper":"0.8660","d":0.0,"task":"depth","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 · KITTI · δ₁ F(I,I)"}},
-    {"model":"DA-V2 Small","ds":"NYU","metric":"delta_1","obs":"0.9729","paper":"0.973","d":0.0,"task":"depth","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 · NYU · ViT-S δ₁"}},
-    {"model":"MonST3R","ds":"NYU","metric":"delta_1","obs":"0.8911","paper":"0.888","d":0.3,"task":"depth","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 · NYU · δ₁"}},
-    {"model":"Marigold v1-1","ds":"NYU","metric":"delta_1","obs":"0.9607","paper":"0.964","d":-0.3,"task":"depth","cite":{"src":"Marigold","who":"Ke et al. 2024","arxiv":"2312.02145","loc":"Table 1 · NYU · δ₁"}},
-    {"model":"DUSt3R","ds":"CO3Dv2","metric":"rra","obs":"0.9722","paper":"0.943","d":3.1,"task":"pose","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"Table 3 · CO3Dv2 · DUSt3R RRA@15"}},
-    {"model":"MASt3R","ds":"CO3Dv2","metric":"rra","obs":"0.9697","paper":"0.946","d":2.5,"task":"pose","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"Table 3 · CO3Dv2 · MASt3R RRA@15"}},
-    {"model":"DUSt3R","ds":"CO3Dv2","metric":"rta","obs":"0.8801","paper":"0.884","d":-0.4,"task":"pose","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"Table 3 · CO3Dv2 · DUSt3R RTA@15"}},
-    {"model":"MASt3R","ds":"CO3Dv2","metric":"rta","obs":"0.9308","paper":"0.919","d":1.3,"task":"pose","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"Table 3 · CO3Dv2 · MASt3R RTA@15"}},
-    {"model":"MonST3R","ds":"Sintel","metric":"rpe_t","obs":"0.0446","paper":"0.042","d":6.2,"task":"pose","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 4 · Sintel · RPE-trans"}},
-    {"model":"DAGE","ds":"Sintel","metric":"rpe_t","obs":"0.0546","paper":"0.051","d":7.1,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 · Sintel · RPE-trans"}},
-    {"model":"DAGE","ds":"TUM-Dyn","metric":"rpe_t","obs":"0.0104","paper":"0.010","d":4.0,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 · TUM-Dynamics · RPE-trans"}},
-    {"model":"MonST3R","ds":"Sintel","metric":"rpe_r","obs":"0.792","paper":"0.732","d":8.2,"task":"pose","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 4 · Sintel · RPE-rot°"}},
-    {"model":"DAGE","ds":"Sintel","metric":"rpe_r","obs":"0.4133","paper":"0.406","d":1.8,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 · Sintel · RPE-rot°"}},
-    {"model":"DAGE","ds":"TUM-Dyn","metric":"rpe_r","obs":"0.3213","paper":"0.323","d":-0.5,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 · TUM-Dynamics · RPE-rot°"}}
-  ]
-  </script>
+[
+{"model":"DUSt3R","ds":"KITTI","metric":"delta_1","obs":"0.8661","paper":"0.8660","d":0.0,"task":"depth","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 \u00b7 KITTI \u00b7 \u03b4\u2081 F(I,I)"},"proto":"dust3r-lineage (median, no-crop)"},
+{"model":"DA-V2 Small","ds":"NYU","metric":"delta_1","obs":"0.9729","paper":"0.973","d":0.0,"task":"depth","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 \u00b7 NYU \u00b7 ViT-S \u03b4\u2081"},"proto":"eigen-2014 (crop+median)"},
+{"model":"MonST3R","ds":"NYU","metric":"delta_1","obs":"0.8911","paper":"0.888","d":0.3,"task":"depth","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 \u00b7 NYU \u00b7 \u03b4\u2081"},"proto":"dust3r-lineage (median, no-crop)"},
+{"model":"Marigold v1-1","ds":"NYU","metric":"delta_1","obs":"0.9607","paper":"0.964","d":-0.3,"task":"depth","cite":{"src":"Marigold","who":"Ke et al. 2024","arxiv":"2312.02145","loc":"Table 1 \u00b7 NYU \u00b7 \u03b4\u2081"},"proto":"eigen-2014 (crop+median)"},
+{"model":"DUSt3R","ds":"CO3Dv2","metric":"rra","obs":"0.9722","paper":"0.943","d":3.1,"task":"pose","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"Table 3 \u00b7 CO3Dv2 \u00b7 DUSt3R RRA@15"},"proto":"PoseDiff (10-frame)"},
+{"model":"MASt3R","ds":"CO3Dv2","metric":"rra","obs":"0.9697","paper":"0.946","d":2.5,"task":"pose","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"Table 3 \u00b7 CO3Dv2 \u00b7 MASt3R RRA@15"},"proto":"PoseDiff (10-frame)"},
+{"model":"DUSt3R","ds":"CO3Dv2","metric":"rta","obs":"0.8801","paper":"0.884","d":-0.4,"task":"pose","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"Table 3 \u00b7 CO3Dv2 \u00b7 DUSt3R RTA@15"},"proto":"PoseDiff (10-frame)"},
+{"model":"MASt3R","ds":"CO3Dv2","metric":"rta","obs":"0.9308","paper":"0.919","d":1.3,"task":"pose","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"Table 3 \u00b7 CO3Dv2 \u00b7 MASt3R RTA@15"},"proto":"PoseDiff (10-frame)"},
+{"model":"MonST3R","ds":"Sintel","metric":"rpe_t","obs":"0.0446","paper":"0.042","d":6.2,"task":"pose","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 4 \u00b7 Sintel \u00b7 RPE-trans"},"proto":"trajectory (Sim3 ATE)"},
+{"model":"DAGE","ds":"Sintel","metric":"rpe_t","obs":"0.0546","paper":"0.051","d":7.1,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 \u00b7 Sintel \u00b7 RPE-trans"},"proto":"trajectory (Sim3 ATE)"},
+{"model":"DAGE","ds":"TUM-Dyn","metric":"rpe_t","obs":"0.0104","paper":"0.010","d":4.0,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 \u00b7 TUM-Dynamics \u00b7 RPE-trans"},"proto":"trajectory (Sim3 ATE)"},
+{"model":"MonST3R","ds":"Sintel","metric":"rpe_r","obs":"0.792","paper":"0.732","d":8.2,"task":"pose","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 4 \u00b7 Sintel \u00b7 RPE-rot\u00b0"},"proto":"trajectory (Sim3 ATE)"},
+{"model":"DAGE","ds":"Sintel","metric":"rpe_r","obs":"0.4133","paper":"0.406","d":1.8,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 \u00b7 Sintel \u00b7 RPE-rot\u00b0"},"proto":"trajectory (Sim3 ATE)"},
+{"model":"DAGE","ds":"TUM-Dyn","metric":"rpe_r","obs":"0.3213","paper":"0.323","d":-0.5,"task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 \u00b7 TUM-Dynamics \u00b7 RPE-rot\u00b0"},"proto":"trajectory (Sim3 ATE)"}
+]
+</script>
 
   <!-- Informational / off-paper cells: real plumbline numbers that DON'T land
        within their tolerance (status "info") or have no paper target (status
@@ -266,158 +289,27 @@
        paper-matches, and excluded from the 44 verified count. -->
   <script type="application/json" id="info-cells">
 [
-{
-"model": "MonST3R",
-"ds": "KITTI",
-"metric": "abs_rel",
-"obs": "0.0959",
-"paper": "0.101",
-"d": -5.0,
-"status": "info",
-"cite": {
-"src": "MonST3R",
-"who": "Zhang et al. 2024",
-"arxiv": "2410.03825",
-"loc": "Table 3 \u00b7 KITTI \u2014 5.05%, just over the \u00b15% gate"
-}
-},
-{
-"model": "MonST3R",
-"ds": "Bonn",
-"metric": "abs_rel",
-"obs": "0.0654",
-"paper": "0.076",
-"d": -13.9,
-"status": "info",
-"cite": {
-"src": "MonST3R",
-"who": "Zhang et al. 2024",
-"arxiv": "2410.03825",
-"loc": "Table 3 \u00b7 Bonn \u2014 D27 paper-private recipe"
-}
-},
-{
-"model": "MonST3R",
-"ds": "Sintel",
-"metric": "abs_rel",
-"obs": "0.3726",
-"paper": "0.345",
-"d": 8.0,
-"status": "info",
-"cite": {
-"src": "MonST3R",
-"who": "Zhang et al. 2024",
-"arxiv": "2410.03825",
-"loc": "Table 3 \u00b7 Sintel \u2014 D27 (temple_2 outlier + recipe)"
-}
-},
-{
-"model": "DA-V2 Base",
-"ds": "NYU",
-"metric": "abs_rel",
-"obs": "0.0456",
-"paper": "0.049",
-"d": -6.9,
-"status": "info",
-"cite": {
-"src": "Depth Anything V2",
-"who": "Yang et al. 2024",
-"arxiv": "2406.09414",
-"loc": "Table 2 \u00b7 NYU \u00b7 ViT-B \u2014 6.9%, downgraded \u2705\u2192\u2139\ufe0f (2026-05-28 audit)"
-}
-},
-{
-"model": "DA3",
-"ds": "GSO",
-"metric": "abs_rel",
-"obs": "0.0150",
-"paper": "",
-"d": null,
-"status": "target",
-"cite": {
-"src": "Depth Anything 3",
-"who": "ByteDance Seed 2025",
-"arxiv": "2511.10647",
-"loc": "GSO \u00b7 abs_rel \u2014 no paper target (informational A/B)"
-}
-},
-{
-"model": "Depth Pro",
-"ds": "NYU",
-"metric": "delta_1",
-"obs": "0.9347",
-"paper": "",
-"d": null,
-"status": "target",
-"cite": {
-"src": "Depth Pro",
-"who": "Bochkovskii et al. 2024",
-"arxiv": "2410.02073",
-"loc": "NYU \u00b7 \u03b4\u2081 \u2014 paper has no NYU row"
-}
-},
-{
-"model": "Depth Pro",
-"ds": "iBims-1",
-"metric": "delta_1",
-"obs": "0.8458",
-"paper": "",
-"d": null,
-"status": "target",
-"cite": {
-"src": "Depth Pro",
-"who": "Bochkovskii et al. 2024",
-"arxiv": "2410.02073",
-"loc": "iBims-1 \u00b7 \u03b4\u2081 \u2014 informational"
-}
-},
-{
-"model": "MASt3R",
-"ds": "RE10K",
-"metric": "maa",
-"obs": "0.850",
-"paper": "",
-"d": null,
-"status": "target",
-"cite": {
-"src": "MASt3R",
-"who": "Leroy et al. 2024",
-"arxiv": "2406.09756",
-"loc": "RealEstate10K 50-clip subset \u00b7 mAA@30 \u2014 off-paper (no published RE10K target; faithful sparse_ga matching path, +18.6 pt over DUSt3R, PR #42)"
-}
-},
-{
-"model": "DUSt3R",
-"ds": "RE10K",
-"metric": "maa",
-"obs": "0.664",
-"paper": "",
-"d": null,
-"status": "target",
-"cite": {
-"src": "DUSt3R",
-"who": "Wang et al. 2024",
-"arxiv": "2312.14132",
-"loc": "RealEstate10K 50-clip subset \u00b7 mAA@30 \u2014 off-paper wide-baseline baseline (PR #42)"
-}
-},
-{
-"model": "DA3",
-"ds": "CO3Dv2",
-"metric": "maa",
-"obs": "0.8819",
-"paper": "",
-"d": null,
-"status": "target",
-"cite": {
-"src": "Depth Anything 3",
-"who": "ByteDance Seed 2025",
-"arxiv": "2511.10647",
-"loc": "CO3Dv2 \u00b7 mAA@30 \u2014 no paper target (DA3 uses CO3Dv2 for training only; informational A/B vs VGGT/MASt3R/DUSt3R)"
-}
-}
+{"model":"MonST3R","ds":"KITTI","metric":"abs_rel","obs":"0.0959","paper":"0.101","d":-5.0,"status":"info","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 \u00b7 KITTI \u2014 5.05%, just over the \u00b15% gate"},"proto":"dust3r-lineage (median, no-crop)"},
+{"model":"MonST3R","ds":"Bonn","metric":"abs_rel","obs":"0.0654","paper":"0.076","d":-13.9,"status":"info","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 \u00b7 Bonn \u2014 D27 paper-private recipe"},"proto":"dust3r-lineage (median, no-crop)"},
+{"model":"MonST3R","ds":"Sintel","metric":"abs_rel","obs":"0.3726","paper":"0.345","d":8.0,"status":"info","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 \u00b7 Sintel \u2014 D27 (temple_2 outlier + recipe)"},"proto":"dust3r-lineage (median, no-crop)"},
+{"model":"DA-V2 Base","ds":"NYU","metric":"abs_rel","obs":"0.0456","paper":"0.049","d":-6.9,"status":"info","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"Table 2 \u00b7 NYU \u00b7 ViT-B \u2014 6.9%, downgraded \u2705\u2192\u2139\ufe0f (2026-05-28 audit)"},"proto":"eigen-2014 (crop+median)"},
+{"model":"DA3","ds":"GSO","metric":"abs_rel","obs":"0.0150","paper":"","d":null,"status":"target","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"GSO \u00b7 abs_rel \u2014 no paper target (informational A/B)"},"proto":"moge-eval (affine)"},
+{"model":"Depth Pro","ds":"NYU","metric":"delta_1","obs":"0.9347","paper":"","d":null,"status":"target","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"NYU \u00b7 \u03b4\u2081 \u2014 paper has no NYU row"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Depth Pro","ds":"iBims-1","metric":"delta_1","obs":"0.8458","paper":"","d":null,"status":"target","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"iBims-1 \u00b7 \u03b4\u2081 \u2014 informational"},"proto":"metric (no-align)"},
+{"model":"MASt3R","ds":"RE10K","metric":"maa","obs":"0.850","paper":"","d":null,"status":"target","cite":{"src":"MASt3R","who":"Leroy et al. 2024","arxiv":"2406.09756","loc":"RealEstate10K 50-clip subset \u00b7 mAA@30 \u2014 off-paper (no published RE10K target; faithful sparse_ga matching path, +18.6 pt over DUSt3R, PR #42)"},"proto":"RE10K wide-baseline"},
+{"model":"DUSt3R","ds":"RE10K","metric":"maa","obs":"0.664","paper":"","d":null,"status":"target","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"RealEstate10K 50-clip subset \u00b7 mAA@30 \u2014 off-paper wide-baseline baseline (PR #42)"},"proto":"RE10K wide-baseline"},
+{"model":"DA3","ds":"CO3Dv2","metric":"maa","obs":"0.8819","paper":"","d":null,"status":"target","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"CO3Dv2 \u00b7 mAA@30 \u2014 no paper target (DA3 uses CO3Dv2 for training only; informational A/B vs VGGT/MASt3R/DUSt3R)"},"proto":"PoseDiff (10-frame)"}
 ]
 </script>
+
+  <!-- BO-predicted fill-in for empty mono-depth AbsRel cells, from
+       scripts/bo_table_forecast.py --json (Bayesian matrix completion).
+       These are MODEL PREDICTIONS with uncertainty, NOT runs — rendered
+       ghosted, never counted toward the verified stat. Regenerate with:
+       python scripts/bo_table_forecast.py --json -->
+  <script type="application/json" id="model-fit">
+{"methods":["CUT3R","DA-V2 Base","DA-V2 Large","DA-V2 Small","DA3","DAGE","DUSt3R","Depth Pro","MASt3R","Marigold v1-1","Metric3D-v2 G","Metric3D-v2 L","MoGe ViT-L","MonST3R","UniK3D Large","VGGT"],"datasets":["Bonn","Booster","CO3Dv2","DDAD","DIODE","ETH3D","GSO","KITTI","NYU","RE10K","Sintel","Sun-RGBD","TUM-Dyn","iBims-1"],"protos":["PoseDiff (10-frame)","RE10K wide-baseline","dust3r-lineage (median, no-crop)","dust3r-table2 (eigen+ratio-med)","eigen-2014 (crop+median)","metric (no-align)","moge-eval (affine)","trajectory (Sim3 ATE)","video (per-sequence)"],"nM":16,"nD":14,"noise2":0.12249999999999998,"mu":[-0.01937,-0.38749,-0.15068,-0.08407,-0.0631,0.25517,0.02692,-0.42577,-0.03113,0.46374,0.00335,-0.16619,-0.11591,0.3136,-0.09095,0.03981,0.41256,0.063,-1.78936,0.06418,-0.94864,0.15275,0.39916,1.89832,0.19303,0.39542,-0.27514,-1.76902,0.6854,0.31347,0.6173,0.06418,-0.27514,-0.42749,-0.01564,-0.06257,-0.72144,0.11808,1.31117,0.00872],"Sigma":[[0.17312,-0.05653,-0.03121,-0.03633,-0.03191,-0.03719,-0.05464,-0.0549,-0.03905,-0.04795,-0.0305,-0.03121,-0.03121,-0.03649,-0.05508,-0.02431,-0.04037,-0.05216,-0.03462,-0.06251,-0.04146,-0.04146,-0.04146,-0.04246,-0.04977,-0.05134,-0.05807,-0.04643,-0.03462,-0.04114,-0.04139,-0.06251,-0.05807,-0.06615,-0.05613,-0.08836,-0.09282,-0.09128,-0.06947,-0.05408],[-0.05653,0.11777,0.01897,0.02157,0.01986,0.02611,0.07726,0.06803,0.02037,0.04663,0.01991,0.01897,0.01897,0.02179,0.08382,0.02195,0.03768,0.00198,0.00118,0.00582,-0.00151,-0.00151,-0.00151,-0.00294,-0.0023,-0.00437,-0.00038,-0.00355,0.00118,0.00813,-0.00059,0.00582,-0.00038,-0.02665,-0.00599,0.03908,0.03475,0.0365,-0.03042,-0.05307],[-0.03121,0.01897,0.10829,0.0425,0.05362,0.04434,0.01605,0.02221,0.042,0.02372,0.05141,0.05239,0.05239,0.04056,0.01898,0.02834,0.02404,0.00125,-0.00521,0.00129,7e-05,7e-05,7e-05,-0.00081,-0.0001,0.00203,0.00394,0.00121,-0.00521,0.0031,-0.0019,0.00129,0.00394,0.01014,0.00586,-0.02715,-0.00458,-0.01039,0.01147,0.00923],[-0.03633,0.02157,0.0425,0.09713,0.04264,0.0487,0.01804,0.0261,0.03364,0.02712,0.03918,0.0425,0.0425,0.0879,0.02103,0.02204,0.02717,-0.00038,-0.00375,0.00198,-0.00241,-0.00241,-0.00241,0.01124,-0.00437,0.00292,0.00464,-0.00055,-0.00375,0.0021,-0.00306,0.00198,0.00464,0.0144,0.00614,-0.00951,0.00716,-0.05354,0.0158,0.01271],[-0.03191,0.01986,0.05362,0.04264,0.09382,0.04516,0.01687,0.02224,0.04404,0.02395,0.0542,0.05362,0.05362,0.04075,0.0202,0.03086,0.02434,0.00167,-0.00571,0.00146,0.00011,0.00011,0.00011,-0.00098,0.00174,0.00047,0.0042,0.00119,-0.00571,0.00319,-0.00206,0.00146,0.0042,0.00968,0.00771,-0.02796,-0.00533,-0.0099,0.01123,0.0087],[-0.03719,0.02611,0.04434,0.0487,0.04516,0.0772,0.02194,0.0328,0.03612,0.03711,0.04286,0.04434,0.04434,0.04852,0.02673,0.02465,0.03884,0.00123,-0.00256,-0.00454,0.00125,0.00125,0.00125,-0.00767,0.00045,0.0037,0.00107,0.00228,-0.00256,0.00469,-9e-05,-0.00454,0.00107,0.00687,0.00058,-0.01347,0.00412,-0.0128,0.00966,0.00827],[-0.05464,0.07726,0.01605,0.01804,0.01687,0.02194,0.18807,0.05535,0.01797,0.03855,0.01703,0.01605,0.01605,0.01822,0.0743,0.01669,0.03121,0.00604,0.00469,0.00873,0.00419,0.00419,0.00419,0.00312,0.00582,0.00368,0.00367,0.00267,0.00469,-0.06063,0.00462,0.00873,0.00367,-0.01911,-0.00368,0.0323,0.03108,0.03192,-0.0612,-0.02406],[-0.0549,0.06803,0.02221,0.0261,0.02224,0.0328,0.05535,0.09565,0.02076,0.06339,0.02037,0.02221,0.02221,0.02607,0.07323,0.01823,0.0508,-0.00702,0.00279,-0.00281,0.00138,0.00138,0.00138,-0.00068,-0.00166,0.00236,-0.01175,0.00107,0.00279,0.00843,0.00199,-0.00281,-0.01175,-0.02233,-0.03618,0.03022,0.03082,0.0273,-0.01049,-0.00512],[-0.03905,0.02037,0.042,0.03364,0.04404,0.03612,0.01797,0.02076,0.12159,0.02153,0.04427,0.042,0.042,0.03244,0.02108,0.07879,0.02117,0.00627,-0.02074,0.00691,0.0018,0.0018,0.0018,0.00089,0.00799,0.003,0.00855,0.00362,-0.02074,0.00511,-0.00651,0.00691,0.00855,0.01227,0.01284,-0.01246,-0.05782,0.00404,0.015,0.01042],[-0.04795,0.04663,0.02372,0.02712,0.02395,0.03711,0.03855,0.06339,0.02153,0.13304,0.02233,0.02372,0.02372,0.02707,0.04958,0.01684,0.06138,-0.00086,0.00285,-0.01259,0.00325,0.00325,0.00325,0.00021,0.00183,0.00486,-0.02399,0.00357,0.00285,0.00792,0.0033,-0.01259,-0.02399,-0.00742,-0.01705,0.01862,0.02303,0.01729,-3e-05,0.00183],[-0.0305,0.01991,0.05141,0.03918,0.0542,0.04286,0.01703,0.02037,0.04427,0.02233,0.11095,0.05141,0.05141,0.03757,0.02087,0.0332,0.02281,0.00238,-0.00621,0.00166,0.00017,0.00017,0.00017,-0.00123,0.00528,-0.00269,0.00436,0.00105,-0.00621,0.00311,-0.0022,0.00166,0.00436,0.00793,0.01076,-0.02713,-0.00637,-0.00806,0.00976,0.00689],[-0.03121,0.01897,0.05239,0.0425,0.05362,0.04434,0.01605,0.02221,0.042,0.02372,0.05141,0.10829,0.05239,0.04056,0.01898,0.02834,0.02404,0.00125,-0.00521,0.00129,7e-05,7e-05,7e-05,-0.00081,-0.0001,0.00203,0.00394,0.00121,-0.00521,0.0031,-0.0019,0.00129,0.00394,0.01014,0.00586,-0.02715,-0.00458,-0.01039,0.01147,0.00923],[-0.03121,0.01897,0.05239,0.0425,0.05362,0.04434,0.01605,0.02221,0.042,0.02372,0.05141,0.05239,0.10829,0.04056,0.01898,0.02834,0.02404,0.00125,-0.00521,0.00129,7e-05,7e-05,7e-05,-0.00081,-0.0001,0.00203,0.00394,0.00121,-0.00521,0.0031,-0.0019,0.00129,0.00394,0.01014,0.00586,-0.02715,-0.00458,-0.01039,0.01147,0.00923],[-0.03649,0.02179,0.04056,0.0879,0.04075,0.04852,0.01822,0.02607,0.03244,0.02707,0.03757,0.04056,0.04056,0.10776,0.02131,0.02159,0.0271,-0.00045,-0.00365,0.0021,-0.0027,-0.0027,-0.0027,0.01267,-0.00417,0.00237,0.00474,-0.0008,-0.00365,0.00194,-0.00322,0.0021,0.00474,0.01451,0.00676,-0.00704,0.0084,-0.05838,0.01596,0.01272],[-0.05508,0.08382,0.01898,0.02103,0.0202,0.02673,0.0743,0.07323,0.02108,0.04958,0.02087,0.01898,0.01898,0.02131,0.11036,0.0203,0.0399,-0.00083,0.00166,0.00377,-0.00037,-0.00037,-0.00037,-0.00213,0.003,-0.00114,-0.00302,-0.00745,0.00166,0.0049,0.00036,0.00377,-0.00302,-0.03805,-0.01428,0.03336,0.03203,0.03432,-0.02505,-0.02343],[-0.02431,0.02195,0.02834,0.02204,0.03086,0.02465,0.01669,0.01823,0.07879,0.01684,0.0332,0.02834,0.02834,0.02159,0.0203,0.23371,0.01599,-0.01369,0.0432,0.00263,-0.00816,-0.00816,-0.00816,-0.00929,-0.01501,-0.02568,0.00323,-0.00993,0.0432,-0.00487,0.01053,0.00263,0.00323,0.02133,0.02665,0.0136,-0.10595,0.01144,0.01343,0.01347],[-0.04037,0.03768,0.02404,0.02717,0.02434,0.03884,0.03121,0.0508,0.02117,0.06138,0.02281,0.02404,0.02404,0.0271,0.0399,0.01599,0.16924,-0.00043,0.00165,-0.01939,0.00254,0.00254,0.00254,-0.00105,0.00139,0.00408,-0.0075,0.00293,0.00165,0.00644,0.00236,-0.01939,-0.0075,-0.00427,-0.01219,0.01129,0.01723,0.01045,0.00149,0.00262],[-0.05216,0.00198,0.00125,-0.00038,0.00167,0.00123,0.00604,-0.00702,0.00627,-0.00086,0.00238,0.00125,0.00125,-0.00045,-0.00083,-0.01369,-0.00043,0.11515,0.02869,0.02634,0.04309,0.04309,0.04309,0.04386,0.05923,0.05675,0.02677,0.04863,0.02869,0.036,0.0403,0.02634,0.02677,-0.01406,0.00204,-0.0072,0.01172,0.00536,0.00322,-0.05453],[-0.03462,0.00118,-0.00521,-0.00375,-0.00571,-0.00256,0.00469,0.00279,-0.02074,0.00285,-0.00621,-0.00521,-0.00521,-0.00365,0.00166,0.0432,0.00165,0.02869,0.19156,0.01633,0.03153,0.03153,0.03153,0.03212,0.0313,0.0335,0.01518,0.03038,0.08874,0.02262,0.05478,0.01633,0.01518,0.00135,-0.0014,0.00793,-0.05035,0.00377,0.00299,0.00399],[-0.06251,0.00582,0.00129,0.00198,0.00146,-0.00454,0.00873,-0.00281,0.00691,-0.01259,0.00166,0.00129,0.00129,0.0021,0.00377,0.00263,-0.01939,0.02634,0.01633,0.36281,0.01922,0.01922,0.01922,0.02185,0.02406,0.02324,0.0335,0.02147,0.01633,0.01673,0.01929,-0.27719,0.0335,0.03562,0.03533,0.03745,0.03614,0.03942,0.03385,0.02548],[-0.04146,-0.00151,7e-05,-0.00241,0.00011,0.00125,0.00419,0.00138,0.0018,0.00325,0.00017,7e-05,7e-05,-0.0027,-0.00037,-0.00816,0.00254,0.04309,0.03153,0.01922,0.10819,0.05229,0.05229,0.05266,0.0493,0.04909,0.01868,0.04852,0.03153,0.03567,0.04768,0.01922,0.01868,-0.00627,-0.00756,-0.00782,0.00209,-0.01328,-0.00522,-0.0001],[-0.04146,-0.00151,7e-05,-0.00241,0.00011,0.00125,0.00419,0.00138,0.0018,0.00325,0.00017,7e-05,7e-05,-0.0027,-0.00037,-0.00816,0.00254,0.04309,0.03153,0.01922,0.05229,0.10819,0.05229,0.05266,0.0493,0.04909,0.01868,0.04852,0.03153,0.03567,0.04768,0.01922,0.01868,-0.00627,-0.00756,-0.00782,0.00209,-0.01328,-0.00522,-0.0001],[-0.04146,-0.00151,7e-05,-0.00241,0.00011,0.00125,0.00419,0.00138,0.0018,0.00325,0.00017,7e-05,7e-05,-0.0027,-0.00037,-0.00816,0.00254,0.04309,0.03153,0.01922,0.05229,0.05229,0.10819,0.05266,0.0493,0.04909,0.01868,0.04852,0.03153,0.03567,0.04768,0.01922,0.01868,-0.00627,-0.00756,-0.00782,0.00209,-0.01328,-0.00522,-0.0001],[-0.04246,-0.00294,-0.00081,0.01124,-0.00098,-0.00767,0.00312,-0.00068,0.00089,0.00021,-0.00123,-0.00081,-0.00081,0.01267,-0.00213,-0.00929,-0.00105,0.04386,0.03212,0.02185,0.05266,0.05266,0.05266,0.09877,0.0493,0.05023,0.02037,0.04905,0.03212,0.0359,0.04815,0.02185,0.02037,-0.00408,-0.00595,-0.00642,0.0033,-0.0272,-0.00343,0.00129],[-0.04977,-0.0023,-0.0001,-0.00437,0.00174,0.00045,0.00582,-0.00166,0.00799,0.00183,0.00528,-0.0001,-0.0001,-0.00417,0.003,-0.01501,0.00139,0.05923,0.0313,0.02406,0.0493,0.0493,0.0493,0.0493,0.07496,0.06317,0.02371,0.0513,0.0313,0.0379,0.04554,0.02406,0.02371,-0.01636,-0.00985,-0.01918,0.00449,2e-05,-0.0012,-0.00601],[-0.05134,-0.00437,0.00203,0.00292,0.00047,0.0037,0.00368,0.00236,0.003,0.00486,-0.00269,0.00203,0.00203,0.00237,-0.00114,-0.02568,0.00408,0.05675,0.0335,0.02324,0.04909,0.04909,0.04909,0.05023,0.06317,0.07351,0.02277,0.05165,0.0335,0.03786,0.04622,0.02324,0.02277,-0.01154,-0.02059,-0.01922,0.00842,-0.00509,0.00255,-0.00087],[-0.05807,-0.00038,0.00394,0.00464,0.0042,0.00107,0.00367,-0.01175,0.00855,-0.02399,0.00436,0.00394,0.00394,0.00474,-0.00302,0.00323,-0.0075,0.02677,0.01518,0.0335,0.01868,0.01868,0.01868,0.02037,0.02371,0.02277,0.37085,0.02105,0.01518,0.01573,0.01849,0.0335,-0.26915,0.03866,0.03949,0.03051,0.03144,0.03292,0.03566,0.02659],[-0.04643,-0.00355,0.00121,-0.00055,0.00119,0.00228,0.00267,0.00107,0.00362,0.00357,0.00105,0.00121,0.00121,-0.0008,-0.00745,-0.00993,0.00293,0.04863,0.03038,0.02147,0.04852,0.04852,0.04852,0.04905,0.0513,0.05165,0.02105,0.08427,0.03038,0.06131,0.04466,0.02147,0.02105,-0.00356,-0.00528,-0.00637,0.00661,-0.00606,-0.02928,0.00113],[-0.03462,0.00118,-0.00521,-0.00375,-0.00571,-0.00256,0.00469,0.00279,-0.02074,0.00285,-0.00621,-0.00521,-0.00521,-0.00365,0.00166,0.0432,0.00165,0.02869,0.08874,0.01633,0.03153,0.03153,0.03153,0.03212,0.0313,0.0335,0.01518,0.03038,0.19156,0.02262,0.05478,0.01633,0.01518,0.00135,-0.0014,0.00793,-0.05035,0.00377,0.00299,0.00399],[-0.04114,0.00813,0.0031,0.0021,0.00319,0.00469,-0.06063,0.00843,0.00511,0.00792,0.00311,0.0031,0.0031,0.00194,0.0049,-0.00487,0.00644,0.036,0.02262,0.01673,0.03567,0.03567,0.03567,0.0359,0.0379,0.03786,0.01573,0.06131,0.02262,0.21312,0.03294,0.01673,0.01573,-0.00522,-0.00433,-0.00014,0.00908,4e-05,-0.02965,-0.00251],[-0.04139,-0.00059,-0.0019,-0.00306,-0.00206,-9e-05,0.00462,0.00199,-0.00651,0.0033,-0.0022,-0.0019,-0.0019,-0.00322,0.00036,0.01053,0.00236,0.0403,0.05478,0.01929,0.04768,0.04768,0.04768,0.04815,0.04554,0.04622,0.01849,0.04466,0.05478,0.03294,0.09157,0.01929,0.01849,-0.0038,-0.00572,-0.00241,-0.01736,-0.00771,-0.00247,0.00142],[-0.06251,0.00582,0.00129,0.00198,0.00146,-0.00454,0.00873,-0.00281,0.00691,-0.01259,0.00166,0.00129,0.00129,0.0021,0.00377,0.00263,-0.01939,0.02634,0.01633,-0.27719,0.01922,0.01922,0.01922,0.02185,0.02406,0.02324,0.0335,0.02147,0.01633,0.01673,0.01929,0.36281,0.0335,0.03562,0.03533,0.03745,0.03614,0.03942,0.03385,0.02548],[-0.05807,-0.00038,0.00394,0.00464,0.0042,0.00107,0.00367,-0.01175,0.00855,-0.02399,0.00436,0.00394,0.00394,0.00474,-0.00302,0.00323,-0.0075,0.02677,0.01518,0.0335,0.01868,0.01868,0.01868,0.02037,0.02371,0.02277,-0.26915,0.02105,0.01518,0.01573,0.01849,0.0335,0.37085,0.03866,0.03949,0.03051,0.03144,0.03292,0.03566,0.02659],[-0.06615,-0.02665,0.01014,0.0144,0.00968,0.00687,-0.01911,-0.02233,0.01227,-0.00742,0.00793,0.01014,0.01014,0.01451,-0.03805,0.02133,-0.00427,-0.01406,0.00135,0.03562,-0.00627,-0.00627,-0.00627,-0.00408,-0.01636,-0.01154,0.03866,-0.00356,0.00135,-0.00522,-0.0038,0.03562,0.03866,0.12033,0.08395,0.069,0.05228,0.05857,0.09148,0.08969],[-0.05613,-0.00599,0.00586,0.00614,0.00771,0.00058,-0.00368,-0.03618,0.01284,-0.01705,0.01076,0.00586,0.00586,0.00676,-0.01428,0.02665,-0.01219,0.00204,-0.0014,0.03533,-0.00756,-0.00756,-0.00756,-0.00595,-0.00985,-0.02059,0.03949,-0.00528,-0.0014,-0.00433,-0.00572,0.03533,0.03949,0.08395,0.19759,0.06494,0.04497,0.05797,0.06498,0.05043],[-0.08836,0.03908,-0.02715,-0.00951,-0.02796,-0.01347,0.0323,0.03022,-0.01246,0.01862,-0.02713,-0.02715,-0.02715,-0.00704,0.03336,0.0136,0.01129,-0.0072,0.00793,0.03745,-0.00782,-0.00782,-0.00782,-0.00642,-0.01918,-0.01922,0.03051,-0.00637,0.00793,-0.00014,-0.00241,0.03745,0.03051,0.069,0.06494,0.13731,0.09138,0.10521,0.05623,0.04741],[-0.09282,0.03475,-0.00458,0.00716,-0.00533,0.00412,0.03108,0.03082,-0.05782,0.02303,-0.00637,-0.00458,-0.00458,0.0084,0.03203,-0.10595,0.01723,0.01172,-0.05035,0.03614,0.00209,0.00209,0.00209,0.0033,0.00449,0.00842,0.03144,0.00661,-0.05035,0.00908,-0.01736,0.03614,0.03144,0.05228,0.04497,0.09138,0.21063,0.08275,0.05092,0.0389],[-0.09128,0.0365,-0.01039,-0.05354,-0.0099,-0.0128,0.03192,0.0273,0.00404,0.01729,-0.00806,-0.01039,-0.01039,-0.05838,0.03432,0.01144,0.01045,0.00536,0.00377,0.03942,-0.01328,-0.01328,-0.01328,-0.0272,2e-05,-0.00509,0.03292,-0.00606,0.00377,4e-05,-0.00771,0.03942,0.03292,0.05857,0.05797,0.10521,0.08275,0.16179,0.05932,0.04148],[-0.06947,-0.03042,0.01147,0.0158,0.01123,0.00966,-0.0612,-0.01049,0.015,-3e-05,0.00976,0.01147,0.01147,0.01596,-0.02505,0.01343,0.00149,0.00322,0.00299,0.03385,-0.00522,-0.00522,-0.00522,-0.00343,-0.0012,0.00255,0.03566,-0.02928,0.00299,-0.02965,-0.00247,0.03385,0.03566,0.09148,0.06498,0.05623,0.05092,0.05932,0.166,0.08113],[-0.05408,-0.05307,0.00923,0.01271,0.0087,0.00827,-0.02406,-0.00512,0.01042,0.00183,0.00689,0.00923,0.00923,0.01272,-0.02343,0.01347,0.00262,-0.05453,0.00399,0.02548,-0.0001,-0.0001,-0.0001,0.00129,-0.00601,-0.00087,0.02659,0.00113,0.00399,-0.00251,0.00142,0.02548,0.02659,0.08969,0.05043,0.04741,0.0389,0.04148,0.08113,0.23853]],"stats":{"abs_rel":[-2.80178,0.70542,-1],"delta_1":[-0.15006,0.19553,1],"maa":[-0.19945,0.15,1],"ate":[-2.49282,1.06658,-1]},"metric_task":{"abs_rel":"depth","delta_1":"depth","maa":"pose","ate":"pose"},"cap":{"CUT3R":["depth","pose"],"DA-V2 Base":["depth"],"DA-V2 Large":["depth"],"DA-V2 Small":["depth"],"DA3":["depth","pose"],"DAGE":["pose"],"DUSt3R":["depth","pose"],"Depth Pro":["depth"],"MASt3R":["depth","pose"],"Marigold v1-1":["depth"],"Metric3D-v2 G":["depth"],"Metric3D-v2 L":["depth"],"MoGe ViT-L":["depth"],"MonST3R":["depth","pose"],"UniK3D Large":["depth"],"VGGT":["depth","pose"]},"calib":1.1656,"supports":{"Bonn":["abs_rel"],"Booster":["delta_1"],"CO3Dv2":["maa"],"DDAD":["abs_rel"],"DIODE":["abs_rel"],"ETH3D":["abs_rel"],"GSO":["abs_rel"],"KITTI":["abs_rel","delta_1"],"NYU":["abs_rel","delta_1"],"RE10K":["maa"],"Sintel":["abs_rel","ate"],"Sun-RGBD":["delta_1"],"TUM-Dyn":["ate"],"iBims-1":["abs_rel","delta_1"]}}
+  </script>
 
   <script>
     (() => {
@@ -425,6 +317,30 @@
       const companion = JSON.parse(document.getElementById("companion-cells").textContent);
       const info = JSON.parse(document.getElementById("info-cells").textContent);
       const cells = [...verified, ...companion, ...info];
+
+      // Fitted 4-D model (method+dataset+protocol effects in direction-aware "goodness"
+      // space, shared across metrics). Predict ANY (method,dataset,protocol,metric) in
+      // the browser — the full rectangular cube, no megabyte of precomputed cells.
+      const FIT = JSON.parse(document.getElementById("model-fit").textContent);
+      const FMI = {}, FDI = {}, FPI = {};
+      FIT.methods.forEach((m, i) => FMI[m] = i);
+      FIT.datasets.forEach((d, i) => FDI[d] = i);
+      FIT.protos.forEach((p, i) => FPI[p] = i);
+      function predict(method, ds, proto, metric) {
+        const st = FIT.stats[metric];
+        if (!st || !(method in FMI) || !(ds in FDI) || !(proto in FPI)) return null;
+        // never predict a task the method can't do (depth-only / pose-only models)
+        const cap = FIT.cap[method] || ["depth", "pose"];
+        if (!cap.includes(FIT.metric_task[metric])) return null;
+        const idx = [0, 1 + FMI[method], 1 + FIT.nM + FDI[ds], 1 + FIT.nM + FIT.nD + FPI[proto]];
+        let gm = 0, gv = FIT.noise2;
+        for (const i of idx) gm += FIT.mu[i];
+        for (const i of idx) for (const j of idx) gv += FIT.Sigma[i][j];
+        const [mu, sd, sign] = st;
+        const lm = mu + sign * sd * gm, ls = sd * Math.sqrt(gv) * (FIT.calib || 1);  // LOO-calibrated band
+        const e = x => Math.exp(x), r = v => +v.toPrecision(3);
+        return { pred: r(e(lm)), lo: r(e(lm - ls)), hi: r(e(lm + ls)) };
+      }
       cells.forEach(c => { c.status = c.status || "ok"; });  // verified+companion = ok; info carries its own
 
       // Colour channel = relative PERFORMANCE within each column (metric × dataset):
@@ -491,71 +407,94 @@
         bar.appendChild(b);
       });
 
+      const protobar = document.getElementById("protobar");
+      let proto = new URLSearchParams(location.search).get("proto") || null;
+
+      // EVERY protocol is available for EVERY metric (the cube is rectangular);
+      // count = how many cells are actually observed under (metric, protocol).
+      function protocolsFor(mk) {
+        const counts = {};
+        FIT.protos.forEach(p => counts[p] = 0);
+        cells.filter(c => c.metric === mk).forEach(c => { const p = protoOf(c); if (p in counts) counts[p]++; });
+        return Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b))
+          .map(p => ({ p, n: counts[p] }));
+      }
+
+      function renderProtoBar() {
+        const ps = protocolsFor(metric);
+        if (!ps.some(x => x.p === proto)) proto = ps.length ? ps[0].p : null;
+        protobar.innerHTML = "";
+        ps.forEach(({ p, n }) => {
+          const b = document.createElement("button");
+          b.className = "ptab"; b.role = "tab"; b.dataset.p = p;
+          b.setAttribute("aria-selected", String(p === proto));
+          b.innerHTML = `${p}<span class="mc">${n}</span>`;
+          b.onclick = () => { proto = p; sync(); };
+          protobar.appendChild(b);
+        });
+      }
+
       function sync() {
         bar.querySelectorAll(".mtab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.k === metric)));
         const m = METRICS.find(x => x.key === metric);
-        desc.innerHTML = `${m.desc} · <span class="dir">${m.dir}</span> · observed / paper, audited to source`;
+        desc.innerHTML = `${m.desc} · <span class="dir">${m.dir}</span> — <b>one protocol per table</b>, so every column is a fair comparison`;
+        renderProtoBar();
         render();
         hide();
       }
 
-      // Short protocol tag per cell. The dust3r-lineage columns (NYU/KITTI/Bonn)
-      // are the ones where models genuinely diverge, so they get explicit
-      // overrides; everything else derives a tag from the citation locator.
-      const PROTO_OVERRIDE = {
-        "DUSt3R|NYU": "eigen-crop", "DUSt3R|Bonn": "MonST3R-base", "DUSt3R|KITTI": "lineage",
-        "MonST3R|NYU": "no-crop", "MonST3R|Bonn": "own", "MonST3R|KITTI": "lineage", "MonST3R|Sintel": "own",
-        "CUT3R|NYU": "prep-set", "CUT3R|Bonn": "video", "CUT3R|KITTI": "lineage",
-        "UniK3D Large|NYU": "metric/no-align",
-      };
-      const MODERN = ["DA-V2", "MoGe", "Metric3D", "Marigold", "Depth Pro"];
-      function protoOf(c) {
-        const o = PROTO_OVERRIDE[c.model + "|" + c.ds]; if (o) return o;
-        const l = ((c.cite && c.cite.loc) || "").toLowerCase();
-        if (l.includes("moge")) return "MoGe-eval";
-        if (l.includes("native")) return "native";
-        if (l.includes("video") || l.includes("rgb_110")) return "video";
-        if (l.includes("eigen") || l.includes("garg")) return "eigen-2014";
-        if ((c.ds === "NYU" || c.ds === "KITTI") && MODERN.some(m => c.model.includes(m))) return "eigen-2014";
-        if (c.cite && c.cite.src && c.cite.src.includes("protocol")) return "alt-protocol";
-        return "";
-      }
+      // Protocol = the recipe baked into each cell's `proto` by
+      // scripts/site_protocols.py (single source of truth). No derivation here.
+      const protoOf = c => c.proto || "other";
 
       function render() {
-        const sub = cells.filter(c => c.metric === metric);
+        // The SAME complete grid for every (metric, protocol): all methods × all datasets.
+        const sub = cells.filter(c => c.metric === metric && protoOf(c) === proto);
         const groups = {};
-        sub.forEach(c => { (groups[c.model + " " + c.ds] = groups[c.model + " " + c.ds] || []).push(c); });
-        const rows = MODEL_ORDER.filter(m => sub.some(c => c.model === m));
-        const colsAll = DS_ORDER.filter(d => sub.some(c => c.ds === d));
+        sub.forEach(c => { (groups[c.model + "|" + c.ds] = groups[c.model + "|" + c.ds] || []).push(c); });
+        // only methods that can do this metric's task appear (depth-only methods
+        // absent from pose tables, & vice-versa); only datasets that score this
+        // metric appear (no AbsRel-on-CO3Dv2 / mAA-on-NYU)
+        const canDo = m => (FIT.cap[m] || ["depth", "pose"]).includes(FIT.metric_task[metric]);
+        const cols = DS_ORDER.filter(d => d in FDI && (FIT.supports[d] || []).includes(metric));
+        const rows = MODEL_ORDER.filter(m => m in FMI && canDo(m));
 
-        // per-column protocol diversity → a column is only a ranking if all its cells share a protocol
-        const colProtos = {};
-        colsAll.forEach(d => colProtos[d] = new Set());
-        sub.forEach(c => { if (colProtos[c.ds]) colProtos[c.ds].add(protoOf(c) || "—"); });
+        // within-column performance (one protocol → comparable). 1 = best in column.
+        const lowerBetter = (METRICS.find(x => x.key === metric).dir || "").includes("lower");
+        const val = (m, d) => groups[m + "|" + d] ? +groups[m + "|" + d][0].obs
+          : (predict(m, d, proto, metric) || {}).pred;
+        const colRange = {};
+        cols.forEach(d => {
+          const vs = rows.map(m => val(m, d)).filter(v => v != null);
+          colRange[d] = vs.length ? { lo: Math.min(...vs), hi: Math.max(...vs) } : { lo: 0, hi: 1 };
+        });
+        const perfOf = (d, v) => {
+          const { lo, hi } = colRange[d]; if (hi === lo) return 1;
+          const t = (v - lo) / (hi - lo); return lowerBetter ? 1 - t : t;
+        };
+        const bestV = d => lowerBetter ? colRange[d].lo : colRange[d].hi;  // best score in column
 
         let html = "<thead><tr><th class='corner'>model \\ benchmark</th>";
-        colsAll.forEach(d => {
-          const n = colProtos[d].size;
-          const mix = n > 1 ? `<span class="colmix" title="${n} different protocols in this column — these cells are NOT comparable">${n} protocols ⚠</span>` : "";
-          html += `<th scope="col">${d}${mix}</th>`;
-        });
+        cols.forEach(d => html += `<th scope="col">${d}</th>`);
         html += "</tr></thead><tbody>";
         rows.forEach(mname => {
           html += `<tr><th scope="row">${mname}</th>`;
-          colsAll.forEach(d => {
-            const g = groups[mname + " " + d];
-            if (!g) { html += `<td><span class="cell empty" aria-hidden="true"></span></td>`; return; }
-            const c = g[0];
-            const glyph = c.status === "info" ? '<span class="sbadge info" title="off-paper">&#8505;</span>'
-              : c.status === "target" ? '<span class="sbadge target" title="no paper target">&#9671;</span>'
-              : '<span class="sbadge ok" title="verified">&#10003;</span>';
-            const fid = c.d == null ? '<span class="dd nt">—</span>'
-              : `<span class="dd">${c.d > 0 ? "+" : ""}${c.d}%</span>`;
-            const proto = protoOf(c);
-            const ptag = proto ? `<span class="proto">·${proto}</span>` : "";
-            const multi = g.length > 1 ? `<span class="multi" title="${g.length} numbers, this row">&middot;${g.length}</span>` : "";
-            const al = `${mname} on ${d}: observed ${c.obs}${c.d == null ? ", no paper target" : ", " + (c.d > 0 ? "+" : "") + c.d + "% from paper"}${proto ? ", protocol " + proto : ""}`;
-            html += `<td><button class="cell has ${c.status}" data-key="${mname} ${d}" aria-label="${al}">${glyph}${fid}${ptag}${multi}</button></td>`;
+          cols.forEach(d => {
+            const g = groups[mname + "|" + d];
+            if (g) {
+              const c = g[0];
+              const glyph = c.status === "info" ? '<span class="sbadge info" title="differs from paper">&#8505;</span>'
+                : c.status === "target" ? '<span class="sbadge target" title="no paper target">&#9671;</span>'
+                : '<span class="sbadge ok" title="reproduces paper">&#10003;</span>';
+              const al = `${mname} on ${d}: ${c.obs}${c.d == null ? " (no paper target)" : c.status === "ok" ? " — reproduces paper (" + (c.d > 0 ? "+" : "") + c.d + "%)" : " — off-paper (" + (c.d > 0 ? "+" : "") + c.d + "% vs paper)"}`;
+              const best = +c.obs === bestV(d) ? "best" : "";
+              html += `<td><button class="cell has ${c.status} ${best}" data-key="${mname}|${d}" aria-label="${al}${best ? " — best in column" : ""}">${glyph}<span class="v" style="color:${perfColor(perfOf(d, +c.obs))}">${c.obs}</span></button></td>`;
+            } else {
+              const p = predict(mname, d, proto, metric);
+              if (!p) { html += `<td><span class="cell empty" aria-hidden="true"></span></td>`; return; }
+              const best = +p.pred === bestV(d) ? "best" : "";
+              html += `<td><span class="cell pred ${best}" tabindex="0" title="BO prediction — NOT a run. ${mname} on ${d} under ${proto} ≈ ${p.pred} (1σ ${p.lo}–${p.hi})${best ? " — best in column" : ""}"><span class="v" style="color:${perfColor(perfOf(d, +p.pred))};font-style:italic">~${p.pred}</span></span></td>`;
+            }
           });
           html += "</tr>";
         });
