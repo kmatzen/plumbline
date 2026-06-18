@@ -53,25 +53,30 @@ def test_unknown_variant_errors() -> None:
 def test_dav2_paper_load_error_distinguishes_missing_repo_from_missing_dep(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """`_load_paper` must not say "clone the repo" when the repo is present.
+    """`_load_paper` gives the right guidance when the vendored import fails.
 
-    The repo's dpt.py does `import cv2`, so a missing opencv-python raises
-    ImportError from the same `from depth_anything_v2.dpt import ...` line as
-    a genuinely-absent repo. The two cases need different guidance: clone vs
-    install-its-deps. We drive the branch via find_spec since the repo isn't
-    installed in the test env (so the import always raises here).
+    The package is vendored (always present), but its dpt.py does `import cv2`,
+    so a missing opencv-python raises ImportError from the same
+    `from depth_anything_v2.dpt import ...` line as a (rare) corrupt install
+    where the vendored package itself is gone. The two cases need different
+    guidance. We force the import to fail by poisoning sys.modules, then drive
+    each branch via find_spec.
     """
     import importlib.util
+    import sys
 
     cls = MODEL_REGISTRY["depth-anything-v2"]
     model = cls(device="cpu", variant="small", source="paper")  # type: ignore[call-arg]
 
-    # Repo genuinely absent → find_spec None → "clone" guidance.
+    # Make `from depth_anything_v2.dpt import ...` raise (regardless of vendoring).
+    monkeypatch.setitem(sys.modules, "depth_anything_v2", None)
+
+    # Vendored package genuinely missing → find_spec None → corrupt-install guidance.
     monkeypatch.setattr(importlib.util, "find_spec", lambda name: None)
-    with pytest.raises(ImportError, match="needs the paper's repo"):
+    with pytest.raises(ImportError, match="vendored depth_anything_v2 package"):
         model._load_paper()
 
-    # Repo present but its import failed (e.g. cv2 missing) → different message.
+    # Package present but its import failed (e.g. cv2 missing) → different message.
     monkeypatch.setattr(importlib.util, "find_spec", lambda name: object())
     with pytest.raises(ImportError, match="found but importing it failed"):
         model._load_paper()
