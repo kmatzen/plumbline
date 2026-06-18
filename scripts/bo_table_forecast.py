@@ -28,6 +28,22 @@ import numpy as np
 EXPLORE = "site/explore.html"
 PRIMARY = ("abs_rel", "delta_1", "maa", "ate")
 SIGN = {"delta_1": +1, "maa": +1, "abs_rel": -1, "ate": -1}  # +1 = higher is better
+METRIC_TASK = {"abs_rel": "depth", "delta_1": "depth", "maa": "pose", "ate": "pose"}
+
+# What each method can actually DO — from the adapters' `tasks` (mono_depth vs pose).
+# We never predict a metric for a method that doesn't do that task.
+CAPABILITY = {
+    "DA-V2 Small": ["depth"], "DA-V2 Base": ["depth"], "DA-V2 Large": ["depth"],
+    "MoGe ViT-L": ["depth"], "Metric3D-v2 L": ["depth"], "Metric3D-v2 G": ["depth"],
+    "Marigold v1-1": ["depth"], "Depth Pro": ["depth"], "UniK3D Large": ["depth"],
+    "DA3": ["depth", "pose"], "CUT3R": ["depth", "pose"], "DUSt3R": ["depth", "pose"],
+    "MonST3R": ["depth", "pose"], "VGGT": ["depth", "pose"], "MASt3R": ["depth", "pose"],
+    "DAGE": ["pose"],
+}
+
+
+def can_do(method, metric):
+    return METRIC_TASK[metric] in CAPABILITY.get(method, ["depth", "pose"])
 
 DEPTH_DROP = ("Booster", "ETH3D", "iBims-1", "Sun-RGBD")
 
@@ -132,6 +148,8 @@ def fit(cells, prior_sd=0.8, noise_sd=0.35):
         "mu": [round(float(v), 5) for v in mu_w],
         "Sigma": [[round(float(v), 5) for v in row] for row in Sigma],
         "stats": {k: [round(stats[k][0], 5), round(stats[k][1], 5), SIGN[k]] for k in stats},
+        "metric_task": METRIC_TASK,
+        "cap": {m: CAPABILITY.get(m, ["depth", "pose"]) for m in methods},
     }
     return methods, datasets, protos, predict, info_gain, model
 
@@ -151,13 +169,14 @@ def main():
         print(json.dumps(model, separators=(",", ":")))
         return
 
-    # FULL rectangular 4-D cube: every method × dataset × protocol × metric.
+    # 4-D cube MASKED by capability: skip metrics a method can't do (no pose for a
+    # depth-only model, no depth for a pose-only model).
     def gaps():
         for k in PRIMARY:
             for p in protos:
                 for d in datasets:
                     for m in methods:
-                        if (m, d, k, p) not in measured:
+                        if can_do(m, k) and (m, d, k, p) not in measured:
                             yield (m, d, p, k)
 
     if args.json:
