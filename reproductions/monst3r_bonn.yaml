@@ -49,16 +49,20 @@ notes: >
   cell (Table 2: 0.067 w/ flow-refined GA); that's a follow-up gated
   on the adapter's flow path (out of scope here).
 
-  STATUS — D27 RESOLVED 2026-05-26 (paper-text-vs-code mismatch).
-  Observed AbsRel 0.0654 vs paper 0.076 (14 % off, *better*). Single-
-  record diff against MonST3R's upstream `depth_metric.ipynb` Bonn cell:
-  paper §4.2 text claims "per-frame median scaling, following DUSt3R"
-  but the notebook actually scores via `depth_evaluation(pr, gt,
-  max_depth=70, align_with_lad2=True)` — per-sequence scale+shift LAD2
-  (Adam optimization, init at median-scale), with valid-pixel-weighted
-  mean across the 5 sequences. Plumbline implements the paper-text
-  recipe (per-frame median scale-only); paper number 0.076 reflects the
-  upstream code recipe. Same shape as D9 (Marigold checkpoint default)
-  and D17/D18 (GeoWizard best-of-N seeds) — `paper_match: no` is an
-  explained protocol delta, not a model/adapter bug. See
-  docs/DISCREPANCIES.md D27.
+  STATUS — ℹ off-paper-better, NOT the scoring recipe (corrected
+  2026-06-18). Observed AbsRel 0.0654 vs paper 0.076 (−13.9 %, *better*).
+  The earlier D27 explanation — that the gap is MonST3R's
+  `align_with_lad2=True` per-sequence scale+shift recipe — was TESTED
+  and DISPROVEN (scripts/_monst3r_bonn_recipe_probe.py, rgb_110): on
+  plumbline's MonST3R F(I,I) predictions, per-seq LAD2 gives 0.0906 and
+  per-seq median 0.0946 — both OVERSHOOT 0.076, while per-frame median
+  (plumbline's recipe, = paper §4.2 text) gives 0.0694 on rgb_110 /
+  0.0654 all-frames, the closest. 0.076 sits BETWEEN, so no scoring
+  recipe reproduces it from these preds. The residual is therefore a
+  PREDICTION-method difference: plumbline uses F(I,I) view-duplication
+  (validated on NYU, which matches at −1.5 %), but MonST3R's Table-3
+  "single-frame" number for the *video* datasets is the per-frame
+  output of its video forward pass — a slightly different (here
+  slightly worse) depth. So plumbline is honestly off-paper-better
+  under the paper's own per-frame-median recipe; switching to the
+  per-seq recipe would make it *worse*, not match. See D27 (corrected).

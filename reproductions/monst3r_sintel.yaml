@@ -48,3 +48,16 @@ notes: >
   use. Iterates 14 dynamic-scene clips from MonST3R's eval_metadata.py
   `sintel` entry; sky pixels (~1e5 m in `.dpt` files) excluded by the
   loader via max_depth=70 before scoring.
+
+  STATUS — ℹ off-paper (+8 %), prediction-method not scoring (tested
+  2026-06-18). Observed AbsRel 0.3726 vs paper 0.345. Probe
+  (scripts/_monst3r_sintel_recipe_probe.py): per-frame median
+  (plumbline's recipe, = §4.2 text) = 0.3726, the CLOSEST; per-seq LAD2
+  scale+shift pixel-weighted = 0.4117 and per-seq median pixel-weighted
+  = 0.4225 — both WORSE. So the per-sequence pixel-weighted recipe does
+  NOT explain (and would worsen) the gap. Dominated by the `temple_2`
+  scene (AbsRel 1.06 under per-seq median). As with monst3r-bonn, the
+  residual is the F(I,I) view-duplication vs MonST3R's video-forward
+  single-frame depth — here plumbline's F(I,I) does slightly *worse* on
+  Sintel's fast-motion scenes (opposite sign to Bonn/KITTI, where it's
+  better). Faithful to the paper's stated recipe; not a scoring bug.
