@@ -72,7 +72,9 @@
     table.matrix tbody tr:nth-child(even) th { background: var(--bg-1); }
     /* no per-cell grid lines: empties recede to blank space, filled cells form the picture */
     table.matrix tbody td { min-width: 80px; }
-    table.matrix tbody td:has(.cell.has) { background: rgba(212,240,0,0.022); }
+    /* a real measurement gets a box; predictions stay borderless (dashed bg) */
+    table.matrix tbody td:has(.cell.has) { background: rgba(212,240,0,0.022); box-shadow: inset 0 0 0 1px var(--rule); }
+    table.matrix tbody td:has(.cell.has.ok) { box-shadow: inset 0 0 0 1px var(--acc-dim); }
     table.matrix tbody tr:hover td { background: rgba(255,255,255,0.015); }
 
     .cell { display: block; width: 100%; padding: 10px 8px; cursor: default; position: relative; text-align: left; transition: background 0.14s var(--ease); }
