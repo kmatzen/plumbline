@@ -52,6 +52,8 @@ def proto_of(model, ds, metric, src, loc):
     """Protocol = eval recipe, from the eval SOURCE + dataset — never the method."""
     s = re.sub(r"\s*\(.*?\)", "", src or "").strip()
     if metric in ("abs_rel", "delta_1"):
+        if ds in ("GSO", "DDAD"):
+            return "moge-eval (affine)"  # these datasets are only ever the MoGe affine eval
         if s == "MoGe":
             return "moge-eval (affine)"
         if s == "DUSt3R":
@@ -80,8 +82,10 @@ def load_cells():
         for c in json.loads(m.group(1)):
             if c.get("metric") not in PRIMARY or c.get("obs") in (None, ""):
                 continue
+            # read the baked single-source `proto`; proto_of() is only the baker's
+            # logic now (scripts/site_protocols.py), kept here as a fallback.
             cite = c.get("cite") or {}
-            proto = proto_of(c["model"], c["ds"], c["metric"], cite.get("src", ""), cite.get("loc", ""))
+            proto = c.get("proto") or proto_of(c["model"], c["ds"], c["metric"], cite.get("src", ""), cite.get("loc", ""))
             k = (c["model"], c["ds"], c["metric"], proto)
             if k in seen:
                 continue
@@ -159,6 +163,7 @@ def main():
     ap.add_argument("--topk", type=int, default=12)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--model", action="store_true", help="emit the fitted model for in-browser prediction")
+    ap.add_argument("--loo", action="store_true", help="leave-one-out cross-validation")
     args = ap.parse_args()
 
     cells = load_cells()
@@ -167,6 +172,32 @@ def main():
 
     if args.model:
         print(json.dumps(model, separators=(",", ":")))
+        return
+
+    if args.loo:
+        import statistics
+        errs = {k: [] for k in PRIMARY}
+        hits = tot = cold = 0
+        for i in range(len(cells)):
+            c = cells[i]
+            _, _, _, pr, _, _ = fit(cells[:i] + cells[i + 1:])
+            try:
+                mean, lo, hi = pr(c["model"], c["ds"], c["proto"], c["metric"])
+            except KeyError:  # held-out cell was the sole observation of some level
+                cold += 1
+                continue
+            errs[c["metric"]].append(abs(mean - c["y"]) / c["y"])
+            tot += 1
+            hits += lo <= c["y"] <= hi
+        print(f"LEAVE-ONE-OUT CV  ({len(cells)} cells)\n")
+        for k in PRIMARY:
+            if errs[k]:
+                print(f"  {k:8} median rel-err {statistics.median(errs[k]) * 100:5.1f}%  "
+                      f"(max {max(errs[k]) * 100:.0f}%)  n={len(errs[k])}")
+        print(f"\n  calibration: {hits}/{tot} held-out scores fell within ±1σ "
+              f"({100*hits/tot:.0f}%; well-calibrated ≈ 68%)")
+        print(f"  cold-start: {cold}/{len(cells)} cells are the SOLE observation of some "
+              f"method/dataset/protocol → unpredictable when held out")
         return
 
     # 4-D cube MASKED by capability: skip metrics a method can't do (no pose for a
