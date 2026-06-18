@@ -523,7 +523,7 @@
       });
 
       const protobar = document.getElementById("protobar");
-      let proto = null;
+      let proto = new URLSearchParams(location.search).get("proto") || null;
 
       // Protocols available for a metric, with each one's measured-cohort size,
       // sorted biggest-first (the richest comparable table leads).
