@@ -62,6 +62,7 @@
     table.matrix thead th.dcol { cursor: pointer; user-select: none; }
     table.matrix thead th.dcol:hover { color: var(--fg-soft); background: rgba(212,240,0,0.05); }
     table.matrix thead th.sorted { color: var(--acc); border-bottom-color: var(--acc-dim); }
+    table.matrix thead th .sortmark { font-size: 8.5px; color: var(--acc); font-weight: 600; letter-spacing: 0; margin-left: 3px; }
     table.matrix thead th.corner.sortable { cursor: pointer; } table.matrix thead th.corner.sortable:hover { color: var(--acc); }
     table.matrix tbody th {
       text-align: left; color: var(--fg-soft); font-weight: 600; white-space: nowrap;
@@ -490,7 +491,7 @@
         const bestV = d => lowerBetter ? colRange[d].lo : colRange[d].hi;  // best score in column
 
         let html = `<thead><tr><th class='corner${sortCol ? " sortable" : ""}' title="${sortCol ? "clear sort" : "click a benchmark to rank methods"}">model \\ benchmark</th>`;
-        cols.forEach(d => html += `<th scope="col" class="dcol${sortCol === d ? " sorted" : ""}" data-col="${d}" title="rank methods by ${d}">${d}${sortCol === d ? (lowerBetter ? " ↑" : " ↓") : ""}</th>`);
+        cols.forEach(d => html += `<th scope="col" class="dcol${sortCol === d ? " sorted" : ""}" data-col="${d}" title="rank methods by ${d} — best on top (${lowerBetter ? "lower" : "higher"} is better)">${d}${sortCol === d ? ' <span class="sortmark">▲ best</span>' : ""}</th>`);
         html += "</tr></thead><tbody>";
         rows.forEach(mname => {
           html += `<tr><th scope="row">${mname}</th>`;
