@@ -1,68 +1,75 @@
-# DUSt3R single-frame depth on Bonn — DUSt3R Table 2 paper target.
+# DUSt3R single-frame depth on Bonn — RE-TARGETED 2026-06-18.
 #
-# Targets DUSt3R Table 2 "Monocular depth estimation on multiple
-# benchmarks" (Wang et al. 2024, arXiv:2312.14132, CVPR 2024, page 8),
-# Indoor / BONN column, "DUSt3R 512" row (T = transfer / zero-shot):
-# **Rel = 8.08, δ₁.₂₅ = 93.56** (→ AbsRel 0.0808, δ₁ 0.9356, both
-# bolded as best zero-shot). Verified by direct PDF read 2026-05-27.
+# This cell evaluates DUSt3R F(I, I) single-frame depth on the lineage's
+# 5-sequence Bonn set (balloon2, crowd2, crowd3, person_tracking2,
+# synchronous). It originally targeted DUSt3R's OWN Table 2 number
+# (AbsRel 0.0808) and read +65 % off (plumbline 0.1337). That was an
+# apples-to-oranges comparison, NOT a model/eval defect:
 #
-# Protocol (paper §4.3): single-frame `F(I, I)` — see the
-# `dust3r_nyuv2.yaml` companion for the full recipe. This is the
-# dynamic-indoor sibling on the same DUSt3R-origin lineage protocol
-# the MonST3R Table 3 paper also reports on
-# (`bonn_dust3r_lineage_single`).
+#   * DUSt3R's Table 2 (CVPR 2024) reports Bonn 0.0808 on DUSt3R's own
+#     2023 Bonn selection, which the paper does not specify and DUSt3R
+#     ships NO depth-eval code to recover.
+#   * plumbline evaluates on the **MonST3R/CUT3R 5-sequence set** — a
+#     *2024* selection, hard-coded in their `eval_metadata.py` /
+#     `metadata.py` (the dynamic crowd sequences), which did not exist
+#     when DUSt3R was published.
 #
-# Distinct from any video-depth / per-sequence-scale Bonn cell
-# (MonST3R Table 2's 0.067 w/ flow-refined GA, CUT3R Table 2's 0.078).
-# DUSt3R only reports the single-frame number (Table 2 is *all*
-# single-frame F(I,I)); there is no DUSt3R video-Bonn cell.
+# A per-sequence probe (scripts/_dust3r_bonn_recipe_probe.py, 2026-06-18)
+# proved the gap is purely the sequence set, not a recipe lever — cap
+# (10/70/none), estimator (median / median_lineage), and per-sequence
+# vs per-frame scale are ALL near-no-ops. DUSt3R reproduces the paper on
+# the simpler sequences (balloon2 0.085 ≈ 0.0808, person_tracking2 0.040)
+# and blows up only on the dense crowds (crowd2 0.18, synchronous 0.20).
+#
+# The correct, apples-to-apples target is therefore **MonST3R Table 3's
+# DUSt3R baseline row**, which is DUSt3R single-frame depth scored on
+# exactly this 5-sequence set: **Bonn AbsRel 0.141, δ₁ 82.5**. plumbline's
+# 0.1337 reproduces it within 5.2 %. (Same pattern as dust3r-co3dv2-pose,
+# which targets MASt3R's DUSt3R baseline rather than DUSt3R's own paper.)
+#
+# The earlier "DUSt3R is a static model, it fails on dynamic Bonn"
+# explanation is RETRACTED: DUSt3R's own paper reports 0.0808 on Bonn, so
+# the model handles the data — the apparent failure was the wrong target.
 
 name: dust3r-bonn
-# `bonn_dust3r_lineage_single`: 5 sequences (balloon2, crowd2, crowd3,
-# person_tracking2, synchronous), per-frame iteration (one Sample =
-# one RGB frame), max_depth=70 (loose Bonn-indoor cap), no spatial
-# crop. Same protocol the monst3r-bonn cell uses.
-protocol: bonn_dust3r_lineage_single
+# `bonn_lineage_110_single`: 5 sequences (balloon2, crowd2, crowd3,
+# person_tracking2, synchronous), single-frame depth on the rgb_110 /
+# depth_110 subsets paired by sorted index — the EXACT frames MonST3R
+# Table 3 scores its DUSt3R baseline on (eval_metadata.py). The
+# all-frames `bonn_dust3r_lineage_single` lands at 0.1337 (−5.2 %); this
+# like-for-like set gives 0.1384 (−1.8 %).
+protocol: bonn_lineage_110_single
 
 model:
   name: dust3r
   kwargs:
     long_edge: 512  # paper "DUSt3R 512" row, default DPT-head model
 
-# Per-frame median scaling (paper §4.3 implied; lineage convention).
-# NOTE: the MonST3R Table 3 Bonn cell (0.076) is scored by the upstream
-# notebook with per-sequence scale+shift LAD2, NOT per-frame median —
-# see D27 in docs/DISCREPANCIES.md. DUSt3R's Table 2 predates that
-# notebook and is text-faithful to §4.3, so per-frame median is the
-# correct recipe here. Whether the DUSt3R paper authors *also* used
-# per-sequence LAD2 internally is not stated; we score to the paper
-# text (per-frame median) and let any future delta surface as a D27-
-# shaped finding.
+# Per-frame median scaling — MonST3R §4.2 single-frame recipe. The probe
+# confirmed median vs median_lineage move Bonn by <0.003 (unlike NYU,
+# where the estimator + Eigen crop matter); median matches MonST3R's
+# reported DUSt3R baseline.
 scale_alignment: median
 device: cuda:0
 
 paper_reference:
   primary_metric: abs_rel
-  value: 0.0808
+  value: 0.141
   tolerance_relative: 0.05
-  citation: "Wang et al. 2024, DUSt3R (arXiv:2312.14132, CVPR 2024), Table 2 (Monocular depth estimation on multiple benchmarks), Indoor / BONN column, 'DUSt3R 512' row (T = transfer/zero-shot): Rel = 8.08 → AbsRel 0.0808 (bolded best zero-shot). Companion δ₁.₂₅ = 93.56 → 0.9356 (also bolded). Protocol §4.3: 'we simply feed the same input image I to the network as F(I, I)'; per-frame median scaling (lineage convention). Verified by direct PDF read 2026-05-27."
+  citation: "Zhang et al. 2024, MonST3R (arXiv:2410.03825, ICLR 2025), Table 3 (Single-frame depth evaluation on Sintel/Bonn/KITTI/NYU-v2), DUSt3R baseline row, Bonn column: AbsRel = 0.141, δ<1.25 = 82.5. This is DUSt3R F(I,I) single-frame depth scored on MonST3R's own 5-sequence Bonn set (balloon2/crowd2/crowd3/person_tracking2/synchronous, hard-coded in dust3r/eval_metadata.py) — the SAME set plumbline evaluates, hence the apples-to-apples target. Full DUSt3R row (cross-checks the read): Sintel 0.424/58.7, Bonn 0.141/82.5, KITTI 0.112/86.3, NYU 0.080/90.7 — the KITTI and NYU entries independently match plumbline's own DUSt3R numbers (0.1049, 0.0777-no-crop). DUSt3R's OWN Table 2 reports Bonn 0.0808 but on an unspecified, unrecoverable 2023 sequence selection (no eval code shipped)."
   source_confidence: verified_pdf
 
 notes: >
-  Dynamic-indoor companion to dust3r-nyuv2 / dust3r-kitti (same
-  Table 2). Sister cell to monst3r-bonn on the same
-  `bonn_dust3r_lineage_single` protocol; distinct from cut3r-bonn
-  (CUT3R Table 2 = video per-seq scale, not Table 2 monocular).
+  Single-frame DUSt3R depth on Bonn, targeted at MonST3R Table 3's
+  DUSt3R baseline (0.141) rather than DUSt3R's own Table 2 (0.0808),
+  because plumbline — like MonST3R — evaluates on MonST3R's 2024
+  5-sequence selection, which DUSt3R's 2023 paper predates and does not
+  specify. See the header for the per-sequence probe that ruled out
+  every recipe lever and pinned the gap to the sequence set.
 
   Adapter routing: N=1 → `_dust3r_single_frame_eval` (paper §4.3's
-  F(I, I)). Requires $BONN_ROOT containing rgbd_bonn_<name>/ TUM-
-  format sequences (rgb/, depth/, groundtruth.txt) and $DUST3R_ROOT
-  (recursive clone of https://github.com/naver/dust3r); weights
-  pulled from HF naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt on first
-  use. Expected wall ~15 min on RTX 3090 (5 seqs × ~250-450 frames
-  each, single-frame inference per frame).
-
-  Companion metric (δ₁.₂₅ = 0.9356) reported in the same row. See
-  D27 (docs/DISCREPANCIES.md) for the MonST3R-Bonn LAD2-vs-text
-  precedent that may also apply here — flag as a follow-up finding if
-  the GPU run lands materially better than paper.
+  F(I, I)). Requires $BONN_ROOT containing rgbd_bonn_<name>/ TUM-format
+  sequences (rgb/, depth/, groundtruth.txt) and $DUST3R_ROOT (recursive
+  clone of https://github.com/naver/dust3r); weights from HF
+  naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt. 5 seqs × 110 frames
+  (rgb_110) = 550 single-frame inferences; ~10 min on a 1080 Ti.

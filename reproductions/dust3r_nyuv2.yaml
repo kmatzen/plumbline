@@ -21,29 +21,38 @@
 # dust3r package resolves on sys.path ($DUST3R_ROOT vs $MONST3R_ROOT/
 # dust3r).
 #
-# Alignment recipe: per-frame median scaling. Paper §4.3 doesn't spell
-# it out explicitly in the text, but it's what every downstream paper
-# in the lineage cites DUSt3R for (MonST3R §4.2: "per-frame median
-# scaling, following Wang et al. 2024c [DUSt3R]"). The lineage protocol
-# file `protocols/nyu_dust3r_lineage.yaml` codifies the full recipe
-# (filled GT, no Eigen crop, no post-alignment clip) — empirically
-# calibrated against MonST3R Table 3 NYU-v2 cell within 1.7 % using
-# this loader (see D24 / D27 in docs/DISCREPANCIES.md).
+# Eval recipe — RESOLVED 2026-06-18 (scripts/_dust3r_nyu_recipe_probe.py,
+# 654 imgs on anima). The cell originally inherited `nyu_dust3r_lineage`
+# (filled GT, NO Eigen crop, median-of-ratios) on the false premise that
+# "DUSt3R is the origin of the lineage protocol" → AbsRel 0.0777 (+19.5 %).
+# That premise was wrong: the no-crop convention is a *later* MonST3R/CUT3R
+# choice. DUSt3R (2023) reports under the CLASSICAL Eigen-2014 crop +
+# ratio-of-medians (its own §4.3 text). The probe re-scored one byte-faithful
+# inference pass under the full recipe matrix:
+#   filled, no-crop, median            0.0777 / δ₁ 0.9101   (old cell)
+#   filled, Eigen-crop, median         0.0577 / 0.9495
+#   filled, Eigen-crop, median_lineage 0.0637 / 0.9456      <- matches paper
+#                                      (paper 0.0650 / 0.9402, both <2.5 %)
+# Two fixes: protocol → nyu_dust3r_table2 (adds the Eigen crop), estimator →
+# median_lineage (ratio-of-medians, DUSt3R §4.3 verbatim). See the protocol
+# file header for the full table.
 
 name: dust3r-nyuv2
-# `nyu_dust3r_lineage` — DUSt3R is the *origin* of this lineage; the
-# protocol is named after this paper. Filled GT + no Eigen crop + no
-# clip, 654-image Eigen test split.
-protocol: nyu_dust3r_lineage
+# `nyu_dust3r_table2` — DUSt3R's OWN 2023 Table-2 convention: filled GT +
+# classical Eigen-2014 crop. Distinct from `nyu_dust3r_lineage` (no crop),
+# which is the MonST3R/CUT3R-era convention. 654-image Eigen test split.
+protocol: nyu_dust3r_table2
 
 model:
   name: dust3r
   kwargs:
     long_edge: 512  # paper "DUSt3R 512" row, default DPT-head model
 
-# Per-frame median scaling (paper §4.3 implied, §4.2-of-MonST3R
-# explicit: "following Wang et al. 2024c [DUSt3R]").
-scale_alignment: median
+# Ratio-of-medians scaling — DUSt3R §4.3 verbatim: "normalize predictions
+# using the medians of the predicted depths and the ground-truth ones"
+# = s = median(gt)/median(pred). (Lineage `median` = median-of-ratios is a
+# different estimator; see protocols/nyu_dust3r_table2.yaml.)
+scale_alignment: median_lineage
 device: cuda:0
 
 paper_reference:
@@ -54,12 +63,13 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
-  First DUSt3R-own-paper depth pin. Sister cell to monst3r-nyuv2 and
-  cut3r-nyuv2 on the same `nyu_dust3r_lineage` protocol (filled GT +
-  no Eigen crop + no clip), same view-duplicate recipe — the three
-  cells are directly comparable. DUSt3R is the *origin* paper for the
-  lineage protocol; MonST3R / CUT3R / Spann3R / π³ all cite this paper
-  (Wang 2024c) for the per-frame-median + filled-GT recipe.
+  First DUSt3R-own-paper depth pin. Uses `nyu_dust3r_table2` (filled GT
+  + Eigen-2014 crop + ratio-of-medians) — DUSt3R's OWN 2023 convention,
+  NOT the no-crop `nyu_dust3r_lineage` that monst3r-nyuv2 / cut3r-nyuv2
+  use. That divergence is the finding: DUSt3R predates the lineage's
+  drop-the-Eigen-crop choice, so it is not directly comparable to the
+  later cells on the same protocol (the earlier claim that it was is
+  retracted; see the recipe table above).
 
   Adapter routing: N=1 → `_dust3r_single_frame_eval` (paper §4.3's
   F(I, I)). Requires $DUST3R_ROOT (recursive clone of

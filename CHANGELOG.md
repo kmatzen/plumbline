@@ -7,7 +7,26 @@ public API may change between 0.x releases.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Fixed
+- **DUSt3R indoor depth (NYU + Bonn) now reproduce** — both were off-paper `ℹ️`
+  cells under wrong recipes/targets, not "paper-private" as previously recorded
+  (D28 RESOLVED). Verified-cell count 42 → **44**.
+  - `dust3r-nyuv2` — **AbsRel 0.0637 vs 0.065** (−2.0 %, was 0.0777 / +19.5 %).
+    DUSt3R's own Table 2 uses the classical **Eigen-2014 crop + ratio-of-medians**,
+    which the *later* lineage protocol (`nyu_dust3r_lineage`) drops. New
+    `nyu_dust3r_table2` protocol (filled GT + Eigen crop) + `median_lineage`.
+    Independently corroborated by MonST3R Table 3, which re-scores DUSt3R-NYU
+    *no-crop* at 0.080 ≈ plumbline's old 0.0777.
+  - `dust3r-bonn` — **AbsRel 0.1384 vs 0.141** (−1.8 %, was 0.1337 vs 0.0808 /
+    +65.5 %). Re-targeted from DUSt3R's own Table 2 (0.0808, scored on an
+    unrecoverable 2023 sequence selection) to **MonST3R Table 3's DUSt3R
+    baseline (0.141)**, which is DUSt3R single-frame depth on exactly the
+    `rgb_110` 5-sequence set plumbline evaluates. The "DUSt3R is a static model,
+    fails on dynamic Bonn" explanation is **retracted** (DUSt3R's own paper
+    reports 0.0808 on Bonn). New Bonn loader `prepared_110` mode +
+    `bonn_lineage_110_single` protocol.
+- Retracted the false claim that DUSt3R is the origin of the `nyu_dust3r_lineage`
+  (no-crop) convention — that's a MonST3R/CUT3R-era choice; DUSt3R predates it.
 
 ## [0.2.1] — 2026-06-16
 

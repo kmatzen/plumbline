@@ -1,0 +1,60 @@
+# NYUv2 evaluation under DUSt3R's OWN Table 2 convention (Wang 2024,
+# arXiv:2312.14132, CVPR 2024 — the 2023 origin paper).
+#
+# This is DISTINCT from `nyu_dust3r_lineage`, despite the lineage protocol's
+# name. Empirically (scripts/_dust3r_nyu_recipe_probe.py, 654 imgs, 2026-06-18)
+# DUSt3R's reported NYU number (AbsRel 0.0650 / δ₁ 0.9402) reproduces under the
+# CLASSICAL Eigen-2014 crop, NOT the lineage's no-crop convention:
+#
+#   recipe (filled GT)                       AbsRel    δ₁
+#   no-crop  + median        (lineage cell)  0.0777   0.9101   <- old dust3r-nyuv2
+#   Eigen-crop + median                      0.0577   0.9495
+#   Eigen-crop + median_lineage              0.0637   0.9456   <- matches paper
+#                                            (paper 0.0650 / 0.9402)
+#
+# Two levers separate DUSt3R from the later lineage (MonST3R/CUT3R), and both
+# trace to DUSt3R being the 2023 ORIGIN paper that predates the lineage's
+# conventions:
+#   1. **Eigen spatial crop** ((45,471,41,601)) — the standard pre-2021 NYU
+#      eval crop. The lineage (`nyu_dust3r_lineage`) explicitly DROPS it; that
+#      drop is a MonST3R/CUT3R-era choice, not DUSt3R's. The crop is the
+#      dominant lever here (0.0777 -> 0.0577).
+#   2. **Ratio-of-medians scaling** (`scale_alignment: median_lineage`) — DUSt3R
+#      §4.3 verbatim: "normalize predictions using the medians of the predicted
+#      depths and the ground-truth ones" = s = median(gt)/median(pred). Set in
+#      the reproduction YAML, not here.
+# GT field stays `filled` (Silberman dense): raw GT overshoots to 0.0489.
+#
+# Use `nyu_dust3r_lineage` (no crop, median-of-ratios) for MonST3R / CUT3R /
+# Spann3R / π³ / VGGT, whose paper cells reproduce under the no-crop convention.
+# Use THIS protocol only for DUSt3R's own Table 2 cells.
+
+name: nyu_dust3r_table2
+description: >
+  NYUv2 under DUSt3R's own CVPR-2024 Table 2 monocular-depth convention:
+  filled (Silberman-colorized) GT, classical Eigen-2014 spatial crop
+  ((45,471,41,601)), valid-mask = gt > 0 inside the crop, no
+  post-alignment clip. Paired with scale_alignment: median_lineage
+  (ratio-of-medians, per §4.3). 654-image Eigen test split.
+
+reference:
+  paper: "Wang et al. 2024, DUSt3R (arXiv:2312.14132, CVPR 2024), Table 2"
+  split_source: "Silberman 2012 splits.mat, testNdxs (0-indexed 654 indices)"
+  empirical_calibration: >
+    scripts/_dust3r_nyu_recipe_probe.py (654 imgs, 2026-06-18): DUSt3R
+    F(I,I) under this protocol + median_lineage = AbsRel 0.0637 / δ₁
+    0.9456 vs paper 0.0650 / 0.9402 (both <2.5%, within 5% tolerance).
+    The no-crop `nyu_dust3r_lineage` gives 0.0777 (+19.5%) — the cell's
+    original off-paper value. Probe is byte-faithful: it reproduces the
+    old 0.0777 exactly under the old recipe.
+
+fixed:
+  dataset:
+    name: nyuv2
+    split: test
+    kwargs:
+      apply_eigen_crop: true
+      depth_field: filled
+  # No depth_clip — DUSt3R's eval doesn't clip; GT cap is a no-op on indoor NYU.
+  max_views: 1
+  tasks: [mono_depth]

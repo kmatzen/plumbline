@@ -225,7 +225,9 @@
     {"model":"UniK3D Large","ds":"NYU","metric":"abs_rel","obs":"0.0749","paper":"0.074","d":1.2,"task":"depth","cite":{"src":"UniK3D","who":"Piccinelli et al. 2025","arxiv":"2503.16591","loc":"Table 18 · NYUv2 · UniK3D-L metric (no align)"}},
     {"model":"CUT3R","ds":"NYU","metric":"abs_rel","obs":"0.0858","paper":"0.086","d":-0.2,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 1 · NYU · prepared set + median_lineage (plumbline-native)"}},
     {"model":"CUT3R","ds":"KITTI","metric":"abs_rel","obs":"0.0953","paper":"0.092","d":3.6,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 1 · KITTI · lineage + median_lineage"}},
-    {"model":"CUT3R","ds":"Bonn","metric":"abs_rel","obs":"0.0768","paper":"0.078","d":-1.5,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 2 · Bonn · video rgb_110 + scale_weiszfeld"}}
+    {"model":"CUT3R","ds":"Bonn","metric":"abs_rel","obs":"0.0768","paper":"0.078","d":-1.5,"task":"depth","cite":{"src":"CUT3R","who":"Wang et al. 2025","arxiv":"2501.12387","loc":"Table 2 · Bonn · video rgb_110 + scale_weiszfeld"}},
+    {"model":"DUSt3R","ds":"NYU","metric":"abs_rel","obs":"0.0637","paper":"0.065","d":-2.0,"task":"depth","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 · NYU · F(I,I) + Eigen-2014 crop + ratio-of-medians (DUSt3R's own 2023 convention, not the lineage no-crop)"}},
+    {"model":"DUSt3R","ds":"Bonn","metric":"abs_rel","obs":"0.1384","paper":"0.141","d":-1.8,"task":"depth","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 · Bonn · DUSt3R baseline, rgb_110 single-frame (DUSt3R's own Table-2 used unrecoverable 2023 seqs)"}}
   ]
   </script>
 
@@ -301,36 +303,6 @@
 "who": "Zhang et al. 2024",
 "arxiv": "2410.03825",
 "loc": "Table 3 \u00b7 Sintel \u2014 D27 (temple_2 outlier + recipe)"
-}
-},
-{
-"model": "DUSt3R",
-"ds": "NYU",
-"metric": "abs_rel",
-"obs": "0.0777",
-"paper": "0.065",
-"d": 19.5,
-"status": "info",
-"cite": {
-"src": "DUSt3R",
-"who": "Wang et al. 2024",
-"arxiv": "2312.14132",
-"loc": "Table 2 \u00b7 NYU \u2014 D28 paper-private indoor recipe"
-}
-},
-{
-"model": "DUSt3R",
-"ds": "Bonn",
-"metric": "abs_rel",
-"obs": "0.1337",
-"paper": "0.0808",
-"d": 65.5,
-"status": "info",
-"cite": {
-"src": "DUSt3R",
-"who": "Wang et al. 2024",
-"arxiv": "2312.14132",
-"loc": "Table 2 \u00b7 Bonn \u2014 D28 (not a dynamic model)"
 }
 },
 {
