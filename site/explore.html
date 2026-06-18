@@ -39,6 +39,15 @@
     .msep { align-self: center; width: 1px; height: 16px; background: var(--rule); margin: 0 4px 12px; }
     .metric-desc { margin: 12px 0 0; color: var(--fg-dim); font-size: 12.5px; min-height: 1.2em; }
     .metric-desc .dir { color: var(--fg-mute); }
+    /* protocol selector — one protocol per table */
+    .protorow { display: flex; align-items: center; gap: 12px; margin: 12px 0 0; flex-wrap: wrap; }
+    .protolabel { color: var(--fg-dim); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; }
+    .protobar { display: flex; gap: 8px; flex-wrap: wrap; }
+    .ptab { background: var(--bg-2); border: 1px solid var(--rule); border-radius: 3px; color: var(--fg-mute); font: 500 11.5px/1 var(--mono); padding: 6px 10px; cursor: pointer; white-space: nowrap; transition: color 0.14s var(--ease), border-color 0.14s var(--ease); }
+    .ptab:hover { color: var(--fg-soft); }
+    .ptab[aria-selected="true"] { color: var(--acc); border-color: var(--acc-dim); background: rgba(212,240,0,0.06); }
+    .ptab .mc { color: var(--fg-dim); margin-left: 6px; font-weight: 400; }
+    .ptab[aria-selected="true"] .mc { color: var(--acc-dim); }
 
     /* matrix */
     .matwrap { margin: 16px 0 0; overflow-x: auto; border: 1px solid var(--rule); border-radius: 3px; background: var(--bg-1); }
@@ -135,36 +144,40 @@
     </div>
 
     <div class="xhead">
-      <span class="xnum">model × benchmark scores</span>
-      <h1>Every benchmark score — <em>measured, predicted, protocol-tagged</em>.</h1>
+      <span class="xnum">model × benchmark scores · one protocol at a time</span>
+      <h1>Benchmark scores under <em>one protocol at a time</em>.</h1>
       <p class="xlede">
-        Each cell is a <b>benchmark score</b> (the metric value itself, e.g. AbsRel).
-        The glyph is provenance: <b>&#10003;</b> our run <b>reproduces the paper's
-        reported score</b>, <b>&#8505;</b> it <b>differs</b> from the paper (hover for
-        the deviation + why), <b>&#9671;</b> has no paper target; faint
-        <b>~values</b> are <b>model predictions</b> (Bayesian fill-in) for cells we
-        haven't run yet. <b>Because each score follows its own paper's protocol</b> —
-        different crops, subsets, estimators — <b>a column is not a naive ranking</b>:
-        the <b>·tag</b> names the protocol and a <b>“mixed” marker</b> flags the
-        columns where the scores aren't comparable. Only the 44 <b>&#10003;</b> scores
-        are paper-verified. <b>Switch the metric</b> with the tabs; <b>hover any cell</b>
-        for the paper number, the deviation, the protocol, and the citation.
+        Scores are only comparable under the same eval recipe, so you pick a
+        <b>protocol</b> (a paper's eval table) and the matrix shows just that one —
+        every column is then a <b>fair comparison</b>, and colour ranks weak→best
+        within it. Each cell is the <b>score</b> (the metric value): <b>&#10003;</b>
+        our run <b>reproduces that paper's number</b>, <b>&#8505;</b> it <b>differs</b>
+        (hover for the deviation + why), <b>&#9671;</b> has no paper target. Faint
+        <b>~values</b> are <b>model predictions</b> — a Bayesian fit that treats
+        (model, dataset, <b>protocol</b>) as discrete factors and fills the unrun
+        cells <em>under the selected protocol</em>, with uncertainty on hover. Only
+        the 44 <b>&#10003;</b> scores are paper-verified. <b>Switch metric</b> with the
+        tabs, <b>protocol</b> with the pills; <b>hover any cell</b> for the paper
+        number, the deviation, and the citation.
       </p>
     </div>
 
     <div class="metricbar" id="metricbar" role="tablist" aria-label="metric"></div>
     <p class="metric-desc" id="metric-desc"></p>
+    <div class="protorow">
+      <span class="protolabel">protocol</span>
+      <div class="protobar" id="protobar" role="tablist" aria-label="protocol"></div>
+    </div>
 
     <div class="matwrap"><table class="matrix" id="matrix"></table></div>
 
     <div class="xlegend">
-      <span style="color:var(--fg-soft)">cell = the <b>score</b> (metric value)</span>
-      <span><span class="lglyph" style="color:var(--acc)">&#10003;</span> reproduces paper</span>
-      <span><span class="lglyph info" style="color:#e0a73c">&#8505;</span> differs from paper</span>
+      <span style="color:var(--fg-soft)">cell = the <b>score</b></span>
+      <span><span class="swgrad"></span> weak&nbsp;→&nbsp;best <span style="color:var(--fg-dim)">(in column)</span></span>
+      <span style="margin-left:10px"><span class="lglyph" style="color:var(--acc)">&#10003;</span> reproduces paper</span>
+      <span><span class="lglyph info" style="color:#e0a73c">&#8505;</span> differs</span>
       <span><span class="lglyph target">&#9671;</span> no target</span>
-      <span style="margin-left:12px; color:var(--fg-dim)">·tag = protocol</span>
-      <span style="color:#e0a73c">⚠ mixed column ≠ ranking</span>
-      <span style="opacity:.55; font-style:italic">~val = predicted (AbsRel tab)</span>
+      <span style="opacity:.55; font-style:italic">~val = BO-predicted</span>
       <span style="margin-left:auto; color:var(--fg-dim)">paper Δ + citation on hover</span>
     </div>
 
@@ -430,7 +443,7 @@
        ghosted, never counted toward the verified stat. Regenerate with:
        python scripts/bo_table_forecast.py --json -->
   <script type="application/json" id="predicted-cells">
-[{"model":"CUT3R","ds":"DDAD","metric":"abs_rel","pred":0.1907,"lo":0.1531,"hi":0.2375},{"model":"CUT3R","ds":"DIODE","metric":"abs_rel","pred":0.0822,"lo":0.066,"hi":0.1024},{"model":"CUT3R","ds":"ETH3D","metric":"abs_rel","pred":0.0681,"lo":0.0546,"hi":0.0848},{"model":"CUT3R","ds":"GSO","metric":"abs_rel","pred":0.0197,"lo":0.0158,"hi":0.0245},{"model":"CUT3R","ds":"Sintel","metric":"abs_rel","pred":0.3478,"lo":0.2792,"hi":0.4333},{"model":"CUT3R","ds":"iBims-1","metric":"abs_rel","pred":0.0589,"lo":0.0473,"hi":0.0734},{"model":"DA-V2 Base","ds":"Bonn","metric":"abs_rel","pred":0.0841,"lo":0.0655,"hi":0.108},{"model":"DA-V2 Base","ds":"DDAD","metric":"abs_rel","pred":0.166,"lo":0.1292,"hi":0.2132},{"model":"DA-V2 Base","ds":"DIODE","metric":"abs_rel","pred":0.0715,"lo":0.0557,"hi":0.0919},{"model":"DA-V2 Base","ds":"ETH3D","metric":"abs_rel","pred":0.0592,"lo":0.0461,"hi":0.0761},{"model":"DA-V2 Base","ds":"GSO","metric":"abs_rel","pred":0.0171,"lo":0.0133,"hi":0.022},{"model":"DA-V2 Base","ds":"NYU","metric":"abs_rel","pred":0.065,"lo":0.0519,"hi":0.0814},{"model":"DA-V2 Base","ds":"Sintel","metric":"abs_rel","pred":0.3027,"lo":0.2357,"hi":0.3888},{"model":"DA-V2 Base","ds":"iBims-1","metric":"abs_rel","pred":0.0513,"lo":0.0399,"hi":0.0659},{"model":"DA-V2 Large","ds":"Bonn","metric":"abs_rel","pred":0.0632,"lo":0.051,"hi":0.0782},{"model":"DA-V2 Small","ds":"Bonn","metric":"abs_rel","pred":0.0753,"lo":0.0602,"hi":0.0942},{"model":"DA-V2 Small","ds":"DDAD","metric":"abs_rel","pred":0.1486,"lo":0.1188,"hi":0.1859},{"model":"DA-V2 Small","ds":"DIODE","metric":"abs_rel","pred":0.064,"lo":0.0512,"hi":0.0801},{"model":"DA-V2 Small","ds":"ETH3D","metric":"abs_rel","pred":0.053,"lo":0.0424,"hi":0.0664},{"model":"DA-V2 Small","ds":"GSO","metric":"abs_rel","pred":0.0153,"lo":0.0123,"hi":0.0192},{"model":"DA-V2 Small","ds":"Sintel","metric":"abs_rel","pred":0.2711,"lo":0.2166,"hi":0.3392},{"model":"DA-V2 Small","ds":"iBims-1","metric":"abs_rel","pred":0.0459,"lo":0.0367,"hi":0.0575},{"model":"DUSt3R","ds":"DDAD","metric":"abs_rel","pred":0.2167,"lo":0.174,"hi":0.27},{"model":"DUSt3R","ds":"DIODE","metric":"abs_rel","pred":0.0934,"lo":0.075,"hi":0.1164},{"model":"DUSt3R","ds":"ETH3D","metric":"abs_rel","pred":0.0774,"lo":0.0621,"hi":0.0964},{"model":"DUSt3R","ds":"GSO","metric":"abs_rel","pred":0.0224,"lo":0.018,"hi":0.0279},{"model":"DUSt3R","ds":"Sintel","metric":"abs_rel","pred":0.3953,"lo":0.3173,"hi":0.4925},{"model":"DUSt3R","ds":"iBims-1","metric":"abs_rel","pred":0.067,"lo":0.0538,"hi":0.0835},{"model":"Marigold v1-1","ds":"Bonn","metric":"abs_rel","pred":0.0748,"lo":0.0582,"hi":0.0961},{"model":"Marigold v1-1","ds":"DDAD","metric":"abs_rel","pred":0.1476,"lo":0.115,"hi":0.1896},{"model":"Marigold v1-1","ds":"DIODE","metric":"abs_rel","pred":0.0636,"lo":0.0495,"hi":0.0817},{"model":"Marigold v1-1","ds":"ETH3D","metric":"abs_rel","pred":0.0527,"lo":0.041,"hi":0.0677},{"model":"Marigold v1-1","ds":"GSO","metric":"abs_rel","pred":0.0152,"lo":0.0119,"hi":0.0196},{"model":"Marigold v1-1","ds":"KITTI","metric":"abs_rel","pred":0.0672,"lo":0.0536,"hi":0.0842},{"model":"Marigold v1-1","ds":"Sintel","metric":"abs_rel","pred":0.2693,"lo":0.2097,"hi":0.3459},{"model":"Marigold v1-1","ds":"iBims-1","metric":"abs_rel","pred":0.0456,"lo":0.0355,"hi":0.0586},{"model":"Metric3D-v2 G","ds":"Bonn","metric":"abs_rel","pred":0.0714,"lo":0.0571,"hi":0.0894},{"model":"Metric3D-v2 G","ds":"DDAD","metric":"abs_rel","pred":0.141,"lo":0.1127,"hi":0.1764},{"model":"Metric3D-v2 G","ds":"DIODE","metric":"abs_rel","pred":0.0608,"lo":0.0486,"hi":0.076},{"model":"Metric3D-v2 G","ds":"ETH3D","metric":"abs_rel","pred":0.0503,"lo":0.0402,"hi":0.063},{"model":"Metric3D-v2 G","ds":"GSO","metric":"abs_rel","pred":0.0146,"lo":0.0116,"hi":0.0182},{"model":"Metric3D-v2 G","ds":"Sintel","metric":"abs_rel","pred":0.2572,"lo":0.2056,"hi":0.3218},{"model":"Metric3D-v2 G","ds":"iBims-1","metric":"abs_rel","pred":0.0436,"lo":0.0348,"hi":0.0545},{"model":"Metric3D-v2 L","ds":"Bonn","metric":"abs_rel","pred":0.0687,"lo":0.0549,"hi":0.086},{"model":"Metric3D-v2 L","ds":"DDAD","metric":"abs_rel","pred":0.1357,"lo":0.1084,"hi":0.1698},{"model":"Metric3D-v2 L","ds":"DIODE","metric":"abs_rel","pred":0.0585,"lo":0.0467,"hi":0.0732},{"model":"Metric3D-v2 L","ds":"ETH3D","metric":"abs_rel","pred":0.0484,"lo":0.0387,"hi":0.0606},{"model":"Metric3D-v2 L","ds":"GSO","metric":"abs_rel","pred":0.014,"lo":0.0112,"hi":0.0175},{"model":"Metric3D-v2 L","ds":"Sintel","metric":"abs_rel","pred":0.2475,"lo":0.1978,"hi":0.3097},{"model":"Metric3D-v2 L","ds":"iBims-1","metric":"abs_rel","pred":0.0419,"lo":0.0335,"hi":0.0525},{"model":"MoGe ViT-L","ds":"Bonn","metric":"abs_rel","pred":0.0472,"lo":0.0381,"hi":0.0584},{"model":"MonST3R","ds":"Bonn","metric":"abs_rel","pred":0.115,"lo":0.0896,"hi":0.1477},{"model":"MonST3R","ds":"DDAD","metric":"abs_rel","pred":0.2271,"lo":0.1768,"hi":0.2916},{"model":"MonST3R","ds":"DIODE","metric":"abs_rel","pred":0.0978,"lo":0.0762,"hi":0.1257},{"model":"MonST3R","ds":"ETH3D","metric":"abs_rel","pred":0.0811,"lo":0.0631,"hi":0.1041},{"model":"MonST3R","ds":"GSO","metric":"abs_rel","pred":0.0235,"lo":0.0183,"hi":0.0301},{"model":"MonST3R","ds":"KITTI","metric":"abs_rel","pred":0.1033,"lo":0.0825,"hi":0.1294},{"model":"MonST3R","ds":"Sintel","metric":"abs_rel","pred":0.4142,"lo":0.3225,"hi":0.532},{"model":"MonST3R","ds":"iBims-1","metric":"abs_rel","pred":0.0702,"lo":0.0546,"hi":0.0902},{"model":"UniK3D Large","ds":"Bonn","metric":"abs_rel","pred":0.0965,"lo":0.0752,"hi":0.124},{"model":"UniK3D Large","ds":"DDAD","metric":"abs_rel","pred":0.1906,"lo":0.1484,"hi":0.2448},{"model":"UniK3D Large","ds":"DIODE","metric":"abs_rel","pred":0.0821,"lo":0.0639,"hi":0.1055},{"model":"UniK3D Large","ds":"ETH3D","metric":"abs_rel","pred":0.068,"lo":0.053,"hi":0.0874},{"model":"UniK3D Large","ds":"GSO","metric":"abs_rel","pred":0.0197,"lo":0.0153,"hi":0.0253},{"model":"UniK3D Large","ds":"KITTI","metric":"abs_rel","pred":0.0867,"lo":0.0692,"hi":0.1086},{"model":"UniK3D Large","ds":"Sintel","metric":"abs_rel","pred":0.3476,"lo":0.2706,"hi":0.4465},{"model":"UniK3D Large","ds":"iBims-1","metric":"abs_rel","pred":0.0589,"lo":0.0459,"hi":0.0757}]
+[{"model":"DA-V2 Base","ds":"KITTI","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0922,"lo":0.0529,"hi":0.1607},{"model":"DA-V2 Base","ds":"NYU","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0834,"lo":0.0478,"hi":0.1455},{"model":"DA-V2 Large","ds":"KITTI","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0866,"lo":0.0501,"hi":0.1495},{"model":"DA-V2 Large","ds":"NYU","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0783,"lo":0.0453,"hi":0.1354},{"model":"DA-V2 Small","ds":"KITTI","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0806,"lo":0.0463,"hi":0.1401},{"model":"DA-V2 Small","ds":"NYU","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0729,"lo":0.042,"hi":0.1264},{"model":"DUSt3R","ds":"KITTI","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.1091,"lo":0.062,"hi":0.192},{"model":"DUSt3R","ds":"NYU","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0987,"lo":0.0561,"hi":0.1738},{"model":"Marigold v1-1","ds":"KITTI","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0838,"lo":0.0427,"hi":0.1646},{"model":"Marigold v1-1","ds":"NYU","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0758,"lo":0.0387,"hi":0.1487},{"model":"Metric3D-v2 G","ds":"KITTI","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0856,"lo":0.0462,"hi":0.1586},{"model":"Metric3D-v2 G","ds":"NYU","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0774,"lo":0.0418,"hi":0.1435},{"model":"Metric3D-v2 L","ds":"KITTI","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0824,"lo":0.0445,"hi":0.1526},{"model":"Metric3D-v2 L","ds":"NYU","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0745,"lo":0.0402,"hi":0.1381},{"model":"MoGe ViT-L","ds":"KITTI","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0676,"lo":0.0391,"hi":0.117},{"model":"MoGe ViT-L","ds":"NYU","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0612,"lo":0.0353,"hi":0.106},{"model":"MonST3R","ds":"KITTI","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0929,"lo":0.0477,"hi":0.181},{"model":"MonST3R","ds":"NYU","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0841,"lo":0.0432,"hi":0.1635},{"model":"UniK3D Large","ds":"KITTI","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0953,"lo":0.0485,"hi":0.1872},{"model":"UniK3D Large","ds":"NYU","proto":"CUT3R Table 1","metric":"abs_rel","pred":0.0862,"lo":0.044,"hi":0.1691},{"model":"DA-V2 Base","ds":"Bonn","proto":"CUT3R Table 2","metric":"abs_rel","pred":0.0751,"lo":0.0429,"hi":0.1314},{"model":"DA-V2 Large","ds":"Bonn","proto":"CUT3R Table 2","metric":"abs_rel","pred":0.0705,"lo":0.0406,"hi":0.1223},{"model":"DA-V2 Small","ds":"Bonn","proto":"CUT3R Table 2","metric":"abs_rel","pred":0.0656,"lo":0.0376,"hi":0.1144},{"model":"DUSt3R","ds":"Bonn","proto":"CUT3R Table 2","metric":"abs_rel","pred":0.0888,"lo":0.0505,"hi":0.1563},{"model":"Marigold v1-1","ds":"Bonn","proto":"CUT3R Table 2","metric":"abs_rel","pred":0.0682,"lo":0.0347,"hi":0.1344},{"model":"Metric3D-v2 G","ds":"Bonn","proto":"CUT3R Table 2","metric":"abs_rel","pred":0.0697,"lo":0.0375,"hi":0.1296},{"model":"Metric3D-v2 L","ds":"Bonn","proto":"CUT3R Table 2","metric":"abs_rel","pred":0.0671,"lo":0.0361,"hi":0.1247},{"model":"MoGe ViT-L","ds":"Bonn","proto":"CUT3R Table 2","metric":"abs_rel","pred":0.0551,"lo":0.0317,"hi":0.0957},{"model":"MonST3R","ds":"Bonn","proto":"CUT3R Table 2","metric":"abs_rel","pred":0.0757,"lo":0.0386,"hi":0.1482},{"model":"UniK3D Large","ds":"Bonn","proto":"CUT3R Table 2","metric":"abs_rel","pred":0.0776,"lo":0.0394,"hi":0.1528},{"model":"CUT3R","ds":"KITTI","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0776,"lo":0.045,"hi":0.1336},{"model":"CUT3R","ds":"NYU","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0702,"lo":0.0406,"hi":0.1213},{"model":"DA-V2 Base","ds":"NYU","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0683,"lo":0.057,"hi":0.0819},{"model":"DA-V2 Large","ds":"NYU","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0641,"lo":0.0535,"hi":0.0768},{"model":"DUSt3R","ds":"KITTI","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0893,"lo":0.0529,"hi":0.1509},{"model":"DUSt3R","ds":"NYU","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0808,"lo":0.0477,"hi":0.137},{"model":"Marigold v1-1","ds":"KITTI","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0686,"lo":0.0379,"hi":0.1242},{"model":"Marigold v1-1","ds":"NYU","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0621,"lo":0.0342,"hi":0.1125},{"model":"Metric3D-v2 G","ds":"KITTI","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0701,"lo":0.0418,"hi":0.1176},{"model":"Metric3D-v2 G","ds":"NYU","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0634,"lo":0.0377,"hi":0.1067},{"model":"Metric3D-v2 L","ds":"KITTI","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0674,"lo":0.0402,"hi":0.1132},{"model":"Metric3D-v2 L","ds":"NYU","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.061,"lo":0.0362,"hi":0.1027},{"model":"MoGe ViT-L","ds":"KITTI","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0554,"lo":0.0463,"hi":0.0662},{"model":"MoGe ViT-L","ds":"NYU","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0501,"lo":0.0413,"hi":0.0607},{"model":"MonST3R","ds":"KITTI","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0761,"lo":0.0446,"hi":0.1297},{"model":"MonST3R","ds":"NYU","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0688,"lo":0.0403,"hi":0.1175},{"model":"UniK3D Large","ds":"KITTI","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.078,"lo":0.0431,"hi":0.1413},{"model":"UniK3D Large","ds":"NYU","proto":"DA-V2 Table 2","metric":"abs_rel","pred":0.0706,"lo":0.0389,"hi":0.128},{"model":"CUT3R","ds":"KITTI","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0746,"lo":0.0424,"hi":0.1314},{"model":"CUT3R","ds":"NYU","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0675,"lo":0.0384,"hi":0.1188},{"model":"DA-V2 Base","ds":"KITTI","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0726,"lo":0.0425,"hi":0.1242},{"model":"DA-V2 Base","ds":"NYU","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0657,"lo":0.0384,"hi":0.1124},{"model":"DA-V2 Large","ds":"KITTI","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0682,"lo":0.0403,"hi":0.1155},{"model":"DA-V2 Large","ds":"NYU","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0617,"lo":0.0364,"hi":0.1046},{"model":"DA-V2 Small","ds":"KITTI","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0635,"lo":0.0372,"hi":0.1083},{"model":"DA-V2 Small","ds":"NYU","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0574,"lo":0.0338,"hi":0.0976},{"model":"Marigold v1-1","ds":"KITTI","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.066,"lo":0.034,"hi":0.1283},{"model":"Marigold v1-1","ds":"NYU","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0597,"lo":0.0308,"hi":0.1159},{"model":"Metric3D-v2 G","ds":"KITTI","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0674,"lo":0.037,"hi":0.1228},{"model":"Metric3D-v2 G","ds":"NYU","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.061,"lo":0.0335,"hi":0.1111},{"model":"Metric3D-v2 L","ds":"KITTI","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0649,"lo":0.0356,"hi":0.1182},{"model":"Metric3D-v2 L","ds":"NYU","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0587,"lo":0.0322,"hi":0.1069},{"model":"MoGe ViT-L","ds":"KITTI","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0533,"lo":0.0314,"hi":0.0904},{"model":"MoGe ViT-L","ds":"NYU","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0482,"lo":0.0284,"hi":0.0819},{"model":"MonST3R","ds":"KITTI","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0732,"lo":0.0453,"hi":0.1184},{"model":"MonST3R","ds":"NYU","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0662,"lo":0.0411,"hi":0.1067},{"model":"UniK3D Large","ds":"KITTI","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0751,"lo":0.0386,"hi":0.1459},{"model":"UniK3D Large","ds":"NYU","proto":"DUSt3R Table 2","metric":"abs_rel","pred":0.0679,"lo":0.035,"hi":0.1318},{"model":"CUT3R","ds":"NYU","proto":"Marigold Table 1","metric":"abs_rel","pred":0.0653,"lo":0.0334,"hi":0.1279},{"model":"DA-V2 Base","ds":"NYU","proto":"Marigold Table 1","metric":"abs_rel","pred":0.0636,"lo":0.0348,"hi":0.1161},{"model":"DA-V2 Large","ds":"NYU","proto":"Marigold Table 1","metric":"abs_rel","pred":0.0597,"lo":0.0329,"hi":0.1081},{"model":"DA-V2 Small","ds":"NYU","proto":"Marigold Table 1","metric":"abs_rel","pred":0.0555,"lo":0.0306,"hi":0.101},{"model":"DUSt3R","ds":"NYU","proto":"Marigold Table 1","metric":"abs_rel","pred":0.0752,"lo":0.0388,"hi":0.1457},{"model":"Metric3D-v2 G","ds":"NYU","proto":"Marigold Table 1","metric":"abs_rel","pred":0.059,"lo":0.0305,"hi":0.114},{"model":"Metric3D-v2 L","ds":"NYU","proto":"Marigold Table 1","metric":"abs_rel","pred":0.0568,"lo":0.0294,"hi":0.1097},{"model":"MoGe ViT-L","ds":"NYU","proto":"Marigold Table 1","metric":"abs_rel","pred":0.0466,"lo":0.0257,"hi":0.0846},{"model":"MonST3R","ds":"NYU","proto":"Marigold Table 1","metric":"abs_rel","pred":0.0641,"lo":0.033,"hi":0.1245},{"model":"UniK3D Large","ds":"NYU","proto":"Marigold Table 1","metric":"abs_rel","pred":0.0657,"lo":0.0321,"hi":0.1343},{"model":"CUT3R","ds":"KITTI","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0692,"lo":0.0375,"hi":0.1277},{"model":"CUT3R","ds":"NYU","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0626,"lo":0.0339,"hi":0.1155},{"model":"DA-V2 Base","ds":"KITTI","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0673,"lo":0.0398,"hi":0.1138},{"model":"DA-V2 Base","ds":"NYU","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0609,"lo":0.036,"hi":0.103},{"model":"DA-V2 Large","ds":"KITTI","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0632,"lo":0.0377,"hi":0.1059},{"model":"DA-V2 Large","ds":"NYU","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0572,"lo":0.0341,"hi":0.0959},{"model":"DA-V2 Small","ds":"KITTI","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0588,"lo":0.0349,"hi":0.0993},{"model":"DA-V2 Small","ds":"NYU","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0532,"lo":0.0317,"hi":0.0895},{"model":"DUSt3R","ds":"KITTI","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0797,"lo":0.0439,"hi":0.1445},{"model":"DUSt3R","ds":"NYU","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0721,"lo":0.0397,"hi":0.1308},{"model":"Marigold v1-1","ds":"KITTI","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0612,"lo":0.0317,"hi":0.1182},{"model":"Marigold v1-1","ds":"NYU","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0554,"lo":0.0287,"hi":0.1067},{"model":"MoGe ViT-L","ds":"KITTI","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0494,"lo":0.0294,"hi":0.0828},{"model":"MoGe ViT-L","ds":"NYU","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0447,"lo":0.0266,"hi":0.0751},{"model":"MonST3R","ds":"KITTI","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0679,"lo":0.0371,"hi":0.1242},{"model":"MonST3R","ds":"NYU","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0614,"lo":0.0336,"hi":0.1121},{"model":"UniK3D Large","ds":"KITTI","proto":"Metric3D Table I","metric":"abs_rel","pred":0.0696,"lo":0.036,"hi":0.1344},{"model":"UniK3D Large","ds":"NYU","proto":"Metric3D Table I","metric":"abs_rel","pred":0.063,"lo":0.0327,"hi":0.1214},{"model":"CUT3R","ds":"DDAD","proto":"MoGe Table 3","metric":"abs_rel","pred":0.133,"lo":0.0767,"hi":0.2306},{"model":"CUT3R","ds":"DIODE","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0575,"lo":0.0332,"hi":0.0996},{"model":"CUT3R","ds":"ETH3D","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0476,"lo":0.0275,"hi":0.0826},{"model":"CUT3R","ds":"GSO","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0138,"lo":0.008,"hi":0.024},{"model":"CUT3R","ds":"KITTI","proto":"MoGe Table 3","metric":"abs_rel","pred":0.054,"lo":0.0312,"hi":0.0936},{"model":"CUT3R","ds":"NYU","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0489,"lo":0.0283,"hi":0.0845},{"model":"CUT3R","ds":"Sintel","proto":"MoGe Table 3","metric":"abs_rel","pred":0.2421,"lo":0.1397,"hi":0.4197},{"model":"CUT3R","ds":"iBims-1","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0413,"lo":0.0238,"hi":0.0716},{"model":"DA-V2 Base","ds":"DDAD","proto":"MoGe Table 3","metric":"abs_rel","pred":0.1294,"lo":0.1035,"hi":0.1618},{"model":"DA-V2 Base","ds":"DIODE","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0559,"lo":0.0447,"hi":0.0699},{"model":"DA-V2 Base","ds":"ETH3D","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0464,"lo":0.0371,"hi":0.058},{"model":"DA-V2 Base","ds":"GSO","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0135,"lo":0.0108,"hi":0.0168},{"model":"DA-V2 Base","ds":"KITTI","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0526,"lo":0.042,"hi":0.0658},{"model":"DA-V2 Base","ds":"NYU","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0476,"lo":0.0382,"hi":0.0592},{"model":"DA-V2 Base","ds":"Sintel","proto":"MoGe Table 3","metric":"abs_rel","pred":0.2356,"lo":0.1885,"hi":0.2946},{"model":"DA-V2 Base","ds":"iBims-1","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0402,"lo":0.0321,"hi":0.0502},{"model":"DA-V2 Large","ds":"KITTI","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0493,"lo":0.0424,"hi":0.0575},{"model":"DA-V2 Small","ds":"DDAD","proto":"MoGe Table 3","metric":"abs_rel","pred":0.1131,"lo":0.0916,"hi":0.1396},{"model":"DA-V2 Small","ds":"DIODE","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0489,"lo":0.0396,"hi":0.0603},{"model":"DA-V2 Small","ds":"ETH3D","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0405,"lo":0.0328,"hi":0.05},{"model":"DA-V2 Small","ds":"GSO","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0118,"lo":0.0095,"hi":0.0145},{"model":"DA-V2 Small","ds":"KITTI","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0459,"lo":0.0369,"hi":0.0571},{"model":"DA-V2 Small","ds":"NYU","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0416,"lo":0.0339,"hi":0.0509},{"model":"DA-V2 Small","ds":"Sintel","proto":"MoGe Table 3","metric":"abs_rel","pred":0.2059,"lo":0.1668,"hi":0.2541},{"model":"DA-V2 Small","ds":"iBims-1","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0351,"lo":0.0284,"hi":0.0433},{"model":"DUSt3R","ds":"DDAD","proto":"MoGe Table 3","metric":"abs_rel","pred":0.1532,"lo":0.0901,"hi":0.2603},{"model":"DUSt3R","ds":"DIODE","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0662,"lo":0.0389,"hi":0.1125},{"model":"DUSt3R","ds":"ETH3D","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0549,"lo":0.0323,"hi":0.0933},{"model":"DUSt3R","ds":"GSO","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0159,"lo":0.0094,"hi":0.0271},{"model":"DUSt3R","ds":"KITTI","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0622,"lo":0.0366,"hi":0.1058},{"model":"DUSt3R","ds":"NYU","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0563,"lo":0.0332,"hi":0.0955},{"model":"DUSt3R","ds":"Sintel","proto":"MoGe Table 3","metric":"abs_rel","pred":0.2788,"lo":0.164,"hi":0.4739},{"model":"DUSt3R","ds":"iBims-1","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0475,"lo":0.028,"hi":0.0808},{"model":"Marigold v1-1","ds":"DDAD","proto":"MoGe Table 3","metric":"abs_rel","pred":0.1177,"lo":0.0646,"hi":0.2143},{"model":"Marigold v1-1","ds":"DIODE","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0508,"lo":0.0279,"hi":0.0926},{"model":"Marigold v1-1","ds":"ETH3D","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0421,"lo":0.0231,"hi":0.0767},{"model":"Marigold v1-1","ds":"GSO","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0122,"lo":0.0067,"hi":0.0223},{"model":"Marigold v1-1","ds":"KITTI","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0478,"lo":0.0262,"hi":0.087},{"model":"Marigold v1-1","ds":"NYU","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0432,"lo":0.0238,"hi":0.0784},{"model":"Marigold v1-1","ds":"Sintel","proto":"MoGe Table 3","metric":"abs_rel","pred":0.2142,"lo":0.1176,"hi":0.39},{"model":"Marigold v1-1","ds":"iBims-1","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0365,"lo":0.0201,"hi":0.0665},{"model":"Metric3D-v2 G","ds":"DDAD","proto":"MoGe Table 3","metric":"abs_rel","pred":0.1201,"lo":0.0711,"hi":0.2029},{"model":"Metric3D-v2 G","ds":"DIODE","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0519,"lo":0.0307,"hi":0.0877},{"model":"Metric3D-v2 G","ds":"ETH3D","proto":"MoGe Table 3","metric":"abs_rel","pred":0.043,"lo":0.0255,"hi":0.0727},{"model":"Metric3D-v2 G","ds":"GSO","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0125,"lo":0.0074,"hi":0.0211},{"model":"Metric3D-v2 G","ds":"KITTI","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0488,"lo":0.0289,"hi":0.0824},{"model":"Metric3D-v2 G","ds":"NYU","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0441,"lo":0.0262,"hi":0.0743},{"model":"Metric3D-v2 G","ds":"Sintel","proto":"MoGe Table 3","metric":"abs_rel","pred":0.2187,"lo":0.1295,"hi":0.3694},{"model":"Metric3D-v2 G","ds":"iBims-1","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0373,"lo":0.0221,"hi":0.063},{"model":"Metric3D-v2 L","ds":"DDAD","proto":"MoGe Table 3","metric":"abs_rel","pred":0.1156,"lo":0.0685,"hi":0.1953},{"model":"Metric3D-v2 L","ds":"DIODE","proto":"MoGe Table 3","metric":"abs_rel","pred":0.05,"lo":0.0296,"hi":0.0844},{"model":"Metric3D-v2 L","ds":"ETH3D","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0414,"lo":0.0245,"hi":0.07},{"model":"Metric3D-v2 L","ds":"GSO","proto":"MoGe Table 3","metric":"abs_rel","pred":0.012,"lo":0.0071,"hi":0.0203},{"model":"Metric3D-v2 L","ds":"KITTI","proto":"MoGe Table 3","metric":"abs_rel","pred":0.047,"lo":0.0278,"hi":0.0793},{"model":"Metric3D-v2 L","ds":"NYU","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0425,"lo":0.0252,"hi":0.0715},{"model":"Metric3D-v2 L","ds":"Sintel","proto":"MoGe Table 3","metric":"abs_rel","pred":0.2105,"lo":0.1246,"hi":0.3556},{"model":"Metric3D-v2 L","ds":"iBims-1","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0359,"lo":0.0212,"hi":0.0606},{"model":"MonST3R","ds":"DDAD","proto":"MoGe Table 3","metric":"abs_rel","pred":0.1305,"lo":0.076,"hi":0.2239},{"model":"MonST3R","ds":"DIODE","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0564,"lo":0.0328,"hi":0.0968},{"model":"MonST3R","ds":"ETH3D","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0467,"lo":0.0272,"hi":0.0802},{"model":"MonST3R","ds":"GSO","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0136,"lo":0.0079,"hi":0.0233},{"model":"MonST3R","ds":"KITTI","proto":"MoGe Table 3","metric":"abs_rel","pred":0.053,"lo":0.0309,"hi":0.0909},{"model":"MonST3R","ds":"NYU","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0479,"lo":0.0281,"hi":0.0818},{"model":"MonST3R","ds":"Sintel","proto":"MoGe Table 3","metric":"abs_rel","pred":0.2375,"lo":0.1383,"hi":0.4077},{"model":"MonST3R","ds":"iBims-1","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0405,"lo":0.0236,"hi":0.0695},{"model":"UniK3D Large","ds":"DDAD","proto":"MoGe Table 3","metric":"abs_rel","pred":0.1338,"lo":0.0735,"hi":0.2436},{"model":"UniK3D Large","ds":"DIODE","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0578,"lo":0.0317,"hi":0.1053},{"model":"UniK3D Large","ds":"ETH3D","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0479,"lo":0.0263,"hi":0.0873},{"model":"UniK3D Large","ds":"GSO","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0139,"lo":0.0076,"hi":0.0254},{"model":"UniK3D Large","ds":"KITTI","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0543,"lo":0.0298,"hi":0.099},{"model":"UniK3D Large","ds":"NYU","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0492,"lo":0.0271,"hi":0.0892},{"model":"UniK3D Large","ds":"Sintel","proto":"MoGe Table 3","metric":"abs_rel","pred":0.2435,"lo":0.1337,"hi":0.4435},{"model":"UniK3D Large","ds":"iBims-1","proto":"MoGe Table 3","metric":"abs_rel","pred":0.0415,"lo":0.0228,"hi":0.0756},{"model":"CUT3R","ds":"Bonn","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.1194,"lo":0.0679,"hi":0.2098},{"model":"CUT3R","ds":"NYU","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.0912,"lo":0.047,"hi":0.1769},{"model":"DA-V2 Base","ds":"Bonn","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.1162,"lo":0.0678,"hi":0.199},{"model":"DA-V2 Base","ds":"NYU","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.0888,"lo":0.0518,"hi":0.1522},{"model":"DA-V2 Large","ds":"Bonn","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.1091,"lo":0.0642,"hi":0.1852},{"model":"DA-V2 Large","ds":"NYU","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.0833,"lo":0.049,"hi":0.1416},{"model":"DA-V2 Small","ds":"Bonn","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.1015,"lo":0.0595,"hi":0.1733},{"model":"DA-V2 Small","ds":"NYU","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.0776,"lo":0.0454,"hi":0.1323},{"model":"DUSt3R","ds":"NYU","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.105,"lo":0.066,"hi":0.1672},{"model":"Marigold v1-1","ds":"Bonn","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.1056,"lo":0.0543,"hi":0.2054},{"model":"Marigold v1-1","ds":"NYU","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.0807,"lo":0.0416,"hi":0.1563},{"model":"Metric3D-v2 G","ds":"Bonn","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.1078,"lo":0.0591,"hi":0.1967},{"model":"Metric3D-v2 G","ds":"NYU","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.0824,"lo":0.0451,"hi":0.1504},{"model":"Metric3D-v2 L","ds":"Bonn","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.1038,"lo":0.0569,"hi":0.1894},{"model":"Metric3D-v2 L","ds":"NYU","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.0793,"lo":0.0434,"hi":0.1447},{"model":"MoGe ViT-L","ds":"Bonn","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.0852,"lo":0.0501,"hi":0.1449},{"model":"MoGe ViT-L","ds":"NYU","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.0651,"lo":0.0382,"hi":0.1108},{"model":"MonST3R","ds":"Bonn","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.1171,"lo":0.0731,"hi":0.1874},{"model":"UniK3D Large","ds":"Bonn","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.1201,"lo":0.0617,"hi":0.2336},{"model":"UniK3D Large","ds":"NYU","proto":"MonST3R Table 3","metric":"abs_rel","pred":0.0917,"lo":0.0473,"hi":0.1778},{"model":"CUT3R","ds":"NYU","proto":"UniK3D Table 18","metric":"abs_rel","pred":0.0743,"lo":0.0379,"hi":0.1454},{"model":"DA-V2 Base","ds":"NYU","proto":"UniK3D Table 18","metric":"abs_rel","pred":0.0723,"lo":0.0396,"hi":0.132},{"model":"DA-V2 Large","ds":"NYU","proto":"UniK3D Table 18","metric":"abs_rel","pred":0.0679,"lo":0.0375,"hi":0.1229},{"model":"DA-V2 Small","ds":"NYU","proto":"UniK3D Table 18","metric":"abs_rel","pred":0.0632,"lo":0.0347,"hi":0.1148},{"model":"DUSt3R","ds":"NYU","proto":"UniK3D Table 18","metric":"abs_rel","pred":0.0855,"lo":0.0442,"hi":0.1657},{"model":"Marigold v1-1","ds":"NYU","proto":"UniK3D Table 18","metric":"abs_rel","pred":0.0657,"lo":0.0321,"hi":0.1343},{"model":"Metric3D-v2 G","ds":"NYU","proto":"UniK3D Table 18","metric":"abs_rel","pred":0.0671,"lo":0.0347,"hi":0.1296},{"model":"Metric3D-v2 L","ds":"NYU","proto":"UniK3D Table 18","metric":"abs_rel","pred":0.0646,"lo":0.0334,"hi":0.1248},{"model":"MoGe ViT-L","ds":"NYU","proto":"UniK3D Table 18","metric":"abs_rel","pred":0.053,"lo":0.0292,"hi":0.0962},{"model":"MonST3R","ds":"NYU","proto":"UniK3D Table 18","metric":"abs_rel","pred":0.0729,"lo":0.0375,"hi":0.1416}]
   </script>
 
   <script>
@@ -441,8 +454,8 @@
       const cells = [...verified, ...companion, ...info];
       // BO-predicted fill-in (model predictions w/ uncertainty, not runs) — keyed model|ds
       const predicted = JSON.parse(document.getElementById("predicted-cells").textContent);
-      const PRED = {};
-      predicted.forEach(p => PRED[p.model + "|" + p.ds] = p);
+      const PRED = {};  // keyed model|ds|proto (predictions are protocol-conditioned)
+      predicted.forEach(p => PRED[p.model + "|" + p.ds + "|" + p.proto] = p);
       cells.forEach(c => { c.status = c.status || "ok"; });  // verified+companion = ok; info carries its own
 
       // Colour channel = relative PERFORMANCE within each column (metric × dataset):
@@ -509,10 +522,39 @@
         bar.appendChild(b);
       });
 
+      const protobar = document.getElementById("protobar");
+      let proto = null;
+
+      // Protocols available for a metric, with each one's measured-cohort size,
+      // sorted biggest-first (the richest comparable table leads).
+      function protocolsFor(mk) {
+        const counts = {};
+        cells.filter(c => c.metric === mk).forEach(c => {
+          const p = protoOf(c); counts[p] = (counts[p] || 0) + 1;
+        });
+        return Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b))
+          .map(p => ({ p, n: counts[p] }));
+      }
+
+      function renderProtoBar() {
+        const ps = protocolsFor(metric);
+        if (!ps.some(x => x.p === proto)) proto = ps.length ? ps[0].p : null;
+        protobar.innerHTML = "";
+        ps.forEach(({ p, n }) => {
+          const b = document.createElement("button");
+          b.className = "ptab"; b.role = "tab"; b.dataset.p = p;
+          b.setAttribute("aria-selected", String(p === proto));
+          b.innerHTML = `${p}<span class="mc">${n}</span>`;
+          b.onclick = () => { proto = p; sync(); };
+          protobar.appendChild(b);
+        });
+      }
+
       function sync() {
         bar.querySelectorAll(".mtab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.k === metric)));
         const m = METRICS.find(x => x.key === metric);
-        desc.innerHTML = `${m.desc} · <span class="dir">${m.dir}</span> · observed / paper, audited to source`;
+        desc.innerHTML = `${m.desc} · <span class="dir">${m.dir}</span> — <b>one protocol per table</b>, so every column is a fair comparison`;
+        renderProtoBar();
         render();
         hide();
       }
@@ -520,69 +562,63 @@
       // Short protocol tag per cell. The dust3r-lineage columns (NYU/KITTI/Bonn)
       // are the ones where models genuinely diverge, so they get explicit
       // overrides; everything else derives a tag from the citation locator.
-      const PROTO_OVERRIDE = {
-        "DUSt3R|NYU": "eigen-crop", "DUSt3R|Bonn": "MonST3R-base", "DUSt3R|KITTI": "lineage",
-        "MonST3R|NYU": "no-crop", "MonST3R|Bonn": "own", "MonST3R|KITTI": "lineage", "MonST3R|Sintel": "own",
-        "CUT3R|NYU": "prep-set", "CUT3R|Bonn": "video", "CUT3R|KITTI": "lineage",
-        "UniK3D Large|NYU": "metric/no-align",
-      };
-      const MODERN = ["DA-V2", "MoGe", "Metric3D", "Marigold", "Depth Pro"];
+      // Protocol identity = (citing paper, table) — the eval recipe that makes
+      // scores comparable. Same derivation as scripts/bo_table_forecast.py.
+      const SRC_SHORT = { "Depth Anything V2": "DA-V2", "Metric3D v2": "Metric3D", "Depth Anything 3": "DA3" };
       function protoOf(c) {
-        const o = PROTO_OVERRIDE[c.model + "|" + c.ds]; if (o) return o;
-        const l = ((c.cite && c.cite.loc) || "").toLowerCase();
-        if (l.includes("moge")) return "MoGe-eval";
-        if (l.includes("native")) return "native";
-        if (l.includes("video") || l.includes("rgb_110")) return "video";
-        if (l.includes("eigen") || l.includes("garg")) return "eigen-2014";
-        if ((c.ds === "NYU" || c.ds === "KITTI") && MODERN.some(m => c.model.includes(m))) return "eigen-2014";
-        if (c.cite && c.cite.src && c.cite.src.includes("protocol")) return "alt-protocol";
-        return "";
+        let src = (((c.cite && c.cite.src) || "").replace(/\s*\(.*?\)/g, "")).trim();
+        src = SRC_SHORT[src] || src;
+        const m = ((c.cite && c.cite.loc) || "").match(/Table [IVXLC]+\b|Table \d+\w*/);
+        return (src + " " + (m ? m[0] : "Table ?")).trim();
       }
 
       function render() {
-        const sub = cells.filter(c => c.metric === metric);
+        // ONE protocol per table → every score in it is comparable.
+        const sub = cells.filter(c => c.metric === metric && protoOf(c) === proto);
         const groups = {};
-        sub.forEach(c => { (groups[c.model + " " + c.ds] = groups[c.model + " " + c.ds] || []).push(c); });
-        const rows = MODEL_ORDER.filter(m => sub.some(c => c.model === m));
-        const colsAll = DS_ORDER.filter(d => sub.some(c => c.ds === d));
+        sub.forEach(c => { (groups[c.model + "|" + c.ds] = groups[c.model + "|" + c.ds] || []).push(c); });
+        const preds = predicted.filter(p => p.proto === proto && metric === "abs_rel");
+        const predMap = {};
+        preds.forEach(p => predMap[p.model + "|" + p.ds] = p);
 
-        // per-column protocol diversity → a column is only a ranking if all its cells share a protocol
-        const colProtos = {};
-        colsAll.forEach(d => colProtos[d] = new Set());
-        sub.forEach(c => { if (colProtos[c.ds]) colProtos[c.ds].add(protoOf(c) || "—"); });
+        const dsSet = new Set([...sub.map(c => c.ds), ...preds.map(p => p.ds)]);
+        const modelSet = new Set([...sub.map(c => c.model), ...preds.map(p => p.model)]);
+        const cols = DS_ORDER.filter(d => dsSet.has(d));
+        const rows = MODEL_ORDER.filter(m => modelSet.has(m));
+
+        // within-column performance (valid now — one protocol). 1 = best in column.
+        const lowerBetter = (METRICS.find(x => x.key === metric).dir || "").includes("lower");
+        const colRange = {};
+        cols.forEach(d => {
+          const vals = rows.map(m => groups[m + "|" + d] ? +groups[m + "|" + d][0].obs
+            : predMap[m + "|" + d] ? +predMap[m + "|" + d].pred : null).filter(v => v != null);
+          colRange[d] = vals.length ? { lo: Math.min(...vals), hi: Math.max(...vals) } : { lo: 0, hi: 1 };
+        });
+        const perfOf = (d, v) => {
+          const { lo, hi } = colRange[d]; if (hi === lo) return 1;
+          const t = (v - lo) / (hi - lo); return lowerBetter ? 1 - t : t;
+        };
 
         let html = "<thead><tr><th class='corner'>model \\ benchmark</th>";
-        colsAll.forEach(d => {
-          const n = colProtos[d].size;
-          const mix = n > 1 ? `<span class="colmix" title="${n} different protocols in this column — these cells are NOT comparable">${n} protocols ⚠</span>` : "";
-          html += `<th scope="col">${d}${mix}</th>`;
-        });
+        cols.forEach(d => html += `<th scope="col">${d}</th>`);
         html += "</tr></thead><tbody>";
         rows.forEach(mname => {
           html += `<tr><th scope="row">${mname}</th>`;
-          colsAll.forEach(d => {
-            const g = groups[mname + " " + d];
-            if (!g) {
-              const p = metric === "abs_rel" ? PRED[mname + "|" + d] : null;
-              if (p) {
-                html += `<td><span class="cell pred" tabindex="0" title="BO prediction — NOT a run. ${mname} on ${d} ≈ ${p.pred} AbsRel (1σ: ${p.lo}–${p.hi}). From scripts/bo_table_forecast.py">~${p.pred}<span class="pu">±</span></span></td>`;
-              } else {
-                html += `<td><span class="cell empty" aria-hidden="true"></span></td>`;
-              }
-              return;
+          cols.forEach(d => {
+            const g = groups[mname + "|" + d];
+            if (g) {
+              const c = g[0];
+              const glyph = c.status === "info" ? '<span class="sbadge info" title="differs from paper">&#8505;</span>'
+                : c.status === "target" ? '<span class="sbadge target" title="no paper target">&#9671;</span>'
+                : '<span class="sbadge ok" title="reproduces paper">&#10003;</span>';
+              const al = `${mname} on ${d}: ${c.obs}${c.d == null ? " (no paper target)" : c.status === "ok" ? " — reproduces paper (" + (c.d > 0 ? "+" : "") + c.d + "%)" : " — off-paper (" + (c.d > 0 ? "+" : "") + c.d + "% vs paper)"}`;
+              html += `<td><button class="cell has ${c.status}" data-key="${mname}|${d}" aria-label="${al}">${glyph}<span class="v" style="color:${perfColor(perfOf(d, +c.obs))}">${c.obs}</span></button></td>`;
+            } else if (predMap[mname + "|" + d]) {
+              const p = predMap[mname + "|" + d];
+              html += `<td><span class="cell pred" tabindex="0" title="BO prediction — NOT a run. ${mname} on ${d} under ${proto} ≈ ${p.pred} (1σ ${p.lo}–${p.hi})"><span class="v" style="color:${perfColor(perfOf(d, +p.pred))};opacity:.55;font-style:italic;font-weight:500">~${p.pred}</span></span></td>`;
+            } else {
+              html += `<td><span class="cell empty" aria-hidden="true"></span></td>`;
             }
-            const c = g[0];
-            const glyph = c.status === "info" ? '<span class="sbadge info" title="off-paper">&#8505;</span>'
-              : c.status === "target" ? '<span class="sbadge target" title="no paper target">&#9671;</span>'
-              : '<span class="sbadge ok" title="verified">&#10003;</span>';
-            // Headline is the SCORE (the metric value). ✓/ℹ glyph = does it reproduce
-            // the paper; Δ and the paper number live in the hover.
-            const score = `<span class="v">${c.obs}</span>`;
-            const proto = protoOf(c);
-            const ptag = proto ? `<span class="proto">·${proto}</span>` : "";
-            const multi = g.length > 1 ? `<span class="multi" title="${g.length} numbers, this row">&middot;${g.length}</span>` : "";
-            const al = `${mname} on ${d}: ${c.obs}${c.d == null ? " (no paper target)" : c.status === "ok" ? " — reproduces paper (" + (c.d > 0 ? "+" : "") + c.d + "%)" : " — off-paper (" + (c.d > 0 ? "+" : "") + c.d + "% vs paper)"}${proto ? ", protocol " + proto : ""}`;
-            html += `<td><button class="cell has ${c.status}" data-key="${mname} ${d}" aria-label="${al}">${glyph}${score}${ptag}${multi}</button></td>`;
           });
           html += "</tr>";
         });
