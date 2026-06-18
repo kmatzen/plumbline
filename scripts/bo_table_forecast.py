@@ -93,14 +93,36 @@ def fit_predict(cells, prior_sd=1.0, noise_sd=0.15):
     return models, datasets, predict, info_gain
 
 
+def emit_json(cells, measured, models, datasets, predict):
+    """Predictions for empty cells, for embedding in the site as ghosted fill-in."""
+    out = []
+    for m in models:
+        for d in datasets:
+            if (m, d) in measured:
+                continue
+            lm, ls = predict(m, d)
+            out.append({
+                "model": m, "ds": d, "metric": "abs_rel",
+                "pred": round(float(np.exp(lm)), 4),
+                "lo": round(float(np.exp(lm - ls)), 4),
+                "hi": round(float(np.exp(lm + ls)), 4),
+            })
+    print(json.dumps(out, indent=0))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--topk", type=int, default=10)
+    ap.add_argument("--json", action="store_true", help="emit predicted empty cells as JSON (for the site)")
     args = ap.parse_args()
 
     cells = load_depth_absrel_cells()
     measured = {(c["model"], c["ds"]) for c in cells}
     models, datasets, predict, info_gain = fit_predict(cells)
+
+    if args.json:
+        emit_json(cells, measured, models, datasets, predict)
+        return
 
     print(f"mono-depth AbsRel slice: {len(cells)} measured cells, "
           f"{len(models)} models × {len(datasets)} datasets "
