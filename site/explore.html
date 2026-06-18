@@ -61,20 +61,24 @@
     table.matrix tbody td:has(.cell.has) { background: rgba(212,240,0,0.022); }
     table.matrix tbody tr:hover td { background: rgba(255,255,255,0.015); }
 
-    .cell { display: block; width: 100%; padding: 11px 8px; cursor: default; position: relative; transition: background 0.14s var(--ease); }
+    .cell { display: block; width: 100%; padding: 10px 8px; cursor: default; position: relative; text-align: left; transition: background 0.14s var(--ease); }
     .cell.empty::after { content: ""; }
     .cell.has { cursor: pointer; }
     .cell.has:hover, .cell.has:focus-visible { background: rgba(212,240,0,0.07); outline: none; }
     .cell.has:focus-visible { box-shadow: inset 0 0 0 1.5px var(--acc); }
-    .cell .v { font-weight: 600; font-variant-numeric: tabular-nums; }
-    /* .v colour is set inline = within-column performance (greener = better); see perfColor() */
-    .cell .dd { display: block; font-size: 10px; margin-top: 2px; color: var(--fg-dim); font-variant-numeric: tabular-nums; }
-    .cell .multi { position: absolute; top: 4px; right: 5px; font-size: 9px; color: var(--acc-dim); }
-    .cell.info .v, .cell.target .v { font-style: italic; }  /* off-paper kept italic; colour still = perf */
-    .cell.info, .cell.target { background-image: repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.014) 6px 7px); }
+    /* fidelity-led cell: glyph + Δ inline, protocol tag below. Colour = provenance, NOT performance. */
+    .cell .sbadge { position: static; font-size: 11px; line-height: 1; margin-right: 4px; vertical-align: baseline; }
+    .cell .sbadge.ok { color: var(--acc); }
+    .cell .sbadge.info { color: #e0a73c; }
+    .cell .sbadge.target { color: var(--fg-dim); }
+    .cell .dd { display: inline; font-size: 12.5px; font-weight: 600; color: var(--fg-soft); font-variant-numeric: tabular-nums; }
+    .cell.ok .dd { color: var(--fg); }
+    .cell.info .dd { color: #e0a73c; font-style: italic; }
     .cell .dd.nt { color: var(--fg-dim); font-style: italic; }
-    .sbadge { position: absolute; top: 3px; right: 5px; font-size: 10px; line-height: 1; }
-    .sbadge.info { color: var(--fg-mute); } .sbadge.target { color: var(--fg-dim); }
+    .cell .proto { display: block; font-size: 9px; color: var(--fg-dim); margin-top: 3px; letter-spacing: 0.03em; }
+    .cell .multi { position: absolute; top: 4px; right: 5px; font-size: 9px; color: var(--acc-dim); }
+    .cell.info, .cell.target { background-image: repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.014) 6px 7px); }
+    .colmix { display: block; font-size: 9px; font-weight: 400; color: #e0a73c; margin-top: 3px; letter-spacing: 0.03em; }
 
     /* hover popover */
     .pop {
@@ -126,19 +130,21 @@
     </div>
 
     <div class="xhead">
-      <span class="xnum">verified/ provenance matrix</span>
-      <h1>Model × benchmark, every number <em>traced to its paper</em>.</h1>
+      <span class="xnum">reproduction-fidelity matrix</span>
+      <h1>How faithfully we reproduce <em>each paper's own number</em>.</h1>
       <p class="xlede">
-        Every number is a plumbline run, <b>shaded by performance</b> — the
-        greenest cell is the <b>best result in its column</b> (that benchmark);
-        dimmer is weaker. <b>Provenance rides the glyph, not the colour:</b>
-        <b>&#10003; verified</b> numbers land within their pinned tolerance of the
-        source paper, <b>&#8505; off-paper</b> ones don't (paper-private recipes,
-        protocol deltas, model limits — the hover names which), and <b>&#9671;</b>
-        have no paper target. Only the 42 verified are safe to cite. <b>Switch the
-        metric</b> with the tabs; <b>hover any number</b> for observed vs paper, the
-        deviation, and the citation. Each row follows its own paper's eval protocol,
-        so read the shading as a within-column ranking, not a controlled head-to-head.
+        <b>This is a reproduction harness, not a leaderboard.</b> Each cell answers
+        one question — <em>did a plumbline run land on THAT paper's published number,
+        under THAT paper's protocol?</em> The headline is the <b>deviation Δ</b> from
+        the paper's target; <b>&#10003; verified</b> is within the pinned tolerance,
+        <b>&#8505; off-paper</b> is outside it (the hover says why — protocol delta,
+        prediction method, model limit), <b>&#9671;</b> has no paper target.
+        <b>The protocol tag (·eigen-crop, ·no-crop, ·video&hellip;) matters:</b> two
+        cells in the same column can target different papers, datasets-subsets, crops,
+        or estimators, so <b>a column is NOT a ranking</b> — a “mixed” marker flags
+        the columns where the cells aren't comparable. Only the 44 verified are safe to
+        cite. <b>Switch the metric</b> with the tabs; <b>hover any cell</b> for
+        observed vs paper, the protocol, the eval-set, and the citation.
       </p>
     </div>
 
@@ -148,20 +154,20 @@
     <div class="matwrap"><table class="matrix" id="matrix"></table></div>
 
     <div class="xlegend">
-      <span style="color:var(--fg-soft)">colour = performance</span>
-      <span><span class="swgrad"></span> weaker&nbsp;→&nbsp;best <span style="color:var(--fg-dim)">(within column)</span></span>
-      <span style="margin-left:14px; color:var(--fg-soft)">provenance —</span>
-      <span><span class="lglyph" style="color:var(--acc)">&#10003;</span> verified</span>
-      <span><span class="lglyph info">&#8505;</span> off-paper</span>
-      <span><span class="lglyph target">&#9671;</span> no paper target</span>
-      <span style="margin-left:auto; color:var(--fg-dim)">Δ vs paper on hover</span>
+      <span style="color:var(--fg-soft)">cell = <b>Δ</b> from <b>that paper's</b> number</span>
+      <span><span class="lglyph" style="color:var(--acc)">&#10003;</span> verified (in tolerance)</span>
+      <span><span class="lglyph info" style="color:#e0a73c">&#8505;</span> off-paper</span>
+      <span><span class="lglyph target">&#9671;</span> no target</span>
+      <span style="margin-left:12px; color:var(--fg-dim)">·tag = protocol</span>
+      <span style="color:#e0a73c">⚠ mixed column ≠ ranking</span>
+      <span style="margin-left:auto; color:var(--fg-dim)">value + citation on hover</span>
     </div>
 
     <p class="xfoot">
       Metrics are grouped <b>depth</b> · <b>pose</b> · <b>trajectory</b>. The pose and
       trajectory tabs include the companion numbers each paper row also reports
       (RRA@15 / RTA@15, RPE-trans / RPE-rot°), audited the same way; the
-      “42 verified results” counts the <em>primary</em> metric per reproduction, not
+      “44 verified results” counts the <em>primary</em> metric per reproduction, not
       these companions.
       Tolerance is pinned per-cell: <b>±5% for nearly all cells</b>, ±10% for the
       three video/trajectory-pose cells (sub-cm ATEs amplify small fp16-vs-bf16 drift),
@@ -179,7 +185,7 @@
 
   <div class="pop" id="pop" role="status" aria-live="polite"></div>
 
-  <!-- Verified cells (42). The array length is the single count the site stat,
+  <!-- Verified cells (44). The array length is the single count the site stat,
        REPRODUCTIONS.md "= N total" and the README all agree with
        (tests/test_site_coverage.py). -->
   <script type="application/json" id="verified-cells">
@@ -234,7 +240,7 @@
   <!-- Companion metrics: additional numbers audited from the SAME paper rows as
        the verified cells (e.g. a pose table reports mAA/RRA/RTA together; a
        Table-4 trajectory row reports ATE/RPE-trans/RPE-rot). Display-only — these
-       do NOT count toward the verified-results stat (that's the 42 primary cells). -->
+       do NOT count toward the verified-results stat (that's the 44 primary cells). -->
   <script type="application/json" id="companion-cells">
   [
     {"model":"DUSt3R","ds":"KITTI","metric":"delta_1","obs":"0.8661","paper":"0.8660","d":0.0,"task":"depth","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 · KITTI · δ₁ F(I,I)"}},
@@ -257,7 +263,7 @@
   <!-- Informational / off-paper cells: real plumbline numbers that DON'T land
        within their tolerance (status "info") or have no paper target (status
        "target"). Shown to make the evaluation surface complete; clearly NOT
-       paper-matches, and excluded from the 42 verified count. -->
+       paper-matches, and excluded from the 44 verified count. -->
   <script type="application/json" id="info-cells">
 [
 {
@@ -493,6 +499,28 @@
         hide();
       }
 
+      // Short protocol tag per cell. The dust3r-lineage columns (NYU/KITTI/Bonn)
+      // are the ones where models genuinely diverge, so they get explicit
+      // overrides; everything else derives a tag from the citation locator.
+      const PROTO_OVERRIDE = {
+        "DUSt3R|NYU": "eigen-crop", "DUSt3R|Bonn": "MonST3R-base", "DUSt3R|KITTI": "lineage",
+        "MonST3R|NYU": "no-crop", "MonST3R|Bonn": "own", "MonST3R|KITTI": "lineage", "MonST3R|Sintel": "own",
+        "CUT3R|NYU": "prep-set", "CUT3R|Bonn": "video", "CUT3R|KITTI": "lineage",
+        "UniK3D Large|NYU": "metric/no-align",
+      };
+      const MODERN = ["DA-V2", "MoGe", "Metric3D", "Marigold", "Depth Pro"];
+      function protoOf(c) {
+        const o = PROTO_OVERRIDE[c.model + "|" + c.ds]; if (o) return o;
+        const l = ((c.cite && c.cite.loc) || "").toLowerCase();
+        if (l.includes("moge")) return "MoGe-eval";
+        if (l.includes("native")) return "native";
+        if (l.includes("video") || l.includes("rgb_110")) return "video";
+        if (l.includes("eigen") || l.includes("garg")) return "eigen-2014";
+        if ((c.ds === "NYU" || c.ds === "KITTI") && MODERN.some(m => c.model.includes(m))) return "eigen-2014";
+        if (c.cite && c.cite.src && c.cite.src.includes("protocol")) return "alt-protocol";
+        return "";
+      }
+
       function render() {
         const sub = cells.filter(c => c.metric === metric);
         const groups = {};
@@ -500,8 +528,17 @@
         const rows = MODEL_ORDER.filter(m => sub.some(c => c.model === m));
         const colsAll = DS_ORDER.filter(d => sub.some(c => c.ds === d));
 
+        // per-column protocol diversity → a column is only a ranking if all its cells share a protocol
+        const colProtos = {};
+        colsAll.forEach(d => colProtos[d] = new Set());
+        sub.forEach(c => { if (colProtos[c.ds]) colProtos[c.ds].add(protoOf(c) || "—"); });
+
         let html = "<thead><tr><th class='corner'>model \\ benchmark</th>";
-        colsAll.forEach(d => html += `<th scope="col">${d}</th>`);
+        colsAll.forEach(d => {
+          const n = colProtos[d].size;
+          const mix = n > 1 ? `<span class="colmix" title="${n} different protocols in this column — these cells are NOT comparable">${n} protocols ⚠</span>` : "";
+          html += `<th scope="col">${d}${mix}</th>`;
+        });
         html += "</tr></thead><tbody>";
         rows.forEach(mname => {
           html += `<tr><th scope="row">${mname}</th>`;
@@ -509,14 +546,16 @@
             const g = groups[mname + " " + d];
             if (!g) { html += `<td><span class="cell empty" aria-hidden="true"></span></td>`; return; }
             const c = g[0];
-            const badge = c.status === "info" ? '<span class="sbadge info" title="off-paper">&#8505;</span>'
+            const glyph = c.status === "info" ? '<span class="sbadge info" title="off-paper">&#8505;</span>'
               : c.status === "target" ? '<span class="sbadge target" title="no paper target">&#9671;</span>'
-              : (g.length > 1 ? `<span class="multi">&middot;${g.length}</span>` : "");
-            const dd = c.d == null ? '<span class="dd nt">no target</span>'
+              : '<span class="sbadge ok" title="verified">&#10003;</span>';
+            const fid = c.d == null ? '<span class="dd nt">—</span>'
               : `<span class="dd">${c.d > 0 ? "+" : ""}${c.d}%</span>`;
-            const al = c.d == null ? `${mname} on ${d}: ${c.obs}, no paper target`
-              : `${mname} on ${d}: ${c.obs}, ${c.d > 0 ? "+" : ""}${c.d}% from paper`;
-            html += `<td><button class="cell has ${c.status}" data-key="${mname} ${d}" aria-label="${al}">${badge}<span class="v" style="color:${perfColor(c.perf)}">${c.obs}</span>${dd}</button></td>`;
+            const proto = protoOf(c);
+            const ptag = proto ? `<span class="proto">·${proto}</span>` : "";
+            const multi = g.length > 1 ? `<span class="multi" title="${g.length} numbers, this row">&middot;${g.length}</span>` : "";
+            const al = `${mname} on ${d}: observed ${c.obs}${c.d == null ? ", no paper target" : ", " + (c.d > 0 ? "+" : "") + c.d + "% from paper"}${proto ? ", protocol " + proto : ""}`;
+            html += `<td><button class="cell has ${c.status}" data-key="${mname} ${d}" aria-label="${al}">${glyph}${fid}${ptag}${multi}</button></td>`;
           });
           html += "</tr>";
         });
@@ -551,9 +590,12 @@
           : '<span class="p-status target">&#9671; no paper target</span>';
         const paperBit = c.paper ? `<span class="p-paper">paper <b>${c.paper}</b></span>` : "";
         const deltaBit = c.d == null ? "" : `<span class="p-delta">&Delta; ${c.d > 0 ? "+" : ""}${c.d}%</span>`;
+        const proto = protoOf(c);
+        const protoBit = proto ? `<span class="p-proto" style="color:var(--fg-mute);font-size:11px">protocol <b style="color:var(--fg-soft)">${proto}</b></span>` : "";
         pop.innerHTML =
           `<div class="p-top"><span class="p-model">${c.model}</span><span class="p-ds">${c.ds} · ${METRICS.find(m=>m.key===c.metric).label}</span></div>
-           <div class="p-nums"><span class="p-obs" style="color:${perfColor(c.perf)}">${c.obs}</span>${paperBit}${deltaBit}${chip}</div>
+           <div class="p-nums"><span class="p-obs">${c.obs}</span>${paperBit}${deltaBit}${chip}</div>
+           ${protoBit ? `<div style="margin:5px 0 2px">${protoBit}</div>` : ""}
            ${blocks}${compHtml}`;
         pop.classList.add("show");
         const r = el.getBoundingClientRect();
