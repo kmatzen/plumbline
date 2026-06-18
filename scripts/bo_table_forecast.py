@@ -126,30 +126,39 @@ def fit(cells, prior_sd=0.8, noise_sd=0.35):
         Sx = Sigma @ feat(m, d, p)
         return float(sum((z @ Sx) ** 2 for z in grid) / (noise_sd**2 + feat(m, d, p) @ Sx))
 
-    return methods, datasets, protos, predict, info_gain
+    model = {  # the fitted model, small enough to embed + evaluate in JS
+        "methods": methods, "datasets": datasets, "protos": protos,
+        "nM": nM, "nD": nD, "noise2": noise_sd**2,
+        "mu": [round(float(v), 5) for v in mu_w],
+        "Sigma": [[round(float(v), 5) for v in row] for row in Sigma],
+        "stats": {k: [round(stats[k][0], 5), round(stats[k][1], 5), SIGN[k]] for k in stats},
+    }
+    return methods, datasets, protos, predict, info_gain, model
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--topk", type=int, default=12)
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--model", action="store_true", help="emit the fitted model for in-browser prediction")
     args = ap.parse_args()
 
     cells = load_cells()
     measured = {(c["model"], c["ds"], c["metric"], c["proto"]) for c in cells}
-    methods, datasets, protos, predict, info_gain = fit(cells)
+    methods, datasets, protos, predict, info_gain, model = fit(cells)
 
-    # valid (dataset, protocol) combos per metric — the tensor is ragged across metrics
-    combos = {}
-    for c in cells:
-        combos.setdefault(c["metric"], set()).add((c["ds"], c["proto"]))
+    if args.model:
+        print(json.dumps(model, separators=(",", ":")))
+        return
 
+    # FULL rectangular 4-D cube: every method × dataset × protocol × metric.
     def gaps():
         for k in PRIMARY:
-            for d, p in sorted(combos.get(k, [])):
-                for m in methods:
-                    if (m, d, k, p) not in measured:
-                        yield (m, d, p, k)
+            for p in protos:
+                for d in datasets:
+                    for m in methods:
+                        if (m, d, k, p) not in measured:
+                            yield (m, d, p, k)
 
     if args.json:
         out = []
@@ -161,20 +170,19 @@ def main():
         return
 
     obs = len(cells)
-    total = sum(len(methods) * len(v) for v in combos.values())
-    print(f"4-D tensor (method × dataset × protocol × metric): {obs} observed, "
-          f"{total - obs} predicted, over {len(methods)} methods · {len(datasets)} datasets · "
-          f"{len(protos)} protocols · {len(combos)} metrics\n")
-    for k in PRIMARY:
-        ps = sorted({p for d, p in combos.get(k, [])})
-        print(f"  {k:9} {len(combos.get(k, [])):2} (ds×proto) cells · protocols: {', '.join(ps)}")
+    cube = len(methods) * len(datasets) * len(protos) * len(PRIMARY)
+    print(f"FULL 4-D cube {len(methods)} methods × {len(datasets)} datasets × "
+          f"{len(protos)} protocols × {len(PRIMARY)} metrics = {cube} cells "
+          f"({obs} observed, {cube - obs} predicted)\n")
+    print("Every (metric, protocol) view is the SAME complete methods × datasets grid.")
+    print(f"protocols: {', '.join(protos)}")
 
-    print(f"\nACQUISITION — top {args.topk} (method, dataset, protocol, metric) by info gain:")
-    cand = sorted(((m, d, p, k, info_gain(m, d, p)) for m, d, p, k in gaps()),
-                  key=lambda r: -r[4])[: args.topk]
-    for i, (m, d, p, k, ig) in enumerate(cand, 1):
-        mean, _, _ = predict(m, d, p, k)
-        print(f"  {i:<3} {m:13} {d:8} {k:8} ·{p:28} ~{mean:.4f}  ig {ig:.2f}")
+    print(f"\nACQUISITION — top {args.topk} (method, dataset, protocol) by info gain:")
+    seen = {(c["model"], c["ds"], c["proto"]) for c in cells}
+    cand = sorted(((m, d, p, info_gain(m, d, p)) for m in methods for d in datasets for p in protos
+                   if (m, d, p) not in seen), key=lambda r: -r[3])[: args.topk]
+    for i, (m, d, p, ig) in enumerate(cand, 1):
+        print(f"  {i:<3} {m:13} {d:8} ·{p:28} ig {ig:.2f}")
 
 
 if __name__ == "__main__":
