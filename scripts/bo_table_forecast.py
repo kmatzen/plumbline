@@ -1,21 +1,22 @@
-"""Bayesian score prediction + active-learning, with PROTOCOL as a discrete variable.
+"""Bayesian completion of the 4-D reproduction tensor: method × dataset × protocol × metric.
 
-Each reproduction cell is (model, dataset, protocol) → score. Scores are only
-comparable WITHIN one protocol, so the model treats protocol as a third discrete
-factor alongside model and dataset:
+Every observed cell is (method, dataset, protocol, metric) -> score. The four axes
+are orthogonal; protocol is the eval RECIPE (read from the recorded eval source +
+dataset, never the method), and metric is the 4th axis.
 
-    log(score) = global + model_effect + dataset_effect + protocol_effect + noise
+Metrics differ in scale and direction (AbsRel lower-better ~0.05; δ₁ higher-better
+~0.95; mAA higher-better; ATE lower-better). We standardise each metric to a
+direction-aware "goodness" g = sign·(log score − μ_metric)/σ_metric (higher g =
+better, comparable across metrics), then fit
 
-with Gaussian priors → exact Gaussian posterior → predicted score + uncertainty
-for ANY (model, dataset, protocol), including protocol counterfactuals. Then:
+    g ~ method + dataset + protocol          (Gaussian priors, exact posterior)
 
-  1. PREDICT — per protocol, fill the gaps in that protocol's cohort
-     (its models × its datasets) with a calibrated score ± 1σ.
-  2. ACQUIRE — rank (model, dataset, protocol) evals to run next by expected
-     information gain across the whole table.
+so method-skill / dataset-difficulty / protocol-leniency are SHARED across metrics
+— a method observed only in δ₁ (e.g. DA3) still gets an AbsRel prediction. Predict
+g for any (method, dataset, protocol, metric), back-transform to that metric's scale.
 
-  python scripts/bo_table_forecast.py                 # per-protocol fill-in + next-evals
-  python scripts/bo_table_forecast.py --json          # predictions for the site
+  python scripts/bo_table_forecast.py            # tensor summary + acquisition
+  python scripts/bo_table_forecast.py --json      # predictions for the site
 """
 
 import argparse
@@ -25,28 +26,34 @@ import re
 import numpy as np
 
 EXPLORE = "site/explore.html"
+PRIMARY = ("abs_rel", "delta_1", "maa", "ate")
+SIGN = {"delta_1": +1, "maa": +1, "abs_rel": -1, "ate": -1}  # +1 = higher is better
 
-# Protocol = the eval RECIPE, read from the recorded recipe (which paper's eval
-# TABLE the score is scored under, + dataset) — NOT the method. This reproduces the
-# plumbline `protocol:` family per cell: the eval source `src` is the paper whose
-# recipe was used (e.g. a DA-V2 baseline row in MoGe's Table 3 has src=MoGe →
-# moge-eval, regardless that the method is DA-V2). Method never appears here, so
-# protocol is an independent tensor axis. Mirrored by recipeOf() in the site.
-def proto_of(model, ds, src, loc):
+DEPTH_DROP = ("Booster", "ETH3D", "iBims-1", "Sun-RGBD")
+
+
+def proto_of(model, ds, metric, src, loc):
+    """Protocol = eval recipe, from the eval SOURCE + dataset — never the method."""
     s = re.sub(r"\s*\(.*?\)", "", src or "").strip()
-    if s == "MoGe":
-        return "moge-eval (affine)"                       # *_moge
-    if s == "DUSt3R":
-        return "dust3r-table2 (eigen+ratio-med)" if ds == "NYU" else "dust3r-lineage (median, no-crop)"
-    if s == "MonST3R":
-        return "dust3r-lineage (median, no-crop)"         # *_dust3r_lineage
-    if s == "CUT3R":
-        return "video (per-sequence)" if ds == "Bonn" else "dust3r-lineage (median, no-crop)"
-    if s == "UniK3D":
-        return "metric (no-align)"                        # *_metric
-    if s == "Depth Pro":
-        return "metric (no-align)" if ds in ("Booster", "ETH3D", "iBims-1", "Sun-RGBD") else "eigen-2014 (crop+median)"
-    return "eigen-2014 (crop+median)"                     # nyu_eigen_2014 / kitti_eigen_garg
+    if metric in ("abs_rel", "delta_1"):
+        if s == "MoGe":
+            return "moge-eval (affine)"
+        if s == "DUSt3R":
+            return "dust3r-table2 (eigen+ratio-med)" if ds == "NYU" else "dust3r-lineage (median, no-crop)"
+        if s == "MonST3R":
+            return "dust3r-lineage (median, no-crop)"
+        if s == "CUT3R":
+            return "video (per-sequence)" if ds == "Bonn" else "dust3r-lineage (median, no-crop)"
+        if s == "UniK3D":
+            return "metric (no-align)"
+        if s == "Depth Pro":
+            return "metric (no-align)" if ds in DEPTH_DROP else "eigen-2014 (crop+median)"
+        return "eigen-2014 (crop+median)"
+    if metric == "maa":
+        return "RE10K wide-baseline" if ds == "RE10K" else "PoseDiff (10-frame)"
+    if metric == "ate":
+        return "trajectory (Sim3 ATE)"
+    return "other"
 
 
 def load_cells():
@@ -55,27 +62,39 @@ def load_cells():
     for kind in ("verified-cells", "companion-cells", "info-cells"):
         m = re.search(rf'id="{kind}">(.*?)</script>', h, re.S)
         for c in json.loads(m.group(1)):
-            if c.get("task") != "depth" or c.get("metric") != "abs_rel":
+            if c.get("metric") not in PRIMARY or c.get("obs") in (None, ""):
                 continue
             cite = c.get("cite") or {}
-            proto = proto_of(c["model"], c["ds"], cite.get("src", ""), cite.get("loc", ""))
-            k = (c["model"], c["ds"], proto)  # a model+dataset can be measured under 2 recipes
+            proto = proto_of(c["model"], c["ds"], c["metric"], cite.get("src", ""), cite.get("loc", ""))
+            k = (c["model"], c["ds"], c["metric"], proto)
             if k in seen:
                 continue
             seen.add(k)
-            out.append({"model": c["model"], "ds": c["ds"], "y": float(c["obs"]), "proto": proto})
+            out.append({"model": c["model"], "ds": c["ds"], "metric": c["metric"],
+                        "proto": proto, "y": float(c["obs"])})
     return out
 
 
-def fit(cells, prior_sd=0.7, noise_sd=0.12):
-    models = sorted({c["model"] for c in cells})
+def fit(cells, prior_sd=0.8, noise_sd=0.35):
+    methods = sorted({c["model"] for c in cells})
     datasets = sorted({c["ds"] for c in cells})
     protos = sorted({c["proto"] for c in cells})
-    mi = {m: i for i, m in enumerate(models)}
+    mi = {m: i for i, m in enumerate(methods)}
     di = {d: i for i, d in enumerate(datasets)}
     pi = {p: i for i, p in enumerate(protos)}
-    nM, nD, nP = len(models), len(datasets), len(protos)
+    nM, nD, nP = len(methods), len(datasets), len(protos)
     P = 1 + nM + nD + nP
+
+    # per-metric standardisation of log-score → direction-aware goodness g
+    stats = {}
+    for k in PRIMARY:
+        ys = np.log([c["y"] for c in cells if c["metric"] == k])
+        if len(ys):
+            stats[k] = (float(ys.mean()), float(max(ys.std(), 0.15)))
+
+    def good(c):
+        mu, sd = stats[c["metric"]]
+        return SIGN[c["metric"]] * (np.log(c["y"]) - mu) / sd
 
     def feat(m, d, p):
         x = np.zeros(P)
@@ -86,33 +105,28 @@ def fit(cells, prior_sd=0.7, noise_sd=0.12):
         return x
 
     X = np.array([feat(c["model"], c["ds"], c["proto"]) for c in cells])
-    y = np.log(np.array([c["y"] for c in cells]))
+    g = np.array([good(c) for c in cells])
     tau = np.full(P, prior_sd**2)
     tau[0] = 10.0**2
-    A = X.T @ X / noise_sd**2 + np.diag(1.0 / tau)
-    Sigma = np.linalg.inv(A)
-    mu = Sigma @ (X.T @ y) / noise_sd**2
+    Sigma = np.linalg.inv(X.T @ X / noise_sd**2 + np.diag(1.0 / tau))
+    mu_w = Sigma @ (X.T @ g) / noise_sd**2
 
-    def predict(m, d, p):
+    def predict(m, d, p, metric):
         x = feat(m, d, p)
-        return float(np.exp(x @ mu)), float(np.sqrt(x @ Sigma @ x + noise_sd**2))
+        gm = float(x @ mu_w)
+        gs = float(np.sqrt(x @ Sigma @ x + noise_sd**2))
+        mu, sd = stats[metric]
+        lm = mu + SIGN[metric] * sd * gm          # back to log-score
+        ls = sd * gs                               # log-score std
+        return float(np.exp(lm)), float(np.exp(lm - ls)), float(np.exp(lm + ls))
 
-    grid = [feat(m, d, p) for m in models for d in datasets for p in protos]
+    grid = [feat(m, d, p) for m in methods for d in datasets for p in protos]
 
     def info_gain(m, d, p):
         Sx = Sigma @ feat(m, d, p)
-        denom = noise_sd**2 + feat(m, d, p) @ Sx
-        return float(sum((z @ Sx) ** 2 for z in grid) / denom)
+        return float(sum((z @ Sx) ** 2 for z in grid) / (noise_sd**2 + feat(m, d, p) @ Sx))
 
-    return models, datasets, protos, predict, info_gain
-
-
-def proto_datasets(cells):
-    """Per protocol: the datasets it covers (a protocol's table reports these)."""
-    out = {}
-    for c in cells:
-        out.setdefault(c["proto"], set()).add(c["ds"])
-    return out
+    return methods, datasets, protos, predict, info_gain
 
 
 def main():
@@ -122,43 +136,45 @@ def main():
     args = ap.parse_args()
 
     cells = load_cells()
-    measured = {(c["model"], c["ds"], c["proto"]) for c in cells}
-    models, datasets, protos, predict, info_gain = fit(cells)
+    measured = {(c["model"], c["ds"], c["metric"], c["proto"]) for c in cells}
+    methods, datasets, protos, predict, info_gain = fit(cells)
 
-    # FULL TENSOR: every (model, dataset, protocol) — measured or predicted. No
-    # restriction to a protocol's "own" datasets; the protocol is a free axis.
-    def gaps_for(p):
-        return [(m, d) for m in models for d in datasets if (m, d, p) not in measured]
+    # valid (dataset, protocol) combos per metric — the tensor is ragged across metrics
+    combos = {}
+    for c in cells:
+        combos.setdefault(c["metric"], set()).add((c["ds"], c["proto"]))
+
+    def gaps():
+        for k in PRIMARY:
+            for d, p in sorted(combos.get(k, [])):
+                for m in methods:
+                    if (m, d, k, p) not in measured:
+                        yield (m, d, p, k)
 
     if args.json:
         out = []
-        for p in protos:
-            for m, d in gaps_for(p):
-                mean, sd = predict(m, d, p)
-                out.append({
-                    "model": m, "ds": d, "proto": p, "metric": "abs_rel",
-                    "pred": round(mean, 4),
-                    "lo": round(float(np.exp(np.log(mean) - sd)), 4),
-                    "hi": round(float(np.exp(np.log(mean) + sd)), 4),
-                })
+        for m, d, p, k in gaps():
+            mean, lo, hi = predict(m, d, p, k)
+            out.append({"model": m, "ds": d, "proto": p, "metric": k,
+                        "pred": round(mean, 4), "lo": round(lo, 4), "hi": round(hi, 4)})
         print(json.dumps(out, separators=(",", ":")))
         return
 
-    cube = len(models) * len(datasets) * len(protos)
-    print(f"{len(cells)} observed cells → full tensor {len(models)} models × "
-          f"{len(datasets)} datasets × {len(protos)} protocols = {cube} cells "
-          f"({len(cells)} observed, {cube - len(cells)} predicted)\n")
-    print("PROTOCOLS (recipe, read per-cell from the recorded eval — never the method):")
-    for p in protos:
-        n = sum(1 for c in cells if c["proto"] == p)
-        ms = sorted({c["model"] for c in cells if c["proto"] == p})
-        print(f"  ◇ {p:32} {n:2} obs · methods: {', '.join(ms)}")
+    obs = len(cells)
+    total = sum(len(methods) * len(v) for v in combos.values())
+    print(f"4-D tensor (method × dataset × protocol × metric): {obs} observed, "
+          f"{total - obs} predicted, over {len(methods)} methods · {len(datasets)} datasets · "
+          f"{len(protos)} protocols · {len(combos)} metrics\n")
+    for k in PRIMARY:
+        ps = sorted({p for d, p in combos.get(k, [])})
+        print(f"  {k:9} {len(combos.get(k, [])):2} (ds×proto) cells · protocols: {', '.join(ps)}")
 
-    print(f"\nACQUISITION — top {args.topk} (model, dataset, protocol) by info gain:")
-    cand = [(m, d, p, predict(m, d, p)[0], info_gain(m, d, p))
-            for p in protos for m, d in gaps_for(p)]
-    for i, (m, d, p, mean, ig) in enumerate(sorted(cand, key=lambda r: -r[4])[: args.topk], 1):
-        print(f"  {i:<3} {m:14} {d:9} ·{p:32} ~{mean:.4f}   infogain {ig:.2f}")
+    print(f"\nACQUISITION — top {args.topk} (method, dataset, protocol, metric) by info gain:")
+    cand = sorted(((m, d, p, k, info_gain(m, d, p)) for m, d, p, k in gaps()),
+                  key=lambda r: -r[4])[: args.topk]
+    for i, (m, d, p, k, ig) in enumerate(cand, 1):
+        mean, _, _ = predict(m, d, p, k)
+        print(f"  {i:<3} {m:13} {d:8} {k:8} ·{p:28} ~{mean:.4f}  ig {ig:.2f}")
 
 
 if __name__ == "__main__":
