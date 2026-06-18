@@ -22,8 +22,18 @@ g for any (method, dataset, protocol, metric), back-transform to that metric's s
 import argparse
 import json
 import re
+import statistics
+from collections import Counter
 
 import numpy as np
+import yaml
+
+# display dataset -> gpu_queue.yaml dataset key (for the cost lookup)
+DS_QUEUE = {"NYU": "nyuv2", "KITTI": "kitti", "DIODE": "diode", "ETH3D": "eth3d", "GSO": "gso",
+            "iBims-1": "ibims1", "DDAD": "ddad", "Sintel": "sintel", "Bonn": "bonn",
+            "Sun-RGBD": "sun_rgbd", "Booster": "booster", "CO3Dv2": "co3dv2",
+            "RE10K": "realestate10k", "TUM-Dyn": "tum-dynamics"}
+SLOW = {"Marigold v1-1"}  # diffusion (multi-step) → ~3× wall
 
 EXPLORE = "site/explore.html"
 PRIMARY = ("abs_rel", "delta_1", "maa", "ate")
@@ -158,12 +168,72 @@ def fit(cells, prior_sd=0.8, noise_sd=0.35):
     return methods, datasets, protos, predict, info_gain, model
 
 
+def suggest(cells, measured, methods, datasets, predict, info_gain, topk=15):
+    """Rank RUNNABLE next-evals by expected info-gain per GPU-minute."""
+    supports = {}  # dataset -> metrics it actually scores (data-driven mask)
+    for c in cells:
+        supports.setdefault(c["ds"], set()).add(c["metric"])
+    home = {}  # method -> home DEPTH protocol (its most common depth recipe)
+    for c in cells:
+        if METRIC_TASK[c["metric"]] == "depth":
+            home.setdefault(c["model"], Counter())[c["proto"]] += 1
+    home = {k: v.most_common(1)[0][0] for k, v in home.items()}
+
+    def proto_for(m, d, k):  # the recipe we'd actually run this eval under
+        if k in ("abs_rel", "delta_1"):
+            return home.get(m)
+        if k == "maa":
+            return "RE10K wide-baseline" if d == "RE10K" else "PoseDiff (10-frame)"
+        return "trajectory (Sim3 ATE)"  # ate
+    nseen = Counter()  # observations per factor level (for the cold-start note)
+    for c in cells:
+        nseen[("m", c["model"])] += 1
+        nseen[("d", c["ds"])] += 1
+        nseen[("p", c["proto"])] += 1
+
+    q = yaml.safe_load(open("reproductions/gpu_queue.yaml"))
+    dscost = {}
+    for j in q.get("jobs", []):
+        if j.get("est_wall_min"):
+            for d in j.get("datasets") or []:
+                dscost.setdefault(d, []).append(j["est_wall_min"])
+    dscost = {d: statistics.median(v) for d, v in dscost.items()}
+
+    def cost(ds, m):
+        return dscost.get(DS_QUEUE.get(ds, ""), 60) * (3 if m in SLOW else 1)
+
+    cand = []
+    for m in methods:
+        for d in datasets:
+            for k in PRIMARY:
+                if not can_do(m, k) or k not in supports.get(d, ()):  # capability + dataset×metric mask
+                    continue
+                p = proto_for(m, d, k)
+                if not p or (m, d, k, p) in measured:
+                    continue
+                try:
+                    ig, pred = info_gain(m, d, p), predict(m, d, p, k)[0]
+                except KeyError:
+                    continue
+                c = cost(d, m)
+                cold = min(nseen[("m", m)], nseen[("d", d)], nseen[("p", p)])
+                cand.append((ig / c, m, d, k, p, pred, ig, c, cold))
+    cand.sort(reverse=True)
+    print("NEXT EVALS — runnable, capability+dataset masked, ranked by info-gain / GPU-minute\n")
+    print(f"  {'#':<3}{'method':14}{'dataset':9}{'metric':8}{'~pred':>8}{'min':>5}{'ig/min':>8}  note")
+    for i, (s, m, d, k, p, pred, ig, c, cold) in enumerate(cand[:topk], 1):
+        note = f"·{p[:22]}" + ("  ⟵ cold-start unlock" if cold <= 1 else "")
+        print(f"  {i:<3}{m:14}{d:9}{k:8}{pred:8.3f}{c:5.0f}{s:8.3f}  {note}")
+    print(f"\n  ({len(cand)} runnable candidates total)")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--topk", type=int, default=12)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--model", action="store_true", help="emit the fitted model for in-browser prediction")
     ap.add_argument("--loo", action="store_true", help="leave-one-out cross-validation")
+    ap.add_argument("--suggest", action="store_true", help="rank runnable next-evals by info-gain per GPU-minute")
     args = ap.parse_args()
 
     cells = load_cells()
@@ -198,6 +268,10 @@ def main():
               f"({100*hits/tot:.0f}%; well-calibrated ≈ 68%)")
         print(f"  cold-start: {cold}/{len(cells)} cells are the SOLE observation of some "
               f"method/dataset/protocol → unpredictable when held out")
+        return
+
+    if args.suggest:
+        suggest(cells, measured, methods, datasets, predict, info_gain)
         return
 
     # 4-D cube MASKED by capability: skip metrics a method can't do (no pose for a
