@@ -43,6 +43,9 @@ adapter.
 from __future__ import annotations
 
 import math
+import os
+import sys
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -58,6 +61,26 @@ from plumbline.models.base import Model, ModelCapabilities, Prediction, config_d
 from plumbline.models.registry import register_model
 
 __all__ = ["MoGeAdapter"]
+
+
+def _ensure_moge_on_path() -> None:
+    """Put the vendored ``moge`` package (and its pinned ``utils3d``) on path.
+
+    MoGe is vendored under ``plumbline/_vendor/moge`` (MIT; the inference subset
+    — model/ + utils/{geometry_*,tools}; see THIRD_PARTY_NOTICES.md). It pins a
+    SPECIFIC ``utils3d`` (commit 3fab839f, the ``utils3d.pt`` API) that differs
+    from the older ``utils3d`` vendored for DAGE under ``_vendor/utils3d``, so a
+    copy of MoGe's version lives at ``_vendor/moge/utils3d``. Inserting
+    ``_vendor/moge`` at the FRONT of sys.path makes both ``import moge`` and
+    ``import utils3d`` resolve to MoGe's copies (models run in separate
+    processes, so this never collides with DAGE's utils3d). ``$MOGE_ROOT``
+    overrides for a dev checkout.
+    """
+    root = os.environ.get("MOGE_ROOT")
+    if not root:
+        root = str(Path(__file__).resolve().parent.parent / "_vendor" / "moge")
+    if os.path.isdir(root) and root not in sys.path:
+        sys.path.insert(0, root)
 
 
 # Variant -> (HuggingFace checkpoint, is_metric, moge.model submodule)
@@ -134,6 +157,7 @@ class MoGeAdapter(Model):
         if self._model is not None:
             return
         ensure_torch()
+        _ensure_moge_on_path()
         try:
             if self._submodule == "v2":
                 from moge.model.v2 import MoGeModel
