@@ -1,0 +1,42 @@
+# Depth Anything V2 (large) on the FULL DIODE-indoor val (325 imgs) — DA-V2 Table 2.
+#
+# Large-variant counterpart to da-v2-small/base-diode-indoor-full, completing the
+# S/B/L trio under DA-V2's own Table 2 affine protocol. DA-V2 Table 2 DIODE ViT-L
+# = AbsRel 0.066 / δ₁ 0.952 (PDF-verified, ar5iv 2406.09414). This is DISTINCT
+# from da-v2-large-diode (MoGe Table 3 re-eval, AbsRel 0.0533 → 0.0529): same
+# model+dataset, different paper/protocol — a genuine 4-D (method × dataset ×
+# protocol × metric) entry. Both coexist in the explorer (per-protocol views).
+
+name: da-v2-large-diode-indoor-full
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: large
+
+dataset:
+  name: diode
+  split: val
+  kwargs:
+    domain: indoors
+
+# DA-V2 predicts affine-invariant inverse depth (MiDaS-style disparity).
+tasks:
+  - mono_depth
+scale_alignment: scale_shift
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 50.0]
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.066
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), DIODE column, Depth-Anything-V2 ViT-L row: AbsRel = 0.066 (δ₁ = 0.952). Affine-invariant inverse depth (per table caption). DIODE indoor-conventional. PDF-verified ar5iv 2406.09414."
+  source_confidence: verified_pdf
+
+notes: >
+  Full 325-img DIODE-indoor val, site-consistent DIODE protocol. Completes the
+  DA-V2 S/B/L DIODE trio under Table 2 affine (cf. da-v2-small-diode-indoor-full
+  0.0720, da-v2-base-diode-indoor-full 0.0695). Distinct protocol from
+  da-v2-large-diode (MoGe Table 3, 0.0529). Needs DIODE val at $DIODE_ROOT.
