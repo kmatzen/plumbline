@@ -16,6 +16,7 @@ is NonCommercial makes the corresponding parts of this repository usable for
 | MonST3R | `_vendor/monst3r/` | https://github.com/Junyi42/monst3r | CC BY-NC-SA 4.0 (`_vendor/monst3r/LICENSE`) |
 | Depth Anything 3 | `_vendor/depth_anything_3/` | PyPI `depth-anything-3` (ByteDance Seed) | Apache-2.0 (`_vendor/depth_anything_3/LICENSE`) |
 | Depth Anything V2 | `_vendor/depth_anything_v2/` | https://github.com/DepthAnything/Depth-Anything-V2 | Apache-2.0 code (`_vendor/depth_anything_v2/LICENSE`); Small weights Apache-2.0, Base/Large weights CC BY-NC 4.0 |
+| MoGe (1 & 2) | `_vendor/moge/` | https://github.com/microsoft/MoGe | MIT (`_vendor/moge/LICENSE`); inference subset (model/ + utils geometry/tools). Bundles its pinned `utils3d` @3fab839f at `_vendor/moge/utils3d/` (MIT, `_vendor/moge/UTILS3D_LICENSE`) — the `utils3d.pt` API MoGe needs, distinct from the older `_vendor/utils3d` used by DAGE |
 | UniK3D | `_vendor/unik3d/` | https://github.com/lpiccinelli-eth/UniK3D | CC BY-NC-SA 4.0 (`_vendor/unik3d/LICENSE`) |
 | Video Depth Anything | `_vendor/vda/` | https://github.com/DepthAnything/Video-Depth-Anything | Apache-2.0 code (`_vendor/vda/LICENSE`); Base/Large *weights* CC BY-NC 4.0 |
 | π³ (Pi3) | `_vendor/pi3/` | https://github.com/yyfz/Pi3 | BSD-3-Clause (`_vendor/pi3/LICENSE`) |
