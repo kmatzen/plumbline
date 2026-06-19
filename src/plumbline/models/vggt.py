@@ -40,6 +40,9 @@ failure and skips the sample when it doesn't fit.
 
 from __future__ import annotations
 
+import os
+import sys
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -57,6 +60,23 @@ from plumbline.conventions import (
 from plumbline.models._torch_utils import ensure_torch
 from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.registry import register_model
+
+
+def _ensure_vggt_on_path() -> None:
+    """Put the vendored ``vggt`` package on ``sys.path``.
+
+    VGGT is vendored under ``plumbline/_vendor/vggt`` (Meta "VGGT License" —
+    redistribution permitted under the agreement bundled at
+    ``_vendor/vggt/LICENSE.txt``; see THIRD_PARTY_NOTICES.md). Only the pose/depth
+    inference path is exercised, which does NOT pull the heavy vggsfm/pycolmap
+    ``dependency/`` tree (track_head's pycolmap use is lazy). ``$VGGT_ROOT``
+    overrides for a dev checkout of the upstream repo.
+    """
+    root = os.environ.get("VGGT_ROOT")
+    if not root:
+        root = str(Path(__file__).resolve().parent.parent / "_vendor" / "vggt")
+    if os.path.isdir(root) and root not in sys.path:
+        sys.path.insert(0, root)
 
 __all__ = ["VGGTAdapter"]
 
@@ -98,6 +118,7 @@ class VGGTAdapter(Model):
         if self._model is not None:
             return
         ensure_torch()
+        _ensure_vggt_on_path()
         try:
             from vggt.models.vggt import VGGT
         except ImportError as exc:  # pragma: no cover

@@ -14,6 +14,7 @@ is NonCommercial makes the corresponding parts of this repository usable for
 | DUSt3R | `_vendor/dust3r/` | https://github.com/naver/dust3r | CC BY-NC-SA 4.0 (`_vendor/dust3r/LICENSE`) |
 | MASt3R | `_vendor/mast3r/` | https://github.com/naver/mast3r | CC BY-NC-SA 4.0 (`_vendor/mast3r/LICENSE`) |
 | MonST3R | `_vendor/monst3r/` | https://github.com/Junyi42/monst3r | CC BY-NC-SA 4.0 (`_vendor/monst3r/LICENSE`) |
+| VGGT | `_vendor/vggt/` | https://github.com/facebookresearch/vggt | "VGGT License" (Meta research license — redistribution permitted under the agreement bundled at `_vendor/vggt/LICENSE.txt`; non-commercial research). Pose/depth inference subset; the heavy vggsfm/pycolmap `dependency/` tree is present but lazy (not imported for pose/depth) |
 | Depth Anything 3 | `_vendor/depth_anything_3/` | PyPI `depth-anything-3` (ByteDance Seed) | Apache-2.0 (`_vendor/depth_anything_3/LICENSE`) |
 | Depth Anything V2 | `_vendor/depth_anything_v2/` | https://github.com/DepthAnything/Depth-Anything-V2 | Apache-2.0 code (`_vendor/depth_anything_v2/LICENSE`); Small weights Apache-2.0, Base/Large weights CC BY-NC 4.0 |
 | MoGe (1 & 2) | `_vendor/moge/` | https://github.com/microsoft/MoGe | MIT (`_vendor/moge/LICENSE`); inference subset (model/ + utils + test/dataloader for the MoGe-eval homographic warp). Bundles its pinned `utils3d` @3fab839f at `_vendor/moge/utils3d/` (MIT, `_vendor/moge/UTILS3D_LICENSE`) — the `utils3d.pt` API MoGe needs, distinct from the older `_vendor/utils3d` used by DAGE |
