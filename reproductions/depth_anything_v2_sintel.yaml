@@ -24,6 +24,11 @@ paper_reference:
   source_confidence: verified_pdf
 
 notes: >
-  Native Sintel under protocol sintel_dav2 (sky mask at 70 m). Prior run
-  without max_depth blew up AbsRel (sky ~1e5 m). MoGe-bundle cell
-  da-v2-large-sintel-moge (0.214) is a different table/protocol.
+  ℹ OFF-PAPER (BETTER) 2026-06-19 (anima 1080 Ti, 643/643, sky mask 70 m):
+  AbsRel **0.2313** vs paper **0.487** (52% under), δ₁ 0.7178. NOT a match,
+  and notably the MoGe-protocol sibling da-v2-large-sintel-moge gives 0.2139 —
+  so BOTH plumbline Sintel protocols land ~0.21–0.23 while DA-V2's own Table 2
+  reports 0.487. DA-V2's 0.487 is therefore unreproduced from these preds: its
+  Table-2 Sintel eval uses a much harder protocol (likely no/low sky cap or a
+  full-range depth set) than plumbline's sintel_dav2. Native Sintel; prior run
+  without max_depth blew up AbsRel (sky ~1e5 m).
