@@ -168,7 +168,7 @@
         metrics (a method seen only in δ₁ still gets an AbsRel score), filling each
         unrun cell <em>a method can actually produce</em> — depth-only methods are
         absent from the pose tabs and vice-versa. The <b>best in each column is
-        bold</b>. Only the 44 <b>&#10003;</b> scores are paper-verified. <b>Switch metric</b> with the
+        bold</b>. Only the 46 <b>&#10003;</b> scores are paper-verified. <b>Switch metric</b> with the
         tabs, <b>protocol</b> with the pills; <b>hover any cell</b> for the paper
         number, the deviation, and the citation.
       </p>
@@ -197,7 +197,7 @@
       Metrics are grouped <b>depth</b> · <b>pose</b> · <b>trajectory</b>. The pose and
       trajectory tabs include the companion numbers each paper row also reports
       (RRA@15 / RTA@15, RPE-trans / RPE-rot°), audited the same way; the
-      “44 verified results” counts the <em>primary</em> metric per reproduction, not
+      “46 verified results” counts the <em>primary</em> metric per reproduction, not
       these companions.
       Tolerance is pinned per-cell: <b>±5% for nearly all cells</b>, ±10% for the
       three video/trajectory-pose cells (sub-cm ATEs amplify small fp16-vs-bf16 drift),
@@ -272,7 +272,7 @@
   <!-- Companion metrics: additional numbers audited from the SAME paper rows as
        the verified cells (e.g. a pose table reports mAA/RRA/RTA together; a
        Table-4 trajectory row reports ATE/RPE-trans/RPE-rot). Display-only — these
-       do NOT count toward the verified-results stat (that's the 44 primary cells). -->
+       do NOT count toward the verified-results stat (that's the 46 primary cells). -->
   <script type="application/json" id="companion-cells">
 [
 {"model":"DUSt3R","ds":"KITTI","metric":"delta_1","obs":"0.8661","paper":"0.8660","d":0.0,"task":"depth","cite":{"src":"DUSt3R","who":"Wang et al. 2024","arxiv":"2312.14132","loc":"Table 2 \u00b7 KITTI \u00b7 \u03b4\u2081 F(I,I)"},"proto":"dust3r-lineage (median, no-crop)"},
@@ -304,7 +304,7 @@
   <!-- Informational / off-paper cells: real plumbline numbers that DON'T land
        within their tolerance (status "info") or have no paper target (status
        "target"). Shown to make the evaluation surface complete; clearly NOT
-       paper-matches, and excluded from the 44 verified count. -->
+       paper-matches, and excluded from the 46 verified count. -->
   <script type="application/json" id="info-cells">
 [
 {"model":"MonST3R","ds":"KITTI","metric":"abs_rel","obs":"0.0959","paper":"0.101","d":-5.0,"status":"info","cite":{"src":"MonST3R","who":"Zhang et al. 2024","arxiv":"2410.03825","loc":"Table 3 \u00b7 KITTI \u2014 5.05%, just over the \u00b15% gate"},"proto":"dust3r-lineage (median, no-crop)"},
