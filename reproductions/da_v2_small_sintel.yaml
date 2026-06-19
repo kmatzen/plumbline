@@ -1,0 +1,29 @@
+# Depth Anything V2 (small) on Sintel — DA-V2 Table 2 (sintel_dav2 protocol).
+#
+# ViT-S counterpart to depth-anything-v2-sintel (ViT-L). DA-V2 Table 2 Sintel
+# ViT-S = AbsRel 0.500 / δ₁ 0.718 (PDF-verified, ar5iv 2406.09414). Like the L
+# cell, plumbline's sintel_dav2 (sky-mask 70 m) is expected to land
+# off-paper-better (~0.23) — DA-V2's Table-2 Sintel uses a harder protocol.
+
+name: da-v2-small-sintel
+protocol: sintel_dav2
+
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: small
+    input_size: 518
+
+scale_alignment: scale_shift
+device: cuda:0
+
+paper_reference:
+  primary_metric: abs_rel
+  value: 0.500
+  tolerance_relative: 0.05
+  citation: "Yang et al. 2024, Depth Anything V2 (arXiv:2406.09414), Table 2 (zero-shot relative depth estimation), Sintel column, ViT-S row: AbsRel = 0.500 (delta_1 = 0.718). PDF-verified ar5iv 2406.09414."
+  source_confidence: verified_pdf
+
+notes: >
+  ViT-S Sintel companion to depth-anything-v2-sintel (ViT-L 0.2313 vs 0.487).
+  sintel_dav2 protocol (sky mask 70 m). Needs $SINTEL_ROOT.
