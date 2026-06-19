@@ -69,7 +69,13 @@ def test_dav2_paper_load_error_distinguishes_missing_repo_from_missing_dep(
     model = cls(device="cpu", variant="small", source="paper")  # type: ignore[call-arg]
 
     # Make `from depth_anything_v2.dpt import ...` raise (regardless of vendoring).
+    # Poison BOTH the package and the dpt submodule: when another test in the
+    # suite has already imported `depth_anything_v2.dpt`, it's cached in
+    # sys.modules and the `from … import` resolves from cache unless the
+    # submodule itself is also forced to None (else this fails only in full-suite
+    # runs, not in isolation).
     monkeypatch.setitem(sys.modules, "depth_anything_v2", None)
+    monkeypatch.setitem(sys.modules, "depth_anything_v2.dpt", None)
 
     # Vendored package genuinely missing → find_spec None → corrupt-install guidance.
     monkeypatch.setattr(importlib.util, "find_spec", lambda name: None)
