@@ -179,6 +179,9 @@ class DIODEDataset(Dataset):
         self._moge_pipe = None
         if moge_fov_warp:
             try:
+                from plumbline.models.moge import _ensure_moge_on_path
+
+                _ensure_moge_on_path()  # vendored moge + its pinned utils3d/pipeline
                 from moge.test.dataloader import EvalDataLoaderPipeline
             except ModuleNotFoundError as exc:
                 raise ImportError(
@@ -540,6 +543,9 @@ class DIODEMogeEvalLoader(Dataset):
         # pipeline since we don't need the worker processes — we only
         # need the per-sample warp logic. Mirrors KITTIMogeEvalLoader.
         try:
+            from plumbline.models.moge import _ensure_moge_on_path
+
+            _ensure_moge_on_path()  # vendored moge + its pinned utils3d/pipeline
             from moge.test.dataloader import EvalDataLoaderPipeline
         except ModuleNotFoundError as exc:
             raise ImportError(

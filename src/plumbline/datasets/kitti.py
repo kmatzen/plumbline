@@ -754,6 +754,9 @@ class KITTIMogeEvalLoader(Dataset):
         # (that happens in .start()) — we use it as a handle to the upstream
         # ``_load_instance`` / ``_process_instance`` methods.
         try:
+            from plumbline.models.moge import _ensure_moge_on_path
+
+            _ensure_moge_on_path()  # vendored moge + its pinned utils3d/pipeline
             from moge.test.dataloader import EvalDataLoaderPipeline
         except ModuleNotFoundError as exc:
             raise ImportError(

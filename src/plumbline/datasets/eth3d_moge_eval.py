@@ -122,6 +122,9 @@ class ETH3DMogeEvalDataset(Dataset):
         # ``_process_instance`` warp logic only (we don't ``.start()`` the
         # worker processes). Mirrors DIODEMogeEvalLoader / KITTIMogeEvalLoader.
         try:
+            from plumbline.models.moge import _ensure_moge_on_path
+
+            _ensure_moge_on_path()  # vendored moge + its pinned utils3d/pipeline
             from moge.test.dataloader import EvalDataLoaderPipeline
         except ModuleNotFoundError as exc:
             raise ImportError(

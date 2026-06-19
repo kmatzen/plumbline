@@ -91,13 +91,16 @@ class _MogeIndexBundleDataset(Dataset):
         self.root = root_path
 
         try:
+            from plumbline.models.moge import _ensure_moge_on_path
+
+            _ensure_moge_on_path()  # vendored moge + its pinned utils3d/pipeline
             from moge.test.dataloader import EvalDataLoaderPipeline
         except ModuleNotFoundError as exc:
             raise ImportError(
-                f"{spec.display_name} needs the `moge` package for its "
-                "homographic warp (matches the paper's eval pipeline). "
-                "Install with `uv pip install "
-                "'git+https://github.com/microsoft/MoGe.git'`."
+                f"{spec.display_name} needs the vendored `moge` eval pipeline "
+                "(plumbline/_vendor/moge — the homographic warp matching the "
+                "paper's eval). The install is likely corrupt; reinstall "
+                "plumbline, or set $MOGE_ROOT to an upstream MoGe checkout."
             ) from exc
         self._moge_pipe = EvalDataLoaderPipeline(
             path=str(bundle_root),
