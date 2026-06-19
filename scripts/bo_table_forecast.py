@@ -51,7 +51,7 @@ CAPABILITY = {
     "Marigold v1-1": ["depth"], "Depth Pro": ["depth"], "UniK3D Large": ["depth"],
     "DA3": ["depth", "pose"], "CUT3R": ["depth", "pose"], "DUSt3R": ["depth", "pose"],
     "MonST3R": ["depth", "pose"], "VGGT": ["depth", "pose"], "MASt3R": ["depth", "pose"],
-    "DAGE": ["pose"],
+    "StreamVGGT": ["depth", "pose"], "Pi3": ["depth", "pose"], "DAGE": ["pose"],
 }
 
 
