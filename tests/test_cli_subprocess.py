@@ -72,7 +72,7 @@ def test_list_models_includes_all_v01_adapters() -> None:
 def test_list_datasets_includes_all_v01() -> None:
     r = _run("list-datasets")
     assert r.returncode == 0, r.stderr
-    for name in ("sintel", "scannet", "eth3d"):
+    for name in ("sintel", "nyuv2", "eth3d"):
         assert name in r.stdout, f"missing dataset {name!r}"
 
 

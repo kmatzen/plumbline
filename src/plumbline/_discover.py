@@ -45,7 +45,6 @@ _BUILTIN_ADAPTER_MODULES: tuple[str, ...] = (
     "plumbline.models.streamvggt",
     "plumbline.models.vggt_omega",
     "plumbline.datasets.sintel",
-    "plumbline.datasets.scannet",
     "plumbline.datasets.eth3d",
     "plumbline.datasets.eth3d_native_depth",
     "plumbline.datasets.nyuv2",
@@ -53,7 +52,6 @@ _BUILTIN_ADAPTER_MODULES: tuple[str, ...] = (
     "plumbline.datasets.kitti",
     "plumbline.datasets.diode",
     "plumbline.datasets.dtu",
-    "plumbline.datasets.scannet_1500",
     "plumbline.datasets.co3dv2",
     "plumbline.datasets.co3dv2_vggt_eval",
     "plumbline.datasets.realestate10k_pose",
@@ -66,7 +64,6 @@ _BUILTIN_ADAPTER_MODULES: tuple[str, ...] = (
     "plumbline.datasets.bonn",
     "plumbline.datasets.sun_rgbd_native",
     "plumbline.datasets.tum_dynamics",
-    "plumbline.datasets.scannet_video_pose",
 )
 
 

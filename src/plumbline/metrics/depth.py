@@ -145,7 +145,7 @@ def silog(
 
 
 def log10_error(pred: NDArray[Any], gt: NDArray[Any], valid: NDArray[Any] | None = None) -> float:
-    """Mean |log10(pred) - log10(gt)|. Common on NYUv2 and ScanNet tables."""
+    """Mean |log10(pred) - log10(gt)|. Common on NYUv2 depth tables."""
     p, g = _flat_valid(pred, gt, valid)
     if p.size == 0:
         return float("nan")

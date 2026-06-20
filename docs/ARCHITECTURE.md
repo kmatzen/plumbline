@@ -307,7 +307,6 @@ Read before adding adapters or closing off-paper cells:
   explicitly (disparity / 1/z / meters).
 - **Resize interpolation.** Bilinear for RGB; **nearest** for depth GT and masks.
 - **Focal length after resize.** Unscale predicted intrinsics back to input pixels.
-- **ScanNet poses.** Filter `inf` extrinsics in the loader.
 - **Sintel intrinsics.** Verify against the dataset README; do not assume a default focal.
 - **VGGT non-determinism.** Some CUDA ops vary with seed; document tolerance, not bitwise equality.
 - **Prediction cache.** Cache keys omit loader preprocessing — bump cache or delete shards after loader changes (`DISCREPANCIES.md` D21).

@@ -211,7 +211,7 @@ def run_cmd(
 
 @app.command("reproduce")
 def reproduce(
-    name: str = typer.Argument(..., help="Reproduction name, e.g. vggt-paper-scannet-depth."),
+    name: str = typer.Argument(..., help="Reproduction name, e.g. vggt-sintel-pose."),
     output: Path | None = typer.Option(
         None, "--output", "-o", help="Write JSON report to this path."
     ),

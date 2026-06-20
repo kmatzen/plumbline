@@ -55,7 +55,7 @@ Queue: `reproductions/gpu_queue.yaml`.
 
 ## Data-staging blocked (not fundamental)
 
-RealEstate10K pose, ScanNet/ScanNet-1500, etc. — blocked on **fetch**, not on an
+RealEstate10K pose, etc. — blocked on **fetch**, not on an
 exhausted protocol. See `gpu_queue.yaml` `blocked_on` text and `GPU_RUNBOOK.md`.
 
 ## Policy

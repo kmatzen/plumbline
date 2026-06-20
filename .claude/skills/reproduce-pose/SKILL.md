@@ -80,7 +80,7 @@ ssh anima-claude 'cd ~/git/geobench && .venv/bin/python scripts/stage_tum_dynami
 ```
 **Sintel** is already at `~/data/sintel` (`$SINTEL_ROOT`); the loader's `full_seq`
 mode emits one trajectory Sample/scene over the 14 dynamic-final clips.
-**Manifest gotcha:** the TUM/ScanNet loaders key their manifest cache on the set
+**Manifest gotcha:** the TUM loader keys its manifest cache on the set
 of *present* sequences, so staging more data after a partial scan invalidates it
 — but if you ever see fewer samples than expected, `rm -rf
 ~/data/<set>/.plumbline_manifest` and re-run.

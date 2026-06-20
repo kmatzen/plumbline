@@ -1,9 +1,7 @@
 # VGGT dense MVS on DTU
 #
-# This is the paper-match configuration that REPLACES the original
-# vggt-paper-scannet-depth gate (the VGGT paper doesn't actually report
-# ScanNet depth — see that YAML's notes). The VGGT paper's headline
-# depth/point-map evaluation is Table 2: Dense MVS Estimation on DTU,
+# This is the paper-match configuration for VGGT's headline
+# depth/point-map evaluation: Table 2, Dense MVS Estimation on DTU,
 # measuring accuracy + completeness + overall (chamfer distance).
 #
 # Published VGGT row (Table 2, lower block, "methods that do not know

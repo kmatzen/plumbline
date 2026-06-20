@@ -1018,7 +1018,7 @@ jobs:
   # ----- DAGE Table 4 (camera pose) — new dataset columns beyond Sintel -----
   # The Sim(3)-aligned TUM-RGBD ATE/RPE apparatus is already proven by the ✅
   # dage-sintel-pose / cut3r-sintel-pose-dage cells; these add the TUM-Dynamics
-  # and ScanNet columns. TUM is public (no ToS) and feed-forward → 1080Ti-runnable.
+  # column. TUM is public (no ToS) and feed-forward → 1080Ti-runnable.
   - name: dage-tum-pose
     status: done
     priority: 3
@@ -1061,40 +1061,6 @@ jobs:
       default); tight RPE agreement validates the apparatus. Same framing as the
       Sintel CUT3R baseline.
 
-  - name: dage-scannet-pose
-    status: blocked
-    blocked_on: >
-      DATA — raw ScanNet is ToS-gated (http://www.scan-net.org/). Needs scenes
-      scene0707_00..scene0806_00 (.sens) → extract color/pose → prepare_scannet.py
-      → $SCANNET_VIDEO_ROOT/<scene>/{color_90,pose_90.txt}. Loader (scannet-video-pose)
-      + config are code-ready and unit-tested; only the data is missing.
-    priority: 5
-    paper_target: "DAGE Table 4 — ScanNet ATE 0.031 / RPE-t 0.014 / RPE-r 0.389 (verified_pdf 2026-06-03)"
-    primary_metric: trajectory_ate_rmse
-    datasets: [scannet-video-pose]
-    data_footprint_gb: 30
-    est_wall_min: 90
-    requires_env: [SCANNET_VIDEO_ROOT, DAGE_ROOT]
-    extras: "DAGE vendored + HF checkpoint. fp16 90-frame clips (24 GB card recommended for full coverage)."
-    notes: >
-      ScanNet column for the ✅ DAGE pose axis. Same apparatus as dage-tum-pose;
-      data-blocked on ToS-gated raw ScanNet staging.
-
-  - name: cut3r-scannet-pose-dage
-    status: blocked
-    blocked_on: >
-      DATA — same ToS-gated ScanNet staging as dage-scannet-pose ($SCANNET_VIDEO_ROOT).
-    priority: 5
-    paper_target: "DAGE Table 4 baseline — CUT3R ScanNet ATE 0.094 / RPE-t 0.022 / RPE-r 0.629 (verified_pdf 2026-06-03)"
-    primary_metric: trajectory_ate_rmse
-    datasets: [scannet-video-pose]
-    data_footprint_gb: 30
-    est_wall_min: 90
-    requires_env: [SCANNET_VIDEO_ROOT, CUT3R_ROOT, CUT3R_CKPT]
-    extras: "Shares the staged ScanNet set with dage-scannet-pose. CUT3R clone + 512-DPT ckpt + curope."
-    notes: >
-      Baseline row (DAGE measuring CUT3R) on ScanNet. Data-blocked alongside dage-scannet-pose.
-
   # TIER C — remaining loader work (targets known):
   #   * Depth Pro Table 1 remaining columns → Depth Pro's FIRST ✅ (sintel is
   #     off-paper, D-pro experiment). ETH3D δ₁ 0.415, Booster, Middlebury,
@@ -1110,7 +1076,7 @@ jobs:
   #     max_depth against Depth Pro's released eval before re-pinning.
   #
   # TIER E — blocked on DATA (already represented above as blocked jobs):
-  #   * RealEstate10K pose ×3 (YouTube scraping) · ScanNet/ScanNet-1500 (ToS).
+  #   * RealEstate10K pose ×3 (YouTube scraping).
   #
   # NOTE: MoGe-2 ViT-L is NOT a per-dataset expansion target — the MoGe-2 paper
   # only publishes ViT-L as a 10-dataset average (per-dataset is ViT-Base

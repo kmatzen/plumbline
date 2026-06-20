@@ -136,7 +136,7 @@ class MonST3RAdapter(Model):
         # video-pose pipeline: sliding-window pair graph + flow-loss +
         # motion-mask + temporal-smoothness terms in the global
         # alignment. Matches what `launch.py --mode=eval_pose` does for
-        # Table 4 / sintel / TUM / scannet rows. When False (default),
+        # Table 4 / sintel / TUM rows. When False (default),
         # n>=3 routes through the MASt3R-shared base PointCloudOptimizer
         # (no flow / motion / temporal terms) — appropriate for the
         # mono-depth / unordered-multi-view cells.

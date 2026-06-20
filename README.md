@@ -27,11 +27,11 @@ API will still change before 1.0.
   flow + motion-mask + temporal global alignment, GPU-validated on the
   Sintel Table-4 trajectory cell). CUT3R also has a GPU smoke run
   (informational).
-- **13 datasets**: NYUv2 (Eigen 2014, rawDepths), KITTI (Eigen 652,
+- **12 datasets**: NYUv2 (Eigen 2014, rawDepths), KITTI (Eigen 652,
   annotated GT, Garg crop), DIODE (FoV-warp loader, MoGe-paper protocol),
   ETH3D high-res multi-view, DTU MVS (22-scan test split), CO3Dv2
   (VGGT-canonical pose-eval recipe), 7-Scenes, GSO, iBims-1, Sintel
-  (RGB + flow; depth gated), ScanNet (gated), Bonn RGB-D Dynamic
+  (RGB + flow; depth gated), Bonn RGB-D Dynamic
   (video depth, one-sample-per-sequence), **TUM-Dynamics** (freiburg3
   video-pose, MonST3R/DAGE Table 4 trajectory eval).
 - **47 paper-match reproductions** with `source_confidence: verified_pdf`
