@@ -87,7 +87,6 @@ ENV PLUMBLINE_CACHE_DIR=/cache/plumbline \
 
 # Dataset roots are overridable per-invocation via -e flags.
 ENV NYUV2_ROOT=/data/nyuv2 \
-    SCANNET_ROOT=/data/scannet \
     SINTEL_ROOT=/data/sintel \
     ETH3D_ROOT=/data/eth3d
 

@@ -451,9 +451,9 @@ device: cpu
 class TestBundledReproductionFilenames:
     """Every bundled reproduction YAML must be discoverable via its own slug.
 
-    Regression: an earlier vggt_scannet_depth.yaml declared
-    ``name: vggt-paper-scannet-depth`` but lived at a filename that
-    ``plumbline reproduce <slug>`` couldn't find. Any future drift
+    Regression: a YAML whose internal ``name:`` slug differs from its
+    filename stem lives at a path that ``plumbline reproduce <slug>``
+    can't find. Any future drift
     where the internal ``name:`` and the filename stem stop matching
     makes the config silently uninvokable, which is exactly the
     failure mode this test catches.

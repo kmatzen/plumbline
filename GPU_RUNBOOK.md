@@ -57,7 +57,7 @@ Queue has **no `pending` jobs**. Do not spend GPU re-tuning off-paper YAMLs.
 | VGGT ETH3D 13-scene | ✅ investigated (D10) | `DISCREPANCIES.md` |
 | D29 native DIODE outdoor | 🔒 upstream confirm only | `D29_DIODE_TABLE2_HANDOFF.md` |
 
-Defer: RealEstate10K scrape, ScanNet ToS, upstream-blocked VGGT-DTU / GeoWizard / Marigold re-runs.
+Defer: RealEstate10K scrape, upstream-blocked VGGT-DTU / GeoWizard / Marigold re-runs.
 
 ## Hard constraints
 
@@ -281,13 +281,6 @@ curl -L -O https://files.is.tue.mpg.de/sintel/MPI-Sintel-training_images.zip    
 unzip -o '*.zip' -d $SINTEL_ROOT   # → training/{final,clean,depth,camdata_left}
 ```
 
-**Auth-gated, deprioritized** (loaders work, data isn't on the v0.1 critical
-path; substitutes already promoted in v0.1 gate):
-
-| Dataset | Why deprioritized |
-|---|---|
-| ScanNet v2 / ScanNet-1500 | ToS at http://www.scan-net.org/, ≤24 h approval |
-
 After a successful fetch, push the dataset back to S3 so the next
 session inherits it:
 
@@ -437,8 +430,6 @@ leave it for the user. Stop work and report when:
 
 ## Known gotchas
 
-- **ScanNet poses** can be `inf` on tracker-dropped frames; loader
-  filters silently.
 - **Scale alignment** must match the paper: DA-V2 (own Table 2) →
   `scale_shift`, Metric3Dv2 → `none`, MASt3R → `median`, VGGT → `none`,
   Marigold / GeoWizard → `scale_shift_depth`. **MoGe-eval mono-depth

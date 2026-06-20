@@ -44,8 +44,6 @@ DATASET_FOOTPRINTS_GB: dict[str, float] = {
     "gso": 2.0,
     "co3dv2": 10.0, # pose subset; full set is ~1.5 TB (do not load)
     "sintel": 6.0,  # public bundle only (depth/cam gated)
-    "scannet": 15.0,  # test split subset (if/when ToS clears)
-    "scannet_1500": 10.0,  # same subset, pose-only
     "7scenes": 12.0,  # all 7 RGB-D sequences (unzipped)
     "ibims1": 0.2,    # MoGe bundle, 100 scenes (unzipped)
 }

@@ -75,7 +75,6 @@ against the canonical arXiv sources. Performed read-only; no YAMLs were modified
 | da_v2_metric_outdoor_large_kitti | DA-V2 metric-outdoor-L | KITTI Eigen | abs_rel | null | — | N/A | Informational; no paper target. |
 | depth_anything_v2_sintel | DA-V2 ViT-L | Sintel | abs_rel | 0.075 | DA-V2 Table 2, Sintel AbsRel col, ViT-L row = **0.487** | WRONG_VALUE | The YAML comment already hedges ("rough sanity value; verify against upstream before declaring it the reference"). The claimed 0.075 does NOT appear in DA-V2 Table 2 — ViT-L Sintel is 0.487; no row gives 0.075 for Sintel. (0.073 is the ViT-S DIODE value; 0.075 is MiDaS v3.1 DIODE. Neither is Sintel.) The smoke-test YAML's value is fabricated/guessed. |
 | vggt_paper_dtu_mvs | VGGT | DTU MVS | chamfer | 0.382 | VGGT Table 2 (Dense MVS on DTU), Overall col, VGGT row = 0.382 | VERIFIED | Acc 0.389, Comp 0.374, Overall 0.382 all match. |
-| vggt_paper_scannet_depth | VGGT | ScanNet | abs_rel | null | — | N/A | Explicitly informational; paper does not evaluate ScanNet depth. |
 | vggt_eth3d_multiscene_chamfer | VGGT | ETH3D (3-scene subset) | overall | 0.709 | VGGT Table 3 (Point Map on ETH3D), Overall col, "Ours (Point)" row = 0.709 | VERIFIED | Value matches paper cell for full cross-scene average. YAML correctly flags that it runs a 3-scene subset, not full split (tolerance 1.0). |
 | vggt_eth3d_courtyard_chamfer | VGGT | ETH3D courtyard | chamfer | null | — | N/A | Informational; single-scene, not paper-comparable. |
 

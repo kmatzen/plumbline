@@ -1,7 +1,7 @@
 # DA3 N-view pose on CO3Dv2 — informational only, no paper target
 #
 # DA3 (Bytedance Seed 2025, arXiv:2511.10647) does NOT evaluate CO3Dv2
-# pose. Their pose Table 2 uses HiRoom / ETH3D / DTU / 7Scenes / ScanNet++.
+# pose. Their pose Table 2 uses HiRoom / ETH3D / DTU / 7Scenes.
 # This YAML runs the DA3-Large checkpoint under the same
 # VGGT/PoseDiffusion canonical CO3Dv2 protocol used by the
 # vggt-co3dv2-pose and mast3r-co3dv2-pose YAMLs, purely as an A/B

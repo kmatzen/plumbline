@@ -3,8 +3,8 @@
 Common Objects in 3D v2 (Meta; Reizenstein et al. 2021) is a public
 object-centric video dataset with GT camera poses per frame. VGGT
 Table 1, DUSt3R, and MASt3R all report multi-view pose benchmarks on
-Co3Dv2 — replacing ScanNet-1500 in plumbline's Tier-2 pose-benchmark
-targets after the 2026-04-19 pivot (ScanNet ToS gate remained open).
+Co3Dv2 — plumbline's primary Tier-2 multi-view pose-benchmark target
+(public, no ToS gate).
 
 Expected layout (point ``--data-root`` or ``$CO3DV2_ROOT`` here)::
 

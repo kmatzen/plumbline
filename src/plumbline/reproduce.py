@@ -144,7 +144,7 @@ class ReproductionResult:
 
 
 def load_reproduction_config(name: str) -> dict[str, Any]:
-    """Load a reproduction YAML by short name (e.g. ``vggt-paper-scannet-depth``)."""
+    """Load a reproduction YAML by short name (e.g. ``vggt-sintel-pose``)."""
     path = _find_config(name)
     if path is None:
         raise FileNotFoundError(

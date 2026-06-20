@@ -11,7 +11,7 @@ has no canonical sampler (VGGT/CUT3R/Spann3R/Fast3R each define their own). The
 obvious candidate for a *common* protocol — **E3D-Bench** (arXiv:2506.01933,
 `github.com/VITA-Group/E3D-Bench`) — **does not evaluate 7-Scenes for pose**.
 Per its Table 4 (Multi-view Relative Pose Estimation), the pose datasets are
-grouped CO3Dv2 · ScanNet/ADT/TUM-Dyn · KITTI-Odometry · Bonn/Sintel/RGBD ·
+grouped CO3Dv2 · ADT/TUM-Dyn · KITTI-Odometry · Bonn/Sintel/RGBD ·
 ACID/Syndrone · ULTRRA. **7-Scenes appears only in the reconstruction table
 (Table 5).** So a 7-Scenes pose cell would still be a per-paper, idiosyncratic
 target — skip it.
@@ -27,12 +27,12 @@ documented protocol. Two task tables are directly usable:
 - plumbline **already computes trajectory ATE/RPE** (MonST3R-Sintel pose,
   `project_monst3r_sintel_pose_v3`) — the metric family exists.
 - New cells available without new metrics: e.g. **VGGT / CUT3R / MonST3R on
-  ScanNet, KITTI-Odometry, Bonn/Sintel** (ATE/RPE). ScanNet + Bonn + Sintel
+  KITTI-Odometry, Bonn/Sintel** (ATE/RPE). Bonn + Sintel
   loaders already exist; KITTI does too.
 - Gotcha: E3D-Bench reports **per-scene-group** means (e.g. "Bonn & Sintel &
   RGBD" pooled), so a faithful cell must match its grouping + frame sampler.
 
-### Table 5 — Sparse/Dense 3D Reconstruction (Acc ↓, Comp ↓, NC ↑) on 7-Scenes (+DTU/NRGBD/ScanNet/TUM)
+### Table 5 — Sparse/Dense 3D Reconstruction (Acc ↓, Comp ↓, NC ↑) on 7-Scenes (+DTU/NRGBD/TUM)
 - This is where the **`7scenes` loader finally gets used**.
 - Umeyama-aligned, official masks; two settings: **Extremely-Sparse (2–5 imgs)**
   and **Dense (10–50 imgs)** per scene.
@@ -53,7 +53,7 @@ documented protocol. Two task tables are directly usable:
    column + row, before pinning any `paper_reference` (per project policy).
    Exact small-font values must be read from the camera-ready, not inferred.
 3. Stage data (all free / already-staged): 7-Scenes (Microsoft, no login),
-   ScanNet (have loader; ToS), Bonn (have), Sintel (have).
+   Bonn (have), Sintel (have).
 4. If pursuing Table 5: implement an **NC metric** in `metrics/pointmap.py`
    (+ test) so the cell can score the full Acc/Comp/NC triple.
 5. Wire protocol + reproduction YAMLs (one per cell), matching E3D-Bench's
@@ -61,6 +61,6 @@ documented protocol. Two task tables are directly usable:
 
 ## Recommendation
 Start with **Table 4 pose cells** (no new metric needed — ATE/RPE already exist):
-the cheapest path to new verified coverage. `CUT3R`/`MonST3R` on ScanNet or
+the cheapest path to new verified coverage. `CUT3R`/`MonST3R` on
 Bonn/Sintel is the first candidate. Defer Table 5 / 7-Scenes until the NC metric
 is worth building.

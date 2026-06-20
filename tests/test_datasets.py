@@ -45,7 +45,6 @@ from plumbline.datasets.kitti import (
     load_kitti_depth_png_to_m,
     parse_eigen_sample_list,
 )
-from plumbline.datasets.scannet import ScanNetDataset, load_scannet_pose
 from plumbline.datasets.seven_scenes import (
     SEVEN_SCENES_INTRINSIC,
     SEVEN_SCENES_TEST_SEQUENCES,
@@ -148,77 +147,6 @@ class TestSintel:
         K_loaded, E_loaded = load_cam(path)
         np.testing.assert_allclose(K_loaded, K, atol=1e-5)
         np.testing.assert_allclose(E_loaded[:3, :4], RT, atol=1e-5)
-
-
-# ---------------------------------------------------------------------------
-# ScanNet
-# ---------------------------------------------------------------------------
-
-
-def _write_fake_scannet(root: Path, *, scenes: int = 1, frames: int = 3) -> None:
-    for s in range(scenes):
-        scene = f"scene{s:04d}_00"
-        scene_dir = root / "scans_test" / scene
-        (scene_dir / "color").mkdir(parents=True, exist_ok=True)
-        (scene_dir / "depth").mkdir(parents=True, exist_ok=True)
-        (scene_dir / "pose").mkdir(parents=True, exist_ok=True)
-        (scene_dir / "intrinsic").mkdir(parents=True, exist_ok=True)
-
-        # Intrinsics (color): 4x4 txt with upper-left 3x3.
-        K4 = np.eye(4)
-        K4[:3, :3] = np.array([[600, 0, 320], [0, 600, 240], [0, 0, 1]], dtype=np.float64)
-        np.savetxt(scene_dir / "intrinsic" / "intrinsic_color.txt", K4)
-        np.savetxt(scene_dir / "intrinsic" / "intrinsic_depth.txt", K4)
-
-        for fi in range(frames):
-            Image.fromarray((np.random.rand(8, 16, 3) * 255).astype(np.uint8)).save(
-                scene_dir / "color" / f"{fi}.jpg", quality=95
-            )
-            depth_mm = (np.random.rand(8, 16) * 1000 + 500).astype(np.uint16)
-            # Pillow infers 'I;16' from uint16; explicit mode= is deprecated in 12+.
-            Image.fromarray(depth_mm).save(scene_dir / "depth" / f"{fi}.png")
-            # camera_from_world identity (with tiny translation).
-            pose = np.eye(4)
-            pose[:3, 3] = [0.05 * fi, 0.0, 0.0]
-            np.savetxt(scene_dir / "pose" / f"{fi}.txt", pose)
-
-
-class TestScanNet:
-    def test_missing_root(self, tmp_path: Path) -> None:
-        from plumbline.datasets._common import DatasetNotAvailable
-
-        with pytest.raises(DatasetNotAvailable):
-            ScanNetDataset(root=tmp_path / "nope")
-
-    def test_basic_load(self, tmp_path: Path) -> None:
-        _write_fake_scannet(tmp_path, scenes=1, frames=5)
-        ds = ScanNetDataset(root=tmp_path, frame_stride=2)
-        samples = list(ds)
-        assert len(samples) == 3  # frames 0, 2, 4
-        s0 = samples[0]
-        assert s0.depth_gt is not None
-        # Depth was uint16 mm; loader converts to float32 meters.
-        assert s0.depth_gt.dtype == np.float32
-        assert 0.5 <= s0.depth_gt.min() <= 1.5
-
-    def test_inf_pose_filtered(self, tmp_path: Path) -> None:
-        _write_fake_scannet(tmp_path, scenes=1, frames=3)
-        pose_path = tmp_path / "scans_test" / "scene0000_00" / "pose" / "1.txt"
-        pose = np.full((4, 4), -np.inf, dtype=np.float64)
-        np.savetxt(pose_path, pose)
-        ds = ScanNetDataset(root=tmp_path, frame_stride=1)
-        samples = list(ds)
-        ids = [s.sample_id for s in samples]
-        # The broken frame should be dropped silently.
-        assert all("/000001_" not in sid for sid in ids)
-
-    def test_load_pose(self, tmp_path: Path) -> None:
-        pose = np.eye(4)
-        pose[:3, 3] = [1, 2, 3]
-        p = tmp_path / "p.txt"
-        np.savetxt(p, pose)
-        loaded = load_scannet_pose(p)
-        np.testing.assert_allclose(loaded, pose)
 
 
 # ---------------------------------------------------------------------------
@@ -1326,113 +1254,6 @@ class TestDTU:
         p.write_text("extrinsic\n1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1\nintrinsic\n1 0 0\n")
         with pytest.raises(ValueError, match="9 intrinsic"):
             load_dtu_cam(p)
-
-
-# ---------------------------------------------------------------------------
-# ScanNet-1500 (two-view pose benchmark)
-# ---------------------------------------------------------------------------
-
-
-def _write_fake_scannet_1500(
-    root: Path,
-    *,
-    n_pairs: int = 3,
-    H: int = 480,
-    W: int = 640,
-) -> Path:
-    """Lay out a minimal ScanNet-test tree + pairs file for loader tests."""
-    scene = "scene0707_00"
-    sens_dir = root / "scans_test" / scene / "sens"
-    sens_dir.mkdir(parents=True, exist_ok=True)
-    # K (1165.72, 1165.74, 649.095, 484.765) from the real SuperGlue pairs.
-    K = np.array([[1165.72, 0, 649.095], [0, 1165.74, 484.765], [0, 0, 1]])
-    K_flat = " ".join(f"{v}" for v in K.flatten())
-    lines = []
-    for i in range(n_pairs):
-        f0 = f"frame-{i * 10:06d}"
-        f1 = f"frame-{i * 10 + 60:06d}"
-        Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
-            sens_dir / f"{f0}.color.jpg", quality=85
-        )
-        Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
-            sens_dir / f"{f1}.color.jpg", quality=85
-        )
-        # Identity relative pose (same camera).
-        T = np.eye(4).flatten()
-        T_flat = " ".join(f"{v}" for v in T)
-        lines.append(
-            f"scans_test/{scene}/sens/{f0}.color.jpg "
-            f"scans_test/{scene}/sens/{f1}.color.jpg 0 0 "
-            f"{K_flat} {K_flat} {T_flat}"
-        )
-    pairs_path = root / "scannet_test_pairs_with_gt.txt"
-    pairs_path.write_text("\n".join(lines) + "\n")
-    return pairs_path
-
-
-class TestScanNet1500:
-    def test_missing_root(self, tmp_path: Path) -> None:
-        from plumbline.datasets._common import DatasetNotAvailable
-        from plumbline.datasets.scannet_1500 import ScanNet1500Dataset
-
-        with pytest.raises(DatasetNotAvailable):
-            ScanNet1500Dataset(root=tmp_path / "nope", pairs_file=tmp_path / "nope.txt")
-
-    def test_missing_pairs_file(self, tmp_path: Path) -> None:
-        from plumbline.datasets._common import DatasetNotAvailable
-        from plumbline.datasets.scannet_1500 import ScanNet1500Dataset
-
-        with pytest.raises(DatasetNotAvailable, match="pairs_file"):
-            ScanNet1500Dataset(root=tmp_path, pairs_file=tmp_path / "nope.txt")
-
-    def test_loads_pairs(self, tmp_path: Path) -> None:
-        from plumbline.datasets.scannet_1500 import ScanNet1500Dataset
-
-        pairs = _write_fake_scannet_1500(tmp_path, n_pairs=3)
-        ds = ScanNet1500Dataset(root=tmp_path, pairs_file=pairs)
-        assert len(ds) == 3
-        samples = list(ds)
-        s = samples[0]
-        assert s.num_views == 2
-        assert s.images.shape == (2, 480, 640, 3)
-        # First camera is world origin after rebase.
-        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-5)
-        # Identity relative pose in the test data → cam1 also identity.
-        np.testing.assert_allclose(s.extrinsics_gt[1], np.eye(4), atol=1e-5)
-        # Intrinsics 2x3x3 from pair file.
-        assert s.intrinsics.shape == (2, 3, 3)
-        assert s.intrinsics[0, 0, 0] == pytest.approx(1165.72)
-
-    def test_missing_image_errors(self, tmp_path: Path) -> None:
-        from plumbline.datasets._common import DatasetNotAvailable
-        from plumbline.datasets.scannet_1500 import ScanNet1500Dataset
-
-        pairs = _write_fake_scannet_1500(tmp_path, n_pairs=1)
-        # Delete one image after loader construction succeeds — iterator
-        # should then raise cleanly.
-        (tmp_path / "scans_test" / "scene0707_00" / "sens").glob("*.jpg")
-        img = next((tmp_path / "scans_test" / "scene0707_00" / "sens").glob("*.jpg"))
-        img.unlink()
-        ds = ScanNet1500Dataset(root=tmp_path, pairs_file=pairs)
-        with pytest.raises(DatasetNotAvailable, match="Missing ScanNet"):
-            list(ds)
-
-    def test_parse_rejects_short_line(self, tmp_path: Path) -> None:
-        from plumbline.datasets.scannet_1500 import parse_scannet_1500_pairs
-
-        p = tmp_path / "bad.txt"
-        p.write_text("foo.jpg bar.jpg 0 0 1 2 3\n")  # way too few tokens
-        with pytest.raises(ValueError, match="38 tokens"):
-            list(parse_scannet_1500_pairs(p))
-
-    def test_parse_yields_scene_id(self, tmp_path: Path) -> None:
-        from plumbline.datasets.scannet_1500 import parse_scannet_1500_pairs
-
-        pairs = _write_fake_scannet_1500(tmp_path, n_pairs=2)
-        recs = list(parse_scannet_1500_pairs(pairs))
-        assert len(recs) == 2
-        assert recs[0]["scene"] == "scene0707_00"
-        assert recs[0]["pair_id"] == "pair_00001_scene0707_00"
 
 
 # ---------------------------------------------------------------------------

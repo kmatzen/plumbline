@@ -294,7 +294,6 @@ releases an updated checkpoint or eval script.
 Loaders exist and are unit-tested but data remains auth-gated:
 
 - **Sintel depth** → substituted by **GSO** / **iBims-1** (synthetic clean-GT slot).
-- **ScanNet-1500 pose** → substituted by **Co3Dv2** / **7Scenes** (pose paper rows).
 
 ---
 
@@ -310,7 +309,6 @@ don't hardcode machine-specific paths:
 
 ```bash
 export NYUV2_ROOT=~/data/nyuv2      # for any da-v2-*-nyuv2 reproduction
-export SCANNET_ROOT=~/data/scannet  # for vggt-paper-scannet-depth
 export SINTEL_ROOT=~/data/sintel    # for depth-anything-v2-sintel
 export KITTI_ROOT=~/data/kitti      # for any *-kitti reproduction
 export DIODE_ROOT=~/data/diode      # for any *-diode-* reproduction

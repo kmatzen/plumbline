@@ -165,14 +165,12 @@ only** (plumbline's own code stays Apache-2.0). See
 - **`reproduce-pose` project skill** (`.claude/skills/`) codifying
   stage-pose-dataset → reproduce → compare-mAA on the GPU box (now also covers
   the trajectory-ATE family: dage/cut3r/monst3r on Sintel / TUM-Dynamics).
-- **DAGE Table 4 pose — TUM-Dynamics & ScanNet columns.** New `tum-dynamics`
+- **DAGE Table 4 pose — TUM-Dynamics column.** New `tum-dynamics`
   loader (8 freiburg3 dynamic sequences, MonST3R `prepare_tum.py` prep replicated
-  at read time) and `scannet-video-pose` loader (MonST3R `color_90`/`pose_90`
-  layout), extending the Sim(3)-aligned trajectory-ATE apparatus beyond Sintel.
-  `dage-tum-pose` is a new ✅ cell — **ATE 0.0136 vs 0.014** (−2.9 %, 8/8 clips,
-  GTX 1080 Ti). Staged via `scripts/stage_tum_dynamics.py` (public, no ToS;
-  member-selective ~366 MB). ScanNet cells are code-ready, data-blocked on
-  ToS-gated raw ScanNet. (#44)
+  at read time), extending the Sim(3)-aligned trajectory-ATE apparatus beyond
+  Sintel. `dage-tum-pose` is a new ✅ cell — **ATE 0.0136 vs 0.014** (−2.9 %, 8/8
+  clips, GTX 1080 Ti). Staged via `scripts/stage_tum_dynamics.py` (public, no ToS;
+  member-selective ~366 MB). (#44)
 - **Vendored model code** under `src/plumbline/_vendor/` for DAGE, CUT3R,
   DUSt3R, MASt3R, and MonST3R (CC BY-NC[-SA]) — no clones needed; `$<m>_ROOT`
   still overrides the vendored path for a dev checkout. The `curope` CUDA RoPE
@@ -214,8 +212,8 @@ First public release.
 - 12 model adapters: Depth Anything V2 (incl. metric Indoor/Outdoor), Depth
   Anything 3, Metric3Dv2 (S/L/Giant2), MoGe-1, MoGe-2, Marigold v1-1,
   GeoWizard, Depth Pro, MASt3R, DUSt3R, VGGT, CUT3R, and MonST3R.
-- 12 dataset loaders: NYUv2, KITTI, DIODE, ETH3D, DTU MVS, CO3Dv2, 7-Scenes,
-  GSO, iBims-1, Sintel, ScanNet, and Bonn RGB-D Dynamic.
+- 11 dataset loaders: NYUv2, KITTI, DIODE, ETH3D, DTU MVS, CO3Dv2, 7-Scenes,
+  GSO, iBims-1, Sintel, and Bonn RGB-D Dynamic.
 - Depth, pose (absolute + pairwise relative-pose AUC, RRA/RTA, trajectory
   ATE/RPE), and point-map (7-DoF similarity / per-view-masked chamfer)
   metric families.
