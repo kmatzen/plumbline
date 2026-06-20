@@ -1,0 +1,29 @@
+# UniK3D-Large zero-shot metric depth on KITTI (Eigen-652, Garg crop).
+#
+# UniK3D is a metric model (is_metric=True), so this cell runs with
+# scale_alignment: none — the strict metric test the paper reports for its
+# zero-shot tables. Selected by the BO matrix-completion model as a
+# high-uncertainty unmeasured cell (BO ~0.092, 95% CI [0.038, 0.223], σ=0.45).
+name: unik3d-large-kitti
+protocol: kitti_eigen_garg
+model:
+  name: unik3d
+  kwargs:
+    variant: vitl
+dataset:
+  name: kitti
+scale_alignment: none
+device: cuda:0
+paper_reference:
+  primary_metric: abs_rel
+  value: null
+  tolerance_relative: 0.05
+  citation: "UniK3D zero-shot KITTI — target pending PDF verification against arXiv:2503.16591 (Piccinelli et al. 2025)."
+  source_confidence: informational_no_paper
+notes: >
+  Active-learning run flagged by the BO score-prediction model: UniK3D-Large
+  KITTI metric AbsRel was a high-uncertainty unmeasured cell (BO ~0.092, 95% CI
+  [0.038, 0.223], σ=0.45). Running on the 1080 Ti to collapse the uncertainty
+  and validate the BO prediction (measured vs predicted). Metric (no-align),
+  Eigen-652 benchmark + Garg crop, same UniK3D-Large vitl checkpoint that
+  reproduced NYUv2 metric (0.0749 vs 0.074, unik3d-large-nyuv2 ✅).
