@@ -476,11 +476,13 @@
       let proto = new URLSearchParams(location.search).get("proto") || null;
       let sortCol = new URLSearchParams(location.search).get("sort") || null;  // rank methods by this column
 
-      // EVERY protocol is available for EVERY metric (the cube is rectangular);
-      // count = how many cells are actually observed under (metric, protocol).
+      // A protocol is task-bound (a trajectory recipe can't produce an AbsRel
+      // score), so only show protocols whose task matches the metric's task —
+      // never a pose protocol under a depth metric. count = cells observed
+      // under (metric, protocol).
       function protocolsFor(mk) {
         const counts = {};
-        FIT.protos.forEach(p => counts[p] = 0);
+        FIT.protos.forEach(p => { if (PROTO_METRICS[p] && PROTO_METRICS[p].has(mk)) counts[p] = 0; });
         cells.filter(c => c.metric === mk).forEach(c => { const p = protoOf(c); if (p in counts) counts[p]++; });
         return Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b))
           .map(p => ({ p, n: counts[p] }));
@@ -496,6 +498,10 @@
           b.setAttribute("aria-selected", String(p === proto));
           b.innerHTML = `${p}<span class="mc">${n}</span>`;
           b.onclick = () => { proto = p; sync(); };
+          b.addEventListener("pointerenter", () => showProto(b));
+          b.addEventListener("pointerleave", hide);
+          b.addEventListener("focus", () => showProto(b));
+          b.addEventListener("blur", hide);
           protobar.appendChild(b);
         });
       }
@@ -512,6 +518,32 @@
       // Protocol = the recipe baked into each cell's `proto` by
       // scripts/site_protocols.py (single source of truth). No derivation here.
       const protoOf = c => c.proto || "other";
+
+      // Each protocol belongs to exactly one task (depth or pose), derived from
+      // the metrics of the cells that use it — used for the hover-card label.
+      const PROTO_TASK = {};
+      cells.forEach(c => { const p = protoOf(c), t = FIT.metric_task[c.metric]; if (p && t) PROTO_TASK[p] = t; });
+
+      // Which metrics each protocol actually emits — drives the protobar so a
+      // protocol only appears under metrics it can produce (no trajectory ATE
+      // under AbsRel, no PoseDiff mAA under ATE). A depth eval always computes
+      // AbsRel and δ₁ together, so any depth protocol covers both.
+      const PROTO_METRICS = {};
+      cells.forEach(c => { const p = protoOf(c); (PROTO_METRICS[p] = PROTO_METRICS[p] || new Set()).add(c.metric); });
+      Object.values(PROTO_METRICS).forEach(s => { if (s.has("abs_rel") || s.has("delta_1")) { s.add("abs_rel"); s.add("delta_1"); } });
+
+      // Human-readable protocol descriptions for the protobar hover card.
+      const PROTO_DESC = {
+        "eigen-2014 (crop+median)": "Eigen-2014 benchmark crop + per-image median scale alignment — the classic NYU/KITTI affine-invariant depth recipe: scale each prediction to GT by the median depth ratio inside the Eigen crop.",
+        "moge-eval (affine)": "MoGe-paper evaluation: scale+shift (affine-invariant) alignment with a homographic FoV warp to the eval camera. Used for the MoGe Table-3 cross-dataset suite (NYU / KITTI / DIODE / ETH3D / GSO / iBims / DDAD / Sintel).",
+        "metric (no-align)": "Metric depth — NO alignment. The prediction is scored in absolute meters against GT. For metric-trained models (Metric3D-v2, Depth Pro, UniK3D).",
+        "dust3r-lineage (median, no-crop)": "DUSt3R / MonST3R-lineage depth: no benchmark crop, per-frame median scale. The recipe those papers' depth tables use.",
+        "dust3r-table2 (eigen+ratio-med)": "DUSt3R Table-2 depth: Eigen-2014 crop + ratio-of-medians scale alignment.",
+        "video (per-sequence)": "Per-sequence video depth: one sample per sequence with sequence-level scale alignment (Bonn dynamic RGB-D).",
+        "trajectory (Sim3 ATE)": "Trajectory pose: Sim(3) Umeyama alignment to the GT camera trajectory, then ATE / RPE RMSE via evo over the subsampled clip (Sintel / TUM-Dynamics).",
+        "PoseDiff (10-frame)": "PoseDiffusion-style N-view pose: pairwise relative-pose AUC@{3,5,15,30}° plus RRA / RTA over 10-frame sets. The VGGT / CO3Dv2 recipe.",
+        "RE10K wide-baseline": "RealEstate10K wide-baseline pairwise pose: mAA@30 over wide-baseline image pairs (MASt3R sparse global alignment).",
+      };
 
       function render() {
         // The SAME complete grid for every (metric, protocol): all methods × all datasets.
@@ -653,6 +685,16 @@
         let y = r.bottom + 10;
         if (y + ph > innerHeight - 10) y = r.top - ph - 10;
         pop.style.left = x + "px"; pop.style.top = Math.max(10, y) + "px";
+      }
+      function showProto(el) {
+        const p = el.dataset.p;
+        const body = PROTO_DESC[p] || "(no description available)";
+        const task = PROTO_TASK[p] || "";
+        pop.innerHTML =
+          `<div class="p-top"><span class="p-model">${p}</span><span class="p-ds">${task} protocol</span></div>
+           <div class="p-cite" style="border-top:none;margin-top:9px;padding-top:0">${body}</div>`;
+        pop.classList.add("show");
+        positionPop(el);
       }
       function hide() { pop.classList.remove("show"); }
       addEventListener("scroll", hide, { passive: true });
