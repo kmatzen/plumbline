@@ -78,6 +78,7 @@ def _ensure_vggt_on_path() -> None:
     if os.path.isdir(root) and root not in sys.path:
         sys.path.insert(0, root)
 
+
 __all__ = ["VGGTAdapter"]
 
 
