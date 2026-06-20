@@ -1,0 +1,33 @@
+# Metric3D-v2 ViT-L zero-shot metric depth on DIODE-indoor.
+#
+# BO active-learning fill: Metric3D-v2 L DIODE was the highest-uncertainty
+# well-supported cell (σ=0.51, BO ~0.072, 95% CI [0.027, 0.195]). Metric model
+# (is_metric) → scale_alignment: none, the strict metric test the paper reports.
+# Mirrors the ✅ da-v2-large-diode-indoor-full setup (DIODE val indoors) so the
+# dataset×protocol neighbor is validated; only metric3d×DIODE is untested.
+name: metric3d-v2-large-diode
+model:
+  name: metric3d-v2
+  kwargs:
+    variant: vit_large
+dataset:
+  name: diode
+  split: val
+  kwargs:
+    domain: indoors
+tasks:
+  - mono_depth
+scale_alignment: none
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 50.0]
+paper_reference:
+  primary_metric: abs_rel
+  value: null
+  tolerance_relative: 0.05
+  citation: "Metric3D v2 (Yin et al. 2024, arXiv:2404.15506) does not report DIODE; informational BO active-learning fill."
+  source_confidence: informational_no_paper
+notes: >
+  Neighboring evidence: Metric3D-v2 ✅ on NYU (0.0660) and KITTI (0.0495) under
+  metric no-align; DIODE-indoor ✅ for DA-V2 (0.066). So model, dataset,
+  protocol, metric are each proven — only the metric3d×DIODE intersection is new.
