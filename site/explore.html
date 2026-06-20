@@ -101,6 +101,7 @@
        distinguished only by the ~ prefix, italics, and a dashed cell background. */
     .cell.pred { font-size: 13px; font-variant-numeric: tabular-nums; cursor: help; }
     .cell.pred .v { font-weight: 600; }
+    .cell.pred .ci { display: block; margin-top: 2px; font-size: 9.5px; font-weight: 500; color: var(--fg-dim); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; white-space: nowrap; }
     .cell.pred:hover, .cell.pred:focus-visible { background: rgba(255,255,255,0.04); outline: none; }
     table.matrix tbody td:has(.cell.pred) { background: repeating-linear-gradient(45deg, transparent 0 5px, rgba(255,255,255,0.02) 5px 6px); }
 
@@ -120,6 +121,8 @@
     .pop .p-status { font-size: 11px; padding: 2px 7px; border: 1px solid var(--rule); border-radius: 2px; white-space: nowrap; }
     .pop .p-status.ok { color: var(--acc); border-color: var(--acc-dim); }
     .pop .p-status.info { color: var(--fg-mute); } .pop .p-status.target { color: var(--fg-dim); }
+    .pop .p-status.pred { color: var(--fg-dim); border-style: dashed; }
+    .pop .p-obs.pred { font-style: italic; color: var(--fg-mute); }
     .pop .p-paper { color: var(--fg-dim); font-size: 13px; } .pop .p-paper b { color: var(--fg-mute); font-weight: 500; }
     .pop .p-delta { font-size: 12px; padding: 2px 7px; border: 1px solid var(--rule); border-radius: 2px; color: var(--fg-mute); font-variant-numeric: tabular-nums; }
     .pop .p-cite { margin: 13px 0 0; padding: 11px 0 0; border-top: 1px solid var(--rule); font-size: 12px; color: var(--fg-mute); line-height: 1.55; }
@@ -189,7 +192,7 @@
       <span style="margin-left:10px"><span class="lglyph" style="color:var(--acc)">&#10003;</span> reproduces paper</span>
       <span><span class="lglyph info" style="color:#e0a73c">&#8505;</span> differs</span>
       <span><span class="lglyph target">&#9671;</span> no target</span>
-      <span style="font-style:italic">~val = BO-predicted (full-strength, hover for ±1σ)</span>
+      <span style="font-style:italic">~val = BO-predicted, with 95% CI below</span>
       <span style="margin-left:auto; color:var(--fg-dim)">paper Δ + citation on hover</span>
     </div>
 
@@ -399,7 +402,9 @@
         const lm = mu + sign * sd * gm, ls = sd * Math.sqrt(gv) * (FIT.calib || 1);  // LOO-calibrated band
         const [lob, hib] = (FIT.range || {})[metric] || [0, Infinity];  // clamp to metric's valid range
         const e = x => Math.min(Math.max(Math.exp(x), lob), hib), r = v => +v.toPrecision(3);
-        return { pred: r(e(lm)), lo: r(e(lm - ls)), hi: r(e(lm + ls)) };
+        // 95% CI = ±1.96σ in log-space (1σ band kept for the legacy `lo`/`hi` callers)
+        return { pred: r(e(lm)), lo: r(e(lm - ls)), hi: r(e(lm + ls)),
+                 lo95: r(e(lm - 1.96 * ls)), hi95: r(e(lm + 1.96 * ls)) };
       }
       cells.forEach(c => { c.status = c.status || "ok"; });  // verified+companion = ok; info carries its own
 
@@ -564,7 +569,8 @@
               const p = predict(mname, d, proto, metric);
               if (!p) { html += `<td><span class="cell empty" aria-hidden="true"></span></td>`; return; }
               const best = +p.pred === bestV(d) ? "best" : "";
-              html += `<td><span class="cell pred ${best}" tabindex="0" title="BO prediction — NOT a run. ${mname} on ${d} under ${proto} ≈ ${p.pred} (1σ ${p.lo}–${p.hi})${best ? " — best in column" : ""}"><span class="v" style="color:${perfColor(perfOf(d, +p.pred))};font-style:italic">~${p.pred}</span></span></td>`;
+              const pal = `${mname} on ${d}: BO estimate ~${p.pred}, 95% CI ${p.lo95}–${p.hi95}, not a measured run${best ? " — best in column" : ""}`;
+              html += `<td><span class="cell pred ${best}" tabindex="0" role="button" data-pkey="${mname}|${d}" data-pred="${p.pred}" data-lo95="${p.lo95}" data-hi95="${p.hi95}" data-proto="${proto}" data-metric="${metric}" aria-label="${pal}"><span class="v" style="color:${perfColor(perfOf(d, +p.pred))};font-style:italic">~${p.pred}</span><span class="ci">${p.lo95}–${p.hi95}</span></span></td>`;
             }
           });
           html += "</tr>";
@@ -577,6 +583,12 @@
           el.addEventListener("pointerenter", e => show(g, el));
           el.addEventListener("pointerleave", hide);
           el.addEventListener("focus", () => show(g, el));
+          el.addEventListener("blur", hide);
+        });
+        matrix.querySelectorAll(".cell.pred").forEach(el => {
+          el.addEventListener("pointerenter", () => showPred(el));
+          el.addEventListener("pointerleave", hide);
+          el.addEventListener("focus", () => showPred(el));
           el.addEventListener("blur", hide);
         });
         matrix.querySelectorAll("th.dcol").forEach(th => th.addEventListener("click", () => {
@@ -613,6 +625,27 @@
            ${protoBit ? `<div style="margin:5px 0 2px">${protoBit}</div>` : ""}
            ${blocks}${compHtml}`;
         pop.classList.add("show");
+        positionPop(el);
+      }
+      function showPred(el) {
+        const [m, d] = el.dataset.pkey.split("|");
+        const pred = el.dataset.pred, lo = el.dataset.lo95, hi = el.dataset.hi95;
+        const proto = el.dataset.proto, metric = el.dataset.metric;
+        const mlabel = (METRICS.find(x => x.key === metric) || {}).label || metric;
+        const protoBit = proto ? `<span class="p-proto" style="color:var(--fg-mute);font-size:11px">protocol <b style="color:var(--fg-soft)">${proto}</b></span>` : "";
+        pop.innerHTML =
+          `<div class="p-top"><span class="p-model">${m}</span><span class="p-ds">${d} · ${mlabel}</span></div>
+           <div class="p-nums"><span class="p-obs pred">~${pred}</span><span class="p-delta">95% CI ${lo}–${hi}</span><span class="p-status pred">&#9671; BO estimate</span></div>
+           ${protoBit ? `<div style="margin:5px 0 2px">${protoBit}</div>` : ""}
+           <div class="p-cite">
+             <span class="src">Bayesian matrix completion</span> · model prediction, <b>not a measured run</b>
+             <br><span class="loc">posterior mean, 95% CI (±1.96σ) under the LOO-calibrated 4-D model (protocol × method × dataset × metric)</span>
+             <br><span style="color:var(--fg-dim)">run this cell to replace the estimate with a real measurement</span>
+           </div>`;
+        pop.classList.add("show");
+        positionPop(el);
+      }
+      function positionPop(el) {
         const r = el.getBoundingClientRect();
         const pw = pop.offsetWidth, ph = pop.offsetHeight;
         let x = r.left + r.width / 2 - pw / 2;
