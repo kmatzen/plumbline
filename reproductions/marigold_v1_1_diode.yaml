@@ -1,0 +1,34 @@
+# Marigold v1-1 affine-invariant depth on DIODE-indoor.
+# BO active-learning fill (σ~0.38, top non-OOM remaining). Marigold is affine
+# (scale_shift), so DIODE-indoor with scale_shift_depth matches the ✅
+# da-v2-large-diode-indoor-full neighbor. 1-step distilled × 10 ensemble.
+name: marigold-v1-1-diode
+model:
+  name: marigold
+  kwargs:
+    variant: v1-1
+    num_inference_steps: 1
+    ensemble_size: 10
+    dtype: float32
+    seed: 1234
+    processing_res: 0
+dataset:
+  name: diode
+  split: val
+  kwargs:
+    domain: indoors
+tasks:
+  - mono_depth
+scale_alignment: scale_shift_depth
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 50.0]
+paper_reference:
+  primary_metric: abs_rel
+  value: null
+  tolerance_relative: 0.05
+  citation: "Marigold (Ke et al. 2024, arXiv:2312.02145) does not report DIODE; informational BO active-learning fill."
+  source_confidence: informational_no_paper
+notes: >
+  Neighboring evidence: Marigold ✅ on NYU (0.055)/KITTI under scale_shift +
+  eigen; DIODE-indoor scale_shift loader ✅ via DA-V2 (0.066). Affine model.
