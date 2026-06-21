@@ -22,7 +22,7 @@
     .xnum::before { content: "› "; }
     .xhead h1 { font-size: clamp(25px, 4vw, 40px); font-weight: 600; line-height: 1.05; margin: 8px 0 0; letter-spacing: -0.01em; }
     .xhead h1 em { color: var(--acc); font-style: normal; }
-    .xlede { color: var(--fg-mute); max-width: 66ch; margin: 14px 0 0; font-size: 13.5px; line-height: 1.7; }
+    .xlede { color: var(--fg-mute); max-width: 66ch; margin: 14px 0 0; font-size: 14.5px; line-height: 1.7; }
     .xlede b { color: var(--fg-soft); font-weight: 500; }
 
     /* metric switcher */
@@ -34,16 +34,16 @@
     }
     .mtab:hover { color: var(--fg-soft); }
     .mtab[aria-selected="true"] { color: var(--acc); border-bottom-color: var(--acc); }
-    .mtab .mc { color: var(--fg-dim); font-weight: 400; font-size: 11.5px; margin-left: 7px; }
+    .mtab .mc { color: var(--fg-mute); font-weight: 400; font-size: 12px; margin-left: 7px; }
     .mtab[aria-selected="true"] .mc { color: var(--acc-dim); }
     .msep { align-self: center; width: 1px; height: 16px; background: var(--rule); margin: 0 4px 12px; }
-    .metric-desc { margin: 12px 0 0; color: var(--fg-dim); font-size: 12.5px; min-height: 1.2em; }
+    .metric-desc { margin: 12px 0 0; color: var(--fg-mute); font-size: 13.5px; min-height: 1.2em; }
     .metric-desc .dir { color: var(--fg-mute); }
     /* protocol selector — one protocol per table */
     .protorow { display: flex; align-items: center; gap: 12px; margin: 12px 0 0; flex-wrap: wrap; }
-    .protolabel { color: var(--fg-dim); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; }
+    .protolabel { color: var(--fg-mute); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; }
     .protobar { display: flex; gap: 8px; flex-wrap: wrap; }
-    .ptab { background: var(--bg-2); border: 1px solid var(--rule); border-radius: 3px; color: var(--fg-mute); font: 500 11.5px/1 var(--mono); padding: 6px 10px; cursor: pointer; white-space: nowrap; transition: color 0.14s var(--ease), border-color 0.14s var(--ease); }
+    .ptab { background: var(--bg-2); border: 1px solid var(--rule); border-radius: 3px; color: var(--fg-soft); font: 500 12px/1 var(--mono); padding: 6px 10px; cursor: pointer; white-space: nowrap; transition: color 0.14s var(--ease), border-color 0.14s var(--ease); }
     .ptab:hover { color: var(--fg-soft); }
     .ptab[aria-selected="true"] { color: var(--acc); border-color: var(--acc-dim); background: rgba(212,240,0,0.06); }
     .ptab .mc { color: var(--fg-dim); margin-left: 6px; font-weight: 400; }
@@ -83,16 +83,16 @@
     .cell.has:hover, .cell.has:focus-visible { background: rgba(212,240,0,0.07); outline: none; }
     .cell.has:focus-visible { box-shadow: inset 0 0 0 1.5px var(--acc); }
     /* fidelity-led cell: glyph + Δ inline, protocol tag below. Colour = provenance, NOT performance. */
-    .cell .sbadge { position: static; font-size: 11px; line-height: 1; margin-right: 4px; vertical-align: baseline; }
+    .cell .sbadge { position: static; font-size: 12.5px; line-height: 1; margin-right: 4px; vertical-align: baseline; }
     .cell .sbadge.ok { color: var(--acc); }
-    .cell .sbadge.info { color: #e0a73c; }
-    .cell .sbadge.target { color: var(--fg-dim); }
+    .cell .sbadge.info { color: #f0b85a; }
+    .cell .sbadge.target { color: var(--fg-mute); }
     /* the score (metric value) is the headline; colour = provenance, not performance rank */
-    .cell .v { display: inline; font-size: 13px; font-weight: 600; color: var(--fg); font-variant-numeric: tabular-nums; }
+    .cell .v { display: inline; font-size: 13.5px; font-weight: 600; color: var(--fg); font-variant-numeric: tabular-nums; }
     .cell.best .v { font-weight: 800; font-style: normal; }  /* best method in the column */
     .cell.info .v { color: #e0a73c; font-style: italic; }
     .cell.target .v { color: var(--fg-soft); }
-    .cell .proto { display: block; font-size: 9px; color: var(--fg-dim); margin-top: 3px; letter-spacing: 0.03em; }
+    .cell .proto { display: block; font-size: 10px; color: var(--fg-mute); margin-top: 3px; letter-spacing: 0.03em; }
     .cell .multi { position: absolute; top: 4px; right: 5px; font-size: 9px; color: var(--acc-dim); }
     .cell.info, .cell.target { background-image: repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.014) 6px 7px); }
     .colmix { display: block; font-size: 9px; font-weight: 400; color: #e0a73c; margin-top: 3px; letter-spacing: 0.03em; }
@@ -101,7 +101,7 @@
        distinguished only by the ~ prefix, italics, and a dashed cell background. */
     .cell.pred { font-size: 13px; font-variant-numeric: tabular-nums; cursor: help; }
     .cell.pred .v { font-weight: 600; }
-    .cell.pred .ci { display: block; margin-top: 2px; font-size: 9.5px; font-weight: 500; color: var(--fg-dim); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; white-space: nowrap; }
+    .cell.pred .ci { display: block; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--fg-soft); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; white-space: nowrap; }
     .cell.pred:hover, .cell.pred:focus-visible { background: rgba(255,255,255,0.04); outline: none; }
     table.matrix tbody td:has(.cell.pred) { background: repeating-linear-gradient(45deg, transparent 0 5px, rgba(255,255,255,0.02) 5px 6px); }
 
@@ -133,20 +133,21 @@
     .pop .p-comp { margin: 11px 0 0; padding: 9px 0 0; border-top: 1px solid var(--rule); font-size: 12px; color: var(--fg-mute); }
     .pop .p-comp b { color: var(--fg-soft); font-weight: 500; font-variant-numeric: tabular-nums; }
 
-    .xlegend { display: flex; gap: 20px 26px; flex-wrap: wrap; align-items: center; margin: 22px 0 0; color: var(--fg-mute); font-size: 12px; }
+    .xlegend { display: flex; gap: 20px 26px; flex-wrap: wrap; align-items: center; margin: 22px 0 0; color: var(--fg-soft); font-size: 12.5px; }
     .xlegend .swgrad { width: 72px; height: 10px; border-radius: 2px; display: inline-block; vertical-align: 0;
       background: linear-gradient(90deg, #6c6960, #d6d1c4 55%, #d4f000); }
     .xlegend .lglyph { margin-right: 5px; }
     .xlegend .lglyph.info { color: var(--fg-mute); } .xlegend .lglyph.target { color: var(--fg-dim); }
-    .xfoot { margin-top: 30px; color: var(--fg-dim); font-size: 12.5px; line-height: 1.7; max-width: 76ch; }
-    .xfoot a { color: var(--fg-mute); } .xfoot a:hover { color: var(--acc); }
+    .xfoot { margin-top: 30px; color: var(--fg-mute); font-size: 13.5px; line-height: 1.7; max-width: 76ch; }
+    .xfoot a, .xlede a, .explainer a { color: var(--fg-soft); text-decoration: underline; text-underline-offset: 2px; text-decoration-color: var(--acc-dim); }
+    .xfoot a:hover, .xlede a:hover, .explainer a:hover { color: var(--acc); text-decoration-color: var(--acc); }
     .explainer { margin: 34px 0 0; padding: 22px 24px; border: 1px solid var(--rule); border-radius: 4px; background: rgba(255,255,255,0.015); max-width: 76ch; scroll-margin-top: 20px; }
     .explainer h2 { font-size: 16px; font-weight: 600; margin: 0 0 12px; color: var(--fg); letter-spacing: -0.01em; }
-    .explainer p { color: var(--fg-mute); font-size: 13px; line-height: 1.7; margin: 0 0 11px; }
+    .explainer p { color: var(--fg-soft); font-size: 14px; line-height: 1.7; margin: 0 0 11px; }
     .explainer p:last-child { margin-bottom: 0; }
     .explainer b { color: var(--fg-soft); font-weight: 500; }
     .explainer em { color: var(--acc); font-style: normal; }
-    .explainer-list { margin: 0 0 11px; padding-left: 18px; color: var(--fg-mute); font-size: 13px; line-height: 1.7; }
+    .explainer-list { margin: 0 0 11px; padding-left: 18px; color: var(--fg-soft); font-size: 14px; line-height: 1.7; }
     .explainer-list b { color: var(--fg-soft); }
   </style>
 </head>
@@ -510,7 +511,7 @@
       });
       const perfColor = p => {                            // gray (weak) → bone → lime (best)
         if (p == null) return "var(--fg-soft)";
-        const dim = [108, 105, 96], soft = [214, 209, 196], acc = [212, 240, 0];
+        const dim = [158, 154, 140], soft = [226, 222, 208], acc = [212, 240, 0];  // floor lifted for legibility (weak cells stay readable)
         const a = p < 0.5 ? dim : soft, b = p < 0.5 ? soft : acc, t = p < 0.5 ? p / 0.5 : (p - 0.5) / 0.5;
         const rgb = a.map((x, i) => Math.round(x + (b[i] - x) * t));
         return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
