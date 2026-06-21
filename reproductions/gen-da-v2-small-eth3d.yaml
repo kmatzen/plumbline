@@ -1,0 +1,22 @@
+name: gen-da-v2-small-eth3d
+protocol: eth3d_dav2
+model:
+  name: depth-anything-v2
+  kwargs:
+    variant: small
+dataset:
+  name: eth3d
+tasks:
+- mono_depth
+scale_alignment: scale_shift
+max_views: 1
+device: cuda:0
+paper_reference:
+  primary_metric: abs_rel
+  value: null
+  tolerance_relative: 0.05
+  citation: 'Backlog fill: DA-V2 Small on ETH3D under its native recipe; no paper
+    target.'
+  source_confidence: informational_no_paper
+notes: Auto-generated backlog run (DA-V2 Small x ETH3D). Alignment scale_shift matches
+  the model's native eval; dataset/protocol proven by neighbors.
