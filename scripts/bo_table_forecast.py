@@ -65,6 +65,10 @@ def proto_of(model, ds, metric, src, loc):
     """Protocol = eval recipe, from the eval SOURCE + dataset — never the method."""
     s = re.sub(r"\s*\(.*?\)", "", src or "").strip()
     if metric in ("abs_rel", "delta_1"):
+        # a cell may explicitly declare a CROSS-PROTOCOL recipe in its citation
+        # (e.g. MoGe is moge-eval-native but run "under eigen-2014") — honor that.
+        if "under eigen-2014" in (loc or "").lower():
+            return "eigen-2014 (crop+median)"
         if ds in ("GSO", "DDAD"):
             return "moge-eval (affine)"  # these datasets are only ever the MoGe affine eval
         if s == "MoGe":

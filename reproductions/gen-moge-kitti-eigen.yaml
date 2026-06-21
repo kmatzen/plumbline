@@ -1,0 +1,20 @@
+name: gen-moge-kitti-eigen
+protocol: kitti_eigen_garg
+model:
+  name: moge
+  kwargs:
+    variant: vitl
+dataset:
+  name: kitti
+tasks:
+- mono_depth
+scale_alignment: scale_shift_clamped
+max_views: 1
+device: cuda:0
+paper_reference:
+  primary_metric: abs_rel
+  value: null
+  tolerance_relative: 0.05
+  citation: "Backlog cross-protocol: MoGe under eigen-2014 on kitti; MoGe is moge-eval-native, no eigen paper target."
+  source_confidence: informational_no_paper
+notes: "Cross-protocol backlog (MoGe x kitti eigen). MoGe scale_shift_clamped matches the moge-vitl-nyuv2-eigen run that reproduced 0.0340."
