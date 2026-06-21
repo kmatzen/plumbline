@@ -1,0 +1,25 @@
+# Metric3D-v2 ViT-L zero-shot metric depth on Sintel.
+# BO active-learning fill (σ~0.36). Metric model → scale none. Sintel under the
+# sintel_dav2 protocol (DA3/DA-V2 Sintel recipe); metric model doesn't align.
+name: metric3d-v2-large-sintel
+protocol: sintel_dav2
+model:
+  name: metric3d-v2
+  kwargs:
+    variant: vit_large
+dataset:
+  name: sintel
+  split: training
+  kwargs:
+    pass_name: final
+scale_alignment: none
+device: cuda:0
+paper_reference:
+  primary_metric: abs_rel
+  value: null
+  tolerance_relative: 0.05
+  citation: "Metric3D v2 (Yin et al. 2024, arXiv:2404.15506) does not report Sintel; informational BO active-learning fill."
+  source_confidence: informational_no_paper
+notes: >
+  Neighboring evidence: Metric3D-v2 ✅ NYU/KITTI metric no-align; Sintel
+  sintel_dav2 loader demonstrated by da3-sintel / DA-V2 Sintel cells.
