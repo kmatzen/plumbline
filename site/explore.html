@@ -96,7 +96,7 @@
     .cell .multi { position: absolute; top: 4px; right: 5px; font-size: 9px; color: var(--acc-dim); }
     .cell.info, .cell.target { background-image: repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.014) 6px 7px); }
     .colmix { display: block; font-size: 9px; font-weight: 400; color: #e0a73c; margin-top: 3px; letter-spacing: 0.03em; }
-    /* BO-predicted fill-in: ghosted, never counted, distinct from runs */
+    /* predicted fill-in: ghosted, never counted, distinct from runs */
     /* predicted cells: full-strength colour (so within-column comparison holds);
        distinguished only by the ~ prefix, italics, and a dashed cell background. */
     .cell.pred { font-size: 13px; font-variant-numeric: tabular-nums; cursor: help; }
@@ -140,6 +140,14 @@
     .xlegend .lglyph.info { color: var(--fg-mute); } .xlegend .lglyph.target { color: var(--fg-dim); }
     .xfoot { margin-top: 30px; color: var(--fg-dim); font-size: 12.5px; line-height: 1.7; max-width: 76ch; }
     .xfoot a { color: var(--fg-mute); } .xfoot a:hover { color: var(--acc); }
+    .explainer { margin: 34px 0 0; padding: 22px 24px; border: 1px solid var(--rule); border-radius: 4px; background: rgba(255,255,255,0.015); max-width: 76ch; scroll-margin-top: 20px; }
+    .explainer h2 { font-size: 16px; font-weight: 600; margin: 0 0 12px; color: var(--fg); letter-spacing: -0.01em; }
+    .explainer p { color: var(--fg-mute); font-size: 13px; line-height: 1.7; margin: 0 0 11px; }
+    .explainer p:last-child { margin-bottom: 0; }
+    .explainer b { color: var(--fg-soft); font-weight: 500; }
+    .explainer em { color: var(--acc); font-style: normal; }
+    .explainer-list { margin: 0 0 11px; padding-left: 18px; color: var(--fg-mute); font-size: 13px; line-height: 1.7; }
+    .explainer-list b { color: var(--fg-soft); }
   </style>
 </head>
 <body>
@@ -166,14 +174,12 @@
         within it. Each cell is the <b>score</b> (the metric value): <b>&#10003;</b>
         our run <b>reproduces that paper's number</b>, <b>&#8505;</b> it <b>differs</b>
         (hover for the deviation + why), <b>&#9671;</b> has no paper target.
-        <b>~values</b> are <b>predictions</b> — a Bayesian fit over
-        <b>(method × dataset × protocol × metric)</b> that shares method-skill across
-        metrics (a method seen only in δ₁ still gets an AbsRel score), filling each
-        unrun cell <em>a method can actually produce</em> — depth-only methods are
-        absent from the pose tabs and vice-versa. The <b>best in each column is
-        bold</b>. Only the 47 <b>&#10003;</b> scores are paper-verified. <b>Switch metric</b> with the
-        tabs, <b>protocol</b> with the pills; <b>hover any cell</b> for the paper
-        number, the deviation, and the citation.
+        <b>~values</b> are <b>predicted</b>, not measured — see
+        <a href="#how-predictions-work" style="color:var(--acc)">how predictions work</a>
+        below; each shows a 95% range and is never counted as verified. The
+        <b>best in each column is bold</b>. Only the 47 <b>&#10003;</b> scores are
+        paper-verified. <b>Switch metric</b> with the tabs, <b>protocol</b> with the
+        pills; <b>hover any cell</b> for the paper number, the deviation, and the citation.
       </p>
     </div>
 
@@ -192,9 +198,46 @@
       <span style="margin-left:10px"><span class="lglyph" style="color:var(--acc)">&#10003;</span> reproduces paper</span>
       <span><span class="lglyph info" style="color:#e0a73c">&#8505;</span> differs</span>
       <span><span class="lglyph target">&#9671;</span> no target</span>
-      <span style="font-style:italic">~val = BO-predicted, with 95% CI below</span>
+      <span style="font-style:italic">~val = predicted (model estimate) — 95% CI shown below it</span>
       <span style="margin-left:auto; color:var(--fg-dim)">paper Δ + citation on hover</span>
     </div>
+
+    <section id="how-predictions-work" class="explainer">
+      <h2>How the predictions work</h2>
+      <p>
+        Running every method on every benchmark would cost thousands of GPU-hours, so
+        we don't. The cells we <b>did</b> run are real measurements (<b>&#10003;</b>/<b>&#8505;</b>/<b>&#9671;</b>);
+        the rest are <b>predicted</b> — the <b>~values</b>, shown with a 95% range and
+        never counted as verified.
+      </p>
+      <p>
+        The prediction is a plain statistical model. From the cells we have measured it
+        learns three things, then adds them up for any empty cell:
+      </p>
+      <ul class="explainer-list">
+        <li><b>method skill</b> — how strong each model generally is,</li>
+        <li><b>dataset difficulty</b> — how hard each benchmark generally is,</li>
+        <li><b>protocol effect</b> — how much each eval recipe shifts the numbers.</li>
+      </ul>
+      <p>
+        It's the same idea as guessing a student's grade on an exam they skipped, from
+        their other grades and how hard each exam is. The <b>95% range</b> is wide when
+        there's little nearby evidence and narrows as we measure more — so a wide range
+        flags a cell we're <em>unsure</em> about. Two honesty rules keep it grounded: a
+        method is only predicted for tasks it can actually do (depth-only models never
+        appear under the pose tabs), and predictions are clamped to each metric's valid
+        range (e.g. δ₁ ≤ 1).
+      </p>
+      <p>
+        We also let the predictions <b>choose what to run next</b>: the widest-range
+        (most uncertain) cell is the most informative, so we run it and check the result.
+        If the measurement lands inside the predicted range, the model was right; when it
+        doesn't, we've found behaviour the model couldn't have guessed (e.g. DA3's
+        unexpectedly-high DIODE error). That run-the-most-uncertain-cell loop is how the
+        beyond-the-papers <b>&#9671;</b> cells were filled — each predicted first, then
+        measured, with both numbers in the hover.
+      </p>
+    </section>
 
     <p class="xfoot">
       Metrics are grouped <b>depth</b> · <b>pose</b> · <b>trajectory</b>. The pose and
@@ -356,37 +399,37 @@
 {"model":"StreamVGGT","ds":"Sintel","metric":"ate","obs":"0.2367","paper":"","d":0.0,"status":"info","task":"pose","cite":{"src":"StreamVGGT","who":"Zheng et al. 2025","arxiv":"2507.11539","loc":"Sintel ATE (Sim3, bf16) \u2014 no DAGE/paper target; functional adapter validation (reproduces self-recorded 0.2367)"},"proto":"trajectory (Sim3 ATE)"},
 {"model":"CUT3R","ds":"TUM-Dyn","metric":"ate","obs":"0.0362","paper":"0.047","d":-23.0,"status":"info","task":"pose","cite":{"src":"DAGE","who":"Ngo et al. 2026","arxiv":"2603.03744","loc":"Table 4 \u00b7 TUM-Dynamics \u00b7 CUT3R baseline row ATE 0.047 \u2014 off-paper-better (8/8 seqs; DAGE evaluated competitors at 518px, cross-measurement gap)"},"proto":"trajectory (Sim3 ATE)"},
 {"model":"VGGT","ds":"RE10K","metric":"maa","obs":"0.7288","paper":"0.853","d":-14.6,"status":"info","task":"pose","cite":{"src":"VGGT","who":"Wang et al. 2025","arxiv":"2503.11651","loc":"Table 1 \u00b7 Re10K (unseen) AUC@30 0.853 \u2014 off-paper (1800/1800, RTX 3090 bf16); gap is a VGGT-specific HF-artifact (YouTube re-encode), entirely translation (RRA@15 0.998, trans_cos 10.8\u00b0); sigma-1.5 low-pass recovers 82%, but MASt3R/DUSt3R clear their RE10K targets on the same clips \u2014 diagnostic only"},"proto":"RE10K wide-baseline"},
-{"model":"UniK3D Large","ds":"KITTI","metric":"abs_rel","obs":"0.0932","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"UniK3D","who":"Piccinelli et al. 2025","arxiv":"2503.16591","loc":"KITTI \u00b7 metric AbsRel (no align) \u2014 no per-dataset paper target (paper reports KITTI only in the Table-1 S.FoV aggregate). BO active-learning fill: predicted ~0.092, measured 0.0932 (652/652, anima 1080Ti) \u2014 validates the BO. Same vitl ckpt as unik3d-large-nyuv2 \u2705"},"proto":"metric (no-align)"},
+{"model":"UniK3D Large","ds":"KITTI","metric":"abs_rel","obs":"0.0932","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"UniK3D","who":"Piccinelli et al. 2025","arxiv":"2503.16591","loc":"KITTI \u00b7 metric AbsRel (no align) \u2014 no per-dataset paper target (paper reports KITTI only in the Table-1 S.FoV aggregate). active-learning fill: predicted ~0.092, measured 0.0932 (652/652, anima 1080Ti) \u2014 confirms the prediction model. Same vitl ckpt as unik3d-large-nyuv2 \u2705"},"proto":"metric (no-align)"},
 {"model":"UniK3D Large","ds":"KITTI","metric":"delta_1","obs":"0.9637","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"UniK3D","who":"Piccinelli et al. 2025","arxiv":"2503.16591","loc":"KITTI \u00b7 metric \u03b4\u2081 (no align) \u2014 free companion of the AbsRel run (same forward pass), 652/652. No per-dataset paper target"},"proto":"metric (no-align)"},
-{"model":"DA3","ds":"NYU","metric":"abs_rel","obs":"0.0506","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"NYU \u00b7 AbsRel \u2014 free twin of the \u2705 DA3 NYU \u03b4\u2081 run (same forward pass, 654/654; \u03b4\u2081 0.9684 reconfirmed). No paper AbsRel target. BO fill: predicted ~0.040, measured 0.0506 (in 95% CI [0.017,0.096])"},"proto":"eigen-2014 (crop+median)"},
-{"model":"DA3","ds":"KITTI","metric":"abs_rel","obs":"0.0636","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"KITTI \u00b7 AbsRel \u2014 free twin of the \u2705 DA3 KITTI \u03b4\u2081 run (same pass, 652/652; \u03b4\u2081 0.9534 vs 0.953 reconfirmed). No paper AbsRel target. BO fill: predicted ~0.052, measured 0.0636 (in 95% CI [0.022,0.125])"},"proto":"eigen-2014 (crop+median)"},
-{"model":"DA3","ds":"DIODE","metric":"abs_rel","obs":"0.2052","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"DIODE \u00b7 AbsRel \u2014 free twin of the DA3 DIODE \u03b4\u2081 run (771/771; \u03b4\u2081 0.7529 reconfirmed). BO SURPRISE: predicted ~0.057, measured 0.2052 \u2014 ABOVE the 95% CI [0.024,0.139]. DA3 has a known DIODE wide-range depth-distribution gap the BO couldn't extrapolate from its low AbsRel elsewhere; the active-learning run surfaced it"},"proto":"eigen-2014 (crop+median)"},
-{"model":"Depth Pro","ds":"NYU","metric":"abs_rel","obs":"0.0918","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"NYU \u00b7 AbsRel (metric, no align) \u2014 free twin of the Depth Pro NYU \u03b4\u2081 cell (same fp16 pass, 654/654; \u03b4\u2081 0.9347 reconfirmed). Depth Pro paper has no NYU row. BO fill: predicted ~0.167, measured 0.0918 (in 95% CI [0.063,0.444]; Depth Pro stronger on NYU AbsRel than the BO point estimate)"},"proto":"eigen-2014 (crop+median)"},
-{"model":"DA-V2 Large","ds":"NYU","metric":"delta_1","obs":"0.9788","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"NYU \u00b7 \u03b4\u2081 \u2014 free twin of the \u2705 DA-V2-L NYU AbsRel run (same eigen-2014 pass, 654/654; AbsRel 0.0427 reconfirms the 0.0428 \u2705). BO fill: predicted ~1.0 (clamped), measured 0.9788 (in 95% CI [0.717,1.000])"},"proto":"eigen-2014 (crop+median)"},
-{"model":"MoGe ViT-L","ds":"DIODE","metric":"delta_1","obs":"0.9716","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"DIODE \u00b7 \u03b4\u2081 \u2014 free twin of the \u2705 MoGe DIODE AbsRel run (same moge-eval pass, 771/771; AbsRel 0.0407 MATCHES paper 0.0400, so the \u03b4\u2081 reading is solid). No paper \u03b4\u2081 target. BO fill: predicted ~0.960, measured 0.9716 (in 95% CI [0.693,1.000])"},"proto":"moge-eval (affine)"},
-{"model":"Metric3D-v2 L","ds":"DIODE","metric":"abs_rel","obs":"0.0855","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"DIODE-indoor \u00b7 metric AbsRel (no align) \u2014 paper doesn't report DIODE. BO active-learning fill (top remaining \u03c3=0.51): predicted ~0.072, measured 0.0855 (325/325, in 95% CI [0.027,0.195]). Metric3D-v2 \u2705 on NYU/KITTI metric-no-align; DIODE loader \u2705 via DA-V2; UniK3D ran the same DIODE metric recipe (0.151)"},"proto":"eigen-2014 (crop+median)"},
+{"model":"DA3","ds":"NYU","metric":"abs_rel","obs":"0.0506","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"NYU \u00b7 AbsRel \u2014 free twin of the \u2705 DA3 NYU \u03b4\u2081 run (same forward pass, 654/654; \u03b4\u2081 0.9684 reconfirmed). No paper AbsRel target. predicted ~0.040, measured 0.0506 (in 95% CI [0.017,0.096])"},"proto":"eigen-2014 (crop+median)"},
+{"model":"DA3","ds":"KITTI","metric":"abs_rel","obs":"0.0636","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"KITTI \u00b7 AbsRel \u2014 free twin of the \u2705 DA3 KITTI \u03b4\u2081 run (same pass, 652/652; \u03b4\u2081 0.9534 vs 0.953 reconfirmed). No paper AbsRel target. predicted ~0.052, measured 0.0636 (in 95% CI [0.022,0.125])"},"proto":"eigen-2014 (crop+median)"},
+{"model":"DA3","ds":"DIODE","metric":"abs_rel","obs":"0.2052","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"DIODE \u00b7 AbsRel \u2014 free twin of the DA3 DIODE \u03b4\u2081 run (771/771; \u03b4\u2081 0.7529 reconfirmed). PREDICTION MISS: predicted ~0.057, measured 0.2052 \u2014 ABOVE the 95% CI [0.024,0.139]. DA3 has a known DIODE wide-range depth-distribution gap the prediction model couldn't extrapolate from its low AbsRel elsewhere; the active-learning run surfaced it"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Depth Pro","ds":"NYU","metric":"abs_rel","obs":"0.0918","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"NYU \u00b7 AbsRel (metric, no align) \u2014 free twin of the Depth Pro NYU \u03b4\u2081 cell (same fp16 pass, 654/654; \u03b4\u2081 0.9347 reconfirmed). Depth Pro paper has no NYU row. predicted ~0.167, measured 0.0918 (in 95% CI [0.063,0.444]; Depth Pro stronger on NYU AbsRel than the predicted point estimate)"},"proto":"eigen-2014 (crop+median)"},
+{"model":"DA-V2 Large","ds":"NYU","metric":"delta_1","obs":"0.9788","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Anything V2","who":"Yang et al. 2024","arxiv":"2406.09414","loc":"NYU \u00b7 \u03b4\u2081 \u2014 free twin of the \u2705 DA-V2-L NYU AbsRel run (same eigen-2014 pass, 654/654; AbsRel 0.0427 reconfirms the 0.0428 \u2705). predicted ~1.0 (clamped), measured 0.9788 (in 95% CI [0.717,1.000])"},"proto":"eigen-2014 (crop+median)"},
+{"model":"MoGe ViT-L","ds":"DIODE","metric":"delta_1","obs":"0.9716","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"MoGe","who":"Wang et al. 2024","arxiv":"2410.19115","loc":"DIODE \u00b7 \u03b4\u2081 \u2014 free twin of the \u2705 MoGe DIODE AbsRel run (same moge-eval pass, 771/771; AbsRel 0.0407 MATCHES paper 0.0400, so the \u03b4\u2081 reading is solid). No paper \u03b4\u2081 target. predicted ~0.960, measured 0.9716 (in 95% CI [0.693,1.000])"},"proto":"moge-eval (affine)"},
+{"model":"Metric3D-v2 L","ds":"DIODE","metric":"abs_rel","obs":"0.0855","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"DIODE-indoor \u00b7 metric AbsRel (no align) \u2014 paper doesn't report DIODE. active-learning fill (top remaining \u03c3=0.51): predicted ~0.072, measured 0.0855 (325/325, in 95% CI [0.027,0.195]). Metric3D-v2 \u2705 on NYU/KITTI metric-no-align; DIODE loader \u2705 via DA-V2; UniK3D ran the same DIODE metric recipe (0.151)"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Metric3D-v2 L","ds":"DIODE","metric":"delta_1","obs":"0.9431","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"DIODE-indoor \u00b7 metric \u03b4\u2081 (no align) \u2014 free companion of the AbsRel run (same pass, 325/325). No paper target"},"proto":"eigen-2014 (crop+median)"},
-{"model":"Metric3D-v2 G","ds":"DIODE","metric":"abs_rel","obs":"0.0817","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"DIODE-indoor \u00b7 metric AbsRel (no align), ViT-giant2 \u2014 paper doesn't report DIODE. BO fill: predicted ~0.075, measured 0.0817 (325/325, in 95% CI [0.028,0.202]); giant edges the ViT-L (0.0855) as expected"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Metric3D-v2 G","ds":"DIODE","metric":"abs_rel","obs":"0.0817","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"DIODE-indoor \u00b7 metric AbsRel (no align), ViT-giant2 \u2014 paper doesn't report DIODE. predicted ~0.075, measured 0.0817 (325/325, in 95% CI [0.028,0.202]); giant edges the ViT-L (0.0855) as expected"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Metric3D-v2 G","ds":"DIODE","metric":"delta_1","obs":"0.9483","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"DIODE-indoor \u00b7 metric \u03b4\u2081 (no align), ViT-giant2 \u2014 free companion of the AbsRel run (325/325). No paper target"},"proto":"eigen-2014 (crop+median)"},
-{"model":"Depth Pro","ds":"KITTI","metric":"abs_rel","obs":"0.1418","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"KITTI \u00b7 AbsRel (metric, no align) \u2014 Depth Pro paper has no KITTI row. BO fill: predicted ~0.16, measured 0.1418 (652/652, in 95% CI [0.073,0.352]). Slightly high AbsRel matches Depth Pro's known far-outdoor under-scaling (indoor-tuned)"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Depth Pro","ds":"KITTI","metric":"abs_rel","obs":"0.1418","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"KITTI \u00b7 AbsRel (metric, no align) \u2014 Depth Pro paper has no KITTI row. predicted ~0.16, measured 0.1418 (652/652, in 95% CI [0.073,0.352]). Slightly high AbsRel matches Depth Pro's known far-outdoor under-scaling (indoor-tuned)"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Depth Pro","ds":"KITTI","metric":"delta_1","obs":"0.8338","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"KITTI \u00b7 \u03b4\u2081 (metric, no align) \u2014 free companion of the AbsRel run (652/652). No paper target"},"proto":"eigen-2014 (crop+median)"},
-{"model":"Metric3D-v2 L","ds":"ETH3D","metric":"abs_rel","obs":"0.1273","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"ETH3D \u00b7 metric AbsRel (no align) \u2014 paper doesn't report ETH3D. BO fill: predicted ~0.093, measured 0.1273 (454/454, in 95% CI [0.037,0.238]). Tighter than UniK3D ETH3D 0.1544 \u2014 Metric3D leads ETH3D metric depth. ETH3D metric-no-align \u2705-demonstrated by unik3d-large-eth3d"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Metric3D-v2 L","ds":"ETH3D","metric":"abs_rel","obs":"0.1273","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"ETH3D \u00b7 metric AbsRel (no align) \u2014 paper doesn't report ETH3D. predicted ~0.093, measured 0.1273 (454/454, in 95% CI [0.037,0.238]). Tighter than UniK3D ETH3D 0.1544 \u2014 Metric3D leads ETH3D metric depth. ETH3D metric-no-align \u2705-demonstrated by unik3d-large-eth3d"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Metric3D-v2 L","ds":"ETH3D","metric":"delta_1","obs":"0.8604","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"ETH3D \u00b7 metric \u03b4\u2081 (no align) \u2014 free companion of the AbsRel run (454/454). No paper target"},"proto":"eigen-2014 (crop+median)"},
-{"model":"Metric3D-v2 G","ds":"ETH3D","metric":"abs_rel","obs":"0.1265","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"ETH3D \u00b7 metric AbsRel (no align), ViT-giant2 \u2014 paper doesn't report ETH3D. BO fill: predicted ~0.094, measured 0.1265 (454/454, in 95% CI [0.037,0.240]); giant \u2248 Large (0.1273)"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Metric3D-v2 G","ds":"ETH3D","metric":"abs_rel","obs":"0.1265","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"ETH3D \u00b7 metric AbsRel (no align), ViT-giant2 \u2014 paper doesn't report ETH3D. predicted ~0.094, measured 0.1265 (454/454, in 95% CI [0.037,0.240]); giant \u2248 Large (0.1273)"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Metric3D-v2 G","ds":"ETH3D","metric":"delta_1","obs":"0.8780","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"ETH3D \u00b7 metric \u03b4\u2081 (no align), ViT-giant2 \u2014 free companion of the AbsRel run (454/454). No paper target"},"proto":"eigen-2014 (crop+median)"},
-{"model":"DA3","ds":"Sintel","metric":"abs_rel","obs":"0.2809","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"Sintel \u00b7 AbsRel \u2014 free twin of the DA3 Sintel \u03b4\u2081 info-cell (same sintel_dav2 pass, 643/643; \u03b4\u2081 0.6342 reconfirmed). No paper AbsRel target. BO fill: predicted ~0.217, measured 0.2809 (in 95% CI [0.107,0.443]); Sintel is DA3's known weak dataset (the \u03b4\u2081 0.634 cell is off-paper)"},"proto":"eigen-2014 (crop+median)"},
-{"model":"Depth Pro","ds":"DIODE","metric":"abs_rel","obs":"0.1995","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"DIODE-indoor \u00b7 metric AbsRel (no align) \u2014 Depth Pro paper has no DIODE row. BO fill: predicted ~0.173, measured 0.1995 (325/325, in 95% CI [0.084,0.355]). Completes the metric-model DIODE ranking: Metric3D 0.086 < UniK3D 0.151 < Depth Pro 0.200 (indoor-tuned, weakest on DIODE's wide range)"},"proto":"eigen-2014 (crop+median)"},
+{"model":"DA3","ds":"Sintel","metric":"abs_rel","obs":"0.2809","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Anything 3","who":"ByteDance Seed 2025","arxiv":"2511.10647","loc":"Sintel \u00b7 AbsRel \u2014 free twin of the DA3 Sintel \u03b4\u2081 info-cell (same sintel_dav2 pass, 643/643; \u03b4\u2081 0.6342 reconfirmed). No paper AbsRel target. predicted ~0.217, measured 0.2809 (in 95% CI [0.107,0.443]); Sintel is DA3's known weak dataset (the \u03b4\u2081 0.634 cell is off-paper)"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Depth Pro","ds":"DIODE","metric":"abs_rel","obs":"0.1995","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"DIODE-indoor \u00b7 metric AbsRel (no align) \u2014 Depth Pro paper has no DIODE row. predicted ~0.173, measured 0.1995 (325/325, in 95% CI [0.084,0.355]). Completes the metric-model DIODE ranking: Metric3D 0.086 < UniK3D 0.151 < Depth Pro 0.200 (indoor-tuned, weakest on DIODE's wide range)"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Depth Pro","ds":"DIODE","metric":"delta_1","obs":"0.6787","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"DIODE-indoor \u00b7 metric \u03b4\u2081 (no align) \u2014 free companion of the AbsRel run (325/325). No paper target"},"proto":"eigen-2014 (crop+median)"},
-{"model":"Depth Pro","ds":"ETH3D","metric":"abs_rel","obs":"0.3602","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"ETH3D \u00b7 metric AbsRel (no align) \u2014 free twin of the Depth Pro ETH3D \u03b4\u2081 info-cell (same pass, 454/454; \u03b4\u2081 0.3648 reconfirmed). BO fill: predicted ~0.285, measured 0.3602 (in 95% CI [0.133,0.61]). High AbsRel = Depth Pro's severe far-outdoor under-scaling \u2014 much worse than Metric3D (0.127)/UniK3D (0.154) on ETH3D"},"proto":"metric (no-align)"},
-{"model":"Marigold v1-1","ds":"DIODE","metric":"abs_rel","obs":"0.0938","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Marigold","who":"Ke et al. 2024","arxiv":"2312.02145","loc":"DIODE-indoor \u00b7 affine AbsRel (scale+shift) \u2014 Marigold paper has no DIODE row. BO fill: predicted ~0.097, measured 0.0938 (325/325, near-exact, in 95% CI [0.046,0.205]). 1-step distilled \u00d710 ensemble"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Depth Pro","ds":"ETH3D","metric":"abs_rel","obs":"0.3602","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Depth Pro","who":"Bochkovskii et al. 2024","arxiv":"2410.02073","loc":"ETH3D \u00b7 metric AbsRel (no align) \u2014 free twin of the Depth Pro ETH3D \u03b4\u2081 info-cell (same pass, 454/454; \u03b4\u2081 0.3648 reconfirmed). predicted ~0.285, measured 0.3602 (in 95% CI [0.133,0.61]). High AbsRel = Depth Pro's severe far-outdoor under-scaling \u2014 much worse than Metric3D (0.127)/UniK3D (0.154) on ETH3D"},"proto":"metric (no-align)"},
+{"model":"Marigold v1-1","ds":"DIODE","metric":"abs_rel","obs":"0.0938","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Marigold","who":"Ke et al. 2024","arxiv":"2312.02145","loc":"DIODE-indoor \u00b7 affine AbsRel (scale+shift) \u2014 Marigold paper has no DIODE row. predicted ~0.097, measured 0.0938 (325/325, near-exact, in 95% CI [0.046,0.205]). 1-step distilled \u00d710 ensemble"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Marigold v1-1","ds":"DIODE","metric":"delta_1","obs":"0.9020","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Marigold","who":"Ke et al. 2024","arxiv":"2312.02145","loc":"DIODE-indoor \u00b7 affine \u03b4\u2081 \u2014 free companion of the AbsRel run (325/325). No paper target"},"proto":"eigen-2014 (crop+median)"},
-{"model":"Marigold v1-1","ds":"Sintel","metric":"abs_rel","obs":"0.4397","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Marigold","who":"Ke et al. 2024","arxiv":"2312.02145","loc":"Sintel \u00b7 affine AbsRel (sintel_dav2) \u2014 Marigold paper has no Sintel row. BO fill: predicted ~0.27, measured 0.4397 (643/643, in 95% CI [0.132,0.55]). High \u2014 Sintel (dynamic, complex) is hard for the affine indoor-trained Marigold (\u03b4\u2081 0.361, below DA3's 0.634)"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Marigold v1-1","ds":"Sintel","metric":"abs_rel","obs":"0.4397","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Marigold","who":"Ke et al. 2024","arxiv":"2312.02145","loc":"Sintel \u00b7 affine AbsRel (sintel_dav2) \u2014 Marigold paper has no Sintel row. predicted ~0.27, measured 0.4397 (643/643, in 95% CI [0.132,0.55]). High \u2014 Sintel (dynamic, complex) is hard for the affine indoor-trained Marigold (\u03b4\u2081 0.361, below DA3's 0.634)"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Marigold v1-1","ds":"Sintel","metric":"delta_1","obs":"0.3611","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Marigold","who":"Ke et al. 2024","arxiv":"2312.02145","loc":"Sintel \u00b7 affine \u03b4\u2081 \u2014 free companion of the AbsRel run (643/643). No paper target"},"proto":"eigen-2014 (crop+median)"},
-{"model":"Metric3D-v2 L","ds":"Sintel","metric":"abs_rel","obs":"0.4705","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Sintel \u00b7 metric AbsRel (no align) \u2014 paper doesn't report Sintel. BO fill: predicted ~0.254, measured 0.4705 (643/643, in 95% CI [0.122,0.528]). Metric models (no-align) do worst on Sintel \u2014 its synthetic depth isn't real-world meters, so a no-align model mismatches scale (\u03b4\u2081 0.228); affine models that scale-align do better"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Metric3D-v2 L","ds":"Sintel","metric":"abs_rel","obs":"0.4705","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Sintel \u00b7 metric AbsRel (no align) \u2014 paper doesn't report Sintel. predicted ~0.254, measured 0.4705 (643/643, in 95% CI [0.122,0.528]). Metric models (no-align) do worst on Sintel \u2014 its synthetic depth isn't real-world meters, so a no-align model mismatches scale (\u03b4\u2081 0.228); affine models that scale-align do better"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Metric3D-v2 L","ds":"Sintel","metric":"delta_1","obs":"0.2282","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Sintel \u00b7 metric \u03b4\u2081 (no align) \u2014 free companion of the AbsRel run (643/643); low \u03b4\u2081 reflects the scale mismatch. No paper target"},"proto":"eigen-2014 (crop+median)"},
-{"model":"Metric3D-v2 G","ds":"Sintel","metric":"abs_rel","obs":"0.3989","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Sintel \u00b7 metric AbsRel (no align), ViT-giant2 \u2014 paper doesn't report Sintel. BO fill: predicted ~0.252, measured 0.3989 (643/643, in 95% CI [0.121,0.524]); giant handles the scale mismatch better than ViT-L (0.4705)"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Metric3D-v2 G","ds":"Sintel","metric":"abs_rel","obs":"0.3989","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Sintel \u00b7 metric AbsRel (no align), ViT-giant2 \u2014 paper doesn't report Sintel. predicted ~0.252, measured 0.3989 (643/643, in 95% CI [0.121,0.524]); giant handles the scale mismatch better than ViT-L (0.4705)"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Metric3D-v2 G","ds":"Sintel","metric":"delta_1","obs":"0.4022","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"Sintel \u00b7 metric \u03b4\u2081 (no align), ViT-giant2 \u2014 free companion of the AbsRel run (643/643). No paper target"},"proto":"eigen-2014 (crop+median)"},
-{"model":"Metric3D-v2 L","ds":"NYU","metric":"delta_1","obs":"0.9740","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"NYU \u00b7 metric \u03b4\u2081 \u2014 free twin of the \u2705 Metric3D-L NYU AbsRel cell (same pass, 654/654; AbsRel 0.0660 reconfirmed). BO ~1.0 clamped, measured 0.9740 (in CI). No paper \u03b4\u2081 target"},"proto":"eigen-2014 (crop+median)"},
+{"model":"Metric3D-v2 L","ds":"NYU","metric":"delta_1","obs":"0.9740","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"NYU \u00b7 metric \u03b4\u2081 \u2014 free twin of the \u2705 Metric3D-L NYU AbsRel cell (same pass, 654/654; AbsRel 0.0660 reconfirmed). predicted ~1.0 (clamped), measured 0.9740 (in CI). No paper \u03b4\u2081 target"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Metric3D-v2 L","ds":"KITTI","metric":"delta_1","obs":"0.9785","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"KITTI \u00b7 metric \u03b4\u2081 \u2014 free twin of the \u2705 Metric3D-L KITTI AbsRel cell (same pass, 652/652; AbsRel 0.0495 reconfirmed). measured 0.9785 (in CI)"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Metric3D-v2 G","ds":"NYU","metric":"delta_1","obs":"0.9730","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"NYU \u00b7 metric \u03b4\u2081, ViT-giant2 \u2014 free twin of the \u2705 Metric3D-G NYU AbsRel cell (654/654; AbsRel 0.0702 reconfirmed). measured 0.9730 (in CI)"},"proto":"eigen-2014 (crop+median)"},
 {"model":"Metric3D-v2 G","ds":"KITTI","metric":"delta_1","obs":"0.9803","paper":"","d":null,"status":"target","task":"depth","cite":{"src":"Metric3D v2","who":"Yin et al. 2024","arxiv":"2404.15506","loc":"KITTI \u00b7 metric \u03b4\u2081, ViT-giant2 \u2014 free twin of the \u2705 Metric3D-G KITTI AbsRel cell (652/652; AbsRel 0.0503 reconfirmed). measured 0.9803 (in CI)"},"proto":"eigen-2014 (crop+median)"},
@@ -394,8 +437,8 @@
 ]
 </script>
 
-  <!-- BO-predicted fill-in for empty mono-depth AbsRel cells, from
-       scripts/bo_table_forecast.py --json (Bayesian matrix completion).
+  <!-- predicted fill-in for empty mono-depth AbsRel cells, from
+       scripts/bo_table_forecast.py --json (statistical prediction from measured cells).
        These are MODEL PREDICTIONS with uncertainty, NOT runs — rendered
        ghosted, never counted toward the verified stat. Regenerate with:
        python scripts/bo_table_forecast.py --json -->
@@ -636,7 +679,7 @@
               const p = predict(mname, d, proto, metric);
               if (!p) { html += `<td><span class="cell empty" aria-hidden="true"></span></td>`; return; }
               const best = +p.pred === bestV(d) ? "best" : "";
-              const pal = `${mname} on ${d}: BO estimate ~${p.pred}, 95% CI ${p.lo95}–${p.hi95}, not a measured run${best ? " — best in column" : ""}`;
+              const pal = `${mname} on ${d}: predicted ~${p.pred}, 95% CI ${p.lo95}–${p.hi95}, not a measured run${best ? " — best in column" : ""}`;
               html += `<td><span class="cell pred ${best}" tabindex="0" role="button" data-pkey="${mname}|${d}" data-pred="${p.pred}" data-lo95="${p.lo95}" data-hi95="${p.hi95}" data-proto="${proto}" data-metric="${metric}" aria-label="${pal}"><span class="v" style="color:${perfColor(perfOf(d, +p.pred))};font-style:italic">~${p.pred}</span><span class="ci">${p.lo95}–${p.hi95}</span></span></td>`;
             }
           });
@@ -702,11 +745,11 @@
         const protoBit = proto ? `<span class="p-proto" style="color:var(--fg-mute);font-size:11px">protocol <b style="color:var(--fg-soft)">${proto}</b></span>` : "";
         pop.innerHTML =
           `<div class="p-top"><span class="p-model">${m}</span><span class="p-ds">${d} · ${mlabel}</span></div>
-           <div class="p-nums"><span class="p-obs pred">~${pred}</span><span class="p-delta">95% CI ${lo}–${hi}</span><span class="p-status pred">&#9671; BO estimate</span></div>
+           <div class="p-nums"><span class="p-obs pred">~${pred}</span><span class="p-delta">95% CI ${lo}–${hi}</span><span class="p-status pred">&#9671; predicted</span></div>
            ${protoBit ? `<div style="margin:5px 0 2px">${protoBit}</div>` : ""}
            <div class="p-cite">
-             <span class="src">Bayesian matrix completion</span> · model prediction, <b>not a measured run</b>
-             <br><span class="loc">posterior mean, 95% CI (±1.96σ) under the LOO-calibrated 4-D model (protocol × method × dataset × metric)</span>
+             <span class="src">Predicted score</span> · <b>not a measured run</b>
+             <br><span class="loc">estimated from the measured cells (method skill + dataset difficulty + protocol effect); 95% range = ±1.96σ. Run this cell to replace it.</span>
              <br><span style="color:var(--fg-dim)">run this cell to replace the estimate with a real measurement</span>
            </div>`;
         pop.classList.add("show");
