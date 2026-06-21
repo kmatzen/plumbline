@@ -1,0 +1,21 @@
+# Metric3D-v2 ViT-giant2 zero-shot metric depth on ETH3D (no align).
+# BO active-learning fill (σ~0.41). Mirrors the unik3d-large-eth3d metric recipe
+# (protocol eth3d_unik3d_metric, [0.01,50] m cap) so the dataset×protocol neighbor
+# is validated; only metric3d×ETH3D is new. Metric3D-v2 ✅ on NYU/KITTI metric.
+name: metric3d-v2-giant-eth3d
+protocol: eth3d_unik3d_metric
+model:
+  name: metric3d-v2
+  kwargs:
+    variant: vit_giant2
+scale_alignment: none
+device: cuda:0
+paper_reference:
+  primary_metric: abs_rel
+  value: null
+  tolerance_relative: 0.05
+  citation: "Metric3D v2 (Yin et al. 2024, arXiv:2404.15506) does not report ETH3D; informational BO active-learning fill."
+  source_confidence: informational_no_paper
+notes: >
+  Neighboring evidence: Metric3D-v2 ✅ on NYU (0.0660)/KITTI (0.0495) metric
+  no-align; ETH3D metric-no-align demonstrated by unik3d-large-eth3d (0.1544).
