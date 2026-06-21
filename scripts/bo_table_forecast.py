@@ -67,8 +67,11 @@ def proto_of(model, ds, metric, src, loc):
     if metric in ("abs_rel", "delta_1"):
         # a cell may explicitly declare a CROSS-PROTOCOL recipe in its citation
         # (e.g. MoGe is moge-eval-native but run "under eigen-2014") — honor that.
-        if "under eigen-2014" in (loc or "").lower():
+        loc_l = (loc or "").lower()
+        if "under eigen-2014" in loc_l:
             return "eigen-2014 (crop+median)"
+        if "moge-eval protocol" in loc_l:
+            return "moge-eval (affine)"
         if ds in ("GSO", "DDAD"):
             return "moge-eval (affine)"  # these datasets are only ever the MoGe affine eval
         if s == "MoGe":
