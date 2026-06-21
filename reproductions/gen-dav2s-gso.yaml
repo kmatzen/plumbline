@@ -1,0 +1,13 @@
+name: gen-dav2s-gso
+protocol: gso_moge
+model:
+  name: depth-anything-v2
+  kwargs: {variant: small}
+device: cuda:0
+paper_reference:
+  primary_metric: abs_rel
+  value: null
+  tolerance_relative: 0.05
+  citation: "Backlog new cell: DA-V2 Small GSO under the MoGe-eval protocol; no paper target for this model on this dataset."
+  source_confidence: informational_no_paper
+notes: "Auto-generated backlog (moge-eval). Protocol pins dataset+alignment."
