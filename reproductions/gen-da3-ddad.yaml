@@ -1,0 +1,13 @@
+name: gen-da3-ddad
+protocol: ddad_moge
+model:
+  name: depth-anything-3
+  kwargs: {variant: large, checkpoint: depth-anything/DA3-LARGE-1.1, process_res: 1008}
+device: cuda:0
+paper_reference:
+  primary_metric: abs_rel
+  value: null
+  tolerance_relative: 0.05
+  citation: "Backlog new cell: DA3 DDAD under the MoGe-eval protocol; no paper target for this model on this dataset."
+  source_confidence: informational_no_paper
+notes: "Auto-generated backlog (moge-eval). Protocol pins dataset+alignment."
