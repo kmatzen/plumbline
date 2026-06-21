@@ -1,0 +1,25 @@
+# Marigold v1-1 affine-invariant depth on ETH3D (high-res).
+# BO active-learning fill (σ~0.43, top 3090-unlocked). Affine (scale_shift),
+# ETH3D under the eth3d_dav2 protocol (the DA3/DA-V2 ETH3D recipe). 1-step ×10.
+name: marigold-v1-1-eth3d
+protocol: eth3d_dav2
+model:
+  name: marigold
+  kwargs:
+    variant: v1-1
+    num_inference_steps: 1
+    ensemble_size: 10
+    dtype: float32
+    seed: 1234
+    processing_res: 0
+scale_alignment: scale_shift
+device: cuda:0
+paper_reference:
+  primary_metric: abs_rel
+  value: null
+  tolerance_relative: 0.05
+  citation: "Marigold (Ke et al. 2024, arXiv:2312.02145) does not report ETH3D; informational BO active-learning fill."
+  source_confidence: informational_no_paper
+notes: >
+  Neighboring evidence: Marigold ✅ NYU/KITTI scale_shift+eigen; ETH3D eth3d_dav2
+  loader ✅-demonstrated by da3-eth3d / DA-V2 ETH3D cells. Affine model.
