@@ -29,7 +29,7 @@
     .metricbar { display: flex; align-items: flex-end; gap: 22px; flex-wrap: wrap; margin: 30px 0 4px; border-bottom: 1px solid var(--rule); }
     .mtab {
       background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px;
-      font: 600 14px/1 var(--mono); color: var(--fg-dim); cursor: pointer;
+      font: 600 14px/1 var(--mono); color: var(--fg-mute); cursor: pointer;
       padding: 10px 2px; transition: color 0.16s var(--ease), border-color 0.16s var(--ease); white-space: nowrap;
     }
     .mtab:hover { color: var(--fg-soft); }
@@ -46,7 +46,7 @@
     .ptab { background: var(--bg-2); border: 1px solid var(--rule); border-radius: 3px; color: var(--fg-soft); font: 500 12px/1 var(--mono); padding: 6px 10px; cursor: pointer; white-space: nowrap; transition: color 0.14s var(--ease), border-color 0.14s var(--ease); }
     .ptab:hover { color: var(--fg-soft); }
     .ptab[aria-selected="true"] { color: var(--acc); border-color: var(--acc-dim); background: rgba(212,240,0,0.06); }
-    .ptab .mc { color: var(--fg-dim); margin-left: 6px; font-weight: 400; }
+    .ptab .mc { color: var(--fg-mute); margin-left: 6px; font-weight: 400; }
     .ptab[aria-selected="true"] .mc { color: var(--acc-dim); }
 
     /* matrix */
@@ -88,10 +88,11 @@
     .cell .sbadge.info { color: #f0b85a; }
     .cell .sbadge.target { color: var(--fg-mute); }
     /* the score (metric value) is the headline; colour = provenance, not performance rank */
+    /* value text is always bright + readable; performance rides the bar, status rides the glyph */
     .cell .v { display: inline; font-size: 13.5px; font-weight: 600; color: var(--fg); font-variant-numeric: tabular-nums; }
     .cell.best .v { font-weight: 800; font-style: normal; }  /* best method in the column */
-    .cell.info .v { color: #e0a73c; font-style: italic; }
-    .cell.target .v { color: var(--fg-soft); }
+    /* weak→best performance, as a colorblind-safe width bar (color is redundant) */
+    .cell .perfbar { display: block; height: 3px; margin-top: 5px; border-radius: 1.5px; min-width: 6px; }
     .cell .proto { display: block; font-size: 10px; color: var(--fg-mute); margin-top: 3px; letter-spacing: 0.03em; }
     .cell .multi { position: absolute; top: 4px; right: 5px; font-size: 9px; color: var(--acc-dim); }
     .cell.info, .cell.target { background-image: repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.014) 6px 7px); }
@@ -100,7 +101,8 @@
     /* predicted cells: full-strength colour (so within-column comparison holds);
        distinguished only by the ~ prefix, italics, and a dashed cell background. */
     .cell.pred { font-size: 13px; font-variant-numeric: tabular-nums; cursor: help; }
-    .cell.pred .v { font-weight: 600; }
+    .cell.pred .v { font-weight: 600; color: var(--fg-soft); }
+    .cell.pred .perfbar { opacity: 0.55; }  /* predicted: dimmer bar */
     .cell.pred .ci { display: block; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--fg-soft); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; white-space: nowrap; }
     .cell.pred:hover, .cell.pred:focus-visible { background: rgba(255,255,255,0.04); outline: none; }
     table.matrix tbody td:has(.cell.pred) { background: repeating-linear-gradient(45deg, transparent 0 5px, rgba(255,255,255,0.02) 5px 6px); }
@@ -660,6 +662,12 @@
           const t = (v - lo) / (hi - lo); return lowerBetter ? 1 - t : t;
         };
         const bestV = d => lowerBetter ? colRange[d].lo : colRange[d].hi;  // best score in column
+        // weak→best as a width bar (primary, colorblind-safe) + redundant gradient colour
+        const perfBar = (d, v) => {
+          const r = colRange[d]; if (!r || r.hi === r.lo) return "";
+          const p = perfOf(d, v); const w = Math.round(16 + 84 * p);
+          return `<span class="perfbar" style="width:${w}%;background:${perfColor(p)}" aria-hidden="true"></span>`;
+        };
 
         let html = `<thead><tr><th class='corner${sortCol ? " sortable" : ""}' title="${sortCol ? "clear sort" : "click a benchmark to rank methods"}">model \\ benchmark</th>`;
         cols.forEach(d => html += `<th scope="col" class="dcol${sortCol === d ? " sorted" : ""}" data-col="${d}" title="rank methods by ${d} — best on top (${lowerBetter ? "lower" : "higher"} is better)">${d}${sortCol === d ? ' <span class="sortmark">▲ best</span>' : ""}</th>`);
@@ -675,13 +683,13 @@
                 : '<span class="sbadge ok" title="reproduces paper">&#10003;</span>';
               const al = `${mname} on ${d}: ${c.obs}${c.d == null ? " (no paper target)" : c.status === "ok" ? " — reproduces paper (" + (c.d > 0 ? "+" : "") + c.d + "%)" : " — off-paper (" + (c.d > 0 ? "+" : "") + c.d + "% vs paper)"}`;
               const best = +c.obs === bestV(d) ? "best" : "";
-              html += `<td><button class="cell has ${c.status} ${best}" data-key="${mname}|${d}" aria-label="${al}${best ? " — best in column" : ""}">${glyph}<span class="v" style="color:${perfColor(perfOf(d, +c.obs))}">${c.obs}</span></button></td>`;
+              html += `<td><button class="cell has ${c.status} ${best}" data-key="${mname}|${d}" aria-label="${al}${best ? " — best in column" : ""}">${glyph}<span class="v">${c.obs}</span>${perfBar(d, +c.obs)}</button></td>`;
             } else {
               const p = predict(mname, d, proto, metric);
               if (!p) { html += `<td><span class="cell empty" aria-hidden="true"></span></td>`; return; }
               const best = +p.pred === bestV(d) ? "best" : "";
               const pal = `${mname} on ${d}: predicted ~${p.pred}, 95% CI ${p.lo95}–${p.hi95}, not a measured run${best ? " — best in column" : ""}`;
-              html += `<td><span class="cell pred ${best}" tabindex="0" role="button" data-pkey="${mname}|${d}" data-pred="${p.pred}" data-lo95="${p.lo95}" data-hi95="${p.hi95}" data-proto="${proto}" data-metric="${metric}" aria-label="${pal}"><span class="v" style="color:${perfColor(perfOf(d, +p.pred))};font-style:italic">~${p.pred}</span><span class="ci">${p.lo95}–${p.hi95}</span></span></td>`;
+              html += `<td><span class="cell pred ${best}" tabindex="0" role="button" data-pkey="${mname}|${d}" data-pred="${p.pred}" data-lo95="${p.lo95}" data-hi95="${p.hi95}" data-proto="${proto}" data-metric="${metric}" aria-label="${pal}"><span class="v" style="font-style:italic">~${p.pred}</span><span class="ci">${p.lo95}–${p.hi95}</span>${perfBar(d, +p.pred)}</span></td>`;
             }
           });
           html += "</tr>";
