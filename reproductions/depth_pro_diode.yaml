@@ -1,0 +1,31 @@
+# Depth Pro zero-shot metric depth on DIODE-indoor.
+# BO active-learning fill (σ~0.42, top remaining). Metric model → scale none.
+# Mirrors the ✅ da-v2-large-diode-indoor-full DIODE setup (val indoors) so the
+# dataset neighbor is validated; only depth-pro×DIODE is new. Depth Pro ✅ metric
+# (sun-rgbd 0.890); DIODE-indoor loader ✅ via DA-V2.
+name: depth-pro-diode
+model:
+  name: depth-pro
+  kwargs:
+    dtype: float16
+dataset:
+  name: diode
+  split: val
+  kwargs:
+    domain: indoors
+tasks:
+  - mono_depth
+scale_alignment: none
+max_views: 1
+device: cuda:0
+depth_clip: [0.001, 50.0]
+paper_reference:
+  primary_metric: abs_rel
+  value: null
+  tolerance_relative: 0.05
+  citation: "Depth Pro (Bochkovskii et al. 2024, arXiv:2410.02073) does not report DIODE; informational BO active-learning fill."
+  source_confidence: informational_no_paper
+notes: >
+  Neighboring evidence: Depth Pro ✅ metric no-align (sun-rgbd-native δ₁ 0.890);
+  DIODE-indoor loader ✅ via DA-V2 (0.066); metric DIODE demonstrated by
+  Metric3D-v2 (0.0855) and UniK3D (0.151). Depth-only model, won't OOM like DA3.
