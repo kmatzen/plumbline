@@ -1,0 +1,13 @@
+name: gen-marigold-gso
+protocol: gso_moge
+model:
+  name: marigold
+  kwargs: {variant: v1-1, num_inference_steps: 1, ensemble_size: 10, dtype: float32, seed: 1234, processing_res: 0}
+device: cuda:0
+paper_reference:
+  primary_metric: abs_rel
+  value: null
+  tolerance_relative: 0.05
+  citation: "Backlog new cell: Marigold GSO under the MoGe-eval protocol; no paper target for this model on this dataset."
+  source_confidence: informational_no_paper
+notes: "Auto-generated backlog (moge-eval). Protocol pins dataset+alignment."
