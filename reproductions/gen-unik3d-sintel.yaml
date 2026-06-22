@@ -1,0 +1,7 @@
+name: gen-unik3d-sintel
+protocol: sintel_depth_pro_metric
+model: {name: unik3d, kwargs: {variant: vitl}}
+scale_alignment: none
+device: cuda:0
+paper_reference: {primary_metric: abs_rel, value: null, tolerance_relative: 0.05, citation: "Backlog: UniK3D Sintel metric (no-align); no paper target.", source_confidence: informational_no_paper}
+notes: "Backlog metric Sintel."
