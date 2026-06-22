@@ -1,0 +1,7 @@
+name: gen-m3dg-ibims
+protocol: ibims1_depth_pro_metric
+model: {name: metric3d-v2, kwargs: {variant: vit_giant2}}
+scale_alignment: none
+device: cuda:0
+paper_reference: {primary_metric: abs_rel, value: null, tolerance_relative: 0.05, citation: "Backlog: Metric3D-v2 L iBims metric (no-align); no paper target.", source_confidence: informational_no_paper}
+notes: "Backlog metric iBims."
