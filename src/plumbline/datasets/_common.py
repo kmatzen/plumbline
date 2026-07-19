@@ -92,6 +92,7 @@ def load_ply_xyz(path: Path) -> NDArray[np.float32]:
         # Vertex element + its property widths. Ignore any later elements.
         vcount = 0
         vertex_props: list[str] = []
+        vertex_prop_names: list[str] = []
         in_vertex = False
         for ln in header_lines:
             if ln.startswith("element "):
@@ -104,9 +105,34 @@ def load_ply_xyz(path: Path) -> NDArray[np.float32]:
                 if parts[1] == "list":
                     raise NotImplementedError("list properties unsupported")
                 vertex_props.append(parts[1])
+                vertex_prop_names.append(parts[2])
         payload = f.read()
 
+    if fmt.startswith("binary_big_endian"):
+        # Would otherwise fall through to the ASCII branch and die on a
+        # confusing UnicodeDecodeError deep in the payload.
+        raise NotImplementedError(f"{path}: binary_big_endian PLY is unsupported")
+
     if fmt.startswith("binary_little_endian"):
+        # The XYZ read below reinterprets the first 12 payload bytes of each
+        # vertex as three float32s. If x/y/z are double (a layout the format
+        # allows, and _PLY_PROP_BYTES knows about) or aren't the first three
+        # properties, the stride math still works and the parse silently
+        # yields garbage coordinates — a chamfer eval then runs to completion
+        # against a scrambled GT cloud. Verify the assumption instead.
+        head_types = vertex_props[:3]
+        head_names = vertex_prop_names[:3]
+        if head_types != ["float"] * 3 and head_types != ["float32"] * 3:
+            raise NotImplementedError(
+                f"{path}: expected float32 x/y/z as the first three vertex "
+                f"properties; got types {head_types}. Convert the file or "
+                f"extend load_ply_xyz to handle this layout."
+            )
+        if head_names != ["x", "y", "z"]:
+            raise NotImplementedError(
+                f"{path}: expected the first three vertex properties to be "
+                f"x, y, z; got {head_names}."
+            )
         vertex_stride = sum(_PLY_PROP_BYTES[p] for p in vertex_props)
         vertex_bytes = vcount * vertex_stride
         buf = np.frombuffer(payload[:vertex_bytes], dtype=np.uint8).reshape(vcount, vertex_stride)

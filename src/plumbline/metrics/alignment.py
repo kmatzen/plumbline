@@ -36,6 +36,7 @@ from numpy.typing import NDArray
 from plumbline.conventions import EPS
 
 __all__ = [
+    "ALIGNMENT_MODES",
     "align_depth",
     "align_scale_and_shift",
     "align_scale_and_shift_robust",
@@ -47,6 +48,21 @@ __all__ = [
     "icp_similarity",
     "umeyama_similarity",
 ]
+
+#: Every mode ``align_depth`` accepts, in dispatch order. Single source of
+#: truth so the CLI's ``--scale-alignment`` choices and reproduction-config
+#: validation can't drift from what the dispatch below actually handles.
+ALIGNMENT_MODES: tuple[str, ...] = (
+    "none",
+    "median",
+    "median_lineage",
+    "scale_weiszfeld",
+    "lstsq",
+    "scale_shift",
+    "scale_shift_robust",
+    "scale_shift_clamped",
+    "scale_shift_depth",
+)
 
 
 def align_scale_median(
@@ -282,6 +298,8 @@ def align_depth(
             protocols. The model output is a depth value where
             ``s * pred + b = gt_depth`` is the natural fit.
     """
+    if mode not in ALIGNMENT_MODES:
+        raise ValueError(f"unknown alignment mode '{mode}'; use one of {list(ALIGNMENT_MODES)}")
     if mode == "none":
         return pred
     out = pred.astype(np.float64, copy=True)

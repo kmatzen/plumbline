@@ -202,17 +202,21 @@ class DIODEDataset(Dataset):
                 drop_max_depth=self.MOGE_DROP_MAX_DEPTH,
             )
 
+        # The manifest caches the FULL on-disk scan (all scenes) and the
+        # `scenes` whitelist is applied after load. Previously the scan was
+        # scene-filtered while the filename was tagged only with the scene
+        # *count* ("scenes1"), so two different single-scene runs collided on
+        # one manifest: the second loaded the first's records and silently
+        # evaluated 0 samples. Same class of bug ETH3D documents fixing (see
+        # eth3d.py). Filename bumped to _v2 to invalidate stale caches.
         warp_tag = "_mogewarp" if moge_fov_warp else ""
-        scenes_tag = "all" if scenes is None else f"scenes{len(scenes)}"
         manifest_path = (
-            self.root
-            / ".plumbline_manifest"
-            / f"diode_{split}_{domain}_{scenes_tag}{warp_tag}.jsonl"
+            self.root / ".plumbline_manifest" / f"diode_{split}_{domain}_all{warp_tag}_v2.jsonl"
         )
         if manifest_path.exists():
             records = load_manifest(manifest_path)
         else:
-            records = list(self._scan(domain_dirs, scenes))
+            records = list(self._scan(domain_dirs, None))
             save_manifest(manifest_path, records)
         if scenes:
             records = [r for r in records if r["scene"] in scenes]

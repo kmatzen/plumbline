@@ -103,6 +103,7 @@ class MarigoldAdapter(Model):
         dtype: str = "float16",
         seed: int = 0,
         processing_res: int | None = None,
+        per_sample_seed: bool = False,
     ) -> None:
         if variant not in _HF_CHECKPOINTS:
             raise ValueError(f"variant must be one of {list(_HF_CHECKPOINTS)}; got {variant!r}")
@@ -131,6 +132,23 @@ class MarigoldAdapter(Model):
         #         predictions).
         #   - int > 0 → explicit long-edge resize target.
         self.processing_res = processing_res
+        # One generator is created at load and threaded through every
+        # ``predict`` call, so its state advances across samples: the depth
+        # for a given sample_id depends on how many samples were denoised
+        # before it. A `subset(n)`, pinned-ID, or resumed run therefore
+        # produces different output for the same sample than a full run —
+        # and prediction-cache entries, keyed on (config_hash, sample_id),
+        # silently disagree between them.
+        #
+        # ``per_sample_seed=True`` reseeds per call, making each sample's
+        # output independent of evaluation order. It is OFF by default
+        # because every published Marigold paper-match cell (NYU, GSO,
+        # ETH3D) was produced under the streaming-generator semantics, and
+        # flipping the default would change those verified numbers. It is
+        # part of ``config_hash``, so the two modes never share cache
+        # entries. GeoWizard has the same order-dependence, deliberately
+        # (see geowizard.py — it matches upstream `seed_all`).
+        self.per_sample_seed = bool(per_sample_seed)
         self._pipe: Any = None
         self._generator: Any = None
 
@@ -161,8 +179,9 @@ class MarigoldAdapter(Model):
         # Silence tqdm — plumbline's runner already shows per-sample progress.
         self._pipe.set_progress_bar_config(disable=True)
         # Seeded generator for reproducibility. Marigold's output depends
-        # heavily on the random latent; a fixed seed is essential if you
-        # want the plumbline cache to be useful.
+        # heavily on the random latent, so a fixed seed is necessary for a
+        # useful cache — but note it is not sufficient unless
+        # ``per_sample_seed`` is set; see __init__ for why.
         self._generator = torch.Generator(device=self.device).manual_seed(self.seed)
 
     # -- predict ---------------------------------------------------------
@@ -176,8 +195,13 @@ class MarigoldAdapter(Model):
         self._load()
         from PIL import Image as PImage
 
+        torch = ensure_torch()
         n, h, w, _ = images.shape
         depths = np.empty((n, h, w), dtype=np.float32)
+        if self.per_sample_seed:
+            # Reset before the batch so this call's latents don't depend on
+            # how many samples the runner happened to denoise earlier.
+            self._generator = torch.Generator(device=self.device).manual_seed(self.seed)
         for i in range(n):
             # Marigold pipeline takes PIL (or a list of PIL). It resizes
             # internally to the model's preferred 768-long-edge, runs the
@@ -218,6 +242,7 @@ class MarigoldAdapter(Model):
                 "ensemble_size": self.ensemble_size,
                 "dtype": self.dtype,
                 "seed": self.seed,
+                "per_sample_seed": self.per_sample_seed,
                 "native_space": "depth_affine_invariant",
                 "alignment_hint": "scale_shift",
             },
@@ -229,5 +254,8 @@ class MarigoldAdapter(Model):
             f"/steps={self.num_inference_steps}/ens={self.ensemble_size}"
             f"/dtype={self.dtype}/seed={self.seed}"
             f"/processing_res={self.processing_res}"
+            # Only contributes when enabled, so existing cache entries and
+            # the published paper-match cells keep their current hash.
+            f"{'/per_sample_seed=1' if self.per_sample_seed else ''}"
         )
         return config_digest(s)

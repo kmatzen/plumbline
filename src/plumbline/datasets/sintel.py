@@ -139,14 +139,21 @@ class SintelDataset(Dataset):
 
         # Manifest key includes the full_seq toggle so the two modes don't
         # share a cache.
+        #
+        # The manifest caches the FULL on-disk scan (all scenes) and the
+        # `scenes` whitelist is applied after load. Scanning scene-filtered
+        # here while keying the file only on split/pass/vps meant a prior
+        # single-scene run left a cache that silently hid every other scene
+        # from later multi-scene calls — the same bug ETH3D documents fixing
+        # (see eth3d.py). Filename bumped to _v2 to invalidate stale caches.
         vps_tag = f"full_s{self.frame_stride}" if self.full_seq else f"vps{self.views_per_sample}"
         manifest_path = (
-            self.root / ".plumbline_manifest" / f"sintel_{split}_{pass_name}_{vps_tag}.jsonl"
+            self.root / ".plumbline_manifest" / f"sintel_{split}_{pass_name}_{vps_tag}_v2.jsonl"
         )
         if manifest_path.exists():
             records = load_manifest(manifest_path)
         else:
-            records = list(self._scan(pass_name, scenes))
+            records = list(self._scan(pass_name, None))
             save_manifest(manifest_path, records)
         if scenes:
             records = [r for r in records if r["scene"] in scenes]

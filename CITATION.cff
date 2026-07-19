@@ -11,9 +11,13 @@ authors:
     given-names: "Kevin"
 repository-code: "https://github.com/kmatzen/plumbline"
 url: "https://plumbline-bench.org"
+# plumbline's own code is Apache-2.0, but the distributed package bundles
+# vendored upstream model code under NonCommercial terms (CC BY-NC[-SA], plus
+# the VGGT Meta research license), making the aggregate non-commercial only.
+# See THIRD_PARTY_NOTICES.md for the per-component breakdown.
 license: Apache-2.0
-version: "0.1.0"
-date-released: "2026-05-31"
+version: "0.2.1"
+date-released: "2026-06-16"
 keywords:
   - 3d-vision
   - depth-estimation

@@ -23,7 +23,6 @@ import random
 import time
 import traceback
 from collections.abc import Iterator
-from dataclasses import dataclass
 from typing import Any
 
 import numpy as np
@@ -43,6 +42,7 @@ from plumbline import _version
 from plumbline.cache import PredictionCache
 from plumbline.datasets.base import Dataset, Sample
 from plumbline.metrics.alignment import (
+    ALIGNMENT_MODES,
     apply_similarity,
     icp_similarity,
     umeyama_similarity,
@@ -59,24 +59,9 @@ from plumbline.runner_metrics import (
     _pose_metrics,
 )
 
-__all__ = ["EvaluateConfig", "evaluate"]
+__all__ = ["evaluate"]
 
 log = logging.getLogger("plumbline.runner")
-
-
-@dataclass
-class EvaluateConfig:
-    """Runner configuration.
-
-    Every field here factors into the cache-key config hash when stored on
-    disk, so changing one re-triggers inference. Pure metric/report knobs
-    (alignment, format) do not live in this dataclass.
-    """
-
-    tasks: list[str]
-    max_views: int = 8
-    device: str = "cuda:0"
-    seed: int = 0
 
 
 def evaluate(
@@ -86,7 +71,6 @@ def evaluate(
     *,
     scale_alignment: str = "median",
     max_views: int = 8,
-    device: str = "cuda:0",
     cache: PredictionCache | None = None,
     seed: int = 0,
     pose_auc_thresholds: tuple[float, ...] = (5.0, 10.0, 30.0),
@@ -115,9 +99,19 @@ def evaluate(
 ) -> Report:
     """Evaluate a model on a dataset and return a :class:`Report`.
 
-    Parameters mirror the CLI's `run` command. See module docstring for the
-    contract on caching, resolution, and OOM handling.
+    The CLI's ``run`` command exposes the common subset of these parameters
+    (model/dataset/tasks/scale_alignment/max_views/cache); the pose,
+    point-cloud, and scene-aggregation knobs are reachable from reproduction
+    YAMLs. See the module docstring for the contract on caching, resolution,
+    and OOM handling.
+
+    The inference device is a property of the model adapter — construct it as
+    ``ModelCls(device=...)``. This function does not move the model.
     """
+    if scale_alignment not in ALIGNMENT_MODES:
+        raise ValueError(
+            f"unknown scale_alignment '{scale_alignment}'; use one of {list(ALIGNMENT_MODES)}"
+        )
     _seed_everything(seed)
     cache = cache or PredictionCache()
 
@@ -213,220 +207,222 @@ def evaluate(
 
     progress.start()
 
-    for sample in _iter_with_progress(dataset):
-        report.n_total = max(report.n_total, len(report.per_sample) + 1)
-        t0 = time.perf_counter()
-        prediction = _predict_with_cache(
-            model=model,
-            dataset_name=dataset.name,
-            sample=sample,
-            max_views=max_views,
-            cache=cache,
-        )
-        if prediction is None:
-            report.n_skipped += 1
-            report.per_sample.append(
-                SampleResult(
-                    sample_id=sample.sample_id,
-                    metrics={},
-                    skipped=True,
-                    skip_reason="OOM or adapter error (see logs)",
-                )
+    try:
+        for sample in _iter_with_progress(dataset):
+            report.n_total = max(report.n_total, len(report.per_sample) + 1)
+            t0 = time.perf_counter()
+            prediction = _predict_with_cache(
+                model=model,
+                dataset_name=dataset.name,
+                sample=sample,
+                max_views=max_views,
+                cache=cache,
             )
-            continue
+            if prediction is None:
+                report.n_skipped += 1
+                report.per_sample.append(
+                    SampleResult(
+                        sample_id=sample.sample_id,
+                        metrics={},
+                        skipped=True,
+                        skip_reason="OOM or adapter error (see logs)",
+                    )
+                )
+                continue
 
-        runtime_ms = (time.perf_counter() - t0) * 1000.0
-        # The runner trimmed the model input to ``keep`` views in
-        # ``_predict_with_cache`` (honouring max_views + the model's cap).
-        # Trim the sample's per-view GT arrays to the same count so that
-        # pose / depth / point-map metrics see matching shapes. Sample IDs
-        # that genuinely need all-view GT should raise max_views accordingly.
-        trimmed_sample = _trim_sample_to_views(
-            sample,
-            prediction.extrinsics.shape[0]
-            if prediction.extrinsics is not None
-            else (
-                prediction.depth.shape[0]
-                if prediction.depth is not None
-                else sample.images.shape[0]
-            ),
-        )
-        if (
-            aggregation == "scene"
-            and per_view_masked
-            and trimmed_sample.depth_gt is not None
-            and trimmed_sample.depth_valid is not None
-        ):
-            # Per-view-masked chamfer (CUT3R/MASt3R/VGGT DTU lineage):
-            # build per-view masked pred+GT pts3d clouds at the model's
-            # processed resolution, center-crop to ``per_view_crop``,
-            # mask by GT validity, and accumulate per scene. Scene-merge
-            # below does ICP + KDTree NN against the accumulated GT, NOT
-            # against ``sample.point_cloud_gt``. Reference:
-            # ``CUT3R/eval/mv_recon/launch.py`` lines ~195-260 +
-            # ``utils.py::accuracy/completion``.
-            geo_mask = None
-            if geometric_consistency:
-                geo_mask = _geometric_consistency_mask(
+            runtime_ms = (time.perf_counter() - t0) * 1000.0
+            # The runner trimmed the model input to ``keep`` views in
+            # ``_predict_with_cache`` (honouring max_views + the model's cap).
+            # Trim the sample's per-view GT arrays to the same count so that
+            # pose / depth / point-map metrics see matching shapes. Sample IDs
+            # that genuinely need all-view GT should raise max_views accordingly.
+            trimmed_sample = _trim_sample_to_views(
+                sample,
+                prediction.extrinsics.shape[0]
+                if prediction.extrinsics is not None
+                else (
+                    prediction.depth.shape[0]
+                    if prediction.depth is not None
+                    else sample.images.shape[0]
+                ),
+            )
+            if (
+                aggregation == "scene"
+                and per_view_masked
+                and trimmed_sample.depth_gt is not None
+                and trimmed_sample.depth_valid is not None
+            ):
+                # Per-view-masked chamfer (CUT3R/MASt3R/VGGT DTU lineage):
+                # build per-view masked pred+GT pts3d clouds at the model's
+                # processed resolution, center-crop to ``per_view_crop``,
+                # mask by GT validity, and accumulate per scene. Scene-merge
+                # below does ICP + KDTree NN against the accumulated GT, NOT
+                # against ``sample.point_cloud_gt``. Reference:
+                # ``CUT3R/eval/mv_recon/launch.py`` lines ~195-260 +
+                # ``utils.py::accuracy/completion``.
+                geo_mask = None
+                if geometric_consistency:
+                    geo_mask = _geometric_consistency_mask(
+                        prediction=prediction,
+                        num_src_views=geo_num_src_views,
+                        geo_pixel_thres=geo_pixel_thres,
+                        geo_depth_thres=geo_depth_thres,
+                        geo_mask_thres=geo_mask_thres,
+                    )
+                pv = _per_view_masked_clouds(
                     prediction=prediction,
-                    num_src_views=geo_num_src_views,
-                    geo_pixel_thres=geo_pixel_thres,
-                    geo_depth_thres=geo_depth_thres,
-                    geo_mask_thres=geo_mask_thres,
+                    sample=trimmed_sample,
+                    per_view_crop=per_view_crop,
+                    geo_mask=geo_mask,
                 )
-            pv = _per_view_masked_clouds(
+                if pv is not None:
+                    pred_pts, gt_pts = pv
+                    # Per-chunk voxel_downsample BEFORE accumulating, mirroring
+                    # the legacy scene-merged path. ETH3D clouds (millions of
+                    # points / scene) make scene-agg ICP + chamfer untractable
+                    # without this; DTU clouds (~800 K / scan) don't strictly
+                    # need it. CAUTION: this voxel applies to pred AND gt at
+                    # their per-sample frames — if pred and gt are in different
+                    # units (VGGT-DTU: pred ≈ metres, gt = mm), a single
+                    # ``scene_voxel_size`` would collapse one side. The cleanest
+                    # escape is ``scene_voxel_size: 0`` (DTU's choice) and let
+                    # the scene-level ICP + chamfer absorb the larger clouds.
+                    # ETH3D pred and gt happen to share metres so it works.
+                    if scene_voxel_size and scene_voxel_size > 0:
+                        pred_pts = voxel_downsample(pred_pts, scene_voxel_size).astype(np.float32)
+                        gt_pts = voxel_downsample(gt_pts, scene_voxel_size).astype(np.float32)
+                    scene = sample.sample_id.split("/", 1)[0]
+                    scene_points.setdefault(scene, []).append(pred_pts)
+                    scene_gt_masked.setdefault(scene, []).append(gt_pts)
+                    report.per_sample.append(
+                        SampleResult(
+                            sample_id=sample.sample_id,
+                            metrics={"n_pred_points": float(pred_pts.shape[0])},
+                            runtime_ms=runtime_ms,
+                        )
+                    )
+                    report.n_evaluated += 1
+                else:
+                    report.n_skipped += 1
+                    report.per_sample.append(
+                        SampleResult(
+                            sample_id=sample.sample_id,
+                            metrics={},
+                            skipped=True,
+                            skip_reason="per-view-masked: missing pred point_map/depth or GT depth",
+                        )
+                    )
+                continue
+
+            if aggregation == "scene" and trimmed_sample.point_cloud_gt is not None:
+                # Per-sample alignment in scene mode is a cheap warm-start only:
+                # camera_centers Umeyama puts each chunk in roughly the right
+                # neighbourhood of the GT frame. Any user-requested ICP refine
+                # is deferred to a single scene-level pass below, on the fused +
+                # voxel-downsampled cloud. Running ICP per sample against a
+                # 200 K-point GT scan was O(N_samples × 30 iters × KDTree query)
+                # and dominated the rental-run wall time on ETH3D + DTU.
+                per_sample_align = (
+                    "camera_centers" if pointcloud_alignment == "icp" else pointcloud_alignment
+                )
+                aligned = _aligned_point_map(
+                    prediction=prediction,
+                    sample=trimmed_sample,
+                    pointcloud_alignment=per_sample_align,
+                )
+                if aligned is not None:
+                    scene = sample.sample_id.split("/", 1)[0]
+                    # Voxel-downsample each per-sample chunk BEFORE accumulating.
+                    # Without this, DTU's 22 × ~42 predictions × ~1 M points each
+                    # balloon to 10-20 GB of in-memory chunks and the aggregation
+                    # OOM-kills on boxes with <32 GB RAM (D20 in DISCREPANCIES,
+                    # exit 137 observed 2026-04-23). The fused-cloud downsample at
+                    # the merge step (line ~340) was doing exactly this per-voxel
+                    # unification already; moving it earlier just bounds peak RSS
+                    # to ~O(N_scenes × scene_voxels) with no algorithmic change.
+                    chunk_pts = aligned.reshape(-1, 3)
+                    # Guard ``scene_voxel_size > 0`` to match the per-view-masked
+                    # path above: ``voxel_downsample`` raises on size <= 0, and
+                    # ``scene_voxel_size: 0`` is a documented config (DTU, where
+                    # pred ≈ m and gt = mm would otherwise collapse one side).
+                    if chunk_pts.shape[0] > 0 and scene_voxel_size and scene_voxel_size > 0:
+                        chunk_pts = voxel_downsample(chunk_pts, scene_voxel_size).astype(np.float32)
+                    scene_points.setdefault(scene, []).append(chunk_pts)
+                    # GT is the same across samples of a scene (subsampled
+                    # laser scan); keep the first one we see.
+                    scene_gt.setdefault(scene, trimmed_sample.point_cloud_gt)
+                    report.per_sample.append(
+                        SampleResult(
+                            sample_id=sample.sample_id,
+                            metrics={"n_points": float(aligned.size // 3)},
+                            runtime_ms=runtime_ms,
+                        )
+                    )
+                    report.n_evaluated += 1
+                else:
+                    report.n_skipped += 1
+                    report.per_sample.append(
+                        SampleResult(
+                            sample_id=sample.sample_id,
+                            metrics={},
+                            skipped=True,
+                            skip_reason="no point map (missing depth or K/E)",
+                        )
+                    )
+                continue
+
+            sample_metrics = _compute_metrics(
                 prediction=prediction,
                 sample=trimmed_sample,
-                per_view_crop=per_view_crop,
-                geo_mask=geo_mask,
+                tasks=tasks,
+                scale_alignment=scale_alignment,
+                pose_auc_thresholds=pose_auc_thresholds,
+                pose_acc_thresholds=pose_acc_thresholds,
+                pose_auc_mode=pose_auc_mode,
+                pose_translation_antipodal=pose_translation_antipodal,
+                pose_trajectory_metrics=pose_trajectory_metrics,
+                delta_thresholds=delta_thresholds,
+                f_score_threshold=f_score_threshold,
+                depth_clip=depth_clip,
+                pointcloud_alignment=pointcloud_alignment,
+                chamfer_outlier_distance=chamfer_outlier_distance,
+                mask_boundaries=mask_boundaries,
+                boundary_thickness=boundary_thickness,
+                boundary_tol=boundary_tol,
             )
-            if pv is not None:
-                pred_pts, gt_pts = pv
-                # Per-chunk voxel_downsample BEFORE accumulating, mirroring
-                # the legacy scene-merged path. ETH3D clouds (millions of
-                # points / scene) make scene-agg ICP + chamfer untractable
-                # without this; DTU clouds (~800 K / scan) don't strictly
-                # need it. CAUTION: this voxel applies to pred AND gt at
-                # their per-sample frames — if pred and gt are in different
-                # units (VGGT-DTU: pred ≈ metres, gt = mm), a single
-                # ``scene_voxel_size`` would collapse one side. The cleanest
-                # escape is ``scene_voxel_size: 0`` (DTU's choice) and let
-                # the scene-level ICP + chamfer absorb the larger clouds.
-                # ETH3D pred and gt happen to share metres so it works.
-                if scene_voxel_size and scene_voxel_size > 0:
-                    pred_pts = voxel_downsample(pred_pts, scene_voxel_size).astype(np.float32)
-                    gt_pts = voxel_downsample(gt_pts, scene_voxel_size).astype(np.float32)
-                scene = sample.sample_id.split("/", 1)[0]
-                scene_points.setdefault(scene, []).append(pred_pts)
-                scene_gt_masked.setdefault(scene, []).append(gt_pts)
-                report.per_sample.append(
-                    SampleResult(
-                        sample_id=sample.sample_id,
-                        metrics={"n_pred_points": float(pred_pts.shape[0])},
-                        runtime_ms=runtime_ms,
-                    )
-                )
-                report.n_evaluated += 1
-            else:
+            if not sample_metrics:
+                # The adapter returned a prediction but it yielded no metric for
+                # any requested task (e.g. ``tasks=["mono_depth"]`` but the
+                # prediction had ``depth=None``). Counting this as "evaluated"
+                # silently inflates the headline count and lets a fully-broken
+                # adapter read as a healthy "N/N evaluated" while every metric
+                # mean is NaN-over-zero-samples. Route it to skipped with a
+                # reason instead (D28 footgun: the count must reflect what
+                # actually contributed).
                 report.n_skipped += 1
                 report.per_sample.append(
                     SampleResult(
                         sample_id=sample.sample_id,
                         metrics={},
                         skipped=True,
-                        skip_reason="per-view-masked: missing pred point_map/depth or GT depth",
-                    )
-                )
-            continue
-
-        if aggregation == "scene" and trimmed_sample.point_cloud_gt is not None:
-            # Per-sample alignment in scene mode is a cheap warm-start only:
-            # camera_centers Umeyama puts each chunk in roughly the right
-            # neighbourhood of the GT frame. Any user-requested ICP refine
-            # is deferred to a single scene-level pass below, on the fused +
-            # voxel-downsampled cloud. Running ICP per sample against a
-            # 200 K-point GT scan was O(N_samples × 30 iters × KDTree query)
-            # and dominated the rental-run wall time on ETH3D + DTU.
-            per_sample_align = (
-                "camera_centers" if pointcloud_alignment == "icp" else pointcloud_alignment
-            )
-            aligned = _aligned_point_map(
-                prediction=prediction,
-                sample=trimmed_sample,
-                pointcloud_alignment=per_sample_align,
-            )
-            if aligned is not None:
-                scene = sample.sample_id.split("/", 1)[0]
-                # Voxel-downsample each per-sample chunk BEFORE accumulating.
-                # Without this, DTU's 22 × ~42 predictions × ~1 M points each
-                # balloon to 10-20 GB of in-memory chunks and the aggregation
-                # OOM-kills on boxes with <32 GB RAM (D20 in DISCREPANCIES,
-                # exit 137 observed 2026-04-23). The fused-cloud downsample at
-                # the merge step (line ~340) was doing exactly this per-voxel
-                # unification already; moving it earlier just bounds peak RSS
-                # to ~O(N_scenes × scene_voxels) with no algorithmic change.
-                chunk_pts = aligned.reshape(-1, 3)
-                # Guard ``scene_voxel_size > 0`` to match the per-view-masked
-                # path above: ``voxel_downsample`` raises on size <= 0, and
-                # ``scene_voxel_size: 0`` is a documented config (DTU, where
-                # pred ≈ m and gt = mm would otherwise collapse one side).
-                if chunk_pts.shape[0] > 0 and scene_voxel_size and scene_voxel_size > 0:
-                    chunk_pts = voxel_downsample(chunk_pts, scene_voxel_size).astype(np.float32)
-                scene_points.setdefault(scene, []).append(chunk_pts)
-                # GT is the same across samples of a scene (subsampled
-                # laser scan); keep the first one we see.
-                scene_gt.setdefault(scene, trimmed_sample.point_cloud_gt)
-                report.per_sample.append(
-                    SampleResult(
-                        sample_id=sample.sample_id,
-                        metrics={"n_points": float(aligned.size // 3)},
+                        skip_reason=f"prediction produced no metrics for tasks {sorted(tasks)}",
                         runtime_ms=runtime_ms,
                     )
                 )
-                report.n_evaluated += 1
-            else:
-                report.n_skipped += 1
-                report.per_sample.append(
-                    SampleResult(
-                        sample_id=sample.sample_id,
-                        metrics={},
-                        skipped=True,
-                        skip_reason="no point map (missing depth or K/E)",
-                    )
-                )
-            continue
-
-        sample_metrics = _compute_metrics(
-            prediction=prediction,
-            sample=trimmed_sample,
-            tasks=tasks,
-            scale_alignment=scale_alignment,
-            pose_auc_thresholds=pose_auc_thresholds,
-            pose_acc_thresholds=pose_acc_thresholds,
-            pose_auc_mode=pose_auc_mode,
-            pose_translation_antipodal=pose_translation_antipodal,
-            pose_trajectory_metrics=pose_trajectory_metrics,
-            delta_thresholds=delta_thresholds,
-            f_score_threshold=f_score_threshold,
-            depth_clip=depth_clip,
-            pointcloud_alignment=pointcloud_alignment,
-            chamfer_outlier_distance=chamfer_outlier_distance,
-            mask_boundaries=mask_boundaries,
-            boundary_thickness=boundary_thickness,
-            boundary_tol=boundary_tol,
-        )
-        if not sample_metrics:
-            # The adapter returned a prediction but it yielded no metric for
-            # any requested task (e.g. ``tasks=["mono_depth"]`` but the
-            # prediction had ``depth=None``). Counting this as "evaluated"
-            # silently inflates the headline count and lets a fully-broken
-            # adapter read as a healthy "N/N evaluated" while every metric
-            # mean is NaN-over-zero-samples. Route it to skipped with a
-            # reason instead (D28 footgun: the count must reflect what
-            # actually contributed).
-            report.n_skipped += 1
+                continue
             report.per_sample.append(
                 SampleResult(
                     sample_id=sample.sample_id,
-                    metrics={},
-                    skipped=True,
-                    skip_reason=f"prediction produced no metrics for tasks {sorted(tasks)}",
+                    metrics=sample_metrics,
                     runtime_ms=runtime_ms,
                 )
             )
-            continue
-        report.per_sample.append(
-            SampleResult(
-                sample_id=sample.sample_id,
-                metrics=sample_metrics,
-                runtime_ms=runtime_ms,
-            )
-        )
-        report.n_evaluated += 1
-        for key, value in sample_metrics.items():
-            per_metric_values.setdefault(key, []).append(value)
+            report.n_evaluated += 1
+            for key, value in sample_metrics.items():
+                per_metric_values.setdefault(key, []).append(value)
 
-    progress.stop()
+    finally:
+        progress.stop()
 
     # Scene-merge post-processing: merge per-scene, voxel downsample,
     # compute Acc/Comp/Overall against scene GT. Aggregate across scenes
@@ -483,7 +479,12 @@ def evaluate(
                 # downsampled prediction cloud. Camera-centres Umeyama
                 # already put each per-sample chunk in the right neighbourhood
                 # above; this tightens the global fit against the GT scan.
-                merged_ds = voxel_downsample(merged, scene_voxel_size).astype(np.float32)
+                # scene_voxel_size == 0 means "no downsampling" (DTU's
+                # choice) and voxel_downsample rejects it; guard as the two
+                # per-sample accumulation paths above already do.
+                merged_ds = (
+                    voxel_downsample(merged, scene_voxel_size) if scene_voxel_size > 0 else merged
+                ).astype(np.float32)
                 if merged_ds.shape[0] >= 3 and gt.shape[0] >= 3:
                     s, R, t, _info = icp_similarity(merged_ds, gt)
                     merged = apply_similarity(merged, s, R, t).astype(np.float32)
@@ -556,7 +557,14 @@ def evaluate(
 # ---------------------------------------------------------------------------
 
 
-def _sample_input_fingerprint(sample: Sample) -> str:
+def _views_for_model(model: Model, n: int, max_views: int) -> int:
+    """How many of the sample's ``n`` views actually get fed to the model."""
+    model_cap = model.capabilities.max_views
+    cap = n if math.isinf(model_cap) else int(model_cap)
+    return min(n, max_views, cap)
+
+
+def _sample_input_fingerprint(sample: Sample, keep: int | None = None) -> str:
     """Short stable hash of the loader's actual output for this sample.
 
     Mixed into the prediction-cache key so a loader refactor that changes
@@ -572,16 +580,36 @@ def _sample_input_fingerprint(sample: Sample) -> str:
     The fingerprint is a sha1 over the full image shape + dtype + the
     intrinsics + the first 1 KB of image bytes. O(μs) per sample and
     ≤8 hex chars added to the cache filename.
+
+    ``keep`` is the number of views actually fed to the model after the
+    ``max_views``/capability trim. It must be part of the key: the trim
+    happens after the cache lookup, so without it a run at ``max_views=8``
+    and a later run at ``max_views=2`` share a cache entry, and the 8-view
+    prediction is served — then ``_trim_sample_to_views`` obligingly trims
+    GT to match, so the report silently claims the 2-view protocol.
+
+    Only a *trimmed* sample (``keep < n``) contributes a tag. A sample fed
+    to the model whole is unambiguous, so it keeps the pre-fix cache path
+    and existing entries stay valid; the ambiguous configs are the ones
+    that get a distinguishing key.
     """
     import hashlib
 
     h = hashlib.sha1()
     h.update(str(sample.images.shape).encode())
     h.update(str(sample.images.dtype).encode())
+    if keep is not None and keep < sample.images.shape[0]:
+        h.update(f"keep={keep}".encode())
     h.update(sample.intrinsics.tobytes())
     # A few KB of raw pixel bytes catches subtler changes (resampling
     # kernel, colour-space flip) that shape + intrinsics alone miss.
-    h.update(sample.images.tobytes()[:1024])
+    # Slice before serialising: ``tobytes()`` on a multi-view 2048px sample
+    # materialises ~100 MB just to hash 1 KB of it. Taking ceil(1024/itemsize)
+    # elements then truncating to 1024 bytes is byte-identical to the old
+    # ``tobytes()[:1024]`` for any dtype, so cache paths are unchanged.
+    flat = np.ascontiguousarray(sample.images).reshape(-1)
+    n_elems = min(flat.size, -(-1024 // flat.itemsize))
+    h.update(flat[:n_elems].tobytes()[:1024])
     return h.hexdigest()[:8]
 
 
@@ -593,7 +621,14 @@ def _predict_with_cache(
     max_views: int,
     cache: PredictionCache,
 ) -> Prediction | None:
-    fingerprint = _sample_input_fingerprint(sample)
+    # Trim to the configured max_views if the model's cap permits a smaller
+    # set. This must be computed *before* the cache lookup so the view count
+    # can enter the cache key — otherwise runs at different max_views share
+    # an entry and silently evaluate the wrong protocol.
+    n = sample.images.shape[0]
+    keep = _views_for_model(model, n, max_views)
+
+    fingerprint = _sample_input_fingerprint(sample, keep=keep)
     cache_args = (
         model.name,
         model.config_hash(),
@@ -604,13 +639,15 @@ def _predict_with_cache(
         try:
             return cache.load(*cache_args, input_fingerprint=fingerprint)
         except Exception:
-            log.warning("Cache load failed for %s; re-running", sample.sample_id, exc_info=True)
+            # A corrupt/truncated archive would otherwise keep `has` True
+            # forever, silently redoing inference on every future run.
+            log.warning(
+                "Cache load failed for %s; evicting the entry and re-running",
+                sample.sample_id,
+                exc_info=True,
+            )
+            cache.evict(*cache_args, input_fingerprint=fingerprint)
 
-    # Trim to the configured max_views if the model's cap permits a smaller set.
-    n = sample.images.shape[0]
-    model_cap = model.capabilities.max_views
-    cap = n if math.isinf(model_cap) else int(model_cap)
-    keep = min(n, max_views, cap)
     if keep < int(model.capabilities.min_views):
         log.warning(
             "Skipping %s: dataset provides %d views, model '%s' needs >= %d",

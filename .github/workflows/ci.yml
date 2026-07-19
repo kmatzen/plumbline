@@ -6,6 +6,18 @@ on:
   pull_request:
   workflow_dispatch:  # manual "Run workflow" — lets the site deploy after secrets land
 
+# Force-pushing to a PR otherwise stacks redundant full runs of a ~10min suite.
+# Pushes to main are never cancelled (deploy-site runs off them).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # CI runners have no GPU; without this uv resolves the cu124 index (see
+  # [tool.uv.sources]) and downloads gigabytes of CUDA wheels — plus the whole
+  # nvidia-* stack — into every job just to run CPU tests.
+  UV_TORCH_BACKEND: cpu
+
 jobs:
   lint-and-test:
     strategy:
@@ -14,6 +26,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: ["3.10", "3.11", "3.12"]
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
 
@@ -39,12 +52,15 @@ jobs:
 
   typecheck:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v7
       - run: uv python install 3.12
       - run: uv sync --python 3.12
-      - run: uv run mypy src
+      # No path args: honor [tool.mypy].files, which also covers the test
+      # fakes. Passing `src` here would silently narrow the check.
+      - run: uv run mypy
 
   # Deploy the marketing site (Cloudflare Worker) on every green push to main.
   # Idempotent: re-uploads the Worker from site/index.html + site/styles.css and

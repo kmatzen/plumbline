@@ -22,6 +22,19 @@ from tests._fakes import (
     _PointMapModel,
 )
 
+# Hypothesis's default 200ms per-example deadline measures wall-clock, so the
+# numeric property tests fail spuriously whenever the machine is loaded (seen
+# in CI and locally: "Test took 273.73ms, which exceeds the deadline of
+# 200.00ms" on a test with no defect). These properties assert mathematical
+# invariants, not latency — drop the deadline rather than tune it.
+try:
+    from hypothesis import settings as _hypothesis_settings
+except ModuleNotFoundError:  # hypothesis is a dev-only dep
+    pass
+else:
+    _hypothesis_settings.register_profile("plumbline", deadline=None, print_blob=True)
+    _hypothesis_settings.load_profile("plumbline")
+
 
 @pytest.fixture
 def registered_fakes() -> Iterator[None]:
@@ -40,8 +53,8 @@ def registered_fakes() -> Iterator[None]:
     dataset_name = "test-synthetic"
     before_models = dict(MODEL_REGISTRY)
     before_datasets = dict(DATASET_REGISTRY)
-    _FixedDepthModel.name = model_name  # type: ignore[attr-defined]
-    _FakeDataset.name = dataset_name  # type: ignore[attr-defined]
+    _FixedDepthModel.name = model_name
+    _FakeDataset.name = dataset_name
     MODEL_REGISTRY[model_name] = _FixedDepthModel
     DATASET_REGISTRY[dataset_name] = _FakeDataset
     try:
@@ -65,8 +78,8 @@ def registered_pointmap_fakes() -> Iterator[None]:
     dataset_name = "test-pointcloud"
     before_models = dict(MODEL_REGISTRY)
     before_datasets = dict(DATASET_REGISTRY)
-    _PointMapModel.name = model_name  # type: ignore[attr-defined]
-    _MultiViewPointCloudDataset.name = dataset_name  # type: ignore[attr-defined]
+    _PointMapModel.name = model_name
+    _MultiViewPointCloudDataset.name = dataset_name
     MODEL_REGISTRY[model_name] = _PointMapModel
     DATASET_REGISTRY[dataset_name] = _MultiViewPointCloudDataset
     try:
