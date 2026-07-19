@@ -30,6 +30,7 @@ Download::
 
 from __future__ import annotations
 
+import logging
 import xml.etree.ElementTree as ET
 from collections.abc import Iterator
 from pathlib import Path
@@ -49,6 +50,12 @@ from plumbline.datasets.base import Dataset, Sample
 from plumbline.datasets.registry import register_dataset
 
 __all__ = ["BoosterDataset", "booster_disparity_to_depth", "read_booster_calib"]
+
+log = logging.getLogger(__name__)
+
+#: Frame count of the fully-staged balanced train split (the Depth Pro
+#: Table 1 eval set). A shorter root is allowed but warned about.
+_BOOSTER_BALANCED_FRAMES = 228
 
 
 def _parse_opencv_matrix(node: ET.Element, rows: int, cols: int) -> NDArray[np.float64]:
@@ -89,8 +96,26 @@ def booster_disparity_to_depth(
     fx: float,
     baseline_mm: float,
 ) -> NDArray[np.float32]:
-    """Convert Booster left disparity (px) to metric depth (m)."""
-    depth = (fx * baseline_mm) / (disp.astype(np.float64) + 1e-6) / 1000.0
+    """Convert Booster left disparity (px) to metric depth (m).
+
+    Non-positive disparity has no finite depth, so it maps to ``inf`` — the
+    caller's ``disp > 0`` validity mask is what actually excludes those
+    pixels. Previously the ``+ 1e-6`` guard applied there too, so ``disp == 0``
+    silently produced ~5e10 m: a plausible-looking finite number for any
+    caller that used this helper outside the masking path.
+
+    The epsilon is retained on the positive branch deliberately. It is not
+    numerically inert — at low disparity it shifts the float32 result (e.g.
+    disp=1.0 gives 49.99995 rather than 50.0) — and the Booster paper-match
+    cell was produced with it, so removing it would move a verified number.
+    """
+    disp64 = disp.astype(np.float64)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        depth = np.where(
+            disp64 > 0,
+            (fx * baseline_mm) / (disp64 + 1e-6) / 1000.0,
+            np.inf,
+        )
     return depth.astype(np.float32)
 
 
@@ -188,9 +213,20 @@ class BoosterDataset(Dataset):
 
         if not self.frame_records:
             raise DatasetNotAvailable(f"No Booster frames under {train_root}")
-        if len(self.frame_records) != 228:
-            # Warn via metadata; do not hard-fail — partial staging is useful for smoke.
-            pass
+        if len(self.frame_records) != _BOOSTER_BALANCED_FRAMES:
+            # Don't hard-fail — partial staging is useful for smoke runs. But do
+            # say so: a short root silently scores the paper cell on fewer frames
+            # than the protocol assumes, which is exactly how a sparse tree lands
+            # inside tolerance by luck (the D28 footgun `min_samples` guards).
+            # This previously `pass`ed, so the warning it promised never fired.
+            log.warning(
+                "Booster: found %d frames under %s, expected %d for the balanced "
+                "train split. Metrics will be computed on a partial set; pin "
+                "`min_samples` in the reproduction yaml to make a short root fail loudly.",
+                len(self.frame_records),
+                train_root,
+                _BOOSTER_BALANCED_FRAMES,
+            )
 
     def __len__(self) -> int:
         return len(self.frame_records)

@@ -7,6 +7,7 @@ datasets to be downloaded.
 
 from __future__ import annotations
 
+import logging
 import struct
 from pathlib import Path
 
@@ -2540,6 +2541,43 @@ class TestBooster:
         out = booster_disparity_to_depth(disp, fx=1000.0, baseline_mm=50.0)
         assert out.dtype == np.float32
         np.testing.assert_allclose(out, np.array([[0.5, 0.25]]), rtol=1e-4)
+
+    def test_non_positive_disparity_is_inf_not_finite_garbage(self) -> None:
+        """Zero/negative disparity has no finite depth.
+
+        The `+ 1e-6` divide-guard used to apply here too, so `disp == 0`
+        returned ~5e10 m — a plausible-looking finite number for any caller
+        using this helper outside the `disp > 0` masking path.
+        """
+        disp = np.array([[0.0, -1.0, 100.0]], dtype=np.float32)
+        out = booster_disparity_to_depth(disp, fx=1000.0, baseline_mm=50.0)
+        assert np.isinf(out[0, 0]) and np.isinf(out[0, 1])
+        assert out[0, 2] == np.float32(0.5)
+
+    def test_positive_disparity_values_are_bit_preserved(self) -> None:
+        """The epsilon is NOT numerically inert — it must stay on this branch.
+
+        At low disparity it shifts the float32 result (disp=1.0 -> 49.99995,
+        not 50.0). The Booster paper-match cell was produced with it, so
+        dropping it would move a verified number.
+        """
+        disp = np.array([[0.5, 1.0, 10.0]], dtype=np.float32)
+        out = booster_disparity_to_depth(disp, fx=1000.0, baseline_mm=50.0)
+        expected = (1000.0 * 50.0) / (disp.astype(np.float64) + 1e-6) / 1000.0
+        np.testing.assert_array_equal(out, expected.astype(np.float32))
+
+    def test_short_root_warns_about_partial_staging(
+        self, tmp_path: Path, caplog: pytest.LogCaptureFixture
+    ) -> None:
+        """The count check previously `pass`ed, so it never warned at all."""
+        _write_fake_booster(tmp_path, scenes=1, illuminations=2)
+        with caplog.at_level(logging.WARNING, logger="plumbline.datasets.booster"):
+            ds = BoosterDataset(root=tmp_path)
+        assert len(ds) < 228
+        messages = [r.getMessage() for r in caplog.records]
+        assert any("expected 228" in m for m in messages), (
+            f"no partial-staging warning emitted; got {messages}"
+        )
 
 
 # ---------------------------------------------------------------------------
