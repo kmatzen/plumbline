@@ -14,6 +14,11 @@ import numpy as np
 import pytest
 from PIL import Image
 
+from plumbline.datasets.booster import (
+    BoosterDataset,
+    booster_disparity_to_depth,
+    read_booster_calib,
+)
 from plumbline.datasets.diode import (
     DIODE_INTRINSIC,
     DIODEDataset,
@@ -34,6 +39,8 @@ from plumbline.datasets.eth3d import (
     parse_colmap_images,
     quat_to_rot,
 )
+from plumbline.datasets.eth3d_moge_eval import ETH3DMogeEvalDataset
+from plumbline.datasets.eth3d_native_depth import ETH3DNativeDepthDataset
 from plumbline.datasets.gso import GSODataset, read_moge_depth_png
 from plumbline.datasets.ibims1 import IBims1Dataset
 from plumbline.datasets.kitti import (
@@ -44,6 +51,11 @@ from plumbline.datasets.kitti import (
     load_kitti_calib,
     load_kitti_depth_png_to_m,
     parse_eigen_sample_list,
+)
+from plumbline.datasets.nyu_cut3r_eval import NYUCut3rEvalDataset
+from plumbline.datasets.realestate10k_pose import (
+    RealEstate10KPoseEvalLoader,
+    _parse_camera_txt,
 )
 from plumbline.datasets.seven_scenes import (
     SEVEN_SCENES_INTRINSIC,
@@ -124,6 +136,24 @@ class TestSintel:
         _write_fake_sintel(tmp_path, scenes=1, frames=3)
         SintelDataset(root=tmp_path)
         assert (tmp_path / ".plumbline_manifest").exists()
+
+    def test_scene_filtered_run_does_not_poison_manifest(self, tmp_path: Path) -> None:
+        """A single-scene run must not hide other scenes from later runs.
+
+        The manifest is keyed on split/pass/vps only, so if the cached scan
+        were scene-filtered, the unfiltered run below would silently see just
+        scene_0's frames instead of all three scenes'.
+        """
+        _write_fake_sintel(tmp_path, scenes=3, frames=2)
+
+        scoped = SintelDataset(root=tmp_path, scenes=["scene_0"])
+        assert len(scoped) == 2
+
+        unfiltered = SintelDataset(root=tmp_path)
+        assert len(unfiltered) == 6
+
+        other = SintelDataset(root=tmp_path, scenes=["scene_2"])
+        assert len(other) == 2
 
     def test_load_dpt_round_trip(self, tmp_path: Path) -> None:
         # Sanity-check the parser in isolation.
@@ -934,6 +964,24 @@ class TestDIODE:
         assert s.depth_valid.shape == (1, 24, 32) and s.depth_valid.dtype == bool
         assert not bool(s.depth_valid[0, 0, 0])
         assert bool(s.depth_valid[0, -1, -1])
+
+    def test_scene_filtered_run_does_not_poison_manifest(self, tmp_path: Path) -> None:
+        """Two different single-scene runs must not collide on one manifest.
+
+        The old tag keyed on scene *count*, so scene_00000 and scene_00001
+        both mapped to "...scenes1.jsonl": the second run loaded the first's
+        scene-filtered records and silently evaluated zero samples.
+        """
+        _write_fake_diode(tmp_path, scenes=3, frames=2)
+
+        first = DIODEDataset(root=tmp_path, domain="indoors", scenes=["scene_00000"])
+        assert len(list(first)) == 2
+
+        second = DIODEDataset(root=tmp_path, domain="indoors", scenes=["scene_00001"])
+        assert len(list(second)) == 2
+
+        unfiltered = DIODEDataset(root=tmp_path, domain="indoors")
+        assert len(list(unfiltered)) == 6
 
     def test_default_intrinsic_is_diode_devkit_value(self, tmp_path: Path) -> None:
         _write_fake_diode(tmp_path)
@@ -2275,3 +2323,759 @@ class TestSintelMogeEvalDataset:
         s = next(iter(ds))
         assert s.images.shape == (1, 436, 872, 3)
         assert s.sample_id == "sintel-moge/alley_1_0001"
+
+
+# ---------------------------------------------------------------------------
+# Booster (balanced training split, disparity → metric depth)
+# ---------------------------------------------------------------------------
+
+
+def _write_booster_calib(
+    path: Path,
+    *,
+    fx: float = 1000.0,
+    fy: float = 1010.0,
+    cx: float = 16.0,
+    cy: float = 12.0,
+    baseline_mm: float | None = 50.0,
+    proj_mat_r_tx: float | None = None,
+) -> None:
+    """Write an OpenCV-FileStorage ``calib_00-02.xml`` in Booster's shape.
+
+    ``baseline_mm=None`` drops ``<baselineLR>`` so the ``proj_matR`` fallback
+    path is exercised (``baseline = -P[0, 3] / fx``).
+    """
+    mtx = f"{fx} 0 {cx} 0 {fy} {cy} 0 0 1"
+    parts = [
+        '<?xml version="1.0"?>',
+        "<opencv_storage>",
+        '<mtxL type_id="opencv-matrix"><rows>3</rows><cols>3</cols>'
+        f"<dt>d</dt><data>{mtx}</data></mtxL>",
+    ]
+    if baseline_mm is not None:
+        parts.append(f"<baselineLR>{baseline_mm}</baselineLR>")
+    if proj_mat_r_tx is not None:
+        data = f"{fx} 0 {cx} {proj_mat_r_tx} 0 {fy} {cy} 0 0 0 1 0"
+        parts.append(
+            '<proj_matR type_id="opencv-matrix"><rows>3</rows><cols>4</cols>'
+            f"<dt>d</dt><data>{data}</data></proj_matR>"
+        )
+    parts.append("</opencv_storage>")
+    path.write_text("\n".join(parts) + "\n")
+
+
+def _write_fake_booster(
+    root: Path,
+    *,
+    scenes: int = 1,
+    illuminations: int = 2,
+    H: int = 12,
+    W: int = 16,
+    disp_value: float = 100.0,
+    fx: float = 1000.0,
+    baseline_mm: float | None = 50.0,
+    write_mask: bool = True,
+    setup: str = "balanced",
+) -> None:
+    """Lay out ``<root>/train/balanced/<scene>/{camera_00,disp_00.npy,calib,mask}``."""
+    for s in range(scenes):
+        scene_dir = root / "train" / setup / f"scene_{s}"
+        cam_dir = scene_dir / "camera_00"
+        cam_dir.mkdir(parents=True, exist_ok=True)
+        for i in range(illuminations):
+            Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
+                cam_dir / f"illum_{i}.png"
+            )
+        disp = np.full((H, W), disp_value, dtype=np.float32)
+        # A zero-disparity column: infinite range, must be masked invalid.
+        disp[:, 0] = 0.0
+        np.save(scene_dir / "disp_00.npy", disp)
+        _write_booster_calib(scene_dir / "calib_00-02.xml", fx=fx, baseline_mm=baseline_mm)
+        if write_mask:
+            occ = np.full((H, W), 255, dtype=np.uint8)
+            occ[-1, :] = 0  # occluded bottom row
+            Image.fromarray(occ).save(scene_dir / "mask_00.png")
+
+
+class TestBooster:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable, match="Booster not found"):
+            BoosterDataset(root=tmp_path / "nope")
+
+    def test_missing_train_subtree(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable, match=r"booster_gt\.zip"):
+            BoosterDataset(root=tmp_path)
+
+    def test_non_training_split_rejected(self, tmp_path: Path) -> None:
+        _write_fake_booster(tmp_path)
+        with pytest.raises(ValueError, match="training split"):
+            BoosterDataset(root=tmp_path, split="test")
+
+    def test_non_balanced_setup_rejected(self, tmp_path: Path) -> None:
+        _write_fake_booster(tmp_path)
+        with pytest.raises(ValueError, match="balanced"):
+            BoosterDataset(root=tmp_path, setup="unbalanced")
+
+    def test_empty_tree_errors(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        (tmp_path / "train" / "balanced").mkdir(parents=True)
+        with pytest.raises(DatasetNotAvailable, match="No Booster frames"):
+            BoosterDataset(root=tmp_path)
+
+    def test_registered(self) -> None:
+        from plumbline.datasets.registry import DATASET_REGISTRY
+
+        assert DATASET_REGISTRY["booster"] is BoosterDataset
+
+    def test_basic_load(self, tmp_path: Path) -> None:
+        _write_fake_booster(tmp_path, scenes=2, illuminations=2)
+        ds = BoosterDataset(root=tmp_path)
+        assert len(ds) == 4  # one frame per illumination per scene
+        samples = list(ds)
+        s = samples[0]
+        assert s.num_views == 1
+        assert s.images.shape == (1, 12, 16, 3) and s.images.dtype == np.uint8
+        assert s.depth_gt is not None and s.depth_gt.shape == (1, 12, 16)
+        assert s.depth_gt.dtype == np.float32
+        assert s.depth_valid is not None and s.depth_valid.dtype == bool
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-6)
+        assert s.intrinsics.shape == (1, 3, 3)
+        assert float(s.intrinsics[0, 0, 0]) == 1000.0
+        assert float(s.intrinsics[0, 1, 1]) == 1010.0
+        assert float(s.intrinsics[0, 0, 2]) == 16.0
+        assert float(s.intrinsics[0, 1, 2]) == 12.0
+
+    def test_sample_id_and_metadata(self, tmp_path: Path) -> None:
+        _write_fake_booster(tmp_path, scenes=1, illuminations=2)
+        ds = BoosterDataset(root=tmp_path)
+        ids = [s.sample_id for s in ds]
+        assert ids == ["booster/scene_0/illum_0", "booster/scene_0/illum_1"]
+        s = next(iter(ds))
+        assert s.metadata["scene"] == "scene_0"
+        assert s.metadata["frame"] == "illum_0"
+        assert s.metadata["split"] == "training"
+        assert s.metadata["setup"] == "balanced"
+        assert s.metadata["image_size"] == (12, 16)
+
+    def test_disparity_to_depth_conversion(self, tmp_path: Path) -> None:
+        # THE unit conversion that silently corrupts metric δ₁ if wrong:
+        # depth_m = fx[px] * baseline[mm] / disp[px] / 1000.
+        # fx=1000, baseline=50 mm, disp=100 px → 1000*50/100/1000 = 0.5 m.
+        _write_fake_booster(tmp_path, disp_value=100.0, fx=1000.0, baseline_mm=50.0)
+        ds = BoosterDataset(root=tmp_path)
+        s = next(iter(ds))
+        assert float(s.depth_gt[0, 5, 5]) == pytest.approx(0.5, rel=1e-4)
+
+    def test_zero_disparity_masked_invalid(self, tmp_path: Path) -> None:
+        _write_fake_booster(tmp_path)
+        ds = BoosterDataset(root=tmp_path)
+        s = next(iter(ds))
+        # Column 0 has disp == 0 (infinite range) — must be invalid + zeroed.
+        assert not bool(s.depth_valid[0, 5, 0])
+        assert float(s.depth_gt[0, 5, 0]) == 0.0
+        assert bool(s.depth_valid[0, 5, 5])
+
+    def test_occlusion_mask_applied(self, tmp_path: Path) -> None:
+        _write_fake_booster(tmp_path, write_mask=True)
+        ds = BoosterDataset(root=tmp_path, use_occlusion_mask=True)
+        s = next(iter(ds))
+        assert not bool(s.depth_valid[0, -1, 5])  # occluded bottom row
+        assert bool(s.depth_valid[0, 0, 5])
+
+    def test_occlusion_mask_can_be_disabled(self, tmp_path: Path) -> None:
+        _write_fake_booster(tmp_path, write_mask=True)
+        ds = BoosterDataset(root=tmp_path, use_occlusion_mask=False)
+        s = next(iter(ds))
+        assert bool(s.depth_valid[0, -1, 5])
+
+    def test_scene_whitelist(self, tmp_path: Path) -> None:
+        _write_fake_booster(tmp_path, scenes=3, illuminations=1)
+        ds = BoosterDataset(root=tmp_path, scenes=["scene_1"])
+        assert len(ds) == 1
+        assert next(iter(ds)).metadata["scene"] == "scene_1"
+
+    def test_disp_shape_mismatch_errors(self, tmp_path: Path) -> None:
+        _write_fake_booster(tmp_path, H=12, W=16)
+        np.save(
+            tmp_path / "train" / "balanced" / "scene_0" / "disp_00.npy", np.ones((4, 4), np.float32)
+        )
+        ds = BoosterDataset(root=tmp_path)
+        with pytest.raises(ValueError, match="disp"):
+            list(ds)
+
+    def test_read_booster_calib_baseline_lr(self, tmp_path: Path) -> None:
+        p = tmp_path / "calib.xml"
+        _write_booster_calib(p, fx=1234.0, fy=1235.0, cx=10.0, cy=20.0, baseline_mm=42.5)
+        fx, fy, cx, cy, baseline = read_booster_calib(p)
+        assert (fx, fy, cx, cy) == (1234.0, 1235.0, 10.0, 20.0)
+        assert baseline == pytest.approx(42.5)
+
+    def test_read_booster_calib_proj_mat_fallback(self, tmp_path: Path) -> None:
+        # No <baselineLR>: baseline = -P_R[0, 3] / fx. With fx=1000 and
+        # tx=-50000 that is 50 mm — the same rig as the explicit tag.
+        p = tmp_path / "calib.xml"
+        _write_booster_calib(p, fx=1000.0, baseline_mm=None, proj_mat_r_tx=-50000.0)
+        _fx, _fy, _cx, _cy, baseline = read_booster_calib(p)
+        assert baseline == pytest.approx(50.0)
+
+    def test_read_booster_calib_missing_mtxl(self, tmp_path: Path) -> None:
+        p = tmp_path / "calib.xml"
+        p.write_text('<?xml version="1.0"?>\n<opencv_storage></opencv_storage>\n')
+        with pytest.raises(ValueError, match="mtxL"):
+            read_booster_calib(p)
+
+    def test_read_booster_calib_missing_baseline_and_proj(self, tmp_path: Path) -> None:
+        p = tmp_path / "calib.xml"
+        _write_booster_calib(p, baseline_mm=None)
+        with pytest.raises(ValueError, match="baselineLR"):
+            read_booster_calib(p)
+
+    def test_booster_disparity_to_depth_helper(self) -> None:
+        disp = np.array([[100.0, 200.0]], dtype=np.float32)
+        out = booster_disparity_to_depth(disp, fx=1000.0, baseline_mm=50.0)
+        assert out.dtype == np.float32
+        np.testing.assert_allclose(out, np.array([[0.5, 0.25]]), rtol=1e-4)
+
+
+# ---------------------------------------------------------------------------
+# RealEstate10K pose eval
+# ---------------------------------------------------------------------------
+
+
+def _write_fake_realestate10k(
+    root: Path,
+    *,
+    clips: int = 1,
+    frames: int = 4,
+    H: int = 24,
+    W: int = 32,
+    fx: float = 0.5,
+    fy: float = 0.6,
+    cx: float = 0.5,
+    cy: float = 0.5,
+    write_images: bool = True,
+) -> None:
+    """Write ``<root>/<clip>/<clip>.txt`` + ``<timestamp>.png`` frames.
+
+    Frame ``i`` has identity rotation and ``cam_from_world`` translation
+    ``[-(i + 1) * 0.1, 0, 0]``, i.e. camera centre at ``x = (i + 1) * 0.1`` in
+    world coords. After w2c→c2w inversion and rebasing to the first camera the
+    loader must report centres at ``x = i * 0.1``.
+    """
+    for c in range(clips):
+        clip_id = f"clip_{c}"
+        clip_dir = root / clip_id
+        clip_dir.mkdir(parents=True, exist_ok=True)
+        lines = ["https://www.youtube.com/watch?v=fake"]
+        for i in range(frames):
+            ts = 1000000 * (i + 1)
+            w2c = np.eye(4)[:3, :4].copy()
+            w2c[0, 3] = -(i + 1) * 0.1
+            pose = " ".join(f"{v!r}" for v in w2c.reshape(-1).tolist())
+            lines.append(f"{ts} {fx} {fy} {cx} {cy} 0 0 {pose}")
+            if write_images:
+                Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
+                    clip_dir / f"{ts}.png"
+                )
+        (clip_dir / f"{clip_id}.txt").write_text("\n".join(lines) + "\n")
+
+
+class TestRealEstate10KPoseEval:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable, match="RealEstate10K not found"):
+            RealEstate10KPoseEvalLoader(root=tmp_path / "nope")
+
+    def test_no_usable_clips(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        # Camera .txt present but no frames were ever extracted from YouTube.
+        _write_fake_realestate10k(tmp_path, frames=4, write_images=False)
+        with pytest.raises(DatasetNotAvailable, match="No usable RealEstate10K clips"):
+            RealEstate10KPoseEvalLoader(root=tmp_path, num_frames=4)
+
+    def test_clip_with_too_few_frames_skipped(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        _write_fake_realestate10k(tmp_path, frames=3)
+        with pytest.raises(DatasetNotAvailable):
+            RealEstate10KPoseEvalLoader(root=tmp_path, num_frames=4)
+
+    def test_num_frames_lower_bound(self, tmp_path: Path) -> None:
+        _write_fake_realestate10k(tmp_path)
+        with pytest.raises(ValueError, match="num_frames"):
+            RealEstate10KPoseEvalLoader(root=tmp_path, num_frames=1)
+
+    def test_downsample_long_side_lower_bound(self, tmp_path: Path) -> None:
+        _write_fake_realestate10k(tmp_path)
+        with pytest.raises(ValueError, match="downsample_long_side"):
+            RealEstate10KPoseEvalLoader(root=tmp_path, downsample_long_side=8)
+
+    def test_lowpass_sigma_lower_bound(self, tmp_path: Path) -> None:
+        _write_fake_realestate10k(tmp_path)
+        with pytest.raises(ValueError, match="lowpass_sigma"):
+            RealEstate10KPoseEvalLoader(root=tmp_path, lowpass_sigma=-1.0)
+
+    def test_registered(self) -> None:
+        from plumbline.datasets.registry import DATASET_REGISTRY
+
+        assert DATASET_REGISTRY["realestate10k-pose-eval"] is RealEstate10KPoseEvalLoader
+
+    def test_basic_load(self, tmp_path: Path) -> None:
+        _write_fake_realestate10k(tmp_path, clips=2, frames=4)
+        ds = RealEstate10KPoseEvalLoader(root=tmp_path, num_frames=4)
+        assert len(ds) == 2
+        samples = list(ds)
+        s = samples[0]
+        assert s.num_views == 4
+        assert s.images.shape == (4, 24, 32, 3) and s.images.dtype == np.uint8
+        assert s.depth_gt is None
+        assert s.intrinsics.shape == (4, 3, 3) and s.intrinsics.dtype == np.float32
+        assert s.extrinsics_gt.shape == (4, 4, 4) and s.extrinsics_gt.dtype == np.float32
+        assert s.sample_id == "realestate10k/clip_0"
+        assert s.metadata["clip_id"] == "clip_0"
+        assert s.metadata["split"] == "test"
+        assert s.metadata["timestamps"] == (1000000, 2000000, 3000000, 4000000)
+
+    def test_intrinsics_denormalized_by_image_size(self, tmp_path: Path) -> None:
+        # RE10K ships fx/fy/cx/cy normalized by width/height. Feeding the
+        # normalized values straight through would make every focal ~1 px.
+        _write_fake_realestate10k(tmp_path, frames=4, H=24, W=32, fx=0.5, fy=0.6)
+        ds = RealEstate10KPoseEvalLoader(root=tmp_path, num_frames=4)
+        s = next(iter(ds))
+        assert float(s.intrinsics[0, 0, 0]) == pytest.approx(0.5 * 32)
+        assert float(s.intrinsics[0, 1, 1]) == pytest.approx(0.6 * 24)
+        assert float(s.intrinsics[0, 0, 2]) == pytest.approx(0.5 * 32)
+        assert float(s.intrinsics[0, 1, 2]) == pytest.approx(0.5 * 24)
+
+    def test_pose_is_c2w_rebased_to_first_camera(self, tmp_path: Path) -> None:
+        # The load-bearing convention check. RE10K stores cam_from_world (w2c);
+        # Sample.extrinsics_gt is world_from_camera (c2w) rebased so camera 0 is
+        # the world origin. A missing inversion would flip the sign of every
+        # camera centre and transpose all relative rotations — mAA would tank
+        # without any loader error.
+        _write_fake_realestate10k(tmp_path, frames=4)
+        ds = RealEstate10KPoseEvalLoader(root=tmp_path, num_frames=4)
+        s = next(iter(ds))
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-6)
+        for i in range(4):
+            # c2w centre for frame i is +(i+1)*0.1; rebased → +i*0.1.
+            np.testing.assert_allclose(
+                s.extrinsics_gt[i][:3, 3], np.array([0.1 * i, 0.0, 0.0]), atol=1e-6
+            )
+            np.testing.assert_allclose(s.extrinsics_gt[i][:3, :3], np.eye(3), atol=1e-6)
+
+    def test_clip_whitelist(self, tmp_path: Path) -> None:
+        _write_fake_realestate10k(tmp_path, clips=3, frames=4)
+        ds = RealEstate10KPoseEvalLoader(root=tmp_path, num_frames=4, clips=["clip_1"])
+        assert len(ds) == 1
+        assert next(iter(ds)).metadata["clip_id"] == "clip_1"
+
+    def test_downsample_long_side_resizes(self, tmp_path: Path) -> None:
+        _write_fake_realestate10k(tmp_path, frames=4, H=48, W=64)
+        ds = RealEstate10KPoseEvalLoader(root=tmp_path, num_frames=4, downsample_long_side=32)
+        s = next(iter(ds))
+        assert s.images.shape == (4, 24, 32, 3)
+        # Intrinsics track the served resolution (normalized × new size).
+        assert float(s.intrinsics[0, 0, 0]) == pytest.approx(0.5 * 32)
+
+    def test_lowpass_sigma_preserves_shape(self, tmp_path: Path) -> None:
+        _write_fake_realestate10k(tmp_path, frames=4, H=24, W=32)
+        ds = RealEstate10KPoseEvalLoader(root=tmp_path, num_frames=4, lowpass_sigma=1.5)
+        s = next(iter(ds))
+        assert s.images.shape == (4, 24, 32, 3)
+
+    def test_parse_camera_txt(self, tmp_path: Path) -> None:
+        _write_fake_realestate10k(tmp_path, clips=1, frames=2)
+        recs = _parse_camera_txt(tmp_path / "clip_0" / "clip_0.txt")
+        assert len(recs) == 2  # URL line skipped
+        assert recs[0]["timestamp"] == 1000000
+        assert recs[0]["w2c"].shape == (3, 4)
+        assert recs[0]["w2c"][0, 3] == pytest.approx(-0.1)
+        np.testing.assert_allclose(recs[0]["fxfycxcy"], [0.5, 0.6, 0.5, 0.5])
+
+    def test_parse_camera_txt_skips_short_lines(self, tmp_path: Path) -> None:
+        p = tmp_path / "c.txt"
+        p.write_text("https://x\n1 2 3\n\n")
+        assert _parse_camera_txt(p) == []
+
+
+# ---------------------------------------------------------------------------
+# ETH3D native official-depth (Depth Pro Table 16)
+# ---------------------------------------------------------------------------
+
+
+def _write_fake_eth3d_native(
+    root: Path,
+    *,
+    scenes: int = 1,
+    views: int = 2,
+    H_d: int = 8,
+    W_d: int = 12,
+    H_u: int = 16,
+    W_u: int = 24,
+    fx: float = 500.0,
+    fy: float = 400.0,
+    depth_m: float = 3.0,
+) -> None:
+    """ETH3D tree with distorted RGB + official float32 depth dumps.
+
+    The undistorted calibration is deliberately 2× the distorted size so the
+    loader's ``fx · W_dist / W_undist`` rescale is observable.
+    """
+    for s in range(scenes):
+        scene = f"scene_{s}"
+        calib = root / scene / "dslr_calibration_undistorted"
+        img_dir = root / scene / "images" / "dslr_images"
+        depth_dir = root / scene / "ground_truth_depth" / "dslr_images"
+        calib.mkdir(parents=True, exist_ok=True)
+        img_dir.mkdir(parents=True, exist_ok=True)
+        depth_dir.mkdir(parents=True, exist_ok=True)
+
+        (calib / "cameras.txt").write_text(
+            "# CAMERA_ID MODEL WIDTH HEIGHT PARAMS[]\n"
+            f"1 PINHOLE {W_u} {H_u} {fx} {fy} {W_u / 2} {H_u / 2}\n"
+        )
+        with (calib / "images.txt").open("w") as f:
+            f.write("# IMAGE_ID QW QX QY QZ TX TY TZ CAMERA_ID NAME\n")
+            for i in range(views):
+                name = f"DSC_{i:04d}.JPG"
+                f.write(f"{i + 1} 1.0 0.0 0.0 0.0 0.0 0.0 0.0 1 dslr_images/{name}\n")
+                f.write("\n")
+                Image.fromarray((np.random.rand(H_d, W_d, 3) * 255).astype(np.uint8)).save(
+                    img_dir / name, quality=90
+                )
+                depth = np.full((H_d, W_d), depth_m, dtype=np.float32)
+                depth[0, 0] = np.inf  # ETH3D's invalid marker
+                depth[0, 1] = 0.01  # below the 0.1 m floor
+                depth[0, 2] = 500.0  # above the 200 m ceiling
+                (depth_dir / name).write_bytes(depth.tobytes())
+
+
+class TestETH3DNativeDepth:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable, match="ETH3D not found"):
+            ETH3DNativeDepthDataset(root=tmp_path / "nope")
+
+    def test_empty_root_errors(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable, match="No distorted-RGB"):
+            ETH3DNativeDepthDataset(root=tmp_path)
+
+    def test_non_train_split_rejected(self, tmp_path: Path) -> None:
+        _write_fake_eth3d_native(tmp_path)
+        with pytest.raises(ValueError, match="'train'"):
+            ETH3DNativeDepthDataset(root=tmp_path, split="test")
+
+    def test_registered(self) -> None:
+        from plumbline.datasets.registry import DATASET_REGISTRY
+
+        assert DATASET_REGISTRY["eth3d-native-depth"] is ETH3DNativeDepthDataset
+
+    def test_basic_load(self, tmp_path: Path) -> None:
+        _write_fake_eth3d_native(tmp_path, scenes=1, views=2)
+        ds = ETH3DNativeDepthDataset(root=tmp_path)
+        assert len(ds) == 2
+        s = next(iter(ds))
+        assert s.num_views == 1
+        assert s.images.shape == (1, 8, 12, 3) and s.images.dtype == np.uint8
+        assert s.depth_gt is not None and s.depth_gt.shape == (1, 8, 12)
+        assert s.depth_gt.dtype == np.float32
+        assert s.depth_valid is not None and s.depth_valid.shape == (1, 8, 12)
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-6)
+        assert s.metadata["scene"] == "scene_0"
+        assert s.metadata["split"] == "train"
+        assert s.metadata["image_size"] == (8, 12)
+
+    def test_sample_id_format(self, tmp_path: Path) -> None:
+        _write_fake_eth3d_native(tmp_path, scenes=1, views=2)
+        ids = [s.sample_id for s in ETH3DNativeDepthDataset(root=tmp_path)]
+        assert ids == [
+            "eth3d-native-depth/scene_0/DSC_0000.JPG",
+            "eth3d-native-depth/scene_0/DSC_0001.JPG",
+        ]
+
+    def test_focal_rescaled_from_undistorted_calibration(self, tmp_path: Path) -> None:
+        # The high-value assertion: ETH3D only ships a pinhole K for the
+        # *undistorted* frames, which are larger than the distorted RGB the
+        # depth is registered to. The loader must scale by W_d/W_u (and
+        # H_d/H_u); serving the raw undistorted focal would hand Depth Pro an
+        # f_px that is off by the resolution ratio (here 2×).
+        _write_fake_eth3d_native(tmp_path, H_d=8, W_d=12, H_u=16, W_u=24, fx=500.0, fy=400.0)
+        s = next(iter(ETH3DNativeDepthDataset(root=tmp_path)))
+        assert float(s.intrinsics[0, 0, 0]) == pytest.approx(500.0 * 12 / 24)
+        assert float(s.intrinsics[0, 1, 1]) == pytest.approx(400.0 * 8 / 16)
+        assert float(s.intrinsics[0, 0, 2]) == pytest.approx(12.0 * 0.5)
+        assert float(s.intrinsics[0, 1, 2]) == pytest.approx(8.0 * 0.5)
+
+    def test_depth_range_masking(self, tmp_path: Path) -> None:
+        _write_fake_eth3d_native(tmp_path, depth_m=3.0)
+        s = next(iter(ETH3DNativeDepthDataset(root=tmp_path)))
+        # inf (invalid), 0.01 m (< 0.1), 500 m (> 200) all masked and zeroed.
+        for col in (0, 1, 2):
+            assert not bool(s.depth_valid[0, 0, col])
+            assert float(s.depth_gt[0, 0, col]) == 0.0
+        assert bool(s.depth_valid[0, 4, 4])
+        assert float(s.depth_gt[0, 4, 4]) == pytest.approx(3.0)
+
+    def test_custom_depth_range(self, tmp_path: Path) -> None:
+        _write_fake_eth3d_native(tmp_path, depth_m=3.0)
+        ds = ETH3DNativeDepthDataset(root=tmp_path, depth_range=(0.001, 1000.0))
+        s = next(iter(ds))
+        assert bool(s.depth_valid[0, 0, 1])  # 0.01 m now in range
+        assert bool(s.depth_valid[0, 0, 2])  # 500 m now in range
+        assert not bool(s.depth_valid[0, 0, 0])  # inf is never valid
+
+    def test_scene_whitelist(self, tmp_path: Path) -> None:
+        _write_fake_eth3d_native(tmp_path, scenes=3, views=1)
+        ds = ETH3DNativeDepthDataset(root=tmp_path, scenes=["scene_1"])
+        assert len(ds) == 1
+        assert next(iter(ds)).metadata["scene"] == "scene_1"
+
+    def test_skips_images_without_depth(self, tmp_path: Path) -> None:
+        _write_fake_eth3d_native(tmp_path, scenes=1, views=2)
+        (tmp_path / "scene_0" / "ground_truth_depth" / "dslr_images" / "DSC_0001.JPG").unlink()
+        ds = ETH3DNativeDepthDataset(root=tmp_path)
+        assert len(ds) == 1
+        assert next(iter(ds)).sample_id.endswith("DSC_0000.JPG")
+
+
+# ---------------------------------------------------------------------------
+# NYU-v2 CUT3R/MonST3R prepared eval set
+# ---------------------------------------------------------------------------
+
+
+def _write_fake_nyu_cut3r(
+    root: Path,
+    *,
+    n: int = 3,
+    H: int = 12,
+    W: int = 16,
+    depth_m: float = 2.0,
+    drop_depth_for: str | None = None,
+) -> list[str]:
+    """``<root>/nyu_images/<id>.png`` + ``<root>/nyu_depths/<id>.npy``."""
+    img_dir = root / "nyu_images"
+    depth_dir = root / "nyu_depths"
+    img_dir.mkdir(parents=True, exist_ok=True)
+    depth_dir.mkdir(parents=True, exist_ok=True)
+    ids = []
+    for i in range(n):
+        sid = f"{i:05d}"
+        ids.append(sid)
+        Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(
+            img_dir / f"{sid}.png"
+        )
+        if sid == drop_depth_for:
+            continue
+        depth = np.full((H, W), depth_m, dtype=np.float32)
+        depth[0, 0] = 0.0  # raw (unfilled) hole — the whole point of this set
+        depth[0, 1] = 12.0  # beyond a 10 m cap
+        np.save(depth_dir / f"{sid}.npy", depth)
+    return ids
+
+
+class TestNYUCut3rEval:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable, match="prepared eval set not found"):
+            NYUCut3rEvalDataset(root=tmp_path / "nope")
+
+    def test_missing_subdirs(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        (tmp_path / "nyu_images").mkdir()
+        with pytest.raises(DatasetNotAvailable, match="one is missing"):
+            NYUCut3rEvalDataset(root=tmp_path)
+
+    def test_empty_image_dir(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        (tmp_path / "nyu_images").mkdir()
+        (tmp_path / "nyu_depths").mkdir()
+        with pytest.raises(DatasetNotAvailable, match=r"No <id>\.png"):
+            NYUCut3rEvalDataset(root=tmp_path)
+
+    def test_registered(self) -> None:
+        from plumbline.datasets.registry import DATASET_REGISTRY
+
+        assert DATASET_REGISTRY["nyu-cut3r-eval"] is NYUCut3rEvalDataset
+
+    def test_basic_load(self, tmp_path: Path) -> None:
+        _write_fake_nyu_cut3r(tmp_path, n=3)
+        ds = NYUCut3rEvalDataset(root=tmp_path)
+        assert len(ds) == 3
+        samples = list(ds)
+        s = samples[0]
+        assert s.num_views == 1
+        assert s.images.shape == (1, 12, 16, 3) and s.images.dtype == np.uint8
+        assert s.depth_gt is not None and s.depth_gt.shape == (1, 12, 16)
+        assert s.depth_gt.dtype == np.float32
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-6)
+        assert s.metadata["dataset"] == "nyu-cut3r-eval"
+
+    def test_sample_ids_are_bare_stems_and_sorted(self, tmp_path: Path) -> None:
+        _write_fake_nyu_cut3r(tmp_path, n=3)
+        assert [s.sample_id for s in NYUCut3rEvalDataset(root=tmp_path)] == [
+            "00000",
+            "00001",
+            "00002",
+        ]
+
+    def test_intrinsics_are_nyuv2_defaults(self, tmp_path: Path) -> None:
+        from plumbline.datasets.nyuv2 import NYUV2_INTRINSICS
+
+        _write_fake_nyu_cut3r(tmp_path, n=1)
+        s = next(iter(NYUCut3rEvalDataset(root=tmp_path)))
+        fx, fy, cx, cy = NYUV2_INTRINSICS
+        assert float(s.intrinsics[0, 0, 0]) == pytest.approx(fx)
+        assert float(s.intrinsics[0, 1, 1]) == pytest.approx(fy)
+        assert float(s.intrinsics[0, 0, 2]) == pytest.approx(cx)
+        assert float(s.intrinsics[0, 1, 2]) == pytest.approx(cy)
+
+    def test_depth_is_metres_and_holes_are_invalid(self, tmp_path: Path) -> None:
+        # This set's whole reason to exist is that GT is the RAW (unfilled)
+        # .h5 depth: zero-valued holes must be excluded, not scored as 0 m.
+        _write_fake_nyu_cut3r(tmp_path, n=1, depth_m=2.0)
+        s = next(iter(NYUCut3rEvalDataset(root=tmp_path)))
+        assert float(s.depth_gt[0, 5, 5]) == pytest.approx(2.0)
+        assert s.depth_valid is not None
+        assert not bool(s.depth_valid[0, 0, 0])
+        assert bool(s.depth_valid[0, 5, 5])
+
+    def test_max_gt_depth_default_is_uncapped(self, tmp_path: Path) -> None:
+        # CUT3R's NYU eval uses max_depth=None; a stray cap would change δ₁.
+        _write_fake_nyu_cut3r(tmp_path, n=1)
+        s = next(iter(NYUCut3rEvalDataset(root=tmp_path)))
+        assert bool(s.depth_valid[0, 0, 1])  # 12 m still valid
+
+    def test_max_gt_depth_caps(self, tmp_path: Path) -> None:
+        _write_fake_nyu_cut3r(tmp_path, n=1)
+        s = next(iter(NYUCut3rEvalDataset(root=tmp_path, max_gt_depth=10.0)))
+        assert not bool(s.depth_valid[0, 0, 1])
+        assert bool(s.depth_valid[0, 5, 5])
+
+    def test_missing_depth_file_errors(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        _write_fake_nyu_cut3r(tmp_path, n=2, drop_depth_for="00001")
+        ds = NYUCut3rEvalDataset(root=tmp_path)
+        with pytest.raises(DatasetNotAvailable, match="Missing depth"):
+            list(ds)
+
+
+# ---------------------------------------------------------------------------
+# ETH3D MoGe-eval bundle
+# ---------------------------------------------------------------------------
+
+
+def _write_fake_eth3d_moge_bundle(
+    root: Path,
+    *,
+    sample_paths: tuple[str, ...] = ("courtyard/0000", "facade/0000"),
+    H: int = 64,
+    W: int = 96,
+) -> None:
+    """Minimal ``<root>/ETH3D/`` MoGe bundle (.index.txt + per-sample dirs)."""
+    import json as _json
+
+    bundle = root / "ETH3D"
+    bundle.mkdir(parents=True, exist_ok=True)
+    (bundle / ".index.txt").write_text("\n".join(sample_paths) + "\n")
+    for sp in sample_paths:
+        d = bundle / sp
+        d.mkdir(parents=True, exist_ok=True)
+        Image.fromarray((np.random.rand(H, W, 3) * 255).astype(np.uint8)).save(d / "image.jpg")
+        _write_fake_moge_depth_png(d / "depth.png", depth_m=2.0, H=H, W=W)
+        meta = {
+            "intrinsics": [
+                [0.9, 0.0, 0.5],
+                [0.0, 0.9 * (W / H), 0.5],
+                [0.0, 0.0, 1.0],
+            ]
+        }
+        (d / "meta.json").write_text(_json.dumps(meta))
+
+
+class TestETH3DMogeEval:
+    def test_missing_root(self, tmp_path: Path) -> None:
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable, match="ETH3D \\(MoGe bundle\\) not found"):
+            ETH3DMogeEvalDataset(root=tmp_path / "nope")
+
+    def test_root_without_eth3d_subdir(self, tmp_path: Path) -> None:
+        # A root that exists but was never unzipped must give the staging
+        # hint, not a bare FileNotFoundError from .index.txt.
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        with pytest.raises(DatasetNotAvailable, match="ETH3D_MOGE_ROOT"):
+            ETH3DMogeEvalDataset(root=tmp_path)
+
+    def test_non_test_split_rejected(self, tmp_path: Path) -> None:
+        _write_fake_eth3d_moge_bundle(tmp_path)
+        with pytest.raises(ValueError, match="test split"):
+            ETH3DMogeEvalDataset(root=tmp_path, split="val")
+
+    def test_registered(self) -> None:
+        from plumbline.datasets.registry import DATASET_REGISTRY
+
+        assert DATASET_REGISTRY["eth3d-moge-eval"] is ETH3DMogeEvalDataset
+
+    def test_moge_warp_target_matches_paper_config(self) -> None:
+        # MoGe's configs/eval/all_benchmarks.json ETH3D entry. Pinning these
+        # class constants is the cheap, dependency-free half of the FoV-warp
+        # guard: a wrong target silently changes the evaluated FoV.
+        assert ETH3DMogeEvalDataset.TARGET_WIDTH == 2048
+        assert ETH3DMogeEvalDataset.TARGET_HEIGHT == 1365
+        assert ETH3DMogeEvalDataset.DROP_MAX_DEPTH == 1000.0
+
+    def test_index_parsing_and_sample_ids(self, tmp_path: Path) -> None:
+        pytest.importorskip("moge")
+        _write_fake_eth3d_moge_bundle(tmp_path)
+        ds = ETH3DMogeEvalDataset(root=tmp_path)
+        assert len(ds) == 2
+        assert [r["sample_id"] for r in ds._records] == [
+            "eth3d-moge/courtyard_0000",
+            "eth3d-moge/facade_0000",
+        ]
+
+    def test_scene_filter(self, tmp_path: Path) -> None:
+        pytest.importorskip("moge")
+        _write_fake_eth3d_moge_bundle(tmp_path)
+        ds = ETH3DMogeEvalDataset(root=tmp_path, scenes=["facade"])
+        assert len(ds) == 1
+        assert ds._records[0]["sample_path"] == "facade/0000"
+
+    def test_scene_filter_matching_nothing_errors(self, tmp_path: Path) -> None:
+        pytest.importorskip("moge")
+        from plumbline.datasets._common import DatasetNotAvailable
+
+        _write_fake_eth3d_moge_bundle(tmp_path)
+        with pytest.raises(DatasetNotAvailable, match="scene filter matched nothing"):
+            ETH3DMogeEvalDataset(root=tmp_path, scenes=["nope"])
+
+    def test_loads_with_moge_installed(self, tmp_path: Path) -> None:
+        pytest.importorskip("moge")
+        _write_fake_eth3d_moge_bundle(tmp_path)
+        ds = ETH3DMogeEvalDataset(root=tmp_path, scenes=["courtyard"])
+        s = next(iter(ds))
+        assert s.images.shape == (1, 1365, 2048, 3)
+        assert s.depth_gt.shape == (1, 1365, 2048)
+        assert s.depth_valid.shape == (1, 1365, 2048)
+        assert s.sample_id == "eth3d-moge/courtyard_0000"
+        assert s.metadata["scene"] == "courtyard"
+        assert s.metadata["source"] == "moge_hf_bundle"
+        np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-6)
+        # Intrinsics are de-normalized to pixels against the warped target.
+        assert float(s.intrinsics[0, 0, 0]) > 100.0

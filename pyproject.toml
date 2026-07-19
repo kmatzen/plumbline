@@ -9,6 +9,9 @@ requires-python = ">=3.10"
 # (CC BY-NC[-SA]); see THIRD_PARTY_NOTICES.md. The aggregate distribution is
 # therefore usable for non-commercial purposes only — reflected in the SPDX
 # expression below and the "Free for non-commercial use" classifier.
+# Intentionally the *restrictive core*, not an exhaustive inventory: the wheel
+# also bundles the VGGT Meta research license and permissive BSD/MIT components.
+# THIRD_PARTY_NOTICES.md is authoritative for the per-component breakdown.
 license = { text = "Apache-2.0 AND CC-BY-NC-4.0 AND CC-BY-NC-SA-4.0" }
 authors = [
     { name = "Kevin Blackburn-Matzen" },
@@ -42,6 +45,14 @@ dependencies = [
     # configured for (PyPI default: cu124 on Linux, CPU/MPS on macOS).
     # Devs running `uv sync` from this repo get cu124 via [tool.uv.sources]
     # below; consumers of the published wheel are unaffected.
+    #
+    # The == pin (not a range) is deliberate but costly: it makes the package
+    # uninstallable alongside any other torch, and freezes consumers out of
+    # torch fixes. It's held because every published paper-match cell was
+    # produced under exactly this build, and the vendored CUT3R `curope` CUDA
+    # extension compiles against it. Widening to e.g. `>=2.6,<2.8` requires
+    # re-running the reproduction suite on the new version first — until then
+    # a range would assert compatibility nobody has tested.
     "torch==2.6.0",
     "torchvision==0.21.0",
     "transformers>=4.40",
@@ -156,11 +167,19 @@ packages = ["src/plumbline"]
 [tool.hatch.build.targets.wheel.force-include]
 "LICENSE" = "plumbline/LICENSE"
 "THIRD_PARTY_NOTICES.md" = "plumbline/THIRD_PARTY_NOTICES.md"
+# protocols/ and reproductions/ are runtime data, not just repo docs:
+# load_protocol() and _find_config() read them on every reproduction run.
+# Without these, `pip install plumbline-bench` yields a package that raises
+# FileNotFoundError for every `protocol:`-bearing cell. plumbline.paths
+# prefers the repo checkout and falls back to these packaged copies.
+"protocols" = "plumbline/protocols"
+"reproductions" = "plumbline/reproductions"
 
 [tool.hatch.build.targets.sdist]
 include = [
     "/src",
     "/tests",
+    "/protocols",
     "/reproductions",
     "/README.md",
     "/LICENSE",
@@ -228,6 +247,13 @@ addopts = [
     "-ra",
     "--strict-markers",
     "--strict-config",
+    "--durations=20",
+    # Weights/gpu/data tests gate themselves on environment sniffing, so on a
+    # configured box (a dev laptop that once ran a repro, the GPU host) a plain
+    # `pytest` would silently download checkpoints from HF Hub mid-suite. Opt
+    # in explicitly instead: `pytest -m weights`.
+    "-m",
+    "not weights and not gpu and not data",
 ]
 markers = [
     "gpu: tests requiring CUDA",
@@ -243,7 +269,12 @@ warn_unused_ignores = true
 # Numpy operations return `Any` pervasively; warn_return_any fires on every
 # metric/geometry helper and doesn't meaningfully improve correctness.
 warn_return_any = false
-files = ["src"]
+# tests/_fakes.py holds the Model/Dataset protocol implementations, so a
+# protocol drift surfaces there first — type-check it (and conftest, which
+# wires it up) alongside src. The rest of tests/ is not yet strict-clean
+# (~128 errors, mostly concrete-attribute access on registry-typed values);
+# widening this to all of tests/ is tracked separately.
+files = ["src", "tests/_fakes.py", "tests/conftest.py"]
 # Vendored third-party source is excluded from type-checking (kept verbatim).
 exclude = ["src/plumbline/_vendor/"]
 

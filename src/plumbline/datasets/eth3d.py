@@ -369,6 +369,13 @@ class ETH3DDataset(Dataset):
                         rng = np.random.default_rng(self.gt_subsample_seed)
                         idx = rng.choice(pcd.shape[0], size=self.max_gt_points, replace=False)
                         pcd = pcd[idx]
+                    # Single-slot: records iterate scene-grouped, so keeping
+                    # only the current scene preserves the within-scene reuse
+                    # this cache exists for, while a 13-scene run no longer
+                    # retains every previous scene's ~450 MB cloud to the end.
+                    # (If records ever interleave scenes this still returns
+                    # correct data — it just re-reads.)
+                    self._gt_cache.clear()
                     self._gt_cache[cache_key] = pcd
 
         if self.with_per_view_gt and ply_rels:
@@ -483,6 +490,8 @@ class ETH3DDataset(Dataset):
                     "render_sizes": [tuple(map(int, x)) for x in f["render_sizes"]],
                     "image_id_to_idx": {int(k): int(v) for k, v in f["image_ids"]},
                 }
+                # Single-slot; see the _gt_cache note in _load_sample.
+                self._pv_depth_cache.clear()
                 self._pv_depth_cache[scene] = cached
                 return cached
 
@@ -594,6 +603,8 @@ class ETH3DDataset(Dataset):
             "render_sizes": render_sizes,
             "image_id_to_idx": image_id_to_idx,
         }
+        # Single-slot; see the _gt_cache note in _load_sample.
+        self._pv_depth_cache.clear()
         self._pv_depth_cache[scene] = cached
         return cached
 

@@ -9,9 +9,19 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: wheels-${{ github.ref }}
+  cancel-in-progress: false  # never interrupt an in-flight publish
+
+env:
+  # CI runners have no GPU; without this uv resolves the cu124 index (see
+  # [tool.uv.sources]) and downloads gigabytes of CUDA wheels to run CPU tests.
+  UV_TORCH_BACKEND: cpu
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
 
@@ -38,6 +48,7 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
 
@@ -47,8 +58,37 @@ jobs:
       - name: Set up Python
         run: uv python install 3.12
 
+      # A tag that disagrees with [project].version publishes an artifact
+      # under the wrong version — silently, since twine only sees the built
+      # file. Fail before building instead.
+      - name: Verify tag matches project version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          project_version="$(uv run --no-project --with tomli python -c \
+            'import tomli;print(tomli.load(open("pyproject.toml","rb"))["project"]["version"])')"
+          tag_version="${GITHUB_REF_NAME#v}"
+          if [ "$project_version" != "$tag_version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME implies version $tag_version, but pyproject.toml says $project_version"
+            exit 1
+          fi
+          echo "tag $GITHUB_REF_NAME matches project version $project_version"
+
       - name: Build sdist + wheel
         run: uv build
+
+      # The wheel must carry the runtime data trees (protocols/, reproductions/)
+      # or every `protocol:`-bearing reproduction raises FileNotFoundError for
+      # pip users. Cheap to assert here; expensive to discover post-release.
+      - name: Verify wheel ships runtime data
+        run: |
+          wheel="$(ls dist/*.whl)"
+          for want in plumbline/protocols/ plumbline/reproductions/; do
+            if ! unzip -l "$wheel" | grep -q "$want"; then
+              echo "::error::wheel is missing $want"
+              exit 1
+            fi
+          done
+          echo "wheel ships protocols/ and reproductions/"
 
       - name: Show artifacts
         run: ls -la dist/
@@ -65,7 +105,12 @@ jobs:
 
   publish:
     needs: build
+    # Tags only. Without this guard a manual "Run workflow" from any branch
+    # uploads whatever [project].version currently says to PyPI — a release
+    # nobody tagged. workflow_dispatch still runs test+build as a dry run.
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     environment:
       name: pypi
       url: https://pypi.org/p/plumbline-bench

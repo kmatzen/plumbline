@@ -46,3 +46,18 @@ def test_package_version_matches_pyproject() -> None:
         f"plumbline.__version__ ({__version__}) != pyproject [project].version "
         f"({_pyproject_version()}). Bump src/plumbline/_version.py to match."
     )
+
+
+def test_citation_version_matches_package() -> None:
+    """GitHub renders CITATION.cff as "Cite this repository".
+
+    It had drifted two releases behind (0.1.0 while the package was 0.2.1),
+    so anyone citing the repo cited a version that no longer described it.
+    """
+    citation = Path(__file__).resolve().parent.parent / "CITATION.cff"
+    m = re.search(r'^version:\s*"([^"]+)"', citation.read_text(), re.MULTILINE)
+    assert m is not None, "no `version:` field in CITATION.cff"
+    assert m.group(1) == __version__, (
+        f"CITATION.cff version ({m.group(1)}) != plumbline.__version__ "
+        f"({__version__}). Update CITATION.cff (version + date-released) on release."
+    )

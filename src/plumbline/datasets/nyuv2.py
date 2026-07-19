@@ -183,11 +183,18 @@ class NYUv2Dataset(Dataset):
                 assert_valid_intrinsics(K_stack, name=f"nyuv2/{idx}/intrinsics")
                 assert_valid_extrinsics(E_eye, name=f"nyuv2/{idx}/extrinsics")
                 assert_valid_depth(depth_stack, name=f"nyuv2/{idx}/depth")
+                # Build the mask when *either* knob is set. Nesting the
+                # max_gt_depth cap inside the crop branch made it a silent
+                # no-op for `max_gt_depth=X, apply_eigen_crop=False`, so the
+                # run quietly scored against the wrong protocol.
                 depth_valid: NDArray[np.bool_] | None = None
-                if self.apply_eigen_crop:
-                    mask = np.zeros(depth.shape, dtype=bool)
-                    top, bot, left, right = EIGEN_CROP
-                    mask[top:bot, left:right] = True
+                if self.apply_eigen_crop or self.max_gt_depth is not None:
+                    if self.apply_eigen_crop:
+                        mask = np.zeros(depth.shape, dtype=bool)
+                        top, bot, left, right = EIGEN_CROP
+                        mask[top:bot, left:right] = True
+                    else:
+                        mask = np.ones(depth.shape, dtype=bool)
                     mask &= depth > 0
                     if self.max_gt_depth is not None:
                         mask &= depth < self.max_gt_depth

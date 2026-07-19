@@ -29,9 +29,11 @@ import yaml
 from plumbline.cache import PredictionCache
 from plumbline.datasets.registry import DATASET_REGISTRY
 from plumbline.models.registry import MODEL_REGISTRY
+from plumbline.paths import REPRODUCTIONS_DIR as _REPRODUCTIONS_DIR
 from plumbline.protocols import apply_protocol
 from plumbline.report import Report
 from plumbline.runner import evaluate
+from plumbline.runner_metrics import _depth_metric_keys
 
 __all__ = [
     "REPRODUCTIONS_DIR",
@@ -41,7 +43,9 @@ __all__ = [
     "run_reproduction",
 ]
 
-REPRODUCTIONS_DIR = Path(__file__).resolve().parent.parent.parent / "reproductions"
+# Re-exported from plumbline.paths, which exists to be the single home for
+# these constants. Defining it independently here let the two drift.
+REPRODUCTIONS_DIR = _REPRODUCTIONS_DIR
 
 log = logging.getLogger(__name__)
 
@@ -75,9 +79,11 @@ def expected_metric_keys(cfg: dict[str, Any]) -> set[str]:
         }
     keys: set[str] = set()
     if {"mono_depth", "mvs_depth"} & tasks:
-        keys |= {"abs_rel", "rmse", "log10", "silog"}
-        deltas = cfg.get("delta_thresholds") or (1.25, 1.25**2, 1.25**3)
-        keys |= {f"delta_{i}" for i in range(1, len(deltas) + 1)}
+        # Derive from the runner's own key list rather than a hand-copied
+        # set — a literal copy here silently dropped sq_rel and rmse_log,
+        # rejecting valid KITTI-Eigen cells at load time.
+        deltas = tuple(cfg.get("delta_thresholds") or (1.25, 1.25**2, 1.25**3))
+        keys |= set(_depth_metric_keys(deltas))
     if "pose" in tasks:
         auc_thr = cfg.get("pose_auc_thresholds") or (5.0, 10.0, 30.0)
         acc_thr = cfg.get("pose_acc_thresholds") or (15.0,)
@@ -221,14 +227,23 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
     pose_translation_antipodal = bool(cfg.get("pose_translation_antipodal", False))
     pose_trajectory_metrics = bool(cfg.get("pose_trajectory_metrics", False))
 
+    # ``expected_metric_keys`` validates primary_metric against these, so they
+    # must reach the runner too — otherwise a cell pinning non-default deltas
+    # or an F-score threshold passes load-time validation and is then scored
+    # at the runner's defaults.
+    delta_cfg = cfg.get("delta_thresholds")
+    delta_thresholds = tuple(float(t) for t in delta_cfg) if delta_cfg else (1.25, 1.25**2, 1.25**3)
+    f_score_threshold = float(cfg.get("f_score_threshold", 0.05))
+
     report = evaluate(
         model=model,
         dataset=dataset,
         tasks=list(cfg["tasks"]),
         scale_alignment=cfg.get("scale_alignment", "median"),
         max_views=int(cfg.get("max_views", 8)),
-        device=cfg.get("device", "cuda:0"),
         cache=PredictionCache(cfg.get("cache_dir")) if cfg.get("cache_dir") else None,
+        delta_thresholds=delta_thresholds,
+        f_score_threshold=f_score_threshold,
         pose_auc_thresholds=pose_auc_thresholds,
         pose_acc_thresholds=pose_acc_thresholds,
         pose_auc_mode=pose_auc_mode,
@@ -252,6 +267,15 @@ def run_reproduction(name: str, *, output: Path | None = None) -> ReproductionRe
     )
 
     paper = cfg.get("paper_reference", {})
+    if not paper.get("primary_metric") and not report.aggregate_metrics:
+        # Every sample was skipped (missing data root, all-OOM, broken
+        # adapter). Without this, `next(iter(...))` raises a bare
+        # StopIteration that the queue records as the useless "StopIteration: ".
+        raise RuntimeError(
+            f"reproduction {name!r} produced no metrics: "
+            f"{report.n_evaluated}/{report.n_total} samples evaluated, "
+            f"{report.n_skipped} skipped. Check the data root and adapter logs."
+        )
     primary_metric = paper.get("primary_metric") or next(iter(report.aggregate_metrics))
     if primary_metric not in report.aggregate_metrics:
         # A primary_metric the protocol never emits silently produced a NaN

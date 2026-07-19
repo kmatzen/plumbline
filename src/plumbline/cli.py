@@ -24,6 +24,7 @@ from plumbline._version import __version__
 from plumbline.cache import PredictionCache, default_cache_dir
 from plumbline.datasets.registry import DATASET_REGISTRY
 from plumbline.install import INSTALL_SPECS, check, install_hint, install_plan, spec_for
+from plumbline.metrics.alignment import ALIGNMENT_MODES
 from plumbline.models.registry import MODEL_REGISTRY
 from plumbline.report import Report
 from plumbline.runner import evaluate
@@ -147,7 +148,7 @@ def run_cmd(
     scale_alignment: str = typer.Option(
         "median",
         "--scale-alignment",
-        help="One of: none, median, lstsq, scale_shift.",
+        help=f"One of: {', '.join(ALIGNMENT_MODES)}.",
     ),
     max_views: int = typer.Option(8, "--max-views", help="Per-sample view cap."),
     device: str = typer.Option("cuda:0", "--device", help="Inference device."),
@@ -199,7 +200,6 @@ def run_cmd(
         tasks=task_list,
         scale_alignment=scale_alignment,
         max_views=max_views,
-        device=device,
         cache=cache,
     )
 

@@ -66,7 +66,11 @@ from plumbline.models.base import Model, ModelCapabilities, Prediction, config_d
 # graph, aligns with PairViewer (N==2) / PointCloudOptimizer (N>=3), and
 # returns plumbline-shaped arrays + view-0 rebase. Passing MonST3R's model
 # in runs MonST3R through that same path.
-from plumbline.models.mast3r import _images_to_dust3r_dicts, _run_mast3r
+from plumbline.models.mast3r import (
+    _images_to_dust3r_dicts,
+    _run_mast3r,
+    dust3r_single_frame_eval,
+)
 from plumbline.models.registry import register_model
 
 __all__ = ["MonST3RAdapter"]
@@ -305,7 +309,11 @@ class MonST3RAdapter(Model):
                 "single_frame_duplicated": single,
                 "native_space": "point_map",
                 "alignment_hint": "median",
-                "flow_refinement": False,  # base dust3r global alignment only
+                # True only on the video_pose path, which runs MonST3R's flow
+                # loss + motion mask + temporal smoothing; the other branches
+                # are base dust3r global alignment. Hardcoding False here made
+                # every video-pose report claim no flow refinement was used.
+                "flow_refinement": bool(self.video_pose and n >= 3 and not single),
                 "single_frame_path": "eval_mono_depth_avg" if single else None,
             },
         )
@@ -341,52 +349,15 @@ def _monst3r_single_frame_eval(
     device: str,
     long_edge: int,
 ) -> tuple[NDArray[np.float32], NDArray[np.float32], NDArray[np.float32]]:
-    """Reproduce MonST3R's ``eval_mono_depth`` single-frame path verbatim.
+    """MonST3R's ``eval_mono_depth`` single-frame path.
 
-    The view-duplicate trick: build a 2-element list with the same image
-    twice, ``symmetrize=True`` makes both directed pairs (0,1) and (1,0),
-    and the resulting ``output['pred1']['pts3d']`` has shape ``(2, H, W, 3)``
-    — one prediction per pair, both expressed in the (duplicated) view-1
-    coordinate frame. Averaging across the leading axis is what the upstream
-    eval helper does (`pts3d.mean(dim=0)`).
-
-    Returns ``(depth, point_map, K)`` shaped ``(1, H, W)``, ``(1, H, W, 3)``,
-    ``(1, 3, 3)`` so the caller can wrap them into a :class:`Prediction`. K
-    is a synthetic centre-principal-point camera with focal = max(H, W) — the
-    Table 3 protocol scores depth only (per-frame median scaling), so K
-    doesn't enter the metric; we just need a shape-valid value to satisfy
-    :func:`assert_valid_intrinsics`.
+    Thin wrapper over the shared implementation in ``mast3r.py`` — this is
+    the same view-duplicate procedure DUSt3R §4.3 describes, so the logic
+    lives in one place rather than as two copies that can drift.
     """
-    from copy import deepcopy
-
-    from dust3r.image_pairs import make_pairs
-    from dust3r.inference import inference
-
-    if images.shape[0] != 1:
-        raise ValueError(
-            f"_monst3r_single_frame_eval expects exactly 1 image; got {images.shape[0]}"
-        )
-
-    # Use the same image-prep helper the multi-view path uses — guarantees
-    # the resize / center-crop is bit-identical to dust3r's load_images.
-    dust3r_imgs = _images_to_dust3r_dicts(images, long_edge=long_edge)
-    img0 = dust3r_imgs[0]
-    # Duplicate the view (eval_mono_depth: `[imgs[0], deepcopy(imgs[0])]`).
-    img1 = deepcopy(img0)
-    img1["idx"] = 1
-    img1["instance"] = "1"
-    pairs = make_pairs([img0, img1], symmetrize=True, prefilter=None)
-    output = inference(pairs, model, device, batch_size=1, verbose=False)
-    # pred1.pts3d: (2, H, W, 3) — average across the 2 symmetric pairs.
-    pts3d = output["pred1"]["pts3d"].mean(dim=0).detach().cpu().numpy().astype(np.float32)
-    depth = pts3d[..., -1]  # (H, W) — z-component
-    # Drop non-finite / non-positive values, matching the multi-view runner.
-    depth = np.where(np.isfinite(depth) & (depth > 0), depth, 0.0).astype(np.float32)
-
-    H, W = depth.shape
-    f = float(max(H, W))
-    K = np.array([[f, 0.0, W / 2.0], [0.0, f, H / 2.0], [0.0, 0.0, 1.0]], dtype=np.float32)
-    return depth[None], pts3d[None], K[None]
+    return dust3r_single_frame_eval(
+        model, images, device=device, long_edge=long_edge, caller="_monst3r_single_frame_eval"
+    )
 
 
 def _run_monst3r_video_pose(

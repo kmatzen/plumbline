@@ -151,13 +151,42 @@ class PredictionCache:
         meta = prediction.metadata or {}
         arrays["_meta_json"] = np.asarray(json.dumps(meta, default=_json_default))
 
-        # np.savez_compressed appends ".npz"; write to a distinct basename
-        # and move into place atomically. The numpy stub claims the second
-        # positional arg is `bool`, but runtime accepts **arrays; suppress.
-        tmp = path.with_name(path.stem + ".tmp")
-        np.savez_compressed(tmp, **arrays)  # type: ignore[arg-type]
-        os.replace(tmp.with_suffix(".tmp.npz"), path)
+        # np.savez_compressed appends ".npz"; write to a distinct basename and
+        # move into place atomically. The tmp name carries the pid so two
+        # processes sharing a cache dir (common on rental GPU boxes) can't
+        # interleave writes into one file and promote a corrupt archive.
+        # The numpy stub claims the second positional arg is `bool`, but
+        # runtime accepts **arrays; suppress.
+        tmp = path.with_name(f"{path.stem}.{os.getpid()}.tmp")
+        tmp_npz = tmp.with_suffix(".tmp.npz")
+        try:
+            np.savez_compressed(tmp, **arrays)  # type: ignore[arg-type]
+            os.replace(tmp_npz, path)
+        finally:
+            with contextlib.suppress(OSError):
+                tmp_npz.unlink()
         return path
+
+    def evict(
+        self,
+        model_name: str,
+        config_hash: str,
+        dataset_name: str,
+        sample_id: str,
+        input_fingerprint: str = "",
+    ) -> bool:
+        """Delete one cache entry. Returns True if a file was removed.
+
+        Used by the runner when ``load`` raises: a corrupt/truncated archive
+        would otherwise keep ``has`` returning True forever, so every future
+        run silently redoes inference and re-fails the same way.
+        """
+        path = self.path_for(model_name, config_hash, dataset_name, sample_id, input_fingerprint)
+        try:
+            path.unlink()
+        except OSError:
+            return False
+        return True
 
     def load(
         self,

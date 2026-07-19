@@ -187,7 +187,9 @@ def _run_vggt(
       - intrinsics: (N, 3, 3), float32, in processed pixel space
       - extrinsics: (N, 4, 4), float32, world_from_camera, first view = identity
       - point_map:  (N, H_p, W_p, 3), float32, world frame
-      - confidence: (N, H_p, W_p), float32 in [0, 1]  (world_points_conf)
+      - confidence: (N, H_p, W_p), float32, raw `world_points_conf` — VGGT's
+        native scale, unbounded above and typically >= 1. NOT normalized to
+        [0, 1]; see Prediction.confidence in models/base.py.
     """
     import torch
     from PIL import Image as PImage

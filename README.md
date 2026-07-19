@@ -10,7 +10,7 @@ Anything 3**, **MASt3R**, **Metric3Dv2**, and **Depth Anything V2**.
 > a whole is therefore usable for **non-commercial purposes only**. See
 > [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
 
-**Status:** v0.2 in development. **47 paper-match cells** — 39 mono-depth
+**Status:** v0.2.1 released; v0.3 in development. **47 paper-match cells** — 39 mono-depth
 (NYU / KITTI / DIODE / GSO / iBims-1 / ETH3D MoGe-eval / DDAD / Sintel MoGe /
 Depth Pro Booster + Sun-RGBD / UniK3D metric NYU / CUT3R NYU·KITTI·Bonn) + 7 multi-view pose/trajectory
 (CO3Dv2 / Sintel / TUM-Dynamics) — each verified against the source PDF.

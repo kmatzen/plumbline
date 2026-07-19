@@ -48,17 +48,30 @@ class Prediction:
         ``(N, H, W)`` float32, meters when metric else dimensionless. NaN or 0
         denote invalid pixels.
     intrinsics
-        ``(N, 3, 3)`` float32, pixels, in the input-image coordinate frame.
-        If the adapter internally resized, it must unscale back to input-image
-        pixels before returning.
+        ``(N, 3, 3)`` float32, in pixels of **the same grid as** ``depth`` /
+        ``point_map``. That is the binding invariant: the runner back-projects
+        with ``K`` against the returned depth map, so ``K`` must describe that
+        map's pixel space. An adapter that resizes internally may therefore
+        return either input-resolution depth with input-resolution ``K``, or
+        processed-resolution depth with processed-resolution ``K`` — but never
+        a mix. (The dust3r-lineage adapters return the processed resolution
+        for both.) Getting this wrong silently corrupts back-projected point
+        clouds and every chamfer/pose metric derived from them; no assertion
+        catches it.
     extrinsics
         ``(N, 4, 4)`` float32, ``world_from_camera`` with first camera as world
         origin.
     point_map
         ``(N, H, W, 3)`` float32 in the world frame.
     confidence
-        ``(N, H, W)`` float32 in ``[0, 1]``. Higher = more certain. Runners
-        ignore this for metric computation; report modules may use it.
+        ``(N, H, W)`` float32, **model-native scale**, monotone in certainty
+        (higher = more certain). Deliberately NOT normalized to a common
+        range: the dust3r lineage (DUSt3R / MASt3R / MonST3R / CUT3R) emits
+        ``1 + exp(x) >= 1``, VGGT/StreamVGGT emit unbounded
+        ``world_points_conf``, while MoGe emits a 0/1 mask and Pi3 a sigmoid
+        in ``[0, 1]``. Comparisons are only meaningful *within* one model.
+        Runners ignore this for metric computation; report modules that
+        threshold it must normalize per-model first.
     metadata
         Free-form dict for runtime stats (``runtime_ms``, ``peak_vram_mb``,
         checkpoint hash, etc.).

@@ -12,25 +12,39 @@ from __future__ import annotations
 
 import json
 import os
-
-# If the console script wasn't installed (e.g. `pip install -e .` skipped),
-# these tests are meaningless; skip cleanly rather than failing confusingly.
-import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
 
-plumbline_bin = shutil.which("plumbline")
-pytestmark = pytest.mark.skipif(
-    plumbline_bin is None,
-    reason="plumbline console script not installed (run `uv sync` first)",
-)
+# Each test spawns a fresh interpreter (~0.5-5s); marked so a pre-push run can
+# deselect them with `-m "not slow"`.
+pytestmark = pytest.mark.slow
+
+
+def _console_script() -> list[str]:
+    """Command that runs *this* checkout's CLI.
+
+    Resolve the console script next to the running interpreter rather than
+    via ``shutil.which``: a bare PATH lookup finds whatever ``plumbline`` is
+    installed globally (pipx, another venv) and would silently test that
+    build instead of this one. Falls back to ``python -m plumbline`` — the
+    package ships ``__main__.py`` — so running outside ``uv run`` exercises
+    the CLI rather than skipping the whole module.
+    """
+    candidate = Path(sys.executable).parent / ("plumbline.exe" if os.name == "nt" else "plumbline")
+    if candidate.exists():
+        return [str(candidate)]
+    return [sys.executable, "-m", "plumbline"]
+
+
+PLUMBLINE_CMD = _console_script()
 
 
 def _run(*args: str, env: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        ["plumbline", *args],
+        [*PLUMBLINE_CMD, *args],
         capture_output=True,
         text=True,
         timeout=60,

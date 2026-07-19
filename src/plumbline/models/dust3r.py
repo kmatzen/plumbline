@@ -61,8 +61,8 @@ from plumbline.conventions import (
 from plumbline.models._torch_utils import ensure_torch
 from plumbline.models.base import Model, ModelCapabilities, Prediction, config_digest
 from plumbline.models.mast3r import (
-    _images_to_dust3r_dicts,
     _run_mast3r,  # share the dust3r runner
+    dust3r_single_frame_eval,
 )
 from plumbline.models.registry import register_model
 
@@ -239,53 +239,12 @@ def _dust3r_single_frame_eval(
     device: str,
     long_edge: int,
 ) -> tuple[NDArray[np.float32], NDArray[np.float32], NDArray[np.float32]]:
-    """Reproduce DUSt3R §4.3 monocular depth: feed `F(I, I)` and average the
-    two symmetric pred1.pts3d directions.
+    """DUSt3R §4.3 monocular depth: feed ``F(I, I)`` and average the two
+    symmetric ``pred1.pts3d`` directions.
 
-    Paper §4.3: *"For this monocular task, we simply feed the same input
-    image I to the network as F(I, I). By design, depth prediction is
-    simply the z coordinate in the predicted 3D pointmap."* The MonST3R
-    fork later concretised this into the ``eval_mono_depth`` helper
-    (load the image twice → ``symmetrize=True`` → average across the
-    leading axis) — we mirror that helper here so the two adapters
-    score the same Table 2 / Table 3 cells with bit-identical logic,
-    only differing in checkpoint + which ``dust3r`` package is on
-    sys.path.
-
-    Returns ``(depth, point_map, K)`` shaped ``(1, H, W)``, ``(1, H, W, 3)``,
-    ``(1, 3, 3)`` so the caller can wrap them into a :class:`Prediction`.
-    K is a synthetic centre-principal-point camera with focal = max(H, W) —
-    monocular depth scoring is scale-only (per-frame median), so K never
-    enters the metric; we just need a shape-valid value to satisfy
-    :func:`assert_valid_intrinsics`.
+    Thin wrapper over the shared implementation in ``mast3r.py`` — MonST3R
+    runs the identical procedure, so the logic lives in one place.
     """
-    from copy import deepcopy
-
-    from dust3r.image_pairs import make_pairs
-    from dust3r.inference import inference
-
-    if images.shape[0] != 1:
-        raise ValueError(
-            f"_dust3r_single_frame_eval expects exactly 1 image; got {images.shape[0]}"
-        )
-
-    # Use the same image-prep helper the multi-view path uses (lives in
-    # mast3r.py) — guarantees the resize / center-crop is bit-identical
-    # to dust3r's ``load_images``.
-    dust3r_imgs = _images_to_dust3r_dicts(images, long_edge=long_edge)
-    img0 = dust3r_imgs[0]
-    img1 = deepcopy(img0)
-    img1["idx"] = 1
-    img1["instance"] = "1"
-    pairs = make_pairs([img0, img1], symmetrize=True, prefilter=None)
-    output = inference(pairs, model, device, batch_size=1, verbose=False)
-    # pred1.pts3d: (2, H, W, 3) — average across the 2 symmetric pairs.
-    pts3d = output["pred1"]["pts3d"].mean(dim=0).detach().cpu().numpy().astype(np.float32)
-    depth = pts3d[..., -1]  # (H, W) — z-component
-    # Drop non-finite / non-positive values, matching the multi-view runner.
-    depth = np.where(np.isfinite(depth) & (depth > 0), depth, 0.0).astype(np.float32)
-
-    H, W = depth.shape
-    f = float(max(H, W))
-    K = np.array([[f, 0.0, W / 2.0], [0.0, f, H / 2.0], [0.0, 0.0, 1.0]], dtype=np.float32)
-    return depth[None], pts3d[None], K[None]
+    return dust3r_single_frame_eval(
+        model, images, device=device, long_edge=long_edge, caller="_dust3r_single_frame_eval"
+    )

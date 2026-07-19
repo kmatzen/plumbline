@@ -8,6 +8,87 @@ public API may change between 0.x releases.
 ## [Unreleased]
 
 ### Fixed
+
+Codebase review sweep (issues #163–#182). Highest-impact first:
+
+- **Prediction cache ignored `max_views`** (#163) — the `keep = min(n, max_views,
+  cap)` trim ran *after* the cache lookup, so a cell run at `max_views=8` and
+  later at `max_views=2` shared one entry: the 8-view prediction was served and
+  `_trim_sample_to_views` trimmed GT to match, silently reporting the wrong
+  protocol. The view count is now part of the cache key. Only *trimmed* samples
+  are tagged, so existing entries stay valid.
+- **Sintel + DIODE manifest caches were poisoned by scene-filtered scans**
+  (#165, #166) — both saved a scene-filtered scan into a scenes-agnostic
+  manifest, so a single-scene run silently hid every other scene from later
+  runs; DIODE additionally keyed on scene *count*, so two different
+  single-scene runs collided and the second evaluated **zero** samples. Both now
+  cache the full scan and filter after load (the ETH3D pattern); manifest names
+  bumped to `_v2` to invalidate poisoned caches. Regression tests added.
+- **Reproduction configs silently dropped `delta_thresholds` /
+  `f_score_threshold`** (#164) — validated by `expected_metric_keys` but never
+  forwarded to `evaluate()`, so a cell pinning a non-default δ set or F-score
+  threshold was scored at the runner's defaults. Also: `expected_metric_keys`
+  omitted `sq_rel` / `rmse_log`, rejecting valid KITTI-Eigen cells at load time;
+  it now derives from the runner's own key list.
+- **Installed wheels could not resolve `protocols/`** (#167) — the YAMLs shipped
+  in neither wheel nor sdist and `paths.py` assumed a git checkout, so every
+  `protocol:`-bearing cell raised `FileNotFoundError` for pip users. Both trees
+  are now packaged, with checkout-preferred fallback resolution and a CI check.
+- **`scene_voxel_size: 0` crashed the scene-merge ICP path** (#173) — a
+  documented config (DTU's choice), unguarded on one of three call sites, and it
+  failed *after* the full inference run, taking the unsaved report with it.
+- **NYUv2 `max_gt_depth` was a silent no-op** without `apply_eigen_crop` (#174).
+- **Corrupt cache entries were never evicted** (#172) — a failed load fell back
+  to re-running inference but left the file, so `has()` stayed true and every
+  future run silently redid the work. Cache writes also now use a pid-scoped
+  temp name so concurrent runs can't promote a corrupt archive.
+- **MonST3R reported `flow_refinement: False` on video-pose runs** that did use
+  the flow / motion-mask / temporal pipeline (#182).
+- **`load_ply_xyz` silently misparsed non-float32 PLYs** (#182) — double-typed
+  or non-`x/y/z` leading properties produced garbage coordinates with no error,
+  and `binary_big_endian` died on a confusing decode error. All now raise.
+- Empty reproduction runs raised a bare `StopIteration` (recorded by the queue
+  as the useless `"StopIteration: "`); they now raise a descriptive error (#176).
+- `--scale-alignment` was unvalidated with stale help text listing 4 of 9 modes;
+  modes now come from a single `ALIGNMENT_MODES` source and are validated before
+  model load (#176).
+
+### Changed
+- `evaluate()` no longer takes `device` — it was accepted, documented, and
+  never used (the model adapter owns its device). `EvaluateConfig` is removed:
+  dead code whose docstring falsely claimed its fields fed the cache key (#163).
+- `Prediction.intrinsics` / `.confidence` docstrings now state the real
+  contracts (#175): `K` must match the *depth map's* pixel grid (not the input
+  image's, as previously documented and contradicted by the runner and every
+  multi-view adapter), and `confidence` is model-native and monotone rather than
+  normalized to `[0, 1]` — half the adapters emit unbounded values.
+- `marigold` gained `per_sample_seed` (default off) — the shared generator makes
+  per-sample output depend on evaluation order, so subset/resumed runs disagree
+  with full runs. Default is unchanged because the published Marigold cells were
+  produced under the streaming-generator semantics (#171).
+- ETH3D per-scene GT caches are now single-slot; a 13-scene run no longer
+  retains every prior scene's ~450 MB cloud (#182).
+- The DUSt3R and MonST3R single-frame eval helpers were byte-identical copies;
+  hoisted to one shared `dust3r_single_frame_eval` (#182).
+- `torch==2.6.0` pin documented rather than widened — a range would assert
+  compatibility that has not been tested against the reproduction suite (#180).
+
+### CI / tooling
+- Weights/GPU/data tests no longer auto-run off environment sniffing (#178);
+  they are opt-in via `-m weights`. This alone takes the default suite from
+  ~880s to ~25s and stops surprise HuggingFace downloads mid-run.
+- Hypothesis deadline disabled via a registered profile — the property tests
+  assert math, not latency, and flaked under load (#170).
+- `wheels.yml` can no longer publish to PyPI from a non-tag `workflow_dispatch`,
+  and now verifies the tag matches `[project].version` before building (#168).
+- CI installs CPU torch (`UV_TORCH_BACKEND=cpu`) instead of pulling the multi-GB
+  CUDA stack into five GPU-less jobs per push (#169).
+- Added `concurrency` cancellation and `timeout-minutes` to both workflows (#179).
+- mypy now covers the test fakes and conftest; `CITATION.cff` version is pinned
+  to `__version__` by a test after drifting two releases (#181).
+- New tests: PLY parser guards, packaging/resource resolution, and manifest
+  cache-poisoning regressions.
+
 - **DUSt3R indoor depth (NYU + Bonn) now reproduce** — both were off-paper `ℹ️`
   cells under wrong recipes/targets, not "paper-private" as previously recorded
   (D28 RESOLVED). Verified-cell count 42 → **44**.
