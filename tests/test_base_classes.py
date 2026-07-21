@@ -142,6 +142,36 @@ class TestDatasetRegistry:
         assert "fake-ds" in DATASET_REGISTRY
         assert FakeDS.name == "fake-ds"
 
+    def test_duplicate_registration_errors(self) -> None:
+        @register_dataset("dupe-ds")
+        class A(_FakeDataset):
+            pass
+
+        with pytest.raises(ValueError, match="already registered"):
+
+            @register_dataset("dupe-ds")
+            class B(_FakeDataset):
+                pass
+
+    def test_register_rejects_non_dataset(self) -> None:
+        with pytest.raises(TypeError, match="not a Dataset subclass"):
+            register_dataset("not-a-dataset")(int)  # type: ignore[arg-type]
+
+    def test_list_datasets_is_sorted(self) -> None:
+        from plumbline.datasets.registry import list_datasets
+
+        @register_dataset("z-fake-ds")
+        class ZFakeDS(_FakeDataset):
+            pass
+
+        @register_dataset("a-fake-ds")
+        class AFakeDS(_FakeDataset):
+            pass
+
+        names = list_datasets()
+        assert names == sorted(names)
+        assert "a-fake-ds" in names and "z-fake-ds" in names
+
 
 class TestSubset:
     def test_subset_size(self) -> None:

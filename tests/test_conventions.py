@@ -95,6 +95,20 @@ class TestIntrinsics:
         with pytest.raises(AssertionError, match="non-finite"):
             assert_valid_intrinsics(K)
 
+    def test_not_ndarray(self) -> None:
+        with pytest.raises(AssertionError, match=r"np\.ndarray"):
+            assert_valid_intrinsics([[1, 0, 0], [0, 1, 0], [0, 0, 1]])  # type: ignore[arg-type]
+
+    def test_integer_dtype_rejected(self) -> None:
+        K = np.eye(3, dtype=np.int32)
+        with pytest.raises(AssertionError, match="floating"):
+            assert_valid_intrinsics(K)
+
+    def test_wrong_trailing_shape(self) -> None:
+        K = np.eye(4, dtype=np.float32)
+        with pytest.raises(AssertionError, match=r"\(3, 3\)"):
+            assert_valid_intrinsics(K)
+
 
 class TestExtrinsics:
     def test_valid_identity(self) -> None:
@@ -126,6 +140,24 @@ class TestExtrinsics:
         with pytest.raises(AssertionError, match=r"\[0, 0, 0, 1\]"):
             assert_valid_extrinsics(E)
 
+    def test_not_ndarray(self) -> None:
+        with pytest.raises(AssertionError, match=r"np\.ndarray"):
+            assert_valid_extrinsics(np.eye(4).tolist())  # type: ignore[arg-type]
+
+    def test_integer_dtype_rejected(self) -> None:
+        with pytest.raises(AssertionError, match="floating"):
+            assert_valid_extrinsics(np.eye(4, dtype=np.int32))
+
+    def test_wrong_trailing_shape(self) -> None:
+        with pytest.raises(AssertionError, match=r"\(4, 4\)"):
+            assert_valid_extrinsics(np.eye(3, dtype=np.float32))
+
+
+class TestWorldFromCameraIsIdentityValidation:
+    def test_wrong_shape_raises(self) -> None:
+        with pytest.raises(ValueError, match=r"\(N, 4, 4\)"):
+            world_from_camera_is_identity(np.eye(4))
+
 
 class TestDepth:
     def test_valid(self) -> None:
@@ -152,6 +184,21 @@ class TestDepth:
         mask = depth_is_valid(d)
         assert mask.tolist() == [[True, False], [False, True]]
 
+    def test_depth_is_valid_mask_zero_allowed(self) -> None:
+        # allow_zero_invalid=False: 0.0 counts as valid (only NaN excludes).
+        d = np.array([[1.0, 0.0], [np.nan, -0.0]], dtype=np.float32)
+        mask = depth_is_valid(d, allow_zero_invalid=False)
+        assert mask.tolist() == [[True, True], [False, True]]
+
+    def test_not_ndarray(self) -> None:
+        with pytest.raises(AssertionError, match=r"np\.ndarray"):
+            assert_valid_depth([[1.0, 2.0]])  # type: ignore[arg-type]
+
+    def test_wrong_ndim(self) -> None:
+        d = np.zeros((2, 2, 2, 2), dtype=np.float32)
+        with pytest.raises(AssertionError, match="ndim 2 or 3"):
+            assert_valid_depth(d)
+
 
 class TestPointMap:
     def test_valid(self) -> None:
@@ -167,6 +214,18 @@ class TestPointMap:
         pmap = np.zeros((4, 4, 4), dtype=np.float32)
         with pytest.raises(AssertionError, match="last dim must be 3"):
             assert_valid_point_map(pmap)
+
+    def test_not_ndarray(self) -> None:
+        with pytest.raises(AssertionError, match=r"np\.ndarray"):
+            assert_valid_point_map(np.zeros((4, 4, 3)).tolist())  # type: ignore[arg-type]
+
+    def test_integer_dtype_rejected(self) -> None:
+        with pytest.raises(AssertionError, match="floating"):
+            assert_valid_point_map(np.zeros((4, 4, 3), dtype=np.int32))
+
+    def test_wrong_ndim(self) -> None:
+        with pytest.raises(AssertionError, match="ndim 3 or 4"):
+            assert_valid_point_map(np.zeros((4, 3), dtype=np.float32))
 
 
 class TestInvertPose:
@@ -188,6 +247,10 @@ class TestInvertPose:
         E = _make_E(_random_rotation(11), np.array([1.0, 2.0, 3.0]))
         np.testing.assert_allclose(camera_from_world(E), invert_pose(E))
 
+    def test_wrong_trailing_shape_raises(self) -> None:
+        with pytest.raises(ValueError, match=r"\(4, 4\)"):
+            invert_pose(np.eye(3))
+
 
 class TestWorldFrame:
     def test_identity_first_camera(self) -> None:
@@ -207,3 +270,7 @@ class TestWorldFrame:
         # Relative transform (inverse of E0 applied to E1) should be preserved.
         expected_rel = invert_pose(E0) @ E1
         np.testing.assert_allclose(rebased[1], expected_rel, atol=1e-10)
+
+    def test_rebase_wrong_shape_raises(self) -> None:
+        with pytest.raises(ValueError, match=r"\(N, 4, 4\)"):
+            rebase_to_first_camera(np.eye(4))

@@ -141,6 +141,61 @@ class TestApplyProtocol:
         out = apply_protocol(repro)
         assert out["depth_clip"] == [0.001, 10.0]
 
+    def test_repro_kwargs_null_is_not_a_conflict(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        # `dataset: {kwargs:}` with no children parses as kwargs=None — that
+        # means "reproduction doesn't override anything in this subtree",
+        # not a conflict, even though the protocol fixes concrete kwargs.
+        monkeypatch.setattr("plumbline.protocols.PROTOCOLS_DIR", tmp_path)
+        (tmp_path / "p.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "name": "p",
+                    "fixed": {"dataset": {"name": "d", "kwargs": {"a": 1}}},
+                }
+            )
+        )
+        repro = {"protocol": "p", "dataset": {"kwargs": None}}
+        out = apply_protocol(repro)
+        assert out["dataset"]["kwargs"] == {"a": 1}
+
+    def test_scalar_where_protocol_expects_dict_conflicts(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        monkeypatch.setattr("plumbline.protocols.PROTOCOLS_DIR", tmp_path)
+        (tmp_path / "p.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "name": "p",
+                    "fixed": {"dataset": {"name": "d", "kwargs": {"a": 1}}},
+                }
+            )
+        )
+        # `dataset` is a scalar in the reproduction where the protocol
+        # expects a nested dict — must raise, not silently coerce.
+        repro = {"protocol": "p", "dataset": "not-a-dict"}
+        with pytest.raises(ProtocolConflictError, match="dataset"):
+            apply_protocol(repro)
+
+    def test_repro_omitting_a_fixed_leaf_is_not_a_conflict(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        # The reproduction doesn't mention `depth_clip` at all — no
+        # conflict, and the protocol's value is merged in.
+        monkeypatch.setattr("plumbline.protocols.PROTOCOLS_DIR", tmp_path)
+        (tmp_path / "p.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "name": "p",
+                    "fixed": {"depth_clip": [0.001, 10.0], "tasks": ["mono_depth"]},
+                }
+            )
+        )
+        repro = {"protocol": "p", "tasks": ["mono_depth"]}
+        out = apply_protocol(repro)
+        assert out["depth_clip"] == [0.001, 10.0]
+
     def test_conflict_error_lists_every_mismatch(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:

@@ -142,6 +142,17 @@ class TestDepthMetrics:
         with pytest.raises(ValueError):
             abs_rel(np.array([1.0]), np.array([1.0, 2.0]))
 
+    def test_valid_mask_shape_mismatch(self) -> None:
+        with pytest.raises(ValueError, match="valid/pred shape mismatch"):
+            abs_rel(np.array([1.0, 2.0]), np.array([1.0, 2.0]), np.array([True]))
+
+    def test_silog_and_log10_empty_valid_return_nan(self) -> None:
+        gt = np.array([1.0, 2.0], dtype=np.float32)
+        pred = np.array([1.0, 2.0], dtype=np.float32)
+        valid = np.array([False, False])
+        assert np.isnan(silog(pred, gt, valid))
+        assert np.isnan(log10_error(pred, gt, valid))
+
 
 # ---------------------------------------------------------------------------
 # Alignment
@@ -332,6 +343,133 @@ class TestAlignment:
         assert np.allclose(plain[1:], clamped[1:], rtol=1e-9, atol=1e-9)
 
 
+class TestAlignmentEdgeCases:
+    """Degenerate-input / less-common-branch coverage for alignment.py."""
+
+    def test_ratio_of_medians_empty_and_zero_median(self) -> None:
+        from plumbline.metrics.alignment import align_scale_ratio_of_medians
+
+        p_empty = np.array([-1.0], dtype=np.float32)  # all invalid -> empty
+        g = np.array([1.0], dtype=np.float32)
+        assert np.isnan(align_scale_ratio_of_medians(p_empty, g))
+
+        # median(pred) == 0 on the valid set -> nan (guards a div-by-zero).
+        p = np.array([1e-12, -1e-12, 2e-12], dtype=np.float64)
+        gt = np.array([1.0, 1.0, 1.0], dtype=np.float64)
+        assert np.isnan(align_scale_ratio_of_medians(p, gt))
+
+    def test_weiszfeld_empty_and_zero_mean(self) -> None:
+        p_empty = np.array([-1.0], dtype=np.float32)
+        g = np.array([1.0], dtype=np.float32)
+        assert np.isnan(align_scale_weiszfeld(p_empty, g))
+
+        # mean(pred) ~ 0 on the valid set -> nan.
+        p = np.array([1e-12, 2e-12], dtype=np.float64)
+        gt = np.array([1.0, 1.0], dtype=np.float64)
+        assert np.isnan(align_scale_weiszfeld(p, gt))
+
+    def test_scale_and_shift_log_space(self) -> None:
+        gt = np.array([1.0, 2.0, 4.0, 8.0], dtype=np.float64)
+        pred = gt.copy()
+        s, b = align_scale_and_shift(pred, gt, space="log")
+        # log(gt) = 1*log(pred) + 0 exactly for pred == gt.
+        assert s == pytest.approx(1.0, abs=1e-6)
+        assert b == pytest.approx(0.0, abs=1e-6)
+
+    def test_scale_and_shift_too_few_points_returns_nan(self) -> None:
+        s, b = align_scale_and_shift(np.array([1.0]), np.array([1.0]))
+        assert np.isnan(s) and np.isnan(b)
+
+    def test_scale_and_shift_robust_log_space_and_too_few_points(self) -> None:
+        from plumbline.metrics.alignment import align_scale_and_shift_robust
+
+        gt = np.array([1.0, 2.0, 4.0, 8.0], dtype=np.float64)
+        s, b = align_scale_and_shift_robust(gt, gt, space="log")
+        assert s == pytest.approx(1.0, abs=1e-3)
+        assert b == pytest.approx(0.0, abs=1e-3)
+
+        s_nan, b_nan = align_scale_and_shift_robust(np.array([1.0]), np.array([1.0]))
+        assert np.isnan(s_nan) and np.isnan(b_nan)
+
+    def test_scale_and_shift_robust_invalid_space(self) -> None:
+        from plumbline.metrics.alignment import align_scale_and_shift_robust
+
+        with pytest.raises(ValueError, match="unknown space"):
+            align_scale_and_shift_robust(np.array([1.0, 2.0]), np.array([1.0, 2.0]), space="nope")
+
+    def test_align_depth_scale_shift_depth_dispatch(self) -> None:
+        gt = np.array([1.0, 2.0, 3.0, 4.0], dtype=np.float64)
+        pred = 2.0 * gt + 1.0  # depth-space affine relationship
+        out = align_depth(pred, gt, mode="scale_shift_depth")
+        np.testing.assert_allclose(out, gt, rtol=1e-6)
+
+    def test_valid_pairs_shape_mismatch_raises(self) -> None:
+        from plumbline.metrics.alignment import align_scale_median
+
+        with pytest.raises(ValueError, match="shape mismatch"):
+            align_scale_median(np.zeros((2, 2)), np.zeros((3, 3)))
+
+    def test_apply_similarity_bad_last_dim_raises(self) -> None:
+        from plumbline.metrics.alignment import apply_similarity
+
+        with pytest.raises(ValueError, match="last dim must be 3"):
+            apply_similarity(np.zeros((5, 2)), 1.0, np.eye(3), np.zeros(3))
+
+    def test_umeyama_reflection_case(self) -> None:
+        """A src/dst pair related by a reflection (det(U @ Vt) < 0) exercises
+        the improper-rotation correction branch (D flips the third axis).
+
+        The true relating transform is a mirror (improper), so the
+        closed-form least-squares fit — constrained to proper rotations —
+        cannot recover it exactly; this only asserts the correction branch
+        keeps the fit a valid (proper, finite) similarity transform.
+        """
+        from plumbline.metrics.alignment import umeyama_similarity
+
+        src = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
+        dst = src.copy()
+        dst[:, 2] *= -1.0  # mirror across the XY plane
+        s, R, t = umeyama_similarity(src, dst)
+        assert np.isfinite(s) and np.all(np.isfinite(R)) and np.all(np.isfinite(t))
+        # R must be a proper rotation (det ~ +1), not a reflection — the
+        # whole point of the D-correction branch this test targets.
+        assert np.linalg.det(R) == pytest.approx(1.0, abs=1e-6)
+        np.testing.assert_allclose(R @ R.T, np.eye(3), atol=1e-6)
+
+    def test_umeyama_degenerate_source_falls_back_to_identity_rotation(self) -> None:
+        """All src points coincide (var_src ~ 0): scale is undefined, so the
+        fit falls back to identity rotation + translation-only alignment."""
+        from plumbline.metrics.alignment import umeyama_similarity
+
+        src = np.tile(np.array([1.0, 2.0, 3.0]), (4, 1))
+        dst = np.array([[5.0, 5.0, 5.0], [6.0, 5.0, 5.0], [5.0, 6.0, 5.0], [5.0, 5.0, 6.0]])
+        s, R, t = umeyama_similarity(src, dst)
+        assert s == pytest.approx(1.0)
+        np.testing.assert_allclose(R, np.eye(3))
+        np.testing.assert_allclose(t, dst.mean(axis=0) - src.mean(axis=0))
+
+    def test_icp_similarity_bad_shapes_raise(self) -> None:
+        from plumbline.metrics.alignment import icp_similarity
+
+        with pytest.raises(ValueError, match=r"src/dst must be \(N, 3\)"):
+            icp_similarity(np.zeros((10, 2)), np.zeros((10, 3)))
+        with pytest.raises(ValueError, match=r"src/dst must be \(N, 3\)"):
+            icp_similarity(np.zeros((10, 3, 1)), np.zeros((10, 3)))
+
+    def test_icp_similarity_subsamples_large_src(self) -> None:
+        """sample_cap forces the deterministic-subsample branch; the fit
+        should still recover the true (trivial identity) transform."""
+        from plumbline.metrics.alignment import icp_similarity
+
+        rng = np.random.default_rng(0)
+        pts = rng.uniform(-1.0, 1.0, size=(500, 3))
+        s, R, t, info = icp_similarity(pts, pts, max_iter=5, sample_cap=100)
+        assert s == pytest.approx(1.0, abs=1e-2)
+        np.testing.assert_allclose(R, np.eye(3), atol=1e-2)
+        np.testing.assert_allclose(t, np.zeros(3), atol=1e-2)
+        assert info["iterations"] >= 1
+
+
 # ---------------------------------------------------------------------------
 # Pose
 # ---------------------------------------------------------------------------
@@ -467,6 +605,69 @@ class TestPointMapMetrics:
         with pytest.raises(ValueError):
             chamfer_distance(np.zeros((4, 2)), np.zeros((4, 3)))
 
+    def test_chamfer_gt_shape_validation(self) -> None:
+        with pytest.raises(ValueError, match="gt must be"):
+            chamfer_distance(np.zeros((4, 3)), np.zeros((4, 2)))
+
+    def test_chamfer_empty_inputs_return_nan(self) -> None:
+        assert np.isnan(chamfer_distance(np.zeros((0, 3)), np.zeros((5, 3))))
+        assert np.isnan(chamfer_distance(np.zeros((5, 3)), np.zeros((0, 3))))
+
+    def test_chamfer_outlier_distance_validation(self) -> None:
+        with pytest.raises(ValueError, match="outlier_distance must be"):
+            chamfer_distance(np.zeros((2, 3)), np.zeros((2, 3)), outlier_distance=0.0)
+
+    def test_chamfer_outlier_distance_drops_far_points(self) -> None:
+        gt = np.array([[0.0, 0.0, 0.0]])
+        pred = np.array([[0.1, 0.0, 0.0], [100.0, 0.0, 0.0]])
+        # Only the near point is within outlier_distance of gt; the
+        # accuracy term averages over that inlier alone.
+        got = chamfer_distance(pred, gt, two_sided=False, outlier_distance=1.0)
+        assert got == pytest.approx(0.1, abs=1e-6)
+
+    def test_chamfer_outlier_distance_all_rejected_returns_nan(self) -> None:
+        gt = np.array([[0.0, 0.0, 0.0]])
+        pred = np.array([[100.0, 0.0, 0.0]])
+        got = chamfer_distance(pred, gt, outlier_distance=1.0)
+        assert np.isnan(got)
+
+    def test_f_score_empty_inputs_return_nan(self) -> None:
+        out = f_score(np.zeros((0, 3)), np.zeros((5, 3)), threshold=1.0)
+        assert np.isnan(out["precision"])
+        assert np.isnan(out["recall"])
+        assert np.isnan(out["f_score"])
+
+    def test_f_score_outlier_distance_validation(self) -> None:
+        with pytest.raises(ValueError, match="outlier_distance must be"):
+            f_score(np.zeros((2, 3)), np.zeros((2, 3)), threshold=1.0, outlier_distance=0.0)
+
+    def test_f_score_outlier_distance_drops_far_pred_points(self) -> None:
+        gt = np.array([[0.0, 0.0, 0.0]])
+        pred = np.array([[0.05, 0.0, 0.0], [100.0, 0.0, 0.0]])
+        out_raw = f_score(pred, gt, threshold=0.5)
+        out_flt = f_score(pred, gt, threshold=0.5, outlier_distance=1.0)
+        # Without filtering, the far outlier drags precision below 100%;
+        # filtering it out of the denominator recovers full precision.
+        assert out_raw["precision"] < out_flt["precision"] == pytest.approx(100.0)
+
+    def test_f_score_outlier_distance_all_rejected_returns_nan(self) -> None:
+        gt = np.array([[0.0, 0.0, 0.0]])
+        pred = np.array([[100.0, 0.0, 0.0]])
+        out = f_score(pred, gt, threshold=0.5, outlier_distance=1.0)
+        assert np.isnan(out["precision"])
+        assert np.isnan(out["recall"])
+        assert np.isnan(out["f_score"])
+
+    def test_nn_distances_empty_input_direct(self) -> None:
+        # _nn_distances's own empty-array guard is defensive: every public
+        # caller (chamfer_distance/f_score/accuracy_completeness) already
+        # short-circuits on an empty pred/gt before reaching it. Exercise it
+        # directly so that guard doesn't silently rot.
+        from plumbline.metrics.pointmap import _nn_distances
+
+        out = _nn_distances(np.zeros((0, 3)), np.zeros((5, 3)))
+        assert out.shape == (0,)
+
     def test_chamfer_matches_bruteforce_without_scipy(self, monkeypatch) -> None:  # type: ignore[no-untyped-def]
         # Force the no-scipy numpy fallback in _nn_distances and confirm it
         # still computes correct NN distances over every query row. Uses a
@@ -504,6 +705,10 @@ class TestVoxelDownsample:
     def test_voxel_size_validation(self) -> None:
         with pytest.raises(ValueError):
             voxel_downsample(np.zeros((1, 3)), voxel_size=0.0)
+
+    def test_empty_points_returns_empty(self) -> None:
+        out = voxel_downsample(np.zeros((0, 3)), voxel_size=1.0)
+        assert out.shape == (0, 3)
 
 
 class TestAccuracyCompleteness:
@@ -545,6 +750,16 @@ class TestAccuracyCompleteness:
         assert np.isnan(out["accuracy"])
         assert np.isnan(out["completeness"])
         assert np.isnan(out["overall"])
+
+    def test_shape_validation(self) -> None:
+        with pytest.raises(ValueError, match="pred must be"):
+            accuracy_completeness(np.zeros((4, 2)), np.zeros((4, 3)))
+        with pytest.raises(ValueError, match="gt must be"):
+            accuracy_completeness(np.zeros((4, 3)), np.zeros((4, 2)))
+
+    def test_outlier_distance_validation(self) -> None:
+        with pytest.raises(ValueError, match="outlier_distance must be"):
+            accuracy_completeness(np.zeros((2, 3)), np.zeros((2, 3)), outlier_distance=0.0)
 
     def test_outlier_distance_drops_far_pred_points(self) -> None:
         # D3 regression guard (2026-04-24). Un-filtered MVS chamfer on
@@ -788,6 +1003,12 @@ class TestBoundaryEdgeMask:
 
         with pytest.raises(ValueError, match="shape"):
             boundary_edge_mask(np.zeros((5, 5)), np.zeros((6, 6), dtype=bool))
+
+    def test_ndim_validation(self) -> None:
+        from plumbline.metrics.masks import boundary_edge_mask
+
+        with pytest.raises(ValueError, match="ndim"):
+            boundary_edge_mask(np.zeros((5, 5, 1)), np.zeros((5, 5, 1), dtype=bool))
 
 
 class TestPairwisePose:

@@ -41,6 +41,24 @@ class TestResourceResolution:
         finally:
             paths._PACKAGE_DIR, paths.REPO_ROOT = original_pkg, original_root
 
+    def test_falls_back_to_repo_root_path_when_neither_exists(self, tmp_path: Path) -> None:
+        """Neither the checkout nor the packaged copy is present: still
+        name the developer-facing repo-root path (so error messages stay
+        legible) rather than raising here."""
+        from plumbline import paths
+
+        fake_pkg = tmp_path / "site-packages" / "plumbline"
+        fake_pkg.mkdir(parents=True)
+        fake_root = tmp_path / "no-such-repo"
+
+        original_pkg, original_root = paths._PACKAGE_DIR, paths.REPO_ROOT
+        try:
+            paths._PACKAGE_DIR = fake_pkg
+            paths.REPO_ROOT = fake_root
+            assert paths._resource_dir("protocols") == fake_root / "protocols"
+        finally:
+            paths._PACKAGE_DIR, paths.REPO_ROOT = original_pkg, original_root
+
     def test_prefers_checkout_over_packaged_copy(self, tmp_path: Path) -> None:
         """An editable/in-tree run must use the checkout, not a stale bundle."""
         from plumbline import paths

@@ -24,6 +24,8 @@ import yaml
 
 from plumbline.install import (
     INSTALL_SPECS,
+    InstallSpec,
+    _module_importable,
     check,
     install_hint,
     install_plan,
@@ -223,3 +225,145 @@ def test_unlicensed_and_custom_are_not_vendorable() -> None:
     assert INSTALL_SPECS["geowizard"].vendorable is False
     assert INSTALL_SPECS["vggt"].vendorable is False
     assert INSTALL_SPECS["depth-pro"].vendorable is False
+
+
+# ---------------------------------------------------------------------------
+# Branches the live registry doesn't happen to exercise (no "pypi"-kind spec,
+# no clone spec with extra_pip, no dest_env pointed at a real directory) —
+# covered directly against synthetic InstallSpec instances instead of
+# reaching for `monkeypatch`-ing the shared global registry.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("name", _ALL_NAMES)
+def test_how_to_runs_without_error(name: str) -> None:
+    text = spec_for(name).how_to()
+    assert isinstance(text, str) and text
+
+
+def test_how_to_base_kind() -> None:
+    spec = InstallSpec(name="fake-base", kind="base")
+    assert spec.how_to() == "ships in the base install"
+
+
+def test_how_to_pypi_kind() -> None:
+    spec = InstallSpec(name="fake-pypi", kind="pypi", pip=("foo-pkg",))
+    text = spec.how_to()
+    assert "plumbline install fake-pypi" in text
+    assert "foo-pkg" in text
+
+
+def test_spec_for_unknown_name_raises_keyerror() -> None:
+    with pytest.raises(KeyError, match="no install spec for 'not-a-real-adapter'"):
+        spec_for("not-a-real-adapter")
+
+
+def test_install_hint_pypi_and_git_kinds() -> None:
+    pypi_spec = InstallSpec(name="fake-pypi-hint", kind="pypi", pip=("foo-pkg",))
+    pypi_hint = install_hint_for(pypi_spec)
+    assert "foo-pkg" in pypi_hint
+    assert "plumbline install fake-pypi-hint" in pypi_hint
+
+    git_spec = InstallSpec(
+        name="fake-git-hint", kind="git", git=("https://example.invalid/fake.git",)
+    )
+    git_hint = install_hint_for(git_spec)
+    assert "https://example.invalid/fake.git" in git_hint
+    assert "plumbline install fake-git-hint" in git_hint
+
+
+def test_install_plan_pypi_kind() -> None:
+    spec = InstallSpec(name="fake-pypi", kind="pypi", pip=("foo-pkg", "bar-pkg"))
+    assert install_plan_for(spec) == ["uv pip install foo-pkg", "uv pip install bar-pkg"]
+
+
+def test_install_plan_clone_with_extra_pip_and_extra_env() -> None:
+    spec = InstallSpec(
+        name="fake-clone",
+        kind="clone",
+        clone_url="https://example.invalid/fake.git",
+        default_dest="/workspace/deps/fake",
+        dest_env="FAKE_ROOT",
+        extra_pip=("opencv-python", "scipy"),
+        extra_env=(("FAKE_CKPT", "checkpoint path"),),
+    )
+    plan = install_plan_for(spec)
+    assert "uv pip install opencv-python scipy" in plan
+    assert "export FAKE_ROOT=/workspace/deps/fake" in plan
+    assert any(line.startswith("export FAKE_CKPT=") for line in plan)
+
+
+def test_check_dest_env_pointing_at_real_directory(tmp_path: Path) -> None:
+    spec = InstallSpec(
+        name="fake-clone-present",
+        kind="clone",
+        clone_url="https://example.invalid/fake.git",
+        dest_env="FAKE_ROOT_PRESENT",
+        default_dest=str(tmp_path),
+    )
+    import os
+
+    os.environ["FAKE_ROOT_PRESENT"] = str(tmp_path)
+    try:
+        ok, detail = check_for(spec)
+    finally:
+        del os.environ["FAKE_ROOT_PRESENT"]
+    assert ok is True
+    assert str(tmp_path) in detail
+
+
+def test_check_dest_env_pointing_at_missing_directory(tmp_path: Path) -> None:
+    spec = InstallSpec(
+        name="fake-clone-missing-dir",
+        kind="clone",
+        clone_url="https://example.invalid/fake.git",
+        dest_env="FAKE_ROOT_MISSING_DIR",
+    )
+    import os
+
+    not_a_dir = tmp_path / "does-not-exist"
+    os.environ["FAKE_ROOT_MISSING_DIR"] = str(not_a_dir)
+    try:
+        ok, detail = check_for(spec)
+    finally:
+        del os.environ["FAKE_ROOT_MISSING_DIR"]
+    assert ok is False
+    assert "not a directory" in detail
+
+
+def test_module_importable_false_for_broken_parent_package() -> None:
+    # A dotted path whose parent package doesn't exist makes find_spec raise
+    # ModuleNotFoundError rather than returning None — _module_importable
+    # must swallow that and report False, not propagate.
+    assert _module_importable("no_such_parent_pkg_xyz.submodule") is False
+
+
+def install_plan_for(spec: InstallSpec) -> list[str]:
+    """Call the real ``install_plan`` logic against a synthetic spec.
+
+    ``install_plan(name)`` looks the spec up in the global ``INSTALL_SPECS``
+    by name, so a throwaway entry is registered under a private key for the
+    duration of the call and removed after — the global registry must not
+    leak a fake adapter into other tests.
+    """
+    INSTALL_SPECS[spec.name] = spec
+    try:
+        return install_plan(spec.name)
+    finally:
+        del INSTALL_SPECS[spec.name]
+
+
+def check_for(spec: InstallSpec) -> tuple[bool, str]:
+    INSTALL_SPECS[spec.name] = spec
+    try:
+        return check(spec.name)
+    finally:
+        del INSTALL_SPECS[spec.name]
+
+
+def install_hint_for(spec: InstallSpec) -> str:
+    INSTALL_SPECS[spec.name] = spec
+    try:
+        return install_hint(spec.name)
+    finally:
+        del INSTALL_SPECS[spec.name]

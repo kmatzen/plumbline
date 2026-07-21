@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from plumbline.cache import PredictionCache, default_cache_dir, sanitize_id
 from plumbline.models.base import Prediction
@@ -57,8 +58,6 @@ class TestCacheRoundTrip:
 
     def test_load_missing_raises(self, tmp_path: Path) -> None:
         cache = PredictionCache(tmp_path)
-        import pytest
-
         with pytest.raises(FileNotFoundError):
             cache.load("m", "cfg", "ds", "nope")
 
@@ -99,6 +98,21 @@ class TestCacheRoundTrip:
         out = cache.load("m", "cfg", "ds", "s0")
         assert out.metadata["peak_vram_mb"] == 512.5
 
+    def test_numpy_array_and_path_metadata(self, tmp_path: Path) -> None:
+        # _json_default must coerce both a bare numpy array and a Path — not
+        # just numpy *scalars* — since adapters stash both in metadata.
+        cache = PredictionCache(tmp_path)
+        pred = Prediction(
+            metadata={
+                "some_array": np.array([1, 2, 3]),
+                "checkpoint_path": tmp_path / "weights.pt",
+            }
+        )
+        cache.save("m", "cfg", "ds", "s0", pred)
+        out = cache.load("m", "cfg", "ds", "s0")
+        assert out.metadata["some_array"] == [1, 2, 3]
+        assert out.metadata["checkpoint_path"] == str(tmp_path / "weights.pt")
+
     def test_atomic_write_tmp_cleanup(self, tmp_path: Path) -> None:
         cache = PredictionCache(tmp_path)
         cache.save("m", "cfg", "ds", "s0", _make_prediction())
@@ -108,6 +122,19 @@ class TestCacheRoundTrip:
         # vacuously true and would not have caught a leaked temp file.
         tmp_files = [p for p in tmp_path.rglob("*.tmp*") if p.is_file()]
         assert tmp_files == []
+
+
+class TestEvict:
+    def test_evict_removes_existing_entry(self, tmp_path: Path) -> None:
+        cache = PredictionCache(tmp_path)
+        cache.save("m", "cfg", "ds", "s0", _make_prediction())
+        assert cache.has("m", "cfg", "ds", "s0")
+        assert cache.evict("m", "cfg", "ds", "s0") is True
+        assert not cache.has("m", "cfg", "ds", "s0")
+
+    def test_evict_missing_entry_returns_false(self, tmp_path: Path) -> None:
+        cache = PredictionCache(tmp_path)
+        assert cache.evict("m", "cfg", "ds", "nope") is False
 
 
 class TestClear:
@@ -142,6 +169,59 @@ class TestClear:
     def test_clear_nothing_when_empty(self, tmp_path: Path) -> None:
         cache = PredictionCache(tmp_path)
         assert cache.clear() == 0
+
+    def test_clear_by_config_hash(self, tmp_path: Path) -> None:
+        cache = PredictionCache(tmp_path)
+        cache.save("m1", "cfg_a", "ds", "s0", _make_prediction())
+        cache.save("m1", "cfg_b", "ds", "s0", _make_prediction())
+        removed = cache.clear(model="m1", config_hash="cfg_a")
+        assert removed == 1
+        assert not cache.has("m1", "cfg_a", "ds", "s0")
+        assert cache.has("m1", "cfg_b", "ds", "s0")
+
+    def test_clear_missing_model_root_is_a_noop(self, tmp_path: Path) -> None:
+        cache = PredictionCache(tmp_path)
+        cache.save("m1", "cfg", "ds", "s0", _make_prediction())
+        assert cache.clear(model="no-such-model") == 0
+        assert cache.has("m1", "cfg", "ds", "s0")
+
+    def test_clear_missing_dataset_within_model_is_a_noop(self, tmp_path: Path) -> None:
+        cache = PredictionCache(tmp_path)
+        cache.save("m1", "cfg", "ds", "s0", _make_prediction())
+        assert cache.clear(model="m1", dataset="no-such-dataset") == 0
+        assert cache.has("m1", "cfg", "ds", "s0")
+
+    def test_clear_missing_config_hash_within_model_is_a_noop(self, tmp_path: Path) -> None:
+        cache = PredictionCache(tmp_path)
+        cache.save("m1", "cfg", "ds", "s0", _make_prediction())
+        assert cache.clear(model="m1", config_hash="no-such-cfg") == 0
+        assert cache.has("m1", "cfg", "ds", "s0")
+
+
+class TestRmtreeCountAndJsonDefault:
+    """Direct coverage of the private helpers that ``clear``/``save`` lean on."""
+
+    def test_rmtree_count_on_a_bare_npz_file(self, tmp_path: Path) -> None:
+        from plumbline.cache import _rmtree_count
+
+        f = tmp_path / "entry.npz"
+        f.write_bytes(b"not really an npz, just bytes")
+        assert _rmtree_count(f) == 1
+        assert not f.exists()
+
+    def test_rmtree_count_on_a_non_npz_file(self, tmp_path: Path) -> None:
+        from plumbline.cache import _rmtree_count
+
+        f = tmp_path / "entry.txt"
+        f.write_text("hi")
+        assert _rmtree_count(f) == 0
+        assert not f.exists()
+
+    def test_json_default_rejects_unsupported_types(self) -> None:
+        from plumbline.cache import _json_default
+
+        with pytest.raises(TypeError, match="Not JSON-serializable"):
+            _json_default(object())
 
 
 class TestDefaultCacheDir:
