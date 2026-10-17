@@ -3024,3 +3024,16 @@ and all 180 projections are retained in
 Projection uses the full inverse transform because saved rotation matrices are
 not perfectly orthonormal. All 180 projections match a separate homogeneous
 inverse calculation within 1e-8 pixels. No user answer has yet been recorded.
+
+### Preparing disjoint learned-judge test inputs
+
+`build_tapvid_external_corpus.py` freezes the same source/candidate panels,
+prompt, lags, and label rule on all twenty TAP-Vid DAVIS videos outside the
+ten-video learned-judge development partition. It opens no development-video
+arrays or calibration export. All missing and borderline examples remain in
+the roster; no class balancing or outcome-based selection is added. These
+videos already have reported classical-baseline results, so this is not an
+untouched benchmark. The intended comparison is base versus the fixed trained
+judge on video-disjoint correspondence examples, not camera-DNF validation.
+Preparing panels performs no model inference. No test-derived model selection,
+threshold adjustment, or success claim is authorized by this preparation.
