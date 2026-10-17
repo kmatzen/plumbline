@@ -4123,3 +4123,26 @@ later reference poses from registration, unresolved scale, complete candidate
 accounting, and replay of the saved array summaries and hashes. Artifacts are
 in `results/movi-camera-pilot-v1/anchor-task-v1`. No binary DNF threshold is
 chosen and the manuscript is unchanged.
+
+### Calibration identifiability control
+
+`probe_focal_depth_ambiguity.py` checks whether correspondence consistency can
+certify the known-world anchor task in every setting. It cannot. For parallel
+cameras moving sideways, replacing focal length f by a*f and every scene depth
+Z by a*Z preserves u=f*(X-Cx)/Z+cx and v=f*Y/Z+cy. The control uses four distinct
+depths, 24 poses, and factors 0.5,0.8,1,1.25,2. Each alternative fits the first
+ten observations and forecasts later points to within 1.46e-11 pixels, yet
+mean known-world anchor error reaches 33.11 pixels when the anchor coordinates
+are not changed. Both calculations use the existing projection/fitting code.
+
+This is an instance of the established self-calibration critical-motion
+problem, not a new theorem or failed model experiment; see
+[Sturm, BMVC 1999](https://www.bmva-archive.org.uk/bmvc/1999/papers/07.html).
+It does not show that a particular MOVi clip is exactly degenerate. It does
+show why the newly added reference task must not be treated as an outcome
+that RGB correspondence alone can always identify. Physical calibration,
+known scene constraints, or explicit uncertainty are required in ambiguous
+cases. Learned appearance priors do not constitute a geometric certificate.
+The fixed control and its regression test are retained under
+`results/movi-camera-pilot-v1/focal-depth-ambiguity-control-v1.json`.
+No current judge input, reference label, or manuscript claim is changed.
