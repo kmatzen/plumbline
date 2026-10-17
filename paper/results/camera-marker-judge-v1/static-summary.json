@@ -1,0 +1,542 @@
+{
+  "scope": "unlabeled camera-marker correspondence predictions; no accuracy or DNF validation",
+  "planned_presentations": 72,
+  "renderable_presentations": 58,
+  "arms": {
+    "base": {
+      "dage": {
+        "planned_presentations": 36,
+        "presented": 29,
+        "unavailable": {
+          "query_outside_image": 4,
+          "missing_prefix_observations": 3
+        },
+        "predicted_labels": {
+          "far": 29
+        },
+        "interpretation": "prediction counts, not accuracy or camera failure counts"
+      },
+      "da3": {
+        "planned_presentations": 36,
+        "presented": 29,
+        "unavailable": {
+          "query_outside_image": 4,
+          "missing_prefix_observations": 3
+        },
+        "predicted_labels": {
+          "far": 29
+        },
+        "interpretation": "prediction counts, not accuracy or camera failure counts"
+      }
+    },
+    "adapted": {
+      "dage": {
+        "planned_presentations": 36,
+        "presented": 29,
+        "unavailable": {
+          "query_outside_image": 4,
+          "missing_prefix_observations": 3
+        },
+        "predicted_labels": {
+          "close": 14,
+          "occluded": 11,
+          "far": 4
+        },
+        "interpretation": "prediction counts, not accuracy or camera failure counts"
+      },
+      "da3": {
+        "planned_presentations": 36,
+        "presented": 29,
+        "unavailable": {
+          "query_outside_image": 4,
+          "missing_prefix_observations": 3
+        },
+        "predicted_labels": {
+          "close": 13,
+          "occluded": 13,
+          "far": 3
+        },
+        "interpretation": "prediction counts, not accuracy or camera failure counts"
+      }
+    }
+  },
+  "base_to_adapted_counts": {
+    "far->close": 27,
+    "far->occluded": 24,
+    "far->far": 7
+  },
+  "paired_predictions": [
+    {
+      "id": "5f2d60ea7241646cd4cd4634",
+      "model": "dage",
+      "slot": 0,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "ad2fb31af4dee73d71539b8f",
+      "model": "dage",
+      "slot": 0,
+      "frame": 60,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "e362d3c7ede7f38d557e3181",
+      "model": "dage",
+      "slot": 0,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "4c18aaa74a7adf748808fed9",
+      "model": "dage",
+      "slot": 1,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "3c881088caf3c7049b5c5f81",
+      "model": "dage",
+      "slot": 1,
+      "frame": 60,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "adc4e888748131b7f7151f87",
+      "model": "dage",
+      "slot": 1,
+      "frame": 89,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "4ab78860b0c514a8e44af2ec",
+      "model": "dage",
+      "slot": 2,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "1d2f6808dd1798a261db18ea",
+      "model": "dage",
+      "slot": 2,
+      "frame": 60,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "4e60bb2713a9d0c36ad84bf9",
+      "model": "dage",
+      "slot": 2,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "02e70c16b07affd2c01d334e",
+      "model": "dage",
+      "slot": 3,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "6d45315ebaf8f1ff5ba7da36",
+      "model": "dage",
+      "slot": 3,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "8d64c39f20a1358c969a7948",
+      "model": "dage",
+      "slot": 4,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "f45ed6364275c30f6b8d3532",
+      "model": "dage",
+      "slot": 4,
+      "frame": 60,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "8dcc2d49b203b3482fb2045b",
+      "model": "dage",
+      "slot": 4,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "36d8bd0da7b88c0da6f6c83d",
+      "model": "dage",
+      "slot": 5,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "e7048a87965ac365cb689444",
+      "model": "dage",
+      "slot": 5,
+      "frame": 60,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "88f7acf838799d88ad40f99f",
+      "model": "dage",
+      "slot": 5,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "04d06ce4d45c01fd2455c146",
+      "model": "dage",
+      "slot": 6,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "7b30aa11d301777af036bad3",
+      "model": "dage",
+      "slot": 6,
+      "frame": 60,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "f7c72d6358cdc1c2c084e100",
+      "model": "dage",
+      "slot": 6,
+      "frame": 89,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "295b1dcb3e8bf43a17707fee",
+      "model": "dage",
+      "slot": 7,
+      "frame": 30,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "3d2b07427dbf2d7ed7637d50",
+      "model": "dage",
+      "slot": 7,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "f3e5191bce2108235e7a38fe",
+      "model": "dage",
+      "slot": 8,
+      "frame": 30,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "80f90fb4fcd77d2ad1a97a1d",
+      "model": "dage",
+      "slot": 8,
+      "frame": 60,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "fbd85b116af62c1642ced4e4",
+      "model": "dage",
+      "slot": 8,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "b0ebb862bd4c527c830a078f",
+      "model": "dage",
+      "slot": 9,
+      "frame": 30,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "a4e76e8c7f124f2bb9062ac0",
+      "model": "dage",
+      "slot": 9,
+      "frame": 60,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "70882ef2b7e647944ce7e4cb",
+      "model": "dage",
+      "slot": 9,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "d1705335411ce783e2cc601b",
+      "model": "dage",
+      "slot": 11,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "2876597e4daea8e87871eae2",
+      "model": "da3",
+      "slot": 0,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "e1d02f8e1862743e452f2318",
+      "model": "da3",
+      "slot": 0,
+      "frame": 60,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "b93fba874a7f7f055f1a1df8",
+      "model": "da3",
+      "slot": 0,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "bd5f8b4ebe0f13beb97e23ef",
+      "model": "da3",
+      "slot": 1,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "5cb44e98b52141c9fd43edf3",
+      "model": "da3",
+      "slot": 1,
+      "frame": 60,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "91a8676dadcf0fe0efcf23f9",
+      "model": "da3",
+      "slot": 1,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "de6b30a19a79c12ded3ab4cd",
+      "model": "da3",
+      "slot": 2,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "f444ef71d99024cf1892209c",
+      "model": "da3",
+      "slot": 2,
+      "frame": 60,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "9bdc21ac647b7fe51ab8efa3",
+      "model": "da3",
+      "slot": 2,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "70e7b2f4fa0099155989ff76",
+      "model": "da3",
+      "slot": 3,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "5a827fb33bf382e294fb1ede",
+      "model": "da3",
+      "slot": 3,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "f151f2f80792deb5548b297b",
+      "model": "da3",
+      "slot": 4,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "1cff08c4350d7bb667d28163",
+      "model": "da3",
+      "slot": 4,
+      "frame": 60,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "2caac6c0349543040814410d",
+      "model": "da3",
+      "slot": 4,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "4ecf51068361476353ae7825",
+      "model": "da3",
+      "slot": 5,
+      "frame": 30,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "cf49e08a0eacae098de3f330",
+      "model": "da3",
+      "slot": 5,
+      "frame": 60,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "6d843cebf4e7c08ca2748842",
+      "model": "da3",
+      "slot": 5,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "cf816a4d49dc63ce166ecaa1",
+      "model": "da3",
+      "slot": 6,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "e124ebec8147173d8e84dd6a",
+      "model": "da3",
+      "slot": 6,
+      "frame": 60,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "2e3843003621b2b5edcae141",
+      "model": "da3",
+      "slot": 6,
+      "frame": 89,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "92ab4a44be82d45bdbd1d684",
+      "model": "da3",
+      "slot": 7,
+      "frame": 30,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "9ba9a8d1d39c89f70cd45872",
+      "model": "da3",
+      "slot": 7,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "a73ba344f995a906e873cd45",
+      "model": "da3",
+      "slot": 8,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "30bb851c314ba3b740b9f80b",
+      "model": "da3",
+      "slot": 8,
+      "frame": 60,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "534ba97957d5272b656b8826",
+      "model": "da3",
+      "slot": 8,
+      "frame": 89,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "3fe407b1d67f713f79e04cdf",
+      "model": "da3",
+      "slot": 9,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    },
+    {
+      "id": "d25a60306670d9deffb89ef5",
+      "model": "da3",
+      "slot": 9,
+      "frame": 60,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "3bb23285f234e01bc89e7544",
+      "model": "da3",
+      "slot": 9,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "f588e3231156140f3a1230b2",
+      "model": "da3",
+      "slot": 11,
+      "frame": 30,
+      "base": "far",
+      "adapted": "close"
+    }
+  ],
+  "limitations": "do not interpret close counts as camera ranking or far as DNF; unverified prefix fits, calibration, correspondence, and staticness; missing cases remain unassessed; no independent labels",
+  "input_sha256": {
+    "report": "6e47ff6d8b48319579a3180bee8fd6b61e092f6c44f513d4187a0c22a45bce5a",
+    "corpus": "7fe2bdf2a388ae6a68f0910687d8cfe70a44bce438a2861abdc5a6b5bc013318",
+    "training": "c16c4c3a0495e8bd813d0bad8009c89b29047c7142114370f27a51ab0aa58f26",
+    "evaluator": "4a7af77a9c97547b2707fd338c79a3c52379e5296b0fa0e840375dd3cf5c743f",
+    "analysis": "03b7dc3df7b2d6771681f5ee43b3a8a15ccdff129c12e9347a37de14920100e4"
+  }
+}

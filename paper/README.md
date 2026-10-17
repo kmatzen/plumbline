@@ -3505,3 +3505,15 @@ also records base-to-adapted response changes. It deliberately reports no
 accuracy, camera winner, or DNF rate without reference judgments. Six new
 audit tests and the four corpus/selection tests pass. Running or partial
 reports cannot be analyzed as complete results.
+
+The first static-clip application completed and passed that audit. Both arms
+saw identical processed pixels and image-token counts for all 58 renderable
+panels. Each camera method has 29 presented and seven unavailable cases out
+of 36 planned presentations. The base model answered `far` for every panel.
+The adapted model predicted 14 close / 11 occluded / 4 far for DAGE and
+13 close / 13 occluded / 3 far for DA3. These are unverified predictions:
+the one-count difference in close responses is not a camera preference or
+accuracy improvement. Full responses and audited accounting are retained in
+`results/camera-marker-judge-v1/static-evaluation.json` and
+`static-summary.json`. The remaining clip runs are separate and are not
+represented by this completed result.
