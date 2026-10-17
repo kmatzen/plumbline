@@ -546,6 +546,31 @@ were independently reprojected in world coordinates, verifying positive depth,
 pixel bounds, and the specified sensor-depth interval. These findings remain
 development evidence outside the manuscript.
 
+#### Concrete visual review instructions
+
+`render_static_drift_review.py` makes unblinded teaching illustrations for all
+five slots observed in every frame 1–89 with measured frame-one depth. It fixes
+one world point using that initial depth and reference pose, then projects it
+without refitting under the reference path and the positive five-degree ramp.
+The three columns show frames 1, 45, and 89. Each column contains scene context,
+an unmarked crop, the reference projection, and the corrupted projection.
+Yellow rings show the fallible image tracker; cyan crosses show projected points.
+Crops follow the image tracker and must not be mistaken for stabilized camera
+output. Selection is by observation/depth availability, not residual size.
+
+The instructions ask whether the cyan cross stays on the same surface detail,
+not whether a trajectory plot looks plausible. In slot 6 the starting detail
+is inside the printed letter “e”: the reference cross remains there, while the
+corrupted cross moves left to another letter. The assistant inspected all five
+rendered sheets for layout and visible correspondence; this is not a human
+judgment or blinded validation. Slot 6 is an explanatory example selected after
+inspection, not a representative accuracy result.
+
+Generated sheets are in `tmp/static-drift-review-v1/`; their hashes, point
+coordinates, and projections are retained in `drift-review-v1.json` under the
+static-control results directory. These sensor-depth illustrations explain the
+desired visual task but do not solve reference-free initialization on DAVIS.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is
