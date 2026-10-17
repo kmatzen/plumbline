@@ -6,12 +6,13 @@ import pytest
 from paper.run_vlm_dnf_pilot import audit_processed_inputs, parse_response, run
 
 
-def test_description_preserves_raw_text_without_treating_it_as_a_camera_label():
-    assert parse_response("A blue square.", "description") == (
+@pytest.mark.parametrize("task", ["description", "crop_description"])
+def test_description_preserves_raw_text_without_treating_it_as_a_camera_label(task):
+    assert parse_response("A blue square.", task) == (
         {"description": "A blue square."},
         None,
     )
-    assert parse_response("  ", "description") == (None, "empty_description")
+    assert parse_response("  ", task) == (None, "empty_description")
 
 
 def test_input_audit_checks_payload_and_placeholder_count():

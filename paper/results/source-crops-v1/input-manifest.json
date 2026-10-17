@@ -1,0 +1,179 @@
+{
+  "scope": "exploratory caption diagnostic, not held-out validation or DNF labels",
+  "selection": "all frame-zero targets in original grid order; no later observation selection",
+  "crop_policy": "161x161 native pixels centered at rounded target; gray padding outside source; no marker",
+  "source_manifest_sha256": "1348932a8cb0844affc5d9d5860aa24f5422f3b78999e9bbdea26ff3b26af6b8",
+  "source_image_sha256": "a6bd658d06a98d1567816d5722290610b0345044713f2337144a8d61fcbc65f6",
+  "tracks_sha256": "a504e6590fa4c64a59f53a3fa4b38d4759e11902fc52623150e30cf6da3e5e46",
+  "script_sha256": "6cb23f34f59a969141f73df1bd3d15b072e4c66d317ea2781f6a08a9bd784845",
+  "items": [
+    {
+      "slot": 0,
+      "status": "ready",
+      "xy": [
+        77.0,
+        153.0
+      ],
+      "rounded_pixel": [
+        77,
+        153
+      ],
+      "image": "slot-0.png",
+      "image_sha256": "1f57139c482df23801917ba5556962bc769988ca766e203b76eb54a6e0cec6d5"
+    },
+    {
+      "slot": 1,
+      "status": "ready",
+      "xy": [
+        253.0,
+        56.0
+      ],
+      "rounded_pixel": [
+        253,
+        56
+      ],
+      "image": "slot-1.png",
+      "image_sha256": "861ebadc2f929ee48c2aa746b52fdf1dc9fc7023fcb598019b323af363296f1e"
+    },
+    {
+      "slot": 2,
+      "status": "ready",
+      "xy": [
+        454.0,
+        8.0
+      ],
+      "rounded_pixel": [
+        454,
+        8
+      ],
+      "image": "slot-2.png",
+      "image_sha256": "2d257c95c66db47398642e365f6f8f93ef385b76f2ea4db9130faf587f6779b5"
+    },
+    {
+      "slot": 3,
+      "status": "ready",
+      "xy": [
+        612.0,
+        62.0
+      ],
+      "rounded_pixel": [
+        612,
+        62
+      ],
+      "image": "slot-3.png",
+      "image_sha256": "a1ad920cdaa323d7fe5ca318cc421ef69e24aeb88e174c3768976bd4c31035b6"
+    },
+    {
+      "slot": 4,
+      "status": "ready",
+      "xy": [
+        58.0,
+        162.0
+      ],
+      "rounded_pixel": [
+        58,
+        162
+      ],
+      "image": "slot-4.png",
+      "image_sha256": "6112446e389a2a9c45abaa313178f1919f6dfb3226ac762f75613dffbb1f064b"
+    },
+    {
+      "slot": 5,
+      "status": "ready",
+      "xy": [
+        254.0,
+        280.0
+      ],
+      "rounded_pixel": [
+        254,
+        280
+      ],
+      "image": "slot-5.png",
+      "image_sha256": "1633146e1abd828b40b29d135e2b01d39c308fea0ab506c1029cf98eb3805667"
+    },
+    {
+      "slot": 6,
+      "status": "ready",
+      "xy": [
+        429.0,
+        282.0
+      ],
+      "rounded_pixel": [
+        429,
+        282
+      ],
+      "image": "slot-6.png",
+      "image_sha256": "75862c54aa5bd8e061314fb6349ab652ea553814f15aac4c32651902cc6c2425"
+    },
+    {
+      "slot": 7,
+      "status": "ready",
+      "xy": [
+        566.0,
+        312.0
+      ],
+      "rounded_pixel": [
+        566,
+        312
+      ],
+      "image": "slot-7.png",
+      "image_sha256": "5ccd1ab36638847dfae79b2058fee30a781ed94ec693b018d237842c20ca7cc3"
+    },
+    {
+      "slot": 8,
+      "status": "ready",
+      "xy": [
+        140.0,
+        322.0
+      ],
+      "rounded_pixel": [
+        140,
+        322
+      ],
+      "image": "slot-8.png",
+      "image_sha256": "fc5c3e35e756ab43043aa3df800395b3f2861884db82d77f8ce4984b37d8b9e6"
+    },
+    {
+      "slot": 9,
+      "status": "ready",
+      "xy": [
+        207.0,
+        350.0
+      ],
+      "rounded_pixel": [
+        207,
+        350
+      ],
+      "image": "slot-9.png",
+      "image_sha256": "fb32c35b32e04e82dfe839eaa3cd9e9f2ada7531447f18468da05bcbb2bdbcee"
+    },
+    {
+      "slot": 10,
+      "status": "ready",
+      "xy": [
+        450.0,
+        326.0
+      ],
+      "rounded_pixel": [
+        450,
+        326
+      ],
+      "image": "slot-10.png",
+      "image_sha256": "403e076dc1263602826960b58685c5a81057a7e08ee1e3138e670dd021b3f6e9"
+    },
+    {
+      "slot": 11,
+      "status": "ready",
+      "xy": [
+        637.0,
+        330.0
+      ],
+      "rounded_pixel": [
+        637,
+        330
+      ],
+      "image": "slot-11.png",
+      "image_sha256": "cb745cd578feb01fac82ca8deac4e6cf27c7a6f3f8b1ede73a8587638c71fff4"
+    }
+  ]
+}

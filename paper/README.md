@@ -408,6 +408,31 @@ on a separately selected source-only sample, with geometric results hidden.
 No existing measurements, selections, or camera rankings were changed by this
 inspection, and these development observations are not added to the manuscript.
 
+The next diagnostic uses `build_source_crops.py` to retain all 12 original
+frame-zero grid targets, without selection on later survival, depth, or camera
+errors. Each input is a native-resolution 161x161 RGB crop centered exactly on
+the rounded target pixel. Outside-image pixels are neutral gray; they are not
+replicated scene content. No marker, depth image, or camera diagnostic is shown.
+The source crops remain local in `tmp/source-crops-v1` and on Anima in
+`/data3/kmatzen/plumbline/research/source-crops-v1/source-crops-v1`.
+
+`run_vlm_dnf_pilot.py --task crop_description` asks for one or two sentences
+describing the center surface or object, explicitly excluding camera quality
+and temporal claims. Nonempty prose is recorded without JSON parsing; this
+does not certify visual correctness. This changes both presentation and prompt
+relative to the earlier identity pilot, so it is not a controlled single-factor
+comparison. It is also the same development sequence already inspected, not
+held-out evaluation.
+
+The 12-item batch has been launched sequentially on Anima using the pinned 7B
+checkpoint, NF4, fp32 language-attention scores, a 768-token image ceiling, and
+greedy generation. The input manifest, executed runner/helper, and completed
+responses are retained in `results/source-crops-v1`. At this checkpoint only
+slot 0 has been retrieved; the batch is still running and no aggregate result
+is claimed. Its processed crop has 36 image tokens (the ceiling does not force
+upsampling). Neither these captions nor assistant assessments of them are
+independent human ground truth or training labels. The paper is unchanged.
+
 #### Reference timing sensitivity
 
 `probe_tum_pose_timing.py` reproduces the retained reference poses from the
