@@ -4290,3 +4290,46 @@ four-scene development evidence, not validation of a reference-free evaluator.
 The complete paired curves are `results/movi-camera-pilot-v1/task-tolerances-v1.json`.
 Tests cover crossings, unavailable denominators, dominance, monotonicity, and
 exact replay with source hashes checked.
+
+### Research decision after the completed judge experiments
+
+The literature check on 2026-10-17 adds a relevant comparison:
+[PathEval, CVPR 2025](https://arxiv.org/html/2411.18711v4), by Aghzal, Yue,
+Plaku, and Yao, separates task interpretation from fine visual perception in
+path evaluation. Its experiments motivate task-specific discriminative
+adaptation of visual representations. This is adjacent evidence, not a result
+about camera tracking or proof of the cause of our errors.
+
+The saved twenty-pass training manifest contains 144 trainable tensors and
+1,843,200 parameters, all in language-model q/v attention LoRA layers. There
+are no trainable visual tensors. Consequently, the completed experiment tests
+language-side adaptation of a frozen visual representation; it does not test
+whether training a visual verifier on geometric supervision can work. The
+image-zeroing audit shows input dependence, not adequate spatial resolution.
+
+The [3DCodeVerse harness](https://3dcodeverse.com/) combines visual judgments
+with deterministic measurements that constrain the judgments, and separates
+judge development from frozen harness comparisons. That supports using a
+measurement-constrained verifier here, not treating fluent judgment text as
+ground truth. [ORE](https://proceedings.neurips.cc/paper_files/paper/2023/hash/eb206443c93d07da8b1974b768d8a0d4-Abstract-Datasets_and_Benchmarks.html)
+already evaluates cameras without ground-truth trajectories using static
+object tracklets. Reprojection checks, task-dependent curves, and adding a VLM
+are not sufficient novelty claims by themselves.
+
+The next learned-method hypothesis is a visually trained, measurement-constrained
+verifier of task failure. Before another language-model training run, test
+whether visual features can distinguish controlled marker displacement from
+occlusion and unresolvable evidence on development-only data. Compare frozen
+features, discriminatively adapted visual features, and the existing RGB
+tracker at matched answer coverage. Keep marker initialization, camera output,
+static-surface support, and visibility as separate inputs/claims. A verifier
+must not turn missing tracks or moving objects into camera failures.
+
+Advancement requires reliable improvements on cases the classical verifier
+cannot answer, followed by fresh scene- and method-disjoint functional tests.
+Model and threshold selection may use development data only; the already
+inspected DAVIS and MOVi examples cannot become fresh validation by renaming
+their split. The existing calibration exports remain unopened. A learned
+verifier that only reproduces classical decisions does not establish the
+requested contribution. BO/RL should wait until this evaluator is validated,
+since optimizing an unreliable score would not demonstrate better tracking.
