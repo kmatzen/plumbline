@@ -302,6 +302,35 @@ compare small missing-data cases against exhaustive binary completions.
 
 #### Early-fit image anchors with a reference-camera control
 
+`probe_point_support.py` tests a set-valued alternative to trusting one fitted
+point. For each complete 11-frame prefix, a linear program searches for any
+positive-depth 3D point whose projections lie within axis-wise pixel boxes
+around the tracked locations. A separate full-track check uses all available
+observations and records missing frames. It is joint consistency, **not held-out
+prediction**: later observations constrain the full-track solution. Staticness,
+correct correspondence, calibration, and synchronization remain assumptions.
+Solver infeasibility is numerical evidence under those assumptions, not a DNF
+certificate. A positive witness also does not prove the trajectory correct.
+
+The fixed tolerance sweep is 1, 2, 4, and 8 pixels, with no selected operating
+cutoff. On walking-static at 4 pixels, reference cameras admit early positive
+witnesses for all 12 tracks, including the three rejected by the earlier fitted
+point's depth. Nine tracks admit full-track witnesses; the later five-degree yaw
+control admits none. At 1 pixel, all 12 reference tracks are solver-infeasible
+even on the early prefix. At 8 pixels, reversed reference camera centers admit
+ten full-track witnesses, so coarse tolerance can also conceal a wrong geometry.
+On walking-XYZ, eight slots lack a complete early track. At 4 pixels, reference
+and DAGE each admit three early witnesses and two full-track witnesses; the yaw
+and reversed-center controls admit no full-track witness. These are conditional
+development results, not calibrated failure detection or a method ranking.
+
+All solver outcomes, numerical margins, witness coordinates, and observation
+indices are retained in `tum-point-support-static-v1.json` and
+`tum-point-support-xyz-v1.json`. Synthetic tests cover exact stationary cameras
+with indeterminate depth, later contradictory observations, and missing early
+evidence. Positive witnesses were independently reprojected into the original
+camera coordinates and checked against the stated boxes and positive depth.
+
 The same unmodified probe was also run on the retained 90-frame TUM
 walking-static clip (`tum-anchor-static-v1.json`). Reference cameras support nine
 fits and 302 later measurements; three fits have nonpositive depth. DAGE supports
