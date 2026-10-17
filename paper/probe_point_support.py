@@ -29,6 +29,7 @@ def track_support(track, poses, calibration, tolerance):
     return {
         "status": "checked",
         "observed_indices": indices.tolist(),
+        "later_observed_frames": int(np.sum(indices >= 11)),
         "missing_frames": len(track) - len(indices),
         "early": early,
         "all_observed": full,

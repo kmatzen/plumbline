@@ -328,6 +328,32 @@ compare small missing-data cases against exhaustive binary completions.
 
 #### Early-fit image anchors with a reference-camera control
 
+The same point-support sweep was applied to the six existing DAVIS training
+outputs by `probe_davis_point_support.py`, without reference poses or new
+inference. Native predicted calibration is converted back to source pixels with
+the retained half-pixel convention. Manifest and prediction hashes are verified.
+The existing LK tracks and annotation-zero admission are reused; excluded mask
+frames and lost observations remain recorded, and neither is certified static.
+
+At a four-pixel axis-wise tolerance, bear has 11 early witnesses for each method,
+but seven full-observed-track witnesses for DAGE and one for DA3. Boat has 11/6
+early and 3/0 full-track witnesses for DAGE/DA3. These maximum-constraint results
+differ from the earlier typical-placement-error comparisons: one bad observation
+can invalidate a complete-track constraint set, and the point can be chosen using
+later observations. This is not an improvement in camera ranking or held-out
+prediction. No tolerance was chosen as a failure threshold.
+
+The first result record (`paper/results/davis/point-support-lk-v1.json`) exposed
+an accounting issue: BMX slot 8 has an early witness but no observed frame after
+the 11-frame prefix. A positive `all_observed` solver outcome there says nothing
+about later consistency. Version 2 retains the solver result but explicitly counts
+such cases as `no_later_observations` rather than full-track support. At eight
+pixels, each BMX method has only one positive track with later evidence, containing
+three later observations; nine other slots lack a complete early track. Both
+versions are preserved. All 163 positive witnesses in version 1 were independently
+checked in the original normalized-camera projection convention. Version 2 changes
+coverage reporting, not the underlying constraints or tolerance sweep.
+
 `probe_point_support.py` tests a set-valued alternative to trusting one fitted
 point. For each complete 11-frame prefix, a linear program searches for any
 positive-depth 3D point whose projections lie within axis-wise pixel boxes

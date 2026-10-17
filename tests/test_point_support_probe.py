@@ -9,6 +9,10 @@ def test_stationary_camera_can_support_point_without_identifying_depth():
     result = track_support(track, poses, k, 1)
     assert result["early"]["status"] == "positive_witness"
     assert result["all_observed"]["status"] == "positive_witness"
+    assert result["later_observed_frames"] == 9
+    for row in track[11:]:
+        row["xy"] = None
+    assert track_support(track, poses, k, 1)["later_observed_frames"] == 0
 
 
 def test_later_inconsistency_does_not_change_early_support():
