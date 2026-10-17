@@ -1,0 +1,3142 @@
+{
+  "scope": "camera-projected correspondence validation; no staticness or camera-DNF labels",
+  "sequence": "drift-chicane",
+  "prompt": "Compare the marked detail in A with the candidate marked in B. The top row shows context; the bottom row shows native-pixel crops. Is the candidate close to the same detail, far from it, or is the original detail occluded? Reply with one label: close, far, occluded, or uncertain. Close means within 2 native pixels; far means at least 8 native pixels. Use uncertain when the images do not support a decision. Do not judge camera accuracy or whether the object is moving.",
+  "planned_presentations": 150,
+  "geometry_sha256": "cba0f1435459acc03dccc6529f61b3514f75a33642a244273c902cf22283d890",
+  "source_manifest_sha256": "d8e1903df707408ef3b392c8c85c951b8cd6a36f899690d76ca520ae331bb41d",
+  "source_file_sha256": "a414658af06721329045ad469cec05ac4e82de292f773c630a7734a4c7198311",
+  "tracker_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "script_sha256": "49f222e81751905ebeb20100c2eceac7eb15c8b92cc7230141b9a7a104cfbbfb",
+  "export_sha256": "592df882a6d5f18217da7039b5e8e0d9af31ea37dfce93c314d9f4b7690e1fb4",
+  "geometry_dependencies_sha256": {
+    "plumbline.image_evidence": "9fc932d5f4cea4008a9dc43106fe4075e67dff17274000853cd511bff17414f4",
+    "plumbline.conventions": "506969710476aafde4ec4adf63cb86d4164762bd32e81d1a1b3bfd5f72e242ad"
+  },
+  "dependencies_sha256": {
+    "tapvid_camera_markers.py": "769bb4e2f7d34574e9352f748ae441926ee8e937c20597a27c107d4299edcc8b",
+    "build_anchor_preview.py": "7568d7a8cc409e7ac630b0a3753dced03691b0350e34547355ccfe862b3ae1c3",
+    "build_tapvid_judge_corpus.py": "5f66c715c674336018bfe6d331d7b67f81acfaa8896757c65e1f7817686852e0",
+    "run_tapvid_cameras.py": "56b8884bdf6c42ea41ae0b3313dc9dcdb554821c98cd96f31f8615cf134ddbec"
+  },
+  "counts": {
+    "close": 17,
+    "occluded": 44,
+    "query_beyond_video": 54,
+    "borderline_unlabeled": 1,
+    "nonpositive_prefix_depth": 16,
+    "far": 18
+  },
+  "records": [
+    {
+      "id": "e47b1b34d8c9afce14548154",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        448.86668956279755,
+        195.91837406158447
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        448.3690739089581,
+        196.44089354295664
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 0.9272500685119625,
+      "image": "images/e47b1b34d8c9afce14548154.png",
+      "image_sha256": "fbd6c1ce6af1ab5eb8252875b7a548e1f04e114b7fa7451eff70ebdceed13a49"
+    },
+    {
+      "id": "fe5741dbca4b9215033e2a1b",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        448.86668956279755,
+        195.91837406158447
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        448.79925421392085,
+        196.16407669180595
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/fe5741dbca4b9215033e2a1b.png",
+      "image_sha256": "173f6c52a85be49ef4ebf6594d11b51a006a386e08c2822f667773fa481aa457"
+    },
+    {
+      "id": "25747118dc8bc91da369d823",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        448.86668956279755,
+        195.91837406158447
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "95e06b89b3ab736045510f98",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        455.86932814121246,
+        195.21865367889404
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        455.4294004772795,
+        195.71905380881708
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 0.996995875017389,
+      "image": "images/95e06b89b3ab736045510f98.png",
+      "image_sha256": "4222bd66169de3d07046806433ee6005266f2cbfdea5f6022b9fe5a1f2262f6b"
+    },
+    {
+      "id": "d9d7f1b5f3cac48e441f38db",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        455.86932814121246,
+        195.21865367889404
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        455.90995183934257,
+        195.43536183528565
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/d9d7f1b5f3cac48e441f38db.png",
+      "image_sha256": "e92115961274c3c49c11f667b5dddaf3e24551e1ee88e97d1c86cfe8c2a60933"
+    },
+    {
+      "id": "58993b06d18d5367517f2bee",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        455.86932814121246,
+        195.21865367889404
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1a067ac920bcc7c5cc648f71",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        449.56695342063904,
+        200.11661052703857
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        448.9697925428568,
+        201.3096173909189
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.597658941487452,
+      "image": "images/1a067ac920bcc7c5cc648f71.png",
+      "image_sha256": "3e64bf624bbe05d4bc3ba63159fe8bab9c8a27f697f631e74105c146c1f85c3f"
+    },
+    {
+      "id": "7f20a30efe0873d2b9a01bee",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        449.56695342063904,
+        200.11661052703857
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        449.7162925741289,
+        200.9861948549731
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/7f20a30efe0873d2b9a01bee.png",
+      "image_sha256": "a8980b3ed89daaec83319afbd27980dc1f44f0e8cc5a46d2a8c033c898c370c7"
+    },
+    {
+      "id": "545ef009b29cb4ef7e3776aa",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        449.56695342063904,
+        200.11661052703857
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "767dd1381650eec1fb379eda",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        455.169064283371,
+        200.816330909729
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        454.59863602388685,
+        202.18013761581793
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.794217836300933,
+      "image": "images/767dd1381650eec1fb379eda.png",
+      "image_sha256": "5616726edf31c8f1115688186a469e6442225de5d3a25a7acf105d8d6f421398"
+    },
+    {
+      "id": "e57dea7449aee720a6bd38f0",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        455.169064283371,
+        200.816330909729
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        455.42970878595315,
+        201.8441166005324
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/e57dea7449aee720a6bd38f0.png",
+      "image_sha256": "ea306baa411ea69967d6748e286a4cd135cebb4e97c74a22eb3ebf46e55bc4bf"
+    },
+    {
+      "id": "0a4f1da6da31877e10b51209",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        455.169064283371,
+        200.816330909729
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4f415756250e258fdbbe354a",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        452.368008852005,
+        195.21865367889404
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        451.8155214479787,
+        195.7271519908543
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.0311595307980468,
+      "image": "images/4f415756250e258fdbbe354a.png",
+      "image_sha256": "629e6a6fe106a278e8382eb402c4385578820fdf7f17fc20050e8b859d9a4b56"
+    },
+    {
+      "id": "2b15b08fd3faed3ec1ddd0b1",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        452.368008852005,
+        195.21865367889404
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        452.2981792425249,
+        195.44268766985437
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/2b15b08fd3faed3ec1ddd0b1.png",
+      "image_sha256": "ec8821952ff036b31985f37ba2157f0eaef25953de51ec91e16d51038fb34bdc"
+    },
+    {
+      "id": "d930a9df8924948e03cca998",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        452.368008852005,
+        195.21865367889404
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0b19733bd70d50cc383ad603",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        452.2778607606888,
+        192.65891075134277
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        451.74986260095136,
+        193.0686342856519
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 2.319945810631235,
+      "image": "images/0b19733bd70d50cc383ad603.png",
+      "image_sha256": "db6c2dd0d211f7361b4b7ae2431cff764276190ebd8802a37342ffa79792cdca"
+    },
+    {
+      "id": "dad5c08c293b0ed000362c49",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        452.2778607606888,
+        192.65891075134277
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        452.14834728852725,
+        192.7954872719515
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/dad5c08c293b0ed000362c49.png",
+      "image_sha256": "fe55bd4035d2faaae3e72afb62ed5df0913e175aa8264091013b6a8f8d907a2a"
+    },
+    {
+      "id": "e0f99d08bd1dd954927a4af0",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        452.2778607606888,
+        192.65891075134277
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "401af4bde4165a16f96e641b",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        452.4212018251419,
+        197.38584995269775
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        451.8248414576243,
+        198.2270823638317
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.9839043103934817,
+      "image": "images/401af4bde4165a16f96e641b.png",
+      "image_sha256": "8d5fdb0e9414f7851d0c7d9887df86d31ae0c08dbefb96893b811f8ae624adf2"
+    },
+    {
+      "id": "d09d58f9cf3bb437a23c0a02",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        452.4212018251419,
+        197.38584995269775
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        452.4638605209345,
+        197.91986661547617
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/d09d58f9cf3bb437a23c0a02.png",
+      "image_sha256": "5a47e9a7a5984ea8427f41e7cf98bd8e681ec16e0ed67a9f06bc544b8f0cfc6c"
+    },
+    {
+      "id": "d5fca8cc9783093d652e21a8",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        452.4212018251419,
+        197.38584995269775
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "28490367834809568ce48498",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        452.8512759208679,
+        204.5478916168213
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        452.3549775648542,
+        205.75051799001835
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.6160245057745963,
+      "image": "images/28490367834809568ce48498.png",
+      "image_sha256": "6220085b5795349d275b1e3d3b3092ad5126367ad0fe4575893c1d8488f0e362"
+    },
+    {
+      "id": "cb45432b13a76deed961c93a",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        452.8512759208679,
+        204.5478916168213
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        453.03667791943406,
+        205.43814198868301
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/cb45432b13a76deed961c93a.png",
+      "image_sha256": "64ddd78cdf13a4bdf8b383a88d81fb4839ee75372bec9a674bf520bf48b03b61"
+    },
+    {
+      "id": "485aa21961b00b08e19c5140",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        452.8512759208679,
+        204.5478916168213
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "49b36562bf7b94ca790f9e64",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        453.85471427440643,
+        210.70724487304688
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        453.34105666244204,
+        211.86886770499115
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.7773154633482724,
+      "image": "images/49b36562bf7b94ca790f9e64.png",
+      "image_sha256": "2063f44262b8898f51c298659d071825fca5df39a6379ba850bdcd3212511776"
+    },
+    {
+      "id": "faadf6f2af018f450fc60e16",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        453.85471427440643,
+        210.70724487304688
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        453.87755900688575,
+        211.58159550024024
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/faadf6f2af018f450fc60e16.png",
+      "image_sha256": "ff1a675c8dd1d5493fe0f1afa32918019050106a77091f35a83ff29a43a38e80"
+    },
+    {
+      "id": "af416f469267157ecf175588",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        453.85471427440643,
+        210.70724487304688
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5f5f091c44a136e1a7c8fa67",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        455.14488565921783,
+        218.15577507019043
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        454.6755869036249,
+        218.98296006396586
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/5f5f091c44a136e1a7c8fa67.png",
+      "image_sha256": "67fbfd0cf615e5c09e0a1d5c7a6ac59ebe7d1e8a3466d91f02b2d66c48d58f9d"
+    },
+    {
+      "id": "8f02f601664068ea8c7bb1bb",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        455.14488565921783,
+        218.15577507019043
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        454.96170248841435,
+        218.74128382023866
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/8f02f601664068ea8c7bb1bb.png",
+      "image_sha256": "9530326b72cd949790abd7cc029b64aabec76e9553a8294af4a91a337f21fe6a"
+    },
+    {
+      "id": "0c55e6036bf9cd3e38ed6083",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        455.14488565921783,
+        218.15577507019043
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "01f387ccd5853da33271257e",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        202.96155577898026,
+        238.62399101257324
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "26390df63a331c4ac1f00762",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        202.96155577898026,
+        238.62399101257324
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "89ab0afc0d18db14456ba4d5",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        202.96155577898026,
+        238.62399101257324
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8fcbf53b4ecc018e1d68dac3",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 2,
+      "source_xy": [
+        200.75544720888138,
+        237.5218105316162
+      ],
+      "lag": 15,
+      "frame": 17,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "48024bddd0724ee19ed67f84",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 2,
+      "source_xy": [
+        200.75544720888138,
+        237.5218105316162
+      ],
+      "lag": 30,
+      "frame": 32,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9dcd0cd9f579be1c80e233a0",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 2,
+      "source_xy": [
+        200.75544720888138,
+        237.5218105316162
+      ],
+      "lag": 60,
+      "frame": 62,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "96dafcb07591e7eed55d0247",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 39,
+      "source_xy": [
+        362.9040962457657,
+        256.2590217590332
+      ],
+      "lag": 15,
+      "frame": 54,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6a4aa5fd33190077225eccb4",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 39,
+      "source_xy": [
+        362.9040962457657,
+        256.2590217590332
+      ],
+      "lag": 30,
+      "frame": 69,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "82b7b7e56cb4abcfd3298927",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 39,
+      "source_xy": [
+        362.9040962457657,
+        256.2590217590332
+      ],
+      "lag": 60,
+      "frame": 99,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e328950610a6489a44b53809",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 4,
+      "source_xy": [
+        290.10266613960266,
+        225.39772510528564
+      ],
+      "lag": 15,
+      "frame": 19,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "25a2796d399665946df8493e",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 4,
+      "source_xy": [
+        290.10266613960266,
+        225.39772510528564
+      ],
+      "lag": 30,
+      "frame": 34,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8f35d7dbf8b2bfb0ba2973ba",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 4,
+      "source_xy": [
+        290.10266613960266,
+        225.39772510528564
+      ],
+      "lag": 60,
+      "frame": 64,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "512ab80122255e5663bac105",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 2,
+      "source_xy": [
+        194.68867409229279,
+        247.99261093139648
+      ],
+      "lag": 15,
+      "frame": 17,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cad83e72a1c1b01462b47369",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 2,
+      "source_xy": [
+        194.68867409229279,
+        247.99261093139648
+      ],
+      "lag": 30,
+      "frame": 32,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4151a412335edba877bd8791",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 2,
+      "source_xy": [
+        194.68867409229279,
+        247.99261093139648
+      ],
+      "lag": 60,
+      "frame": 62,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ed22dac616e02957afa22d15",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        451.63460755348206,
+        210.25640487670898
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        451.1509795420269,
+        211.39888627747865
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 0.9586889485608429,
+      "image": "images/ed22dac616e02957afa22d15.png",
+      "image_sha256": "2e2efa18c3c4968d83bcd2115a450c2f32794563e226d0b8d32cdd17bf845e62"
+    },
+    {
+      "id": "a51ea158e076ed95774d9770",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        451.63460755348206,
+        210.25640487670898
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        451.6615522600099,
+        211.1154712882948
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/a51ea158e076ed95774d9770.png",
+      "image_sha256": "c11426896e48de2acf82a4eb3dbe3d86cf335944078047ef68a1345955dc4fdf"
+    },
+    {
+      "id": "8b367fc14e7e6e9ae6d5e1e3",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        451.63460755348206,
+        210.25640487670898
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f671005eff43bc726ffd3624",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        453.6875,
+        210.25640487670898
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        453.185998596284,
+        211.363496218009
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.3917700062293201,
+      "image": "images/f671005eff43bc726ffd3624.png",
+      "image_sha256": "923ca674dcb3515453b3800bfb893ef6c4e71326a06a3773e29cdf9b6cfaa278"
+    },
+    {
+      "id": "d7483a6db3ac3fcf40415ed2",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        453.6875,
+        210.25640487670898
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        453.6983701309433,
+        211.08002657347194
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/d7483a6db3ac3fcf40415ed2.png",
+      "image_sha256": "c87d73118bd8894ac447a63f31e9e814e32c5a812c13bc4fc77f8ac3d238d4f0"
+    },
+    {
+      "id": "4955210105aae85289280d60",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        453.6875,
+        210.25640487670898
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4c07dd4c071a8cc2652663cf",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        450.6081613302231,
+        208.20512294769287
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        450.1181028377255,
+        209.33830452039584
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.5833019880795178,
+      "image": "images/4c07dd4c071a8cc2652663cf.png",
+      "image_sha256": "1aa68aed737ed617a09fb8a7158a38c6f806ab96366567a96ddef84cc968813f"
+    },
+    {
+      "id": "a2c0d8cc1f07c256068d6242",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        450.6081613302231,
+        208.20512294769287
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        450.7019952349943,
+        209.04217308523084
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/a2c0d8cc1f07c256068d6242.png",
+      "image_sha256": "8d7d3de61b8595111207e362470214f58d9961d1becf3167dc3f46e46b0a5f4b"
+    },
+    {
+      "id": "15f7b8f704b66f8306694e55",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        450.6081613302231,
+        208.20512294769287
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "10a10471d2c0938d3aa13f4e",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        452.661053776741,
+        210.25640487670898
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        452.1694846124185,
+        211.3588691648913
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.5858150145473533,
+      "image": "images/10a10471d2c0938d3aa13f4e.png",
+      "image_sha256": "db1644d78a2f9fda1ea95a10b56a80f973812257482aa87bcfe6167f15d60c89"
+    },
+    {
+      "id": "b571964e717b40b3c5e7b004",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        452.661053776741,
+        210.25640487670898
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        452.6661276630549,
+        211.0778611195433
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/b571964e717b40b3c5e7b004.png",
+      "image_sha256": "5a31097a9bf5a284781bc4df129d06e9c6dbd5d3509aba7a05789a1aeca9bfa9"
+    },
+    {
+      "id": "55f3114800d751529c5a244d",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        452.661053776741,
+        210.25640487670898
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3ee2a56cb6b945c8bbf83d63",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        452.661053776741,
+        209.2307710647583
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        452.1703522212267,
+        210.35872297552424
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.7003217231720893,
+      "image": "images/3ee2a56cb6b945c8bbf83d63.png",
+      "image_sha256": "08153ae1c2f1455fb14a7bc689a23672dae3854d8038cb0fb09c42e8447dc54b"
+    },
+    {
+      "id": "08ce38aa34e95ad5af3b9106",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        452.661053776741,
+        209.2307710647583
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        452.70869162473343,
+        210.07054324498938
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.1419910214815943,
+      "image": "images/08ce38aa34e95ad5af3b9106.png",
+      "image_sha256": "f28be58018149a9850763cead7955c0ac9bffe9db9653d5575b8c7089be601ff"
+    },
+    {
+      "id": "e029592d7767c0ab9f1bdee0",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        452.661053776741,
+        209.2307710647583
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c87db97ceab87aca83d63ba6",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        191.04000091552734
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        439.293853284569,
+        191.5444499077277
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 0.8861440993805596,
+      "image": "images/c87db97ceab87aca83d63ba6.png",
+      "image_sha256": "63974bbe8701eff026d12238a61c906194369e7303523cf6931dc9f393051e5c"
+    },
+    {
+      "id": "cc675d76273624e2d583df0d",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        191.04000091552734
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        439.60137458984184,
+        191.2818807195046
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/cc675d76273624e2d583df0d.png",
+      "image_sha256": "121b5dc2bcee551f23ab892a55f45bf3170e6215c167e30448e36e1d06b7a02f"
+    },
+    {
+      "id": "ccb8e1b64861d6cf881b72be",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        191.04000091552734
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b038c05236a8fc2222f308a9",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        440.98491621017456,
+        231.3599967956543
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        440.20773069219246,
+        232.11132773948594
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/b038c05236a8fc2222f308a9.png",
+      "image_sha256": "95c26760bc3c0545f68ac63e1b29f2a686de303f5cdbfc1512e1ce847f40c940"
+    },
+    {
+      "id": "8f8b829526df3bdb6a623009",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        440.98491621017456,
+        231.3599967956543
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        440.4210841553444,
+        231.88785363258742
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/8f8b829526df3bdb6a623009.png",
+      "image_sha256": "9ee1aeebce81f0f6efeb98e3838e5ce0bc69ac8f4abf58c58a450aab12f9ef55"
+    },
+    {
+      "id": "73525873c06bd5bad234b0af",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        440.98491621017456,
+        231.3599967956543
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "16a696f0b756843b2eabc39b",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        440.98491621017456,
+        196.79999828338623
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        440.1957792258977,
+        197.2410652928508
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 0.9971998296258544,
+      "image": "images/16a696f0b756843b2eabc39b.png",
+      "image_sha256": "4d28e1799517af556517c271f011783a671aa704d804b274caf27024cb1eb1cc"
+    },
+    {
+      "id": "757291dc2629818a6bd4c90a",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        440.98491621017456,
+        196.79999828338623
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        440.45701665296957,
+        196.98859754155166
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/757291dc2629818a6bd4c90a.png",
+      "image_sha256": "cde2032e1326bf0f70819bb64eec2947ba3c6659989cec3af92a3034849b1dc1"
+    },
+    {
+      "id": "8e41f7fbf8d7bf19ced40153",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        440.98491621017456,
+        196.79999828338623
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d9017c050d62a0593b19ceaf",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        442.90642964839935,
+        206.40000343322754
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        441.8611531766036,
+        206.89040643896593
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.332392136070824,
+      "image": "images/d9017c050d62a0593b19ceaf.png",
+      "image_sha256": "eccf142d6821a663e536cc1f91ab647aaa04debba63d0ababe349a8e11efe57a"
+    },
+    {
+      "id": "1dc22ee2a0ab492d28199d69",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        442.90642964839935,
+        206.40000343322754
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        442.09270126118554,
+        206.64855593821608
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/1dc22ee2a0ab492d28199d69.png",
+      "image_sha256": "729ceb2c27226e554108a717b0a0de134815058fcf0058543e0c2cf8f1266ac2"
+    },
+    {
+      "id": "1f391e8fd0a83f2571c2a577",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        442.90642964839935,
+        206.40000343322754
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f3701037463e81d55a893388",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        220.80000400543213
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        439.08630717568633,
+        221.46358219883248
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/f3701037463e81d55a893388.png",
+      "image_sha256": "cac35a06af0c1dbb581e42160dd3d7b60ff6222e95eb38ecc92fef12ade6bcea"
+    },
+    {
+      "id": "bf6c264755e145f8abc246cb",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        220.80000400543213
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        439.3235828536686,
+        221.2291531149672
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/bf6c264755e145f8abc246cb.png",
+      "image_sha256": "6b8ce846c68c6c8ae684caa38307cdbfe5aa51efdd92fdbb757295c6ff1972a2"
+    },
+    {
+      "id": "2300ddd7e02024d6153e33ef",
+      "sequence": "drift-chicane",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        220.80000400543213
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "38abb8258a8ec987d9137415",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        448.86668956279755,
+        195.91837406158447
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        484.9123683528671,
+        188.81025699986654
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 36.56513326642908,
+      "image": "images/38abb8258a8ec987d9137415.png",
+      "image_sha256": "b9af7cd6c05809fedf8afd9afe83c46950a7d31d9b2da6983c93ca9f00c97972"
+    },
+    {
+      "id": "8bae37c099a058ddab14907a",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        448.86668956279755,
+        195.91837406158447
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        498.42861177311664,
+        194.47640097611887
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/8bae37c099a058ddab14907a.png",
+      "image_sha256": "deb6f0201c62d43451cf85d6debf7e50c505459fd01f7bf8cef02736659e39d9"
+    },
+    {
+      "id": "b181e359730ad295b75aa848",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        448.86668956279755,
+        195.91837406158447
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4980659465dd6a4c546e3977",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        455.86932814121246,
+        195.21865367889404
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        492.73760828913316,
+        187.91094831593355
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 37.2230793315124,
+      "image": "images/4980659465dd6a4c546e3977.png",
+      "image_sha256": "18d77e57812a043eb89671cc939c918dcd178db9cf728b0465f192bbc82af047"
+    },
+    {
+      "id": "1a9f2c722d41d4ffbf6cffc3",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        455.86932814121246,
+        195.21865367889404
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        506.5876436003389,
+        193.7400081048813
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/1a9f2c722d41d4ffbf6cffc3.png",
+      "image_sha256": "75a6e28ed3dcd3f31523d1a6e61f6b5176f583798186d0577bae6b3aeac7304c"
+    },
+    {
+      "id": "dd149a98f130fdeb065728f7",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        455.86932814121246,
+        195.21865367889404
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "91f5fc8ad02fe7366d9aeb39",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        449.56695342063904,
+        200.11661052703857
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        486.96143614939456,
+        192.97767864138396
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 37.7460470118399,
+      "image": "images/91f5fc8ad02fe7366d9aeb39.png",
+      "image_sha256": "6cef8fd175f5239ce72a88c130d959c1e0141ed51e93540c987433936b0d80b4"
+    },
+    {
+      "id": "8f5a7eb457a5f4ee700d8eba",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        449.56695342063904,
+        200.11661052703857
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        501.0248288253063,
+        198.99558040242403
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/8f5a7eb457a5f4ee700d8eba.png",
+      "image_sha256": "2018ea57da0f5d2a6dd9a669c926082cf8ac5b39a9a0faf61c97935d40de44a0"
+    },
+    {
+      "id": "1622716d8310b28134e6a541",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        449.56695342063904,
+        200.11661052703857
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b3e538888ea03e5ffc1ae753",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        455.169064283371,
+        200.816330909729
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        493.1889340348188,
+        193.6412156546743
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 38.24441736116067,
+      "image": "images/b3e538888ea03e5ffc1ae753.png",
+      "image_sha256": "a2f023b5cbb5082a3681b5db0f051ed1e06e4ab6f2fd4ec9fdfa8ea5797a18ed"
+    },
+    {
+      "id": "6537ef854dddd40df3860ce1",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        455.169064283371,
+        200.816330909729
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        507.5007020778429,
+        199.78999208759052
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/6537ef854dddd40df3860ce1.png",
+      "image_sha256": "9d13c522cacd589105bf6e00ec20effaeaca8a7b31fe2dd92f0f1a366646c17f"
+    },
+    {
+      "id": "1271c148eb2bfd7b14b19d6f",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        455.169064283371,
+        200.816330909729
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8f497512258dd69416bcf378",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        452.368008852005,
+        195.21865367889404
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        488.9984246737208,
+        187.9252179760999
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 37.046883447784964,
+      "image": "images/8f497512258dd69416bcf378.png",
+      "image_sha256": "dc2c2085ddd2891e5ce39ef49544593b4ea9bb188e2c5e238a02d1d01279d6a5"
+    },
+    {
+      "id": "4dda2d422ef973890caf591a",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        452.368008852005,
+        195.21865367889404
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        502.786578822128,
+        193.73058815416894
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/4dda2d422ef973890caf591a.png",
+      "image_sha256": "bb3bd63c06fc379f8da86afec1fc6f64952e6acc5c62f54e655dc750735c5b4d"
+    },
+    {
+      "id": "6bc9325d63105355e9b29de4",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        452.368008852005,
+        195.21865367889404
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3ea7a055034eaedb04f77882",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        452.2778607606888,
+        192.65891075134277
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        488.43833064243626,
+        185.47372431715445
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 35.18174553128814,
+      "image": "images/3ea7a055034eaedb04f77882.png",
+      "image_sha256": "e0472ac441335c580e8ea155c0fe601952e57bd752c1c47af87a71d53d622d86"
+    },
+    {
+      "id": "c928126e849923f44758c41e",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        452.2778607606888,
+        192.65891075134277
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        502.0315292454899,
+        191.14550701295732
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/c928126e849923f44758c41e.png",
+      "image_sha256": "35fe918e91859b0d639a6b713807cf6f9b2be2b5a628706aedd7edfdaa909b39"
+    },
+    {
+      "id": "3818d405180879ea3bc295ba",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        452.2778607606888,
+        192.65891075134277
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e6482434a41daa9ce70fb369",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        452.4212018251419,
+        197.38584995269775
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        489.4007145695998,
+        190.13012590492508
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 36.607402708910634,
+      "image": "images/e6482434a41daa9ce70fb369.png",
+      "image_sha256": "8277619c30ade0feff1faf1d90426b0fe8c68ad32b9862e80761f10993c3b77a"
+    },
+    {
+      "id": "151552b20672f20c618abdfe",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        452.4212018251419,
+        197.38584995269775
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        503.31563764481837,
+        196.02760383556392
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/151552b20672f20c618abdfe.png",
+      "image_sha256": "5d84acd1053a3d6f62efee29585120d71a65e2d454763e62d734296c610b6d84"
+    },
+    {
+      "id": "f5a0382991f137c00398ca4a",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        452.4212018251419,
+        197.38584995269775
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "bb5087df21942f45f2e440fa",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        452.8512759208679,
+        204.5478916168213
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        489.98095479492224,
+        197.57998703316508
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 37.320197067416,
+      "image": "images/bb5087df21942f45f2e440fa.png",
+      "image_sha256": "ecd10744cc6dafa47ae4b2c27cbfc31e8e196c7aa3d6d01e50c27b1bddec845c"
+    },
+    {
+      "id": "f560b32827021d571b4c2b1c",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        452.8512759208679,
+        204.5478916168213
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        503.9118423850828,
+        203.54832233177044
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/f560b32827021d571b4c2b1c.png",
+      "image_sha256": "4988ebdf940ef880b6d32c480d4b05a6c97de82db5254d6bfe40f1970541c4e5"
+    },
+    {
+      "id": "cf9152f8cf3694577d193eb9",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        452.8512759208679,
+        204.5478916168213
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9812367bdb8aaf54c5d6f0e7",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        453.85471427440643,
+        210.70724487304688
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        489.75969868140464,
+        204.1041248941437
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 35.820767210602796,
+      "image": "images/9812367bdb8aaf54c5d6f0e7.png",
+      "image_sha256": "f3747c2c232866de5032b6c3b32a23993a40616c21c1b8b2468f6d4c9c5ee6bd"
+    },
+    {
+      "id": "f4097bed81302b58c3a81d78",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        453.85471427440643,
+        210.70724487304688
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        503.2083651280772,
+        209.84141484586425
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/f4097bed81302b58c3a81d78.png",
+      "image_sha256": "e71e682f5258629dc4f3675d9ece7d8eed9ccf3a5ce433981a9debd583b73710"
+    },
+    {
+      "id": "20aee987af500bdcd0d61966",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        453.85471427440643,
+        210.70724487304688
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "987bff7bfbc2937ab0bd2254",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        455.14488565921783,
+        218.15577507019043
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        487.72766587341204,
+        212.11366832186408
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/987bff7bfbc2937ab0bd2254.png",
+      "image_sha256": "b3aab255c731b25fcaa68df13fa3bb0dadd80efb55ba9c49baa3e424d5acde50"
+    },
+    {
+      "id": "90d1a0fb9244063519dc3fdf",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        455.14488565921783,
+        218.15577507019043
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        499.7750467593325,
+        217.08414848338865
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/90d1a0fb9244063519dc3fdf.png",
+      "image_sha256": "0c8217dd8742cdb62d911b604f501fd6c34a76881f481f351b05a0907fd83aef"
+    },
+    {
+      "id": "f2bd58f8b0ccc47ca9d22f24",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        455.14488565921783,
+        218.15577507019043
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9e947af54f3c117398a4c33b",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        202.96155577898026,
+        238.62399101257324
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1b34c796c21fdcda4c5a0b2e",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        202.96155577898026,
+        238.62399101257324
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d733651892c01c78d15ebe16",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        202.96155577898026,
+        238.62399101257324
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0b0946ced451c49292e8259f",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 2,
+      "source_xy": [
+        200.75544720888138,
+        237.5218105316162
+      ],
+      "lag": 15,
+      "frame": 17,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d3b3aa5e5c2a23ecd330732f",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 2,
+      "source_xy": [
+        200.75544720888138,
+        237.5218105316162
+      ],
+      "lag": 30,
+      "frame": 32,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fec45d89e1e2f7b380ce272a",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 2,
+      "source_xy": [
+        200.75544720888138,
+        237.5218105316162
+      ],
+      "lag": 60,
+      "frame": 62,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e4609d96b04631d4e6abf2c3",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 39,
+      "source_xy": [
+        362.9040962457657,
+        256.2590217590332
+      ],
+      "lag": 15,
+      "frame": 54,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "678336f006378935d813f1d7",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 39,
+      "source_xy": [
+        362.9040962457657,
+        256.2590217590332
+      ],
+      "lag": 30,
+      "frame": 69,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ceb1ae8d03e74acc4edd1d07",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 39,
+      "source_xy": [
+        362.9040962457657,
+        256.2590217590332
+      ],
+      "lag": 60,
+      "frame": 99,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0a4b1ebecc25a2ee15c2e585",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 4,
+      "source_xy": [
+        290.10266613960266,
+        225.39772510528564
+      ],
+      "lag": 15,
+      "frame": 19,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "991afa58d0763465dcd1772c",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 4,
+      "source_xy": [
+        290.10266613960266,
+        225.39772510528564
+      ],
+      "lag": 30,
+      "frame": 34,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "80c8446c1180c13ca59f6e2c",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 4,
+      "source_xy": [
+        290.10266613960266,
+        225.39772510528564
+      ],
+      "lag": 60,
+      "frame": 64,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "73571c0430d19fc4e70553eb",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 2,
+      "source_xy": [
+        194.68867409229279,
+        247.99261093139648
+      ],
+      "lag": 15,
+      "frame": 17,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "76e1749db4135038f27ad8ca",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 2,
+      "source_xy": [
+        194.68867409229279,
+        247.99261093139648
+      ],
+      "lag": 30,
+      "frame": 32,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c35fa8913da0f42b9fef87c3",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 2,
+      "source_xy": [
+        194.68867409229279,
+        247.99261093139648
+      ],
+      "lag": 60,
+      "frame": 62,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0d935439d3e69aa66acd808d",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        451.63460755348206,
+        210.25640487670898
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        487.0781941316961,
+        203.74497041205913
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 36.45789313124735,
+      "image": "images/0d935439d3e69aa66acd808d.png",
+      "image_sha256": "9c5d047874f57572ba11877ac2e711679d12a6bae1cf4354a1f11982eeb7d88d"
+    },
+    {
+      "id": "bad970667ee53976e5b7f336",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        451.63460755348206,
+        210.25640487670898
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        500.31351020621537,
+        209.3610342662979
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/bad970667ee53976e5b7f336.png",
+      "image_sha256": "419d351d2aa7a012d3679cda39b27421b8f548bbf958bc35edd1e99e489f1992"
+    },
+    {
+      "id": "c090832eda24dd4d0d79a2ed",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        451.63460755348206,
+        210.25640487670898
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d30d00e24c517b526f3ab0f3",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        453.6875,
+        210.25640487670898
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        489.49610588787374,
+        203.65176547384368
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 36.58596619048011,
+      "image": "images/d30d00e24c517b526f3ab0f3.png",
+      "image_sha256": "7b2b94635042b0f35233da69e6931cb61c51bf767b1da4154607b80f3c7d5f84"
+    },
+    {
+      "id": "bca86484f183b2cad1b3e933",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        453.6875,
+        210.25640487670898
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        502.9036522511606,
+        209.36170231953378
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/bca86484f183b2cad1b3e933.png",
+      "image_sha256": "933c09e5b2a00afe4fc9bc78f5c0f32a67dc1a5cd327a15885dedb309e8e86c2"
+    },
+    {
+      "id": "97a077eeb296fe2f6ebcb925",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        453.6875,
+        210.25640487670898
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "dd3cdaea1fbe653f0b25d409",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        450.6081613302231,
+        208.20512294769287
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        486.6492127192273,
+        201.47879071750444
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 36.04449982215586,
+      "image": "images/dd3cdaea1fbe653f0b25d409.png",
+      "image_sha256": "8d88cd7cee1811347a58c370aa362f281fe4b3e9e2da6acd1a6b2e5685658c71"
+    },
+    {
+      "id": "9864ba6e4adc23f4c671def9",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        450.6081613302231,
+        208.20512294769287
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        500.1253501397939,
+        207.22101040885036
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/9864ba6e4adc23f4c671def9.png",
+      "image_sha256": "45d04db2b32b69364456880fb8f39b6c6dfdd6213bc027c3431ee9a301d56350"
+    },
+    {
+      "id": "bd94a4ef42920142a7397367",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        450.6081613302231,
+        208.20512294769287
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "92bcb863d93eba87e2121979",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        452.661053776741,
+        210.25640487670898
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        488.2026281905953,
+        203.71154494589376
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 35.38399766707289,
+      "image": "images/92bcb863d93eba87e2121979.png",
+      "image_sha256": "14f1ff0d2fa8456abe83ca21822ff7c5c0029fc19c8481ec4f3c248cad66b285"
+    },
+    {
+      "id": "c08d21ce44266890dcdfa082",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        452.661053776741,
+        210.25640487670898
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        501.49087074066415,
+        209.35518457918985
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/c08d21ce44266890dcdfa082.png",
+      "image_sha256": "95320d2b91c1fa9d1526ff7aaaba505f91c3311b4f526fc1fe5b20ea14867aa1"
+    },
+    {
+      "id": "35c8cbcfe3ab97aaf2c082a0",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        452.661053776741,
+        210.25640487670898
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4da1d87b8bf6ddbeefaf3c5e",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        452.661053776741,
+        209.2307710647583
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        488.66698934592614,
+        202.57674959146604
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 35.98395899284598,
+      "image": "images/4da1d87b8bf6ddbeefaf3c5e.png",
+      "image_sha256": "8937f6a34b775d0dbae0c46eaed8adcfd86272763e8b40f7b57ee505411e28da"
+    },
+    {
+      "id": "5f932efda893c4a1544e5f44",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        452.661053776741,
+        209.2307710647583
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        502.1464585972839,
+        208.32334964570504
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 48.68741305131148,
+      "image": "images/5f932efda893c4a1544e5f44.png",
+      "image_sha256": "8ea647df2b6191b08f1337b722b645f17aca2a469375a5555bdb868b2351aafd"
+    },
+    {
+      "id": "0cd0ef72add67e683ebf094c",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        452.661053776741,
+        209.2307710647583
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e20e091c0476d3790b13547a",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        191.04000091552734
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        473.19317889069526,
+        184.5102533701978
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 33.778211433273896,
+      "image": "images/e20e091c0476d3790b13547a.png",
+      "image_sha256": "1f95ef7b0632f2f3322c885b16fbbb2ba9f41ef2e698888368a5208f612e5b5b"
+    },
+    {
+      "id": "974bcf418addaea4fe551a77",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        191.04000091552734
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        485.55907531230133,
+        189.49901976629366
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/974bcf418addaea4fe551a77.png",
+      "image_sha256": "ccc9a121962b248940b4046065ce9880ddc84294294c5710ab4f611e60780b58"
+    },
+    {
+      "id": "d122e1dd13a0188340c87c62",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        191.04000091552734
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ad583c0007255977c732da8b",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        440.98491621017456,
+        231.3599967956543
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        469.6379622131016,
+        225.82730574085485
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/ad583c0007255977c732da8b.png",
+      "image_sha256": "e78ed5079dfe015a7b081f0091527ff789e2a798ddcb0be14035d1bdf1f7f0ac"
+    },
+    {
+      "id": "f8c610c665ddd23cbf077b93",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        440.98491621017456,
+        231.3599967956543
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        480.10226647590173,
+        229.99318275220918
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/f8c610c665ddd23cbf077b93.png",
+      "image_sha256": "923f6d8d07a57596cb923bed12f0ffb57e00d7d68889f425e70e9ecb5efde2aa"
+    },
+    {
+      "id": "2e8ca9172201cd316a7e22e0",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        440.98491621017456,
+        231.3599967956543
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2e1cdd3d90288e42d264e49f",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        440.98491621017456,
+        196.79999828338623
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        473.99564436932104,
+        190.2826430523683
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 33.5968337077454,
+      "image": "images/2e1cdd3d90288e42d264e49f.png",
+      "image_sha256": "59fc23ac08436cf8583e10b34f881125d9d8f117d507c684cbe38b706ef79fde"
+    },
+    {
+      "id": "2f34e2ef6bcf5dc9c35fc9e8",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        440.98491621017456,
+        196.79999828338623
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        486.3389793743437,
+        195.3012897831405
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/2f34e2ef6bcf5dc9c35fc9e8.png",
+      "image_sha256": "bc815309b01433e1c6da5ac26f4eb1feecbbdf331efbf3b031c2bc6b51f6ecc3"
+    },
+    {
+      "id": "d36e5e0cb5b34e1929cf8f43",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        440.98491621017456,
+        196.79999828338623
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f1a4c3bdb4c8590994c1cb08",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        442.90642964839935,
+        206.40000343322754
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        474.4769990873176,
+        200.15482532412022
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 33.560561684651,
+      "image": "images/f1a4c3bdb4c8590994c1cb08.png",
+      "image_sha256": "1975b45b81ea72e8bd47018bbbd95a90324a5c2f055918a3d6259a7e50566096"
+    },
+    {
+      "id": "72bdc9309dd5a72ddd6cb8bf",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        442.90642964839935,
+        206.40000343322754
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        486.3185457903889,
+        204.9499499898321
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/72bdc9309dd5a72ddd6cb8bf.png",
+      "image_sha256": "91eec416da8e6367ed88794f5c2df56404583fbce3deaeacd445f37b12b26ca3"
+    },
+    {
+      "id": "fc92fcc0c274a651afa8f0d9",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        442.90642964839935,
+        206.40000343322754
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0fda5b7969215380580214ab",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        220.80000400543213
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        469.8759294101672,
+        214.96438670159046
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/0fda5b7969215380580214ab.png",
+      "image_sha256": "db060d7506ce0c6d94e59da8e4ba51c4b0e3e94928f462622d843918f61b6c86"
+    },
+    {
+      "id": "5131afe522eeb611a719ab1c",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        220.80000400543213
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        480.91947878465663,
+        219.40368178158232
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/5131afe522eeb611a719ab1c.png",
+      "image_sha256": "b03feac8ad9073f604eb5e016d810211c4a6e483482dfb95438a24ee1c0c345e"
+    },
+    {
+      "id": "b82a2d2e06c4f0354bef6489",
+      "sequence": "drift-chicane",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        220.80000400543213
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    }
+  ]
+}

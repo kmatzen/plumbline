@@ -1,0 +1,3675 @@
+{
+  "source": {
+    "source_manifest_sha256": "d8e1903df707408ef3b392c8c85c951b8cd6a36f899690d76ca520ae331bb41d",
+    "source_file_sha256": "2fda86af9ba9ed9f17c0a0bec31b0a48bc174823bbe8cd6cf4fca4bb20d5163e",
+    "decoded_rgb_sha256": "94ac6a7729af998534216b2db24fcaa499360bc5768f35ea75e5b6173834f0a8",
+    "shape": [
+      78,
+      480,
+      854,
+      3
+    ],
+    "frame_sha256": [
+      "37c97c4a63836c902c93e33d9e10e57f4bc774e205acf8aade7252811e3a9091",
+      "90662bd8dd118c6b4a8f4f9b629218426ecfbd796f3f6fb2d8b2394112e1d848",
+      "38bb70449ebd7fb4ac7d64229e81240afc333b0ea254d211f57994714c1e3217",
+      "53d7bf32cc2e8ecd33bde3acb2f34a87ba7c91e390894d5ba2576896fce40826",
+      "b5e7d14b723088ccfab2c0086249f69e6d06d76293242e8c0d34e23ade1601b4",
+      "5a75c07eb1fc98ac74e8926621edfe22e4d21c2aa821cdcd6d5c44252e875a8c",
+      "071960aeaed27961fc041190f05d373039e834f33a834dcfd0b0114a74869c63",
+      "78ab366ddd4061d0915b6926370658cab898941f544ec40c871ac2676eeed229",
+      "77813edf994ae5bfc2d2dc099e431e954a06d38b62344e8bd88afc9c647c4445",
+      "d9b11b9f90c9917bd11420ff32473b9a284cc3ab197a564f187407746a123a58",
+      "bcb80a5cbd03f0e26b50296c8f7a3fa6c57d33e92b8da46643485b5b37b72a25",
+      "f58090ecf15d60b4ee17f0750b0fb92a60204223cf3335bae67592b6504d0d95",
+      "be3dbd9bc69240d52eaa8be21233c37558980f2019393ff0f17aca91e2b85f27",
+      "ce8bb7058dc6926c1e76d654575636385886a5ca192fba1252e1c90c09d874bb",
+      "4c3925adae35659fe500ff97a5f74aaa26a93f7cca90ac121dc52f41b5c16fa7",
+      "510ddf952982c79a35b387c3e9c7cef8f8e704c9b3c77c30e4c4ad5d09889830",
+      "e8503433645a08d240576302bbcddbb2e18e5ece08a1edfb5759aa7c80ff78c7",
+      "17b3981bb844d3d7752b4386b89107287e4cd22eea3bf53142ff43da504ffa26",
+      "98e99ceadab382b282ccfbc63f43d902eb6b31d3d65a56f3cfe108a3f19c7ed3",
+      "7cc8ae0106328dd718da8fa472c814e5e7ea6a084e93fb87b227416f7df9d6e8",
+      "f2abb970d540c4080fdfd37ebb059feb7658f93fb4db427cc8fcb290617fb95c",
+      "06fc6c7f130bffe432e0765519ac574f5e7aaa3d5266a559ad04c32643a30b60",
+      "659ff077e5449269e6210619ad75e309cdd94a93df82aa7f9a5c6ff63e1cccaa",
+      "67320c4a24b80c5f4bdf7844f57a2dc581ad0468442713a5595116e6f6147456",
+      "50f446693de2d87635dcd87e23c2bb3792770a2ad9bbcedf929653dacd01f8fd",
+      "a53fbb35b3e24488f0366d9ae7658663ff582e6cf96d4885c80ea50a17e01aae",
+      "73f40ee4b7199248a8859012421de6817ccb3b2d1c895e8d5bf23811ee80e499",
+      "25cb9e3fb783eacdc6f0704c444a46305a5ad49cf8b71b8398586ccdf310aeef",
+      "ca0cd459172d3c2989f383a2c53379715743982c2ea840e232bfda7c19522659",
+      "c9d05c495ef5aa45fd36a6d5a37cb36e7bd6d2425fd54c6f45be891a3addc849",
+      "68c5563912677c29162e187a70bab17467c517f21133d2b0a5da1afa676793f0",
+      "bd14af9b36d9b0ebac380ec416cc196bd20331178ad97eba09d7b141ec2e57fc",
+      "f3303772ef24d405fcbb2698ee192d997b26d74b2823cc731b02ff53a000bf33",
+      "e2cedb6227c62053b60f1c9381009ddb383beb3befbb6dd2ebcbc864cc3a58a8",
+      "fb39531ba61f83ab838396c2c9fa09a83418dd09fa579706ea9bdfdbd469309d",
+      "518d15cfd57d98017d510aa263fe1967471d67395130c56ebb87e444ac6d4339",
+      "018f0cafd6c8f7b173b94ab53bf6f6ee1b702b7363efebcac8db62568afc8f7f",
+      "07edea85e89725f73ccb40ec77a5bcdbac328b4002e4e262ba9ab21eb0bd96a8",
+      "723933394ca3eaa3949f0821208c3d60fea35987373b1be38e3252163216fad6",
+      "fbd500b1e79e235cf7995872cc1990c2e5d15b1a4c56106d4200d6f1552426b3",
+      "2bc1adc11f4f21d507098c62e10f9c02d2327dc032cbcce06c35030bbfe35ff8",
+      "af2dcf8d46853d9001a7c7f99a528ad78da9c2a9f9eab5a6f1e0705eacf7ad42",
+      "80bf3e6a817a926592333fa59bed3d34429cd20b9c8f375ccc8e5abf01f0659e",
+      "04b2e05c49ed49664b12b05d20dc70c071b045159670f2f873747d74d4c600be",
+      "219ba36ded7ce85e02991e64e8ea81f8918f2d90fde6e6c6a07fdb141f49ba33",
+      "5fd507398303bdd26bbdea39b0d8fe5958fefba61a436626c47f97232e2eea59",
+      "6aa5bd220049e6ccc71491cfba258fd6920fc9bae9363c2dcce3319741147553",
+      "53dd714620ef2fef61ee2108398fa0a9e2dca6865d0d02ea1b25a94d007896c3",
+      "3f4552af2ffddd164f280a26bb4edffda5b5077e6f01493f24a3caf826a7d0ee",
+      "aa4ffb9224cc8ae46744c394d832c2051ebf8120da6f3a370300c37ad5a5e265",
+      "d49dac028c0cc4f18d6c13a175a36f913cea5b22e6a6ee96fd7f88fb9dad2ff4",
+      "f49ea9753b912377271cb28be9824cc0126811dc1e7f5b068d67a6bbbd2647ad",
+      "61c098404c1f0457c95582e9c0bb344ceda9d4b69890fd6512d61f6407773b06",
+      "033fecf559822f46d98776d9279084fc6c73361f8bfb2ffc6676f6ae9e91cefc",
+      "d369afe32918913051c4e4cb707d9575793e85ef8f39453872a06b1a1c648bd2",
+      "79089650182ac153e3b6fef03e1543b598e7e13fd17a166e6dc1c3564261415e",
+      "0f5b708d5ee7eeb426e20f55b5177b5b3c19256e30e24705e4c3d349c804156e",
+      "bef3e237cbf6398342853e410b5a165639037a41d883c0301c0cc516a14e6dae",
+      "a3d80c751aa9c00fab9aba7670f3c860290c26737aa41de7a545261a80a1ff13",
+      "94970a710e89ad1bfffdfb56d0d96ff4d8ebcb12a2c15de0247123515289ad19",
+      "64a41e21ea1b0578f5673fa8b7541a439b386374a971a756e7ea79fd05468594",
+      "3bd197cdd50aced05985c141d59fdac996640cc3c8e0dfa8284c455daf3ddb60",
+      "630d384a7da15b245af8070bef2652caf0d64edfcbb4b07c7a6b87d3bf64f548",
+      "bdb972b7ca1e6131c20213d82f9c340602f2da6a5d9e8d20e37521ef18fdd264",
+      "b6bd1a5d1bf12fb017fb07723f22aa7baa3f5fa6c5f8894dd362ce1d862e567a",
+      "f6750a04d97d4ada866e5876a8060e120cc1fae8b24c65a369fcb96375b30f3b",
+      "98dde1e4486546ef2f213861be0f0d42b5e1a6f378ca2dcfe9011aa76f8cb9f4",
+      "81b1d79a775c5a8a0fad0a17da081ea23ce05c52ce29bb4b1f34d8879ea097ed",
+      "5e49a69fc7ea233d3848f842610bc202298ca0c9d4ae40fcccb420a2d21964f1",
+      "8c7d81e89b6316ebe09dfae8eb6b41e06979dcf43f15bdd59f44382c4ea7df7a",
+      "1a017c423f8600c9dd89735edbc09a5ee07d37733e004fdcf150267eea2a68c3",
+      "cfbae811e4293e80d839b5c3011cf6a1bd7cdf64c6f10cb78a2e6ae519c00981",
+      "bbe260e8870df578ac515ffec6a246661a03d69ec0d661d732e8b2e1eea0fffe",
+      "073ae23313c115486e3d163a8a47261ee16d5e66b359f8b5870db7f4c3e3f768",
+      "30fef4418d4d429d6c5406648228e7712cb42e6876c200e59ed3ae81c1406797",
+      "70f134bd89ccf9908171719ec36b76ee42f0556997a1b368c59029b342beb1bc",
+      "6f90a8e6bdd2db70b4d3faa9ff5cf6828011de3235072acd3c25c46aa01efbd1",
+      "2638ce332581f0c6e8eb8c021af55ff17b790649ef72c85189f462310066d509"
+    ]
+  },
+  "tracker_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "cameras": {
+    "dage": {
+      "manifest_sha256": "732aa4c97f4263cf5b17e916e2271d6d7130295e0fe67d6801fe176ab8bb3687",
+      "status": "complete",
+      "prediction_sha256": "1c35dca6822d29c106509dd5a76160201e801107ede41291dd8320e632b032ef"
+    },
+    "da3": {
+      "manifest_sha256": "6f906b9b0cbc4b74104f77fca24ff43ee20e326889953f125e89087475f9454d",
+      "status": "complete",
+      "prediction_sha256": "7f53790ebf9f0afa136a13342d46756ce02c2caa467d9c81dd9f7f942decc6ca"
+    }
+  },
+  "fits": [
+    {
+      "model": "dage",
+      "track": 0,
+      "status": "fitted",
+      "point_world": [
+        0.22669407208622092,
+        0.1309930780714865,
+        0.7112071678784633
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        793.0028287172318,
+        449.5238399505615
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 11.136943582209302
+    },
+    {
+      "model": "dage",
+      "track": 1,
+      "status": "fitted",
+      "point_world": [
+        0.18594516686886797,
+        0.18204640879239062,
+        1.1889684249605963
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        605.6009811162949,
+        419.48719024658203
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 5.683494310622873
+    },
+    {
+      "model": "dage",
+      "track": 2,
+      "status": "fitted",
+      "point_world": [
+        0.24071529939493205,
+        0.14646332632509546,
+        0.8375049485399827
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        757.5144113302231,
+        440.00000953674316
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 9.240115673536344
+    },
+    {
+      "model": "dage",
+      "track": 3,
+      "status": "fitted",
+      "point_world": [
+        0.25429786781234553,
+        0.13365378663315472,
+        1.0454673169473883
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        706.192303776741,
+        385.6410312652588
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 8.145891290848203
+    },
+    {
+      "model": "dage",
+      "track": 4,
+      "status": "fitted",
+      "point_world": [
+        0.23790792883324077,
+        0.1662946728178538,
+        1.05372755210584
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        686.6899273395538,
+        421.5384578704834
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 6.732623116227603
+    },
+    {
+      "model": "dage",
+      "track": 5,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.02476827025952483,
+        0.010961605571297491,
+        -0.11935601469990104
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 6,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.003244946631633473,
+        -0.00262783633081545,
+        -0.08306956432337498
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 7,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.02509429615667742,
+        0.006987923019641836,
+        -0.14673592770376703
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 8,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.003331102149850631,
+        0.0002418405166512325,
+        -0.021174846138880543
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 9,
+      "status": "prefix_beyond_video"
+    },
+    {
+      "model": "dage",
+      "track": 10,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.027487781360244302,
+        -0.062231220845586535,
+        -0.5250371223947028
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 11,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.01730474620363326,
+        -0.06357382980396448,
+        -0.545882546767987
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 12,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.015299935193732433,
+        -0.06576524362842336,
+        -0.5557722467322218
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 13,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.0166436464405045,
+        -0.030037042141149932,
+        -0.4951741544407747
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 14,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.00663072188848526,
+        0.00195143741286625,
+        -0.026133428798975514
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 15,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.052574853110275606,
+        -0.004071561124936754,
+        -0.9668659676102158
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 16,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.08233893954762757,
+        -0.012792916986947619,
+        -1.0341841539350216
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 17,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.06700188214574758,
+        0.0053720188183357075,
+        -0.9324859268648765
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 18,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.08800603202350117,
+        -0.0025759313336580097,
+        -0.9713059590653006
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 19,
+      "status": "fitted",
+      "point_world": [
+        0.04887959409664015,
+        -0.03165494527397654,
+        -0.019439818824861687
+      ],
+      "source_frame": 59,
+      "source_xy": [
+        486.34238624572754,
+        272.7950191497803
+      ],
+      "fit_frames": [
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68
+      ],
+      "prefix_max_pixel_error": 821.8770594377287
+    },
+    {
+      "model": "dage",
+      "track": 20,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.156071008827923,
+        0.012083110942196135,
+        -0.8030114984822987
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 21,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.074660364137671,
+        0.009815228518713992,
+        -0.5037860197259603
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 22,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.03310533276387976,
+        0.011556836301141795,
+        -0.29123894924118093
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 23,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.04961113466437043,
+        0.018408492942050457,
+        -0.38967954926399834
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 24,
+      "status": "fitted",
+      "point_world": [
+        -0.0746523611681961,
+        -0.0054982641760891425,
+        0.3423775574728249
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        153.25418582558632,
+        221.19403839111328
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 19.382764126603146
+    },
+    {
+      "model": "da3",
+      "track": 0,
+      "status": "fitted",
+      "point_world": [
+        0.35218661319698624,
+        0.27124240255946525,
+        1.2375135888410242
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        793.0028287172318,
+        449.5238399505615
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 6.796877375371296
+    },
+    {
+      "model": "da3",
+      "track": 1,
+      "status": "fitted",
+      "point_world": [
+        0.10622939539429946,
+        0.14449865786026453,
+        0.7870024775631431
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        605.6009811162949,
+        419.48719024658203
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 12.187228548431136
+    },
+    {
+      "model": "da3",
+      "track": 2,
+      "status": "fitted",
+      "point_world": [
+        0.29853902039099867,
+        0.24196544796931824,
+        1.1625027179487468
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        757.5144113302231,
+        440.00000953674316
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 7.157502045428913
+    },
+    {
+      "model": "da3",
+      "track": 3,
+      "status": "fitted",
+      "point_world": [
+        0.2210886592920475,
+        0.15469299851821383,
+        1.020573878006446
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        706.192303776741,
+        385.6410312652588
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 7.942002677002391
+    },
+    {
+      "model": "da3",
+      "track": 4,
+      "status": "fitted",
+      "point_world": [
+        0.197986757119748,
+        0.1858264471758842,
+        0.987726460039988
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        686.6899273395538,
+        421.5384578704834
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 9.196612646006125
+    },
+    {
+      "model": "da3",
+      "track": 5,
+      "status": "fitted",
+      "point_world": [
+        0.05876439849180041,
+        -0.028995664608434807,
+        0.27564144615393354
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        730.8269113302231,
+        154.87179279327393
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 35.087433812692595
+    },
+    {
+      "model": "da3",
+      "track": 6,
+      "status": "fitted",
+      "point_world": [
+        0.03948491332326906,
+        0.016926316569145915,
+        0.40879798325893846
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        563.5168386697769,
+        288.2051181793213
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 26.821121587968207
+    },
+    {
+      "model": "da3",
+      "track": 7,
+      "status": "fitted",
+      "point_world": [
+        0.05263290942800222,
+        -0.015821354049741165,
+        0.3034138248892861
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        675.3990188837051,
+        203.07692527770996
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 31.061708783949168
+    },
+    {
+      "model": "da3",
+      "track": 8,
+      "status": "fitted",
+      "point_world": [
+        0.0694315077198589,
+        -0.00645745737312868,
+        0.4670614841873584
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        631.2620348930359,
+        231.79487228393555
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 21.863373973217307
+    },
+    {
+      "model": "da3",
+      "track": 9,
+      "status": "prefix_beyond_video"
+    },
+    {
+      "model": "da3",
+      "track": 10,
+      "status": "fitted",
+      "point_world": [
+        0.022423702714402596,
+        0.06846216735576678,
+        0.4699489092621566
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        484.4807848930359,
+        382.564115524292
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 6.1280033670124725
+    },
+    {
+      "model": "da3",
+      "track": 11,
+      "status": "fitted",
+      "point_world": [
+        0.014597176088212514,
+        0.0703188597601655,
+        0.492585338998859
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        460.87257266044617,
+        377.43590354919434
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 6.167176210492983
+    },
+    {
+      "model": "da3",
+      "track": 12,
+      "status": "fitted",
+      "point_world": [
+        -0.012007567900385699,
+        0.08026893648967115,
+        0.5572419997509088
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        401.338946223259,
+        374.35898780822754
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 8.736460455841291
+    },
+    {
+      "model": "da3",
+      "track": 13,
+      "status": "fitted",
+      "point_world": [
+        -0.015572335004878004,
+        0.057636191112523535,
+        0.8051703115493704
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        399.18595427274704,
+        305.9154796600342
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 6.186849629449421
+    },
+    {
+      "model": "da3",
+      "track": 14,
+      "status": "fitted",
+      "point_world": [
+        -0.010811937572446717,
+        -6.079600305929743e-05,
+        0.04644893210893171
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        378.0426127910614,
+        261.9718265533447
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 259.67416252154607
+    },
+    {
+      "model": "da3",
+      "track": 15,
+      "status": "fitted",
+      "point_world": [
+        0.03827979317660337,
+        0.0024222118065821375,
+        0.7276755984579217
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        490.07200264930725,
+        240.74535369873047
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 5.282491145003349
+    },
+    {
+      "model": "da3",
+      "track": 16,
+      "status": "fitted",
+      "point_world": [
+        0.05617954306994125,
+        0.009718954880092357,
+        0.7439458431932963
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        519.908933877945,
+        250.4347801208496
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 4.864816891105495
+    },
+    {
+      "model": "da3",
+      "track": 17,
+      "status": "fitted",
+      "point_world": [
+        0.053863653452143424,
+        -0.007124376072868065,
+        0.7730927002906275
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        513.1956243515015,
+        228.07454109191895
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 4.619894204116678
+    },
+    {
+      "model": "da3",
+      "track": 18,
+      "status": "fitted",
+      "point_world": [
+        0.06385973899952956,
+        0.0008944914276656249,
+        0.7435943411842244
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        533.3356038331985,
+        238.50932121276855
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 5.007706066925899
+    },
+    {
+      "model": "da3",
+      "track": 19,
+      "status": "fitted",
+      "point_world": [
+        -0.041488012286963305,
+        0.010428980663242372,
+        0.20431832595849755
+      ],
+      "source_frame": 59,
+      "source_xy": [
+        486.34238624572754,
+        272.7950191497803
+      ],
+      "fit_frames": [
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68
+      ],
+      "prefix_max_pixel_error": 47.119982331101596
+    },
+    {
+      "model": "da3",
+      "track": 20,
+      "status": "fitted",
+      "point_world": [
+        -0.0955767275736434,
+        -0.009298195568934972,
+        0.5385137785639901
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        197.23622301220894,
+        225.98540782928467
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 6.3416400893675196
+    },
+    {
+      "model": "da3",
+      "track": 21,
+      "status": "fitted",
+      "point_world": [
+        -0.06703068562203346,
+        -0.011275088852559874,
+        0.5057133460022752
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        263.85824579000473,
+        225.1094913482666
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 12.494922011602878
+    },
+    {
+      "model": "da3",
+      "track": 22,
+      "status": "fitted",
+      "point_world": [
+        -0.04491320523939272,
+        -0.022393446032113483,
+        0.4803182893312609
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        318.20777159929276,
+        204.08759593963623
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 16.598372983481745
+    },
+    {
+      "model": "da3",
+      "track": 23,
+      "status": "fitted",
+      "point_world": [
+        -0.05567131279004603,
+        -0.028395101461466458,
+        0.5055463320877426
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        293.66282856464386,
+        193.57664108276367
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 14.545812792758614
+    },
+    {
+      "model": "da3",
+      "track": 24,
+      "status": "fitted",
+      "point_world": [
+        -0.017347113539376388,
+        0.0036820754944506995,
+        0.02738963567320908
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        153.25418582558632,
+        221.19403839111328
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 592.2818110072449
+    }
+  ],
+  "records": [
+    {
+      "id": "b298eff7d2745bacb40982e8",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        793.0028287172318,
+        449.5238399505615
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        749.8809282890426,
+        469.03095932791115
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "431bc926271c99c51fa71b25",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        793.0028287172318,
+        449.5238399505615
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        698.6714203734319,
+        460.9119821099134
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "922b2da3cdc7740e49997a65",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        793.0028287172318,
+        449.5238399505615
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        664.76330608053,
+        510.589904299618
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "78eed0c77798b1144cb76685",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        605.6009811162949,
+        419.48719024658203
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        570.0170463590206,
+        430.1955962620278
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "a854e27f8e714f487b9b5254",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        605.6009811162949,
+        419.48719024658203
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        534.384648216535,
+        426.07692533368936
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "bc40fba303ab5078bb477bf2",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        605.6009811162949,
+        419.48719024658203
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        509.22248808013467,
+        463.56807659670477
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "1dc29b38814f20a8384eb2bb",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        757.5144113302231,
+        440.00000953674316
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        717.2114703974173,
+        457.146438492679
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "b99da598edeea9d863acc540",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        757.5144113302231,
+        440.00000953674316
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        671.3535590953176,
+        450.2622501556687
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "a95ea72adbf95b881390a0bb",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        757.5144113302231,
+        440.00000953674316
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        640.9351209711423,
+        495.1026906894129
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "d4ad3a93689656968159a577",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        706.192303776741,
+        385.6410312652588
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        670.0332672903702,
+        400.4958544502292
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "86f8496642c29c4f1efaef94",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        706.192303776741,
+        385.6410312652588
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        629.8990566216245,
+        395.89301408188106
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "9736362e31b80632992b77f4",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        706.192303776741,
+        385.6410312652588
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        602.7119608593018,
+        435.26740351674175
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "bf4f626d062304d67ec2a855",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        686.6899273395538,
+        421.5384578704834
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        649.5970629032363,
+        436.04290583666346
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "167dfe0319bd2e29ae968172",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        686.6899273395538,
+        421.5384578704834
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        610.2830917538411,
+        430.8788484182428
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "b3708aaf0ca1c9056576f3f8",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        686.6899273395538,
+        421.5384578704834
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        583.645573281164,
+        470.26780434440315
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "b4acc133db4051836e0616a3",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        730.8269113302231,
+        154.87179279327393
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "263621f8e8610b0ec78a6d0a",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        730.8269113302231,
+        154.87179279327393
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "893470e6edf7649bd3806519",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        730.8269113302231,
+        154.87179279327393
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "8e36c2d722609e9b323e7a78",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        563.5168386697769,
+        288.2051181793213
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "2f496e79918d9aeeb05ace8d",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        563.5168386697769,
+        288.2051181793213
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "d841625e14bfaecdfa85e6cc",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        563.5168386697769,
+        288.2051181793213
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "a0048212ba32d7422412a99d",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        675.3990188837051,
+        203.07692527770996
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "33887a02c569c4a6b6386082",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        675.3990188837051,
+        203.07692527770996
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "59d10a1b7c698bf4e9f890fb",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        675.3990188837051,
+        203.07692527770996
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "e8ed81c5482ef478f1f623c4",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        631.2620348930359,
+        231.79487228393555
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "e4917e938f2750dd6b05cfbd",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        631.2620348930359,
+        231.79487228393555
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "1a9636668cb1df6442a31518",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        631.2620348930359,
+        231.79487228393555
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "c9675ce735b6d95251549017",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 69,
+      "source_xy": [
+        567.6225726604462,
+        152.8205108642578
+      ],
+      "lag": 15,
+      "frame": 84,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "e814e76e9dbbc39d171fced1",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 69,
+      "source_xy": [
+        567.6225726604462,
+        152.8205108642578
+      ],
+      "lag": 30,
+      "frame": 99,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "1783e27a9497900c3fb4a668",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 69,
+      "source_xy": [
+        567.6225726604462,
+        152.8205108642578
+      ],
+      "lag": 60,
+      "frame": 129,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "2d0d2181de75532b19b6d022",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        484.4807848930359,
+        382.564115524292
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f569b9de74bb4449fef9ad95",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        484.4807848930359,
+        382.564115524292
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "0763bb6959b31daacc9c6dd7",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        484.4807848930359,
+        382.564115524292
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "07d536c1cdaf9e8c6f4b4818",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        460.87257266044617,
+        377.43590354919434
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f3eb07510b7e9bd2f5013eea",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        460.87257266044617,
+        377.43590354919434
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "8f1973fdc1747e8ed36cc166",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        460.87257266044617,
+        377.43590354919434
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "43ef2e3a020b49791e704e0d",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        401.338946223259,
+        374.35898780822754
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "820e35e58ea181e59db77f52",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        401.338946223259,
+        374.35898780822754
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "9d92013da5dc49b6f1c5a70d",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        401.338946223259,
+        374.35898780822754
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "a1ab1ec46f618b4b73357f01",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        399.18595427274704,
+        305.9154796600342
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "d467e895c2d27edae0aad111",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        399.18595427274704,
+        305.9154796600342
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "2afc105e923940639aafe69a",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        399.18595427274704,
+        305.9154796600342
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "d05558f220c9f7640d7ca4ed",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        378.0426127910614,
+        261.9718265533447
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "b70d6c94f6aa4fab3f231a4f",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        378.0426127910614,
+        261.9718265533447
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "98ff7494a36d5c084472c7a3",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        378.0426127910614,
+        261.9718265533447
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "1500ae1155c36a053b11df61",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        490.07200264930725,
+        240.74535369873047
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "84125ac59acc3c81a41e8435",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        490.07200264930725,
+        240.74535369873047
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f617e267c0d35e4a8f9ab4c4",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        490.07200264930725,
+        240.74535369873047
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "56bd5604d1b8273dc4d72891",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        519.908933877945,
+        250.4347801208496
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "d9688d324543d25cb5d067ec",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        519.908933877945,
+        250.4347801208496
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "2494cfc539f666a8b5a296dc",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        519.908933877945,
+        250.4347801208496
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "93ae30bc90bf6704862d3d63",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        513.1956243515015,
+        228.07454109191895
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f1ec43aa03477735ef87282e",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        513.1956243515015,
+        228.07454109191895
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "2fc2b9ca5d67d201750ac284",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        513.1956243515015,
+        228.07454109191895
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "daad5e4509cac4ff7fe15ad3",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        533.3356038331985,
+        238.50932121276855
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "7b81756d0d79a685909c2627",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        533.3356038331985,
+        238.50932121276855
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "9c494fa4165179c2f6d8f603",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        533.3356038331985,
+        238.50932121276855
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "dcfb90982b252bc871fe35f5",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 59,
+      "source_xy": [
+        486.34238624572754,
+        272.7950191497803
+      ],
+      "lag": 15,
+      "frame": 74,
+      "candidate_xy": [
+        664.3984632620172,
+        791.1697715031598
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "a74718e160fd68894d38c0b3",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 59,
+      "source_xy": [
+        486.34238624572754,
+        272.7950191497803
+      ],
+      "lag": 30,
+      "frame": 89,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "1e8a2bd2f3d67c24188bffdb",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 59,
+      "source_xy": [
+        486.34238624572754,
+        272.7950191497803
+      ],
+      "lag": 60,
+      "frame": 119,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "3d437922cf832dfdc9cf5de7",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        197.23622301220894,
+        225.98540782928467
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "dedda398193994f80477c880",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        197.23622301220894,
+        225.98540782928467
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "6f23f069d37cf84e0c766618",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        197.23622301220894,
+        225.98540782928467
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "6b5ed5ef5068adfdffbcb62a",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        263.85824579000473,
+        225.1094913482666
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "2688238983f7bb4fb7b727c2",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        263.85824579000473,
+        225.1094913482666
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "79029423958809b629b770c2",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        263.85824579000473,
+        225.1094913482666
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "70c059dec0c87e2709307836",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        318.20777159929276,
+        204.08759593963623
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "c4c41b7fb6e533394a5e5bbd",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        318.20777159929276,
+        204.08759593963623
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "4fcd69d9a5a349262f1939f1",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        318.20777159929276,
+        204.08759593963623
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "6c65ef2aeea597b3d52ca8cb",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        293.66282856464386,
+        193.57664108276367
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "3f2c35387f6c77f008a0087f",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        293.66282856464386,
+        193.57664108276367
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "25eca1510f624f5ff022697e",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        293.66282856464386,
+        193.57664108276367
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "42e9d7ecdeb111cd24e8894b",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        153.25418582558632,
+        221.19403839111328
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        65.13284653685903,
+        232.26961107746482
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "d25d343610ee8d1d4f2f9600",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        153.25418582558632,
+        221.19403839111328
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        14.783147769783293,
+        236.40490902385827
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "0aefeda45ffa134187a6c92f",
+      "sequence": "gold-fish",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        153.25418582558632,
+        221.19403839111328
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -12.901738324274666,
+        340.8645300229631
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "89f168f4edc0ceb4b75081f6",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        793.0028287172318,
+        449.5238399505615
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        750.7762147006723,
+        464.91814234559934
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "33f788fc64ad13756aebf69e",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        793.0028287172318,
+        449.5238399505615
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        726.0777267615058,
+        467.13123267004147
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "3c69f438bda26a4a054a08d0",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        793.0028287172318,
+        449.5238399505615
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        677.5652436081117,
+        483.972034746536
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "2dd5755ff80c69fd1327e8c8",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        605.6009811162949,
+        419.48719024658203
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        576.4879206848185,
+        425.51798068397244
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "336ab051787f7666d963be90",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        605.6009811162949,
+        419.48719024658203
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        555.2360020348053,
+        429.13598190861694
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "4b0dd8811679cf426b8f5ad2",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        605.6009811162949,
+        419.48719024658203
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        537.4092583305327,
+        447.94989063927824
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "a4f29ebc1557c31ce19ede13",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        757.5144113302231,
+        440.00000953674316
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        717.6261284847743,
+        453.73892407545986
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "e6795ecda4d8e14936b7107d",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        757.5144113302231,
+        440.00000953674316
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        693.3041421065855,
+        456.22209466376773
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "e1c74629c65b9780849672ca",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        757.5144113302231,
+        440.00000953674316
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        648.5560418631576,
+        473.43582773042704
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "e18df20abaea6d99ff545d85",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        706.192303776741,
+        385.6410312652588
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        671.0693278487545,
+        398.04200230500595
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "79cb70c7d308d93969df1de1",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        706.192303776741,
+        385.6410312652588
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        647.8011089961692,
+        401.2176769578748
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "a1a82c5ede2a97832aab2497",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        706.192303776741,
+        385.6410312652588
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        610.8842573348219,
+        418.4185400205514
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "28055954d9845e527e12dea9",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        686.6899273395538,
+        421.5384578704834
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        651.4858962073695,
+        432.794258283466
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "d31ac2f9b486a51d5d2915da",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        686.6899273395538,
+        421.5384578704834
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        628.296095499093,
+        435.82490088221016
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "df8ff2cd619e59f9e386ac17",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        686.6899273395538,
+        421.5384578704834
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        593.7999265974956,
+        453.709469814504
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "5d4320cd2fec1399c4e1f6f3",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        730.8269113302231,
+        154.87179279327393
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        742.0548047694971,
+        124.7897143577397
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "ea796ccd6896cb56408e1663",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        730.8269113302231,
+        154.87179279327393
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        749.3454637441389,
+        133.09200027737734
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "c61002e629377afac3945451",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        730.8269113302231,
+        154.87179279327393
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        876.1989558223969,
+        147.30216775466562
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "15d19e073d70580b2b725ed3",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        563.5168386697769,
+        288.2051181793213
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        562.4648084501162,
+        275.80588746676364
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "0ec6ac499c0a6deae8ce18b8",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        563.5168386697769,
+        288.2051181793213
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        554.3468417016718,
+        281.5562027622743
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "f7820287db717804f3dc4cd6",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        563.5168386697769,
+        288.2051181793213
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        610.834052363708,
+        297.8914453914976
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "09dce7acc6ffe684dc325e2d",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        675.3990188837051,
+        203.07692527770996
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        683.1912624661989,
+        178.13198369742392
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "b1f3d31b9a6c323b0fe06105",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        675.3990188837051,
+        203.07692527770996
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        686.1967847474829,
+        185.53840996030345
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "7fb4bafa486422230de7d62b",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        675.3990188837051,
+        203.07692527770996
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        794.2882329268958,
+        200.1778699584627
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "02d0bf7ffd6de6d056826b49",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        631.2620348930359,
+        231.79487228393555
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        619.6548874610166,
+        226.72380004875393
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "79a1e234955609db7e426344",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        631.2620348930359,
+        231.79487228393555
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        609.0626039421089,
+        232.41433931938042
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "a6771c056093488588998ed6",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        631.2620348930359,
+        231.79487228393555
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        645.1191891430366,
+        247.88483876644608
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "b86c6f4667f143b20c1219c3",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 69,
+      "source_xy": [
+        567.6225726604462,
+        152.8205108642578
+      ],
+      "lag": 15,
+      "frame": 84,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "c70414ffe311265282a48f21",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 69,
+      "source_xy": [
+        567.6225726604462,
+        152.8205108642578
+      ],
+      "lag": 30,
+      "frame": 99,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "451a80276976d1b1a3433c96",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 69,
+      "source_xy": [
+        567.6225726604462,
+        152.8205108642578
+      ],
+      "lag": 60,
+      "frame": 129,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "9a0a5fe773d3506bee6cbb7d",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        484.4807848930359,
+        382.564115524292
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        490.79441473965505,
+        379.3251229419129
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "dcab435d134cf02f7fe832e5",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        484.4807848930359,
+        382.564115524292
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        477.70032565268036,
+        384.4276185897546
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "4f4e49a0a610fa57ffdba6b8",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        484.4807848930359,
+        382.564115524292
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        514.3906792957489,
+        403.5347822011189
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "25af39e2c0f27bfb8ca0001a",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        460.87257266044617,
+        377.43590354919434
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        465.12031949862416,
+        377.4986430707674
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "29f13c35c1b6f2682435213e",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        460.87257266044617,
+        377.43590354919434
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        450.4627668364918,
+        382.50756601564547
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "b9780fcdf1372b24d23a8a0f",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        460.87257266044617,
+        377.43590354919434
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        480.63342323341584,
+        401.75563200684326
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "001f8a0c6d9d397fb48adf8e",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        401.338946223259,
+        374.35898780822754
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        393.2848544899883,
+        381.1355844453473
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "ca438c4104e6d8c15da03d84",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        401.338946223259,
+        374.35898780822754
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        374.5020098393862,
+        385.92541239851
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "6de9a08f712b971ad2939db9",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        401.338946223259,
+        374.35898780822754
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        388.4201364882612,
+        405.83956799245084
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "271bf09de88e1eea6a078c56",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        399.18595427274704,
+        305.9154796600342
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        381.2735722668451,
+        317.0680847515892
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "63046b051d03a902fafbd5de",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        399.18595427274704,
+        305.9154796600342
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        356.3941685555409,
+        321.1515481751453
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "03747e767a8f4486c13fd2e7",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        399.18595427274704,
+        305.9154796600342
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        334.36148300199545,
+        339.05705775209464
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "02e410d0a6d98477c7e3afcf",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        378.0426127910614,
+        261.9718265533447
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        686.1545675046614,
+        25.677784841985083
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "522c511c7b35fb09c7f38a97",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        378.0426127910614,
+        261.9718265533447
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        898.6956529903704,
+        50.77499614132368
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "6217b81da20ebced850e90e4",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        378.0426127910614,
+        261.9718265533447
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        2318.6027484898473,
+        45.722847187446995
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "e1c0e9b9788d3783b1d5d31d",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        490.07200264930725,
+        240.74535369873047
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        477.1151475196439,
+        250.46521824056313
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "e5a0382ccc257017f9c536fc",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        490.07200264930725,
+        240.74535369873047
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        455.85844018487296,
+        254.9104578766113
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "04c8156001a41588b52b7173",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        490.07200264930725,
+        240.74535369873047
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        443.5936295198913,
+        270.93103942628943
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "5cb3dee0497ddb5136371002",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        519.908933877945,
+        250.4347801208496
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        505.10045096051573,
+        260.34015652976035
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "92b4db6550cf0a8549585fd4",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        519.908933877945,
+        250.4347801208496
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        483.98274751349794,
+        264.7561728467069
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "05b4f8f43e8e88ee41189172",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        519.908933877945,
+        250.4347801208496
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        470.02413117863955,
+        280.92896034004195
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "b5eb3a7018401a2bbd44f1b7",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        513.1956243515015,
+        228.07454109191895
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        496.51727132511064,
+        239.4635276184758
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "7db0dbde459b2c6c9cd14493",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        513.1956243515015,
+        228.07454109191895
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        474.75618430263677,
+        243.88330286395126
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "a1ca62d266dc09f013df1ff5",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        513.1956243515015,
+        228.07454109191895
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        457.46618159846975,
+        259.6889037190406
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "f8c8437e44c930e54d560b53",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        533.3356038331985,
+        238.50932121276855
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        518.302092493161,
+        249.05213142633323
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "6050dc57a4bb90219922422f",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        533.3356038331985,
+        238.50932121276855
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        497.4438143218286,
+        253.53144954483125
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "80223dabdf47d81cb01f50ee",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        533.3356038331985,
+        238.50932121276855
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        483.54049061364566,
+        269.48510252761065
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "4c4e06da5d8e280a1d9efde3",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 59,
+      "source_xy": [
+        486.34238624572754,
+        272.7950191497803
+      ],
+      "lag": 15,
+      "frame": 74,
+      "candidate_xy": [
+        407.5893323999039,
+        295.36298020840655
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "d5afa92b224671c0b44a71a0",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 59,
+      "source_xy": [
+        486.34238624572754,
+        272.7950191497803
+      ],
+      "lag": 30,
+      "frame": 89,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "e345f7c8c7ef10b36120f620",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 59,
+      "source_xy": [
+        486.34238624572754,
+        272.7950191497803
+      ],
+      "lag": 60,
+      "frame": 119,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "838a9d12066146553f6e59b6",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        197.23622301220894,
+        225.98540782928467
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        197.57700070756152,
+        223.10016388827623
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "67de9a60bb213b4fc8e9fe95",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        197.23622301220894,
+        225.98540782928467
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        174.65754361973836,
+        227.58885338455954
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "a3a0d3dd98a7396a26d3359b",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        197.23622301220894,
+        225.98540782928467
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        186.46423669665847,
+        242.80925251387362
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "ce9c2d2eabdcdde43b8d5a5a",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        263.85824579000473,
+        225.1094913482666
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        258.86101909829745,
+        217.40550036417903
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "829ef652e96bde26c0230a1a",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        263.85824579000473,
+        225.1094913482666
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        239.11147254974935,
+        222.1513284108146
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "b81caf250adcf56a4651bddf",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        263.85824579000473,
+        225.1094913482666
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        261.0561438162354,
+        237.1908261355731
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "3014f360808e41ee9a55e6f8",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        318.20777159929276,
+        204.08759593963623
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        312.17231021851626,
+        193.24548630832274
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "fd662487757af8f921b62fdf",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        318.20777159929276,
+        204.08759593963623
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        295.1031743449403,
+        198.2001459309994
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "eecbc211d45475edbe43b51b",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        318.20777159929276,
+        204.08759593963623
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        325.35257768679196,
+        212.50768783689313
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "01771d0ec5a1ec8925104edf",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        293.66282856464386,
+        193.57664108276367
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        288.1145712120176,
+        184.9742194372171
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "be4eee34d21762894bc2ccf2",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        293.66282856464386,
+        193.57664108276367
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        269.3034965620462,
+        189.73138139908866
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "2d33e276715bae793b8c8d4c",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        293.66282856464386,
+        193.57664108276367
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        292.16536099075216,
+        203.74318106100478
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "86348b91ce013dc226141e1c",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        153.25418582558632,
+        221.19403839111328
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        603.2987999616314,
+        -12.527546586389622
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "d091660cfe614c507199c6df",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        153.25418582558632,
+        221.19403839111328
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        996.2393295045744,
+        25.2775300299165
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "1312e2f02109af7906d7cefc",
+      "sequence": "gold-fish",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        153.25418582558632,
+        221.19403839111328
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        3797.5820794920073,
+        -4.403624742862867
+      ],
+      "status": "query_outside_image"
+    }
+  ]
+}

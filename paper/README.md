@@ -3648,3 +3648,27 @@ Cows and dance-twirl extend the prepared set to 810 planned presentations:
 still no close candidates. All outcomes remain recorded without modifying
 the class thresholds or replacing videos. The complete transfer study is
 still pending; these seven videos are not reported as the full test set.
+
+Dog, drift-chicane, gold-fish, and horsejump-high extend preparation to eleven
+videos and 1,320 planned presentations. Counts are 18 close, 277 far, 118
+occluded, 16 borderline/unlabeled, 154 off-image queries, 507 nonpositive-prefix
+depth cases, and 230 beyond-video queries. Seventeen close cases come from
+drift-chicane and one from gold-fish. Horsejump-high has no evaluable candidates.
+These outcomes remain in the fixed roster. Frozen geometry bindings, exported
+file hashes, and consistency of saved distances/visibility with the unchanged
+label thresholds were checked for all eleven corpora. This does not yet report
+judge performance or validate a camera-quality metric.
+
+`analyze_camera_transfer.py` prepares the separate accuracy analysis. It checks
+complete paired responses, input hashes, the reference labels and exact parser,
+and identical processed pixels/image-token counts. It compares base/adapted
+predictions, the training-only majority label, and the fixed source-patch NCC
+baseline. It reports classification metrics and availability separately, keeps
+all twenty video entries (including those without labels), and leaves balanced
+accuracy undefined when a reference class is absent. Descriptive paired
+bootstrap intervals resample whole videos with labeled examples, keeping both
+methods and their correlated observations together; excluded unlabeled videos
+remain listed. Results grouped by candidate camera method describe judge
+classification, not camera quality. Seventeen targeted analysis/metric/input
+tests pass. The analysis is ready but has not been run on transfer judge
+responses; the full camera batch and subsequent judge inference remain pending.
