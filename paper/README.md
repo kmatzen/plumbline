@@ -2972,3 +2972,27 @@ general error sensitivity. A changed camera that remains compatible is not
 certified correct, nor is rejection itself a validated DNF label. The scene
 remains planar, amplitudes are fixed, and texture seeds are correlated. No
 admission threshold or learned policy was selected from this profile.
+
+### Real-estimate evidence-sensitivity pilot
+
+`probe_real_evidence_sensitivity.py` applies the same finite-change profile to
+the saved DAGE and DA3 estimates on both TUM RGB-D development clips. Each
+clip's `evidence-sensitivity-v1.json.gz` retains 336 configurations and 4,032
+slot evaluations: both methods, all three existing prefix lengths, all four
+existing pixel tolerances, and all 14 changes. Source RGB hashes, decoded input
+hashes, prediction manifests, archived runner hashes, and prediction bytes are
+reverified. Evaluation uses RGB-derived tracks, estimated poses, and the common
+published calibration; it does not use reference-pose or depth values. The
+inference models saw the entire clip, so this is not causal prediction.
+
+All 576 per-slot global rigid-gauge comparisons preserve status. As a descriptive
+example, office DA3 at prefix 10 and tolerance four pixels has 12 compatible
+tracks under the original estimate. Positive five-degree pitch causes all 12 to
+contradict; positive five-degree yaw causes only five. At prefix 30, the nine
+originally compatible tracks yield nine and seven contradictions respectively.
+All settings, not only these examples, remain in the result. The four-pixel
+setting was not selected as an admission threshold. On unknown estimated
+trajectories a change can improve or worsen accuracy, so these are response
+profiles, not detection rates for known failures. They establish neither a
+method ranking nor functional DNF. Independent track validity and usability
+validation remain necessary before using the profile as a decision rule.
