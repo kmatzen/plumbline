@@ -477,6 +477,17 @@ the original image/model/prompt/settings before interpreting response
 differences. No scale-comparison result or accuracy improvement is claimed yet.
 This remains a development diagnostic, not held-out validation.
 
+The first two scaled responses are retrieved. `compare_crop_scale.py` checks
+their paired image, prompt, checkpoint, software, quantization, attention, and
+decoding settings, allowing only the declared minimum-pixel change. Both
+actually use 576 rather than 36 image tokens. The partial accounting in
+`results/source-crops-scale-v1/comparison-partial-v1.json` retains all 12 slots:
+two matched responses and ten not yet retrieved, with no inferred execution
+status for those ten. Raw responses are kept alongside the comparison; changed
+wording is not counted as an improvement. Both early pairs remain broad scene
+descriptions. The comparison test rejects altered images, prompts, seeds,
+decoding settings, incomplete attempts, and an incorrect realized image scale.
+
 #### Reference timing sensitivity
 
 `probe_tum_pose_timing.py` reproduces the retained reference poses from the

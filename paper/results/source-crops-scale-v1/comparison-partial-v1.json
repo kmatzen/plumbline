@@ -1,0 +1,71 @@
+{
+  "scope": "paired presentation audit, not visual accuracy or DNF validation",
+  "input_manifest_sha256": "22817868b0a31a11b8f8ef038d70576d2a6a943edf1ce17af04ce38b2a311001",
+  "script_sha256": "e9df1ba916e32cc70f438127938e799c8e753ee2f200135b959b43e547bcfed1",
+  "rows": [
+    {
+      "slot": 0,
+      "status": "matched",
+      "original_sha256": "a5bb940ab99bf089ddbaca56203dce7b87285fe4a957baada6c8fe8f265473b8",
+      "scaled_sha256": "006b617927965613587a397a3547f0ac91e5f055ad52b08281efebeaec883860",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The physical object at the exact center of the image appears to be a white wall with a visible intersection where two panels meet, forming a corner. There are no clear surface details or additional objects overlapping this area that can be discerned.",
+      "scaled_response": "The central area of the image appears to be a section of a wall or a piece of furniture with a light-colored finish. There is a noticeable intersection where two vertical elements meet, possibly indicating a corner or a joint in the structure.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 1,
+      "status": "matched",
+      "original_sha256": "eeb4611f7db2c5c08d76798b9369f67d83a2a7a81a51924b117ad25d4894b6fe",
+      "scaled_sha256": "8fbd67cc222efc99794198130751cc89e8b350e44ff046e2b00b69df4225df40",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The central area of the image appears to be a section of a ceiling with exposed ductwork and piping. The surface detail includes the metallic framework of the ducts and pipes, which intersect and overlap in a complex pattern.",
+      "scaled_response": "The central area of the image appears to be a section of a ceiling with exposed beams and ductwork. The surface detail includes the texture of the ceiling panels and the metallic sheen of the ducts, while the outlines are defined by the edges of the beams and the structure's framework.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 2,
+      "status": "not_retrieved"
+    },
+    {
+      "slot": 3,
+      "status": "not_retrieved"
+    },
+    {
+      "slot": 4,
+      "status": "not_retrieved"
+    },
+    {
+      "slot": 5,
+      "status": "not_retrieved"
+    },
+    {
+      "slot": 6,
+      "status": "not_retrieved"
+    },
+    {
+      "slot": 7,
+      "status": "not_retrieved"
+    },
+    {
+      "slot": 8,
+      "status": "not_retrieved"
+    },
+    {
+      "slot": 9,
+      "status": "not_retrieved"
+    },
+    {
+      "slot": 10,
+      "status": "not_retrieved"
+    },
+    {
+      "slot": 11,
+      "status": "not_retrieved"
+    }
+  ]
+}
