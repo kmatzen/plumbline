@@ -4849,6 +4849,44 @@ for that revised method. The artifact is
 `results/movi-replication-shard01-v1/scene-calibration-v1.json`. No new manuscript
 claim follows from this feasibility calculation.
 
+### Learned image-error regression baseline
+
+`probe_movi_error_regression.py` fits fixed small predictors on the original
+four scenes and reports results on the four replication scenes. It uses seven
+image-derived features: log reverse-cycle error, log heldout Sampson residual,
+a missing-residual flag, log displacement, target-frame fraction, and source
+and target distances to the image edge. Neither camera-method identity,
+candidate placement, reference motion, nor reference labels enter the feature
+function. Labels are diagnostic correspondence errors on supported reference
+points. Forward and reverse visibility determine eligibility; unlabeled
+eligible observations remain counted and receive predictions, but are not
+scored as correct.
+
+All models predict `log(1+error)` using training-only feature standardization,
+an unpenalized intercept, and fixed ridge penalty one. Each training scene has
+total weight one. Constant, cycle-only, and seven-feature models are all
+reported; there is no hyperparameter or checkpoint selection. Predicted log
+errors are clipped at zero and converted back to pixels. These are error
+estimates, not upper uncertainty bounds or calibrated radii.
+
+Macro scene log-error MSE is 0.28890/0.08217 for the constant model,
+0.15477/0.07548 for cycle-only, and 0.11253/0.07817 for all features
+(training/replication). The richer model improves training fit but does not
+improve replication loss over cycle-only. Its largest labeled training
+error divided by `max(1,predicted_error)` is 6.997; replication reaches 8.569.
+These in-sample ratios must not be used as independent calibration scores.
+Per-scene results and all predictions remain in
+`results/movi-replication-shard01-v1/error-regression-v1.json`.
+
+This is retrospective development, not a fresh validation result: both sets
+have already been inspected. Tests replay the full fit and show that changing
+a prediction row's reference label cannot change its predicted error. The
+result does not justify a camera-quality claim or a novel learned evaluator.
+In particular, optimizing average log error is not the same objective as
+accurately bounding the largest errors in a video. A tail-focused predictor
+would still require fresh scene-level calibration and evaluation. The
+manuscript is unchanged.
+
 ### Frozen-matrix correspondence intervention
 
 `audit_movi_motion_track_error.py` tests whether correspondence error explains
