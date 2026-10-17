@@ -244,6 +244,38 @@ def test_calibration_counts_missing_judge_rows_as_uncovered() -> None:
         calibrate_judge_votes(human + human[:1], judge)
 
 
+def test_calibration_resamples_whole_tasks() -> None:
+    human = [{"comparison_id": str(i), "task_id": str(i // 3), "winner": "a"} for i in range(6)]
+    judge = [{**r, "winner": "a" if r["task_id"] == "0" else "b"} for r in human]
+    result = calibrate_judge_votes(human, judge, n_bootstrap=500, seed=12)
+    assert result == calibrate_judge_votes(human, judge, n_bootstrap=500, seed=12)
+    uncertainty = result["task_bootstrap"]
+    assert uncertainty["n_tasks"] == 2
+    assert uncertainty["accuracy_ci95"] == [0.0, 1.0]
+    assert uncertainty["coverage_ci95"] == [1.0, 1.0]
+    assert uncertainty["accuracy_valid_draws"] == 500
+
+
+def test_calibration_does_not_invent_independent_tasks() -> None:
+    rows = [{"comparison_id": "p", "winner": "a"}]
+    assert calibrate_judge_votes(rows, rows)["task_bootstrap"]["accuracy_ci95"] is None
+    rows[0]["task_id"] = "one"
+    assert calibrate_judge_votes(rows, rows)["task_bootstrap"]["accuracy_ci95"] is None
+    with pytest.raises(ValueError, match="task_id mismatch"):
+        calibrate_judge_votes(rows, [{**rows[0], "task_id": "two"}])
+    with pytest.raises(ValueError, match="invalid calibration verdict"):
+        calibrate_judge_votes(rows, [{**rows[0], "winner": "typo"}])
+
+
+def test_calibration_abstaining_bootstrap_draws_are_reported() -> None:
+    human = [{"comparison_id": str(i), "task_id": str(i), "winner": "a"} for i in range(2)]
+    result = calibrate_judge_votes(human, human[:1], n_bootstrap=500)
+    uncertainty = result["task_bootstrap"]
+    assert uncertainty["coverage_ci95"] == [0.0, 1.0]
+    assert 0 < uncertainty["accuracy_valid_draws"] < 500
+    assert uncertainty["accuracy_ci95"] == [1.0, 1.0]
+
+
 def test_gated_pair_has_automatic_outcome(tmp_path) -> None:
     gt = _trajectory()
     valid = write_tracking_review_artifact(

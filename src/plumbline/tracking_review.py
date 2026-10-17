@@ -675,7 +675,11 @@ def run_external_judge(
 
 
 def calibrate_judge_votes(
-    human_rows: list[dict[str, Any]], judge_rows: list[dict[str, Any]]
+    human_rows: list[dict[str, Any]],
+    judge_rows: list[dict[str, Any]],
+    *,
+    n_bootstrap: int = 2000,
+    seed: int = 0,
 ) -> dict[str, Any]:
     """Measure a judge log against human labels on shared comparison IDs.
 
@@ -683,7 +687,11 @@ def calibrate_judge_votes(
     judge-decisive / all human-decisive, including comparisons the judge omitted.
     Each input must have one label per comparison; aggregate independent human
     votes explicitly before calibration. Gate-generated rows are excluded.
+    Percentile intervals resample tasks, not comparisons. They are unavailable
+    without task IDs on all decisive human labels or with fewer than two tasks.
     """
+    if n_bootstrap < 1:
+        raise ValueError("n_bootstrap must be positive")
 
     def unique_rows(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
         selected: dict[str, dict[str, Any]] = {}
@@ -691,6 +699,8 @@ def calibrate_judge_votes(
             if row.get("source") == "gate":
                 continue
             cid = str(row["comparison_id"])
+            if row.get("winner") not in {"a", "b", "tie", "both_bad", "abstain"}:
+                raise ValueError("invalid calibration verdict")
             if cid in selected:
                 raise ValueError("multiple labels per comparison: aggregate reviewer votes first")
             selected[cid] = row
@@ -699,6 +709,14 @@ def calibrate_judge_votes(
     human = unique_rows(human_rows)
     judge = unique_rows(judge_rows)
     shared_ids = sorted(set(human) & set(judge))
+    for cid in shared_ids:
+        for field in ("task_id", "system_a", "system_b"):
+            if (
+                field in human[cid]
+                and field in judge[cid]
+                and human[cid][field] != judge[cid][field]
+            ):
+                raise ValueError(f"calibration {field} mismatch for {cid}")
     human_decisive = [cid for cid in human if human[cid].get("winner") in {"a", "b"}]
     decisive = [
         cid for cid in human_decisive if cid in judge and judge[cid].get("winner") in {"a", "b"}
@@ -709,6 +727,45 @@ def calibrate_judge_votes(
     correct = sum(human[cid]["winner"] == judge[cid]["winner"] for cid in decisive)
     accuracy = correct / len(decisive) if decisive else None
     coverage = len(decisive) / len(human_decisive) if human_decisive else None
+    uncertainty: dict[str, Any] = {
+        "unit": "task",
+        "seed": seed,
+        "requested_draws": n_bootstrap,
+        "n_tasks": None,
+        "coverage_ci95": None,
+        "accuracy_ci95": None,
+        "accuracy_valid_draws": 0,
+    }
+    if human_decisive and all(human[cid].get("task_id") for cid in human_decisive):
+        tasks = sorted({str(human[cid]["task_id"]) for cid in human_decisive})
+        uncertainty["n_tasks"] = len(tasks)
+        if len(tasks) >= 2:
+            totals = np.zeros((len(tasks), 3), dtype=np.int64)
+            index = {task: i for i, task in enumerate(tasks)}
+            decisive_set = set(decisive)
+            for cid in human_decisive:
+                row = totals[index[str(human[cid]["task_id"])]]
+                row[0] += 1
+                if cid in decisive_set:
+                    row[1] += 1
+                    row[2] += int(human[cid]["winner"] == judge[cid]["winner"])
+            rng = np.random.default_rng(seed)
+            # Draw one cluster sample at a time to bound memory for large studies.
+            draws = np.asarray(
+                [
+                    totals[rng.integers(len(tasks), size=len(tasks))].sum(axis=0)
+                    for _ in range(n_bootstrap)
+                ]
+            )
+            uncertainty["coverage_ci95"] = np.quantile(
+                draws[:, 1] / draws[:, 0], [0.025, 0.975]
+            ).tolist()
+            valid = draws[:, 1] > 0
+            uncertainty["accuracy_valid_draws"] = int(valid.sum())
+            if valid.any():
+                uncertainty["accuracy_ci95"] = np.quantile(
+                    draws[valid, 2] / draws[valid, 1], [0.025, 0.975]
+                ).tolist()
 
     kappa: float | None = None
     if decisive:
@@ -728,6 +785,7 @@ def calibrate_judge_votes(
         "accuracy": accuracy,
         "cohen_kappa": kappa,
         "confusion": confusion,
+        "task_bootstrap": uncertainty,
     }
 
 

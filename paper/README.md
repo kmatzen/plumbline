@@ -131,6 +131,18 @@ No human outcomes have been analyzed yet. Project-member feedback is pilot data,
 not independent external validation. A small partial session cannot establish
 generalization, evaluator superiority, or a publication-ready reliability claim.
 
+For later automated-judge calibration, `calibrate_judge_votes` reports decisive
+accuracy and coverage separately. Missing judge responses reduce coverage.
+Its percentile intervals resample complete tasks, retaining correlations among
+method comparisons from the same clip. Intervals are unavailable without task
+IDs or with fewer than two tasks. Accuracy intervals condition on bootstrap
+samples with at least one decisive judge response; the output reports how many
+draws qualify. High conditional accuracy at low coverage is not evidence of a
+generally accurate judge. Two-task intervals are only a calculation, not enough
+evidence for a stable population estimate. Input labels must be aggregated
+explicitly before calibration, and shared task or candidate-side metadata must
+match. These checks have unit-test coverage but no human-calibration result yet.
+
 Build from the repository root:
 
 ```sh
