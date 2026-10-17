@@ -424,18 +424,37 @@ relative to the earlier identity pilot, so it is not a controlled single-factor
 comparison. It is also the same development sequence already inspected, not
 held-out evaluation.
 
-The 12-item batch has been launched sequentially on Anima using the pinned 7B
+The 12-item batch completed sequentially on Anima using the pinned 7B
 checkpoint, NF4, fp32 language-attention scores, a 768-token image ceiling, and
 greedy generation. The input manifest, executed runner/helper, and completed
-responses are retained in `results/source-crops-v1`. At this checkpoint slots
-0–2 have been retrieved and their image, runner/helper, checkpoint, prompt, and
-settings hashes checked. No aggregate result is claimed while the batch is
-incomplete. Slot 0 describes a white wall/panel corner; slots 1 and 2 describe
-ceiling or metal framework. Broad scene descriptions alone do not establish
-the exact physical target's identity. These are raw answers, not correctness
-labels. Their processed crops have 36 image tokens (the ceiling does not force
-upsampling). Neither these captions nor assistant assessments of them are
-independent human ground truth or training labels. The paper is unchanged.
+responses are retained in `results/source-crops-v1`. All 12 image,
+runner/helper, checkpoint, prompt, and settings hashes were checked. All inputs
+were finite with matching image-placeholder counts; all outputs were nonempty
+prose. Generation took 18.31–28.59 seconds per item, excluding loading. These
+are execution checks, not accuracy measurements. Every processed crop has 36
+image tokens; the ceiling does not force upsampling.
+
+Assistant comparison with the rendered source crops shows mixed specificity.
+Slot 5 names the keyboard edge. Slot 7 identifies a checkered shirt, but also
+claims it is tucked in, which is not supported by the visible hem. Slot 6 names
+the whole display rather than the marked monitor-support boundary. Slot 8
+describes a hand resting on a desk instead of the center near the forearm.
+Slot 10 describes a possible desk edge and cannot distinguish its surface
+from an outline or intersection; it does not identify the chair/desk occlusion
+intersection. Slot 11 supplies a hand-near-chest detail that is not supported
+by the crop. These observations do not produce a numerical correctness score:
+there are no independent target descriptions or human judgments for this set.
+
+The captions do not establish a reliable source-point qualification rule. No
+DNF decisions, staticness labels, training targets, or camera rankings are
+derived from them. This experiment changes both prompt and presentation from
+the earlier identity task, so completion without JSON errors is not evidence
+of improved visual grounding. A useful next controlled check would preserve
+the crop, prompt, and model while varying only presented image scale; any such
+follow-up must remain separate from held-out evaluator validation. The paper
+is unchanged. The non-weight regression suite passed 1,836 tests, with one
+missing KITTI-bundle skip and six weight-backed tests excluded; that verifies
+software behavior, not the proposed metric's scientific validity.
 
 #### Reference timing sensitivity
 
