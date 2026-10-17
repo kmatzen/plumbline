@@ -3839,3 +3839,24 @@ Two additional tests cover corner ordering, rigid transforms, boundary
 retention, and radial versus axial depth. This checks same-frame surface
 consistency only. Cross-frame visibility, static-support selection, and
 camera-method evaluation remain pending; no functional-DNF labels result.
+
+`audit_movi_temporal.py` transports every foreground point on the fixed
+frame-zero grid through each object's released bounding-box trajectory. The
+1,058 source points yield 25,392 point-frame records; 24,405 project within the
+image with positive depth. All records remain in `temporal-audit-v1/`, including
+off-image points. It saves world displacement, projection difference between
+the actual point and a hypothetical source-frozen world point under the same
+reference camera, four-neighbor radial-depth ranges, and mask-match counts.
+Unobservable neighborhoods are explicitly unavailable. No visibility threshold,
+staticness label, or DNF verdict is produced.
+
+The largest observed displacement among sampled points on initially still
+objects is 3.842 scene units. Thus the initial setup flag cannot substitute for
+actual motion evidence in this pilot. The same-frame identity checks stay below
+0.003508 pixels at the sampled source locations. This does not validate later
+visibility: depth-neighborhood agreement and same-instance masks alone can miss
+self-occlusion or nearby surfaces. The upstream point-tracking implementation
+also uses surface-normal checks; this diagnostic is not claimed to reproduce
+its full visibility procedure. Two new tests separate object motion from camera
+motion, preserve off-image records, and ensure the initial flag does not override
+geometry. No candidate methods or evaluator accuracy have been measured here.

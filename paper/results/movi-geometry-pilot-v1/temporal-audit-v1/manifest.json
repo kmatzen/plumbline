@@ -1,0 +1,165 @@
+{
+  "scope": "continuous reference-motion and local visibility evidence, not binary visibility or DNF labels",
+  "protocol": "source frame 0; all foreground grid pixels x,y=4,12,...,252; fixed local object coordinate transported through every released bbox; compare actual position with source-frozen world point under the same reference camera; retain all frames and all points",
+  "limitations": "four-neighbor depth and mask evidence is not exact visibility; surface normals and self-occlusion not yet independently checked; no staticness cutoff; source foreground only, no background support",
+  "source_manifest_sha256": "1e8af9575c9e881a8a83ae396bacff1d3be1ecd1bbc5b5cd6585f70ba28491ed",
+  "script_sha256": "46c821445ac75ab028a9d0ddb1c2faa73cb93375128cfa5cf16324400de811e4",
+  "scenes": [
+    {
+      "name": "3835",
+      "records_file": "00-temporal.npz",
+      "records_sha256": "af8bea72399cf33bf810f00498b76641820225056fe34c1d9091d58e147d4b43",
+      "source_points": 257,
+      "planned_point_frames": 6168,
+      "in_image": 6120,
+      "source_reprojection_pixels": {
+        "count": 257,
+        "median": 0.0010767900905986306,
+        "p95": 0.0017823724102547453,
+        "max": 0.0021829175371778286
+      },
+      "per_point_max_motion": {
+        "count": 257,
+        "median": 0.04926496695349649,
+        "p95": 7.36812477194568,
+        "max": 8.188845474206369
+      },
+      "initially_still_max_motion": {
+        "count": 194,
+        "median": 0.011134137022395619,
+        "p95": 0.10660594922534747,
+        "max": 0.11515612387357482
+      },
+      "counterfactual_static_error_pixels": {
+        "count": 6168,
+        "median": 0.28003823422848384,
+        "p95": 82.34112965945985,
+        "max": 123.5438522173297
+      },
+      "neighbor_match_histogram": {
+        "0": 225,
+        "1": 76,
+        "2": 323,
+        "3": 322,
+        "4": 5174
+      }
+    },
+    {
+      "name": "5397",
+      "records_file": "01-temporal.npz",
+      "records_sha256": "846447633d22bab64ed162e5f1b293817d7bfc5d6a382a4eb4dcf04f3b7a046b",
+      "source_points": 336,
+      "planned_point_frames": 8064,
+      "in_image": 7628,
+      "source_reprojection_pixels": {
+        "count": 336,
+        "median": 0.0009546465546734869,
+        "p95": 0.001660715713213572,
+        "max": 0.0035072381396960652
+      },
+      "per_point_max_motion": {
+        "count": 336,
+        "median": 0.02465881712663312,
+        "p95": 6.026476620065413,
+        "max": 7.2981607143230685
+      },
+      "initially_still_max_motion": {
+        "count": 262,
+        "median": 0.01684723496925007,
+        "p95": 0.5707609516018984,
+        "max": 0.6828398314491362
+      },
+      "counterfactual_static_error_pixels": {
+        "count": 8064,
+        "median": 0.26532179256698885,
+        "p95": 126.78187762548336,
+        "max": 256.50029214272473
+      },
+      "neighbor_match_histogram": {
+        "0": 273,
+        "1": 41,
+        "2": 402,
+        "3": 163,
+        "4": 6749
+      }
+    },
+    {
+      "name": "4385",
+      "records_file": "02-temporal.npz",
+      "records_sha256": "8a621c5d0d90da1fc4f76fa9a858579076c7e422abba7e8081a7b937ba1ba164",
+      "source_points": 144,
+      "planned_point_frames": 3456,
+      "in_image": 3421,
+      "source_reprojection_pixels": {
+        "count": 144,
+        "median": 0.000978740957322461,
+        "p95": 0.0019189661684179359,
+        "max": 0.0020467824578741926
+      },
+      "per_point_max_motion": {
+        "count": 144,
+        "median": 1.0797453514681123,
+        "p95": 3.0115318454397766,
+        "max": 3.782678234925132
+      },
+      "initially_still_max_motion": {
+        "count": 120,
+        "median": 0.11972532472057959,
+        "p95": 3.1512541409780233,
+        "max": 3.782678234925132
+      },
+      "counterfactual_static_error_pixels": {
+        "count": 3456,
+        "median": 2.323308470153337,
+        "p95": 62.58519088896501,
+        "max": 115.99655279946958
+      },
+      "neighbor_match_histogram": {
+        "0": 205,
+        "1": 27,
+        "2": 117,
+        "3": 161,
+        "4": 2911
+      }
+    },
+    {
+      "name": "4970",
+      "records_file": "03-temporal.npz",
+      "records_sha256": "096b8c131c4dd024fd82701f37de152debc95f7596086135b51040809746028b",
+      "source_points": 321,
+      "planned_point_frames": 7704,
+      "in_image": 7236,
+      "source_reprojection_pixels": {
+        "count": 321,
+        "median": 0.0012780302317208236,
+        "p95": 0.0020720142270701227,
+        "max": 0.0025803627609179394
+      },
+      "per_point_max_motion": {
+        "count": 321,
+        "median": 1.9215845924428216,
+        "p95": 7.593175061200958,
+        "max": 7.84574436446145
+      },
+      "initially_still_max_motion": {
+        "count": 190,
+        "median": 0.005976094193003267,
+        "p95": 3.591029097741964,
+        "max": 3.841647900863828
+      },
+      "counterfactual_static_error_pixels": {
+        "count": 7704,
+        "median": 8.942048797405604,
+        "p95": 222.51645119654344,
+        "max": 280.1790437891052
+      },
+      "neighbor_match_histogram": {
+        "0": 251,
+        "1": 58,
+        "2": 448,
+        "3": 280,
+        "4": 6199
+      }
+    }
+  ]
+}
