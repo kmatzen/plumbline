@@ -3777,3 +3777,27 @@ was added before completed adapted-model responses; it is not a trained fallback
 policy or evidence of camera-level failure detection. Nineteen targeted analysis
 and baseline tests pass, including paired subset membership and rejection of an
 incomplete baseline roster. The running VLM experiment is unchanged.
+
+### MOVi-E geometry feasibility pilot
+
+The next unresolved issue is distinguishing independent scene motion from
+camera error. The [official MOVi documentation](https://github.com/google-research/kubric/blob/main/challenges/movi/README.md)
+describes rendered RGB, camera and object poses, depth, and instance masks.
+Its `is_dynamic` field describes the initial setup, not whether an object stays
+stationary throughout the clip. A future static-support reference must use
+actual motion and validated projection conventions, not this flag alone.
+
+`stage_movi_geometry_pilot.py` stages only the first validation shard of
+MOVi-E/256x256/1.0.0, selected before decoding scenes. The 115,302,799-byte shard
+is on Anima under `/data3/kmatzen/plumbline/research/movi-geometry-pilot-v1/`.
+Publisher sizes and MD5 checks pass for all four downloaded objects; generation
+IDs, URLs, and SHA-256 hashes are archived with dataset metadata under
+`results/movi-geometry-pilot-v1/`. The script preserves existing directories and
+failed attempts. Two tests cover checksum/size rejection and no overwrite.
+
+This is parser and geometry development, not held-out evaluation, a replacement
+for real-video validation, or evidence of evaluator performance. No scenes have
+yet been decoded, no camera methods run, and no DNF labels inferred. Downstream
+work must retain every scene in this shard and keep reference annotations out
+of camera/evaluator inputs. The existing DAVIS judge comparison continues
+unchanged on the GPU; staging this small pilot used CPU/network only.

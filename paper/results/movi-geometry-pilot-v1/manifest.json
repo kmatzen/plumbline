@@ -1,0 +1,46 @@
+{
+  "status": "complete",
+  "dataset": "MOVi-E/256x256/1.0.0",
+  "scope": "first validation shard for geometry and parser development; not held-out evaluation",
+  "selection": "shard 00000 selected before decoding any examples; keep every contained scene",
+  "policy": "no test shards; no candidate camera inference or DNF labels; keep RGB separate from reference annotations in downstream use",
+  "files": [
+    {
+      "file": "dataset_info.json",
+      "url": "https://storage.googleapis.com/kubric-public/tfds/movi_e/256x256/1.0.0/dataset_info.json?generation=1648219472806808",
+      "metadata_url": "https://storage.googleapis.com/storage/v1/b/kubric-public/o/tfds%2Fmovi_e%2F256x256%2F1.0.0%2Fdataset_info.json",
+      "generation": "1648219472806808",
+      "size": 26183,
+      "md5Hash": "94W/uTNYhPkRqshnfRR9Yg==",
+      "sha256": "69864ea9a301422920220fa1c34c0c1695790697237f7beddad1ac2c9cc96205"
+    },
+    {
+      "file": "features.json",
+      "url": "https://storage.googleapis.com/kubric-public/tfds/movi_e/256x256/1.0.0/features.json?generation=1648219474140319",
+      "metadata_url": "https://storage.googleapis.com/storage/v1/b/kubric-public/o/tfds%2Fmovi_e%2F256x256%2F1.0.0%2Ffeatures.json",
+      "generation": "1648219474140319",
+      "size": 20557,
+      "md5Hash": "IBv/AFyRXRD5uCNtH8jDsw==",
+      "sha256": "485529bffa1a4386c76f02a9840beef8502b422d740d9561ae10648d3fcc6cba"
+    },
+    {
+      "file": "instances-category.labels.txt",
+      "url": "https://storage.googleapis.com/kubric-public/tfds/movi_e/256x256/1.0.0/instances-category.labels.txt?generation=1648219475225661",
+      "metadata_url": "https://storage.googleapis.com/storage/v1/b/kubric-public/o/tfds%2Fmovi_e%2F256x256%2F1.0.0%2Finstances-category.labels.txt",
+      "generation": "1648219475225661",
+      "size": 164,
+      "md5Hash": "wX09rHWJXs0cnYZQvPWfCg==",
+      "sha256": "fc8780d114f680c34759da0919777bbf6b1c5315655fe389786c1c686b99708d"
+    },
+    {
+      "file": "movi_e-validation.tfrecord-00000-of-00064",
+      "url": "https://storage.googleapis.com/kubric-public/tfds/movi_e/256x256/1.0.0/movi_e-validation.tfrecord-00000-of-00064?generation=1648219484808801",
+      "metadata_url": "https://storage.googleapis.com/storage/v1/b/kubric-public/o/tfds%2Fmovi_e%2F256x256%2F1.0.0%2Fmovi_e-validation.tfrecord-00000-of-00064",
+      "generation": "1648219484808801",
+      "size": 115302799,
+      "md5Hash": "4jbJ4INpBikNxNIo8p77AQ==",
+      "sha256": "e024496a96010a4dfa0a75f64644ba7d0bb2495a7e215cd1c38bd7242d81d9db"
+    }
+  ],
+  "script_sha256": "b36cab6a7a84706f507dd883a60b602bd72a6e4ff7ceca2b020c8f5b66908c95"
+}
