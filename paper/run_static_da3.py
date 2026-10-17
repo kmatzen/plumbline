@@ -30,7 +30,7 @@ def run(root, checkpoint, output):
     if not torch.cuda.is_available():
         raise ValueError("run in the CUDA environment")
     output.mkdir(parents=True)
-    record = {"status": "preparing", "scope": "static control development prediction; not DNF validation",
+    record = {"status": "preparing", "scope": "fixed RGB development prediction; not DNF validation",
               "model": "DA3-LARGE-1.1"}
 
     def save():

@@ -1,0 +1,11 @@
+{
+  "scope": "Development comparison on dynamic RGB-D footage; no novelty or DNF claim",
+  "sequence": "rgbd_dataset_freiburg3_walking_xyz",
+  "selection": "First 90 chronological RGB frames at stride 3, selected before depth or reference association. All twelve fixed-grid image tracks retained. No scene or track substitution based on outcome.",
+  "methods": ["DAGE", "DA3-LARGE-1.1"],
+  "settings": "Same pinned checkpoints and inference settings as the preceding static and office comparisons: DAGE float16 252px; DA3 252px query-chunk 256. Save full-clip predictions and record all attempts.",
+  "score": "Frozen classical coordinate reprojection-error bisection, native published Freiburg-3 calibration, frames 1..89, median bounds over all twelve tracks; unresolved scores [0,infinity]. No reference poses, depth values, or semantic masks used for scoring.",
+  "validation": "Separate reference-pose validation after geometric scores are saved. Same frame roster for both methods, nearest reference within 20ms; report unavailable association rather than substitute frames. Sim3-aligned ATE and adjacent-frame RPE. These are not functional failure labels.",
+  "purpose": "Add a real moving-object scene before comparing learned versus classical image evidence. This stage establishes method outputs and the baseline, not a learned evaluator's advantage.",
+  "limitations": "Development scene used previously with DAGE, not held out. Moving-object tracks are not assumed static. No human agreement, DNF cutoff, or superiority claim follows from this pair. DA3 query-chunk end-to-end equivalence remains unestablished. Preserve attempts outside the manuscript."
+}

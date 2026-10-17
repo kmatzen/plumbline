@@ -9,7 +9,8 @@ from collections import Counter
 from pathlib import Path, PurePosixPath
 
 SEQUENCE = "rgbd_dataset_freiburg3_structure_texture_near"
-SEQUENCES = (SEQUENCE, "rgbd_dataset_freiburg3_long_office_household")
+SEQUENCES = (SEQUENCE, "rgbd_dataset_freiburg3_long_office_household",
+             "rgbd_dataset_freiburg3_walking_xyz")
 
 
 def digest(path):
@@ -98,7 +99,9 @@ def stage(archive, output, *, sequence=SEQUENCE):
                            "file_sha256": digest(destination), "depth": depth_match,
                            "reference": nearest(row["timestamp"], reference)})
     record = {
-        "scope": "static-scene development control; reference and depth are validation-only",
+        "scope": ("dynamic-scene development comparison; reference and depth are validation-only"
+                  if sequence.endswith("walking_xyz") else
+                  "static-scene development control; reference and depth are validation-only"),
         "sequence": sequence, "archive_sha256": digest(archive),
         "archive_bytes": archive.stat().st_size, "script_sha256": digest(Path(__file__)),
         "selection": "first 90 chronological RGB frames at stride 3, before depth/reference association",

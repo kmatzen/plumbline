@@ -3402,3 +3402,21 @@ score accounting, and rejection of mismatched paired observations or duplicate
 slots. The preceding reference-validation revision passed 1,972 non-weight
 tests, with one unstaged-KITTI skip and six weight tests deselected; the three
 new audit tests also pass separately.
+
+### Fixed dynamic-scene method comparison
+
+The next development comparison uses `rgbd_dataset_freiburg3_walking_xyz`.
+`results/walking-xyz-rgbd-comparison-v1/protocol.json` fixes the sample, methods,
+inference settings, geometric baseline, and separate reference validation before
+new inference. This sequence was used previously for DAGE development and is
+not held out. It adds moving-object footage to the two preceding comparisons;
+it does not by itself test a learned evaluator or establish novelty.
+
+The staging helper now explicitly supports this sequence while preserving the
+same first-90-RGB, stride-three rule, chosen before reference/depth association.
+Its record identifies the scene as dynamic. The inference runners use the same
+settings and now describe their scope as fixed-RGB development, rather than
+assuming a static scene. Eleven targeted staging/input/preservation tests pass,
+including the added sequence. Outputs and conclusions will be recorded only
+after their execution and verification; the saved protocol is not evidence of
+a completed experiment.

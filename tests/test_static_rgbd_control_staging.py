@@ -36,6 +36,7 @@ def test_fixed_rgb_selection_does_not_depend_on_reference_or_depth(tmp_path, seq
     output = tmp_path / "selected"
     record = stage(archive, output, sequence=sequence)
     assert record["sequence"] == sequence
+    assert ("dynamic-scene" in record["scope"]) == sequence.endswith("walking_xyz")
     assert len(record["frames"]) == 90
     assert [r["rgb_index"] for r in record["frames"]] == list(range(0, 270, 3))
     assert record["frames"][0]["depth"]["status"] == "outside_20ms"
