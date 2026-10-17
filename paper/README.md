@@ -1315,6 +1315,17 @@ nor establish its frequency in the full benchmark. Official scores are not
 changed. A valid replacement would require a justified distortion/calibration
 policy and verification against source images, not an automatic box repair.
 
+The source-track author review now uses an identity-first presentation
+(`build_track_review.py`, manifest `results/dense/source-track-review-v2.json`).
+The original three videos are unchanged and hash-checked. Each starting image
+remains above its video. A reviewer must name the marked detail before entering
+a tracking judgment; an unidentifiable or unanswered target exports as
+`not_assessed`, not a tracking failure. Answers are downloaded locally with
+the evidence hashes, not silently collected. This responds to author feedback
+that the earlier examples did not make the inspection task clear. No new human
+judgments have been collected, and the revised display has not been validated
+for comprehensibility. These are source-track checks, not camera DNF labels.
+
 DAVIS segmentation objects cannot be assumed static. Intrinsics are also absent
 from our DAVIS inventory. Do not use arbitrary focal lengths or moving masks as
 ORE ground truth. An annotated static-track subset and an explicit calibration

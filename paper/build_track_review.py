@@ -2,7 +2,9 @@
 
 import argparse
 import json
+import shutil
 import subprocess
+from html import escape
 from pathlib import Path
 
 import cv2
@@ -13,6 +15,113 @@ from paper.build_reference_free_review import digest
 def select_slots(tracks, count=3):
     """First nonempty grid slots, with no access to cameras or later survival."""
     return [i for i, track in enumerate(tracks) if track[0]["xy"] is not None][:count]
+
+
+def render_review(items):
+    """Identity-first review; skipped and unavailable evidence are not failures."""
+    cards = []
+    for item in items:
+        number = int(item["example"])
+        video = escape(item["video"], quote=True)
+        cards.append(f'''<section data-example="{number}">
+<h2>Example {number}</h2>
+<h3>1. Find one detail in the starting image</h3>
+<p>Look inside the cyan ring. Can you name the exact detail, such as a window corner?
+“The wall” is not specific enough. If you cannot identify a detail, stop here for this example.</p>
+<img src="frames-{number}/000000.png" alt="Starting image for example {number}, with a cyan target ring and enlarged crop">
+<label>Can you identify the detail?
+<select class="identity"><option value="unanswered">Not answered</option>
+<option value="identifiable">Yes, I can name it</option>
+<option value="unidentifiable">No, I cannot identify it</option></select></label>
+<label>Name the detail <input class="detail" placeholder="For example: the lower-left corner of the window"></label>
+<fieldset disabled><legend>2. Watch that same detail</legend>
+<p>Keep the starting image above for comparison. Watch the detail you named, not just the ring.
+Does the ring stay on it? Both may move across the screen together; that is not slipping.</p>
+<video controls muted playsinline preload="metadata" src="{video}"></video>
+<p><strong>Stays:</strong> the ring follows the original detail.
+<strong>Slips:</strong> the original detail is still visible, but the ring moves onto a different detail.
+<strong>Cannot tell:</strong> blur, obstruction, or the display prevents a decision.</p>
+<p>If the ring disappears with “Track lost,” judge only the visible part. A missing ring is not evidence of slipping.</p>
+<label>Your answer <select class="tracking"><option value="unanswered">Not answered</option>
+<option value="same_detail">Stays on the same detail</option><option value="slips">Slips onto a different detail</option>
+<option value="cannot_tell">Cannot tell</option></select></label>
+<label>Frame where it first slips, if visible <input class="frame" type="number" min="0" step="1"></label>
+</fieldset></section>''')
+    return (
+        """<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width"><title>Check one image track</title>
+<style>body{font:18px/1.5 system-ui;max-width:1050px;margin:32px auto;padding:0 20px}
+img,video{width:100%;height:auto}section{border-top:2px solid #aaa;margin:36px 0;padding-top:12px}
+label{display:block;margin:16px 0}input,select,button{font:inherit;padding:8px;max-width:100%;box-sizing:border-box}
+.detail{display:block;width:100%}fieldset{margin-top:24px}fieldset:disabled{opacity:.5}</style>
+<h1>Check one image track</h1>
+<p>First identify a detail. Then check whether the cyan ring follows it.
+You do not need to judge a camera path, a 3D reconstruction, or which method is better.</p>
+<p>One example is enough. “Cannot identify it” is a useful answer.
+These are project-author development checks, not independent validation or camera-failure labels.</p>
+"""
+        + "\n".join(cards)
+        + '<script type="application/json" id="evidence">'
+        + json.dumps(items).replace("<", "\\u003c")
+        + "</script>"
+        + """
+<button id="download">Download my answers</button><p id="status" role="status">Answers are not sent anywhere or saved automatically. Download them before closing this page.</p>
+<script>
+const sections = [...document.querySelectorAll('section')];
+for (const section of sections) {
+  const update = () => {
+    const ready = section.querySelector('.identity').value === 'identifiable'
+      && section.querySelector('.detail').value.trim().length > 0;
+    section.querySelector('fieldset').disabled = !ready;
+    if (!ready) section.querySelector('video').pause();
+  };
+  section.querySelector('.identity').addEventListener('change', update);
+  section.querySelector('.detail').addEventListener('input', update);
+}
+document.querySelector('#download').addEventListener('click', () => {
+  const answers = sections.map(section => {
+    const identity = section.querySelector('.identity').value;
+    const detail = section.querySelector('.detail').value.trim();
+    const ready = identity === 'identifiable' && detail.length > 0;
+    const tracking = ready ? section.querySelector('.tracking').value : 'not_assessed';
+    const frame = section.querySelector('.frame');
+    return {example: Number(section.dataset.example), identity, detail,
+      tracking, first_slip_frame: tracking === 'slips' && frame.value !== '' && frame.checkValidity()
+        ? Number(frame.value) : null};
+  });
+  const data = {schema: 'source-track-review-v2', purpose: 'author development feedback, not camera DNF',
+    evidence: JSON.parse(document.querySelector('#evidence').textContent), answers};
+  const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'}));
+  const link = document.createElement('a'); link.href = url; link.download = 'track-review-answers.json'; link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  document.querySelector('#status').textContent = 'Download requested. Check your downloads; no answers were sent to a server.';
+});
+</script></html>"""
+    )
+
+
+def revise_packet(previous, output):
+    """Revise only presentation, retaining exact videos and source-packet identity."""
+    if output.exists():
+        raise ValueError("preserve previous review packets")
+    study = json.loads((previous / "study.json").read_text())
+    for item in study["items"]:
+        if digest(previous / item["video"]) != item["sha256"]:
+            raise ValueError("review video hash mismatch")
+        if not (previous / f"frames-{int(item['example'])}/000000.png").is_file():
+            raise ValueError("missing starting image")
+    output.mkdir(parents=True)
+    for item in study["items"]:
+        shutil.copyfile(previous / item["video"], output / item["video"])
+        relative = Path(f"frames-{int(item['example'])}/000000.png")
+        (output / relative.parent).mkdir()
+        shutil.copyfile(previous / relative, output / relative)
+        item["starting_image_sha256"] = digest(output / relative)
+    study["previous_study_sha256"] = digest(previous / "study.json")
+    study["presentation_script_sha256"] = digest(Path(__file__))
+    study["presentation_version"] = "identity-first-v2"
+    (output / "study.json").write_text(json.dumps(study, indent=2) + "\n")
+    (output / "index.html").write_text(render_review(study["items"]))
 
 
 def build(run, source, tracks_path, output):
@@ -115,27 +224,7 @@ def build(run, source, tracks_path, output):
         items.append(
             {"example": number, "slot": slot, "video": video.name, "sha256": digest(video)}
         )
-    cards = "\n".join(
-        f'<h2>Example {i["example"]}</h2><video controls muted playsinline preload="metadata" src="{i["video"]}"></video>'
-        for i in items
-    )
-    page = (
-        """<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
-<title>Does the circle follow the same detail?</title><style>body{font:19px/1.5 system-ui;max-width:1100px;margin:32px auto;padding:0 20px}video{width:100%}li{margin:12px 0}</style>
-<h1>Does the circle follow the same physical detail?</h1>
-<p>These are image tracks, not camera estimates. You are not being asked to judge a camera path.</p>
-<ol><li>Pause at the start. Find the small detail inside the cyan circle. The larger view on the right shows that same area.</li>
-<li>Play the video. Does the circle keep following that original detail, or slip onto a different one? Movement across the screen is normal.</li>
-<li>If the circle disappears and the display says “Track lost,” no position is being claimed after that point. Judge only the part where it is present.</li></ol>
-<p>For each example, reply <strong>same detail</strong>, <strong>slips</strong>, or <strong>cannot tell</strong>.
-If it slips, give an approximate frame number. One answer is enough; you do not need to finish all three.</p>
-<p>Separately, if clear: is that detail on a fixed part of the room, on something moving independently, or can you not tell?
-Do not use motion across the screen alone to decide: the camera is moving too.</p>
-<p>This is a test of the review display. “Cannot tell” is useful. Your answers will be treated as project-author development feedback, not independent validation.</p>
-"""
-        + cards
-        + "<p>Playback is slowed to 5 displayed frames per second. The examples are the first three nonempty first-frame grid cells; selection uses no camera estimates or later tracking outcomes.</p></html>"
-    )
+    page = render_review(items)
     (output / "index.html").write_text(page)
     (output / "study.json").write_text(
         json.dumps(
