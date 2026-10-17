@@ -3607,3 +3607,28 @@ process-local package search path. No shared repository or installed package
 was changed. The result records the actual geometry/conventions helper hashes.
 The forty-attempt camera batch continues independently; this first corpus is
 not a substitute for the remaining planned videos or for evaluator validation.
+
+Five video corpora have now been prepared and hash-checked: bike-packing,
+blackswan, bmx-trees, car-roundabout, and car-shadow. Their 600 planned
+presentations contain 75 far and 34 occluded labeled candidates, 103 off-image
+queries, 298 nonpositive-prefix-depth cases, and 90 beyond-video queries.
+There are still no close candidates in this partial set. This is an availability
+and label-distribution result, not judge accuracy; the full twenty-video
+roster remains unchanged. Every per-video geometry, manifest, and export is
+retained under the transfer result directory.
+
+`combine_tapvid_camera_transfer.py` requires all twenty per-video corpora before
+creating a combined test input. It checks hashes and the complete two-method,
+all-track, three-lag roster, retains unavailable and borderline cases, and
+copies verified panels without altering them. The existing evaluator's test
+path additionally validates this transfer roster and describes the run as
+camera-position correspondence transfer rather than camera-DNF validation.
+Fourteen targeted transfer/partition/builder tests pass. Combined corpus
+construction and judge inference have not yet run.
+
+The combiner includes a simple source-patch NCC comparison, reusing the prior
+17-by-17 patch and 0.8 threshold. It predicts close or abstains; rejection does
+not imply far. This baseline was selected for the transfer comparison after
+the first video's reference labels were available, not preregistered before
+all label inspection. Its threshold is unchanged and is not tuned to this
+transfer set. It uses only RGB and marker coordinates, not reference labels.

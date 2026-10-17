@@ -1,0 +1,678 @@
+{
+  "scope": "camera-projected correspondence validation; no staticness or camera-DNF labels",
+  "sequence": "blackswan",
+  "prompt": "Compare the marked detail in A with the candidate marked in B. The top row shows context; the bottom row shows native-pixel crops. Is the candidate close to the same detail, far from it, or is the original detail occluded? Reply with one label: close, far, occluded, or uncertain. Close means within 2 native pixels; far means at least 8 native pixels. Use uncertain when the images do not support a decision. Do not judge camera accuracy or whether the object is moving.",
+  "planned_presentations": 30,
+  "geometry_sha256": "d880d42fd0584b2dacf869fb1b88326e7d79bd4d2ba3758f0d3d149b23ddbc15",
+  "source_manifest_sha256": "d8e1903df707408ef3b392c8c85c951b8cd6a36f899690d76ca520ae331bb41d",
+  "source_file_sha256": "57c95d595ff29dc0ddfece9b02cf35d6cba7846bde52e419f1a92a30ac444153",
+  "tracker_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "script_sha256": "49f222e81751905ebeb20100c2eceac7eb15c8b92cc7230141b9a7a104cfbbfb",
+  "export_sha256": "3b71b59d0d787f85ab2966e53fc28f7e1ee9d99fbdabf495d268be7773efbb38",
+  "geometry_dependencies_sha256": {
+    "plumbline.image_evidence": "9fc932d5f4cea4008a9dc43106fe4075e67dff17274000853cd511bff17414f4",
+    "plumbline.conventions": "506969710476aafde4ec4adf63cb86d4164762bd32e81d1a1b3bfd5f72e242ad"
+  },
+  "dependencies_sha256": {
+    "tapvid_camera_markers.py": "769bb4e2f7d34574e9352f748ae441926ee8e937c20597a27c107d4299edcc8b",
+    "build_anchor_preview.py": "7568d7a8cc409e7ac630b0a3753dced03691b0350e34547355ccfe862b3ae1c3",
+    "build_tapvid_judge_corpus.py": "5f66c715c674336018bfe6d331d7b67f81acfaa8896757c65e1f7817686852e0",
+    "run_tapvid_cameras.py": "56b8884bdf6c42ea41ae0b3313dc9dcdb554821c98cd96f31f8615cf134ddbec"
+  },
+  "counts": {
+    "far": 20,
+    "query_beyond_video": 10
+  },
+  "records": [
+    {
+      "id": "34caa710459503507fbb88c9",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        445.31655490398407,
+        89.44099187850952
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        459.91862110731597,
+        100.64504874063546
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 22.47641145456592,
+      "image": "images/34caa710459503507fbb88c9.png",
+      "image_sha256": "084d5e869400cb0f1dbad3d693d8de7879443a909649cfd7d0bca8f97486b9e5"
+    },
+    {
+      "id": "f3b0824ead8c9ba7378dcfdb",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        445.31655490398407,
+        89.44099187850952
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        408.1601230589978,
+        104.04256891628745
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 55.428406603353814,
+      "image": "images/f3b0824ead8c9ba7378dcfdb.png",
+      "image_sha256": "3fe6d1901b8831eeacce1132dad050b4bdafdfa9a612ff4fe35d1e174920aa58"
+    },
+    {
+      "id": "eb308b8d9a5b3b91b939b4ca",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        445.31655490398407,
+        89.44099187850952
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0adc345e1b4483d507445140",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        482.0677582025528,
+        125.07041931152344
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        496.54202451528624,
+        135.32949379615357
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 22.378510553249644,
+      "image": "images/0adc345e1b4483d507445140.png",
+      "image_sha256": "d73613dc550f0b3842813b2fe57a0ff8c288275759d9e3fda60b629a55aac8b4"
+    },
+    {
+      "id": "d03d6c798e732e64981eff44",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        482.0677582025528,
+        125.07041931152344
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        445.19357544900674,
+        138.99163766496434
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 53.562015694539376,
+      "image": "images/d03d6c798e732e64981eff44.png",
+      "image_sha256": "d2ea0f38d4af4eb152622c7cd8b644f92ebb3aae8d405feb146fdad806721c21"
+    },
+    {
+      "id": "4b56d4e930c7679d00043d9c",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        482.0677582025528,
+        125.07041931152344
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d6e35906ff0a5743bae585b4",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        463.2187136411667,
+        110.31055927276611
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        477.8202111307795,
+        121.10584581045508
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 22.832079707279526,
+      "image": "images/d6e35906ff0a5743bae585b4.png",
+      "image_sha256": "2b9abf4eb0d70bbe000ebb625523d9831c76357e50b2fb6eaf1237ba89fc9385"
+    },
+    {
+      "id": "5a4789a40820e8694930e171",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        463.2187136411667,
+        110.31055927276611
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        426.45865031840947,
+        124.62977121121482
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 55.12528257597451,
+      "image": "images/5a4789a40820e8694930e171.png",
+      "image_sha256": "02202f31238617f412d1dce4137ce131eb4ba27533ebe0014f5a1cc6d2d20773"
+    },
+    {
+      "id": "83c1d5aba74af40826bd3a2b",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        463.2187136411667,
+        110.31055927276611
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8a2744a841511a8b041e354d",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        266.294814825058,
+        269.8136615753174
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        281.83127040609526,
+        279.29942412744896
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 20.582596525127613,
+      "image": "images/8a2744a841511a8b041e354d.png",
+      "image_sha256": "864c9166a77acc84ae1295ae585f3a01c7dddd3298a64e5f0226dd18a28b4ab7"
+    },
+    {
+      "id": "791a738d1074887aa75bb88d",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        266.294814825058,
+        269.8136615753174
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        224.78590440507705,
+        287.39883219796184
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 54.30152831541205,
+      "image": "images/791a738d1074887aa75bb88d.png",
+      "image_sha256": "d2ab37aa864bdda23f476b85b62385163175f329b223fb8cb8422248d123d280"
+    },
+    {
+      "id": "c603f58f93a5d76eec74bf64",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        266.294814825058,
+        269.8136615753174
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "635ceb7bde62362b79001c28",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        232.72824174165726,
+        278.75776290893555
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        249.02344609146567,
+        288.29689948045643
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 19.8929693408117,
+      "image": "images/635ceb7bde62362b79001c28.png",
+      "image_sha256": "1b3056356b1719ad58e505ddc23820540d0ebcb2a1322d7227d8edbeace59e0c"
+    },
+    {
+      "id": "25e6dd66b30e0ff05f7d064a",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        232.72824174165726,
+        278.75776290893555
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        191.41176412078005,
+        296.840901170913
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 55.15013311408255,
+      "image": "images/25e6dd66b30e0ff05f7d064a.png",
+      "image_sha256": "764482fd1b919d8c75f92e8d7093950d40b99462b5cf8301b233ac6662fbc864"
+    },
+    {
+      "id": "fe19d61e1b3c97392ac822df",
+      "sequence": "blackswan",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        232.72824174165726,
+        278.75776290893555
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8d7999f10c634bae30abf539",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        445.31655490398407,
+        89.44099187850952
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        637.2110674575852,
+        118.15511856050196
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 155.72174882133638,
+      "image": "images/8d7999f10c634bae30abf539.png",
+      "image_sha256": "11888519f2841337bc0576058298099b9101ffcd98c1cf295af9669010d7d99d"
+    },
+    {
+      "id": "07f376264f50100e6c56b669",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        445.31655490398407,
+        89.44099187850952
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        797.0286501365882,
+        179.99679133841715
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 340.8802051963088,
+      "image": "images/07f376264f50100e6c56b669.png",
+      "image_sha256": "af51316738e406c250cef50b8489279bbb471df25fb6f81fd9c6c104e431c5e6"
+    },
+    {
+      "id": "45554ee4f498538dcbad59ed",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        445.31655490398407,
+        89.44099187850952
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "18c5f8fa4d50265f9ff582e5",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        482.0677582025528,
+        125.07041931152344
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        677.010711823459,
+        156.0862668859791
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 159.29540086010456,
+      "image": "images/18c5f8fa4d50265f9ff582e5.png",
+      "image_sha256": "a1d901635b5b9e93e5eb70c4c5bcbf6777e8d69026d1b3c14ab50245fda987a1"
+    },
+    {
+      "id": "4bb608307e0002de57bc253c",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        482.0677582025528,
+        125.07041931152344
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        837.5822721058568,
+        218.18223431712244
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 346.960396074529,
+      "image": "images/4bb608307e0002de57bc253c.png",
+      "image_sha256": "3eb4db8d6c435e7f0f6a41c1aa1d0458b8b3e9f4ed9d5eb22d21fe0bd4532999"
+    },
+    {
+      "id": "78d96021b4a69fc31ae4101e",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        482.0677582025528,
+        125.07041931152344
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "33831e4f885427eabec01dce",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        463.2187136411667,
+        110.31055927276611
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        657.1967137254409,
+        140.55512640650218
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 157.62756982983174,
+      "image": "images/33831e4f885427eabec01dce.png",
+      "image_sha256": "74211a0a7192f490c16645af50389787e468b05608ba9b08696c7dd31cc9c3fb"
+    },
+    {
+      "id": "4c61e6af94a36efb158ca342",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        463.2187136411667,
+        110.31055927276611
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        818.2903925695725,
+        202.67129850952014
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 344.5378824995983,
+      "image": "images/4c61e6af94a36efb158ca342.png",
+      "image_sha256": "481b1f10624d0b4e28b2c0f82ec349ce909467046768d4ec1a2929624f74299c"
+    },
+    {
+      "id": "7196cb1ab2a27bcfed970cfd",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        463.2187136411667,
+        110.31055927276611
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "910ac01de0dbf0de154187aa",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        266.294814825058,
+        269.8136615753174
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        457.19694584096516,
+        312.03315080458066
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 157.84456442424678,
+      "image": "images/910ac01de0dbf0de154187aa.png",
+      "image_sha256": "e9d0d69ed1e6ef7c28c29256950774330ebe2932dacb8b9ca8e082dc13439754"
+    },
+    {
+      "id": "20b5e56d6cb9a98d99916c26",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        266.294814825058,
+        269.8136615753174
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        632.0737992409403,
+        381.1554415332572
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 363.6646301831686,
+      "image": "images/20b5e56d6cb9a98d99916c26.png",
+      "image_sha256": "4c9befc85a063f2df462189d1c73540b7bdc102b5e9b3911becead4cb327aa24"
+    },
+    {
+      "id": "6f518453ef1b5835bd60cee7",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        266.294814825058,
+        269.8136615753174
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1d7c058fc78924d694e25d80",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        232.72824174165726,
+        278.75776290893555
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        425.23819745464783,
+        322.1131495349863
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 159.71524595243665,
+      "image": "images/1d7c058fc78924d694e25d80.png",
+      "image_sha256": "90d84eec2d8f30a9531081533402e6b4fa3ef195612f3c7ce51f07617599b745"
+    },
+    {
+      "id": "41dc110049aaa515ea1f92b3",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        232.72824174165726,
+        278.75776290893555
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        604.8331408361677,
+        392.8552938130162
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 369.28820785615994,
+      "image": "images/41dc110049aaa515ea1f92b3.png",
+      "image_sha256": "017c3548477cd309dd530df290a4cfa67651dd98b325bff8247b56fc1a2a489a"
+    },
+    {
+      "id": "ad95234cf4dea726e6ab1b68",
+      "sequence": "blackswan",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        232.72824174165726,
+        278.75776290893555
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    }
+  ]
+}

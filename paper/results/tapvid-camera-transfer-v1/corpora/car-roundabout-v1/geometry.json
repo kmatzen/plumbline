@@ -1,0 +1,2814 @@
+{
+  "source": {
+    "source_manifest_sha256": "d8e1903df707408ef3b392c8c85c951b8cd6a36f899690d76ca520ae331bb41d",
+    "source_file_sha256": "f4968c5299170cde574140c4374609e62f5a2bcfad0ad982b86803017e088962",
+    "decoded_rgb_sha256": "4113c3df6ed02ae8b90013b011501d392254edda0ae209340857ff673adbe608",
+    "shape": [
+      75,
+      480,
+      854,
+      3
+    ],
+    "frame_sha256": [
+      "979801dff4705fa57583847e56fb7abed00a5bd08e2490e0f794bb6b5d9b6c91",
+      "34839d754b16e2aa0ced834472379e77e05b2d5c5d41fe4bc5e0eb9a6075471e",
+      "b336c5ef0583ad1c6a5cfbae1b23afe0ff443b41e8870861ba3b96ba9853d663",
+      "7b52ce840223b30b1428ed1fc78b23e471a7b192d0fee6e808784151b4bc0aec",
+      "f228048fe98cf9d33b1a43a42a454db26c5478d8c16eb579dadf08830ec42759",
+      "2e9275e2c33735811e2b5903e890434e199e2641d220e53a7e82f45f24f3385e",
+      "742b327818f69e80adb5192946d0e17afdd9c6e852d84a4b35cd12dfa1f63f44",
+      "043d4409c3a077bce5ec7511f0c78617f25bee1cebd19453d82b8eb7a6abe9f4",
+      "252fa6d24a5533c1cbbe18acc9d78b21703068f5ef75977576c18cd84735a43d",
+      "6fc7c231ef07343515e9fd40a29c78c053e300802e33a4883a753e4c02eceb73",
+      "2b78675d95ee8e40d6c9020f0a793b1195ce342f1e7da70ea10e718cc67c0670",
+      "dc664b22b4737611ec6acc3585fd6c5e493a40b64345c45d0ec963e7000aad8c",
+      "d20cbc6604ee4f98e5d58cb8badd0ec8b9582255d5ce7c3dc8effd240817163b",
+      "9b396b51c73cb9ed140226efd972edfabe06361d9deda676808f10a572730751",
+      "46668b809e64e9982b4612e07e4e123df641fa1c44b3f326c71aab3e7bfd3793",
+      "3ead060c036ea7a9c3d254204fe64f1fe9c90bf025a12bff9ef7391591726f5f",
+      "a5bbba65a3f9e2a3362d1094627d6965b4b487e04fa4a3df780181d4d0af85bb",
+      "3e57dd1caf85a7741fc23e93352af516b76004c05da2bbe47ee1fa6c900ba336",
+      "9a3a1676e98beefd33b978e289ed1d55280ceb1e2bca1932958b1fe87e419250",
+      "501e9e62309c850cfa13e11276bbd7de402b3297f0fb7c62c37a252f1939e953",
+      "1774ed5317263b9046981e67ea3d840f3c18e417d42b2b51d77037363d8563a5",
+      "ea9eb016f027b8526cda747e1ea8c715fda8d07ed56ee2a2f22d5a4d9432d3c9",
+      "999fe5723b6468a89859bfa22bb0cd5b94a1f43e3450e5f24c17df9a536b0f1a",
+      "1f7f0c5efa3db074122529cda83f2acba72f3e01492a401e2d2ffc7d3c855f95",
+      "8176e66df84ae2dd65ffeed22c1d7be72c0eaf33e78cc9020310efcec69b3c59",
+      "454218ff614c5253ac0f8380478143033680e239c2dd4636cd7305940ea8bfb1",
+      "6ff46d88a4c9c51d1258b7ee7f9278231a7471a2a1298994e76222b5772deb92",
+      "356f2d80e54639ab1cbb38ec04f4e1b62484eb812325d06ddea38931ebd56e74",
+      "82129878c0ff7963c5b4a8073fac41bb2aa1006f64af3e646dbdc4f69c2163bb",
+      "d698b038d1c41b440c64f63576dd095a9d13f01b9417d0f60d307c9992a6a83e",
+      "291bf49b26f6d918c63dbf602edd2e7d3643348f71e786be1ade7e7ef010c644",
+      "316b544ed8bd038177e82bee37660a976f015ac5572c45d56cf2f736e1fb2183",
+      "d9c7916a492592e2e70d808d875ff7ff45d0c136755012aa43ccb34f426351f1",
+      "3658f64699d25a9d3ba48abed489ccf00ee4416b66317bc111ac820169637409",
+      "1d18336f6ec250cfe9ac51cf963ba0848e2313ea40903c39572677f117953a06",
+      "cec8c86ac04cbda1004a226f54b0c439fae6992c049a263b393c794e9a01018c",
+      "16e0dff616e732181ef2e58e43143f09fe24457783150c70599865c8d71a82de",
+      "47a82e09a65299daf4280307a85f41924d6ba9b35a98f70817bab68e0302a897",
+      "cdcaf03ac0e4af790a5b43aba09a036bee5844b575f2506bc2c694cd058bcd32",
+      "1cbb33b048d34069937a77241d7e89ca9f8edb28f9100ba8b5fd516dffb28fd6",
+      "300df95ab6e19ac12f43bd7a726b711a01b0f0bc2a8e1039660eba499628720d",
+      "e57a3e4fbc995faa24c70132bfa800a2666a8926dce92bb955bec59c1c09d678",
+      "8ac2509b8fa30aa5a9dac7e9f26630a34e96d07275638e0addbabf4d20f170ee",
+      "0e8fa75abecb3c2a8000e2732a946ec85751a457de20d4176459faf4ded23527",
+      "830455c6f3153e7083326c9e5f677edc7c43765d4ad835cd3f46984d65356141",
+      "be892b095b72957428817824cb53e8dbe4845a3948756c39c9c182207a4f1b76",
+      "ce3a09897e0761f52f9cd9da06de3e7a7ba6dd3a0c85d71489e444ad11398954",
+      "c2fe0a4e225cf991a0c05a91d23d28b596fc3fb08cb2aa37063ecba24ecabb6b",
+      "5712a0b09dfc38f1b482f57ece43a1f270c7163bb110185b72d65652d8a5fbd0",
+      "637ce124874483136950d0724fd72876b1328c162719f6c1315930df0957a54e",
+      "96648ba5f4302a19ec11bace4f09d35608dd7ee331a2ff888804e53e8bcfc1d1",
+      "f75ce90649872c0264b2ea9048ef02fad66a22163f1c3371c66618fa162f01d3",
+      "307b4cdb30808deb261efe7a1f4f3e8832bb02cc38e3c0b3ac2a40b2d80b2f5c",
+      "9b97b11026e0e3300bda42a8dcc3d9f387e120ad7066b2e54dafe3d4381b7300",
+      "d2cc9e8d419acacb022c3709600f0a7ce32a51cf62ee87e2655555a9e2b43bdf",
+      "5200c11853ccba51a9ad30931fed6c40e77aac6370b44c4c086baf698e55eae8",
+      "012ca82546437c42cfe85cda86b09412c8fc881e1f27589ecb43b96b39c07d63",
+      "6ce2a1bc2f08d46afbd2e5f69208acbb7423ccfb346e05321ba8141726081123",
+      "33e4e92dc02d503641df1178b30077bdf49a53dd41635fb9e25d6b9b0a0b9d0f",
+      "f34fbaf2683befebe6811d2a6cd39c3617dd6338603d29f4370f10cb0d2118bb",
+      "bc80e52b7c7afa6f82ddac9d5acfb0d3a7a8567fc0c6b81a142442623cc58be1",
+      "1dc9f99de79f221f95fb57f1a541b246e74d84385ed5889610659db5d1d8eec3",
+      "3cc6c2a644326b70134fc42d658158fb5998e00f238c774295d9738144480b36",
+      "7d6807ad05c0b0d2e7dc39fc7c89e5c31c2ede1c34266d97893d1652e3063995",
+      "f7e81f081d56bea18c2e59dc7dde0811776bbd2e902123e91df05c764cd27867",
+      "a5c6246405852bdc63c4882dd92811a72aba55d772906384ed087bca9b90ef66",
+      "6ade84be589ee1cd8622ed1d0f12baad70aacb418012cd9aadfa5888c01e10db",
+      "72d1f51fc3e3f14a3e61e8007539e96bdb5f97174e5e1edaa9dcb9445ada3a84",
+      "9ca2398b19ada7ea9af73a9e41c8c4ec5fed8a44372439b199c09b924c9c8836",
+      "8c05694c4fd00daa0769e81ab0996ed644aff6f515e85de33b1102090bf0e473",
+      "09467006ed028133314fb1279687fbe37b021159a013f78742dad75c33ee036d",
+      "4d5c6d3b043bff0e8a08d4109f75078c8a326a46ecb8fb320db129cff44393b7",
+      "2f12c77a01b5dbc6335761b3eb3c44091a227d6658ee4c682372b10d53504d46",
+      "b8c8d607470d785d1b70e232887294e5ba6beabb9bf81f6f15a2846b181e2c08",
+      "35170dfa5be3948087a391944064657297bcef9278e03c21c0a4f77f5ea4946b"
+    ]
+  },
+  "tracker_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "cameras": {
+    "dage": {
+      "manifest_sha256": "b986763e350dad2159f4e724ae1bace4f4a9e05aee31d9598c938265555c76ce",
+      "status": "complete",
+      "prediction_sha256": "f222f929950bddd5ce56c7403d8beff6eb1e26e26a32e8c8b77f4e8486e704f0"
+    },
+    "da3": {
+      "manifest_sha256": "4d76fecc686af03cf5c2d43e49c1e46a7295c43debe64d3572d032f69db690e0",
+      "status": "complete",
+      "prediction_sha256": "bf342d2b531809f719f0771ef5314913d81c5b1203859c3b5a19152c5e15da71"
+    }
+  },
+  "fits": [
+    {
+      "model": "dage",
+      "track": 0,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.1281378143226183,
+        0.022524321210817044,
+        -0.5676734865353137
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 1,
+      "status": "fitted",
+      "point_world": [
+        0.30399019806155053,
+        -0.04767758468464574,
+        1.3606534278314428
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 31.825605768252583
+    },
+    {
+      "model": "dage",
+      "track": 2,
+      "status": "fitted",
+      "point_world": [
+        0.24936015534855938,
+        -0.03284669461742071,
+        1.0736402079741663
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 39.13992107218883
+    },
+    {
+      "model": "dage",
+      "track": 3,
+      "status": "fitted",
+      "point_world": [
+        1.2933599114122851,
+        -0.1671799879444061,
+        4.960408821366386
+      ],
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "fit_frames": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "prefix_max_pixel_error": 7.801241776153882
+    },
+    {
+      "model": "dage",
+      "track": 4,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.4526981077185777,
+        0.02236513838076349,
+        -2.4626554959792877
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 5,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.04037869858311168,
+        -0.007322779339066229,
+        -0.4148035073099652
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 6,
+      "status": "fitted",
+      "point_world": [
+        0.01857925535757078,
+        -0.018505222818874463,
+        0.5511861598859862
+      ],
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "fit_frames": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "prefix_max_pixel_error": 71.86597116892172
+    },
+    {
+      "model": "dage",
+      "track": 7,
+      "status": "fitted",
+      "point_world": [
+        -0.15587235899557317,
+        -0.018848009066452003,
+        4.471018024750109
+      ],
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "fit_frames": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "prefix_max_pixel_error": 7.908265676118656
+    },
+    {
+      "model": "dage",
+      "track": 8,
+      "status": "fitted",
+      "point_world": [
+        -0.011883052851294184,
+        -0.00709712000160514,
+        2.733978636691281
+      ],
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "fit_frames": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "prefix_max_pixel_error": 15.971299231578753
+    },
+    {
+      "model": "dage",
+      "track": 9,
+      "status": "fitted",
+      "point_world": [
+        0.024549371988752854,
+        -0.026690318010868536,
+        0.6952387692406449
+      ],
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "fit_frames": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "prefix_max_pixel_error": 58.05176864550908
+    },
+    {
+      "model": "dage",
+      "track": 10,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.024175689063066826,
+        0.004760295032906914,
+        -0.3406791901347286
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 11,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.13232089532429403,
+        0.0026059959678628075,
+        -0.4836896653171819
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 12,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.02094251338029371,
+        0.005987209487116138,
+        -0.32151022472051977
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 13,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.02757960474441788,
+        -0.001449225492323156,
+        -0.3707031911787368
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 14,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.023021443900358162,
+        0.007202884658646744,
+        -0.355035301217765
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 15,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.021175258891430685,
+        0.001736581330122432,
+        -0.33525871948623104
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 16,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.006815997881978357,
+        -0.004008492482620624,
+        -0.3637170213787441
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 17,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.021649438112834738,
+        -0.0030957753600971603,
+        -0.4160697936097727
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 18,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.030934217150587553,
+        -0.021422780590795283,
+        -0.41670600314715234
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 19,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.06857582872683003,
+        -0.008880421024694458,
+        -0.1832807966020736
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 0,
+      "status": "fitted",
+      "point_world": [
+        0.013755464214253627,
+        -0.0033204624779818695,
+        0.05635007042444908
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 15.0353970807932
+    },
+    {
+      "model": "da3",
+      "track": 1,
+      "status": "fitted",
+      "point_world": [
+        0.003107531986693049,
+        -0.0016204727130720168,
+        0.014292620535445133
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 75.82155957584717
+    },
+    {
+      "model": "da3",
+      "track": 2,
+      "status": "fitted",
+      "point_world": [
+        0.0025024122056529325,
+        -0.0014458367528400605,
+        0.011134050860881749
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 96.46473403877643
+    },
+    {
+      "model": "da3",
+      "track": 3,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.002253736368570639,
+        -0.000929341760575855,
+        -0.006626095790942672
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 4,
+      "status": "fitted",
+      "point_world": [
+        0.005104318824065615,
+        -0.0009780929211113296,
+        0.027632369588806327
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 33.113637330555655
+    },
+    {
+      "model": "da3",
+      "track": 5,
+      "status": "fitted",
+      "point_world": [
+        -0.003944593408338655,
+        -0.00034151602541520633,
+        0.045342247193910376
+      ],
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "fit_frames": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "prefix_max_pixel_error": 73.03319927726064
+    },
+    {
+      "model": "da3",
+      "track": 6,
+      "status": "fitted",
+      "point_world": [
+        -0.014167121391107087,
+        0.0007855671095972935,
+        0.2153747567796149
+      ],
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "fit_frames": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "prefix_max_pixel_error": 13.943422333540152
+    },
+    {
+      "model": "da3",
+      "track": 7,
+      "status": "fitted",
+      "point_world": [
+        -0.01284414932672839,
+        0.0026382352382878374,
+        0.15515847617789108
+      ],
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "fit_frames": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "prefix_max_pixel_error": 19.3625116787552
+    },
+    {
+      "model": "da3",
+      "track": 8,
+      "status": "fitted",
+      "point_world": [
+        -0.005889941825662576,
+        0.0015193946015635272,
+        0.07924939968725737
+      ],
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "fit_frames": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "prefix_max_pixel_error": 36.5472991799131
+    },
+    {
+      "model": "da3",
+      "track": 9,
+      "status": "fitted",
+      "point_world": [
+        -0.008235164393392976,
+        -0.0009371361059395615,
+        0.15248300247553292
+      ],
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "fit_frames": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "prefix_max_pixel_error": 22.13645414060166
+    },
+    {
+      "model": "da3",
+      "track": 10,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0006984519953490273,
+        -0.0011438278904982318,
+        -0.003669958755517166
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 11,
+      "status": "fitted",
+      "point_world": [
+        0.0029175104123778774,
+        -0.0007682409327938596,
+        -0.0010326637756161907
+      ],
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "fit_frames": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "prefix_max_pixel_error": 234.1373422380028
+    },
+    {
+      "model": "da3",
+      "track": 12,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0006941788309307212,
+        -0.001136606491060176,
+        -0.003684221474805107
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 13,
+      "status": "fitted",
+      "point_world": [
+        0.001664419726382111,
+        -0.0011686244457490304,
+        0.019917104243500707
+      ],
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "fit_frames": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "prefix_max_pixel_error": 169.4766430758318
+    },
+    {
+      "model": "da3",
+      "track": 14,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0006591981647714752,
+        -0.0011379141053948158,
+        -0.003296767656770137
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 15,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0006848065508400953,
+        -0.0011614943736925902,
+        -0.0036534620367570506
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 16,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0005851850494698004,
+        -0.0011674553542378957,
+        -0.0027845726799822844
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 17,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0006159016625303395,
+        -0.0011206957098595727,
+        -0.0010902037777282998
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 18,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0006595313093500155,
+        -0.0010345081857509486,
+        -0.0008387412005632475
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 19,
+      "status": "fitted",
+      "point_world": [
+        0.008634726802997197,
+        0.0013429792241079531,
+        0.010617764163915855
+      ],
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "fit_frames": [
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46
+      ],
+      "prefix_max_pixel_error": 323.1980631285152
+    }
+  ],
+  "records": [
+    {
+      "id": "d80c11d7606b01325d9970ef",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "a356134b57aa5a03d5a87141",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "ab137eaa251aabfa98308aea",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "89b207163069edcb0dfae677",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        412.8217635253086,
+        213.27032997472787
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "2d7d39e7497dfee1a3bc542b",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        115.19400571166993,
+        217.81727867746014
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "089bf7640a6c07428a055b6d",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -594.2821222651856,
+        246.52728907033563
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "669aa2f5b3237df8d138779d",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        409.3950107708177,
+        223.94816627004553
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "c1762a71f94254a00fd005d4",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        99.47444551169905,
+        227.89026812165338
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "b80efbb1a0d3bdd61daa3eeb",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -698.9525201748783,
+        259.10104671128016
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "1b857e55801269bb9c6d5fc5",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "lag": 15,
+      "frame": 18,
+      "candidate_xy": [
+        457.8896220754767,
+        204.31556628273904
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "c09e0d44069ae7f1cbab15e3",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "lag": 30,
+      "frame": 33,
+      "candidate_xy": [
+        180.55473191123014,
+        213.37896922085974
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "a30fd404d8e0b6f326d3b9ba",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "lag": 60,
+      "frame": 63,
+      "candidate_xy": [
+        -308.7856625070508,
+        233.61581706849898
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "2631fbc58e6118cce03c417c",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "65920ebe86a6f1ed29a78e28",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "457bf65c5f8677fb05332ac6",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f5493faa1c1c282430f142d2",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "lag": 15,
+      "frame": 22,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "5c66fd09f21bc9cbe108ad81",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "lag": 30,
+      "frame": 37,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "a261d57982729fba05734ea3",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "lag": 60,
+      "frame": 67,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "b710e89a7997362c6019000b",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "lag": 15,
+      "frame": 23,
+      "candidate_xy": [
+        2.7307927433447308,
+        199.25205401194148
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "1ba6ba4219358028e37dff43",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "lag": 30,
+      "frame": 38,
+      "candidate_xy": [
+        -822.5437485269669,
+        240.10116363348988
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "eded81ce590ac252d88d0299",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "lag": 60,
+      "frame": 68,
+      "candidate_xy": [
+        -4072.932781553213,
+        114.53568032749766
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "f00a99943951c4b69b18c453",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "lag": 15,
+      "frame": 24,
+      "candidate_xy": [
+        -41.642986626499855,
+        249.81812206683512
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "9d8fd9b6d72a66467acbd6ca",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "lag": 30,
+      "frame": 39,
+      "candidate_xy": [
+        -376.4403939751725,
+        261.06590391404524
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "a7d35054e619f295c937dec9",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "lag": 60,
+      "frame": 69,
+      "candidate_xy": [
+        -1088.5049084972668,
+        305.45513357561344
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "cd693002a2ec3de57e37536d",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "lag": 15,
+      "frame": 27,
+      "candidate_xy": [
+        -88.85697521481143,
+        252.45070339910137
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "66f769a0b2c7b0b5accf7e3b",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "lag": 30,
+      "frame": 42,
+      "candidate_xy": [
+        -423.7015372286592,
+        260.6524464258371
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "d28196e8396f1e774ada7e34",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "lag": 60,
+      "frame": 72,
+      "candidate_xy": [
+        -1158.0919588494328,
+        313.72315889618807
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "11a99b726792d979dcea2f9f",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "lag": 15,
+      "frame": 25,
+      "candidate_xy": [
+        -30.792926937515155,
+        213.19044071915812
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "e8774f64c8279a0b65be6dfd",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "lag": 30,
+      "frame": 40,
+      "candidate_xy": [
+        -725.270096283437,
+        174.7937483777756
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "18b621b3a7b7fe88363fe550",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "lag": 60,
+      "frame": 70,
+      "candidate_xy": [
+        -2973.906135185167,
+        210.7143618730375
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "35659c66e6b0e76032480e8f",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        471.6137355566025,
+        220.72992324829102
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "adb819d6eaff0091e162e41a",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        471.6137355566025,
+        220.72992324829102
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "e3e32243549cf34af924ef69",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        471.6137355566025,
+        220.72992324829102
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "a0d24c185834f78bbe52205c",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "lag": 15,
+      "frame": 36,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f7a39e2a386eb2e9bed12ede",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "lag": 30,
+      "frame": 51,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "20fdc61f84b9ccb66ea341fd",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "lag": 60,
+      "frame": 81,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "f28c53481bc2ab34ab82572b",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        463.7242759466171,
+        215.4744529724121
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "1c7c2f49f484bb2099ad25f6",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        463.7242759466171,
+        215.4744529724121
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "cd16255075cd843f357ea7d2",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        463.7242759466171,
+        215.4744529724121
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "2b51b7c7c1c1708485b0a46a",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "lag": 15,
+      "frame": 21,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "8dbddd40bf95056e4b4e1ce3",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "lag": 30,
+      "frame": 36,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "3d63cc0aef5d8e85d42ce9ba",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "lag": 60,
+      "frame": 66,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "20b55d7505703091d08f5e4f",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        465.4775061607361,
+        214.59853649139404
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "40fbb7b9476d24ab7ef3b70a",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        465.4775061607361,
+        214.59853649139404
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "5d9115f64ba410c9ce3e6fdf",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        465.4775061607361,
+        214.59853649139404
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "c55a6b61f06481c1f91469c9",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        460.78446066379547,
+        231.77813529968262
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "c28c931fa379e29a9ad316c4",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        460.78446066379547,
+        231.77813529968262
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "769930815870735339e67136",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        460.78446066379547,
+        231.77813529968262
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "7c484aec7955ebec9aaa222c",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        405.95182049274445,
+        251.83098793029785
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "d8f4ba8bf5f04be2c00a469e",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        405.95182049274445,
+        251.83098793029785
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "cc65eac77392497c219c8378",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        405.95182049274445,
+        251.83098793029785
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "94a084837de6e2f37eaaee69",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        318.16068691015244,
+        247.4388313293457
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "75f2e433f371c8d81cffa385",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        318.16068691015244,
+        247.4388313293457
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "6f31a5f3fc227db99da2a2dd",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        318.16068691015244,
+        247.4388313293457
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "eff210919b70b0c8b460e892",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        290.08640283346176,
+        303.38027000427246
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "d2c33997bd43658b2c5306cc",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        290.08640283346176,
+        303.38027000427246
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "ba1e85a952adb63c45c1461b",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        290.08640283346176,
+        303.38027000427246
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "3be2484a0535d2d99157f19b",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "lag": 15,
+      "frame": 52,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "0d2d1968b47a8a9bc9340ac9",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "lag": 30,
+      "frame": 67,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "49730c11800f876e49f5bb7a",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "lag": 60,
+      "frame": 97,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "eb365a4e0734d7e3f3338b4b",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        487.50171555557955,
+        178.48952040308592
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "1709e5cba89c2d781462efd3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        229.81247896664476,
+        199.0231441373049
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "7d8be4e796848a294c4b2d6a",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -373.42528149560496,
+        190.1354638617148
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "4aff8ae2057f7d87dd81e3b6",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        455.1710889502765,
+        171.10458808918125
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "840ed856ce8da0648b98b72c",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        153.14229904378112,
+        216.39782074989606
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "a2ff81a905a3b42556aa927d",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -1471.9087345368484,
+        79.93348018513262
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "b096277266332bad18f8af43",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        458.6105221143381,
+        171.45339911980633
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "583a06ad757f6e1f7a63feb4",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        146.17859868630984,
+        222.48394316902872
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "040e7e6c1a14337e31c85bb8",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -2124.698677992616,
+        17.816230102987387
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "f41fa72529623e6ff13b6aab",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "lag": 15,
+      "frame": 18,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "811f123eca7c556758123f6a",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "lag": 30,
+      "frame": 33,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "c5af2e041d0008a4e9e77fc8",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "lag": 60,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "78bb786a59e31edbad0dc37d",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        429.6825468646379,
+        205.3783787074488
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "385c92ccba63b908b516a901",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        152.19736076306336,
+        235.4630588650946
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "ab178325fd87baf5d0ff0e9f",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -783.4922552500817,
+        211.78063583802273
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "e0a3742fd5db7eeb92454f4d",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "lag": 15,
+      "frame": 22,
+      "candidate_xy": [
+        -24.71977763501565,
+        229.02909817211713
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "6131987f7ba7e661e1cf6613",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "lag": 30,
+      "frame": 37,
+      "candidate_xy": [
+        -322.9948239598375,
+        226.6012837557957
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "f2ba50a4cdb786036a41b323",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "lag": 60,
+      "frame": 67,
+      "candidate_xy": [
+        -1399.0505700127576,
+        296.52772637412727
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "0304e958c1903b020cefc85e",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "lag": 15,
+      "frame": 23,
+      "candidate_xy": [
+        18.97475128630828,
+        234.50168584945845
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "3b85f2296bc7eb4331f4c016",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "lag": 30,
+      "frame": 38,
+      "candidate_xy": [
+        -303.91453435634725,
+        237.22006891756374
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "d33bfd6020866c1af2c3b754",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "lag": 60,
+      "frame": 68,
+      "candidate_xy": [
+        -993.4462473253844,
+        284.39638181645483
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "e6832519b73ee4ff582d6258",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "lag": 15,
+      "frame": 24,
+      "candidate_xy": [
+        -39.025810464002255,
+        245.60119537252697
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "766caca11bc9b383c6b59b4d",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "lag": 30,
+      "frame": 39,
+      "candidate_xy": [
+        -361.67726325506396,
+        254.0896863659539
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "690eb3f29cdc6c41d8f815a3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "lag": 60,
+      "frame": 69,
+      "candidate_xy": [
+        -1082.5781366787628,
+        313.5575804174185
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "488b3d454db8b55188848b1d",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "lag": 15,
+      "frame": 27,
+      "candidate_xy": [
+        -75.90085195236327,
+        248.3153461248078
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "1bec1439b8214c4b56ab96d3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "lag": 30,
+      "frame": 42,
+      "candidate_xy": [
+        -322.8943639430702,
+        269.602888331323
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "807f211e34fb0a8a110d8774",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "lag": 60,
+      "frame": 72,
+      "candidate_xy": [
+        -1561.350493544163,
+        303.7241259441849
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "02770b7abd71ff14dd340637",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "lag": 15,
+      "frame": 25,
+      "candidate_xy": [
+        -1.934651908265078,
+        230.77494241220347
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "0b937661f36985cb1023eae7",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "lag": 30,
+      "frame": 40,
+      "candidate_xy": [
+        -326.75089693353533,
+        236.0056458137281
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "b9922664e334a0997bf76bf3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "lag": 60,
+      "frame": 70,
+      "candidate_xy": [
+        -1064.018045234662,
+        275.69004220078705
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "78779444531a197598cefac0",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        471.6137355566025,
+        220.72992324829102
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "5cbe6cee76bda665bdb6d382",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        471.6137355566025,
+        220.72992324829102
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "d6c0f6e7709c1558391d0bfd",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        471.6137355566025,
+        220.72992324829102
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "da5bdef7a0dc607bb4548f6f",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "lag": 15,
+      "frame": 36,
+      "candidate_xy": [
+        -5.885110266092356,
+        128.8113689028948
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "55d57385ac74dd09b6788e29",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "lag": 30,
+      "frame": 51,
+      "candidate_xy": [
+        487.4327735598016,
+        173.3494990087631
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "25cf5a35d04a2f632145f1a3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "lag": 60,
+      "frame": 81,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "36ebed6348cfba20d53b5b2f",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        463.7242759466171,
+        215.4744529724121
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "2d9d5ab14c01a272d325a856",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        463.7242759466171,
+        215.4744529724121
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "aba445af1acf88a314f5c9e3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        463.7242759466171,
+        215.4744529724121
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "a02aab460dbbe06776747c15",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "lag": 15,
+      "frame": 21,
+      "candidate_xy": [
+        152.7810853553223,
+        183.69692774907537
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "fe06dc460b6f9b1991d38180",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "lag": 30,
+      "frame": 36,
+      "candidate_xy": [
+        -187.13189533064767,
+        191.3315330761507
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "5c5aa60e3c1866db5c82f287",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "lag": 60,
+      "frame": 66,
+      "candidate_xy": [
+        -1213.9695585871523,
+        225.47367199607658
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "859645c31b14cfb9f72ef65d",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        465.4775061607361,
+        214.59853649139404
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "0bb472bfc3ae0671c0166ca2",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        465.4775061607361,
+        214.59853649139404
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "be08b84cdf3cec15f6c5ad91",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        465.4775061607361,
+        214.59853649139404
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "0196a15e0e4c4a9cc4b0c13f",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        460.78446066379547,
+        231.77813529968262
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "d47d5d807bbdfa659a87c65e",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        460.78446066379547,
+        231.77813529968262
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "eaa989178382ba1609e71fa8",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        460.78446066379547,
+        231.77813529968262
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "8df235c4654352fbb3e02563",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        405.95182049274445,
+        251.83098793029785
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "d50b0551472f422fb4df00c3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        405.95182049274445,
+        251.83098793029785
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "183bb4b7de61e771dd5c4d5b",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        405.95182049274445,
+        251.83098793029785
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "d589eda23e30bbcaaa3b4d93",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        318.16068691015244,
+        247.4388313293457
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "4084ccfca34dc788411a5d19",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        318.16068691015244,
+        247.4388313293457
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "e7d047c777af1fbdb96b60db",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        318.16068691015244,
+        247.4388313293457
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "fba0fe0f7184b8f05474202c",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        290.08640283346176,
+        303.38027000427246
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "4a4e94bd28a078f280e266b5",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        290.08640283346176,
+        303.38027000427246
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "3ad2a2a50b1616e4dae9ddd4",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        290.08640283346176,
+        303.38027000427246
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "88c05b0d1aa54d24d7fbdaa9",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "lag": 15,
+      "frame": 52,
+      "candidate_xy": [
+        -317.0890711342174,
+        355.01178078087764
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "59a5a7a8632eed01f2f5480b",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "lag": 30,
+      "frame": 67,
+      "candidate_xy": [
+        -638.3840997476871,
+        440.34595930507174
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "e686da7729917886f6c68c34",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "lag": 60,
+      "frame": 97,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    }
+  ]
+}

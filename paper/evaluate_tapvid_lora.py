@@ -70,6 +70,25 @@ def validate_test_partition(manifest, development):
             raise ValueError("test record outside declared video partition")
 
 
+def validate_camera_transfer_roster(manifest):
+    counts = manifest["track_counts"]
+    if (len(counts) != 20 or set(counts) != set(manifest["partitions"])
+            or any(type(n) is not int or n <= 0 for n in counts.values())):
+        raise ValueError("complete twenty-video track counts required")
+    expected = {(name, method, track, lag) for name, count in counts.items()
+                for method in ("dage", "da3") for track in range(count) for lag in (15, 30, 60)}
+    records = manifest["records"]
+    actual = {(r["sequence"], r["model"], r["track"], r["lag"]) for r in records}
+    if len(records) != len(expected) or actual != expected or manifest["planned_presentations"] != len(expected):
+        raise ValueError("complete camera-transfer presentation roster required")
+    for row in records:
+        if row["status"] == "labeled":
+            if row["label"] not in {"close", "far", "occluded"} or row["geometry_status"] != "renderable":
+                raise ValueError("invalid camera-transfer reference label")
+        elif row["label"] is not None or row["status"] not in {"borderline_unlabeled", "unavailable"}:
+            raise ValueError("unavailable/borderline cases must remain unlabeled")
+
+
 def select_evaluation(corpus, train, manifest, partition, development=None):
     if partition == "camera":
         return select_camera_evaluation(corpus, train, manifest, development)
@@ -77,6 +96,8 @@ def select_evaluation(corpus, train, manifest, partition, development=None):
         raise ValueError("only training-fit, validation, or explicit disjoint test evaluation is allowed")
     if partition == "test":
         validate_test_partition(manifest, development)
+        if manifest.get("application") == "camera_projection_transfer":
+            validate_camera_transfer_roster(manifest)
     elif development is not None:
         raise ValueError("development manifest is only supplied for test evaluation")
     source = corpus / f"{partition}.jsonl"
@@ -135,6 +156,10 @@ def run(corpus, training_run, output, partition="validation", development_manife
                       protocol="base with adapters disabled versus adapted; identical prepared quantized model and original panels/prompts; greedy max 8 new tokens; exact four-label parser; invalid and uncertain retained; no calibration examples read; no weight updates; no test-based selection")
     if partition == "validation":
         report["validation_export_sha256"] = digest(source)
+    if partition == "test" and manifest.get("application") == "camera_projection_transfer":
+        report.update(application="camera_projection_transfer",
+                      scope="correspondence-judge transfer to camera-projected positions on previously evaluated test videos; not camera DNF validation",
+                      protocol="frozen base/adapted model and original prompt; independently labeled projected marker positions; no labels in model inputs; identical prepared images, greedy max 8 tokens; no training, threshold tuning, or calibration examples")
     if partition == "camera":
         report.update(scope="unlabeled development camera-marker correspondence judgments; no accuracy, staticness, human agreement, or DNF labels",
                       development_manifest_sha256=digest(development_manifest),

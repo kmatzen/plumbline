@@ -1,0 +1,2308 @@
+{
+  "scope": "camera-projected correspondence validation; no staticness or camera-DNF labels",
+  "sequence": "car-roundabout",
+  "prompt": "Compare the marked detail in A with the candidate marked in B. The top row shows context; the bottom row shows native-pixel crops. Is the candidate close to the same detail, far from it, or is the original detail occluded? Reply with one label: close, far, occluded, or uncertain. Close means within 2 native pixels; far means at least 8 native pixels. Use uncertain when the images do not support a decision. Do not judge camera accuracy or whether the object is moving.",
+  "planned_presentations": 120,
+  "geometry_sha256": "437f9362a61bffd232764d48405133208de6ecbf0fde32a9a17f2c7bedadcc46",
+  "source_manifest_sha256": "d8e1903df707408ef3b392c8c85c951b8cd6a36f899690d76ca520ae331bb41d",
+  "source_file_sha256": "f4968c5299170cde574140c4374609e62f5a2bcfad0ad982b86803017e088962",
+  "tracker_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "script_sha256": "49f222e81751905ebeb20100c2eceac7eb15c8b92cc7230141b9a7a104cfbbfb",
+  "export_sha256": "3394a42b595d0daa907b1ba9073aafe9643af4b50b3bb42bc75f950dda86ef56",
+  "geometry_dependencies_sha256": {
+    "plumbline.image_evidence": "9fc932d5f4cea4008a9dc43106fe4075e67dff17274000853cd511bff17414f4",
+    "plumbline.conventions": "506969710476aafde4ec4adf63cb86d4164762bd32e81d1a1b3bfd5f72e242ad"
+  },
+  "dependencies_sha256": {
+    "tapvid_camera_markers.py": "769bb4e2f7d34574e9352f748ae441926ee8e937c20597a27c107d4299edcc8b",
+    "build_anchor_preview.py": "7568d7a8cc409e7ac630b0a3753dced03691b0350e34547355ccfe862b3ae1c3",
+    "build_tapvid_judge_corpus.py": "5f66c715c674336018bfe6d331d7b67f81acfaa8896757c65e1f7817686852e0",
+    "run_tapvid_cameras.py": "56b8884bdf6c42ea41ae0b3313dc9dcdb554821c98cd96f31f8615cf134ddbec"
+  },
+  "counts": {
+    "nonpositive_prefix_depth": 61,
+    "occluded": 11,
+    "far": 7,
+    "query_outside_image": 37,
+    "query_beyond_video": 4
+  },
+  "records": [
+    {
+      "id": "d80c11d7606b01325d9970ef",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a356134b57aa5a03d5a87141",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ab137eaa251aabfa98308aea",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "89b207163069edcb0dfae677",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        412.8217635253086,
+        213.27032997472787
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/89b207163069edcb0dfae677.png",
+      "image_sha256": "21152e6d21dce42a8642d5e00e67c282653ea6b16c457e6e7a34d8749b42b930"
+    },
+    {
+      "id": "2d7d39e7497dfee1a3bc542b",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        115.19400571166993,
+        217.81727867746014
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 71.6759076001053,
+      "image": "images/2d7d39e7497dfee1a3bc542b.png",
+      "image_sha256": "112fda422e3576325d25869623446238e2039ff4fdd62df534c309c912dbc952"
+    },
+    {
+      "id": "089bf7640a6c07428a055b6d",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -594.2821222651856,
+        246.52728907033563
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "669aa2f5b3237df8d138779d",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        409.3950107708177,
+        223.94816627004553
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/669aa2f5b3237df8d138779d.png",
+      "image_sha256": "d932c580b2f36a25e9ad5f852ab60d906861743e354edfb03994aa63d41c8de4"
+    },
+    {
+      "id": "c1762a71f94254a00fd005d4",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        99.47444551169905,
+        227.89026812165338
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 40.780076593841876,
+      "image": "images/c1762a71f94254a00fd005d4.png",
+      "image_sha256": "2420a1caec1b40359b34953e4a747445d6e86159ed96e640ba2741bf965d811e"
+    },
+    {
+      "id": "b80efbb1a0d3bdd61daa3eeb",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -698.9525201748783,
+        259.10104671128016
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1b857e55801269bb9c6d5fc5",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "lag": 15,
+      "frame": 18,
+      "candidate_xy": [
+        457.8896220754767,
+        204.31556628273904
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/1b857e55801269bb9c6d5fc5.png",
+      "image_sha256": "f6b0d02a9416a2b6668d24f04b34f593663f24c0b30e5ff681223ca038c79085"
+    },
+    {
+      "id": "c09e0d44069ae7f1cbab15e3",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "lag": 30,
+      "frame": 33,
+      "candidate_xy": [
+        180.55473191123014,
+        213.37896922085974
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 161.35441904729353,
+      "image": "images/c09e0d44069ae7f1cbab15e3.png",
+      "image_sha256": "e4991f14014f88cf6f268e334b22d00754257a68195d96ee403efc6ca7cc251c"
+    },
+    {
+      "id": "a30fd404d8e0b6f326d3b9ba",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "lag": 60,
+      "frame": 63,
+      "candidate_xy": [
+        -308.7856625070508,
+        233.61581706849898
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2631fbc58e6118cce03c417c",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "65920ebe86a6f1ed29a78e28",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "457bf65c5f8677fb05332ac6",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f5493faa1c1c282430f142d2",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "lag": 15,
+      "frame": 22,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5c66fd09f21bc9cbe108ad81",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "lag": 30,
+      "frame": 37,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a261d57982729fba05734ea3",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "lag": 60,
+      "frame": 67,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b710e89a7997362c6019000b",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "lag": 15,
+      "frame": 23,
+      "candidate_xy": [
+        2.7307927433447308,
+        199.25205401194148
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/b710e89a7997362c6019000b.png",
+      "image_sha256": "dcffadbe34c55459c0e3bea5abb0a3875241deb93fd9124dc684225ce43e2541"
+    },
+    {
+      "id": "1ba6ba4219358028e37dff43",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "lag": 30,
+      "frame": 38,
+      "candidate_xy": [
+        -822.5437485269669,
+        240.10116363348988
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eded81ce590ac252d88d0299",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "lag": 60,
+      "frame": 68,
+      "candidate_xy": [
+        -4072.932781553213,
+        114.53568032749766
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f00a99943951c4b69b18c453",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "lag": 15,
+      "frame": 24,
+      "candidate_xy": [
+        -41.642986626499855,
+        249.81812206683512
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9d8fd9b6d72a66467acbd6ca",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "lag": 30,
+      "frame": 39,
+      "candidate_xy": [
+        -376.4403939751725,
+        261.06590391404524
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a7d35054e619f295c937dec9",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "lag": 60,
+      "frame": 69,
+      "candidate_xy": [
+        -1088.5049084972668,
+        305.45513357561344
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cd693002a2ec3de57e37536d",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "lag": 15,
+      "frame": 27,
+      "candidate_xy": [
+        -88.85697521481143,
+        252.45070339910137
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "66f769a0b2c7b0b5accf7e3b",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "lag": 30,
+      "frame": 42,
+      "candidate_xy": [
+        -423.7015372286592,
+        260.6524464258371
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d28196e8396f1e774ada7e34",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "lag": 60,
+      "frame": 72,
+      "candidate_xy": [
+        -1158.0919588494328,
+        313.72315889618807
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "11a99b726792d979dcea2f9f",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "lag": 15,
+      "frame": 25,
+      "candidate_xy": [
+        -30.792926937515155,
+        213.19044071915812
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e8774f64c8279a0b65be6dfd",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "lag": 30,
+      "frame": 40,
+      "candidate_xy": [
+        -725.270096283437,
+        174.7937483777756
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "18b621b3a7b7fe88363fe550",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "lag": 60,
+      "frame": 70,
+      "candidate_xy": [
+        -2973.906135185167,
+        210.7143618730375
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "35659c66e6b0e76032480e8f",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        471.6137355566025,
+        220.72992324829102
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "adb819d6eaff0091e162e41a",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        471.6137355566025,
+        220.72992324829102
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e3e32243549cf34af924ef69",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        471.6137355566025,
+        220.72992324829102
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a0d24c185834f78bbe52205c",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "lag": 15,
+      "frame": 36,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f7a39e2a386eb2e9bed12ede",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "lag": 30,
+      "frame": 51,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "20fdc61f84b9ccb66ea341fd",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "lag": 60,
+      "frame": 81,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f28c53481bc2ab34ab82572b",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        463.7242759466171,
+        215.4744529724121
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1c7c2f49f484bb2099ad25f6",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        463.7242759466171,
+        215.4744529724121
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cd16255075cd843f357ea7d2",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        463.7242759466171,
+        215.4744529724121
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2b51b7c7c1c1708485b0a46a",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "lag": 15,
+      "frame": 21,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8dbddd40bf95056e4b4e1ce3",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "lag": 30,
+      "frame": 36,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3d63cc0aef5d8e85d42ce9ba",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "lag": 60,
+      "frame": 66,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "20b55d7505703091d08f5e4f",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        465.4775061607361,
+        214.59853649139404
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "40fbb7b9476d24ab7ef3b70a",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        465.4775061607361,
+        214.59853649139404
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5d9115f64ba410c9ce3e6fdf",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        465.4775061607361,
+        214.59853649139404
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c55a6b61f06481c1f91469c9",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        460.78446066379547,
+        231.77813529968262
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c28c931fa379e29a9ad316c4",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        460.78446066379547,
+        231.77813529968262
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "769930815870735339e67136",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        460.78446066379547,
+        231.77813529968262
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7c484aec7955ebec9aaa222c",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        405.95182049274445,
+        251.83098793029785
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d8f4ba8bf5f04be2c00a469e",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        405.95182049274445,
+        251.83098793029785
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cc65eac77392497c219c8378",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        405.95182049274445,
+        251.83098793029785
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "94a084837de6e2f37eaaee69",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        318.16068691015244,
+        247.4388313293457
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "75f2e433f371c8d81cffa385",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        318.16068691015244,
+        247.4388313293457
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6f31a5f3fc227db99da2a2dd",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        318.16068691015244,
+        247.4388313293457
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eff210919b70b0c8b460e892",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        290.08640283346176,
+        303.38027000427246
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d2c33997bd43658b2c5306cc",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        290.08640283346176,
+        303.38027000427246
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ba1e85a952adb63c45c1461b",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        290.08640283346176,
+        303.38027000427246
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3be2484a0535d2d99157f19b",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "lag": 15,
+      "frame": 52,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0d2d1968b47a8a9bc9340ac9",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "lag": 30,
+      "frame": 67,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "49730c11800f876e49f5bb7a",
+      "sequence": "car-roundabout",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "lag": 60,
+      "frame": 97,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eb365a4e0734d7e3f3338b4b",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        487.50171555557955,
+        178.48952040308592
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/eb365a4e0734d7e3f3338b4b.png",
+      "image_sha256": "00f54bb68a4c38906ef6df808d6179ab8946294f91ccf934ef5b6cc9e180a75a"
+    },
+    {
+      "id": "1709e5cba89c2d781462efd3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        229.81247896664476,
+        199.0231441373049
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 173.4186844439955,
+      "image": "images/1709e5cba89c2d781462efd3.png",
+      "image_sha256": "103e493558f34b09786fbaafac8206497c91d9f22b24eecbe838fb529b5b3110"
+    },
+    {
+      "id": "7d8be4e796848a294c4b2d6a",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        726.3281092643738,
+        192.00000286102295
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -373.42528149560496,
+        190.1354638617148
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4aff8ae2057f7d87dd81e3b6",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        455.1710889502765,
+        171.10458808918125
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/4aff8ae2057f7d87dd81e3b6.png",
+      "image_sha256": "bde13b5d3181ed520436472dafa8027b340eb76c7c7544de8101520226efcbb1"
+    },
+    {
+      "id": "840ed856ce8da0648b98b72c",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        153.14229904378112,
+        216.39782074989606
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 109.4475610975641,
+      "image": "images/840ed856ce8da0648b98b72c.png",
+      "image_sha256": "1af319766fe74811e5caff4af229b89b923a22d110f8159fd12f0b7749c92ab2"
+    },
+    {
+      "id": "a2ff81a905a3b42556aa927d",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        718.872999548912,
+        199.436616897583
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -1471.9087345368484,
+        79.93348018513262
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b096277266332bad18f8af43",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        458.6105221143381,
+        171.45339911980633
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/b096277266332bad18f8af43.png",
+      "image_sha256": "bd3e2551967c948f4e46a0d60d906b52d1db9ec24cb0c487534c8a5b4ba669d3"
+    },
+    {
+      "id": "583a06ad757f6e1f7a63feb4",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        146.17859868630984,
+        222.48394316902872
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 86.1060553671341,
+      "image": "images/583a06ad757f6e1f7a63feb4.png",
+      "image_sha256": "84cf719b27454b85b0e5eb944cbb5bd284f038721786fe121c87de29499203cb"
+    },
+    {
+      "id": "040e7e6c1a14337e31c85bb8",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        739.7786524295807,
+        200.64000606536865
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -2124.698677992616,
+        17.816230102987387
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f41fa72529623e6ff13b6aab",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "lag": 15,
+      "frame": 18,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "811f123eca7c556758123f6a",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "lag": 30,
+      "frame": 33,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c5af2e041d0008a4e9e77fc8",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 3,
+      "source_xy": [
+        696.5448291301727,
+        195.83999633789062
+      ],
+      "lag": 60,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "78bb786a59e31edbad0dc37d",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        429.6825468646379,
+        205.3783787074488
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/78bb786a59e31edbad0dc37d.png",
+      "image_sha256": "09067e9c2f053b7a934687cc6f472e9dc09e701b354c8a91f97785f191f6d941"
+    },
+    {
+      "id": "385c92ccba63b908b516a901",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        152.19736076306336,
+        235.4630588650946
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/385c92ccba63b908b516a901.png",
+      "image_sha256": "7f5c05c3878cd49035207ad1d25c8acd1b9aed92c84177885fcd9a567d13f206"
+    },
+    {
+      "id": "ab178325fd87baf5d0ff0e9f",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        660.5174065828323,
+        229.01408672332764
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -783.4922552500817,
+        211.78063583802273
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e0a3742fd5db7eeb92454f4d",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "lag": 15,
+      "frame": 22,
+      "candidate_xy": [
+        -24.71977763501565,
+        229.02909817211713
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6131987f7ba7e661e1cf6613",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "lag": 30,
+      "frame": 37,
+      "candidate_xy": [
+        -322.9948239598375,
+        226.6012837557957
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f2ba50a4cdb786036a41b323",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 7,
+      "source_xy": [
+        230.38556212186813,
+        224.60640907287598
+      ],
+      "lag": 60,
+      "frame": 67,
+      "candidate_xy": [
+        -1399.0505700127576,
+        296.52772637412727
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0304e958c1903b020cefc85e",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "lag": 15,
+      "frame": 23,
+      "candidate_xy": [
+        18.97475128630828,
+        234.50168584945845
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/0304e958c1903b020cefc85e.png",
+      "image_sha256": "c4019b1777deb8299b18bf9ba50d6ffd86f70917f168d40e0fe2665b43e2ed7a"
+    },
+    {
+      "id": "3b85f2296bc7eb4331f4c016",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "lag": 30,
+      "frame": 38,
+      "candidate_xy": [
+        -303.91453435634725,
+        237.22006891756374
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d33bfd6020866c1af2c3b754",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 8,
+      "source_xy": [
+        226.884268283844,
+        226.70554161071777
+      ],
+      "lag": 60,
+      "frame": 68,
+      "candidate_xy": [
+        -993.4462473253844,
+        284.39638181645483
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e6832519b73ee4ff582d6258",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "lag": 15,
+      "frame": 24,
+      "candidate_xy": [
+        -39.025810464002255,
+        245.60119537252697
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "766caca11bc9b383c6b59b4d",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "lag": 30,
+      "frame": 39,
+      "candidate_xy": [
+        -361.67726325506396,
+        254.0896863659539
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "690eb3f29cdc6c41d8f815a3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 9,
+      "source_xy": [
+        211.4785524904728,
+        239.30029392242432
+      ],
+      "lag": 60,
+      "frame": 69,
+      "candidate_xy": [
+        -1082.5781366787628,
+        313.5575804174185
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "488b3d454db8b55188848b1d",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "lag": 15,
+      "frame": 27,
+      "candidate_xy": [
+        -75.90085195236327,
+        248.3153461248078
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1bec1439b8214c4b56ab96d3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "lag": 30,
+      "frame": 42,
+      "candidate_xy": [
+        -322.8943639430702,
+        269.602888331323
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "807f211e34fb0a8a110d8774",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 12,
+      "source_xy": [
+        198.17360281944275,
+        243.49854469299316
+      ],
+      "lag": 60,
+      "frame": 72,
+      "candidate_xy": [
+        -1561.350493544163,
+        303.7241259441849
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "02770b7abd71ff14dd340637",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "lag": 15,
+      "frame": 25,
+      "candidate_xy": [
+        -1.934651908265078,
+        230.77494241220347
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0b937661f36985cb1023eae7",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "lag": 30,
+      "frame": 40,
+      "candidate_xy": [
+        -326.75089693353533,
+        236.0056458137281
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b9922664e334a0997bf76bf3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 10,
+      "source_xy": [
+        224.08323830366135,
+        218.30904006958008
+      ],
+      "lag": 60,
+      "frame": 70,
+      "candidate_xy": [
+        -1064.018045234662,
+        275.69004220078705
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "78779444531a197598cefac0",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        471.6137355566025,
+        220.72992324829102
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5cbe6cee76bda665bdb6d382",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        471.6137355566025,
+        220.72992324829102
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d6c0f6e7709c1558391d0bfd",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        471.6137355566025,
+        220.72992324829102
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "da5bdef7a0dc607bb4548f6f",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "lag": 15,
+      "frame": 36,
+      "candidate_xy": [
+        -5.885110266092356,
+        128.8113689028948
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "55d57385ac74dd09b6788e29",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "lag": 30,
+      "frame": 51,
+      "candidate_xy": [
+        487.4327735598016,
+        173.3494990087631
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/55d57385ac74dd09b6788e29.png",
+      "image_sha256": "0f7d1e7917deb7b53ae576ef7ea654e7b6892271dbac3e7a2ec70ca96f8d1475"
+    },
+    {
+      "id": "25cf5a35d04a2f632145f1a3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 21,
+      "source_xy": [
+        472.49032521247864,
+        227.73722648620605
+      ],
+      "lag": 60,
+      "frame": 81,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "36ebed6348cfba20d53b5b2f",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        463.7242759466171,
+        215.4744529724121
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2d9d5ab14c01a272d325a856",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        463.7242759466171,
+        215.4744529724121
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "aba445af1acf88a314f5c9e3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        463.7242759466171,
+        215.4744529724121
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a02aab460dbbe06776747c15",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "lag": 15,
+      "frame": 21,
+      "candidate_xy": [
+        152.7810853553223,
+        183.69692774907537
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 280.94218864665686,
+      "image": "images/a02aab460dbbe06776747c15.png",
+      "image_sha256": "3a0108ade5810c7e4e413e09df105a55f27661af8943719d345696ebefea8a37"
+    },
+    {
+      "id": "fe06dc460b6f9b1991d38180",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "lag": 30,
+      "frame": 36,
+      "candidate_xy": [
+        -187.13189533064767,
+        191.3315330761507
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5c5aa60e3c1866db5c82f287",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 6,
+      "source_xy": [
+        441.80912733078003,
+        205.83941459655762
+      ],
+      "lag": 60,
+      "frame": 66,
+      "candidate_xy": [
+        -1213.9695585871523,
+        225.47367199607658
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "859645c31b14cfb9f72ef65d",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        465.4775061607361,
+        214.59853649139404
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0bb472bfc3ae0671c0166ca2",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        465.4775061607361,
+        214.59853649139404
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "be08b84cdf3cec15f6c5ad91",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        465.4775061607361,
+        214.59853649139404
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0196a15e0e4c4a9cc4b0c13f",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        460.78446066379547,
+        231.77813529968262
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d47d5d807bbdfa659a87c65e",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        460.78446066379547,
+        231.77813529968262
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eaa989178382ba1609e71fa8",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        460.78446066379547,
+        231.77813529968262
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8df235c4654352fbb3e02563",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        405.95182049274445,
+        251.83098793029785
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d50b0551472f422fb4df00c3",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        405.95182049274445,
+        251.83098793029785
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "183bb4b7de61e771dd5c4d5b",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        405.95182049274445,
+        251.83098793029785
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d589eda23e30bbcaaa3b4d93",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        318.16068691015244,
+        247.4388313293457
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4084ccfca34dc788411a5d19",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        318.16068691015244,
+        247.4388313293457
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e7d047c777af1fbdb96b60db",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        318.16068691015244,
+        247.4388313293457
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fba0fe0f7184b8f05474202c",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        290.08640283346176,
+        303.38027000427246
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4a4e94bd28a078f280e266b5",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        290.08640283346176,
+        303.38027000427246
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3ad2a2a50b1616e4dae9ddd4",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        290.08640283346176,
+        303.38027000427246
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "88c05b0d1aa54d24d7fbdaa9",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "lag": 15,
+      "frame": 52,
+      "candidate_xy": [
+        -317.0890711342174,
+        355.01178078087764
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "59a5a7a8632eed01f2f5480b",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "lag": 30,
+      "frame": 67,
+      "candidate_xy": [
+        -638.3840997476871,
+        440.34595930507174
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e686da7729917886f6c68c34",
+      "sequence": "car-roundabout",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 37,
+      "source_xy": [
+        202.96155577898026,
+        312.4706840515137
+      ],
+      "lag": 60,
+      "frame": 97,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    }
+  ]
+}
