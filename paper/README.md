@@ -3943,4 +3943,20 @@ This pilot begins after the original judge transfer comparison is complete and
 does not change it. It is not held-out validation. The purpose is to compare
 predicted cameras against scene-motion-aware reference measurements in a
 controlled setting; no camera-quality threshold or functional-DNF label has
-been established. Inference and separate evaluation are pending.
+been established. All eight inference attempts have now completed.
+
+`evaluate_movi_cameras.py` separately verifies saved prediction and reference
+hashes and evaluates all 24 poses and 23 adjacent pairs per attempt. The
+reference conversion changes Blender camera axes to OpenCV axes. Position
+alignment uses Sim3; rank-deficient trajectories remain unresolved. Rotation
+matrices are normalized before angle calculations, with the correction recorded.
+Four tests cover camera axes, quaternion signs, missing frames, static-camera
+alignment, similarity invariance, and finite-precision rotation errors.
+
+`reference-evaluation-v2.json` is the current evaluation. Version 1 is retained
+as a development record: it computed direct rotation angles before matrix
+normalization and is superseded. ATE favors DAGE on scenes 3835 and 4970 and
+DA3 on 5397 and 4385. Adjacent translation error favors DAGE on three scenes
+and DA3 on 5397. These conventional pose measurements provide comparison
+targets; they do not validate the new evaluator or define functional DNF.
+No result from this pilot has been added to the manuscript.

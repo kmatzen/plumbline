@@ -1,0 +1,420 @@
+{
+  "scope": "four-scene development reference validation; not DNF or evaluator validation",
+  "policy": "all eight attempts, all 24 frames, 23 adjacent pairs; Sim3 position alignment; units are dataset scene units",
+  "reference_convention": "wxyz camera-to-world, right multiplied by diag(1,-1,-1,1)",
+  "protocol_sha256": "e427265796aab7bf529cda57c330c663297b47c9a1a956459cb86ad930f3a084",
+  "batch_sha256": "c542f11386c5c0570c37af603de8ac0d526ea015fba1a8f9b0d4369f59e054b8",
+  "decoded_manifest_sha256": "1e8af9575c9e881a8a83ae396bacff1d3be1ecd1bbc5b5cd6585f70ba28491ed",
+  "script_sha256": "f214f749fa89fce42bce5a9fea946c3ac95f5d542c939711841512c2d31dde2a",
+  "metric_source_sha256": "40232f0be8ca1da969a050d7079fdf2cc5d488107fc427cfee4feecf8a3c9770",
+  "attempts": [
+    {
+      "sequence": "3835",
+      "method": "dage",
+      "process_status": "process_complete",
+      "manifest_sha256": "a2e52eae308f1ea05f08f160ae9d54b5036cac45c8b3dd6a8275493a136642cf",
+      "evaluation_status": "evaluated",
+      "reference_sha256": "34e4dc87c1ab1379e27f7e5fb748b9b4c62ea68f687d86146c952d0db90a3d50",
+      "prediction_sha256": "6d9627b1482d7d60360893b5d0349366efe0e329f04fc497e5c7bf5aa8fd7f18",
+      "metrics": {
+        "frames": 24,
+        "adjacent_pairs": 23,
+        "rotation_projection_max_abs_correction": [
+          2.3907271798906393e-06,
+          4.440892098500626e-16
+        ],
+        "adjacent_rotation_error_degrees": [
+          0.03753212702538395,
+          0.013560156129983372,
+          0.03366642149489772,
+          0.02369740707442466,
+          0.04668752669985368,
+          0.0591997525596633,
+          0.01947018033884644,
+          0.05222489745726656,
+          0.09260813641183815,
+          0.06504219196123158,
+          0.025641548714370254,
+          0.1147910716697993,
+          0.0533469893168417,
+          0.06705007624208577,
+          0.045004486611760944,
+          0.07111484464311585,
+          0.03215772281369484,
+          0.01683532820102883,
+          0.027990486207989166,
+          0.027163219806933522,
+          0.02673031315826168,
+          0.04253779142199227,
+          0.019751635590971452
+        ],
+        "adjacent_rotation_rmse_degrees": 0.05060371380430915,
+        "centered_position_ranks": [
+          3,
+          3
+        ],
+        "alignment_status": "complete",
+        "ate_rmse_scene_units": 0.01501840552405449,
+        "adjacent_translation_rmse_scene_units": 0.013404476379725791,
+        "aligned_adjacent_rotation_rmse_degrees": 0.05060371380729336
+      }
+    },
+    {
+      "sequence": "3835",
+      "method": "da3",
+      "process_status": "process_complete",
+      "manifest_sha256": "7179d53006ce76fa74c681b6e480aefcccc5b969d6a74dc6d8d848a1b58100a7",
+      "evaluation_status": "evaluated",
+      "reference_sha256": "34e4dc87c1ab1379e27f7e5fb748b9b4c62ea68f687d86146c952d0db90a3d50",
+      "prediction_sha256": "0c501cc351adf5dfef3012d6e5f1d514160d024610a4f4362aa034474e13f958",
+      "metrics": {
+        "frames": 24,
+        "adjacent_pairs": 23,
+        "rotation_projection_max_abs_correction": [
+          6.862776513738567e-08,
+          4.440892098500626e-16
+        ],
+        "adjacent_rotation_error_degrees": [
+          0.05655529677773796,
+          0.058535119323871204,
+          0.07282332655432415,
+          0.09644558425316663,
+          0.03344947937542834,
+          0.10937591330931908,
+          0.1880334340837275,
+          0.10238210564385475,
+          0.09867416438578466,
+          0.1317197002698862,
+          0.06998847390712397,
+          0.05213474233596284,
+          0.08573992670452348,
+          0.22074414668906311,
+          0.1641477628833338,
+          0.3972542147821065,
+          0.3015757958764881,
+          0.1403106746530227,
+          0.09954225612835157,
+          0.043490808656343444,
+          0.07745247543320842,
+          0.07326413058689178,
+          0.11936896435433526
+        ],
+        "adjacent_rotation_rmse_degrees": 0.14799220038538047,
+        "centered_position_ranks": [
+          3,
+          3
+        ],
+        "alignment_status": "complete",
+        "ate_rmse_scene_units": 0.02678299471281421,
+        "adjacent_translation_rmse_scene_units": 0.020603568704462644,
+        "aligned_adjacent_rotation_rmse_degrees": 0.14799220038756572
+      }
+    },
+    {
+      "sequence": "5397",
+      "method": "dage",
+      "process_status": "process_complete",
+      "manifest_sha256": "bac785181d01ee2b95f3888222e56afa2a51ef8cde2f44fa62c1944cc0dc9398",
+      "evaluation_status": "evaluated",
+      "reference_sha256": "d08d6768651f608c3ff8390c9d1b55e795ceeb25d64ca7c2d6f329e91ffc74c0",
+      "prediction_sha256": "9d6c45e59f1b031953423e73899217053544e05527eaeef10684e010810b0463",
+      "metrics": {
+        "frames": 24,
+        "adjacent_pairs": 23,
+        "rotation_projection_max_abs_correction": [
+          3.2186508178710938e-06,
+          4.440892098500626e-16
+        ],
+        "adjacent_rotation_error_degrees": [
+          0.050964431566686605,
+          0.04549127274865144,
+          0.027285948503619484,
+          0.050542471884551535,
+          0.04552744177781601,
+          0.018036325760881843,
+          0.023928569657889906,
+          0.09557792615500647,
+          0.038936769585355586,
+          0.02582992799880178,
+          0.022409805336598643,
+          0.02715511373376122,
+          0.11674811982479154,
+          0.024320200640134182,
+          0.06383594491012606,
+          0.037234543483708436,
+          0.04825614207124312,
+          0.048380956655666954,
+          0.037141156474297436,
+          0.07201829490982951,
+          0.058186767580213315,
+          0.0690396661118451,
+          0.02092325393966978
+        ],
+        "adjacent_rotation_rmse_degrees": 0.0523379441112281,
+        "centered_position_ranks": [
+          3,
+          3
+        ],
+        "alignment_status": "complete",
+        "ate_rmse_scene_units": 0.014658836878560252,
+        "adjacent_translation_rmse_scene_units": 0.0107283395668767,
+        "aligned_adjacent_rotation_rmse_degrees": 0.052337944104124984
+      }
+    },
+    {
+      "sequence": "5397",
+      "method": "da3",
+      "process_status": "process_complete",
+      "manifest_sha256": "2b4e76ea320bc9f118df18e844792f5f238b950c2e1c314a3590ff0a0234446d",
+      "evaluation_status": "evaluated",
+      "reference_sha256": "d08d6768651f608c3ff8390c9d1b55e795ceeb25d64ca7c2d6f329e91ffc74c0",
+      "prediction_sha256": "5a0919be28d9feaefc47557cfc1da0a6e959553679308af47241c14820d7932c",
+      "metrics": {
+        "frames": 24,
+        "adjacent_pairs": 23,
+        "rotation_projection_max_abs_correction": [
+          7.332211626742691e-08,
+          4.440892098500626e-16
+        ],
+        "adjacent_rotation_error_degrees": [
+          0.055944326178810844,
+          0.017768677221057017,
+          0.05681072206010437,
+          0.03501036365455537,
+          0.047760442814287485,
+          0.06682835662938837,
+          0.07824788121976961,
+          0.04780275638203152,
+          0.034227289947253,
+          0.07484650216860755,
+          0.09830264523863991,
+          0.16025967902692095,
+          0.1426792046091774,
+          0.11148905304999802,
+          0.08366287270294634,
+          0.2884337301852202,
+          0.28614331132627696,
+          0.06843374172799332,
+          0.04838473999602039,
+          0.1049002522965032,
+          0.07308924536976098,
+          0.03637928650095588,
+          0.05072768336031171
+        ],
+        "adjacent_rotation_rmse_degrees": 0.11369284420963584,
+        "centered_position_ranks": [
+          3,
+          3
+        ],
+        "alignment_status": "complete",
+        "ate_rmse_scene_units": 0.013041277494634395,
+        "adjacent_translation_rmse_scene_units": 0.008110781450689462,
+        "aligned_adjacent_rotation_rmse_degrees": 0.11369284420734213
+      }
+    },
+    {
+      "sequence": "4385",
+      "method": "dage",
+      "process_status": "process_complete",
+      "manifest_sha256": "4167ec1544f53bfe9d221871c082c5efbde0fb4f41a5febef7c24bd2d59ca033",
+      "evaluation_status": "evaluated",
+      "reference_sha256": "cda00dc47b7bf4f29034c6b38e933f8c2caf5e7c66977ee30e026021eda868ae",
+      "prediction_sha256": "403632f53c3704a0e09aa27d3c19f08535d8710f9531f8028c6455f64a920e3e",
+      "metrics": {
+        "frames": 24,
+        "adjacent_pairs": 23,
+        "rotation_projection_max_abs_correction": [
+          1.4667088339415102e-06,
+          5.551115123125783e-16
+        ],
+        "adjacent_rotation_error_degrees": [
+          0.094136880944411,
+          0.10936501430423952,
+          0.08716195882131092,
+          0.07118821242068958,
+          0.06227954533986538,
+          0.30265695024766237,
+          0.09030825184407792,
+          0.19080413346959088,
+          0.07311615227045605,
+          0.19191797727945561,
+          0.4106989738938574,
+          0.23507058539778716,
+          0.4775328153148892,
+          0.17956771600365995,
+          0.2678530318440848,
+          0.34294646864972017,
+          0.25846627805986694,
+          0.2094273851791503,
+          0.3014807483396062,
+          0.212446777647173,
+          0.4116350086724708,
+          0.3307260958766097,
+          0.2870977975920908
+        ],
+        "adjacent_rotation_rmse_degrees": 0.2551398921031524,
+        "centered_position_ranks": [
+          3,
+          3
+        ],
+        "alignment_status": "complete",
+        "ate_rmse_scene_units": 0.08198913855854786,
+        "adjacent_translation_rmse_scene_units": 0.05165208259122235,
+        "aligned_adjacent_rotation_rmse_degrees": 0.25513989210149113
+      }
+    },
+    {
+      "sequence": "4385",
+      "method": "da3",
+      "process_status": "process_complete",
+      "manifest_sha256": "2d5cba48ca4dc7da56afc0a96ba58d89bc638c733ad7865fb1df807b6a146c8e",
+      "evaluation_status": "evaluated",
+      "reference_sha256": "cda00dc47b7bf4f29034c6b38e933f8c2caf5e7c66977ee30e026021eda868ae",
+      "prediction_sha256": "7719892641d3cfd098c2eeffb89b9896d635088bf7cd0a693e68358aae27d2bc",
+      "metrics": {
+        "frames": 24,
+        "adjacent_pairs": 23,
+        "rotation_projection_max_abs_correction": [
+          6.663649620985979e-08,
+          5.551115123125783e-16
+        ],
+        "adjacent_rotation_error_degrees": [
+          0.6482339153575062,
+          0.1640945755241111,
+          0.1739024141702981,
+          0.2938068549870471,
+          0.09274424496568026,
+          0.13087903603941767,
+          0.2820742860516616,
+          0.24441092244929974,
+          0.15443452228705964,
+          0.4332728612975582,
+          0.4111476925655893,
+          0.338106421530807,
+          0.2726218361822626,
+          0.4403071553598007,
+          0.2329865035405083,
+          0.2584418410895264,
+          0.24592562909326904,
+          0.358233516140141,
+          0.3370224667031643,
+          0.34145052667571657,
+          0.12071903802562993,
+          0.2532441199757404,
+          0.5405841518402958
+        ],
+        "adjacent_rotation_rmse_degrees": 0.32322115644825494,
+        "centered_position_ranks": [
+          3,
+          3
+        ],
+        "alignment_status": "complete",
+        "ate_rmse_scene_units": 0.07233975924410153,
+        "adjacent_translation_rmse_scene_units": 0.06329685449050004,
+        "aligned_adjacent_rotation_rmse_degrees": 0.3232211564462955
+      }
+    },
+    {
+      "sequence": "4970",
+      "method": "dage",
+      "process_status": "process_complete",
+      "manifest_sha256": "21652d8885fe85a8db981425f02ecb3b57b92b811e40c70a5fbc087509947751",
+      "evaluation_status": "evaluated",
+      "reference_sha256": "26147ecc5020d2424e4131188305d11cba03d223b19f6a2f7ea8bd7852ee33ea",
+      "prediction_sha256": "32543d15860a3ea6a89cf74be24383b7dbe6bb8a7b8051856268894e55104ce1",
+      "metrics": {
+        "frames": 24,
+        "adjacent_pairs": 23,
+        "rotation_projection_max_abs_correction": [
+          2.1527562333867323e-06,
+          3.3306690738754696e-16
+        ],
+        "adjacent_rotation_error_degrees": [
+          0.11990836030227864,
+          0.20077449643664966,
+          0.12283588641376575,
+          0.17109581222449355,
+          0.044736906084709815,
+          0.010869347609429432,
+          0.08189124887236801,
+          0.07675180623366447,
+          0.09622202349139422,
+          0.18014252443337347,
+          0.047618859346969564,
+          0.025126895244008397,
+          0.10984848285539511,
+          0.08725763279712863,
+          0.07416181129813208,
+          0.20770004789078272,
+          0.12888192311596655,
+          0.09859240638747695,
+          0.07637780356029926,
+          0.05284008729900694,
+          0.24280396007168592,
+          0.16410087570699022,
+          0.09594427605083672
+        ],
+        "adjacent_rotation_rmse_degrees": 0.12454107187626692,
+        "centered_position_ranks": [
+          3,
+          3
+        ],
+        "alignment_status": "complete",
+        "ate_rmse_scene_units": 0.028862520269084972,
+        "adjacent_translation_rmse_scene_units": 0.02313111253694355,
+        "aligned_adjacent_rotation_rmse_degrees": 0.12454107188018711
+      }
+    },
+    {
+      "sequence": "4970",
+      "method": "da3",
+      "process_status": "process_complete",
+      "manifest_sha256": "7c3bc37b48c0fa267cd2820b1a63bebea540fd4f454c00a11a9ab4725ad92ba2",
+      "evaluation_status": "evaluated",
+      "reference_sha256": "26147ecc5020d2424e4131188305d11cba03d223b19f6a2f7ea8bd7852ee33ea",
+      "prediction_sha256": "7caa930dff60a91e7f02bc6ba824453c7b56b0f3980089b3bf11e7557cdfc669",
+      "metrics": {
+        "frames": 24,
+        "adjacent_pairs": 23,
+        "rotation_projection_max_abs_correction": [
+          6.681147057818748e-08,
+          3.3306690738754696e-16
+        ],
+        "adjacent_rotation_error_degrees": [
+          0.20903914379735003,
+          0.24752249280661964,
+          0.2679957075898382,
+          0.24266354840048765,
+          0.33261175346802785,
+          0.13513153440618525,
+          0.0884738825662371,
+          0.1149571929806444,
+          0.28806711853111705,
+          0.12600282578992922,
+          0.1538990869817885,
+          0.20497762055668067,
+          0.046912680428266004,
+          0.2554906279070228,
+          0.11099612440713433,
+          0.07652832248555817,
+          0.216629309993032,
+          0.2993003508098825,
+          0.5847333895431254,
+          0.2550075966365741,
+          0.11772131755596049,
+          0.1815164289215663,
+          0.1382835766971453
+        ],
+        "adjacent_rotation_rmse_degrees": 0.23267806586836207,
+        "centered_position_ranks": [
+          3,
+          3
+        ],
+        "alignment_status": "complete",
+        "ate_rmse_scene_units": 0.05537717262746755,
+        "adjacent_translation_rmse_scene_units": 0.03816108758341934,
+        "aligned_adjacent_rotation_rmse_degrees": 0.2326780658692765
+      }
+    }
+  ]
+}
