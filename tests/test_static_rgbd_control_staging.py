@@ -3,7 +3,7 @@ import tarfile
 
 import pytest
 
-from paper.stage_static_rgbd_control import SEQUENCE, nearest, parse_index, safe_image_path, stage
+from paper.stage_static_rgbd_control import SEQUENCE, SEQUENCES, nearest, parse_index, safe_image_path, stage
 
 
 def test_association_keeps_ambiguity_and_missingness_local():
@@ -19,11 +19,12 @@ def test_association_keeps_ambiguity_and_missingness_local():
             safe_image_path(path, "rgb")
 
 
-def test_fixed_rgb_selection_does_not_depend_on_reference_or_depth(tmp_path):
+@pytest.mark.parametrize("sequence", SEQUENCES)
+def test_fixed_rgb_selection_does_not_depend_on_reference_or_depth(tmp_path, sequence):
     archive = tmp_path / "source.tgz"
     with tarfile.open(archive, "w:gz") as tar:
         def add(name, payload):
-            info = tarfile.TarInfo(f"{SEQUENCE}/{name}")
+            info = tarfile.TarInfo(f"{sequence}/{name}")
             info.size = len(payload)
             tar.addfile(info, io.BytesIO(payload))
         add("rgb.txt", "".join(f"{i} rgb/{i}.png\n" for i in range(270)).encode())
@@ -33,7 +34,8 @@ def test_fixed_rgb_selection_does_not_depend_on_reference_or_depth(tmp_path):
             add(f"rgb/{i}.png", f"synthetic-image-{i}".encode())
         add("depth/3.png", b"synthetic-depth")
     output = tmp_path / "selected"
-    record = stage(archive, output)
+    record = stage(archive, output, sequence=sequence)
+    assert record["sequence"] == sequence
     assert len(record["frames"]) == 90
     assert [r["rgb_index"] for r in record["frames"]] == list(range(0, 270, 3))
     assert record["frames"][0]["depth"]["status"] == "outside_20ms"
@@ -66,3 +68,8 @@ def test_rejects_ambiguous_or_nonordinary_archive_members(tmp_path, kind):
 def test_nonfinite_timestamp_is_not_associated():
     with pytest.raises(ValueError, match="invalid timestamp"):
         parse_index(b"nan rgb/a.png\n", 2)
+
+
+def test_unsupported_sequence_rejected_before_opening_archive(tmp_path):
+    with pytest.raises(ValueError, match="explicitly supported"):
+        stage(tmp_path / "missing", tmp_path / "output", sequence="../other")

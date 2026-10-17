@@ -9,6 +9,7 @@ from collections import Counter
 from pathlib import Path, PurePosixPath
 
 SEQUENCE = "rgbd_dataset_freiburg3_structure_texture_near"
+SEQUENCES = (SEQUENCE, "rgbd_dataset_freiburg3_long_office_household")
 
 
 def digest(path):
@@ -50,7 +51,9 @@ def safe_image_path(name, kind):
     return path
 
 
-def stage(archive, output):
+def stage(archive, output, *, sequence=SEQUENCE):
+    if sequence not in SEQUENCES:
+        raise ValueError("sequence must be an explicitly supported Freiburg-3 control")
     if output.exists():
         raise ValueError("preserve existing staging attempts")
     with tarfile.open(archive, "r:gz") as tar:
@@ -59,7 +62,7 @@ def stage(archive, output):
             raise ValueError("duplicate archive member")
 
         def read(relative):
-            member = tar.getmember(f"{SEQUENCE}/{relative}")
+            member = tar.getmember(f"{sequence}/{relative}")
             if not member.isfile():
                 raise ValueError("expected ordinary archive file")
             return tar.extractfile(member).read()
@@ -96,7 +99,7 @@ def stage(archive, output):
                            "reference": nearest(row["timestamp"], reference)})
     record = {
         "scope": "static-scene development control; reference and depth are validation-only",
-        "sequence": SEQUENCE, "archive_sha256": digest(archive),
+        "sequence": sequence, "archive_sha256": digest(archive),
         "archive_bytes": archive.stat().st_size, "script_sha256": digest(Path(__file__)),
         "selection": "first 90 chronological RGB frames at stride 3, before depth/reference association",
         "association": "nearest timestamp within 20 ms; earlier timestamp on ties; duplicate selected timestamp is ambiguous; no interpolation",
@@ -113,5 +116,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("archive", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--sequence", choices=SEQUENCES, default=SEQUENCE)
     args = parser.parse_args()
-    print(stage(args.archive, args.output)["association_counts"])
+    print(stage(args.archive, args.output, sequence=args.sequence)["association_counts"])
