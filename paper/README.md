@@ -596,6 +596,30 @@ depth. A usable abstention criterion must measure uncertainty in the projected
 position, not reject every point with unbounded depth. The diagnostic remains
 outside the manuscript and does not establish a reference-free DNF decision.
 
+`probe_static_projection_range.py` then bounds query-image coordinates directly
+using early frames 1–10 and query cameras at frames 11, 45, and 89. No query
+image coordinates or sensor depths enter the calculation. The linear-fractional
+problem is written in homogeneous coordinates with query depth fixed to one;
+points at infinity are allowed in the closure. Bounds are conditional on
+positive query depth, not a visibility certificate. Separate coordinate extrema
+need not form an attainable rectangle corner. No bounds are clipped to the image.
+
+All 144 slot/tolerance/query combinations are retained in
+`projection-range-v1.json`. At four pixels, all 11 eligible slots have finite
+coordinate bounds. Median horizontal widths at frames 11, 45, and 89 are
+7.80, 931.18, and 1282.10 pixels; median vertical widths are 5.99, 46.24, and
+174.47 pixels. The image is 640 by 480 pixels. Thus this early window supports
+a relatively precise immediate prediction but not precise later placement.
+This is a reference-camera diagnostic, not validation of estimated cameras or
+a calibrated abstention threshold.
+
+Analytic tests distinguish unconstrained depth with bounded same-view projection
+from translation-induced unbounded projection, check reverse-view infeasibility,
+known-disparity prediction bounds, and world-coordinate invariance. A runner
+test replaces all later image coordinates and sensor data and verifies that
+every predicted bound remains unchanged. These classical geometric bounds are
+an observability diagnostic, not the paper's claimed novel contribution.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is
