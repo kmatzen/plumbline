@@ -1,6 +1,7 @@
 import itertools
 
 import numpy as np
+from scipy.spatial.transform import Rotation
 
 from paper.audit_movi_visibility import evidence, normal_evidence
 
@@ -47,3 +48,23 @@ def test_depth_and_offscreen_rejection_keep_all_slots():
     assert result['outside_or_behind'].item()
     assert result['rejected'].size == 1
     assert not result['depth_rejected'].item()
+
+
+def test_visibility_evidence_invariant_to_world_similarity():
+    a,n,t = fixture()
+    original = evidence(a,n,t)
+    transform = Rotation.from_euler('z',90,degrees=True)
+    rotation = transform.as_matrix()
+    scale,shift = 3.5,np.array([17.,-8.,4.])
+    a['instances_bboxes_3d'] = scale*(a['instances_bboxes_3d']@rotation.T)+shift
+    a['camera_positions'] = scale*(a['camera_positions']@rotation.T)+shift
+    xyzw = transform.as_quat()
+    a['instances_quaternions'] = xyzw[[3,0,1,2]][None,None]
+    rotated_normals = (n.astype(float)/65535*2-1)@rotation.T
+    n = np.round((rotated_normals+1)/2*65535).astype(np.uint16)
+    t['neighbor_depth_max'] *= scale
+    t['radial_depth'] *= scale
+    transformed = evidence(a,n,t)
+    for field in ('supported','rejected','unresolved','depth_rejected','mask_rejected','normal_rejected'):
+        np.testing.assert_array_equal(original[field],transformed[field])
+    np.testing.assert_allclose(transformed['normal_camera_dot'],original['normal_camera_dot']*scale,atol=1e-9)
