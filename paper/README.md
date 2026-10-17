@@ -620,8 +620,8 @@ levels must accompany any comparison. Both model arms returned valid labels
 for every example. Input hashes and paired processed-image hashes were checked;
 `validation.json` and `validation-summary.json` preserve the full results.
 This development result does not establish a reliable DNF rule. The unchanged
-adapter's predeclared external-video comparison has now been launched; its
-results remain pending. These development diagnostics remain outside the
+adapter's predeclared external-video comparison has completed, as recorded
+below. These development diagnostics remain outside the
 manuscript's reported experiments.
 
 The development order follows the useful separation in
@@ -3095,5 +3095,36 @@ percentile interval is descriptive uncertainty, not proof of external validity.
 Input hashes must match the completed fixed 20-pass training manifest, original
 development manifest, test corpus, and original tracker results. Synthetic tests
 check that test-label frequencies cannot choose the majority baseline and that
-an all-abstaining model has zero answer coverage. Test inference is now running
-under `base-adapted-twenty-pass-v1` on Anima; no completed test result exists yet.
+an all-abstaining model has zero answer coverage.
+
+The fixed external comparison completed under `base-adapted-twenty-pass-v1`
+on Anima. Both arms contain all 971 labeled examples from all 20 videos, with
+matching processed-image hashes. The training, development, corpus, export,
+tracker, and evaluator hashes were verified. Complete predictions and the
+predeclared analysis are retained in
+`results/tapvid-lora-twenty-pass-v1/external-test.json` and
+`external-test-summary.json`.
+
+The base model predicted far for every example: 400/971 correct (41.2%), the
+same as the training-majority baseline. The adapted model scored 588/971
+(60.6%), with 56.2% balanced accuracy. Its class recalls were 317/375 close,
+208/400 far, and 63/196 occluded. Mean per-video accuracy rose from 39.7% to
+62.5%; the paired whole-video difference was 22.9 percentage points, with a
+descriptive 95% bootstrap interval of 9.9 to 37.7 points. Both arms returned
+valid labels on every scored example, with no abstentions.
+
+The adapted model made 444 close predictions, of which 127 were wrong
+(71.4% precision). The frozen image check made 255 close predictions, of which
+10 were wrong (96.1% precision), and abstained on 716 labeled examples. The
+learned model therefore did not establish a safer acceptance check than this
+classical baseline. Neither arm evaluates camera-level DNF. The full planned
+roster remains 1,740: 971 labeled, 306 borderline, 170 unavailable candidates,
+and 293 beyond the video. Model response coverage is 100% of labeled examples
+but only 55.8% of the planned roster; excluded cases are not successes.
+
+This result establishes that the fixed fine-tuning procedure improves this
+correspondence classification task over its pinned base model on video-disjoint
+examples. It does not validate static-scene membership, camera poses, or a DNF
+decision. No model or threshold is selected using these test responses, and
+calibration remains unopened. The result is retained in this research ledger;
+it has not been added to the manuscript's reported camera experiments.
