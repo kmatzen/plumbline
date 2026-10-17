@@ -6,7 +6,7 @@
   <title>plumbline — reproducibility in 3D vision evaluation</title>
   <meta name="description" content="An open research effort auditing whether published 3D foundation-model results can be reproduced under explicit evaluation protocols." />
   <meta property="og:title" content="plumbline · 3D vision reproducibility study" />
-  <meta property="og:description" content="47 paper-match results, protocol audits, and documented negative findings across depth and camera-pose evaluation." />
+  <meta property="og:description" content="47 reproduced results, with the exact evaluation settings and source for each one." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23f3f0e8'/%3E%3Crect x='7.4' y='2' width='1.2' height='10' fill='%23ad2b21'/%3E%3Cpolygon points='5,12 11,12 8,15' fill='%23ad2b21'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="styles.css" />
@@ -24,67 +24,67 @@
   <main id="top">
     <section class="research-hero">
       <div class="eyebrow">Open evaluation study · v0.3 in development · updated 2026</div>
-      <h1>Do published 3D-vision results survive a shared evaluation harness?</h1>
-      <p class="dek">Plumbline is a reproducibility study of depth and camera-pose evaluation. It reconstructs the protocols behind reported numbers, reruns public models, and records both matches and failures without collapsing them into a leaderboard.</p>
+      <h1>Can we reproduce published results for 3D vision models?</h1>
+      <p class="dek">Plumbline studies depth and camera-pose evaluation. It records the settings used in each paper, runs the public model, and reports whether the new result matches the published result.</p>
       <div class="hero-actions">
         <a class="primary-link" href="/explore">Explore the evidence →</a>
         <a href="https://github.com/kmatzen/plumbline/blob/main/REPRODUCTIONS.md">Read the evidence ledger</a>
         <a href="https://github.com/kmatzen/plumbline">Methods and code</a>
       </div>
       <dl class="headline-results" aria-label="Current study scope">
-        <div><dt>47</dt><dd>paper-match cells</dd></div>
+        <div><dt>47</dt><dd>reproduced results</dd></div>
         <div><dt>18</dt><dd>model adapters</dd></div>
         <div><dt>16</dt><dd>dataset families</dd></div>
-        <div><dt>3</dt><dd>evaluation families</dd></div>
+        <div><dt>3</dt><dd>types of evaluation</dd></div>
       </dl>
-      <p class="definition">A “paper match” is one primary metric whose target was read directly from the source PDF and whose full recorded run falls within a declared tolerance. Companion metrics never inflate the count.</p>
+      <p class="definition">A result counts as reproduced when we read the target value in the paper, run the full evaluation, and get a value within the stated tolerance. Extra metrics from the same run do not increase the count.</p>
     </section>
 
     <section class="paper-section" id="question">
       <div class="margin-label">01 / research question</div>
       <div class="section-body two-col">
-        <div><h2>The number is not the protocol.</h2><p class="lead">A benchmark value is the endpoint of a long, often underspecified chain: checkpoint, input resize, dataset selection, crop, valid mask, alignment, aggregation, and metric implementation.</p></div>
-        <div class="research-note"><h3>Working hypothesis</h3><p>Many apparent model differences—and many failed reproductions—are caused by evaluation choices rather than model quality. A useful comparison must expose those choices as data.</p><p>Plumbline tests this by expressing protocols as versioned configurations, sharing metric code across methods, and retaining discrepancies as findings.</p></div>
+        <div><h2>A published number depends on many choices.</h2><p class="lead">The result depends on the checkpoint, image size, dataset records, crop, valid mask, alignment, aggregation, and metric code. Papers do not always state all of these choices.</p></div>
+        <div class="research-note"><h3>Research aim</h3><p>We want to separate differences between models from differences between evaluation methods.</p><p>Plumbline saves each evaluation method as a versioned configuration. Models share the same metric code where possible. Results that do not match the paper remain in the record.</p></div>
       </div>
     </section>
 
     <section class="paper-section findings" id="findings">
       <div class="margin-label">02 / findings so far</div>
       <div class="section-body">
-        <h2>Reproduction is possible—but rarely automatic.</h2>
+        <h2>What we have learned.</h2>
         <div class="finding-grid">
-          <article><span class="finding-no">A</span><h3>Protocol details move results materially.</h3><p>Median estimator variants, depth-vs-disparity alignment, crops, frame sets, and aggregation rules can decide whether a public checkpoint reproduces its paper.</p></article>
-          <article><span class="finding-no">B</span><h3>Negative results are evidence.</h3><p>When a released checkpoint remains off-paper after an audited implementation, the result stays visible as upstream-blocked or off-paper—not tuned into a check mark.</p></article>
-          <article><span class="finding-no">C</span><h3>One scalar is not enough for tracking.</h3><p>ATE and pose AUC can hide jitter, local failure, recovery, and coverage. The study now adds blinded pairwise trajectory review with human/VLM calibration.</p></article>
+          <article><span class="finding-no">A</span><h3>Small changes can change the score.</h3><p>The median estimator, alignment method, crop, frame set, and aggregation rule can determine whether the public checkpoint matches the paper.</p></article>
+          <article><span class="finding-no">B</span><h3>We report results that do not match.</h3><p>Some public checkpoints still produce a different result after we check the implementation. We publish these differences and their likely causes.</p></article>
+          <article><span class="finding-no">C</span><h3>Camera tracking needs more than one score.</h3><p>ATE and pose AUC do not show every problem. They can hide jitter, short failures, recovery, and missing frames. We now add blinded comparisons of complete trajectories.</p></article>
         </div>
-        <aside class="result-strip"><div><b>Depth</b><span>39 verified primary cells</span></div><div><b>Pose / trajectory</b><span>8 verified primary cells</span></div><div><b>Discrepancies</b><span>root-caused and retained in the public ledger</span></div></aside>
+        <aside class="result-strip"><div><b>Depth</b><span>39 reproduced results</span></div><div><b>Pose and trajectory</b><span>8 reproduced results</span></div><div><b>Different results</b><span>published with notes about the likely cause</span></div></aside>
       </div>
     </section>
 
     <section class="paper-section" id="method">
       <div class="margin-label">03 / method</div>
       <div class="section-body">
-        <h2>From paper claim to auditable result.</h2>
+        <h2>How we check each result.</h2>
         <ol class="method-flow">
-          <li><span>01</span><div><h3>Read the primary source</h3><p>Record table, row, column, metric direction, target, and tolerance from the PDF—not a secondary benchmark list.</p></div></li>
-          <li><span>02</span><div><h3>Reconstruct the protocol</h3><p>Pin checkpoint, dataset records, preprocessing, alignment, masks, metric implementation, and aggregation in YAML.</p></div></li>
-          <li><span>03</span><div><h3>Run the full evaluation</h3><p>Cache raw predictions before alignment, preserve environment metadata, and reject partial runs below the declared sample floor.</p></div></li>
-          <li><span>04</span><div><h3>Classify the evidence</h3><p>Promote only full runs within tolerance. Keep mismatches, private-recipe gaps, and informational comparisons visibly separate.</p></div></li>
+          <li><span>01</span><div><h3>Read the paper</h3><p>Record the table, row, column, metric, target value, and tolerance from the PDF.</p></div></li>
+          <li><span>02</span><div><h3>Record the evaluation settings</h3><p>Save the checkpoint, dataset records, preprocessing, alignment, masks, metric code, and aggregation rule in YAML.</p></div></li>
+          <li><span>03</span><div><h3>Run every required sample</h3><p>Save raw predictions before alignment and record the software and hardware environment. Reject incomplete runs.</p></div></li>
+          <li><span>04</span><div><h3>Compare the values</h3><p>Mark a result as reproduced only when the full run is within tolerance. Report other results in separate groups.</p></div></li>
         </ol>
-        <figure class="protocol-figure"><figcaption>Evaluation chain recorded for every result</figcaption><div class="chain" role="img" aria-label="Paper claim flows through protocol, public model, shared evaluator, and evidence ledger"><span>paper claim</span><i>→</i><span>pinned protocol</span><i>→</i><span>public checkpoint</span><i>→</i><span>shared evaluator</span><i>→</i><span>evidence ledger</span></div></figure>
+        <figure class="protocol-figure"><figcaption>Information saved for every result</figcaption><div class="chain" role="img" aria-label="Published value, evaluation settings, public model, shared metric code, and recorded result"><span>published value</span><i>→</i><span>evaluation settings</span><i>→</i><span>public model</span><i>→</i><span>shared metric code</span><i>→</i><span>recorded result</span></div></figure>
       </div>
     </section>
 
     <section class="paper-section" id="evidence">
       <div class="margin-label">04 / evidence</div>
       <div class="section-body">
-        <div class="evidence-head"><div><h2>Inspect every primary result.</h2><p class="lead">The interactive matrix shows observed and paper values, relative deviation, citation location, protocol family, and whether a cell is verified or informational.</p></div><a class="primary-link" href="/explore">Open the evidence explorer →</a></div>
+        <div class="evidence-head"><div><h2>See every result and its source.</h2><p class="lead">The table shows our value, the published value, the difference, the location in the paper, and the evaluation method.</p></div><a class="primary-link" href="/explore">Open the results table →</a></div>
         <ul class="stat-row" aria-label="harness scope and evidence"><li class="stat"><span class="stat-n">18</span><span class="stat-label">models</span></li><li class="stat"><span class="stat-n">16</span><span class="stat-label">datasets</span></li><li class="stat"><span class="stat-n">47</span><span class="stat-label">verified results</span></li></ul>
         <div class="evidence-links">
-          <a href="/explore"><b>Interactive matrix</b><span>Filter and inspect primary and companion measurements.</span></a>
-          <a href="https://github.com/kmatzen/plumbline/blob/main/REPRODUCTIONS.md"><b>Reproduction ledger</b><span>Protocols, observed values, paper targets, and run notes.</span></a>
-          <a href="https://github.com/kmatzen/plumbline/blob/main/docs/DISCREPANCIES.md"><b>Discrepancy log</b><span>Unresolved and root-caused deviations, including negative results.</span></a>
-          <a href="https://github.com/kmatzen/plumbline/blob/main/docs/CAMERA_TRACKING_REVIEW_HARNESS.md"><b>Tracking review protocol</b><span>Blinded pairwise review and preference-calibrated ranking.</span></a>
+          <a href="/explore"><b>Results table</b><span>Filter results by metric and evaluation method.</span></a>
+          <a href="https://github.com/kmatzen/plumbline/blob/main/REPRODUCTIONS.md"><b>Evaluation records</b><span>Settings, values from our runs, published values, and notes.</span></a>
+          <a href="https://github.com/kmatzen/plumbline/blob/main/docs/DISCREPANCIES.md"><b>Results that differ</b><span>Differences that remain and differences whose cause is known.</span></a>
+          <a href="https://github.com/kmatzen/plumbline/blob/main/docs/CAMERA_TRACKING_REVIEW_HARNESS.md"><b>Camera tracking review</b><span>Blinded comparisons of two trajectories and tests of automated reviewers.</span></a>
         </div>
       </div>
     </section>
@@ -92,7 +92,7 @@
     <section class="paper-section" id="supported">
       <div class="margin-label">05 / study coverage</div>
       <div class="section-body">
-        <h2>Current experimental surface.</h2>
+        <h2>Models and datasets in this study.</h2>
         <div class="cov">
           <article class="cov-col"><h3>models<span class="cnt">18</span></h3><ul class="cov-flat"><li>depth-anything-v2</li><li>depth-anything-3</li><li>unik3d</li><li>vda</li><li>pi3</li><li>streamvggt</li><li>vggt-omega</li><li>metric3d-v2</li><li>moge</li><li>vggt</li><li>dust3r</li><li>mast3r</li><li>marigold</li><li>geowizard</li><li>depth-pro</li><li>cut3r</li><li>monst3r</li><li>dage</li></ul></article>
           <article class="cov-col"><h3>datasets<span class="cnt">16</span></h3><ul class="cov-flat"><li>nyuv2</li><li>kitti</li><li>diode</li><li>eth3d</li><li>dtu</li><li>co3dv2</li><li>7scenes</li><li>gso</li><li>ibims1</li><li>sintel</li><li>bonn</li><li>tum-dynamics</li><li>booster</li><li>ddad-moge-eval</li><li>realestate10k-pose-eval</li><li>sun-rgbd-native</li></ul></article>
@@ -103,13 +103,13 @@
     <section class="paper-section reproduce" id="reproduce">
       <div class="margin-label">06 / reproduce &amp; cite</div>
       <div class="section-body two-col">
-        <div><h2>The code is an instrument for the study.</h2><p>Run a pinned experiment, inspect its exact configuration, or contribute a protocol correction. Most model runs require CUDA; the evidence and configuration ledger do not.</p><pre><code><span>$</span> pip install plumbline-bench
+        <div><h2>Run the same evaluation.</h2><p>You can run a saved evaluation, read its exact settings, or submit a correction. Most model runs require a CUDA GPU. Reading the results and settings does not.</p><pre><code><span>$</span> pip install plumbline-bench
 <span>$</span> plumbline reproduce da-v2-large-nyuv2
 
 → AbsRel  0.0428
 → paper   0.0420
 → status  match</code></pre></div>
-        <div class="cite-card"><h3>Citation and scope</h3><p>Plumbline is an evolving open research artifact. Cite the repository version used, and cite each upstream model and dataset whose results you report.</p><a href="https://github.com/kmatzen/plumbline/blob/main/CITATION.cff">CITATION.cff →</a><a href="https://github.com/kmatzen/plumbline/blob/main/reproductions/AUDIT.md">source audit →</a><a href="https://github.com/kmatzen/plumbline/blob/main/THIRD_PARTY_NOTICES.md">licenses →</a><small>The distributed package includes non-commercial upstream components. See the per-component notices before reuse.</small></div>
+        <div class="cite-card"><h3>How to cite this work</h3><p>Cite the version of Plumbline that you used. Also cite each model and dataset included in your results.</p><a href="https://github.com/kmatzen/plumbline/blob/main/CITATION.cff">CITATION.cff →</a><a href="https://github.com/kmatzen/plumbline/blob/main/reproductions/AUDIT.md">paper sources →</a><a href="https://github.com/kmatzen/plumbline/blob/main/THIRD_PARTY_NOTICES.md">licenses →</a><small>The package includes components that permit research use but not commercial use. Read the license for each component before use.</small></div>
       </div>
     </section>
   </main>
