@@ -1,0 +1,140 @@
+{
+  "scope": "surface metadata consistency, not temporal visibility or camera quality",
+  "protocol": "all 24 frames; fixed grid x,y=4,12,...,252; every foreground sample retained; 3x3 same-instance interior reported separately; object coordinates /65535; radial depth decoded with recorded min/max; pixel centers at x+.5,y+.5",
+  "source_manifest_sha256": "1e8af9575c9e881a8a83ae396bacff1d3be1ecd1bbc5b5cd6585f70ba28491ed",
+  "script_sha256": "e4a8845e038bce876318e6a2293653d25b57a5111c8aa9ce3cec3429e7e2ec1a",
+  "scenes": [
+    {
+      "name": "3835",
+      "records_file": "00-residuals.npz",
+      "records_sha256": "dc75c08a527fdaa1c5f0f5fa223c8376a0b64a9d901d293dfecf2ac03a3a3fe9",
+      "planned_grid_samples": 24576,
+      "foreground_samples": 4968,
+      "interior_samples": 4154,
+      "nonpositive_depth": 0,
+      "projection_pixels": {
+        "count": 4968,
+        "median": 0.0010670434966321785,
+        "p95": 0.0016942606009653226,
+        "max": 0.002678260995571642
+      },
+      "interior_projection_pixels": {
+        "count": 4154,
+        "median": 0.0010795497641616055,
+        "p95": 0.0017055795331850456,
+        "max": 0.0022221056639859503
+      },
+      "radial_depth_error": {
+        "count": 4968,
+        "median": 0.00017411354041563243,
+        "p95": 0.0003330312922710021,
+        "max": 0.00037759960619965227
+      },
+      "interior_radial_depth_error": {
+        "count": 4154,
+        "median": 0.00017497684866363272,
+        "p95": 0.00033309331179802725,
+        "max": 0.00037759960619965227
+      }
+    },
+    {
+      "name": "5397",
+      "records_file": "01-residuals.npz",
+      "records_sha256": "21d1682ef2255ad050f60138359a4d91a24c0d55d596a5f285ce72aa30feff1a",
+      "planned_grid_samples": 24576,
+      "foreground_samples": 7077,
+      "interior_samples": 6307,
+      "nonpositive_depth": 0,
+      "projection_pixels": {
+        "count": 7077,
+        "median": 0.0009845300178874933,
+        "p95": 0.0017844141746618607,
+        "max": 0.004506410804938363
+      },
+      "interior_projection_pixels": {
+        "count": 6307,
+        "median": 0.0009937533211456827,
+        "p95": 0.0017754904355613299,
+        "max": 0.0038851068612516812
+      },
+      "radial_depth_error": {
+        "count": 7077,
+        "median": 0.00017621573347437192,
+        "p95": 0.00034193750842401725,
+        "max": 0.00039027732457341813
+      },
+      "interior_radial_depth_error": {
+        "count": 6307,
+        "median": 0.00017636607385007608,
+        "p95": 0.00034155525831174315,
+        "max": 0.00039027732457341813
+      }
+    },
+    {
+      "name": "4385",
+      "records_file": "02-residuals.npz",
+      "records_sha256": "8f2873226167ec97f624cb9071023424da1d598cfba863079f504cbf5ecfb74e",
+      "planned_grid_samples": 24576,
+      "foreground_samples": 4347,
+      "interior_samples": 3684,
+      "nonpositive_depth": 0,
+      "projection_pixels": {
+        "count": 4347,
+        "median": 0.0009944179163964382,
+        "p95": 0.001873666583098014,
+        "max": 0.002657601394462093
+      },
+      "interior_projection_pixels": {
+        "count": 3684,
+        "median": 0.0009905669775499945,
+        "p95": 0.001873761148950675,
+        "max": 0.002657601394462093
+      },
+      "radial_depth_error": {
+        "count": 4347,
+        "median": 2.842686038739828e-05,
+        "p95": 6.552645463386852e-05,
+        "max": 9.645841741523498e-05
+      },
+      "interior_radial_depth_error": {
+        "count": 3684,
+        "median": 2.8583316157515526e-05,
+        "p95": 6.566848947695546e-05,
+        "max": 9.645841741523498e-05
+      }
+    },
+    {
+      "name": "4970",
+      "records_file": "03-residuals.npz",
+      "records_sha256": "104d668c6e4f99dec348278fdaad8c22ef0b52e8809d1e6ecee844a6c7f529ae",
+      "planned_grid_samples": 24576,
+      "foreground_samples": 8045,
+      "interior_samples": 6846,
+      "nonpositive_depth": 0,
+      "projection_pixels": {
+        "count": 8045,
+        "median": 0.001236790624810031,
+        "p95": 0.002030586469146885,
+        "max": 0.0027146390461943912
+      },
+      "interior_projection_pixels": {
+        "count": 6846,
+        "median": 0.0012578425281887689,
+        "p95": 0.0020580341999256705,
+        "max": 0.0027146390461943912
+      },
+      "radial_depth_error": {
+        "count": 8045,
+        "median": 3.863207191567852e-05,
+        "p95": 8.215290515387607e-05,
+        "max": 0.0001222918112997462
+      },
+      "interior_radial_depth_error": {
+        "count": 6846,
+        "median": 3.840277497602074e-05,
+        "p95": 8.215231617514362e-05,
+        "max": 0.0001222918112997462
+      }
+    }
+  ]
+}

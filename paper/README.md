@@ -3820,3 +3820,22 @@ saved in `metadata-projection-audit-v1.json`. Seven pilot tests pass. This is
 metadata consistency, not validation of rendered surface coordinates, depth
 decoding, visibility, static support, or a camera-evaluation method. Those
 checks are still required before this pilot can supply task-level references.
+
+`audit_movi_surfaces.py` now checks the rendered foreground surface data on a
+fixed eight-pixel grid across every frame. Object-local coordinates are mapped
+through the ordered world-space bounding-box corners and projected using the
+reference camera. Decoded radial depth is compared with distance from that
+world point to the camera. The TFDS builder's uint16 depth conversion is used;
+the current README's raw-TIFF description is not applied to these encoded
+TFDS samples. No thresholds were used to select or discard foreground samples.
+
+There are 98,304 planned grid locations and 24,437 foreground samples across the
+four scenes. All foreground samples have positive camera depth. Maximum
+same-frame reprojection error is 0.004507 pixels; maximum radial-depth
+disagreement is 0.000391 scene units. Per-scene medians, 95th percentiles, maxima,
+and every sampled residual are retained in `surface-audit-v1/`. Same-instance
+3x3 interior statistics are reported separately without dropping boundaries.
+Two additional tests cover corner ordering, rigid transforms, boundary
+retention, and radial versus axial depth. This checks same-frame surface
+consistency only. Cross-frame visibility, static-support selection, and
+camera-method evaluation remain pending; no functional-DNF labels result.
