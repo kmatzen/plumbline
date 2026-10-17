@@ -247,6 +247,27 @@ related-work coverage and actual camera experiments remain outstanding.
 
 ### Fresh dense development runs
 
+#### Source-track comprehension pilot
+
+`build_track_review.py` generates three source-only videos from the first three
+nonempty first-frame grid slots of the retained walking-XYZ tracks. Selection
+does not inspect later survival, poses, fits, or error scores. Each 18-second
+video shows the full image, a cyan circle, a 4x detail crop, and frame numbers,
+at five displayed frames per second. Lost tracks remove the circle and are
+explicitly marked; no further position is claimed. The task asks whether the
+circle follows the same physical detail, slips, or cannot be judged. A separate
+question asks whether the detail belongs to a fixed part of the room or an
+independently moving object, allowing uncertainty. No camera-quality rating is
+requested. Partial replies are accepted directly in the conversation.
+
+The local packet is `tmp/source-track-review-v1`; its manifest is retained as
+`paper/results/dense/source-track-review-v1.json`. Initial frames and a lost-track
+frame were visually checked, the first video's duration was verified, and the
+page returned HTTP 200 at localhost:8769. This is a project-author comprehension
+and evidence-review pilot, not independent validation. No answers have yet been
+recorded. The selection-invariance test verifies that changing later survival
+does not change which initial slots are shown.
+
 #### Placement-consistency bounds with missing observations
 
 `placement_bounds.paired_bounds` treats every planned anchor/frame observation
