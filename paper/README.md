@@ -273,6 +273,58 @@ related-work coverage and actual camera experiments remain outstanding.
 
 ### Fresh dense development runs
 
+#### Static-scene geometric control (staging)
+
+The retained caption diagnostics do not provide reliable source-point labels.
+Before further judge tuning, the next experiment checks the geometric evidence
+on a separate static-scene control: `rgbd_dataset_freiburg3_structure_texture_near`.
+The [official sequence catalog](https://webshare.cvg.cit.tum.de/g/rgbd/dataset/)
+describes camera motion along textured wooden panels, with textured posters on
+the floor, and supplies RGB-D observations and reference poses. This controlled,
+textured scene is deliberately favorable. It is not representative validation
+of dynamic videos or evidence that every image correspondence is correct.
+In particular, occlusion boundaries, depth holes, timing, and calibration can
+still invalidate a proposed surface point.
+
+The official archive URL is
+`https://cvg.cit.tum.de/rgbd/dataset/freiburg3/rgbd_dataset_freiburg3_structure_texture_near.tgz`.
+Its verified redirect uses `/g/rgbd/dataset/freiburg3/` on the official webshare
+host; the catalog's relative archive link without `/g/` returned 404. A HEAD
+request reports 567,005,874 bytes. Download and gzip integrity verification are
+running in `/data3/kmatzen/plumbline/research/static-rgbd-validation-v1` on
+Anima. No extraction, prediction, or result is yet claimed. Existing dynamic
+sequence folders are untouched; the pruning staging script is not used.
+
+The development protocol is fixed before camera predictions are inspected:
+
+1. Retain the archive and timestamp indices with hashes. Select the first 90
+   chronological RGB frames at stride three. Preserve missing depth/reference
+   associations explicitly; do not shift the clip to improve tracking results.
+2. Verify reference timing and the published Freiburg-3 calibration before
+   evaluating camera estimates. Keep source, timing, and measurement validity
+   separate from camera validity. Do not silently collapse duplicate reference
+   timestamps or interpolate outside the reference span.
+3. Select the same 12 first-frame grid features using only RGB, with no access
+   to candidate poses, reference geometry, or later tracking outcomes. Retain
+   empty slots, missing tracks, and invalid point fits in the denominator.
+4. Use depth and reference poses only on the validation side: inspect world
+   spread and depth-boundary ambiguity of the measured tracks. Evaluate the
+   existing early-fit/later-frame geometric diagnostic on reference cameras,
+   the unchanged five-degree later-yaw control, and actual model predictions.
+   Report shared-support comparisons and coverage separately. These are
+   continuous diagnostics, not automatically assigned functional-DNF labels.
+5. Check whether reference cameras and the known rotation intervention produce
+   distinguishable evidence on valid support. Inspect discrepancies rather
+   than selecting a threshold or dropping inconvenient points after seeing
+   model rankings. A successful control only supports this implementation
+   check; it does not establish novelty, generalization, or human usability.
+
+This is a prerequisite for validating the proposed evaluation method, not a
+replacement contribution. A publishable end-to-end evaluator still requires a
+defined functional-failure decision, independent validation targets, comparison
+with existing metrics, and a frozen held-out evaluation. The manuscript is
+unchanged while this control is being prepared.
+
 #### RGB-D evidence validation
 
 The existing TUM development subset contains only RGB and associated reference
