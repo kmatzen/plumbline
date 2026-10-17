@@ -3632,3 +3632,19 @@ not imply far. This baseline was selected for the transfer comparison after
 the first video's reference labels were available, not preregistered before
 all label inspection. Its threshold is unchanged and is not tuned to this
 transfer set. It uses only RGB and marker coordinates, not reference labels.
+
+The combined-input path now has a synthetic end-to-end test spanning all
+twenty videos and both methods through `select_evaluation`. It verifies copied
+panel hashes, full membership, and an image-only baseline that does not change
+with the reference label. Combination also compares every scored record's
+source/query coordinates, frames, method, and track against the frozen geometry
+record; changed candidates or unexpected availability changes are rejected.
+This binding check passes on all seven currently prepared real video corpora.
+Ten targeted combination/roster/builder tests pass.
+
+Cows and dance-twirl extend the prepared set to 810 planned presentations:
+176 far, 62 occluded, seven borderline/unlabeled, 135 off-image queries,
+340 nonpositive-prefix-depth cases, and 90 beyond-video queries. There are
+still no close candidates. All outcomes remain recorded without modifying
+the class thresholds or replacing videos. The complete transfer study is
+still pending; these seven videos are not reported as the full test set.

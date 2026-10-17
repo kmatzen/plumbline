@@ -14,6 +14,20 @@ from paper.probe_tapvid_identity import correlation, patch
 from paper.run_tapvid_cameras import digest, load_video
 
 
+def validate_frozen_proposals(records, frozen):
+    indexed = {r["id"]:r for r in frozen}
+    if len(indexed) != len(frozen) or len(records) != len(frozen) or {r["id"] for r in records} != set(indexed):
+        raise ValueError("frozen proposal roster changed")
+    fields = ("sequence", "model", "track", "source_frame", "source_xy", "lag", "frame", "candidate_xy")
+    for row in records:
+        original = indexed[row["id"]]
+        if any(row[k] != original[k] for k in fields):
+            raise ValueError("candidate geometry changed during labeling")
+        if row["status"] != original["status"] and not (
+                original["status"] == "renderable" and row["status"] == "source_display_outside_image"):
+            raise ValueError("proposal availability changed during labeling")
+
+
 def combine(root, corpora, plan_path, output):
     if output.exists():
         raise ValueError("preserve previous combined corpus")
@@ -35,6 +49,8 @@ def combine(root, corpora, plan_path, output):
                 or digest(path/"evaluation.jsonl") != manifest["export_sha256"]):
             raise ValueError("per-video provenance changed")
         input_hashes[name] = digest(path/"manifest.json")
+        frozen = json.loads((path/"geometry.json").read_text())
+        validate_frozen_proposals(manifest["records"], frozen["records"])
         for item in manifest["records"]:
             row = dict(item, partition="test", geometry_status=item["status"], status=item["scoring_status"])
             if row["status"] not in {"labeled", "borderline_unlabeled"}:
