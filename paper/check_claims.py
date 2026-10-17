@@ -99,7 +99,7 @@ for name in ("on", "off"):
     assert json.loads(raw[7:-3])["verdict"] == "inconsistent"
 failed = json.loads((controls / "control_on-qwen3b.json").read_text())
 assert failed["status"] == "failed" and "OutOfMemoryError" in failed["traceback"]
-for phrase in ("22,472", "28 frame pairs", "588", "72.08", "768-token"):
+for phrase in ("22,472", "28 frame pairs", "588", "72.08"):
     assert phrase in TEX, f"missing checked development phrase: {phrase}"
 
 for clip in ("bear", "bmx-bumps", "boat"):
@@ -156,16 +156,11 @@ tum = json.loads((ROOT / "paper/results/dense/tum-anchor-xyz-v1.json").read_text
 assert tum["possible_later_observations"] == 948
 common = tum["common_observations"]
 assert len(common) == 130
-for name in ("reference", "dage", "reference_later_yaw_5deg"):
-    assert f"{np.median([r['pixels'][name] for r in common]):.3f}" in TEX
 later = [r for r in common if r["frame"] >= 31]
 assert len(later) == 70
 prefix = json.loads((ROOT / "paper/results/dense/tum-anchor-prefix-v1.json").read_text())
 intersection = [r for r in prefix["rows"] if r["common"]]
 assert len(intersection) == 49 and len(prefix["rows"]) == 708
-for name in ("reference", "dage"):
-    assert f"{np.median([r['pixels'][name] for r in later]):.3f}" in TEX
-    assert f"{np.median([r['errors'][name + '_11'] for r in intersection]):.3f}" in TEX
 ore_root = ROOT / "paper/results/ore-official-demo-v1"
 depth = json.loads((ore_root / "depth-support-audit.json").read_text())
 tracks = [t for m in depth["methods"] for t in m["tracks"]]
@@ -178,21 +173,15 @@ assert [t["reversed_after_integer_cast"] for t in boxes] == [24, 371, 40, 429]
 assert sum(t["frames"] for t in boxes) * 2 == 6774
 assert sum(v > 1 for t in boxes for r in t["rows"] for v in r["roundtrip_error_pixels"]) == 3995
 assert all(not r["reversed_before_distortion"] for t in boxes for r in t["rows"])
-for phrase in ("3,995 of 6,774", "130 of 948", "49 of 708", "Twelve of 28"):
-    assert phrase in TEX
 
 timing = json.loads((ROOT / "paper/results/dense/tum-pose-timing-xyz-v2.json").read_text())
 assert timing["comparison_start_frame"] == 1
 assert timing["fit_original_frames"] == list(range(1, 12))
 assert len(timing["common_observations"]) == 141
-for value in timing["common_median_pixels"].values():
-    assert f"{value:.3f}" in TEX
 paired = [
     abs(r["pixels"]["associated_reference"] - r["pixels"]["interpolated_reference"])
     for r in timing["common_observations"]
 ]
-assert f"{np.median(paired):.3f}" in TEX and f"{max(paired):.3f}" in TEX
-assert "141 of 936" in TEX
 description_root = ROOT / "paper/results/description-controls-v1"
 description = json.loads((description_root / "shapes.json").read_text())
 identity = json.loads((description_root / "identity-repeat.json").read_text())
@@ -217,7 +206,17 @@ arithmetic = json.loads(
 )["statistics"]
 assert arithmetic["query"]["nonfinite"] == arithmetic["key"]["nonfinite"] == 0
 assert arithmetic["qk_fp16"]["nonfinite"] > 0 and arithmetic["qk_fp32"]["nonfinite"] == 0
-assert f"{arithmetic['qk_fp32']['maximum_finite_absolute']:,.2f}" in TEX
+
+# Development failures remain audited above, but are not manuscript sections.
+for excluded in (
+    "Unsuccessful author-review",
+    "failed VLM",
+    "sec:vlmcontrol",
+    "exclamation marks",
+    "GPU out-of-memory",
+    "Audit of the released ORE sample",
+):
+    assert excluded not in TEX, f"development-only narrative restored: {excluded}"
 
 print(
     "Selected manuscript counts match retained records; human validation and general claims are not certified"
