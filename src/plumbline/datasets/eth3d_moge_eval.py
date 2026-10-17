@@ -128,10 +128,8 @@ class ETH3DMogeEvalDataset(Dataset):
             from moge.test.dataloader import EvalDataLoaderPipeline
         except ModuleNotFoundError as exc:
             raise ImportError(
-                "ETH3DMogeEvalDataset needs the `moge` package for its "
-                "homographic warp (matches the paper's eval pipeline). "
-                "Install with `uv pip install "
-                "'git+https://github.com/microsoft/MoGe.git'`."
+                "ETH3DMogeEvalDataset could not import plumbline's vendored "
+                "MoGe evaluation pipeline. Reinstall plumbline-bench."
             ) from exc
         self._moge_pipe = EvalDataLoaderPipeline(
             path=str(root_path / "ETH3D"),

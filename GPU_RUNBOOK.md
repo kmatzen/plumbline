@@ -53,7 +53,7 @@ Queue has **no `pending` jobs**. Do not spend GPU re-tuning off-paper YAMLs.
 |-------|--------|-----|
 | MoGe Table 3 mono-depth sweep | ✅ done | `REPRODUCTIONS.md` |
 | DA-V2 native Table 2 (ETH3D / Sintel / DIODE) | 🔒 parked | `ETH3D_DAV2_TABLE2_HANDOFF.md`, `SINTEL_DAV2_TABLE2_HANDOFF.md`, `D29_DIODE_TABLE2_HANDOFF.md` |
-| Depth Pro Table 1 | ✅ Booster; 🔒 four blocked; ETH3D pending | [`docs/BLOCKED.md`](docs/BLOCKED.md) |
+| Depth Pro Table 1 | ✅ Booster + Sun-RGBD; 🔒/ℹ️ four blocked or off-paper cells | [`docs/BLOCKED.md`](docs/BLOCKED.md) |
 | VGGT ETH3D 13-scene | ✅ investigated (D10) | `DISCREPANCIES.md` |
 | D29 native DIODE outdoor | 🔒 upstream confirm only | `D29_DIODE_TABLE2_HANDOFF.md` |
 
@@ -152,8 +152,8 @@ export DTU_ROOT=$PLUMBLINE_WORK/data/dtu
 ### Per-adapter extras (install only what you need)
 
 The base install (`uv sync` / `pip install plumbline-bench`) covers
-torch + diffusers + transformers — enough for DA-V2, DA3, Marigold,
-Depth Pro, Metric3Dv2.
+torch + diffusers + transformers — enough for DA-V2, DA3, and Marigold.
+Depth Pro and Metric3Dv2 need their install-registry steps below.
 
 Don't hand-maintain install commands: ask the tool.
 `plumbline install --list` prints the table below, `plumbline install
@@ -164,16 +164,16 @@ doctor` reports which adapters are present on the current box.
 
 | Adapter | Kind | Install plan |
 |---|---|---|
-| metric3d-v2 | base | (none — base install) |
+| metric3d-v2 | pypi | `uv pip install mmengine mmcv-lite` |
 | marigold | base | (none — base install) |
 | depth-anything-v2 | base | (none — base install) |
 | depth-anything-3 | pypi | `uv pip install depth-anything-3` |
-| moge | git | `uv pip install 'git+https://github.com/microsoft/MoGe.git'` |
+| moge | vendored | (runtime deps in base; code under `_vendor/moge`, `$MOGE_ROOT` is an optional dev override) |
 | vggt | git | `uv pip install 'git+https://github.com/facebookresearch/vggt'` |
 | depth-pro | git | `uv pip install 'git+https://github.com/apple/ml-depth-pro.git'` |
 | mast3r | vendored | `uv pip install roma scikit-learn trimesh` (code vendored under `_vendor/mast3r`, no clone; optional curope CUDA build — see notes. `$MAST3R_ROOT` overrides for a dev checkout) |
 | dust3r | vendored | `uv pip install roma scikit-learn trimesh` (code vendored under `_vendor/dust3r`, no clone) |
-| monst3r | vendored | `uv pip install roma scikit-learn trimesh evo` (code vendored under `_vendor/monst3r`, no clone; `evo` is a hard dep — its dust3r fork imports it at load) |
+| monst3r | vendored | `uv pip install roma scikit-learn trimesh` (code vendored under `_vendor/monst3r`, no clone; `evo` is a base dependency because its dust3r fork and plumbline's trajectory metrics import it) |
 | cut3r | vendored | `uv pip install roma scikit-learn trimesh omegaconf` (code vendored under `_vendor/cut3r`, no clone; then build the vendored curope ext + set `$CUT3R_CKPT` to the 512-DPT weight — see notes) |
 | dage | vendored | `uv pip install einops omegaconf safetensors kornia roma segmentation_models_pytorch` (code + the `utils3d` geometry lib both vendored under `_vendor/`, no clone) |
 | geowizard | clone | `git clone https://github.com/fuxiao0719/GeoWizard $HOME/deps/geowizard; export GEOWIZARD_ROOT=$HOME/deps/geowizard` then `uv sync --extra geowizard; uv pip install --force-reinstall 'nvidia-cudnn-cu12==9.1.0.70'` |
@@ -376,9 +376,10 @@ gate (`plumbline reproduce vggt-paper-dtu-mvs`) that was retired
 - **≥ 15 verified_pdf paper-match cells** across ≥ 3 datasets and ≥ 5
   papers — **met 2026-04-27** (16 mono-depth cells across NYU + KITTI
   + DIODE).
-- **≥ 1 pose paper-match** — *pending*. CO3Dv2 infra landed; GPU run
-  pending for `vggt-co3dv2-pose` (VGGT Table 1, AUC@30 = 0.882) and
-  `mast3r-co3dv2-pose` (MASt3R Table 3, mAA(30) = 0.818).
+- **≥ 1 pose paper-match** — **met 2026-05-26**. `vggt-co3dv2-pose`
+  matched VGGT Table 1 (0.8964 vs AUC@30 0.882), and
+  `mast3r-co3dv2-pose` independently matched MASt3R Table 3
+  (0.7960 vs mAA(30) 0.818), both within the ±5% gate.
 - **No fabricated paper cells** — every `verified_pdf` YAML audited
   against the source PDF (table + col + row). See
   `reproductions/AUDIT.md` for the per-YAML log. As of 2026-05-23 all

@@ -52,13 +52,11 @@ jobs:
     datasets: [co3dv2]
     data_footprint_gb: 4
     est_wall_min: 150
-    requires_env: [CO3DV2_ROOT, MAST3R_ROOT]
+    requires_env: [CO3DV2_ROOT]
     extras: >
-      MASt3R: git clone --recursive https://github.com/naver/mast3r
-      $HOME/deps/mast3r; uv pip install roma scikit-learn trimesh;
-      export MAST3R_ROOT=$HOME/deps/mast3r. For practical wall-time also
-      build the curope CUDA ext in MASt3R's dust3r fork
-      ($MAST3R_ROOT/dust3r/croco/models/curope; python setup.py
+      MASt3R code is vendored; uv pip install roma scikit-learn trimesh.
+      For practical wall-time also build the curope CUDA ext in the vendored
+      dust3r fork (_vendor/mast3r/dust3r/croco/models/curope; python setup.py
       build_ext --inplace, CUDA_HOME=/usr/local/cuda-12.1). Without it,
       MASt3R falls back to a pytorch RoPE2D and per-sample wall climbs
       from ~50 s to ~70 s.
@@ -91,12 +89,11 @@ jobs:
     datasets: [nyuv2]
     data_footprint_gb: 3
     est_wall_min: 40
-    requires_env: [NYUV2_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    requires_env: [NYUV2_ROOT, CUT3R_CKPT]
     extras: >
-      CUT3R: git clone https://github.com/CUT3R/CUT3R $HOME/deps/cut3r;
-      cd $HOME/deps/cut3r && pip install -r requirements.txt; export
-      CUT3R_ROOT=$HOME/deps/cut3r; download the 512-DPT weights per the
-      repo README and export CUT3R_CKPT=$CUT3R_ROOT/src/cut3r_512_dpt_4_64.pth
+      CUT3R code is vendored; run `plumbline install cut3r`, build its vendored
+      curope extension, and place the 512-DPT checkpoint at $CUT3R_CKPT (or
+      the documented default cache path).
     notes: >
       Closed the video / unordered-collection coverage gap. Ran on GPU
       2026-05-25; the off-paper-better result is an explained protocol
@@ -116,7 +113,7 @@ jobs:
     datasets: [kitti]
     data_footprint_gb: 6
     est_wall_min: 50
-    requires_env: [KITTI_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    requires_env: [KITTI_ROOT, CUT3R_CKPT]
     extras: "CUT3R — same setup as cut3r-nyuv2."
     notes: >
       Outdoor companion to cut3r-nyuv2 (same Table 1). Ran 2026-05-25;
@@ -135,7 +132,7 @@ jobs:
     datasets: [bonn]
     data_footprint_gb: 4
     est_wall_min: 40
-    requires_env: [BONN_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    requires_env: [BONN_ROOT, CUT3R_CKPT]
     extras: >
       Bonn: extract the rgbd_bonn_<name>.zip archives (no auth) from
       https://www.ipb.uni-bonn.de/data/rgbd-dynamic-dataset/ under
@@ -170,7 +167,7 @@ jobs:
     datasets: [nyu-cut3r-eval]
     data_footprint_gb: 2
     est_wall_min: 10
-    requires_env: [CUT3R_ROOT, CUT3R_CKPT, NYU_CUT3R_EVAL_ROOT]
+    requires_env: [CUT3R_CKPT, NYU_CUT3R_EVAL_ROOT]
     extras: "CUT3R as for cut3r-nyuv2 (curope optional — pytorch RoPE fallback works on the 1080 Ti); stage data via scripts/stage_nyu_cut3r_eval.sh."
     notes: >
       ✅ MATCH 2026-06-15 (1080 Ti): AbsRel 0.08584 vs 0.086, δ₁ 0.9087.
@@ -192,7 +189,7 @@ jobs:
     datasets: [kitti]
     data_footprint_gb: 19
     est_wall_min: 30
-    requires_env: [KITTI_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    requires_env: [KITTI_ROOT, CUT3R_CKPT]
     extras: "CUT3R as for cut3r-nyuv2; stage KITTI via scripts/stage_kitti_cut3r.sh (~14 GB annotated + 13 raw drives + 5 calib, slow S3)."
     notes: >
       ✅ MATCH 2026-06-16 (1080 Ti): AbsRel 0.09530 vs 0.092, δ₁ 0.9056. KITTI
@@ -216,7 +213,7 @@ jobs:
     datasets: [bonn]
     data_footprint_gb: 2
     est_wall_min: 15
-    requires_env: [BONN_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    requires_env: [BONN_ROOT, CUT3R_CKPT]
     extras: "CUT3R as for cut3r-nyuv2; stage 5 Bonn seqs via scripts/stage_bonn_cut3r.sh."
     notes: >
       ✅ MATCH 2026-06-16 (1080 Ti): AbsRel 0.0768 vs 0.078, δ₁ 0.9201. Completes
@@ -1048,10 +1045,10 @@ jobs:
     datasets: [tum-dynamics]
     data_footprint_gb: 3
     est_wall_min: 30
-    requires_env: [TUM_ROOT, CUT3R_ROOT, CUT3R_CKPT]
+    requires_env: [TUM_ROOT, CUT3R_CKPT]
     extras: >
-      Shares the staged TUM set with dage-tum-pose. CUT3R: clone at $CUT3R_ROOT +
-      512-DPT checkpoint at $CUT3R_CKPT + built curope ext (the cut3r-sintel-pose-dage
+      Shares the staged TUM set with dage-tum-pose. CUT3R code is vendored;
+      use the checkpoint at $CUT3R_CKPT + built curope ext (the cut3r-sintel-pose-dage
       setup). Feed-forward/online → 90-frame clips fit 11 GB.
     notes: >
       ℹ️ INFORMATIONAL 2026-06-03 (GTX 1080Ti, 8/8): ATE 0.0362 vs 0.047 (−23 %),

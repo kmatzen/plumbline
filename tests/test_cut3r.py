@@ -112,6 +112,13 @@ class TestAdapterConfig:
         monkeypatch.setenv("CUT3R_CKPT", "/custom/ckpt.pth")
         assert CUT3RAdapter(device="cpu").checkpoint == "/custom/ckpt.pth"
 
+    def test_checkpoint_default_uses_plumbline_cache(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.delenv("CUT3R_CKPT", raising=False)
+        monkeypatch.delenv("CUT3R_ROOT", raising=False)
+        assert CUT3RAdapter(device="cpu").checkpoint.endswith(
+            "/.cache/plumbline/weights/cut3r/cut3r_512_dpt_4_64.pth"
+        )
+
 
 def _install_fake_cut3r_backend(
     monkeypatch: pytest.MonkeyPatch,

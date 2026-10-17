@@ -185,9 +185,8 @@ class DIODEDataset(Dataset):
                 from moge.test.dataloader import EvalDataLoaderPipeline
             except ModuleNotFoundError as exc:
                 raise ImportError(
-                    "DIODEDataset(moge_fov_warp=True) needs the `moge` package. "
-                    "Install with `uv pip install "
-                    "'git+https://github.com/microsoft/MoGe.git'`."
+                    "DIODEDataset(moge_fov_warp=True) could not import "
+                    "plumbline's vendored MoGe pipeline. Reinstall plumbline-bench."
                 ) from exc
             # ``EvalDataLoaderPipeline`` reads ``.index.txt`` at init; we only
             # call ``_process_instance``, so use a stub index under the manifest.
@@ -553,10 +552,8 @@ class DIODEMogeEvalLoader(Dataset):
             from moge.test.dataloader import EvalDataLoaderPipeline
         except ModuleNotFoundError as exc:
             raise ImportError(
-                "DIODEMogeEvalLoader needs the `moge` package for its "
-                "homographic warp (matches the paper's eval pipeline). "
-                "Install with `uv pip install "
-                "'git+https://github.com/microsoft/MoGe.git'`."
+                "DIODEMogeEvalLoader could not import plumbline's vendored "
+                "MoGe evaluation pipeline. Reinstall plumbline-bench."
             ) from exc
         self._moge_pipe = EvalDataLoaderPipeline(
             path=str(root_path / "DIODE"),

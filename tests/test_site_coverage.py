@@ -83,6 +83,16 @@ class TestSiteCoverage:
         unknown = [d for d in items if d not in DATASET_REGISTRY]
         assert not unknown, f"site lists unregistered datasets: {unknown}"
 
+    def test_readme_registry_counts_are_current(self) -> None:
+        """Keep the public README's inventory claims tied to live registries."""
+        readme = README_MD.read_text(encoding="utf-8")
+        models = re.search(r"\*\*(\d+) model adapters\*\*", readme)
+        datasets = re.search(r"\*\*(\d+) registered dataset loaders", readme)
+        assert models, "README is missing its model-adapter count"
+        assert datasets, "README is missing its registered-loader count"
+        assert int(models.group(1)) == len(MODEL_REGISTRY)
+        assert int(datasets.group(1)) == len(DATASET_REGISTRY)
+
 
 # --- Cross-surface verified-count consistency (added 2026-05-28) ---
 # The "verified paper-match" count must agree across every surface that

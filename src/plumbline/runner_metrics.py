@@ -239,20 +239,22 @@ def _pose_metrics(
     # delegates to `evo` to match MonST3R's bit-for-bit eval shape (their
     # `dust3r/utils/vo_eval.py:eval_metrics` is the same evo wrapper).
     if E_pred.ndim == 3 and E_pred.shape[0] >= 3 and trajectory_metrics:
+        from evo.core.geometry import GeometryException
+        from evo.core.metrics import MetricsException
+
         try:
             ate = trajectory_ate_rmse_sim3(E_pred, E_gt)
             rpe_t, rpe_r = trajectory_rpe_rmse_sim3(E_pred, E_gt, delta=1)
             out["trajectory_ate_rmse"] = float(ate)
             out["trajectory_rpe_trans_rmse"] = float(rpe_t)
             out["trajectory_rpe_rot_deg_rmse"] = float(rpe_r)
-        except ImportError:
-            # `evo` is an optional extra; silently skip if not installed.
-            pass
-        except Exception:
+        except (GeometryException, MetricsException):
             # Umeyama can fail on degenerate trajectories (collinear /
             # near-stationary cameras). Emit NaN so the per-sample row
             # records the failure and aggregation skips it via nanmean —
-            # don't crash the whole eval.
+            # don't crash the whole eval. Other exceptions are programming or
+            # dependency errors and must propagate instead of becoming a
+            # suspicious all-NaN report.
             out["trajectory_ate_rmse"] = float("nan")
             out["trajectory_rpe_trans_rmse"] = float("nan")
             out["trajectory_rpe_rot_deg_rmse"] = float("nan")

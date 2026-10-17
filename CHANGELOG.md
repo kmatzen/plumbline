@@ -9,6 +9,36 @@ public API may change between 0.x releases.
 
 ### Fixed
 
+- **Trajectory ATE/RPE crashed with unbounded evo** — evo 1.38 removed the
+  `est_name` keyword from `ape()` / `rpe()`. The integration now uses the
+  compatible API, evo is a base dependency pinned below 1.38 because the
+  vendored MonST3R reference evaluator also uses the older API, and trajectory
+  tests no longer skip in CI. The runner also stopped
+  swallowing arbitrary trajectory exceptions as NaNs; only genuine evo
+  geometry/metric degeneracy is downgraded to NaN.
+- Public coverage documentation now matches the live registries (18 model
+  adapters, 23 loaders / 16 dataset families, 47 verified cells). π³ audit
+  pages now reflect that the adapter was restored for pose while its
+  DTU/ETH3D reconstruction path remains explicitly blocked.
+- **`plumbline doctor` produced both false positives and false negatives.** It
+  checked only one "signature" dependency, so DAGE read OK with two runtime
+  packages missing, while base-complete vendored adapters read MISSING because
+  their private package roots are activated lazily. Specs now declare their
+  complete lightweight import probes. Metric3Dv2's real `mmengine` +
+  `mmcv-lite` install step is also registry-driven instead of being documented
+  as a no-op.
+- **`plumbline install moge` tried to install incompatible MoGe 3 from moving
+  upstream HEAD**, despite the compatible MoGe v1/v2 inference code already
+  being vendored. On macOS this failed immediately on MoGe 3's
+  `flex-gemm`/Triton dependency; elsewhere it would install the wrong API.
+  MoGe is now correctly registered as vendored, its dataset tests exercise the
+  bundled pipeline instead of skipping on `import moge`, and stale external
+  installation instructions were removed.
+- Vendored install plans no longer present optional development-root variables
+  as fake installation steps. Base-complete adapters are true no-ops, while
+  manual checkpoints and environment overrides are printed as non-executable
+  guidance (not shell exports that cannot persist from the installer process).
+
 Codebase review sweep (issues #163–#182). Highest-impact first:
 
 - **Prediction cache ignored `max_views`** (#163) — the `keep = min(n, max_views,

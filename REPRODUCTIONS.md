@@ -127,6 +127,7 @@ follow-up.
 - **Sintel trajectory pose (1): MonST3R Table 4 — ATE 0.1134 vs 0.108 (+5.0 %), plumbline-computed 2026-05-27** via the new adapter v1.2 video-pose path + `metrics/pose.py` ATE/RPE family.
 - **DAGE Table 4 pose (2, NEW 2026-06-03): Sintel** — ATE **0.1417 vs 0.132** (+7.3 %, fp16, 14/14 dynamic clips, 2026-06-02); **TUM-Dynamics** — ATE **0.0136 vs 0.014** (−2.9 %, fp16, 8/8 freiburg3 clips, 2026-06-03 — companions RPE-trans 0.0104/0.010, RPE-rot 0.3213/0.323 all within ~4 %). Same Sim(3)-aligned TUM-RGBD ATE/RPE apparatus as the MonST3R Sintel cell; feed-forward DAGE adapter (pose-only), `tum-dynamics` loader. PR #44.
 - **DAGE Table 4 baseline (1, CUT3R-Sintel): CUT3R** — ATE **0.2138 vs 0.217** (−1.5 %, 14/14 dynamic clips; companions RPE-trans 0.0683/0.070, RPE-rot 0.632/0.636 — all within ~2.5 %). Vendored CUT3R + built curope, same Sim(3)-aligned TUM-RGBD harness; `cut3r-sintel-pose-dage`. Run 2026-06-02, re-confirmed bit-identical 2026-06-09 on the vendored `main`. Completes the DAGE Table 4 Sintel column (DAGE/MonST3R/Pi3/CUT3R).
+- **DAGE Table 4 baseline (1, VGGT-Sintel): VGGT** — ATE **0.1675 vs 0.167** (+0.3 %, 14/14 dynamic clips; bf16, Sim(3)-aligned), completing the eighth verified pose/trajectory cell.
 
 Each cell is verified against the source PDF (table + col + row) per
 `reproductions/AUDIT.md`.
@@ -176,12 +177,16 @@ reproductions on `main`:
   variant is preserved at `vggt_eth3d_subset_chamfer.yaml` for
   regression detection.
 
-**Pose ✅ cells (plumbline matrix)**: **4** — every number below was computed by plumbline's runner, loader, adapter, and metric code.
+**Pose ✅ cells (plumbline matrix)**: **8** — every number below was computed by plumbline's runner, loader, adapter, and metric code.
 
 - ✅ **VGGT CO3Dv2** (Table 1, AUC@30): observed **0.8964** vs paper **0.882** (+1.6 % over). Companion **pairwise_RRA@15 = 0.9819**. Run wall ~28 min; feed-forward, no global alignment.
-- ✅ **MASt3R CO3Dv2** (Table 3, mAA(30)): observed **0.7960** vs paper **0.818** (−2.7 % under). Companion **pairwise_RRA@15 = 0.9708**. Run wall ~3.2 h cumulative (interrupted once by an SSH-daemon drop on the vast.ai box; resumed via plumbline's prediction cache, 143 of 410 samples already computed). Paper cell PDF-verified 2026-05-23 (D23 resolved).
+- ✅ **MASt3R CO3Dv2** (Table 3, mAA(30)): observed **0.8581** vs paper **0.818** (+4.9 % over) on the faithful `sparse_ga` matching path. Companion **pairwise_RRA@15 = 0.9697**. This supersedes the legacy `dust3r_ga` result of 0.7960, which matched while using the wrong pose method.
 - ✅ **DUSt3R CO3Dv2** (MASt3R Table 3 DUSt3R row, mAA(30)): observed **0.7893** vs paper **0.772** (+2.2 % over; target corrected 0.774→0.772 per PDF re-verify 2026-05-28). Companion **RRA@15 = 0.9722** vs paper 0.943 (+3.1 %), **RTA@15 = 0.8801** vs paper 0.884 (−0.4 %). All three within ±5 %. Run wall ~2.9 h (399 of 399 samples; PCO ~25 s/sample on a 3090). Adapter v1.0 (new this PR) wraps `naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt` via the shared `_run_mast3r` helper (added `scene_graph` kwarg, hardcoded `"complete"` previously). Same MASt3R Table 3 row as the MASt3R cell above — paper-PDF-verified 2026-05-27 with the same direct-read confidence as the MASt3R row.
 - ✅ **MonST3R Sintel trajectory pose** (Table 4): observed **ATE 0.1134** vs paper **0.108** (+5.0 % over). Companion **RPE-trans = 0.0446** vs paper 0.042 (+6.3 %), **RPE-rot = 0.792°** vs paper 0.732° (+8.2 %). All three within ±10 %. Run wall ~42 min (14 dynamic Sintel-final clips). Adapter v1.2 video-pose path: builds the `swinstride-5-noncyclic` pair graph, drives MonST3R's extended `global_aligner` with `flow_loss_weight=0.01` (RAFT-Sintel checkpoint), `motion_mask_thre=0.35`, `temporal_smoothing_weight=0.01`, `use_self_mask=True`, then `compute_global_alignment(init='mst', niter=300, schedule='linear', lr=0.01)` — i.e., the same apparatus as MonST3R's `launch.py --mode=eval_pose --eval_dataset=sintel`. ATE/RPE math via `metrics/pose.py:trajectory_{ate,rpe}_rmse_sim3`, which wrap `evo.main_ape.ape` + `main_rpe.rpe` with `align=True, correct_scale=True` — bit-identical to MonST3R's `vo_eval.py:eval_metrics`. End-to-end agreement: plumbline 0.11340 vs MonST3R-own-pipeline 0.1134 (paper-trust signal from PR #14) — same to 4 decimals.
+- ✅ **DAGE Sintel trajectory pose** (Table 4): ATE **0.1417** vs **0.132** (+7.3 %).
+- ✅ **DAGE TUM-Dynamics trajectory pose** (Table 4): ATE **0.0136** vs **0.014** (−2.9 %).
+- ✅ **CUT3R Sintel trajectory pose** (DAGE Table 4 baseline): ATE **0.2138** vs **0.217** (−1.5 %).
+- ✅ **VGGT Sintel trajectory pose** (DAGE Table 4 baseline): ATE **0.1675** vs **0.167** (+0.3 %).
 
 The first three run the same `Co3Dv2VGGTPoseEvalLoader` recipe (41 SEEN cats × 10 seq × 10 frame, seed=0), `vggt_co3d_histogram` AUC mode, `pose_translation_antipodal: true`. CO3Dv2 staged once via `scripts/co3dv2_prefetch.py` (~3 GB selective fetch, ~30 min), then jobs ran back-to-back on the same disk. MASt3R / DUSt3R inference goes through dust3r's `PointCloudOptimizer` (N≥3, init=mst, niter=300, scene_graph=complete); curope CUDA ext built per-MASt3R-dust3r-fork in-session (32 % speedup vs the pytorch RoPE2D fallback the adapter ships with). DA3 has an informational companion (`da3_co3dv2_pose.yaml`) with no paper target.
 

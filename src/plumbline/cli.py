@@ -367,6 +367,15 @@ def _run_steps(name: str, steps: list[str]) -> None:
             raise typer.Exit(result.returncode)
 
 
+def _print_install_guidance(name: str) -> None:
+    """Print non-executable artifact and environment guidance for an adapter."""
+    spec = spec_for(name)
+    if spec.weights.startswith("manual"):
+        console.print(f"[yellow]weights:[/yellow] {spec.weights.removeprefix('manual:').strip()}")
+    for var, note in spec.extra_env:
+        console.print(f"[yellow]{var}:[/yellow] {note}")
+
+
 @app.command("install")
 def install_cmd(
     name: str | None = typer.Argument(None, help="Adapter to install (omit to list all)."),
@@ -423,12 +432,14 @@ def install_cmd(
     steps = install_plan(name)
     if not steps:
         console.print(f"[green]{name}[/green] {spec.how_to()} — nothing to install.")
+        _print_install_guidance(name)
         return
 
     if not yes:
         console.print(f"[bold]install plan for {name}[/bold] ({spec.kind}):")
         for step in steps:
             console.print(f"  {step}")
+        _print_install_guidance(name)
         console.print("\nRe-run with [bold]--yes[/bold] to execute these steps.")
         return
 
@@ -443,6 +454,7 @@ def install_cmd(
                 console.print(f"  {step}")
     else:
         console.print(f"[green]installed[/green] {name}.")
+        _print_install_guidance(name)
 
 
 @app.command("doctor")

@@ -26,7 +26,7 @@ the released *checkpoint* doesn't match the paper (e.g. GeoWizard).
 | marigold | prs-eth/marigold (diffusers) | faithful | forward + depth-space alignment correct; defaults differ from paper protocol (exposed as kwargs) |
 | geowizard | fuxiao0719/GeoWizard | faithful | seed_all/xformers/no-generator/domain all match; `--half_precision` is a dead upstream flag |
 | depth-pro | apple/ml-depth-pro | faithful | metric depth + focal handling correct; never passes GT `f_px` (intended no-intrinsics mode) |
-| ~~pi3~~ | yyfz/Pi3 | **REMOVED 2026-05-31** | adapter deleted pre-release — 6–20× worse than VGGT under identical alignment (suspected bug); see [`blocked/PI3_RECONSTRUCTION.md`](blocked/PI3_RECONSTRUCTION.md) |
+| pi3 | yyfz/Pi3 | **partial / reconstruction blocked** | restored + vendored 2026-06-04; pose path exercised, but DTU/ETH3D reconstruction remains 6–20× worse than VGGT; see [`blocked/PI3_RECONSTRUCTION.md`](blocked/PI3_RECONSTRUCTION.md) |
 | cut3r | CUT3R/CUT3R | faithful | transcribed from demo.py while building; depth/pose/pointmap conversions match |
 | monst3r | Junyi42/monst3r | faithful | base dust3r alignment for depth; v1.2 `video_pose` path wires the full flow + motion + temporal video-pose alignment (Sintel Table 4 ✅) |
 | dust3r | naver/dust3r | faithful | single-frame `F(I,I)` byte-identical to upstream `load_images`+`inference` (single-record diff, D28); N≥3 shares dust3r PCO with mast3r |
@@ -70,12 +70,12 @@ the released *checkpoint* doesn't match the paper (e.g. GeoWizard).
 - **moge principal-point.** Adapter scales `cx·W, cy·H`; utils3d's
   `denormalize_intrinsics('integer-center')` also subtracts 0.5. 0.5px
   offset, no metric impact.
-- **pi3 — REMOVED (2026-05-31, pre-release).** The π³ adapter was deleted: on
-  DTU/ETH3D it scored 6–20× worse than VGGT under identical alignment while the
-  paper reports π³ ≈ VGGT — a suspected adapter bug with no verified anchor.
-  See [`blocked/PI3_RECONSTRUCTION.md`](blocked/PI3_RECONSTRUCTION.md). (Audit
-  history: preprocessing did no resize-to-multiple-of-14 and used bf16 weights
-  rather than fp32+autocast — a candidate cause to revisit if revived.)
+- **pi3 reconstruction — still blocked.** The adapter was removed on 2026-05-31,
+  then restored and vendored on 2026-06-04 with upstream-style
+  resize-to-multiple-of-14 and fp32-weights-plus-autocast preprocessing. The
+  pose path is useful, but the old DTU/ETH3D reconstruction A/B has not been
+  cleared: it scored 6–20× worse than VGGT while the paper reports π³ ≈ VGGT.
+  See [`blocked/PI3_RECONSTRUCTION.md`](blocked/PI3_RECONSTRUCTION.md).
 - **marigold / geowizard defaults.** Both default `dtype="float16"`; the
   released eval runs fp32 (GeoWizard's `--half_precision` is a dead flag).
   Both expose `dtype="float32"` and the reproduction YAMLs pin the paper
@@ -298,7 +298,9 @@ camera-to-world (= `world_from_camera`), rebased to view 0; world point map =
 `E[i] @ self_pts[i]` (consistent with depth+pose). Conversion logic covered by
 `tests/test_cut3r.py` (mocked backend; caught a real SE(3) bug during build).
 
-**Net:** faithful (GPU validation pending).
+**Net:** faithful and GPU-validated on the native NYU-v2, KITTI, and Bonn
+reproductions (all within the configured paper-match tolerance; see D24 and
+`REPRODUCTIONS.md`).
 
 ## monst3r
 

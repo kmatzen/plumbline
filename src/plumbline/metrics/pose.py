@@ -375,7 +375,6 @@ def trajectory_ate_rmse_sim3(
     result = ape(
         traj_ref,
         traj_est,
-        est_name="traj",
         pose_relation=PoseRelation.translation_part,
         align=True,
         correct_scale=True,
@@ -408,7 +407,6 @@ def trajectory_rpe_rmse_sim3(
     rpe_trans = rpe(
         traj_ref,
         traj_est,
-        est_name="traj",
         pose_relation=PoseRelation.translation_part,
         align=True,
         correct_scale=True,
@@ -420,7 +418,6 @@ def trajectory_rpe_rmse_sim3(
     rpe_rot = rpe(
         traj_ref,
         traj_est,
-        est_name="traj",
         pose_relation=PoseRelation.rotation_angle_deg,
         align=True,
         correct_scale=True,

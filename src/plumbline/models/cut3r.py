@@ -25,13 +25,10 @@ Per view the model produces (see upstream ``demo.py::prepare_output``):
 
 Install
 -------
-No PyPI distribution; follow the MASt3R clone pattern:
-
-    git clone https://github.com/CUT3R/CUT3R /workspace/deps/cut3r
-    cd /workspace/deps/cut3r && pip install -r requirements.txt   # + submodules
-    export CUT3R_ROOT=/workspace/deps/cut3r
-    # download weights per the repo README, then point at the .pth:
-    export CUT3R_CKPT=$CUT3R_ROOT/src/cut3r_512_dpt_4_64.pth
+CUT3R's inference code is vendored with plumbline. Install the trimmed runtime
+stack with ``plumbline install cut3r`` and place the 512-DPT checkpoint at
+``~/.cache/plumbline/weights/cut3r/cut3r_512_dpt_4_64.pth``. ``$CUT3R_CKPT``
+and ``$CUT3R_ROOT`` override the checkpoint and code paths for development.
 
 Alignment
 ---------
@@ -40,8 +37,8 @@ realign per sequence (scale or scale+shift for depth, Sim(3) for trajectory);
 apply that at the runner level via the reproduction's ``scale_alignment`` /
 ``pointcloud_alignment`` — not in the adapter.
 
-Status: adapter + conversion unit tests landed; **GPU validation pending**
-Queued in ``reproductions/gpu_queue.yaml``.
+Status: GPU-validated on NYU, KITTI, Bonn, and Sintel reproduction cells; see
+``REPRODUCTIONS.md``.
 """
 
 from __future__ import annotations

@@ -15,12 +15,10 @@ plus a validity mask plus intrinsics:
   needed at eval time. ``capabilities.is_metric=True``;
   ``alignment_hint="none"``.
 
-Install surface:
-
-    uv pip install 'git+https://github.com/microsoft/MoGe.git'
-
-(MoGe is not in ``transformers`` or PyTorch Hub — the upstream repo is
-the only supported install path.)
+The compatible MoGe v1/v2 inference subset and its pinned ``utils3d`` revision
+are vendored with plumbline. ``$MOGE_ROOT`` can override them for development;
+do not install current upstream HEAD as a substitute because MoGe 3 has a
+different API and dependency stack.
 
 Native MoGe output is a dict with keys:
 - ``points`` — ``(H, W, 3)`` camera-frame point map in OpenCV coords

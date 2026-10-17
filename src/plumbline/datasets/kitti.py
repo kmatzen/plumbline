@@ -694,8 +694,7 @@ class KITTIMogeEvalLoader(Dataset):
     source, keeping ~60 % of the horizontal FoV (54.9° vs 81.4°). The
     intrinsics on the warped frame match the new FoV; depth is ray-
     length-adjusted through the warp so Z-axis depth stays consistent.
-    Needs the ``moge`` package (``uv pip install 'git+https://github.com/
-    microsoft/MoGe.git'``).
+    Uses plumbline's vendored MoGe v1/v2 evaluation pipeline.
 
     Expected layout (pointed at by ``--data-root`` or ``$KITTI_MOGE_ROOT``)::
 
@@ -760,10 +759,8 @@ class KITTIMogeEvalLoader(Dataset):
             from moge.test.dataloader import EvalDataLoaderPipeline
         except ModuleNotFoundError as exc:
             raise ImportError(
-                "KITTIMogeEvalLoader needs the `moge` package for its "
-                "homographic warp (matches the paper's eval pipeline). "
-                "Install with `uv pip install "
-                "'git+https://github.com/microsoft/MoGe.git'`."
+                "KITTIMogeEvalLoader could not import plumbline's vendored "
+                "MoGe evaluation pipeline. Reinstall plumbline-bench."
             ) from exc
         self._moge_pipe = EvalDataLoaderPipeline(
             path=str(root_path / "KITTI"),

@@ -5,16 +5,14 @@ These verify plumbline's ``trajectory_ate_rmse_sim3`` and
 trajectory — and, importantly, that they match the convention used by
 MonST3R / DUSt3R / SLAM papers (which all wrap ``evo`` under the hood).
 
-The metrics live in ``src/plumbline/metrics/pose.py`` and depend on the
-optional ``evo`` extra; tests skip cleanly if it's not installed.
+The metrics live in ``src/plumbline/metrics/pose.py`` and depend on ``evo``,
+which is a base dependency because shipped reproductions use these metrics.
 """
 
 from __future__ import annotations
 
 import numpy as np
 import pytest
-
-pytest.importorskip("evo", reason="trajectory-pose metrics need `pip install evo` (optional extra)")
 
 from plumbline.metrics.pose import (
     trajectory_ate_rmse_sim3,

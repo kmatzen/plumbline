@@ -46,6 +46,7 @@ from __future__ import annotations
 import importlib.util
 import os
 from dataclasses import dataclass, replace
+from pathlib import Path
 
 __all__ = [
     "INSTALL_SPECS",
@@ -72,6 +73,11 @@ class InstallSpec:
         Importable module name used to detect presence, or ``None`` when the
         adapter has no clean import probe (e.g. torch.hub-only, or a clone whose
         modules only resolve after ``sys.path`` munging).
+    required_imports:
+        Complete set of lightweight import probes required for the adapter.
+        When non-empty, ``check`` validates every entry instead of trusting one
+        "signature" dependency. This avoids false-positive doctor results when
+        one package is present but the rest of an adapter's runtime stack is not.
     pip:
         Plain PyPI package specs for ``kind == "pypi"``.
     git:
@@ -93,6 +99,10 @@ class InstallSpec:
     weights:
         ``"hf-auto"`` (downloaded from the HF hub on first use) or
         ``"manual: <note>"`` (operator must place the checkpoint).
+    required_files:
+        Manual artifacts required at runtime, expressed as ``(env_var,
+        default_path)`` pairs. ``env_var`` may be ``None`` when there is no
+        environment override. Paths support ``~`` expansion.
     pyproject_extra:
         Name of the matching ``[project.optional-dependencies]`` extra, if any.
     notes:
@@ -102,6 +112,7 @@ class InstallSpec:
     name: str
     kind: str
     probe_import: str | None = None
+    required_imports: tuple[str, ...] = ()
     pip: tuple[str, ...] = ()
     git: tuple[str, ...] = ()
     clone_url: str | None = None
@@ -111,6 +122,7 @@ class InstallSpec:
     extra_pip: tuple[str, ...] = ()
     extra_env: tuple[tuple[str, str], ...] = ()
     weights: str = "hf-auto"
+    required_files: tuple[tuple[str | None, str], ...] = ()
     pyproject_extra: str | None = None
     # Upstream code license (SPDX-ish), and whether plumbline may **vendor** that
     # code under ``_vendor/`` (redistribute it in-repo). Vendoring is allowed for
@@ -146,18 +158,16 @@ _TRIMESH_STACK: tuple[str, ...] = ("roma", "scikit-learn", "trimesh")
 INSTALL_SPECS: dict[str, InstallSpec] = {
     "metric3d-v2": InstallSpec(
         name="metric3d-v2",
-        kind="base",
-        probe_import=None,  # torch.hub.load("YvanYin/Metric3D") — no importable pkg
+        kind="pypi",
+        probe_import="mmcv",
+        required_imports=("mmengine", "mmcv"),
+        pip=("mmengine", "mmcv-lite"),
         weights="hf-auto",
         notes=(
             "Loaded via torch.hub.load('YvanYin/Metric3D', trust_repo=True). "
-            "Its hubconf.py imports `mmcv.utils.Config` at module top, so the "
-            "hub load fails with ModuleNotFoundError: No module named 'mmcv' "
-            "unless mmcv is installed — and it wants the legacy 1.x API "
-            "(`mmcv.utils`, moved to mmengine in 2.x), which has no prebuilt "
-            "wheel for recent torch/CUDA and is painful to build. Treat "
-            "metric3d-v2 as effectively blocked on torch>=2.x boxes until that "
-            "is resolved. Gotcha (once it loads): a mismatched xformers wheel "
+            "Current upstream first tries legacy `mmcv.utils.Config`, then "
+            "falls back to `mmengine.Config`; `mmcv-lite` still supplies utility "
+            "symbols used elsewhere. Install both via this spec. A mismatched xformers wheel "
             "makes the dinov2 backbone raise NotImplementedError at forward "
             "time — uninstall xformers or match the wheel."
         ),
@@ -206,6 +216,7 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         # subset (no vggt/dust3r/croco needed). Inference deps (torch/einops/
         # transformers/huggingface-hub) all base. Probe the vendored package.
         probe_import="streamvggt",
+        required_imports=("torch", "einops", "transformers", "huggingface_hub"),
         pip=(),
         extra_env=(
             (
@@ -229,6 +240,7 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         # (torch/einops/safetensors/huggingface-hub) are all base; the RoPE2D
         # CUDA ext is optional (pure-torch fallback). Probe the vendored package.
         probe_import="pi3",
+        required_imports=("torch", "einops", "safetensors", "huggingface_hub"),
         pip=(),
         extra_env=(
             (
@@ -253,6 +265,7 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         # base); opencv/einops/tqdm already base, xformers guarded-optional.
         # Probe the vendored package itself.
         probe_import="video_depth_anything",
+        required_imports=("easydict", "cv2", "einops", "tqdm"),
         pip=(),
         extra_env=(
             (
@@ -279,6 +292,7 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         # guarded-optional in the vendored DINOv2 layers), so a plain `uv sync`
         # is enough. Probe the vendored package itself.
         probe_import="unik3d",
+        required_imports=("timm", "scipy", "cv2"),
         pip=(),
         extra_env=(
             (
@@ -301,10 +315,11 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         # Vendored as the mono-depth subset of the Apache-2.0 package
         # (_vendor/depth_anything_3). Its three runtime deps — addict, omegaconf,
         # opencv-python — are declared in base pyproject (the slice is numpy-2
-        # clean; xformers/gsplat/e3nn are guarded-optional, evo is lazy), so a
+        # clean; xformers/gsplat/e3nn are guarded-optional; evo is in base), so a
         # plain `uv sync` is enough — nothing to pip-install here. Probe the
         # vendored package itself.
         probe_import="depth_anything_3",
+        required_imports=("addict", "omegaconf", "cv2"),
         pip=(),
         extra_env=(
             (
@@ -322,10 +337,18 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
     ),
     "moge": InstallSpec(
         name="moge",
-        kind="git",
-        probe_import="moge",
-        git=("git+https://github.com/microsoft/MoGe.git",),
+        kind="vendored",
+        # The v1/v2 inference subset and its exact utils3d revision are bundled.
+        # All runtime imports used by inference are base dependencies.
+        probe_import="torch",
+        required_imports=("torch", "huggingface_hub", "scipy", "cv2"),
         weights="hf-auto",
+        notes=(
+            "MoGe v1/v2 inference code and its pinned utils3d revision are vendored "
+            "under plumbline/_vendor/moge. Runtime dependencies are in the base "
+            "install; weights download from Hugging Face. Do not install upstream "
+            "HEAD: MoGe 3 has a different API and pulls flex-gemm/Triton."
+        ),
     ),
     "vggt-omega": InstallSpec(
         name="vggt-omega",
@@ -360,11 +383,13 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
             "manual: depth_pro.pt is NOT on the HF hub — download it to "
             "~/.cache/plumbline/weights/depth-pro/depth_pro.pt"
         ),
+        required_files=((None, "~/.cache/plumbline/weights/depth-pro/depth_pro.pt"),),
     ),
     "mast3r": InstallSpec(
         name="mast3r",
         kind="vendored",
         probe_import="roma",  # signature dust3r-lineage runtime dep
+        required_imports=("roma", "sklearn", "trimesh"),
         pip=_TRIMESH_STACK,
         extra_env=(
             (
@@ -386,6 +411,7 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         name="dust3r",
         kind="vendored",
         probe_import="roma",  # signature dust3r-lineage runtime dep
+        required_imports=("roma", "sklearn", "trimesh"),
         pip=_TRIMESH_STACK,
         extra_env=(
             (
@@ -404,12 +430,12 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
     "monst3r": InstallSpec(
         name="monst3r",
         kind="vendored",
-        # MonST3R's dust3r fork imports `evo` at module load (dust3r/utils/
-        # vo_eval.py), so it is required even for the mono-depth path — not
-        # just trajectory metrics. roma/scikit-learn/trimesh are the shared
-        # dust3r-family deps. Probe on `evo` since it's the monst3r-specific dep.
+        # MonST3R's dust3r fork imports `evo` at module load. evo is a base
+        # dependency because the runner's trajectory metrics require it;
+        # roma/scikit-learn/trimesh remain the adapter-specific stack.
         probe_import="evo",
-        pip=(*_TRIMESH_STACK, "evo"),
+        required_imports=("roma", "sklearn", "trimesh", "evo"),
+        pip=_TRIMESH_STACK,
         extra_env=(
             (
                 "MONST3R_ROOT",
@@ -420,7 +446,7 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         notes=(
             "Code vendored under plumbline/_vendor/monst3r (bundles its own dust3r "
             "fork + third_party/RAFT; no clone). The fork imports `evo` at load "
-            "time, so it is a hard dependency (in pip). MonST3R's `sam2` import is "
+            "time; evo is installed by the base package. MonST3R's `sam2` import is "
             "shimmed in the adapter (import-only), so sam2 is not needed. Only ONE "
             "dust3r-family model (mast3r/dust3r/monst3r) per process — Python "
             "caches `import dust3r`."
@@ -430,6 +456,7 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         name="cut3r",
         kind="vendored",
         probe_import="roma",  # signature dust3r-lineage runtime dep
+        required_imports=("roma", "sklearn", "trimesh", "omegaconf"),
         # CUT3R's upstream requirements.txt is training-heavy; the inference path
         # the adapter drives needs the shared dust3r-lineage stack plus omegaconf
         # (the checkpoint embeds an omegaconf config that torch.load rebuilds).
@@ -438,7 +465,7 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
             (
                 "CUT3R_CKPT",
                 "Path to the 512-DPT checkpoint (default "
-                "_vendor/cut3r/src/cut3r_512_dpt_4_64.pth).",
+                "~/.cache/plumbline/weights/cut3r/cut3r_512_dpt_4_64.pth).",
             ),
             (
                 "CUT3R_ROOT",
@@ -447,8 +474,14 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         ),
         weights=(
             "manual: 512-DPT checkpoint cut3r_512_dpt_4_64.pth to $CUT3R_CKPT "
-            "(default _vendor/cut3r/src/cut3r_512_dpt_4_64.pth). Public Google "
+            "(default ~/.cache/plumbline/weights/cut3r/cut3r_512_dpt_4_64.pth). Public Google "
             "Drive id 1Asz-ZB3FfpzZYwunhQvNPZEUA8XUNAYD (gdown)."
+        ),
+        required_files=(
+            (
+                "CUT3R_CKPT",
+                "~/.cache/plumbline/weights/cut3r/cut3r_512_dpt_4_64.pth",
+            ),
         ),
         notes=(
             "Code vendored under plumbline/_vendor/cut3r (src/dust3r + "
@@ -484,6 +517,14 @@ INSTALL_SPECS: dict[str, InstallSpec] = {
         name="dage",
         kind="vendored",
         probe_import="kornia",  # signature DAGE runtime dep (vendored `dage` itself resolves post-munge)
+        required_imports=(
+            "einops",
+            "omegaconf",
+            "safetensors",
+            "kornia",
+            "roma",
+            "segmentation_models_pytorch",
+        ),
         pip=(
             "einops",
             "omegaconf",
@@ -571,11 +612,11 @@ def install_hint(name: str) -> str:
             )
         return "ships in the base install; no extra step is required."
     if spec.kind == "pypi":
-        pkg = spec.pip[0]
-        mod = spec.probe_import or pkg
+        packages = " ".join(spec.pip)
+        mod = spec.probe_import or spec.pip[0]
         return (
             f"needs the `{mod}` package. "
-            f"Install with `plumbline install {name}` (or `uv pip install {pkg}`)."
+            f"Install with `plumbline install {name}` (or `uv pip install {packages}`)."
         )
     if spec.kind == "git":
         url = spec.git[0]
@@ -609,8 +650,8 @@ def install_plan(name: str) -> list[str]:
     - ``base``     → empty list (nothing to do).
     - ``pypi``     → one ``uv pip install <pkg>`` per package.
     - ``git``      → one ``uv pip install <url>`` per URL.
-    - ``vendored`` → ``uv pip install`` of the runtime deps + ``export`` lines for
-      any ``extra_env`` vars (checkpoint paths). No clone (code is in ``_vendor``).
+    - ``vendored`` → ``uv pip install`` of runtime deps only. ``extra_env``
+      entries are documentation/dev overrides, not executable install steps.
     - ``clone``    → ``git clone`` + extra-pip + ``export`` lines for ``dest_env``
       and any ``extra_env`` vars the operator must set.
     """
@@ -623,15 +664,12 @@ def install_plan(name: str) -> list[str]:
         return [f"uv pip install '{url}'" for url in spec.git]
 
     if spec.kind == "vendored":
-        # No clone: code ships under _vendor/<name>. Install only the runtime
-        # pip deps (one per line so PEP 508 direct refs with spaces survive),
-        # then any export lines for checkpoint paths (extra_env).
-        plan = [
+        # No clone: code ships under _vendor/<name>. Install only runtime pip
+        # deps. Environment entries are optional overrides or manual-artifact
+        # guidance; a child process cannot persist them to the calling shell.
+        return [
             f"uv pip install {pkg!r}" if " " in pkg else f"uv pip install {pkg}" for pkg in spec.pip
         ]
-        for var, _note in spec.extra_env:
-            plan.append(f"export {var}=...  # see notes")
-        return plan
 
     # clone
     dest = spec.default_dest or f"${spec.dest_env}"
@@ -658,19 +696,42 @@ def _module_importable(module: str) -> bool:
 def check(name: str) -> tuple[bool, str]:
     """Report whether ``name`` looks installed. Returns ``(ok, detail)``.
 
-    - For ``base`` / ``pypi`` / ``git`` / ``vendored`` adapters with a
-      ``probe_import``: OK iff the module is importable (checked via ``find_spec``
-      — no heavy import). For ``vendored`` the probe is a signature runtime dep
-      (e.g. ``roma``), since the bundled model code always resolves.
+    - For ``base`` / ``pypi`` / ``git`` / ``vendored`` adapters with import
+      probes: OK iff every ``required_imports`` entry (or the legacy singular
+      ``probe_import``) is importable via ``find_spec`` — no heavy import.
+      Vendored model code itself is guaranteed by package validation; probes
+      cover its complete external runtime stack.
+    - Manual artifacts declared in ``required_files`` must also exist, using
+      an environment override when configured and the default path otherwise.
     - For ``clone`` adapters (and anything without a clean probe): OK iff
       ``dest_env`` is set *and* points at an existing directory.
     """
     spec = spec_for(name)
 
-    if spec.probe_import is not None:
-        if _module_importable(spec.probe_import):
-            return True, f"`{spec.probe_import}` importable"
-        return False, f"`{spec.probe_import}` not importable — {install_hint(name)}"
+    probes = spec.required_imports or ((spec.probe_import,) if spec.probe_import else ())
+    if probes:
+        missing = tuple(module for module in probes if not _module_importable(module))
+        if missing:
+            return (
+                False,
+                f"missing runtime imports: {', '.join(missing)} — {install_hint(name)}",
+            )
+
+    missing_files: list[str] = []
+    for env_var, default_path in spec.required_files:
+        configured = os.environ.get(env_var) if env_var else None
+        path = Path(configured or default_path).expanduser()
+        if not path.is_file():
+            source = f"${env_var}" if configured and env_var else "default"
+            missing_files.append(f"{path} ({source})")
+    if missing_files:
+        return False, f"missing required files: {', '.join(missing_files)} — {install_hint(name)}"
+
+    if probes:
+        detail = f"runtime imports available: {', '.join(probes)}"
+        if spec.required_files:
+            detail += "; required files present"
+        return True, detail
 
     # No import probe: fall back to the clone-destination check.
     if spec.dest_env is not None:
@@ -687,5 +748,5 @@ def check(name: str) -> tuple[bool, str]:
             )
         return True, f"${spec.dest_env}={dest} present"
 
-    # base adapter with no probe (metric3d-v2): nothing extra to install.
+    # Base adapter without a useful import probe: nothing extra to install.
     return True, "ships in the base install"

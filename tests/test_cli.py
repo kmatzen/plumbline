@@ -55,6 +55,21 @@ def test_list_datasets_runs() -> None:
     assert "Registered" in result.stdout and "datasets" in result.stdout
 
 
+def test_install_base_complete_vendored_adapter_is_noop() -> None:
+    result = runner.invoke(app, ["install", "depth-anything-3", "--yes"])
+    assert result.exit_code == 0
+    assert "nothing to install" in " ".join(result.stdout.split())
+    assert "export DA3_ROOT" not in result.stdout
+
+
+def test_install_manual_weights_are_actionable_not_fake_steps() -> None:
+    result = runner.invoke(app, ["install", "cut3r"])
+    assert result.exit_code == 0
+    assert "weights:" in result.stdout
+    assert "CUT3R_CKPT" in result.stdout
+    assert "export CUT3R_CKPT" not in result.stdout
+
+
 def test_run_unknown_model_errors() -> None:
     # mix_stderr=False is default in newer click; combine explicitly.
     result = runner.invoke(app, ["run", "--model", "no-such", "--dataset", "no-such"])

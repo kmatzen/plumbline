@@ -1,19 +1,19 @@
-# REMOVED — π³ (pi3) point-cloud reconstruction adapter
+# BLOCKED — π³ (pi3) point-cloud reconstruction
 
-> **⚠️ Adapter removed (2026-05-31, pre-release).** The `pi3` model adapter,
-> its DTU and ETH3D reproduction configs, its install spec, and its queue jobs
-> were deleted from the package. This page documents the attempt and the
-> specific evidence that the adapter is **mis-implemented**, so a future GPU
-> session can pick it back up.
+> **Historical note:** the adapter was removed on 2026-05-31 after the failed
+> reconstruction A/B, then restored and vendored on 2026-06-04 for depth and
+> pose work. Its DAGE Table-4 pose path is independently useful; the DTU/ETH3D
+> reconstruction result documented here remains blocked and must not be
+> presented as verified.
 
 | Field | Value |
 |-------|-------|
-| **Status** | 🔒 Removed — suspected adapter (L1) bug, no verified anchor |
+| **Status** | 🔒 Reconstruction blocked — adapter ships, but this path has no verified anchor |
 | **Model** | π³ / Pi3 (Yuan et al. 2025, [arXiv:2507.13347](https://arxiv.org/abs/2507.13347)) |
 | **Cells attempted** | DTU MVS chamfer, ETH3D multi-scene chamfer (both informational, `value: null`) |
 | **Verified ✅ anywhere?** | No |
 
-## Why it was removed — the A/B inversion
+## Why reconstruction remains blocked — the A/B inversion
 
 The π³ paper's Table 3 reports point-map reconstruction with **Umeyama + ICP
 alignment** (exactly plumbline's chamfer protocol), and it reports VGGT in the
@@ -48,11 +48,11 @@ the VGGT paper reports 0.382 mm). Pinning π³ would have required reverse-
 engineering an undisclosed normalization — and the built-in VGGT cross-check
 already fails to line up.
 
-## To revive
+## To unblock reconstruction
 
 Re-run the π³ vs VGGT A/B on DTU/ETH3D and **debug why π³'s point map is ~20×
 worse than VGGT's** under identical alignment. The most likely culprits: the
 point-map → camera-frame convention, the per-view scale, or the keyframe
-selection ("every 5 images" per the paper). Restore from git history
-(`git show <pre-removal-commit>:src/plumbline/models/pi3.py`). Do **not** re-add
-until the A/B ordering matches the paper. See `docs/CONFIDENCE_AUDIT.md`.
+selection ("every 5 images" per the paper). Re-test against the current
+vendored adapter. Do **not** promote a DTU/ETH3D reproduction until the A/B
+ordering matches the paper. See `docs/CONFIDENCE_AUDIT.md`.

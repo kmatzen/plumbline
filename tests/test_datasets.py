@@ -1071,7 +1071,6 @@ class TestDIODE:
         assert K[1, 1] == pytest.approx(886.81 / 768)
 
     def test_moge_fov_warp_changes_shape(self, tmp_path: Path) -> None:
-        pytest.importorskip("moge")
         _write_fake_diode(tmp_path, frames=1)
         native = DIODEDataset(root=tmp_path, domain="indoors")
         warped = DIODEDataset(root=tmp_path, domain="indoors", moge_fov_warp=True)
@@ -2283,7 +2282,6 @@ class TestDDADMogeEvalDataset:
         assert DATASET_REGISTRY["ddad-moge-eval"] is DDADMogeEvalDataset
 
     def test_loads_with_moge_installed(self, tmp_path: Path) -> None:
-        pytest.importorskip("moge")
         from plumbline.datasets.ddad_sintel_moge_eval import DDADMogeEvalDataset
 
         _write_fake_moge_index_bundle(
@@ -2312,7 +2310,6 @@ class TestSintelMogeEvalDataset:
         assert DATASET_REGISTRY["sintel-moge-eval"] is SintelMogeEvalDataset
 
     def test_loads_with_moge_installed(self, tmp_path: Path) -> None:
-        pytest.importorskip("moge")
         from plumbline.datasets.ddad_sintel_moge_eval import SintelMogeEvalDataset
 
         _write_fake_moge_index_bundle(
@@ -3041,7 +3038,6 @@ class TestETH3DMogeEval:
         assert ETH3DMogeEvalDataset.DROP_MAX_DEPTH == 1000.0
 
     def test_index_parsing_and_sample_ids(self, tmp_path: Path) -> None:
-        pytest.importorskip("moge")
         _write_fake_eth3d_moge_bundle(tmp_path)
         ds = ETH3DMogeEvalDataset(root=tmp_path)
         assert len(ds) == 2
@@ -3051,14 +3047,12 @@ class TestETH3DMogeEval:
         ]
 
     def test_scene_filter(self, tmp_path: Path) -> None:
-        pytest.importorskip("moge")
         _write_fake_eth3d_moge_bundle(tmp_path)
         ds = ETH3DMogeEvalDataset(root=tmp_path, scenes=["facade"])
         assert len(ds) == 1
         assert ds._records[0]["sample_path"] == "facade/0000"
 
     def test_scene_filter_matching_nothing_errors(self, tmp_path: Path) -> None:
-        pytest.importorskip("moge")
         from plumbline.datasets._common import DatasetNotAvailable
 
         _write_fake_eth3d_moge_bundle(tmp_path)
@@ -3066,7 +3060,6 @@ class TestETH3DMogeEval:
             ETH3DMogeEvalDataset(root=tmp_path, scenes=["nope"])
 
     def test_loads_with_moge_installed(self, tmp_path: Path) -> None:
-        pytest.importorskip("moge")
         _write_fake_eth3d_moge_bundle(tmp_path)
         ds = ETH3DMogeEvalDataset(root=tmp_path, scenes=["courtyard"])
         s = next(iter(ds))

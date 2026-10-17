@@ -17,11 +17,14 @@ or any adapter dependency (no torch / transformers import):
 from __future__ import annotations
 
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
 import yaml
 
+import plumbline.install as install_module
 from plumbline.install import (
     INSTALL_SPECS,
     check,
@@ -37,6 +40,24 @@ _GPU_QUEUE_YAML = Path(__file__).resolve().parent.parent / "reproductions" / "gp
 _PYPROJECT = Path(__file__).resolve().parent.parent / "pyproject.toml"
 _MODELS_DIR = Path(__file__).resolve().parent.parent / "src" / "plumbline" / "models"
 _HINT_CALL = re.compile(r"""install_hint\(\s*['"]([^'"]+)['"]\s*\)""")
+
+_VENDORED_BACKEND_IMPORTS = {
+    "depth_anything_3": (
+        "_ensure_da3_on_path",
+        "from depth_anything_3.api import DepthAnything3",
+    ),
+    "moge": ("_ensure_moge_on_path", "from moge.model.v2 import MoGeModel"),
+    "pi3": ("_ensure_pi3_on_path", "from pi3.models.pi3x import Pi3X"),
+    "streamvggt": (
+        "_ensure_streamvggt_on_path",
+        "from streamvggt.models.streamvggt import StreamVGGT",
+    ),
+    "unik3d": ("_ensure_unik3d_on_path", "from unik3d.models import UniK3D"),
+    "vda": (
+        "_ensure_vda_on_path",
+        "from video_depth_anything.video_depth import VideoDepthAnything",
+    ),
+}
 
 
 def test_registry_is_nonempty_and_has_18_entries() -> None:
@@ -130,6 +151,62 @@ def test_helpers_run_without_error(name: str) -> None:
     assert isinstance(detail, str) and detail
 
 
+def test_check_requires_every_declared_runtime_import(monkeypatch: pytest.MonkeyPatch) -> None:
+    """One installed dependency must not make a partially installed adapter OK."""
+    available = {"einops", "omegaconf", "safetensors", "kornia", "roma"}
+    monkeypatch.setattr(install_module, "_module_importable", available.__contains__)
+
+    ok, detail = check("dage")
+
+    assert not ok
+    assert "segmentation_models_pytorch" in detail
+
+
+def test_vendored_adapter_probes_external_deps_not_private_package(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Vendored package roots are activated lazily by adapters, not site-packages."""
+    available = {"addict", "omegaconf", "cv2"}
+    monkeypatch.setattr(install_module, "_module_importable", available.__contains__)
+
+    ok, detail = check("depth-anything-3")
+
+    assert ok, detail
+
+
+def test_doctor_rejects_missing_manual_checkpoint(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(install_module, "_module_importable", lambda _module: True)
+    monkeypatch.setenv("HOME", str(tmp_path))
+
+    ok, detail = check("depth-pro")
+
+    assert not ok
+    assert "depth_pro.pt" in detail
+    assert "missing required files" in detail
+
+
+def test_doctor_accepts_manual_checkpoint_env_override(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    checkpoint = tmp_path / "cut3r.pth"
+    checkpoint.touch()
+    monkeypatch.setattr(install_module, "_module_importable", lambda _module: True)
+    monkeypatch.setenv("CUT3R_CKPT", str(checkpoint))
+
+    ok, detail = check("cut3r")
+
+    assert ok, detail
+    assert "required files present" in detail
+
+
+def test_every_manual_weight_spec_declares_a_required_file() -> None:
+    for name, spec in INSTALL_SPECS.items():
+        if spec.weights.startswith("manual:"):
+            assert spec.required_files, f"{name}: manual weights are invisible to doctor"
+
+
 def test_install_plan_shape_per_kind() -> None:
     for name in _ALL_NAMES:
         spec = spec_for(name)
@@ -140,10 +217,9 @@ def test_install_plan_shape_per_kind() -> None:
             assert plan, f"{name}: {spec.kind} plan must have steps"
             assert all(s.startswith("uv pip install") for s in plan), plan
         elif spec.kind == "vendored":
-            # pip-install lines (+ optional export lines for checkpoint paths);
-            # no clone step (code is bundled under _vendor/).
-            assert plan, f"{name}: vendored plan must have steps"
-            assert all(s.startswith(("uv pip install", "export")) for s in plan), plan
+            # Only executable pip steps: env vars are optional overrides or
+            # manual-artifact guidance and cannot persist from a subprocess.
+            assert all(s.startswith("uv pip install") for s in plan), plan
             assert not any(s.startswith("git clone") for s in plan), plan
         else:  # clone
             assert plan[0].startswith("git clone"), plan
@@ -180,6 +256,16 @@ def test_da3_job_reflects_vendored_in_base() -> None:
     assert "pip install depth-anything-3" not in extras, extras
 
 
+def test_queue_does_not_require_optional_vendored_root_overrides() -> None:
+    jobs = _load_queue_jobs()
+    for job in jobs:
+        required = set(job.get("requires_env", ()))
+        if job["name"].startswith("cut3r-"):
+            assert "CUT3R_ROOT" not in required, job["name"]
+        if job["name"].startswith("mast3r-"):
+            assert "MAST3R_ROOT" not in required, job["name"]
+
+
 # ---------------------------------------------------------------------------
 # Adapter ImportError messages derive from the registry via install_hint(); a
 # typo there would make the error path itself raise KeyError. Every name passed
@@ -207,6 +293,48 @@ def test_da3_extras_matches_registry_truth() -> None:
     spec = spec_for("depth-anything-3")
     assert spec.kind == "vendored"
     assert spec.pip == ()
+
+
+def test_moge_is_vendored_and_needs_no_external_install() -> None:
+    """MoGe v1/v2 ships in-tree; upstream HEAD is incompatible MoGe 3."""
+    spec = spec_for("moge")
+    assert spec.kind == "vendored"
+    assert spec.pip == ()
+    assert spec.git == ()
+    assert install_plan("moge") == []
+
+
+def test_base_complete_vendored_installs_are_true_noops() -> None:
+    assert install_plan("depth-anything-3") == []
+    assert install_plan("pi3") == []
+    assert install_plan("streamvggt") == []
+
+
+@pytest.mark.parametrize("module_name", sorted(_VENDORED_BACKEND_IMPORTS))
+def test_base_complete_vendored_backend_imports(module_name: str) -> None:
+    """Import the real backend, not merely its dependency-light wrapper.
+
+    Each backend gets a fresh interpreter because upstream packages mutate
+    ``sys.path`` and several use generic top-level module names. Importing the
+    canonical model class exercises the bundled tree and its transitive runtime
+    dependencies without downloading weights or requiring a GPU.
+    """
+    helper, backend_import = _VENDORED_BACKEND_IMPORTS[module_name]
+    source = f"from plumbline.models.{module_name} import {helper}; {helper}(); {backend_import}"
+    result = subprocess.run(
+        [sys.executable, "-c", source],
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+
+
+def test_vendored_install_plans_never_include_exports() -> None:
+    for name, spec in INSTALL_SPECS.items():
+        if spec.kind == "vendored":
+            assert not any(step.startswith("export ") for step in install_plan(name))
 
 
 def test_every_spec_records_a_license() -> None:

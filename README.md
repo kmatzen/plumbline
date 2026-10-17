@@ -12,28 +12,30 @@ Anything 3**, **MASt3R**, **Metric3Dv2**, and **Depth Anything V2**.
 
 **Status:** v0.2.1 released; v0.3 in development. **47 paper-match cells** — 39 mono-depth
 (NYU / KITTI / DIODE / GSO / iBims-1 / ETH3D MoGe-eval / DDAD / Sintel MoGe /
-Depth Pro Booster + Sun-RGBD / UniK3D metric NYU / CUT3R NYU·KITTI·Bonn) + 7 multi-view pose/trajectory
+Depth Pro Booster + Sun-RGBD / UniK3D metric NYU / CUT3R NYU·KITTI·Bonn) + 8 pose/trajectory
 (CO3Dv2 / Sintel / TUM-Dynamics) — each verified against the source PDF.
 API will still change before 1.0.
 
 ## What works today
 
-- **12 model adapters**: DA-V2 (6 variants including metric
+- **18 model adapters**: DA-V2 (6 variants including metric
   Indoor/Outdoor), DA3, Metric3Dv2 (S/L/Giant2), MoGe-1, MoGe-2 (incl.
   `*-normal`), Marigold v1-1, GeoWizard, Depth Pro, MASt3R (N-view via
-  PointCloudOptimizer for N≥3, PairViewer for N=2), VGGT, **CUT3R**
+  sparse global alignment for N≥3, PairViewer for N=2), VGGT, **CUT3R**
   (recurrent — video + unordered image collections), and **MonST3R**
   (dynamic-scene video; the v1.2 `video_pose` path wires MonST3R's full
   flow + motion-mask + temporal global alignment, GPU-validated on the
   Sintel Table-4 trajectory cell). CUT3R also has a GPU smoke run
-  (informational).
-- **12 datasets**: NYUv2 (Eigen 2014, rawDepths), KITTI (Eigen 652,
+  (informational), plus DAGE, UniK3D, Video Depth Anything, Pi3,
+  StreamVGGT, and VGGT-Ω.
+- **23 registered dataset loaders across 16 dataset families**: NYUv2 (Eigen 2014, rawDepths), KITTI (Eigen 652,
   annotated GT, Garg crop), DIODE (FoV-warp loader, MoGe-paper protocol),
   ETH3D high-res multi-view, DTU MVS (22-scan test split), CO3Dv2
   (VGGT-canonical pose-eval recipe), 7-Scenes, GSO, iBims-1, Sintel
   (RGB + flow; depth gated), Bonn RGB-D Dynamic
   (video depth, one-sample-per-sequence), **TUM-Dynamics** (freiburg3
-  video-pose, MonST3R/DAGE Table 4 trajectory eval).
+  video-pose, MonST3R/DAGE Table 4 trajectory eval), plus Booster, DDAD,
+  RealEstate10K, and Sun-RGBD protocol-specific loaders.
 - **47 paper-match reproductions** with `source_confidence: verified_pdf`
   — see [REPRODUCTIONS.md](./REPRODUCTIONS.md). Each cell audited
   table-+-column-+-row against the source paper
@@ -55,14 +57,14 @@ cell reproduces" and "we built honest infra but the public release
 doesn't reproduce the paper cell". The matrix in
 [`REPRODUCTIONS.md`](./REPRODUCTIONS.md) tracks this:
 
-**Verified paper-match (36 cells, safe to cite):** 30 mono-depth — DA-V2
+**Verified paper-match (47 cells, safe to cite):** 39 mono-depth — DA-V2
 (S/L on NYU; S/B/L on KITTI; L on DIODE + KITTI-MoGe + GSO + ETH3D
 MoGe-eval + iBims-1 + DDAD + Sintel MoGe), Metric3Dv2 (L/Giant on NYU + KITTI), MoGe-1 ViT-L (NYU,
 KITTI, DIODE, GSO, iBims-1, ETH3D MoGe-eval, DDAD, Sintel MoGe), Marigold v1-1 (NYU), DA3
 (NYU δ₁), MonST3R (NYU), DUSt3R (KITTI), Depth Pro (Booster + Sun-RGBD Table 1, δ₁);
-plus 6 multi-view pose — VGGT / MASt3R / DUSt3R on CO3Dv2 (mAA@30),
-MonST3R on Sintel (trajectory ATE, Table 4), and DAGE on Sintel + TUM-Dynamics
-(trajectory ATE, Table 4).
+plus 8 pose/trajectory — VGGT / MASt3R / DUSt3R on CO3Dv2 (mAA@30),
+MonST3R on Sintel (trajectory ATE, Table 4), DAGE on Sintel + TUM-Dynamics,
+CUT3R on Sintel, and VGGT on Sintel.
 
 **Upstream-blocked (adapter+protocol audited; gap is in the released
 checkpoint or a paper-private eval config — do not promote):**
