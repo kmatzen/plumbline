@@ -1,0 +1,139 @@
+{
+  "status": "finished_all_attempts",
+  "scope": "prospective validation-shard replication; all attempts retained",
+  "protocol_sha256": "0196e5529cb8b3e0ebcb0e877c2442317b6f292ccacdcfe6380806aaccf1ba62",
+  "input_manifest_sha256": "e7c8b767228c45af179f9ab5a1e01c8791a2d0da75e267c8a7fb81f51885e4a0",
+  "script_sha256": "aecdeead504c7b55418e1ea542380764b7dbfcb53a1b422590da0ef7c68b08be",
+  "runner_sha256": "7779f1d2dac5ad059d20b1d904d753be92fdf7ea19ba53cf5a97426e048a9907",
+  "sequences": [
+    "7097",
+    "4852",
+    "2373",
+    "4866"
+  ],
+  "cameras": {
+    "dage": {
+      "prior_manifest_sha256": "a2e52eae308f1ea05f08f160ae9d54b5036cac45c8b3dd6a8275493a136642cf",
+      "checkpoint": "/data3/kmatzen/.cache/huggingface/hub/models--TuanNgo--DAGE/snapshots/a0520500cd3eea0e65b96cec43e1fe376dfbb51a",
+      "checkpoint_files": {
+        "model.pt": "9b60f10e2a7db9e9c1bcc1d5ce4fd9413bbac899e5cf3681c1d7979ae2d9d974"
+      },
+      "settings": {
+        "lr_max_size": 252,
+        "hr_max_size": 252,
+        "compute_dtype": "float16"
+      }
+    },
+    "da3": {
+      "prior_manifest_sha256": "7179d53006ce76fa74c681b6e480aefcccc5b969d6a74dc6d8d848a1b58100a7",
+      "checkpoint": "/data3/kmatzen/.cache/huggingface/hub/models--depth-anything--DA3-LARGE-1.1/snapshots/0e109ae307c5982f319a67cf6f9f99ccdc0ec97c",
+      "checkpoint_files": {
+        "config.json": "744dcaf53859490ed92fc6cb98d68d3daf624b8c54533aaf604bdb53f06321f5",
+        "model.safetensors": "739905c423cf0d6ccaf9e61a8401d82ba1ac32d7f4d3ee6dca8f92b377633f64"
+      },
+      "settings": {
+        "process_res": 252,
+        "process_res_method": "upper_bound_resize",
+        "query_chunk": 256
+      }
+    }
+  },
+  "attempts": [
+    {
+      "sequence": "7097",
+      "method": "dage",
+      "output": "7097-dage",
+      "status": "process_complete",
+      "returncode": 0,
+      "manifest_sha256": "c5d33896eae35b5099c16c0cb7f83e2659871df054ec3af16bbedfd9c99ceb13",
+      "camera_status": "complete",
+      "matches_prior_settings": true,
+      "matches_prior_checkpoint": true,
+      "matches_prior_model_sources": true
+    },
+    {
+      "sequence": "7097",
+      "method": "da3",
+      "output": "7097-da3",
+      "status": "process_complete",
+      "returncode": 0,
+      "manifest_sha256": "92d9613ea71fa69f5ea3851ebe8ca43d8a33c508668ef2b4090826fd60e9427c",
+      "camera_status": "complete",
+      "matches_prior_settings": true,
+      "matches_prior_checkpoint": true,
+      "matches_prior_model_sources": true
+    },
+    {
+      "sequence": "4852",
+      "method": "dage",
+      "output": "4852-dage",
+      "status": "process_complete",
+      "returncode": 0,
+      "manifest_sha256": "b20397d6d4dd2e4886b8a7d0596e06089329b7c919246b0716e2dff793f67d0a",
+      "camera_status": "complete",
+      "matches_prior_settings": true,
+      "matches_prior_checkpoint": true,
+      "matches_prior_model_sources": true
+    },
+    {
+      "sequence": "4852",
+      "method": "da3",
+      "output": "4852-da3",
+      "status": "process_complete",
+      "returncode": 0,
+      "manifest_sha256": "21c37800e3600edf98e74b59923ec30c3bee6c4380e79d6a2d0075978ac629b7",
+      "camera_status": "complete",
+      "matches_prior_settings": true,
+      "matches_prior_checkpoint": true,
+      "matches_prior_model_sources": true
+    },
+    {
+      "sequence": "2373",
+      "method": "dage",
+      "output": "2373-dage",
+      "status": "process_complete",
+      "returncode": 0,
+      "manifest_sha256": "f0f6cfcd0a6901889105843d238ab94b753a3bcdde759870a5c0613aee89c3ff",
+      "camera_status": "complete",
+      "matches_prior_settings": true,
+      "matches_prior_checkpoint": true,
+      "matches_prior_model_sources": true
+    },
+    {
+      "sequence": "2373",
+      "method": "da3",
+      "output": "2373-da3",
+      "status": "process_complete",
+      "returncode": 0,
+      "manifest_sha256": "db38c0be846739bc50d21e01b1da5847108ab11db36e264ebddfc8b886660344",
+      "camera_status": "complete",
+      "matches_prior_settings": true,
+      "matches_prior_checkpoint": true,
+      "matches_prior_model_sources": true
+    },
+    {
+      "sequence": "4866",
+      "method": "dage",
+      "output": "4866-dage",
+      "status": "process_complete",
+      "returncode": 0,
+      "manifest_sha256": "560a181d0b4a1b71c51da5129360eae66f5f7bb693a8af01ff58e76f744f523c",
+      "camera_status": "complete",
+      "matches_prior_settings": true,
+      "matches_prior_checkpoint": true,
+      "matches_prior_model_sources": true
+    },
+    {
+      "sequence": "4866",
+      "method": "da3",
+      "output": "4866-da3",
+      "status": "process_complete",
+      "returncode": 0,
+      "manifest_sha256": "fd04cfb407a79a0903ba66d9102f8457af62f47991e9a4c5df8e2a8bf28c44a8",
+      "camera_status": "complete",
+      "matches_prior_settings": true,
+      "matches_prior_checkpoint": true,
+      "matches_prior_model_sources": true
+    }
+  ]
+}

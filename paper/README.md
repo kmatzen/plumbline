@@ -4677,11 +4677,45 @@ archives are separate under Anima's private
 `/data3/kmatzen/plumbline/research/movi-replication-shard01-v1/decoded-v1`.
 The local staging and decoded manifests retain the source and artifact hashes.
 
-At this stage only acquisition and decoding are complete; camera inference
-and the fixed evaluator comparison on this batch remain to run. No new
-accuracy, ranking, or DNF result follows from successful decoding. If settings
+Camera inference and image-based evidence generation are now complete, as
+recorded below; scoring against the separate reference geometry remains.
+No new accuracy, ranking, or DNF result follows from successful execution. If settings
 are revised after inspecting these results, the batch becomes development
 data for that revision and another independently selected batch is required.
+
+### Frozen replication outputs before reference scoring
+
+All eight DAGE/DA3 runs completed on the new scenes. Their checkpoint hashes,
+model-source hashes, and inference settings match the original pilot. The
+RGB-only loader now accepts an explicit scene roster while preserving its
+default original-pilot guard, RGB-only archive check, and input hashes. Tests
+verify all eight retained predictions, 24-frame pose/calibration shapes,
+rotation validity, and correspondence to the frozen protocol. The batch
+continues after process failures; no failures occurred in these eight runs.
+
+The unchanged LK-prefix placement procedure retains all 1,536 planned
+method-point-frame slots: 691 renderable, 744 missing prefix observations,
+54 nonpositive prefix fits, and 47 outside-image query projections. These
+unavailable proposals are not automatic camera-DNF labels. Renderable counts
+by scene are 186 (7097), 253 (4852), 152 (2373), and 100 (4866).
+
+`run_movi_replication_evidence.py` ran the frozen CoTracker3 forward pass,
+four-fold heldout-point epipolar checks, and reverse-prefix checks. It calls
+the existing motion and cycle functions without changing thresholds. All 768
+unique point/frame slots remain. Motion results are 446 compatible, 53
+incompatible, and 269 unresolved. Cycle results are 433 consistent, 57
+inconsistent, and 278 unresolved. Both checks retain 406 observations. These
+are decision counts, not correctness measurements: reference geometry has not
+yet been joined for scoring this replication.
+
+Outputs are under `results/movi-replication-shard01-v1/`: `runs/` contains the
+eight camera manifests and prediction arrays, the four marker JSONs retain
+every placement slot, and `evidence-v1/` retains full forward arrays, reverse
+endpoints, fitted matrices, decisions and provenance. Replay tests reproduce
+every motion decision from the retained forward arrays and verify cycle
+arithmetic and full accounting. The new scenes are unseen by this evaluation
+development sequence, but frozen-model pretraining overlap is unknown. The
+experiment does not yet establish evaluator accuracy or a novel contribution.
 
 ### Frozen-matrix correspondence intervention
 
