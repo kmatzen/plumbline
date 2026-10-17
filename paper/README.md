@@ -3494,3 +3494,14 @@ not prevent projection, later observations cannot change the prefix fit,
 invalid projections remain unavailable, the complete roster is required,
 and targets or changed prompts are rejected. Existing external-evaluation,
 training-membership, and analysis tests remain passing.
+
+`analyze_camera_judge.py` audits completed camera-application reports against
+their corpus, training-manifest, export, and executed-evaluator hashes. It
+requires every renderable presentation exactly once for each arm, re-parses
+the raw response, rejects non-null target labels, and checks paired processed
+pixel hashes and image-token counts. Per-method reporting keeps all 36 planned
+presentations, with unavailable reasons separate from predicted labels. It
+also records base-to-adapted response changes. It deliberately reports no
+accuracy, camera winner, or DNF rate without reference judgments. Six new
+audit tests and the four corpus/selection tests pass. Running or partial
+reports cannot be analyzed as complete results.
