@@ -455,7 +455,13 @@ matrix computation is now fp32. The uploaded evaluator reads this setting from
 the training manifest for both arms. The remote command starts validation only
 after the trainer exits successfully; neither the failed fp16 run nor the
 one-example diagnostic adapter is used as the evaluated trained model. Completion
-and validation results remain pending.
+is now verified: all 188 unique training examples were processed in the frozen
+seeded order, with finite losses and positive finite gradient norms at every
+step. Peak allocated GPU memory was 5,122,803,200 bytes. The completed manifest
+and exact executed training/evaluation sources are retained in
+`results/tapvid-lora-epoch-fp32-v1/`. The saved adapter is retained on Anima, with
+its file hashes recorded in that manifest. Validation has started; its results
+remain pending. Successful training is not evidence of improved recognition.
 
 `evaluate_tapvid_lora.py` freezes the next comparison: all 128 validation panels
 under the same prepared quantized model, once with adapters disabled and once
@@ -466,9 +472,9 @@ overall and class-balanced correctness, per-video results, invalids and
 abstentions. Do not condition accuracy on answered examples alone. There are
 only two validation videos, so these observations are not 128 independent scenes.
 The 119 calibration examples remain unused. The evaluator verifies identical
-processed image hashes and the saved base/adapter file hashes. Its GPU execution
-is pending a numerically valid training run; parser and training-mask tests are not end-to-end
-evaluation evidence.
+processed image hashes and the saved base/adapter file hashes. GPU evaluation is
+now running from the completed fp32-compute training pass; parser and
+training-mask tests are not end-to-end evaluation evidence.
 
 `analyze_tapvid_lora.py` rejects incomplete or mismatched paired generation records
 and includes abstentions/invalids in all-example accuracy. Its frozen baselines
