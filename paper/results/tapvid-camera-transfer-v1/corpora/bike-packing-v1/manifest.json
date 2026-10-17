@@ -1,0 +1,2964 @@
+{
+  "scope": "camera-projected correspondence validation; no staticness or camera-DNF labels",
+  "sequence": "bike-packing",
+  "prompt": "Compare the marked detail in A with the candidate marked in B. The top row shows context; the bottom row shows native-pixel crops. Is the candidate close to the same detail, far from it, or is the original detail occluded? Reply with one label: close, far, occluded, or uncertain. Close means within 2 native pixels; far means at least 8 native pixels. Use uncertain when the images do not support a decision. Do not judge camera accuracy or whether the object is moving.",
+  "planned_presentations": 150,
+  "geometry_sha256": "b94525f870f60ea4af5f9ee4b8dacf2c7e0b28a84858b3bd442517de69fc7365",
+  "source_manifest_sha256": "d8e1903df707408ef3b392c8c85c951b8cd6a36f899690d76ca520ae331bb41d",
+  "source_file_sha256": "7c2f71010d15ad7302fb48d5dd45a8fdfa25bcd87eb350067eb0b37850dd65df",
+  "tracker_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "script_sha256": "49f222e81751905ebeb20100c2eceac7eb15c8b92cc7230141b9a7a104cfbbfb",
+  "export_sha256": "b862502e7536cd91c0255fb04822989791f9bc539c82653f72bd95ef12e6b522",
+  "geometry_dependencies_sha256": {
+    "plumbline.image_evidence": "9fc932d5f4cea4008a9dc43106fe4075e67dff17274000853cd511bff17414f4",
+    "plumbline.conventions": "506969710476aafde4ec4adf63cb86d4164762bd32e81d1a1b3bfd5f72e242ad"
+  },
+  "dependencies_sha256": {
+    "tapvid_camera_markers.py": "769bb4e2f7d34574e9352f748ae441926ee8e937c20597a27c107d4299edcc8b",
+    "build_anchor_preview.py": "7568d7a8cc409e7ac630b0a3753dced03691b0350e34547355ccfe862b3ae1c3",
+    "build_tapvid_judge_corpus.py": "5f66c715c674336018bfe6d331d7b67f81acfaa8896757c65e1f7817686852e0",
+    "run_tapvid_cameras.py": "56b8884bdf6c42ea41ae0b3313dc9dcdb554821c98cd96f31f8615cf134ddbec"
+  },
+  "counts": {
+    "far": 38,
+    "query_outside_image": 18,
+    "occluded": 9,
+    "nonpositive_prefix_depth": 65,
+    "query_beyond_video": 20
+  },
+  "records": [
+    {
+      "id": "76d32af558584a508bb8f2bc",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        544.9508529901505,
+        112.99270391464233
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        636.9816863187632,
+        203.43685850760588
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 191.08801319119152,
+      "image": "images/76d32af558584a508bb8f2bc.png",
+      "image_sha256": "1e2b95fce0f11440fe4bc9f5a10538306ce3904554605e6b2a84a9186d4316d7"
+    },
+    {
+      "id": "f1284fbd12db0a03b97cf91d",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        544.9508529901505,
+        112.99270391464233
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        703.7941237205904,
+        261.1732187417668
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 213.72502466637937,
+      "image": "images/f1284fbd12db0a03b97cf91d.png",
+      "image_sha256": "257fb59c5e93619905e6a4b2dc847c07783821787238a488ff27e670a2e395cb"
+    },
+    {
+      "id": "d669cb4735a01d837cd5b7c3",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        544.9508529901505,
+        112.99270391464233
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        394.38907833740546,
+        -249.2371892378497
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fdb7bd2df44c06a0852835b0",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        560.7211446762085,
+        402.04379081726074
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        572.0928001022329,
+        416.84639138414894
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 20.251303600708383,
+      "image": "images/fdb7bd2df44c06a0852835b0.png",
+      "image_sha256": "90e46719fcbe745677e2a593ea6c9c71b2e88af21dde7d67ef1dabd207462f05"
+    },
+    {
+      "id": "c8b60717f2fe3b2c5cdbbc71",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        560.7211446762085,
+        402.04379081726074
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        579.6373549672049,
+        429.02561080151594
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/c8b60717f2fe3b2c5cdbbc71.png",
+      "image_sha256": "082f6aa4c9e04638030b73baba58a6ce7ccbf947b28d294bb56e7d0d79a145e8"
+    },
+    {
+      "id": "29b7cfeebb5624e5bf4704e5",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        560.7211446762085,
+        402.04379081726074
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        525.1991311740153,
+        314.52482293542676
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 68.00691253789292,
+      "image": "images/29b7cfeebb5624e5bf4704e5.png",
+      "image_sha256": "ecd3aeb8ad384b959047fb488864d2b2f65568c88c097f9e719fb81481d2043d"
+    },
+    {
+      "id": "f058894ec92d9bc5796f9ccd",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        561.5972870588303,
+        375.7664394378662
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        593.1925382130898,
+        416.3754383281553
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 60.124371266609614,
+      "image": "images/f058894ec92d9bc5796f9ccd.png",
+      "image_sha256": "38a5d605c6691985a72c9225904373dad8b016fa197b5a652e07319f361c9784"
+    },
+    {
+      "id": "df101d0271ea6095d8b3d74d",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        561.5972870588303,
+        375.7664394378662
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        613.8704954210923,
+        448.4968403118002
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/df101d0271ea6095d8b3d74d.png",
+      "image_sha256": "2c348796775b140aca193d68a04f0a6c7e0e91dcbe0af2793f29b35e20c8418d"
+    },
+    {
+      "id": "4f60a5b18f2335b168c63a02",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        561.5972870588303,
+        375.7664394378662
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        490.3493659767626,
+        202.48857860163898
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 151.8952070478062,
+      "image": "images/4f60a5b18f2335b168c63a02.png",
+      "image_sha256": "fff37b27f2be32a4176b6536a966b3adb7e0e19a7b8679e6b9355ef2bedb8cd7"
+    },
+    {
+      "id": "a4830bbeae5fcb16bdc556b6",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        561.5972870588303,
+        178.68613243103027
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        658.3068948133697,
+        277.616072051689
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 233.03796874554536,
+      "image": "images/a4830bbeae5fcb16bdc556b6.png",
+      "image_sha256": "47f84036aa5438f5f9b551ffb0c84078f717014f8b681bacc16fa284d1233b98"
+    },
+    {
+      "id": "3f398febed7385600f2f1462",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        561.5972870588303,
+        178.68613243103027
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        732.6407325979648,
+        351.88565922267463
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 248.05511562737536,
+      "image": "images/3f398febed7385600f2f1462.png",
+      "image_sha256": "a6cc5791885566ef54b49f10e99be9783545b7e7768786f0852a082e8d05d5f9"
+    },
+    {
+      "id": "2ae041712ad3f4c2a2a4e594",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        561.5972870588303,
+        178.68613243103027
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        403.7666688075176,
+        -201.3591430430342
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ab744d899d5fb3edcc73fce8",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        566.8540328741074,
+        227.73722648620605
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        655.4923164635732,
+        322.19823651911975
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 223.92982894330774,
+      "image": "images/ab744d899d5fb3edcc73fce8.png",
+      "image_sha256": "ad804891666aa0abbe538208dbe89f6ebffba83ec11ec21edcd693f6be0f27df"
+    },
+    {
+      "id": "ad4251d0cf37acadc7585444",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        566.8540328741074,
+        227.73722648620605
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        723.9622860192217,
+        398.32375593848667
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 252.43955567549344,
+      "image": "images/ad4251d0cf37acadc7585444.png",
+      "image_sha256": "f9139167f749fdebd46c2cb95a3de7d7290ab836aab672ecca6cc623467ce43b"
+    },
+    {
+      "id": "30db6ad5b8b868626dbdf099",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        566.8540328741074,
+        227.73722648620605
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        414.99585200178836,
+        -137.55092022725773
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "bb6f71a412aa47beeaa50746",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        490.3579020500183,
+        188.83721351623535
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        644.6674670464083,
+        343.20879507692484
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 390.9001812909324,
+      "image": "images/bb6f71a412aa47beeaa50746.png",
+      "image_sha256": "32d1f21ee96cb39cf3216541d52253083153dede184188e82e6ad14099bfa150"
+    },
+    {
+      "id": "ac590f3778de48150b2ab496",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        490.3579020500183,
+        188.83721351623535
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        775.0747436356831,
+        500.28124154343504
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eabf1c7e569d3b1c8930b319",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        490.3579020500183,
+        188.83721351623535
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        274.66985517762123,
+        -368.5011354433461
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f95702b4910f96698f374851",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        501.5235239267349,
+        137.6744270324707
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        733.8918473289992,
+        352.43576439511133
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 482.3995701427995,
+      "image": "images/f95702b4910f96698f374851.png",
+      "image_sha256": "5dc65cccac732d105bdc1eac17c2ae70980a78793b6f87ea9eb9de6d8c6e4100"
+    },
+    {
+      "id": "f79bdc833f1c6ce61afaa8c3",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        501.5235239267349,
+        137.6744270324707
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1013.3380328004608,
+        635.0534109526184
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c7355282c9d1e20a7078b3a6",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        501.5235239267349,
+        137.6744270324707
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        213.38406444081434,
+        -597.1240576006746
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ee33b8cd73f4a27f6946583b",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        453.139072060585,
+        177.67441749572754
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        663.1306105344,
+        405.98690834817796
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/ee33b8cd73f4a27f6946583b.png",
+      "image_sha256": "10d6b1b20ac2c12f836d2df3ae8b1956df5610b08b9d23007e79bdf7fe73a277"
+    },
+    {
+      "id": "072129973530edc9fc887b58",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        453.139072060585,
+        177.67441749572754
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        881.3480307098478,
+        690.283352538285
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3393e80b74df02b182712e56",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        453.139072060585,
+        177.67441749572754
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        185.4217862693228,
+        -518.3597573266583
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "bca0fccbc9c351044c26df38",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        525.7157498598099,
+        188.83721351623535
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        639.3861956094261,
+        328.2675244854163
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 349.1554205886086,
+      "image": "images/bca0fccbc9c351044c26df38.png",
+      "image_sha256": "0f8893cc1edb7b7c612142bbfe206247648ecdbcc3a4d48c0c1fffab79b38ede"
+    },
+    {
+      "id": "c9dba4818eafa4481033c979",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        525.7157498598099,
+        188.83721351623535
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        728.8165964931424,
+        433.63759220016595
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 308.62725816305203,
+      "image": "images/c9dba4818eafa4481033c979.png",
+      "image_sha256": "667d6a331243acc27ad7cc1ca8cbaf3ac9e1a22689db1d5cc06e9f9be58c8c81"
+    },
+    {
+      "id": "2343285f4ac02c7000bf58b6",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        525.7157498598099,
+        188.83721351623535
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        344.9950823544537,
+        -238.88165612823124
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "65961b20102f1556b94cb491",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        483.84457290172577,
+        220.46512126922607
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "54093af658665ffb2df5b0da",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        483.84457290172577,
+        220.46512126922607
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "252b6685cb262da4af7e3acd",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        483.84457290172577,
+        220.46512126922607
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d22ecd8772eb20a1665aa254",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        566.6678261756897,
+        258.46341133117676
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        605.1679238467616,
+        306.0953068680163
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 141.09745867923962,
+      "image": "images/d22ecd8772eb20a1665aa254.png",
+      "image_sha256": "fd7c7c884c485a3d346f009b3db52bf38f8f00bfdac76791d36cf35cfe410f1b"
+    },
+    {
+      "id": "9a4b6edb777c689b1911b53b",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        566.6678261756897,
+        258.46341133117676
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        630.954579266914,
+        336.8487305074697
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 138.6490211430899,
+      "image": "images/9a4b6edb777c689b1911b53b.png",
+      "image_sha256": "992d6568564bcee30a9c693891665c11a61610a5d45ffa935d90b0f95ab96d1b"
+    },
+    {
+      "id": "e88f8e64ed6f8522805f1acf",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        566.6678261756897,
+        258.46341133117676
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        483.9062968172872,
+        64.65510918389313
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 157.78789672984647,
+      "image": "images/e88f8e64ed6f8522805f1acf.png",
+      "image_sha256": "119ad0d9c2766b5a7663dbe5e00da546f1dade37298145231707d5e174602142"
+    },
+    {
+      "id": "c8d605f8001fa4f3e1b5b54f",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 3,
+      "source_xy": [
+        475.16309916973114,
+        153.2043170928955
+      ],
+      "lag": 15,
+      "frame": 18,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "60fe5b462b343da488eef5b9",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 3,
+      "source_xy": [
+        475.16309916973114,
+        153.2043170928955
+      ],
+      "lag": 30,
+      "frame": 33,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4688887dc66976db8d3f6e18",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 3,
+      "source_xy": [
+        475.16309916973114,
+        153.2043170928955
+      ],
+      "lag": 60,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c0f0dd31eb4f208b126d7b94",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 58,
+      "source_xy": [
+        474.6119099855423,
+        77.15325593948364
+      ],
+      "lag": 15,
+      "frame": 73,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "49bd93200e1ab2e63bd9f738",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 58,
+      "source_xy": [
+        474.6119099855423,
+        77.15325593948364
+      ],
+      "lag": 30,
+      "frame": 88,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ce202c81dc4c55affca8d3a0",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 58,
+      "source_xy": [
+        474.6119099855423,
+        77.15325593948364
+      ],
+      "lag": 60,
+      "frame": 118,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3cc1736707b6d5cbf8f6c818",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        563.9116632938385,
+        119.03645038604736
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        661.1589440629908,
+        214.32331900249687
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 199.75225387315612,
+      "image": "images/3cc1736707b6d5cbf8f6c818.png",
+      "image_sha256": "4b94b5624ec82dcd95498d18651b443a13af4a758280b5efeda282d944fac698"
+    },
+    {
+      "id": "e2fb7bf38b8c04d3bfec7acc",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        563.9116632938385,
+        119.03645038604736
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        736.515728669425,
+        277.7517914920936
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 242.04762683669708,
+      "image": "images/e2fb7bf38b8c04d3bfec7acc.png",
+      "image_sha256": "953f3a25fee7154bd1c977a99d818484f71522127be8ee47ef92820748e764d2"
+    },
+    {
+      "id": "def67c782b94fcbce02e5fab",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        563.9116632938385,
+        119.03645038604736
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        404.4784313182306,
+        -259.0796252479762
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "983dbee36c0474a572ba791f",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 59,
+      "source_xy": [
+        494.45629358291626,
+        69.98902559280396
+      ],
+      "lag": 15,
+      "frame": 74,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0a23a7edb052c8820a6fd3ad",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 59,
+      "source_xy": [
+        494.45629358291626,
+        69.98902559280396
+      ],
+      "lag": 30,
+      "frame": 89,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e0d03ed03b3664de7b7c284d",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 59,
+      "source_xy": [
+        494.45629358291626,
+        69.98902559280396
+      ],
+      "lag": 60,
+      "frame": 119,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c41b8395b7bfc7fddb2bede0",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        612.6362013816833,
+        214.08000469207764
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        637.8228003649253,
+        243.15252949123598
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 61.46896602740036,
+      "image": "images/c41b8395b7bfc7fddb2bede0.png",
+      "image_sha256": "6e0ca035c3ccbc0875225e2084c7b6d690813401839775ca2fce5758c5f0b2dd"
+    },
+    {
+      "id": "969677f1add7fe6ba70d71e5",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        612.6362013816833,
+        214.08000469207764
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        656.1847865632978,
+        259.50517886339946
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/969677f1add7fe6ba70d71e5.png",
+      "image_sha256": "e604f4ca23cb8e10f992dae493be1b0431ff13d3cf9aae3b027ac0df066f3332"
+    },
+    {
+      "id": "269f80eb825145eacd52803b",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        612.6362013816833,
+        214.08000469207764
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        551.5410076016927,
+        74.06794257724208
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/269f80eb825145eacd52803b.png",
+      "image_sha256": "3eed912ce03406c55d69c8208a1fb72b09e4a0b0eb87cb9fdb480ac689931799"
+    },
+    {
+      "id": "d44d321a3b997836e8359256",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        560.7829785346985,
+        344.6399974822998
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        581.0702749116026,
+        372.3858706615998
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 46.65202104125069,
+      "image": "images/d44d321a3b997836e8359256.png",
+      "image_sha256": "27590d767a2a8f70c05a9ecfcc307c6c646fdda8b7fd416167eb1dcf465465ab"
+    },
+    {
+      "id": "09a747a08384ff4ba27087f3",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        560.7829785346985,
+        344.6399974822998
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        594.7489044382972,
+        392.3202327136999
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 58.734817950768395,
+      "image": "images/09a747a08384ff4ba27087f3.png",
+      "image_sha256": "303c10465f1afdb8b5a741172d4690235b58a5b7e75769dac1460b2510650a9e"
+    },
+    {
+      "id": "0b28b56f961ae99ecb3c1104",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        560.7829785346985,
+        344.6399974822998
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        506.0975535006692,
+        215.63793212224752
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 121.90340177749552,
+      "image": "images/0b28b56f961ae99ecb3c1104.png",
+      "image_sha256": "0ad70f54f3b364c5be185ede6f39a05e26c716a173bf8106472302aa5bee2e4a"
+    },
+    {
+      "id": "0f1cfd19ebaee0c27749cfbf",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        591.5108263492584,
+        273.59999656677246
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        611.7212755451295,
+        299.06098270022056
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 55.22139479641991,
+      "image": "images/0f1cfd19ebaee0c27749cfbf.png",
+      "image_sha256": "9deaeeb3823b9c4f802dcfd95a34bb12aaf7a8e0eca7cbc7d1b5941040c25831"
+    },
+    {
+      "id": "022babd897ba58e652c31cca",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        591.5108263492584,
+        273.59999656677246
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        625.9609986252323,
+        314.79665193874104
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/022babd897ba58e652c31cca.png",
+      "image_sha256": "e6e34435d122142ff4cfafcbadebd850904abecfe9895f94b5d4ef57c15ca5d8"
+    },
+    {
+      "id": "7b96aeda254ba3a0550109ed",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        591.5108263492584,
+        273.59999656677246
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        538.6860153239056,
+        151.1520540741123
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 103.69670584850445,
+      "image": "images/7b96aeda254ba3a0550109ed.png",
+      "image_sha256": "cec50af4aaf438f26bf269015f3759926375822a9ed943999d6d37402dc36180"
+    },
+    {
+      "id": "23fef927aa3a12c6bcb08885",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        508.9297556877136,
+        310.0800132751465
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        582.700582529097,
+        414.5059831120735
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 138.58920447722662,
+      "image": "images/23fef927aa3a12c6bcb08885.png",
+      "image_sha256": "51b4fdf0ce9979317f34a0c83914eb2011240683a4d747504a311170a3171dcf"
+    },
+    {
+      "id": "c8423927941384f9065d0b9c",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        508.9297556877136,
+        310.0800132751465
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        648.2434917532074,
+        520.8344889860198
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "61af93666c665f57db4cdd52",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        508.9297556877136,
+        310.0800132751465
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        327.7171256013605,
+        -108.37617956409848
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1474bbafa3b9f65d39c107f3",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        514.6912068128586,
+        231.3599967956543
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        623.3050454939163,
+        375.16695780124724
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/1474bbafa3b9f65d39c107f3.png",
+      "image_sha256": "2d68740fc8cf4983ece92e3c0b44144c2a9a7ced9c922b5e074ba380b1b2dc35"
+    },
+    {
+      "id": "41074e9301cb3179f69659f7",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        514.6912068128586,
+        231.3599967956543
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        729.800001090938,
+        519.1757898461182
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "760fcbf6071557c08a2bc66f",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        514.6912068128586,
+        231.3599967956543
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        289.3659068352877,
+        -282.6807257098668
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8cef61bac6ba44a646669631",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        385.7388374209404,
+        274.8718070983887
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5dc4671c6289a68214f54def",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        385.7388374209404,
+        274.8718070983887
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ad7b771a94a698a2cb1570cc",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        385.7388374209404,
+        274.8718070983887
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3d982cc04c5d59223c6abfc7",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 19,
+      "source_xy": [
+        648.3695542812347,
+        247.17947959899902
+      ],
+      "lag": 15,
+      "frame": 34,
+      "candidate_xy": [
+        671.70313952999,
+        210.78529225128682
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 75.34699815505988,
+      "image": "images/3d982cc04c5d59223c6abfc7.png",
+      "image_sha256": "fb75354b953b2c71329af618643c5a22ef0c8f29d07ddd256ba4797a10ef43da"
+    },
+    {
+      "id": "d1b4a2399770aad8e1342f4e",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 19,
+      "source_xy": [
+        648.3695542812347,
+        247.17947959899902
+      ],
+      "lag": 30,
+      "frame": 49,
+      "candidate_xy": [
+        375.6969471475998,
+        -547.0936962301168
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2320ffe7d354188e27928252",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 19,
+      "source_xy": [
+        648.3695542812347,
+        247.17947959899902
+      ],
+      "lag": 60,
+      "frame": 79,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "642f72cd250d246d9fc2f8b9",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 19,
+      "source_xy": [
+        624.7738081216812,
+        230.76922416687012
+      ],
+      "lag": 15,
+      "frame": 34,
+      "candidate_xy": [
+        639.3852876464985,
+        170.78621624165623
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 96.0711433714399,
+      "image": "images/642f72cd250d246d9fc2f8b9.png",
+      "image_sha256": "6d944a540d33e07b895f4be0b5933bb9cbe5b97eb77f6e0d4a9f9818246a0670"
+    },
+    {
+      "id": "9ba044889810bdd8f9551dd7",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 19,
+      "source_xy": [
+        624.7738081216812,
+        230.76922416687012
+      ],
+      "lag": 30,
+      "frame": 49,
+      "candidate_xy": [
+        280.18435293614965,
+        -760.9114259166425
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1a10c566329756818067ebf8",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 19,
+      "source_xy": [
+        624.7738081216812,
+        230.76922416687012
+      ],
+      "lag": 60,
+      "frame": 79,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "de7ba9b59702d0c5b26b359b",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 18,
+      "source_xy": [
+        593.996764421463,
+        467.6923084259033
+      ],
+      "lag": 15,
+      "frame": 33,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "bc2fc3fff3baea60808d7643",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 18,
+      "source_xy": [
+        593.996764421463,
+        467.6923084259033
+      ],
+      "lag": 30,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9fc54f86641e51f2b1fdf054",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 18,
+      "source_xy": [
+        593.996764421463,
+        467.6923084259033
+      ],
+      "lag": 60,
+      "frame": 78,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "11309ff01a9d0b29ed51d9af",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 19,
+      "source_xy": [
+        592.9708647727966,
+        466.6666603088379
+      ],
+      "lag": 15,
+      "frame": 34,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3c8a302e27fdd036fe2dbaaa",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 19,
+      "source_xy": [
+        592.9708647727966,
+        466.6666603088379
+      ],
+      "lag": 30,
+      "frame": 49,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "deddcbe9b8924fa135438f35",
+      "sequence": "bike-packing",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 19,
+      "source_xy": [
+        592.9708647727966,
+        466.6666603088379
+      ],
+      "lag": 60,
+      "frame": 79,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "904f66d53bb5b7e57e6a110a",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        544.9508529901505,
+        112.99270391464233
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1e60e4664bc30c937827f625",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        544.9508529901505,
+        112.99270391464233
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3c9dac8c898567508f4daf2f",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        544.9508529901505,
+        112.99270391464233
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "573668710f3131766b8a39ca",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        560.7211446762085,
+        402.04379081726074
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a4e55e02a84337dc73e6d61a",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        560.7211446762085,
+        402.04379081726074
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1b9b3cc40ba2effd3d2b2168",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        560.7211446762085,
+        402.04379081726074
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ed6c692bd814cb16e3803945",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        561.5972870588303,
+        375.7664394378662
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eef64f2f62daa825fa60ff96",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        561.5972870588303,
+        375.7664394378662
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8f553f12e84a43ad37fde270",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        561.5972870588303,
+        375.7664394378662
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5b6c5ef830eb3244e56e297b",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        561.5972870588303,
+        178.68613243103027
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e99a3a7cb15a2f3f9a3e74ac",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        561.5972870588303,
+        178.68613243103027
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "15a8db90c293bddff323c4d6",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        561.5972870588303,
+        178.68613243103027
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "dce44c7d0c1139edd1c79ab8",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        566.8540328741074,
+        227.73722648620605
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8c46a6620fea3f53962d4620",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        566.8540328741074,
+        227.73722648620605
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6385b83d1b4a07eb36457e7f",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        566.8540328741074,
+        227.73722648620605
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "23df72d7c21c64fa529a6a97",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        490.3579020500183,
+        188.83721351623535
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d95c54958839674d3e3ed8d8",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        490.3579020500183,
+        188.83721351623535
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b4fffc5b6dfd8cce33ea665b",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        490.3579020500183,
+        188.83721351623535
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "81925b83d08d1d42a46fdf7c",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        501.5235239267349,
+        137.6744270324707
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "254fa60c3d4407fb2d19460e",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        501.5235239267349,
+        137.6744270324707
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "bc1f8a9e1c7cd3021f18203e",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        501.5235239267349,
+        137.6744270324707
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9be36eff0bf811a7488f776a",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        453.139072060585,
+        177.67441749572754
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "20bc9007fefb68fbf3c4aa65",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        453.139072060585,
+        177.67441749572754
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "58d7cf0d233c915bb2f2a89b",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        453.139072060585,
+        177.67441749572754
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6c93ac9a7119723bd585fbfb",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        525.7157498598099,
+        188.83721351623535
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "500e76a83e065351838907d3",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        525.7157498598099,
+        188.83721351623535
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fdd53ce6bd4636c99dea297e",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        525.7157498598099,
+        188.83721351623535
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4d148b72c80e7a0d36d558a6",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        483.84457290172577,
+        220.46512126922607
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        500.58475708576685,
+        147.90342165442425
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 150.7392846163371,
+      "image": "images/4d148b72c80e7a0d36d558a6.png",
+      "image_sha256": "dfdc86fde4f1466dbb1cc62b0b940ad5865b2d554c540598ca679e5548edd00d"
+    },
+    {
+      "id": "9852df5bd4c3b20f10eaa1b2",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        483.84457290172577,
+        220.46512126922607
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        405.4816890695924,
+        210.50345647002084
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 134.16404567602982,
+      "image": "images/9852df5bd4c3b20f10eaa1b2.png",
+      "image_sha256": "97f6429b1afcefedf0ede27315e4bbb9ae0fed66ec4162e378f8301cfbb485eb"
+    },
+    {
+      "id": "3f893458ad13434c936646d1",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        483.84457290172577,
+        220.46512126922607
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        263.4987016426955,
+        204.02983970875192
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 348.34557824562467,
+      "image": "images/3f893458ad13434c936646d1.png",
+      "image_sha256": "39cf1e8f3bc3fb68a0033e5173f80e65951a6255f720890163fd80a2a2e66279"
+    },
+    {
+      "id": "144c37504fcd5f56380124db",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        566.6678261756897,
+        258.46341133117676
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3565592d77710a7799fd144d",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        566.6678261756897,
+        258.46341133117676
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6ff6f843a1b03c330cfc4973",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        566.6678261756897,
+        258.46341133117676
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2729328f4f2abd5fad9dfce1",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 3,
+      "source_xy": [
+        475.16309916973114,
+        153.2043170928955
+      ],
+      "lag": 15,
+      "frame": 18,
+      "candidate_xy": [
+        -228.83475792362935,
+        -47.008238289626696
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "05c22afb404a26838dbaa2bc",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 3,
+      "source_xy": [
+        475.16309916973114,
+        153.2043170928955
+      ],
+      "lag": 30,
+      "frame": 33,
+      "candidate_xy": [
+        65.15856514826248,
+        161.41203324006952
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 410.2921671100273,
+      "image": "images/05c22afb404a26838dbaa2bc.png",
+      "image_sha256": "3f3d758a8fcff659136bd20753489a90ed47e10cf9035dfc19c3a1f0a1cc4dd8"
+    },
+    {
+      "id": "b0da9f0e5fdb8cd9de73397c",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 3,
+      "source_xy": [
+        475.16309916973114,
+        153.2043170928955
+      ],
+      "lag": 60,
+      "frame": 63,
+      "candidate_xy": [
+        73.93587022408802,
+        263.84771769136955
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 500.9675661839845,
+      "image": "images/b0da9f0e5fdb8cd9de73397c.png",
+      "image_sha256": "cd0c5676060d74ef62f102f6db89ddda803191580befe268b5bc737fe69d297e"
+    },
+    {
+      "id": "5dbe2fc2a656a6dee76872f9",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 58,
+      "source_xy": [
+        474.6119099855423,
+        77.15325593948364
+      ],
+      "lag": 15,
+      "frame": 73,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a330fb867ff4c6aef207df91",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 58,
+      "source_xy": [
+        474.6119099855423,
+        77.15325593948364
+      ],
+      "lag": 30,
+      "frame": 88,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8d8fe394e954f11cff70aaec",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 58,
+      "source_xy": [
+        474.6119099855423,
+        77.15325593948364
+      ],
+      "lag": 60,
+      "frame": 118,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0dbadf5737d5f02ea01a7386",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        563.9116632938385,
+        119.03645038604736
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e0dfa149b5cb6d70f65dda0e",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        563.9116632938385,
+        119.03645038604736
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2231b8c1008b847da30def4d",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        563.9116632938385,
+        119.03645038604736
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "dceaf0b9b2c50a0f7c0a65b6",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 59,
+      "source_xy": [
+        494.45629358291626,
+        69.98902559280396
+      ],
+      "lag": 15,
+      "frame": 74,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f6c51f2a0ee0239e60707f22",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 59,
+      "source_xy": [
+        494.45629358291626,
+        69.98902559280396
+      ],
+      "lag": 30,
+      "frame": 89,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f1a8a79a6cefe96fdc0fff91",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 59,
+      "source_xy": [
+        494.45629358291626,
+        69.98902559280396
+      ],
+      "lag": 60,
+      "frame": 119,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "032b718c572163dddec871aa",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        612.6362013816833,
+        214.08000469207764
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f479a04e3769c576b0f8caf4",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        612.6362013816833,
+        214.08000469207764
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "78f9d73cc35523a206a56c17",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        612.6362013816833,
+        214.08000469207764
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5244f4a418ae29273f17ac2e",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        560.7829785346985,
+        344.6399974822998
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d5735278e7ff91854d567e8a",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        560.7829785346985,
+        344.6399974822998
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "27dd3e3d245acb5c15c6972d",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        560.7829785346985,
+        344.6399974822998
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a247a6aed25aec4e96642fac",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        591.5108263492584,
+        273.59999656677246
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0ae72973156128ab3c35deee",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        591.5108263492584,
+        273.59999656677246
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cd2e0ca4b1fbda8a7109f29e",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        591.5108263492584,
+        273.59999656677246
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b1416bc917a4c3d0b4a004ba",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        508.9297556877136,
+        310.0800132751465
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2730abad5fcd7c264d252722",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        508.9297556877136,
+        310.0800132751465
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2c3f8423e00ad448de5de1a0",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        508.9297556877136,
+        310.0800132751465
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "811a0e2ced3ad28b00e4cf75",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        514.6912068128586,
+        231.3599967956543
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cbe859dcef382cc76bf1076a",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        514.6912068128586,
+        231.3599967956543
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "219cdb0003421685751b0c17",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        514.6912068128586,
+        231.3599967956543
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "746489882a3d6d2cf4fe7dfa",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        385.7388374209404,
+        274.8718070983887
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        395.0576949818849,
+        255.96550220118473
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 36.595579804660765,
+      "image": "images/746489882a3d6d2cf4fe7dfa.png",
+      "image_sha256": "76754a607939d3c64b3e0a3040159c3ba105515bb14cbf5faad8443d4644d239"
+    },
+    {
+      "id": "6823cb4c4ae223c265682758",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        385.7388374209404,
+        274.8718070983887
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        369.44506717159754,
+        273.2123359039749
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/6823cb4c4ae223c265682758.png",
+      "image_sha256": "4a4d9730f7a982e6f0a93c86fdd14030c9f5157b31a2ace9c75a7e5f22102309"
+    },
+    {
+      "id": "a8eb99767b0044512a01b914",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        385.7388374209404,
+        274.8718070983887
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        316.04949456732,
+        248.03515725085708
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/a8eb99767b0044512a01b914.png",
+      "image_sha256": "4357729bb57bc64d9e1a938dbef23c9f25787e20764a6d25a4999f8953a30d1c"
+    },
+    {
+      "id": "c0d3d6e1f8ed62d9b53b5403",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 19,
+      "source_xy": [
+        648.3695542812347,
+        247.17947959899902
+      ],
+      "lag": 15,
+      "frame": 34,
+      "candidate_xy": [
+        717.6013654334621,
+        302.32251832507205
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 28.148707453386972,
+      "image": "images/c0d3d6e1f8ed62d9b53b5403.png",
+      "image_sha256": "baafeb339dc1163918752afd8265f69a3bbd4639355d3128fbbfe54c65e6ec0a"
+    },
+    {
+      "id": "52429acc9f2f94097328c5d1",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 19,
+      "source_xy": [
+        648.3695542812347,
+        247.17947959899902
+      ],
+      "lag": 30,
+      "frame": 49,
+      "candidate_xy": [
+        564.3083002828466,
+        232.78599357057274
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 78.2955007597185,
+      "image": "images/52429acc9f2f94097328c5d1.png",
+      "image_sha256": "3ecd61ea766367073d9b511de7457e642d4ad5d580d42dc88adc34d87acd3d74"
+    },
+    {
+      "id": "4dd6afc5957de6974897b701",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 19,
+      "source_xy": [
+        648.3695542812347,
+        247.17947959899902
+      ],
+      "lag": 60,
+      "frame": 79,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cf93bdabc8f0682c7f6db77b",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 19,
+      "source_xy": [
+        624.7738081216812,
+        230.76922416687012
+      ],
+      "lag": 15,
+      "frame": 34,
+      "candidate_xy": [
+        697.0842118425567,
+        282.92205455279094
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 31.722008257996073,
+      "image": "images/cf93bdabc8f0682c7f6db77b.png",
+      "image_sha256": "ccb48f2e0b17d0a8d8e11ee5af53242c062be4fa9396ee3cae5e06add9da6a31"
+    },
+    {
+      "id": "90c6a05839ae5b9fe2b39687",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 19,
+      "source_xy": [
+        624.7738081216812,
+        230.76922416687012
+      ],
+      "lag": 30,
+      "frame": 49,
+      "candidate_xy": [
+        543.3843157706028,
+        216.25738185987382
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 68.17443389389085,
+      "image": "images/90c6a05839ae5b9fe2b39687.png",
+      "image_sha256": "78485dff3f76e8f7e5b144a4533ad739c1635e2cf56b2ca6b4cdbc809a1433f7"
+    },
+    {
+      "id": "4584a000da0d58d4dc358531",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 19,
+      "source_xy": [
+        624.7738081216812,
+        230.76922416687012
+      ],
+      "lag": 60,
+      "frame": 79,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "281bc7731ef08e4b147e2b7f",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 18,
+      "source_xy": [
+        593.996764421463,
+        467.6923084259033
+      ],
+      "lag": 15,
+      "frame": 33,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "42df80fecb2d987b39522e8b",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 18,
+      "source_xy": [
+        593.996764421463,
+        467.6923084259033
+      ],
+      "lag": 30,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "dd650d58148f6b2984bee55c",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 18,
+      "source_xy": [
+        593.996764421463,
+        467.6923084259033
+      ],
+      "lag": 60,
+      "frame": 78,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "64a295df33693e01619feb5e",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 19,
+      "source_xy": [
+        592.9708647727966,
+        466.6666603088379
+      ],
+      "lag": 15,
+      "frame": 34,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eaceb7e2d33935da7c2b8266",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 19,
+      "source_xy": [
+        592.9708647727966,
+        466.6666603088379
+      ],
+      "lag": 30,
+      "frame": 49,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5f13a92894053d0efd5a993c",
+      "sequence": "bike-packing",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 19,
+      "source_xy": [
+        592.9708647727966,
+        466.6666603088379
+      ],
+      "lag": 60,
+      "frame": 79,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    }
+  ]
+}

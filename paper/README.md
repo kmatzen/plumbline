@@ -3579,3 +3579,31 @@ occluded/borderline outcomes. The original twenty-pass judge remains frozen.
 These test videos were already used for prior correspondence comparisons, so
 this is a declared transfer study, not a fresh untouched benchmark. Moving
 points and uncertain prefix geometry remain limitations for camera-level use.
+
+`tapvid_camera_markers.py` implements that geometry/reference separation.
+`build_tapvid_camera_transfer.py` verifies the original RGB input and camera
+outputs, freezes every planned candidate in `geometry.json`, and only then
+opens the later point/visibility references for scoring. Source queries are
+checked against the original first-visible annotations after geometry is
+frozen. Later annotated positions never enter the fit or projection. The
+reference label cannot change a candidate. Seven targeted tests cover this
+path, including synthetic end-to-end construction, poisoned later track and
+scoring metadata, missing prefixes, occlusion, and borderline labels.
+
+The first completed video, bike-packing, retains all 150 planned method/track/
+lag presentations: 38 far, nine occluded, 18 off-image query projections, 65
+nonpositive-prefix-depth cases, and 20 queries beyond the video. There are no
+close or borderline examples in this video. This class balance is retained;
+the protocol does not replace the video or adjust the threshold. These are
+candidate correspondence references, not camera-failure labels or judge
+results. Both camera outputs and the frozen geometry/export hashes were
+verified locally. The corresponding manifests and geometry are retained
+under `results/tapvid-camera-transfer-v1/`; image panels remain on Anima.
+
+The initial builder import on Anima stopped before creating output because
+its installed package lacks `plumbline.image_evidence`. A pinned copy is loaded
+from this experiment's isolated `geometry-support` directory through a
+process-local package search path. No shared repository or installed package
+was changed. The result records the actual geometry/conventions helper hashes.
+The forty-attempt camera batch continues independently; this first corpus is
+not a substitute for the remaining planned videos or for evaluator validation.
