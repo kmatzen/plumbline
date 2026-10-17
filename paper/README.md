@@ -15,6 +15,36 @@ The synthetic search experiment tests the optimizer, not tracking improvements.
 
 ### Independent point annotations for identity validation
 
+#### Frozen first-visible LK identity check
+
+`probe_tapvid_identity.py` runs native-resolution, independently queried LK
+tracks from each annotation's first visible point. Later annotation positions
+and visibility enter only scoring, after the full candidate track is computed.
+The baseline does not restart after an LK/out-of-image failure. Four rules are
+retained: any available estimate; backward round-trip error at most one native
+pixel; starting-patch grayscale NCC at least 0.8; and both checks. NCC uses a
+17×17 subpixel patch without rotation/scale alignment; borders and textureless
+patches cannot pass. Correctness requires visibility and Euclidean error below
+four pixels after coordinate scaling to 256×256. This is not staticness.
+
+On the ten development videos, macro accepted precision is 54.7%, 62.4%, 96.1%,
+and 97.3%, respectively. The joint rule's macro visible-correct recall is 24.8%.
+All 215 queries and their 11,857 later observations are retained. Raw records and
+the exact executed development runner are in `results/tapvid-davis-v1/`.
+
+Before opening held-out arrays, freeze all four rules without threshold changes.
+The joint rule is the primary selected check; all three alternatives remain
+reported. Primary measurements are per-video accepted precision and
+visible-correct recall, averaged across the 20 held-out videos. Also report
+acceptance coverage and counts of accepted occluded points. Use 20,000 video-level
+bootstrap resamples with seed 677 for descriptive percentile intervals; never
+resample individual point frames as independent evidence. A video with zero
+accepted points has undefined precision, is reported explicitly, and prevents
+an unconditional macro-precision estimate. The script defaults to development;
+held-out evaluation requires `--split held_out`. No held-out results have been
+examined at this protocol freeze. This validation does not authorize a camera-DNF
+claim and does not assess a VLM or a learned identity verifier.
+
 The official [TAP-Vid DAVIS release](https://github.com/google-deepmind/tapnet/blob/730cda1c730877cfedbe01bf87fb1cadb78a565d/tapnet/tapvid/README.md)
 is staged at `/data3/kmatzen/plumbline/research/tapvid-davis-v1/staged` on Anima.
 It contains 30 videos, 1,999 frames, and 650 annotated tracks. These point
