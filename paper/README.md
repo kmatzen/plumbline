@@ -3146,7 +3146,32 @@ Tests check exact nearest-surface cases, independent homogeneous projections
 for every frame, raster visibility away from silhouette boundaries, repeatable
 RGB, and invalid reference rejection. Rounded pixels at a silhouette are not
 substituted for analytic reference visibility. Seven combined planar/layered
-renderer tests pass. Tracking and camera-sensitivity experiments on this scene
-have not yet been run. The next comparison should retain every anchor and
-camera change, report observed-track and exact-reference controls separately,
-and avoid treating finite perturbation magnitude as a functional failure label.
+renderer tests pass.
+
+`probe_layered_camera_control.py` now runs the fixed sequential LK check and
+the unchanged 14-change camera profile on seeds 0 through 9. All 12 anchors,
+24 frames, and both observed-track and exact-visible-reference arms are retained
+in `results/layered-camera-control-v1.json.gz`: 280 profiles and 3,360 slot
+evaluations. The tracker receives only RGB and initial query coordinates.
+Reference visibility and later coordinates enter only the scoring and explicitly
+named oracle arm. No threshold was selected from these results.
+
+Of 2,760 later observations, LK accepted all 2,760: 2,573 were visible and within
+two pixels, 140 were occluded, and 47 were visible but more than two pixels off.
+Nevertheless, all 120 original-camera tracks in each arm were jointly
+compatible. Both signed pitch/yaw changes contradicted all 120 tracks in each
+arm, whereas both signed forward/backward translations contradicted none.
+Signed roll changes contradicted 40 tracks each. Negative lateral translation
+contradicted 100 observed tracks versus 80 oracle tracks; positive lateral
+translation contradicted 40 in both. Vertical translation contradicted all
+120 observed tracks but only 100 oracle tracks in either direction. All 240
+global-gauge slot comparisons preserved the original status.
+
+Thus non-planar scene geometry does not remove the tested directional blind
+spots, even with exact visible correspondences. More contradictions in the
+observed arm are not automatically better: corrupted observations can create
+additional contradictions. This remains one scene/path with correlated texture
+seeds, not a camera-method benchmark or a functional failure label. These
+controls stay outside the manuscript's reported experiments. Six focused tests
+cover the new renderer/probe, including separate missing, occluded, and wrong
+observation accounting and tracking without later reference inputs.
