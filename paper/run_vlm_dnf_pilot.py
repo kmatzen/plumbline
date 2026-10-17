@@ -132,6 +132,17 @@ def parse_response(raw: str, task: str = "dnf") -> tuple[dict | None, str | None
     return response, None
 
 
+def image_size_options(visual_tokens, min_visual_tokens=None):
+    if not 64 <= visual_tokens <= 1280:
+        raise ValueError("visual token budget must be between 64 and 1280")
+    options = {"max_pixels": visual_tokens * 28 * 28}
+    if min_visual_tokens is not None:
+        if not 64 <= min_visual_tokens <= visual_tokens:
+            raise ValueError("minimum visual tokens must be between 64 and the maximum")
+        options["min_pixels"] = min_visual_tokens * 28 * 28
+    return options
+
+
 def run(
     checkpoint: Path,
     image: Path,
@@ -141,6 +152,7 @@ def run(
     quantization: str = "none",
     numeric_preflight_only: bool = False,
     fp32_attention_scores: bool = False,
+    min_visual_tokens: int | None = None,
 ) -> None:
     if task not in {"dnf", "geometry", "source_identity", "description", "crop_description"}:
         raise ValueError("unknown pilot task")
@@ -153,8 +165,7 @@ def run(
     }[task]
     if quantization not in {"none", "nf4"}:
         raise ValueError("unknown quantization")
-    if not 64 <= visual_tokens <= 1280:
-        raise ValueError("visual token budget must be between 64 and 1280")
+    size_options = image_size_options(visual_tokens, min_visual_tokens)
     if output.exists():
         raise ValueError("preserve existing runs; choose a new output file")
     if not checkpoint.is_dir():
@@ -187,7 +198,7 @@ def run(
             "dtype": "float16",
             "quantization": quantization,
             "attention": "eager",
-            "max_pixels": visual_tokens * 28 * 28,
+            **size_options,
             "max_new_tokens": 256,
             "do_sample": False,
         },
@@ -230,7 +241,7 @@ def run(
         save()
         torch.manual_seed(0)
         processor = AutoProcessor.from_pretrained(
-            str(checkpoint), local_files_only=True, max_pixels=visual_tokens * 28 * 28
+            str(checkpoint), local_files_only=True, **size_options
         )
         load_options = {}
         if quantization == "nf4":
@@ -368,6 +379,7 @@ if __name__ == "__main__":
         "--task", choices=("dnf", "geometry", "source_identity", "description", "crop_description"), default="dnf"
     )
     parser.add_argument("--visual-tokens", type=int, default=1280)
+    parser.add_argument("--min-visual-tokens", type=int, default=None)
     parser.add_argument("--quantization", choices=("none", "nf4"), default="none")
     parser.add_argument("--numeric-preflight-only", action="store_true")
     parser.add_argument("--fp32-attention-scores", action="store_true")
@@ -381,4 +393,5 @@ if __name__ == "__main__":
         args.quantization,
         args.numeric_preflight_only,
         args.fp32_attention_scores,
+        args.min_visual_tokens,
     )

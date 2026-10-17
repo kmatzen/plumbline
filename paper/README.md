@@ -456,6 +456,27 @@ is unchanged. The non-weight regression suite passed 1,836 tests, with one
 missing KITTI-bundle skip and six weight-backed tests excluded; that verifies
 software behavior, not the proposed metric's scientific validity.
 
+A matched scale diagnostic is now running in
+`/data3/kmatzen/plumbline/research/source-crops-scale-v1`. It reuses all 12
+original crop files, the exact caption prompt, checkpoint, quantization,
+attention implementation, greedy decoding, and 768-token ceiling. The only
+intended inference-setting change is `--min-visual-tokens 576`, implemented
+through the processor's `min_pixels` argument. This enlarges the same sampled
+image; it does not add scene information. Actual processed grid and token
+counts must be verified, not assumed from the requested minimum.
+
+The updated runner first executes slot 0 without a minimum as a replay control,
+then processes slots 0–11 at the new scale. Its source and attention helper are
+retained in `results/source-crops-scale-v1`. Default arguments preserve the
+previous processor options; tests cover the optional size bounds and reject
+invalid minima before model loading. All results will be retained. The completed
+`default-slot-0.json` replay exactly matches the original processed-input audit,
+raw/parsed response, image, prompt, checkpoint files, settings, and attention
+helper/implementation hashes. Each scaled run still needs comparison against
+the original image/model/prompt/settings before interpreting response
+differences. No scale-comparison result or accuracy improvement is claimed yet.
+This remains a development diagnostic, not held-out validation.
+
 #### Reference timing sensitivity
 
 `probe_tum_pose_timing.py` reproduces the retained reference poses from the

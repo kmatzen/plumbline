@@ -3,7 +3,24 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-from paper.run_vlm_dnf_pilot import audit_processed_inputs, parse_response, run
+from paper.run_vlm_dnf_pilot import audit_processed_inputs, image_size_options, parse_response, run
+
+
+def test_image_size_options_preserve_default_and_bound_scale_control():
+    assert image_size_options(768) == {"max_pixels": 768 * 28 * 28}
+    assert image_size_options(768, 576) == {
+        "max_pixels": 768 * 28 * 28, "min_pixels": 576 * 28 * 28,
+    }
+    for maximum, minimum in [(63, None), (1281, None), (768, 769), (768, 0)]:
+        with pytest.raises(ValueError):
+            image_size_options(maximum, minimum)
+
+
+def test_invalid_minimum_is_rejected_before_model_loading(tmp_path):
+    with pytest.raises(ValueError, match="minimum visual"):
+        run(Path("missing"), Path("missing.png"), tmp_path / "result.json",
+            visual_tokens=768, min_visual_tokens=900)
+    assert not (tmp_path / "result.json").exists()
 
 
 @pytest.mark.parametrize("task", ["description", "crop_description"])
