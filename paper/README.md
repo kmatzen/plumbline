@@ -3735,3 +3735,35 @@ particular, balanced three-class accuracy is undefined for the DA3 subgroup
 and the 60-frame subgroup. These differences must remain visible in the final
 analysis rather than being hidden by aggregate accuracy. Judge inference is
 still running; no parameters or thresholds have been changed.
+
+### Exploratory RGB-track baseline on camera projections
+
+`analyze_camera_transfer_lk.py` adds a separate comparison while the frozen
+judge inference continues. This baseline was added after the reference counts
+and partial base-model responses were observed; it is not preregistered. It
+does not change the combined corpus, VLM inputs, or experiment thresholds.
+It reuses the saved RGB-only LK observations and their existing checks:
+forward/backward error at most one native pixel and source-patch NCC at least
+0.8. For an accepted observation, distance from the camera-projected pixel to
+the tracked pixel is classified as close at at most two pixels, far at at
+least eight pixels, and uncertain otherwise. Missing or rejected observations
+are uncertain, not far or occluded. No threshold sweep was performed.
+
+The tracker is hash-bound to every per-video construction manifest. Only RGB
+coordinates and checks enter its predictions; later annotation metadata is
+excluded. All predictions are fixed before reference labels enter scoring.
+The baseline shares early tracking evidence with the marker fit, but its later
+image observations were not used to fit or refit those points. This dependence
+and the possibility of tracking errors remain limitations.
+
+The saved `exploratory-lk-baseline-v1.json` retains all 2,610 slots. On the 698
+labeled presentations it answers 162 (23.2% coverage), with 160 correct and two
+incorrect (98.8% accuracy conditional on answering). It abstains on 536. Of 16
+close predictions, 15 are correct; it detects 15 of the 30 close references.
+It makes no occlusion predictions. These are correspondence metrics, not
+camera quality or DNF. The original patch-only gate answers 14 labeled cases,
+nine correctly, while the training-majority far baseline scores 498/698 but
+detects no close or occluded cases. These comparisons require both coverage
+and class-specific reporting. Nine new tests check reference-label separation,
+threshold boundaries, missing-evidence abstention, source binding, and duplicate
+frame rejection. VLM transfer results remain pending; no paper claims are added.
