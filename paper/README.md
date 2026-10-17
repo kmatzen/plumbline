@@ -3767,3 +3767,13 @@ detects no close or occluded cases. These comparisons require both coverage
 and class-specific reporting. Nine new tests check reference-label separation,
 threshold boundaries, missing-evidence abstention, source binding, and duplicate
 frame rejection. VLM transfer results remain pending; no paper claims are added.
+
+The final transfer analysis accepts `--tracker` to recompute this exploratory
+baseline from its hash-bound input, rather than trusting saved aggregate scores.
+It reports each arm on the same two labeled subsets: RGB-track answered and
+RGB-track abstained. Missing and borderline reference labels remain outside
+accuracy scoring and inside the planned roster. This descriptive stratification
+was added before completed adapted-model responses; it is not a trained fallback
+policy or evidence of camera-level failure detection. Nineteen targeted analysis
+and baseline tests pass, including paired subset membership and rejection of an
+incomplete baseline roster. The running VLM experiment is unchanged.

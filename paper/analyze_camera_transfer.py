@@ -23,7 +23,7 @@ def availability(records):
                                                  if r["status"] == "unavailable")))
 
 
-def analyze(report, corpus, development):
+def analyze(report, corpus, development, lk_baseline=None):
     if (report["status"] != "complete" or report["partition"] != "test"
             or report.get("application") != "camera_projection_transfer"
             or corpus.get("application") != "camera_projection_transfer"):
@@ -70,6 +70,22 @@ def analyze(report, corpus, development):
             raise ValueError("patch baseline policy changed")
         arms["source_patch_ncc"].append(dict(common, answer=answer))
         arms["training_majority"].append(dict(common, answer=majority))
+    lk_index = None
+    if lk_baseline is not None:
+        predictions = lk_baseline["predictions"]
+        lk_index = {p["id"]:p for p in predictions}
+        if (len(predictions) != len(corpus["records"])
+                or len(lk_index) != len(predictions)
+                or set(lk_index) != {r["id"] for r in corpus["records"]}):
+            raise ValueError("exploratory baseline roster mismatch")
+        for row in corpus["records"]:
+            p = lk_index[row["id"]]
+            if (p["sequence"] != row["sequence"] or p["model"] != row["model"]
+                    or p["answer"] not in {"close", "far", "uncertain"}
+                    or (row["geometry_status"] != "renderable" and p["answer"] != "uncertain")):
+                raise ValueError("exploratory baseline identity or answer mismatch")
+        arms["exploratory_rgb_track"] = [dict(id=r["id"], sequence=r["sequence"], model=r["model"],
+            lag=r["lag"], target=r["label"], answer=lk_index[r["id"]]["answer"]) for r in selected.values()]
     names = sorted(corpus["partitions"])
     planned = len(corpus["records"])
     summaries = {}
@@ -83,6 +99,10 @@ def analyze(report, corpus, development):
             macro_accuracy_on_videos_with_labels=sum(observed)/len(observed) if observed else None,
             videos_without_labeled_examples=[n for n,v in per_video.items() if not v["examples"]],
             answered_fraction_of_planned=summary["answered_examples"]/planned if planned else None)
+        if lk_index is not None:
+            summaries[arm]["exploratory_rgb_track_strata"] = {
+                label: metrics([r for r in rows if (lk_index[r["id"]]["answer"] != "uncertain") == answered])
+                for label, answered in (("track_answered", True), ("track_abstained", False))}
     base = {n:v["accuracy_all_examples"] for n,v in summaries["base"]["per_video"].items() if v["examples"]}
     adapted = {n:summaries["adapted"]["per_video"][n]["accuracy_all_examples"] for n in base}
     return dict(scope="independently labeled projected-position correspondence accuracy; not camera quality or DNF",
@@ -95,7 +115,7 @@ def analyze(report, corpus, development):
                 limitations="previously evaluated videos; dependent frames/tracks/methods grouped by video; accuracy excludes unavailable and borderline references, whose counts remain reported; absent reference classes make balanced accuracy unavailable; no camera-level DNF labels; NCC baseline added after first-video label inspection")
 
 
-def run(report_path, training_path, corpus_path, development_path, evaluator_path):
+def run(report_path, training_path, corpus_path, development_path, evaluator_path, tracker_path=None):
     report, training, corpus, development = [json.loads(p.read_text()) for p in
                                             (report_path, training_path, corpus_path, development_path)]
     if training["status"] != "complete" or training.get("epochs") != 20:
@@ -109,7 +129,15 @@ def run(report_path, training_path, corpus_path, development_path, evaluator_pat
         raise ValueError("analysis provenance mismatch")
     if report["evaluation_export_sha256"] != corpus["exports_sha256"]["test"]:
         raise ValueError("evaluation export mismatch")
-    result = analyze(report, corpus, development)
+    baseline = None
+    if tracker_path is not None:
+        from paper.analyze_camera_transfer_lk import run as run_lk
+        baseline = run_lk(corpus_path, tracker_path)
+    result = analyze(report, corpus, development, baseline)
+    if baseline is not None:
+        result["exploratory_rgb_track_comparison"] = dict(
+            policy=baseline["policy"], timing=baseline["timing"], source_sha256=baseline["source_sha256"],
+            interpretation="descriptive same-example comparison stratified by the fixed RGB-track decision; no fitted fallback rule or camera-level DNF claim; strata analysis added before completed adapted-model responses")
     result["source_sha256"] = {name:digest(path) for name,path in
         (("report",report_path),("training",training_path),("corpus",corpus_path),
          ("development",development_path),("evaluator",evaluator_path),("analysis",Path(__file__)),
@@ -122,8 +150,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("report", "training", "corpus", "development", "evaluator", "output"):
         parser.add_argument(name, type=Path)
+    parser.add_argument("--tracker", type=Path, help="Recompute the separately marked exploratory RGB-track baseline")
     args = parser.parse_args()
-    result = run(args.report, args.training, args.corpus, args.development, args.evaluator)
+    result = run(args.report, args.training, args.corpus, args.development, args.evaluator, args.tracker)
     with args.output.open("x") as stream:
         stream.write(json.dumps(result, indent=2, allow_nan=False)+"\n")
     print(json.dumps(result["roster"], indent=2))

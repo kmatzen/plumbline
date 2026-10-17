@@ -77,6 +77,27 @@ def test_no_labeled_presentations_is_not_perfect_accuracy():
         assert arm["answered_fraction_of_planned"] == 0
 
 
+def test_exploratory_track_strata_compare_same_labeled_examples():
+    report, corpus, dev = fixture()
+    predictions = [dict(id=r["id"], sequence=r["sequence"], model=r["model"], answer="uncertain")
+                   for r in corpus["records"]]
+    predictions[0]["answer"] = "far"
+    result = analyze(report, corpus, dev, dict(predictions=predictions))
+    for arm in result["arms"].values():
+        strata = arm["exploratory_rgb_track_strata"]
+        assert strata["track_answered"]["examples"] == 1
+        assert strata["track_abstained"]["examples"] == 1
+    adapted = result["arms"]["adapted"]["exploratory_rgb_track_strata"]
+    assert adapted["track_answered"]["uncertain_examples"] == 1
+    assert adapted["track_abstained"]["accuracy_all_examples"] == 0
+    baseline = result["arms"]["exploratory_rgb_track"]["exploratory_rgb_track_strata"]
+    assert baseline["track_answered"]["accuracy_all_examples"] == 1
+    assert baseline["track_abstained"]["answer_coverage"] == 0
+    predictions.pop()
+    with pytest.raises(ValueError, match="roster"):
+        analyze(report, corpus, dev, dict(predictions=predictions))
+
+
 @pytest.mark.parametrize("change",["pixel","target","parser","baseline","roster","counts"])
 def test_corrupted_accuracy_comparison_rejected(change):
     report, corpus, dev = fixture()
