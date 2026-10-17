@@ -196,6 +196,18 @@ their hashes are in the manifest. A walking-static development run has been
 launched separately to test the stationary-camera/moving-foreground case; no
 result or usability label is implied by that launch.
 
+`build_source_preview.py MANIFEST DATA_ROOT NEW_OUTPUT` verifies the source-image
+hashes before staging frames and encoding a source-only MP4. Playback uses the
+median sampling interval; exact timestamps are retained and remain authoritative
+for temporal analysis. The walking-XYZ preview on Anima is
+`/data3/kmatzen/plumbline/research/dense-dnf/walking-xyz-source-v1/`: ffprobe
+confirmed 90 frames at 640x480, with a duration of 9.001708 s. Maximum frame-time
+displacement from recorded capture timestamps is 0.084282 s. Its SHA-256 is
+`4007ff3039d3dc51c6854b5d5edea6f3ba91753e32602f9a447ba663167b148d`.
+The preview and retained PNG frames are for context, not evidence of tracker
+quality by themselves. A timing-faithful candidate overlay is still needed for
+the functional-DNF annotation study.
+
 ## Human diagnostic-review pilot
 
 `build_review_study.py` creates 150 native-input comparisons and 15 hidden
