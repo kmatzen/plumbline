@@ -25,10 +25,18 @@ def select_camera_evaluation(corpus, train, manifest, development):
     if development is None or manifest["prompt"] != development["prompt"]:
         raise ValueError("camera inference requires the original frozen prompt")
     records = manifest["records"]
-    expected = {(m, s, f) for m in ("dage", "da3") for s in range(12) for f in (30, 60, 89)}
-    if (len(records) != 72 or manifest["planned_presentations"] != 72
-            or {(r["model"], r["slot"], r["frame"]) for r in records} != expected
-            or len({r["id"] for r in records}) != 72):
+    if manifest.get('application') == 'movi_marker_development':
+        expected = {(n, m, s, f) for n in ('3835', '5397', '4385', '4970')
+                    for m in ('dage', 'da3') for s in range(64) for f in (12, 18, 23)}
+        actual = {(r['sequence'], r['method'], r['track'], r['frame']) for r in records}
+        if any(r['source_frame'] != 0 or r['source_xy'] != [12+32*(r['track']%8), 12+32*(r['track']//8)] for r in records):
+            raise ValueError('fixed MOVi source grid changed')
+    else:
+        expected = {(m, s, f) for m in ("dage", "da3") for s in range(12) for f in (30, 60, 89)}
+        actual = {(r["model"], r["slot"], r["frame"]) for r in records}
+    if (len(records) != len(expected) or manifest["planned_presentations"] != len(expected)
+            or actual != expected
+            or len({r["id"] for r in records}) != len(expected)):
         raise ValueError("complete camera presentation roster required")
     if set(train["training_ids"]) & {r["id"] for r in records}:
         raise ValueError("camera IDs overlap training")

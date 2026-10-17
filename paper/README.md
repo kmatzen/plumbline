@@ -4016,3 +4016,33 @@ marker audit. The manuscript is unchanged.
 Reference implementations:
 [Kubric point tracking](https://raw.githubusercontent.com/google-research/kubric/main/challenges/point_tracking/dataset.py)
 and [MOVi-E format](https://raw.githubusercontent.com/google-research/kubric/main/challenges/movi/movi_e.py).
+
+### Frozen visual-judge comparison on MOVi markers
+
+`build_movi_judge_corpus.py` renders all 944 available proposals from the fixed
+1,536-slot roster. It opens only verified RGB archives and frozen geometry,
+not reference arrays. The exported inference rows contain only ID, image path,
+and the original correspondence prompt. Panels stay on Anima; their hashes,
+the complete roster, and the export are archived under
+`results/movi-camera-pilot-v1/judge-corpus-v1`.
+
+The RGB baseline uses the saved later LK track, forward-backward error <=1
+pixel, and source-patch NCC >=0.8. It answers close at <=2 pixels and far at
+>=8 pixels; otherwise it abstains. This gives 337 close, 6 far, and 1,193
+uncertain responses across all planned slots. Those are predictions, not
+accuracy figures. Thresholds are unchanged from the earlier comparison.
+
+The evaluator's unlabeled-camera mode now also checks the exact four-scene,
+two-method, 64-slot, three-query MOVi roster and fixed source grid. The prior
+72-example camera mode remains supported. Ten targeted tests pass, including
+rejection of missing proposals and targets in inference rows.
+
+A fresh base/adapted run was launched after checking GPU availability and
+confirmed live with initial responses. It uses the completed twenty-pass
+adapter, unchanged prompt, original quantized arithmetic, and both arms on
+identical images. There are no updates, selection, or calibration reads.
+Outputs are under Anima's
+`/data3/kmatzen/plumbline/research/movi-camera-pilot-v1/judge-v1`.
+The comparison is developmental and was added after reference audits; it is
+not a held-out validation claim. Reference visibility remains diagnostic,
+and correspondence agreement cannot establish functional camera DNF.
