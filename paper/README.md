@@ -642,6 +642,37 @@ substantially on two clips. Neither these values nor their ordering establish
 human preference, camera accuracy, or functional DNF. Three sequences and two
 models remain development evidence, not a validated comparative benchmark.
 
+### DAVIS author-review pilot
+
+The eight-presentation pilot contains six outputs (DAGE and DA3 on the three
+development clips) and two repeated presentations. The public packet hides method
+names and shows source video plus reference-free trajectory diagnostics. Video
+playback is 10 displayed frames per second, not known capture timing. This packet
+does not show a reconstructed scene or demonstrate successful static-content
+placement, so insufficient evidence is an expected and useful response.
+
+The available reviewer is a project author. Responses can test the instructions,
+evidence sufficiency, and within-reviewer consistency; they cannot establish
+independent validation, evaluator accuracy, or a generalizable method ranking.
+No human responses have been incorporated yet.
+
+Serve only the generated `public/` directory. Keep `private/study.json` and its
+method mapping out of the browser. The version-one packet is retained locally at
+`tmp/davis-usability-pilot-v1`; its study record is archived under
+`paper/results/davis/author-review-pilot-v1/`. Do not rebuild over a live study.
+
+Validate a downloaded partial or complete export with:
+
+```sh
+uv run python -m paper.analyze_davis_review \
+  paper/results/davis/author-review-pilot-v1/study.json downloaded-responses.json
+```
+
+Keep the raw export unchanged. The analyzer reports presentation counts separately
+from unique outputs, treats conflicting repeats as inconsistent, and distinguishes
+unanswered presentations from explicit abstentions. It does not turn these answers
+into ground-truth labels or calculate confidence intervals from repeated displays.
+
 ### ORE comparison prerequisites
 
 Chen et al., [Object Reprojection Error (NeurIPS 2023)](https://papers.nips.cc/paper_files/paper/2023/file/eb206443c93d07da8b1974b768d8a0d4-Paper-Datasets_and_Benchmarks.pdf)

@@ -1,0 +1,233 @@
+{
+  "study_id": "53b6ef567f37beac578d",
+  "seed": 914,
+  "assets": [
+    {
+      "asset_id": "734fd7f9849a06de3da8",
+      "run": "paper/results/davis/davis-dage-bear-v2",
+      "sequence": "bear",
+      "manifest_sha256": "14c3ba76d48870bd32149857506ebb42f45372a2641d6bd4b4d230c8838a094c",
+      "image_sha256": "2819eff34400eb9095c083b0d83a2d4709a58b30c2162cf16aee6fca85674b4d",
+      "video_sha256": "adfb9d644220e6fb515f0ae69ba0ff7606400547d30f786348e23a7ba01c3fd3",
+      "ffmpeg_command": [
+        "ffmpeg",
+        "-nostdin",
+        "-n",
+        "-loglevel",
+        "error",
+        "-framerate",
+        "10",
+        "-i",
+        "tmp/davis-usability-pilot-v1/private/734fd7f9849a06de3da8/source/%06d.jpg",
+        "-frames:v",
+        "60",
+        "-c:v",
+        "libx264",
+        "-crf",
+        "18",
+        "-pix_fmt",
+        "yuv420p",
+        "-movflags",
+        "+faststart",
+        "tmp/davis-usability-pilot-v1/public/734fd7f9849a06de3da8.mp4"
+      ]
+    },
+    {
+      "asset_id": "38e60b66064435c4af52",
+      "run": "paper/results/davis/davis-da3-bear-v2",
+      "sequence": "bear",
+      "manifest_sha256": "0949cefa4468cdc2dcd4cc032ad9f548e7d4f5ece5eb8ee590cf9b76f83d5954",
+      "image_sha256": "f45d0935b483e37661aa9c41cb5041ca694b83af0bcbdd8c1ac94c5f36fdc71c",
+      "video_sha256": "adfb9d644220e6fb515f0ae69ba0ff7606400547d30f786348e23a7ba01c3fd3",
+      "ffmpeg_command": [
+        "ffmpeg",
+        "-nostdin",
+        "-n",
+        "-loglevel",
+        "error",
+        "-framerate",
+        "10",
+        "-i",
+        "tmp/davis-usability-pilot-v1/private/38e60b66064435c4af52/source/%06d.jpg",
+        "-frames:v",
+        "60",
+        "-c:v",
+        "libx264",
+        "-crf",
+        "18",
+        "-pix_fmt",
+        "yuv420p",
+        "-movflags",
+        "+faststart",
+        "tmp/davis-usability-pilot-v1/public/38e60b66064435c4af52.mp4"
+      ]
+    },
+    {
+      "asset_id": "1199e98d49671be50caf",
+      "run": "paper/results/davis/davis-dage-bmx-bumps-v1",
+      "sequence": "bmx-bumps",
+      "manifest_sha256": "d01eea207bc35105dc9592d39f79f42759dcee38e1180a2ae0392d1fd29decc4",
+      "image_sha256": "758261461209ef4e7975ff54d3cd5968d3b1ce97cc867b2897f53dc1d3dd3f38",
+      "video_sha256": "14755197ccc9a5c6d7a479feb7004a33e64e071d52e72dc7dde23fd4f45897bd",
+      "ffmpeg_command": [
+        "ffmpeg",
+        "-nostdin",
+        "-n",
+        "-loglevel",
+        "error",
+        "-framerate",
+        "10",
+        "-i",
+        "tmp/davis-usability-pilot-v1/private/1199e98d49671be50caf/source/%06d.jpg",
+        "-frames:v",
+        "60",
+        "-c:v",
+        "libx264",
+        "-crf",
+        "18",
+        "-pix_fmt",
+        "yuv420p",
+        "-movflags",
+        "+faststart",
+        "tmp/davis-usability-pilot-v1/public/1199e98d49671be50caf.mp4"
+      ]
+    },
+    {
+      "asset_id": "dd8b71ed6e5e53b3a2d5",
+      "run": "paper/results/davis/davis-da3-bmx-bumps-v1",
+      "sequence": "bmx-bumps",
+      "manifest_sha256": "767b6d507fc1b2409c6795cf813621c498dbc99e95691698437149b470d94e9a",
+      "image_sha256": "723c00da68cc2398f488b07049b7d814a7f8c530f6984b2c09531f65edf7040b",
+      "video_sha256": "14755197ccc9a5c6d7a479feb7004a33e64e071d52e72dc7dde23fd4f45897bd",
+      "ffmpeg_command": [
+        "ffmpeg",
+        "-nostdin",
+        "-n",
+        "-loglevel",
+        "error",
+        "-framerate",
+        "10",
+        "-i",
+        "tmp/davis-usability-pilot-v1/private/dd8b71ed6e5e53b3a2d5/source/%06d.jpg",
+        "-frames:v",
+        "60",
+        "-c:v",
+        "libx264",
+        "-crf",
+        "18",
+        "-pix_fmt",
+        "yuv420p",
+        "-movflags",
+        "+faststart",
+        "tmp/davis-usability-pilot-v1/public/dd8b71ed6e5e53b3a2d5.mp4"
+      ]
+    },
+    {
+      "asset_id": "a7283045bc340d32226e",
+      "run": "paper/results/davis/davis-dage-boat-v1",
+      "sequence": "boat",
+      "manifest_sha256": "78d768058c27b88177a92f0c68bada773c8f5b377cb246d080e5f8c21804d8a3",
+      "image_sha256": "e7601e841eba16ecabcf9d8f7e887ce0c637465f49f1828375acb16703e07171",
+      "video_sha256": "912dc2fccfe7164da0ef791ed03907ea49b0ab0b82734644e05a0fbc684931fb",
+      "ffmpeg_command": [
+        "ffmpeg",
+        "-nostdin",
+        "-n",
+        "-loglevel",
+        "error",
+        "-framerate",
+        "10",
+        "-i",
+        "tmp/davis-usability-pilot-v1/private/a7283045bc340d32226e/source/%06d.jpg",
+        "-frames:v",
+        "60",
+        "-c:v",
+        "libx264",
+        "-crf",
+        "18",
+        "-pix_fmt",
+        "yuv420p",
+        "-movflags",
+        "+faststart",
+        "tmp/davis-usability-pilot-v1/public/a7283045bc340d32226e.mp4"
+      ]
+    },
+    {
+      "asset_id": "af1d27e2e82ce6afc48e",
+      "run": "paper/results/davis/davis-da3-boat-v1",
+      "sequence": "boat",
+      "manifest_sha256": "3ccfce1b92bc63f353e98d67941d2969045c375ac23d685c556114254d615d8c",
+      "image_sha256": "bae345cf4065f842fc8e92f616fa29af0f06f61ffaae720d7b115bc340f5e992",
+      "video_sha256": "912dc2fccfe7164da0ef791ed03907ea49b0ab0b82734644e05a0fbc684931fb",
+      "ffmpeg_command": [
+        "ffmpeg",
+        "-nostdin",
+        "-n",
+        "-loglevel",
+        "error",
+        "-framerate",
+        "10",
+        "-i",
+        "tmp/davis-usability-pilot-v1/private/af1d27e2e82ce6afc48e/source/%06d.jpg",
+        "-frames:v",
+        "60",
+        "-c:v",
+        "libx264",
+        "-crf",
+        "18",
+        "-pix_fmt",
+        "yuv420p",
+        "-movflags",
+        "+faststart",
+        "tmp/davis-usability-pilot-v1/public/af1d27e2e82ce6afc48e.mp4"
+      ]
+    }
+  ],
+  "presentations": [
+    {
+      "presentation_id": "cee787d10359242f0012",
+      "asset_id": "af1d27e2e82ce6afc48e",
+      "repeat": false
+    },
+    {
+      "presentation_id": "be50e149d0398273587d",
+      "asset_id": "dd8b71ed6e5e53b3a2d5",
+      "repeat": false
+    },
+    {
+      "presentation_id": "f404e63047cedc7234ab",
+      "asset_id": "734fd7f9849a06de3da8",
+      "repeat": false
+    },
+    {
+      "presentation_id": "707b7ea3811dc053824d",
+      "asset_id": "1199e98d49671be50caf",
+      "repeat": false
+    },
+    {
+      "presentation_id": "77ea198ae7af283b7f42",
+      "asset_id": "1199e98d49671be50caf",
+      "repeat": true
+    },
+    {
+      "presentation_id": "840f6bb77f46a5604746",
+      "asset_id": "a7283045bc340d32226e",
+      "repeat": false
+    },
+    {
+      "presentation_id": "4d07fe754d26e8be7e5c",
+      "asset_id": "734fd7f9849a06de3da8",
+      "repeat": true
+    },
+    {
+      "presentation_id": "1f45461341858c2f2fee",
+      "asset_id": "38e60b66064435c4af52",
+      "repeat": false
+    }
+  ],
+  "html_sha256": "ec5e47732a5308e39d4dc35882ce15803b13275f25ecc5b2b3531f3f4917c3f3",
+  "display_fps": 10,
+  "capture_timestamps": null,
+  "scope": "project-author development pilot; not independent validation",
+  "repeat_policy": "repeat presentations are reliability checks, not independent labels"
+}
