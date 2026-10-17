@@ -35,3 +35,13 @@ def test_geometry_verdict_is_not_a_dnf_label():
     assert parse_response(json.dumps(row), "dnf") == (None, "invalid_verdict")
     row["verdict"] = "usable"
     assert parse_response(json.dumps(row), "geometry") == (None, "invalid_verdict")
+
+
+def test_source_identity_does_not_accept_camera_verdicts_or_unknown_panels():
+    row = {"verdict": "identifiable", "reason": "marked beam", "evidence_panels": ["detail_crop"]}
+    assert parse_response(json.dumps(row), "source_identity") == (row, None)
+    assert parse_response(json.dumps(row), "dnf") == (None, "invalid_verdict")
+    row["evidence_panels"] = ["trajectory"]
+    assert parse_response(json.dumps(row), "source_identity") == (None, "invalid_evidence_panels")
+    row["verdict"] = "usable"
+    assert parse_response(json.dumps(row), "source_identity") == (None, "invalid_verdict")

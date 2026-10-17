@@ -275,6 +275,25 @@ related-work coverage and actual camera experiments remain outstanding.
 
 #### Source-track comprehension pilot
 
+A separate source-identity VLM pilot uses the first frame of each of these three
+examples. It asks only what physical detail the cyan circle marks, or to abstain;
+it explicitly prohibits staticness, motion, camera-quality, and DNF judgments
+from a single frame. The task is not temporal correspondence validation. The
+existing pinned Qwen2.5-VL-3B checkpoint was run on Anima at the previously used
+768 visual-token budget, fp16/eager attention, greedy decoding, and a 256-token
+response limit. No model downloads, prompt retries, or answer repairs occurred.
+
+All three attempts completed. Each raw answer abstains because the target is
+small and blurred. Each also encloses its JSON in Markdown fences and therefore
+fails the unchanged strict parser. No accepted identity labels, static-region
+labels, or DNF decisions are produced. These three abstentions do not establish
+model accuracy or that the physical details are objectively unidentifiable;
+human answers are still absent. The raw responses and model, prompt, input,
+runtime, and runner hashes are retained under `paper/results/source-identity-v1/`.
+Downloaded records were checked against the local runner and exact input-image
+hashes. The source-identity schema rejects camera verdicts and unknown panel
+names, separately from the older geometry and DNF tasks.
+
 `build_track_review.py` generates three source-only videos from the first three
 nonempty first-frame grid slots of the retained walking-XYZ tracks. Selection
 does not inspect later survival, poses, fits, or error scores. Each 18-second
