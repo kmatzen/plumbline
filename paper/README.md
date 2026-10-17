@@ -559,7 +559,48 @@ recognizing missing evidence, and explaining measured contradictions. Semantic
 judgments still need independent annotation; a VLM must not override measured
 point-line distances or turn low residuals into proof of camera usability.
 
-### ORE prerequisites for comparative experiments
+### Expanded DAVIS development pilot and annotation-assisted regions
+
+The next two entries in the recorded training list, `bmx-bumps` and `boat`, were
+run with the same DAGE checkpoint, first-60-frame selection, resolution, and
+precision as `bear`. Both completed. Their prediction and execution manifests
+are retained in `results/davis/davis-dage-bmx-bumps-v1/` and
+`results/davis/davis-dage-boat-v1/`. All 120 additional source-frame hashes and
+both prediction hashes were verified before image analysis. Neither run has
+a functional-usability label. The validation split remains unused for inference.
+
+Each clip contributes the same 28 frame pairs. The BMX and boat runs yield
+11,626 and 18,258 mutual SIFT matches, respectively. This is still a three-clip,
+one-method development sample, not a comparative benchmark.
+
+`stage_davis_masks.py` stages official instance masks separately from model
+inputs and checks that archive image bytes match the run. `analyze_davis_regions.py`
+partitions the existing correspondences without reselecting them. It follows
+the official DAVIS encoding (0 background, positive non-255 object IDs, 255
+void). Background is not verified static, and object membership does not imply
+motion. This analysis uses human dataset annotations and must not be reported
+as an automatic, annotation-free evaluator.
+
+| Clip | Both-background matches | Same-object matches | Background median of pair medians | Same-object median of pair medians |
+| --- | ---: | ---: | ---: | ---: |
+| bear | 20,746 | 1,717 | 0.000643 | 0.002344 |
+| bmx-bumps | 11,034 | 574 | 0.001391 | 0.012484 |
+| boat | 15,699 | 2,500 | 0.000297 | 0.000248 |
+
+Residuals are in normalized camera coordinates under predicted calibration.
+Cross-region counts are 9, 18, and 59; these are retained separately. None of
+these clips has void/outside matches under nearest-pixel sampling. These
+descriptive summaries neither validate the camera estimates nor provide DNF
+thresholds. In particular, the object-region residual is lower in `boat`, so
+discarding annotated objects is not uniformly supported even in this sample.
+
+Mask manifests and region summaries are retained with each run. Masks remain
+local and on Anima, not redistributed. An early boat mask staging linked to its
+then-running manifest; it is preserved remotely but excluded from analysis.
+The used boat `masks-v2` staging was made after completion, and the staging
+script now rejects unfinished runs explicitly.
+
+### ORE requirements
 
 Chen et al., [Object Reprojection Error (NeurIPS 2023)](https://papers.nips.cc/paper_files/paper/2023/file/eb206443c93d07da8b1974b768d8a0d4-Paper-Datasets_and_Benchmarks.pdf)
 already evaluate trajectories without reference camera poses. This is a required

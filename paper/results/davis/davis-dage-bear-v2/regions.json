@@ -1,0 +1,737 @@
+{
+  "scope": "annotation-assisted region analysis, not automatic motion masks or DNF",
+  "source_manifest_sha256": "14c3ba76d48870bd32149857506ebb42f45372a2641d6bd4b4d230c8838a094c",
+  "evidence_sha256": "660c945972fbaffb1b11a818015e721b3e89f0026ee9039607232b1950dc51f5",
+  "masks_manifest_sha256": "c98843dd37bdd12b8575f9b6474e66e661f4b63ef0cccfe23507ba00e83ba705",
+  "script_sha256": "02cf2456e19cbf823af6aa774956d0ee7723b029ffc4a1ae343e644853400833",
+  "pairs": [
+    {
+      "a": 0,
+      "b": 1,
+      "groups": {
+        "both_background": {
+          "count": 924,
+          "finite_count": 924,
+          "median": 0.00019535555331398906
+        },
+        "same_annotated_object": {
+          "count": 78,
+          "finite_count": 78,
+          "median": 0.000881699049235872
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 5,
+      "b": 6,
+      "groups": {
+        "both_background": {
+          "count": 953,
+          "finite_count": 953,
+          "median": 0.0005471935391339094
+        },
+        "same_annotated_object": {
+          "count": 78,
+          "finite_count": 78,
+          "median": 0.00045108192553571945
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 10,
+      "b": 11,
+      "groups": {
+        "both_background": {
+          "count": 895,
+          "finite_count": 895,
+          "median": 0.00011267518479819916
+        },
+        "same_annotated_object": {
+          "count": 83,
+          "finite_count": 83,
+          "median": 0.001091270204470021
+        },
+        "cross_region": {
+          "count": 1,
+          "finite_count": 1,
+          "median": 0.0001359775056659101
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 15,
+      "b": 16,
+      "groups": {
+        "both_background": {
+          "count": 914,
+          "finite_count": 914,
+          "median": 0.00010528022205253937
+        },
+        "same_annotated_object": {
+          "count": 112,
+          "finite_count": 112,
+          "median": 0.00029397505860436694
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 20,
+      "b": 21,
+      "groups": {
+        "both_background": {
+          "count": 918,
+          "finite_count": 918,
+          "median": 0.00016380892991335564
+        },
+        "same_annotated_object": {
+          "count": 105,
+          "finite_count": 105,
+          "median": 0.0020784176033470116
+        },
+        "cross_region": {
+          "count": 1,
+          "finite_count": 1,
+          "median": 0.00046776444396370344
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 25,
+      "b": 26,
+      "groups": {
+        "both_background": {
+          "count": 865,
+          "finite_count": 865,
+          "median": 0.00022279332935656746
+        },
+        "same_annotated_object": {
+          "count": 107,
+          "finite_count": 107,
+          "median": 0.000260282520413704
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 30,
+      "b": 31,
+      "groups": {
+        "both_background": {
+          "count": 866,
+          "finite_count": 866,
+          "median": 0.0004541082241382459
+        },
+        "same_annotated_object": {
+          "count": 127,
+          "finite_count": 127,
+          "median": 0.001338692665379518
+        },
+        "cross_region": {
+          "count": 2,
+          "finite_count": 2,
+          "median": 0.00020469523107859362
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 35,
+      "b": 36,
+      "groups": {
+        "both_background": {
+          "count": 935,
+          "finite_count": 935,
+          "median": 0.00018187362365430223
+        },
+        "same_annotated_object": {
+          "count": 105,
+          "finite_count": 105,
+          "median": 0.0023435478954153474
+        },
+        "cross_region": {
+          "count": 1,
+          "finite_count": 1,
+          "median": 0.0010907984775935307
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 40,
+      "b": 41,
+      "groups": {
+        "both_background": {
+          "count": 842,
+          "finite_count": 842,
+          "median": 8.011537778128576e-05
+        },
+        "same_annotated_object": {
+          "count": 114,
+          "finite_count": 114,
+          "median": 0.0011277733273629812
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 45,
+      "b": 46,
+      "groups": {
+        "both_background": {
+          "count": 857,
+          "finite_count": 857,
+          "median": 0.00015305030367653661
+        },
+        "same_annotated_object": {
+          "count": 122,
+          "finite_count": 122,
+          "median": 0.00016967468996926965
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 50,
+      "b": 51,
+      "groups": {
+        "both_background": {
+          "count": 845,
+          "finite_count": 845,
+          "median": 0.0002936673872270272
+        },
+        "same_annotated_object": {
+          "count": 143,
+          "finite_count": 143,
+          "median": 0.0004323139842376019
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 55,
+      "b": 56,
+      "groups": {
+        "both_background": {
+          "count": 882,
+          "finite_count": 882,
+          "median": 0.0004605473685667264
+        },
+        "same_annotated_object": {
+          "count": 115,
+          "finite_count": 115,
+          "median": 0.00012525581999408582
+        },
+        "cross_region": {
+          "count": 1,
+          "finite_count": 1,
+          "median": 0.0003049868850035185
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 0,
+      "b": 10,
+      "groups": {
+        "both_background": {
+          "count": 706,
+          "finite_count": 706,
+          "median": 0.0006257611258985139
+        },
+        "same_annotated_object": {
+          "count": 9,
+          "finite_count": 9,
+          "median": 0.006489689015594036
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 5,
+      "b": 15,
+      "groups": {
+        "both_background": {
+          "count": 782,
+          "finite_count": 782,
+          "median": 0.0014230586350265275
+        },
+        "same_annotated_object": {
+          "count": 32,
+          "finite_count": 32,
+          "median": 0.005234685829193955
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 10,
+      "b": 20,
+      "groups": {
+        "both_background": {
+          "count": 740,
+          "finite_count": 740,
+          "median": 0.0010815941573237005
+        },
+        "same_annotated_object": {
+          "count": 49,
+          "finite_count": 49,
+          "median": 0.002540830281245508
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 15,
+      "b": 25,
+      "groups": {
+        "both_background": {
+          "count": 747,
+          "finite_count": 747,
+          "median": 0.0007149163654022243
+        },
+        "same_annotated_object": {
+          "count": 27,
+          "finite_count": 27,
+          "median": 0.0072792803079596265
+        },
+        "cross_region": {
+          "count": 1,
+          "finite_count": 1,
+          "median": 0.022163597359801182
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 20,
+      "b": 30,
+      "groups": {
+        "both_background": {
+          "count": 706,
+          "finite_count": 706,
+          "median": 0.000659676775512059
+        },
+        "same_annotated_object": {
+          "count": 28,
+          "finite_count": 28,
+          "median": 0.0019967819253290985
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 25,
+      "b": 35,
+      "groups": {
+        "both_background": {
+          "count": 704,
+          "finite_count": 704,
+          "median": 0.00012174745441768278
+        },
+        "same_annotated_object": {
+          "count": 17,
+          "finite_count": 17,
+          "median": 0.004226842193214478
+        },
+        "cross_region": {
+          "count": 1,
+          "finite_count": 1,
+          "median": 0.00018400309596120293
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 30,
+      "b": 40,
+      "groups": {
+        "both_background": {
+          "count": 665,
+          "finite_count": 665,
+          "median": 0.0007850901330652083
+        },
+        "same_annotated_object": {
+          "count": 17,
+          "finite_count": 17,
+          "median": 0.005626863551167501
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 35,
+      "b": 45,
+      "groups": {
+        "both_background": {
+          "count": 674,
+          "finite_count": 674,
+          "median": 0.0010374645152707944
+        },
+        "same_annotated_object": {
+          "count": 64,
+          "finite_count": 64,
+          "median": 0.014646192849127077
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 40,
+      "b": 50,
+      "groups": {
+        "both_background": {
+          "count": 722,
+          "finite_count": 722,
+          "median": 0.0007059673821431141
+        },
+        "same_annotated_object": {
+          "count": 79,
+          "finite_count": 79,
+          "median": 0.008273169323563468
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 45,
+      "b": 55,
+      "groups": {
+        "both_background": {
+          "count": 635,
+          "finite_count": 635,
+          "median": 0.0010958456768227927
+        },
+        "same_annotated_object": {
+          "count": 66,
+          "finite_count": 66,
+          "median": 0.004958170320446972
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 0,
+      "b": 30,
+      "groups": {
+        "both_background": {
+          "count": 510,
+          "finite_count": 510,
+          "median": 0.0014324487061566844
+        },
+        "same_annotated_object": {
+          "count": 20,
+          "finite_count": 20,
+          "median": 0.005899753471871046
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 5,
+      "b": 35,
+      "groups": {
+        "both_background": {
+          "count": 507,
+          "finite_count": 507,
+          "median": 0.0023658381586268325
+        },
+        "same_annotated_object": {
+          "count": 5,
+          "finite_count": 5,
+          "median": 0.002170079922731354
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 10,
+      "b": 40,
+      "groups": {
+        "both_background": {
+          "count": 486,
+          "finite_count": 486,
+          "median": 0.001178859139445436
+        },
+        "same_annotated_object": {
+          "count": 2,
+          "finite_count": 2,
+          "median": 0.008245689987926933
+        },
+        "cross_region": {
+          "count": 1,
+          "finite_count": 1,
+          "median": 0.045364041430954606
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 15,
+      "b": 45,
+      "groups": {
+        "both_background": {
+          "count": 473,
+          "finite_count": 473,
+          "median": 0.0015013277098725717
+        },
+        "same_annotated_object": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 20,
+      "b": 50,
+      "groups": {
+        "both_background": {
+          "count": 492,
+          "finite_count": 492,
+          "median": 0.0012214204065458321
+        },
+        "same_annotated_object": {
+          "count": 3,
+          "finite_count": 3,
+          "median": 0.023663808246040533
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    },
+    {
+      "a": 25,
+      "b": 55,
+      "groups": {
+        "both_background": {
+          "count": 501,
+          "finite_count": 501,
+          "median": 0.0011177863738160983
+        },
+        "same_annotated_object": {
+          "count": 10,
+          "finite_count": 10,
+          "median": 0.03940205591783552
+        },
+        "cross_region": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        },
+        "void_or_outside": {
+          "count": 0,
+          "finite_count": 0,
+          "median": null
+        }
+      }
+    }
+  ]
+}
