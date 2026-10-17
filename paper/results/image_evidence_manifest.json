@@ -1,0 +1,7158 @@
+{
+  "matches_sha256": "e077724b4db95b09844195557279928873153cea60bea46e1df35ff3ddbb757b",
+  "extractor_sha256": "d9bd28c6af01a3875bf9c923e5d5e23ed89cea86a93e15724018c11c7e29b28c",
+  "opencv_version": "4.13.0",
+  "source_on_anima": "/data3/kmatzen/plumbline/research/image-evidence/matches.json",
+  "clips": [
+    {
+      "sample_id": "realestate10k/008cd8c450342e49",
+      "frames": [
+        {
+          "timestamp": 152218733,
+          "sha256": "38edc7acc1c5718ae72579f7847a92fabb3207d5db64ced9f323f97bf67cf565",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 788
+        },
+        {
+          "timestamp": 152519033,
+          "sha256": "43a6b8cf98b86bf46c3f06d1a1bdf8c341196c1d56ecbfa6af029800eee4c84d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 816
+        },
+        {
+          "timestamp": 152652500,
+          "sha256": "31b94ae161505eb11e9457e01169400a6e5a51231741f985daa02c792078ce4b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 843
+        },
+        {
+          "timestamp": 152785967,
+          "sha256": "7bc75ca332ee95f266fbbfd5bb888bf6fd715493004c742c66faf495cc956ea3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 899
+        },
+        {
+          "timestamp": 152952800,
+          "sha256": "f6890ef676989a9d2c9144e36d0ce78fee98b9ef102270558b6cd1985bddde34",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 948
+        },
+        {
+          "timestamp": 153219733,
+          "sha256": "f0d8320fb114fe8f51402bd1960be46d82516683301b2c3f8d9d4b80b6e17b39",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 963
+        },
+        {
+          "timestamp": 153953800,
+          "sha256": "23af1241c6a4f403bf50f9cd7b1f2971195a8af90345fc02153edd982bd852af",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 875
+        },
+        {
+          "timestamp": 154087267,
+          "sha256": "3783d399e54c481c921f4b26dff352abc3a3e24d9d5aa3e6822afcd3504f4f97",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 961
+        },
+        {
+          "timestamp": 154254100,
+          "sha256": "0400bc089b63e0f7d4afe77f323e57952b133585fdc828dfb363eaaed8c03a73",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 899
+        },
+        {
+          "timestamp": 154387567,
+          "sha256": "a873842e7be3e4ce6594c4335c2f99ef6d5bf2d1faf859f428fe461173aa3af4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 896
+        }
+      ],
+      "camera_metadata_sha256": "2ca6eb32d1efbead55b4e577c0043e3e43f28d8a39140d76b73f0bced503f0f5",
+      "pair_match_counts": [
+        412,
+        368,
+        342,
+        310,
+        262,
+        158,
+        149,
+        129,
+        135,
+        510,
+        452,
+        365,
+        314,
+        182,
+        185,
+        149,
+        155,
+        526,
+        433,
+        375,
+        218,
+        197,
+        176,
+        185,
+        499,
+        426,
+        233,
+        221,
+        207,
+        209,
+        521,
+        292,
+        257,
+        240,
+        239,
+        328,
+        323,
+        306,
+        275,
+        527,
+        451,
+        416,
+        546,
+        492,
+        570
+      ]
+    },
+    {
+      "sample_id": "realestate10k/00a54225c5cb1913",
+      "frames": [
+        {
+          "timestamp": 84785000,
+          "sha256": "c22774aa82f9eeddd3f185a4bd34e245937434f217f49f909529d1d2fdc6f0ee",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 85152000,
+          "sha256": "883a3022ba6c92a146429823bae4130d1ae19d09de81f1df1ebe8d364780f640",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        },
+        {
+          "timestamp": 85551000,
+          "sha256": "6df0ca7dde2b36100ddc3371dc8ccd3707af4900dee1e1b83a5c1d0d893d0af8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 85919000,
+          "sha256": "76b93890eb175211049bdf0eaad84bb36a94b9ff14e329b8fe7df9a4823ccb0b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 86119000,
+          "sha256": "96846ae99a914984ee765aa4d62f3be9a627c14b7d9c22f248222fbef8d2b8cc",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 86486000,
+          "sha256": "d9b4e2006b730070b8760d36bd7a58948d3b86b7547bbaea99b3866085fc45fc",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 86853000,
+          "sha256": "a93b1415edf66ca6ad47fbeeef8895e27991f825f6eaab7fab34d575139f0c47",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 87053000,
+          "sha256": "5bad2950fecf22b063769ca94a4367993c9d664437c6e7fc60ca32701fb0558a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 87253000,
+          "sha256": "39ffb691b07a9a08966e036adfb2ce9d6af1ec44c1fd3999e85a5ea9164894ad",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 87420000,
+          "sha256": "6ca5bd95134520a2d8192b2019aa3d47f28835bb0d3d00a4259226f0f06cb0f4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        }
+      ],
+      "camera_metadata_sha256": "2624ecd9690b813dbaedab1955215b35390624b13810b7f80d3d3c01d520a7d3",
+      "pair_match_counts": [
+        834,
+        600,
+        546,
+        554,
+        529,
+        499,
+        473,
+        478,
+        390,
+        705,
+        621,
+        631,
+        601,
+        531,
+        529,
+        537,
+        436,
+        889,
+        820,
+        712,
+        623,
+        607,
+        573,
+        472,
+        948,
+        807,
+        662,
+        646,
+        609,
+        481,
+        892,
+        713,
+        685,
+        629,
+        507,
+        861,
+        829,
+        773,
+        621,
+        954,
+        857,
+        691,
+        962,
+        740,
+        784
+      ]
+    },
+    {
+      "sample_id": "realestate10k/00cf0a94235771bb",
+      "frames": [
+        {
+          "timestamp": 77244000,
+          "sha256": "170fc2e03f7f9d167c24f9473a6638a2fc767241cf8e91cbb02ff4e7c6b50284",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1251
+        },
+        {
+          "timestamp": 77410000,
+          "sha256": "2acc9bc33689bf503451a6b685c5662c8db35508966b6be95875f0f22683f68d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1261
+        },
+        {
+          "timestamp": 77786000,
+          "sha256": "6a618507c758dd37f8a1ea80ec577d465a9f771388c54acb93c204c191ee8c04",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1270
+        },
+        {
+          "timestamp": 78495000,
+          "sha256": "fa4bfa16de8cfef0f2c96cfb66ffbb0c3d249c449a0c64a29c753d1e0358e3c1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1265
+        },
+        {
+          "timestamp": 78662000,
+          "sha256": "24139617ab9aa1477e809defb49c481a6dc020a79a427f405222fda2f73c3ebe",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1270
+        },
+        {
+          "timestamp": 78828000,
+          "sha256": "39da3387ffc4cde22cbc178395a1bccc76f7bf44e1fb809deb83a8e3812c1204",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1309
+        },
+        {
+          "timestamp": 79037000,
+          "sha256": "42f63c9a57298ed8945497d86279962708937e2f2717aee2a1788e2d5daacf8b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1359
+        },
+        {
+          "timestamp": 79371000,
+          "sha256": "a0819896b834da078e8ad6951cfa761effd029e3f30021b7f624a37be55d7a77",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1332
+        },
+        {
+          "timestamp": 79746000,
+          "sha256": "8fee0aa768305d9cf8f30d8bc631a11f6b117ab545583b3bc5fb124b8c9ca88c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1326
+        },
+        {
+          "timestamp": 79913000,
+          "sha256": "33f873227697acadaa37e250b51df14adf1cb88df388f071af96dc5bf807fc24",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1363
+        }
+      ],
+      "camera_metadata_sha256": "354dd7786523155a3660a6b1ef20052bd4f9787c3269f3ad2d5b9e7bfafa029e",
+      "pair_match_counts": [
+        867,
+        685,
+        417,
+        352,
+        353,
+        304,
+        250,
+        223,
+        210,
+        724,
+        441,
+        396,
+        369,
+        326,
+        277,
+        237,
+        223,
+        565,
+        483,
+        455,
+        385,
+        313,
+        259,
+        238,
+        771,
+        713,
+        615,
+        468,
+        379,
+        360,
+        843,
+        717,
+        546,
+        424,
+        379,
+        805,
+        597,
+        475,
+        415,
+        750,
+        587,
+        523,
+        740,
+        667,
+        847
+      ]
+    },
+    {
+      "sample_id": "realestate10k/00cfc0ecd345deb4",
+      "frames": [
+        {
+          "timestamp": 145612133,
+          "sha256": "636a60d78bbaf40460d90fb0c70a271857e0610f254bd36edc1a1829b812e67f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 515
+        },
+        {
+          "timestamp": 146146000,
+          "sha256": "f994964487fafdf567a3cc1de89b37e84c50f12b7a604dcb67f97d00cdaa1ce6",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 391
+        },
+        {
+          "timestamp": 146412933,
+          "sha256": "17566b875b843408cdbca1b5a1af08ea673d0f67939e1b10fc089e05b1fbeea0",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 334
+        },
+        {
+          "timestamp": 146946800,
+          "sha256": "c5c8c0c893324c51589a119ba3bb2dae85e0c05766add27de539703a4ecfa434",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 357
+        },
+        {
+          "timestamp": 147247100,
+          "sha256": "71ee88bd473e72ed5a87bf84289f0208519d49cf40b37e5ffdb3684238d4b3c3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 296
+        },
+        {
+          "timestamp": 147514033,
+          "sha256": "c86bc236731508ef2f4e53c1a6639e8446357e2bb06ac5032d01cb600bae961f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 206
+        },
+        {
+          "timestamp": 147780967,
+          "sha256": "47b84a8b8a0baf1cc51ac6146321694e60ef379f5e37368e8a832719f1cc5eaf",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 193
+        },
+        {
+          "timestamp": 148047900,
+          "sha256": "5fff7cbf0f384c9168808d7975ca7c7812097e035b8f8fb92faa313bcfd20452",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 168
+        },
+        {
+          "timestamp": 148314833,
+          "sha256": "6f57537fdf82b3bd204e36cb10ab70285e555dd0cb1871a56409115f4c33d273",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 203
+        },
+        {
+          "timestamp": 148581767,
+          "sha256": "ac3493fd90d7e81c57e178eb75e1d43d642ad5fa20cf044caa6c3c72f09d8e02",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 221
+        }
+      ],
+      "camera_metadata_sha256": "d0d3413904c228902b463b8fa275af871259d4965b8135d11b83d9427354db7c",
+      "pair_match_counts": [
+        127,
+        92,
+        51,
+        34,
+        36,
+        35,
+        27,
+        30,
+        29,
+        149,
+        74,
+        43,
+        40,
+        41,
+        28,
+        34,
+        37,
+        88,
+        42,
+        39,
+        40,
+        29,
+        32,
+        34,
+        104,
+        61,
+        59,
+        56,
+        45,
+        43,
+        82,
+        72,
+        61,
+        62,
+        53,
+        95,
+        76,
+        70,
+        54,
+        91,
+        80,
+        62,
+        92,
+        66,
+        82
+      ]
+    },
+    {
+      "sample_id": "realestate10k/015d8a2a2834d38c",
+      "frames": [
+        {
+          "timestamp": 138338338,
+          "sha256": "62a8b79e00117767f7de7c5743e99db2599047e1a0097d6253b3b4b9f804a318",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 483
+        },
+        {
+          "timestamp": 140206874,
+          "sha256": "7f3d1d0aa3988dcbd00305931024ab52d5df8e453e3dec9b7a78c188617e5e5c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 586
+        },
+        {
+          "timestamp": 140807474,
+          "sha256": "5e372591df72884438eab82c5b52e020e9c17ef0474fadcc1f8a57a6c4d31cae",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 717
+        },
+        {
+          "timestamp": 142042042,
+          "sha256": "aa21e3bef93b1c9332e59af6b5a02538a8a3aabdac183a0a5be874d10cc1d732",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 684
+        },
+        {
+          "timestamp": 142676009,
+          "sha256": "822419b3c5498f40566b6b5ea760bd5afde116b38b7b399b36460edf71bf0b1c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 572
+        },
+        {
+          "timestamp": 143910577,
+          "sha256": "a88a40218527395f211ddac03aa1d31e3a74d546eb163a566a18b5c9bafb77de",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 472
+        },
+        {
+          "timestamp": 144511178,
+          "sha256": "90ec7b978d145ba74993c78ad5f9e2b6e711e0f161a1048410a795b44d40a5d6",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 530
+        },
+        {
+          "timestamp": 145745746,
+          "sha256": "a5ec65c9882c3bf5d2d04980eded8bab4d44f2da8da9e4d8eb9e6479f07001b1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 395
+        },
+        {
+          "timestamp": 146379713,
+          "sha256": "a6551452ac6cab9fb6850552933659274da11b3ed169747f3e52540237f33bdc",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 375
+        },
+        {
+          "timestamp": 146980314,
+          "sha256": "381005153f59c18d83ebe8019746a0f112a6c35f5d16b3b72202743c51a8549d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 331
+        }
+      ],
+      "camera_metadata_sha256": "7dd8962cc4f073d38c287e471e1d8b401c1bf501efe51d43ff707ec6272d9f2b",
+      "pair_match_counts": [
+        39,
+        19,
+        7,
+        7,
+        3,
+        4,
+        13,
+        5,
+        0,
+        132,
+        20,
+        11,
+        5,
+        5,
+        10,
+        3,
+        4,
+        42,
+        21,
+        9,
+        5,
+        9,
+        7,
+        3,
+        104,
+        31,
+        23,
+        17,
+        8,
+        5,
+        48,
+        31,
+        19,
+        14,
+        13,
+        109,
+        50,
+        45,
+        31,
+        79,
+        45,
+        35,
+        127,
+        73,
+        105
+      ]
+    },
+    {
+      "sample_id": "realestate10k/0181d3b41c2cf87c",
+      "frames": [
+        {
+          "timestamp": 134467667,
+          "sha256": "7a68b71a23d3feab32c8abfd4cab197b7bc1c8f72353fcdb5d828318794bea9b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 136336200,
+          "sha256": "223a9d25d3b2721efc59994d703c5705ef357570536dd8db5664bed2aa8f476e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1180
+        },
+        {
+          "timestamp": 136936800,
+          "sha256": "67d256504fa8164776ddbac6733df41626db2c5367c87ab36d07ad1466263e4d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 139405933,
+          "sha256": "a10a0fcde8acc0ca6191790505f877452fce66367f99c363cd4e648e215a3dcc",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 140039900,
+          "sha256": "44e22dd4d8f2a9bb0a3629b9e9ecf0f1fe05418fe0a43e4a3fe36b4c81632f87",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 140640500,
+          "sha256": "e96d3de97ce10651fbed4ffa0a7c4855ced2c2837f83fec98790091fef1e008e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 141274467,
+          "sha256": "1813e052b194f78da3c8a71d7d4f2c89f4ff9282e6ee49ddc4acebe689cbb329",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 141875067,
+          "sha256": "713a855d70544e4b2bf6186f72ae47cc668d5c54c0053c9010df5a4b0a3ba0a8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 142509033,
+          "sha256": "280ff3074bd4a589bba6ab03bf759d2aed71ba4b558ae41428d690fd25c8cdc4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 143109633,
+          "sha256": "f4107a67eb11cac2f178ec998384f2b70e03b420531118edf37f40449dfb1d8d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        }
+      ],
+      "camera_metadata_sha256": "9bcfa675855ac92d2c97c038e3ece656956e9e2a7242a69c3cbf44fd28b7e883",
+      "pair_match_counts": [
+        23,
+        21,
+        7,
+        6,
+        2,
+        3,
+        5,
+        4,
+        3,
+        194,
+        33,
+        22,
+        15,
+        10,
+        9,
+        6,
+        4,
+        63,
+        36,
+        15,
+        11,
+        14,
+        4,
+        4,
+        279,
+        110,
+        67,
+        33,
+        20,
+        7,
+        290,
+        113,
+        62,
+        28,
+        14,
+        284,
+        125,
+        60,
+        35,
+        307,
+        130,
+        68,
+        350,
+        203,
+        432
+      ]
+    },
+    {
+      "sample_id": "realestate10k/01842c6b21e1d679",
+      "frames": [
+        {
+          "timestamp": 216616400,
+          "sha256": "d005c36bfd8c605355c54ab449e12111f3cfd680bcfafb9444edc449d4b7b37d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 640
+        },
+        {
+          "timestamp": 217584033,
+          "sha256": "b40e384b09ef06e600574ecbbd68b65d5fee916161a4a10986cbb064aeb2a409",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 915
+        },
+        {
+          "timestamp": 218084533,
+          "sha256": "73a50e017703a2d18ea2565af48f722ab58afc8f007084dc37ff906c4ad1e56b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 922
+        },
+        {
+          "timestamp": 219052167,
+          "sha256": "a8e84e1abef62ca6bd94928b9a9702b34a8652791b59b8a867b41ee07d6a2384",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 953
+        },
+        {
+          "timestamp": 219552667,
+          "sha256": "986b3d56217459cf9019afff7510bcca69cdb27c765863058631cf4851460bc8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 686
+        },
+        {
+          "timestamp": 220053167,
+          "sha256": "eadd6bb3f114e8a79be43796d9c88323f9a3c1d4d2d01224a28e7be759f26912",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 444
+        },
+        {
+          "timestamp": 220520300,
+          "sha256": "21aa149a1a925abb75c1c25e53381ae2d0c9d1c92a6dcf85746332a925701858",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 431
+        },
+        {
+          "timestamp": 221521300,
+          "sha256": "bebd9d5a5bd06e1f1a08c21862e4f7ba6201867a701bd1e2c613ab51aab96b81",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 455
+        },
+        {
+          "timestamp": 222488933,
+          "sha256": "705637a67e33d916bd208c219c39f450f31b122767e40f998e8f85520bf9c5ef",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 835
+        },
+        {
+          "timestamp": 223456567,
+          "sha256": "b184eed7e3db5a14308d93639cae7360dfbaaa99fb5fd142471e2cd25e65b443",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 852
+        }
+      ],
+      "camera_metadata_sha256": "60bab1b49de3ff7cb7abf81be026b5d041a49434a8ab4d8988dab445164d72b1",
+      "pair_match_counts": [
+        180,
+        105,
+        44,
+        34,
+        26,
+        20,
+        15,
+        8,
+        7,
+        282,
+        96,
+        46,
+        43,
+        30,
+        11,
+        4,
+        8,
+        133,
+        76,
+        52,
+        43,
+        18,
+        4,
+        8,
+        162,
+        91,
+        65,
+        37,
+        20,
+        9,
+        119,
+        86,
+        41,
+        24,
+        10,
+        139,
+        60,
+        35,
+        16,
+        105,
+        57,
+        29,
+        145,
+        73,
+        224
+      ]
+    },
+    {
+      "sample_id": "realestate10k/01866b81c3b90f2c",
+      "frames": [
+        {
+          "timestamp": 33133333,
+          "sha256": "cbc32d9fb7bbdb7216363afd4e4505d53822d4912beed4fcb1399bef50cbfc57",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        },
+        {
+          "timestamp": 33266667,
+          "sha256": "17014121f6737aca02cdcb67ae8c329e9891dcd85cc48dd4102752dfea0548d2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 33700000,
+          "sha256": "f4a3ddae6a0f8707ae0733f631557a09df1be7f5036c75f5e3c5c57a0c22641d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 33966667,
+          "sha256": "397e0922126e6d78638ad6081a3b0a0a9570e72e2d0097a36f87d997add5650d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 34100000,
+          "sha256": "6919548e92c616eed328d7ade3c8cab85a670b236d8d7dd3db145613fe3d3fd2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 34233333,
+          "sha256": "8b83a594507d02df0a87f18e4e2423ac02698245c6245e5e9cfebbc1e0c03a8b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 34366667,
+          "sha256": "dffdffdd279d0ba91110d2c16b98901d27316f39617998aa267f86adf77a52e9",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 34800000,
+          "sha256": "3ebd61297e81672e729826d1a1af1eac8015408a43083123898f685349e4cac2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 34933333,
+          "sha256": "da7f99673d3a308bb45a7f987862dcdcb39f911bb5a99d32343b8760ba9648f6",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 35200000,
+          "sha256": "17e0293d60c4dd06ff61eb81910dcd9374cdf0185bf706131feaa87e22c0dde9",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        }
+      ],
+      "camera_metadata_sha256": "0e5e56f9fa4f562a05d2a04a3f768f46ccb10773e1b1848bc1d8711a1e6e2b47",
+      "pair_match_counts": [
+        989,
+        783,
+        734,
+        685,
+        654,
+        617,
+        504,
+        490,
+        434,
+        807,
+        728,
+        676,
+        638,
+        623,
+        497,
+        494,
+        414,
+        889,
+        844,
+        794,
+        755,
+        607,
+        626,
+        517,
+        959,
+        895,
+        838,
+        698,
+        697,
+        589,
+        972,
+        896,
+        717,
+        688,
+        608,
+        1004,
+        782,
+        746,
+        645,
+        807,
+        791,
+        681,
+        970,
+        835,
+        904
+      ]
+    },
+    {
+      "sample_id": "realestate10k/018f7907401f2fef",
+      "frames": [
+        {
+          "timestamp": 156856700,
+          "sha256": "eef6a09440e5ae84ebbb06faf5bedaa29d9f9422fcf989ceabf1366945d96117",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 522
+        },
+        {
+          "timestamp": 158124633,
+          "sha256": "f1f192d9b3f26608413bc289144bce078a282ad1388c7f1b7e7aa753a0660703",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 399
+        },
+        {
+          "timestamp": 158525033,
+          "sha256": "f334c0d8829ffee14736d53ce23a820384b0bfdc4c50a1a207a4d50ecce2cf72",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 446
+        },
+        {
+          "timestamp": 159359200,
+          "sha256": "d1b1fcfb58c98409e38df70049310f2e3702be40bbe158cdb65d53fbd2deece0",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 514
+        },
+        {
+          "timestamp": 160627133,
+          "sha256": "87ee75b7afe27da6a9a626452f649d0ead6b7b7836bc6530c07b7a7fc269972b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 534
+        },
+        {
+          "timestamp": 161027533,
+          "sha256": "139abc67551e2373fe745affbb0854be948461879d7728116aa9abe16a2d794f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 533
+        },
+        {
+          "timestamp": 161461300,
+          "sha256": "6656c77dfb9ba05d566e8c35033775266551307834b164f85e667a53d5deb512",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 592
+        },
+        {
+          "timestamp": 161861700,
+          "sha256": "8f504b59bbe5a4c4f6e09d051d1c062abd12c231d7c98b80a7d6595ef5c75d78",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 610
+        },
+        {
+          "timestamp": 162295467,
+          "sha256": "a570e146c769afde5862302e4add37686b245215d34afed39d933626175eb822",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 533
+        },
+        {
+          "timestamp": 163129633,
+          "sha256": "bd3a683b2a7cad4d362dfbd73a54ad4e7ffd9b63ba1a1093213c1fd4dead7554",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 540
+        }
+      ],
+      "camera_metadata_sha256": "30f4eeea4d498c0d412c71017134eb346a473f1ac8806aebfb0ff8b30823afc9",
+      "pair_match_counts": [
+        84,
+        91,
+        73,
+        63,
+        50,
+        46,
+        35,
+        27,
+        8,
+        181,
+        120,
+        91,
+        75,
+        70,
+        67,
+        45,
+        25,
+        184,
+        124,
+        95,
+        97,
+        89,
+        60,
+        39,
+        161,
+        129,
+        119,
+        104,
+        76,
+        55,
+        256,
+        207,
+        165,
+        122,
+        85,
+        228,
+        184,
+        134,
+        75,
+        244,
+        171,
+        95,
+        220,
+        109,
+        139
+      ]
+    },
+    {
+      "sample_id": "realestate10k/0196dedebec3dad2",
+      "frames": [
+        {
+          "timestamp": 104304200,
+          "sha256": "dd374bdedab6c57386133136ea1da07c9df161bdb700419051c073fa25336033",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 824
+        },
+        {
+          "timestamp": 104504400,
+          "sha256": "4311ee6c64a5cd21d9494f303336d8432e1c9d525df9250f0ff71d0c57072489",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 836
+        },
+        {
+          "timestamp": 105171733,
+          "sha256": "be5cd2823d81a18a4880f7b6d6de1e1491019e175b832a4a8350b51f12964d49",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 980
+        },
+        {
+          "timestamp": 105405300,
+          "sha256": "68284062eda9da3b37c1e8a64ba94f6b375d892ad165559481749eded2095ffe",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 985
+        },
+        {
+          "timestamp": 105605500,
+          "sha256": "6ee50d55b9aa6be7ce9fc9a3c0539046d1e796c315ba64eb1d10fa564ab9c5cb",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 997
+        },
+        {
+          "timestamp": 106039267,
+          "sha256": "4b9c44062134a00864c754544d135bb4be38a38c9d4243917bd35c3242af822c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1146
+        },
+        {
+          "timestamp": 106272833,
+          "sha256": "64ca7af554217f04b9fa5bc8ff080e7b342637c3923a453d27077cf330c3a8b9",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1148
+        },
+        {
+          "timestamp": 106940167,
+          "sha256": "91e37950b4bbf000dc0190b8fa4df8bf31140e0c56b9ac336a0a74c15904c8d2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 965
+        },
+        {
+          "timestamp": 107140367,
+          "sha256": "d82a3c6695f103807a114c908207442f9ec39b31e97378abaab822a5815e959b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 950
+        },
+        {
+          "timestamp": 107373933,
+          "sha256": "5565ab7f3db3315babf4a0e53b007428428add2c56f1d16dea733c8e0ec1a0b0",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 864
+        }
+      ],
+      "camera_metadata_sha256": "291058a6f61d6f531ce9e068f323ff06d9247a47ab872681c1c901d7c8284b7b",
+      "pair_match_counts": [
+        350,
+        201,
+        182,
+        160,
+        124,
+        101,
+        68,
+        39,
+        12,
+        237,
+        186,
+        179,
+        137,
+        117,
+        61,
+        42,
+        12,
+        417,
+        338,
+        217,
+        184,
+        97,
+        64,
+        21,
+        424,
+        280,
+        222,
+        127,
+        97,
+        27,
+        324,
+        250,
+        133,
+        89,
+        29,
+        476,
+        208,
+        144,
+        46,
+        274,
+        168,
+        64,
+        343,
+        116,
+        172
+      ]
+    },
+    {
+      "sample_id": "realestate10k/01a5cc3805e94c21",
+      "frames": [
+        {
+          "timestamp": 110376933,
+          "sha256": "b2c470652e8568598726b8a20b6804d9f6c3c3f8073b94790a58828efc17aa04",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 730
+        },
+        {
+          "timestamp": 110844067,
+          "sha256": "58cc87e66fd6e88d1a32236d4d9f737abfb69a36a2a7e6ac8af5933ae1941d98",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 592
+        },
+        {
+          "timestamp": 111111000,
+          "sha256": "cca3b9471c939a49d1c691ec13fb227a4a3ff34716a0f9b83e41566fd779b654",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 607
+        },
+        {
+          "timestamp": 111344567,
+          "sha256": "12cf11f46b0387143180594301f6fb74e341d07300568f6f708120a43a9ac5ea",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 512
+        },
+        {
+          "timestamp": 111811700,
+          "sha256": "91461842047de7f1a05ec04f6ca3ad70c9eb462112093201bdd7cb3f1608d74d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 421
+        },
+        {
+          "timestamp": 112512400,
+          "sha256": "738ef711dee31180b6e798cb86056817aad43f50fe4f175002526e312eb2cfc3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 396
+        },
+        {
+          "timestamp": 112745967,
+          "sha256": "5ede27908539bb2a84b30e1a5c75ee02285c4b86b9fdb44a9f856f94816179d9",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 297
+        },
+        {
+          "timestamp": 113012900,
+          "sha256": "8689f495b7359440a66d324ae07d74290a3411f40fe1129f0848d64e89ca9de2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 221
+        },
+        {
+          "timestamp": 113246467,
+          "sha256": "ae918b970714253d0fcaa2b66344293ff29420e28b7e291ea6e470091be4b24e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 127
+        },
+        {
+          "timestamp": 113480033,
+          "sha256": "9d1a5d739f8bb4a7332ffe3bd6ce2621937ce4215c1b4824d0c4882259371fd3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 122
+        }
+      ],
+      "camera_metadata_sha256": "a4455c891f26a7c1770513cfaf739f68e153bf64b817e3ca2cb28b00499a4c67",
+      "pair_match_counts": [
+        174,
+        167,
+        125,
+        103,
+        46,
+        36,
+        23,
+        14,
+        14,
+        235,
+        160,
+        120,
+        65,
+        41,
+        25,
+        19,
+        19,
+        217,
+        133,
+        58,
+        52,
+        25,
+        16,
+        19,
+        167,
+        76,
+        44,
+        29,
+        14,
+        20,
+        115,
+        69,
+        47,
+        21,
+        24,
+        141,
+        83,
+        38,
+        40,
+        103,
+        42,
+        39,
+        60,
+        58,
+        60
+      ]
+    },
+    {
+      "sample_id": "realestate10k/01cefee9563f691a",
+      "frames": [
+        {
+          "timestamp": 142675000,
+          "sha256": "ddb4f4ba551246294a4036d5da764fc68b375eb56e7f089b35c21ee5f8d6eca4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 871
+        },
+        {
+          "timestamp": 143042000,
+          "sha256": "14bb9a3a80f9d5ba07952c93b1c2e22b7d3208851d8ec89a6414a2cd628fb5af",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 769
+        },
+        {
+          "timestamp": 143776000,
+          "sha256": "a1b96ceff4a5fc9265798ebafcb445aa2d79bc7f76e9dc41db83d42458fb8dff",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 730
+        },
+        {
+          "timestamp": 144143000,
+          "sha256": "5b19f70c045a9180af679e49abf37f6967de6f218ae2801982edfaf03a1ed6f0",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 638
+        },
+        {
+          "timestamp": 144878000,
+          "sha256": "9ce883e4e065f94ecdd0d5d7504e6a2200b96a1ac5d9c8bbb2bb7beacf29ca2a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 587
+        },
+        {
+          "timestamp": 145945000,
+          "sha256": "1d2728677722c3eca08f4db4c1aae95c412e9d93728d72e052cfcbbcc6e30024",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 714
+        },
+        {
+          "timestamp": 146312000,
+          "sha256": "5185aa6d33edf0606fd8c83722935f16d8d167c1e64f02024b740665449a8fa4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 681
+        },
+        {
+          "timestamp": 146679000,
+          "sha256": "9eeb904e6a8b966959d35b1290a7c24bb2ce5ebe79642303b35fa6c7a9b41da5",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 643
+        },
+        {
+          "timestamp": 147046000,
+          "sha256": "696d94ec6b65f1f613d96abcdd78448504794f30ad5c766c2986a61824dca3d7",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 709
+        },
+        {
+          "timestamp": 147414000,
+          "sha256": "499ddd312d3bcfc698e9aaa9cde6e2d5bfc4aeef330b4fa67b7755f2c267e365",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 725
+        }
+      ],
+      "camera_metadata_sha256": "658e26d2423f1885a74f5fc8175ce3290ff97af2653f9cc82a5eb70d0537cb81",
+      "pair_match_counts": [
+        304,
+        165,
+        109,
+        46,
+        17,
+        9,
+        9,
+        10,
+        12,
+        213,
+        130,
+        50,
+        18,
+        10,
+        19,
+        16,
+        17,
+        249,
+        109,
+        44,
+        32,
+        19,
+        26,
+        21,
+        153,
+        52,
+        42,
+        26,
+        21,
+        19,
+        85,
+        60,
+        34,
+        23,
+        18,
+        193,
+        104,
+        73,
+        55,
+        192,
+        110,
+        80,
+        222,
+        148,
+        218
+      ]
+    },
+    {
+      "sample_id": "realestate10k/01e18dbbf22ff263",
+      "frames": [
+        {
+          "timestamp": 215882333,
+          "sha256": "1178c9752daf5b55e6f19d11347abe2a5cd9af56e445ad40ad4ae81a9d3b9588",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 312
+        },
+        {
+          "timestamp": 216149267,
+          "sha256": "b5eb69fbfc673bb38657dd2cc620b1f19e8629c4b063fcfa7415bc4caa612b8c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 344
+        },
+        {
+          "timestamp": 216683133,
+          "sha256": "41abc18d9517673b19ea08224c893c7a8dba4fc5dd39ba3d5d64469b5f6b7e97",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 331
+        },
+        {
+          "timestamp": 217217000,
+          "sha256": "5aeb45b5f0ed2a6737fd555209f47d687ec2c7d89776db49aafc1d98afea3e5e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 251
+        },
+        {
+          "timestamp": 217483933,
+          "sha256": "07914b26050b9dca281d3c19054d62e312c55f058fb8c88e83e4edee90d427dc",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 243
+        },
+        {
+          "timestamp": 217750867,
+          "sha256": "8c330dbe0d86a72b7ca65d19e0407a5cbf2972ffb968c1e84eb7818a105990f3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 262
+        },
+        {
+          "timestamp": 218251367,
+          "sha256": "3feb33d51048530ce8239c8e039979b04f1919081afffe2f14919f97fa922816",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 253
+        },
+        {
+          "timestamp": 218785233,
+          "sha256": "33d3e27acb0918eb798471df51810743ac1cc200b5713c6ec41c0871eb09dd47",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 229
+        },
+        {
+          "timestamp": 219319100,
+          "sha256": "37acf2513360a9332448d35c6710999fc4ae102b3ba38b4a330cd2a7288bfc64",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 185
+        },
+        {
+          "timestamp": 219852967,
+          "sha256": "1974f54972cd478df57c429d4b845a87c7ced4ff4cfd2533b6d674b4d3d4728c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 185
+        }
+      ],
+      "camera_metadata_sha256": "62380ff81ee88c76f1925763bbbea9fe32b208ae362e8e02e72ba68802e95690",
+      "pair_match_counts": [
+        171,
+        97,
+        81,
+        61,
+        60,
+        49,
+        28,
+        29,
+        22,
+        135,
+        95,
+        90,
+        74,
+        51,
+        46,
+        28,
+        23,
+        107,
+        87,
+        89,
+        62,
+        46,
+        32,
+        22,
+        121,
+        102,
+        77,
+        54,
+        38,
+        22,
+        125,
+        91,
+        51,
+        37,
+        28,
+        107,
+        64,
+        42,
+        30,
+        85,
+        46,
+        26,
+        58,
+        37,
+        70
+      ]
+    },
+    {
+      "sample_id": "realestate10k/01f7915dce639515",
+      "frames": [
+        {
+          "timestamp": 75875800,
+          "sha256": "3ae91796eb499abedebeea0774da2b8d3254eeadd81c70d69aa579fdf238a3b5",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 702
+        },
+        {
+          "timestamp": 76109367,
+          "sha256": "f0091deb6cd448eb1f61981324b1f7dc3c496db2a8c6e4eaabeecf88ca5c9145",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 745
+        },
+        {
+          "timestamp": 76843433,
+          "sha256": "0fda4a07909e6ca4cdd5e6dce51ee86cc6f4c6d6493511e6908565e9d15d49d0",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 700
+        },
+        {
+          "timestamp": 77610867,
+          "sha256": "c1556b56fb6bc6c4f511e77a0969df105d6c5897aba2a6303e69187458e723c2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 701
+        },
+        {
+          "timestamp": 77844433,
+          "sha256": "bbec7b813da43ed1c3bc0f58d12c268d20aba903384039b87b2c7cf73dc53616",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 686
+        },
+        {
+          "timestamp": 78078000,
+          "sha256": "66fb10aede341148193ca4f3e49c4ea1469e6e90c9e5fedc472f8323b757f65e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 684
+        },
+        {
+          "timestamp": 78344933,
+          "sha256": "7192bcb98dff328fb853d91e2a44ccd7afa779935a7e16b9f3cb5d95416fd248",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 674
+        },
+        {
+          "timestamp": 78578500,
+          "sha256": "4754ec5c8be422daa3e7eff40a85f28fba032c50996e1be265554b1936de753e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 688
+        },
+        {
+          "timestamp": 78845433,
+          "sha256": "440d32a1b0ec55f04bbe2fbc05f1f5ff20e325cb282332de43faf68fe366533a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 687
+        },
+        {
+          "timestamp": 79079000,
+          "sha256": "04c9e010f6c498d9ee6cf5e0383b64a56e573a0ee5dc24534ca3ef155cf86fe8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 657
+        }
+      ],
+      "camera_metadata_sha256": "72f19499a4c9c6aa37c6d2197477284e1477d03e83910948f671b38687187d98",
+      "pair_match_counts": [
+        453,
+        352,
+        291,
+        251,
+        238,
+        239,
+        226,
+        209,
+        182,
+        375,
+        310,
+        272,
+        251,
+        249,
+        225,
+        216,
+        191,
+        362,
+        313,
+        316,
+        283,
+        269,
+        246,
+        231,
+        426,
+        417,
+        368,
+        351,
+        314,
+        276,
+        441,
+        380,
+        344,
+        322,
+        282,
+        443,
+        415,
+        365,
+        324,
+        431,
+        416,
+        350,
+        452,
+        388,
+        425
+      ]
+    },
+    {
+      "sample_id": "realestate10k/0223924f43297881",
+      "frames": [
+        {
+          "timestamp": 32432400,
+          "sha256": "c5d4fd38bf6706bf5a0825076b886bad6a190effc828675d11521eb3beb543a7",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 693
+        },
+        {
+          "timestamp": 33666967,
+          "sha256": "34b44f8e5e7216ca7a833768e325b5c2d19c9ac035625481228433fd242d0f9b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 686
+        },
+        {
+          "timestamp": 34901533,
+          "sha256": "dff476af89c4eb2b34857bb653896a95c4dcd78434f48522df959d9f69c7ad3f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 738
+        },
+        {
+          "timestamp": 36136100,
+          "sha256": "14949d2544ad6e282b61c5ce9222745ca29326a6c96e387f7b77da1093154e59",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 761
+        },
+        {
+          "timestamp": 37370667,
+          "sha256": "68481bc90dc481451635a2d296e6e3e7ca3a300132b75748c6a1900dda330106",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 656
+        },
+        {
+          "timestamp": 38605233,
+          "sha256": "ca8dfa475edb7141802df5b58ec110807d40abda38476453692794cef35dd3b2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 577
+        },
+        {
+          "timestamp": 39239200,
+          "sha256": "6556b2b39e8d80c4b1fe3fb7432a2fd2138c357e48fa5a00b02690b5967c3cd8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 556
+        },
+        {
+          "timestamp": 39839800,
+          "sha256": "65a36540c476e3bf461d36b46946093f1079364588807b04a9434b03d0827f2a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 568
+        },
+        {
+          "timestamp": 40473767,
+          "sha256": "3313a7bfac9fb0297251d5cfb7e290d69887edb70e38891e03cb37aea4d06e95",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 556
+        },
+        {
+          "timestamp": 41708333,
+          "sha256": "d89c9d8af5f06a3fe707b8b182845f0201065a1f7fd7b0dc06b1c62bd01a43c4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 567
+        }
+      ],
+      "camera_metadata_sha256": "576efc571ffd095ee2c5ca455078c43418c5d5ffcf753c7089374a218c94d642",
+      "pair_match_counts": [
+        189,
+        128,
+        62,
+        38,
+        35,
+        26,
+        22,
+        16,
+        16,
+        180,
+        96,
+        55,
+        44,
+        34,
+        34,
+        31,
+        29,
+        232,
+        135,
+        89,
+        71,
+        71,
+        66,
+        62,
+        232,
+        151,
+        112,
+        123,
+        94,
+        82,
+        229,
+        184,
+        174,
+        139,
+        109,
+        267,
+        208,
+        164,
+        119,
+        251,
+        200,
+        140,
+        273,
+        170,
+        202
+      ]
+    },
+    {
+      "sample_id": "realestate10k/025ce727b1b55932",
+      "frames": [
+        {
+          "timestamp": 80681000,
+          "sha256": "da5d0db11d9cab654122a7b2f4bb66bad5c32f022221a2098644e9859ee28c0a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 602
+        },
+        {
+          "timestamp": 80981000,
+          "sha256": "6d6daaa1189d24a3f562ef21fe1e15056e21c22e65baf708cfff3a68b556abb8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 555
+        },
+        {
+          "timestamp": 81915000,
+          "sha256": "17746b49df7a32a7886b6e7606fd2cebccb56837a066e8a7a821b1767941fa2d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 414
+        },
+        {
+          "timestamp": 82215000,
+          "sha256": "73e9c8c814fa6e002fe3e6b2a93695e3cd2a0b6d170f2e459909f8758bed4e8b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 432
+        },
+        {
+          "timestamp": 82849000,
+          "sha256": "e0d0e5bfd1e88871ab84eba6425fb3da4fe9d23ef20534e896d34f201ddaab83",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 463
+        },
+        {
+          "timestamp": 83150000,
+          "sha256": "201ba911f30b4b7601bc24bd7e686937caa6ac79f7774f957e61911397a77504",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 487
+        },
+        {
+          "timestamp": 83450000,
+          "sha256": "cae2666ed97327da8e3c2d44fd1a2dfee7f37c829b80d17e8f8444854125995c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 419
+        },
+        {
+          "timestamp": 84084000,
+          "sha256": "742d83ca5264f0fe631e7d1baa8aabd6b0c6b7fea15790f1dd071bb09dbf1c78",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 435
+        },
+        {
+          "timestamp": 84718000,
+          "sha256": "8e6aa66b6ecb744f55d2461b699e9b55fc7b67675f9232525ad8a7a046f64caf",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 450
+        },
+        {
+          "timestamp": 85085000,
+          "sha256": "9ddeeb54a72f9767d1bb6600c7e1979e8cc4bf33f5d2553c92bf02d01fc58244",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 426
+        }
+      ],
+      "camera_metadata_sha256": "a0f7fd130f540b08084e233662dece7670d517f8f73f68047cadb7f78367b192",
+      "pair_match_counts": [
+        263,
+        115,
+        88,
+        53,
+        43,
+        39,
+        28,
+        19,
+        17,
+        110,
+        92,
+        55,
+        47,
+        37,
+        22,
+        14,
+        16,
+        192,
+        99,
+        68,
+        53,
+        34,
+        23,
+        16,
+        137,
+        80,
+        67,
+        38,
+        29,
+        22,
+        177,
+        110,
+        59,
+        45,
+        31,
+        171,
+        102,
+        83,
+        62,
+        126,
+        88,
+        79,
+        138,
+        108,
+        170
+      ]
+    },
+    {
+      "sample_id": "realestate10k/02b59cd60efb924e",
+      "frames": [
+        {
+          "timestamp": 109150708,
+          "sha256": "03bf30fa17ae29d765520737bea552cb2bb673918282043e130e5bfc168544ac",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1150
+        },
+        {
+          "timestamp": 109859750,
+          "sha256": "a73cd47d29d6d0fc5df71a3ad7e0640820097b8add8555c71f4d30be70304c32",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1141
+        },
+        {
+          "timestamp": 110235125,
+          "sha256": "fef3dc9eab1c9d6fe1968f4d72981489dab3d7ea4b341f9fadf47393e513bc3f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1270
+        },
+        {
+          "timestamp": 110985875,
+          "sha256": "f4d6debc93d882f0b94b4c20215713efb85614451ad0a8a74f6628bce21c9425",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1265
+        },
+        {
+          "timestamp": 111319542,
+          "sha256": "2fe537cb53f06c4fb47ede58ea11a5ed8311f4cb3f7522b514d7c935abb87e87",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1285
+        },
+        {
+          "timestamp": 111694917,
+          "sha256": "4d79cd800ad4d069b67e517f34bcf3701d352ff48a185f29850b1d2a4e5d75b2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1361
+        },
+        {
+          "timestamp": 112445667,
+          "sha256": "761cd42abf3520ddf6aead34079306e27c9c5e581d218f60125bf0f0c8f24838",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1420
+        },
+        {
+          "timestamp": 113530083,
+          "sha256": "124296a0a08ec3dc4262fb261b717ed2b1b8eced2a8501a15b2d1ea6e3a110b4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1387
+        },
+        {
+          "timestamp": 114239125,
+          "sha256": "d15c5e44d7b9cd12715543ac9061ec41cd12602260e27ecdf0c47c0a4650a767",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1359
+        },
+        {
+          "timestamp": 114614500,
+          "sha256": "024eb7fe850ec881006fbf691e8967ae2be66febff19a317aad4f8d7d0c028c7",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1395
+        }
+      ],
+      "camera_metadata_sha256": "96dae1c7940e8bf4323195338db97c2aa7190807cf117e0c2e8e6883744fbb46",
+      "pair_match_counts": [
+        397,
+        315,
+        153,
+        129,
+        95,
+        60,
+        39,
+        33,
+        33,
+        564,
+        269,
+        211,
+        153,
+        79,
+        42,
+        40,
+        31,
+        369,
+        286,
+        208,
+        104,
+        56,
+        47,
+        46,
+        593,
+        395,
+        183,
+        92,
+        73,
+        74,
+        566,
+        249,
+        107,
+        90,
+        74,
+        391,
+        156,
+        124,
+        117,
+        297,
+        196,
+        170,
+        548,
+        489,
+        818
+      ]
+    },
+    {
+      "sample_id": "realestate10k/02c485bd207116d4",
+      "frames": [
+        {
+          "timestamp": 110777444,
+          "sha256": "126b419b2ce1422e5de6154344777f5f5d00ed42ced7d82e634605e97cfe0048",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 421
+        },
+        {
+          "timestamp": 111578245,
+          "sha256": "d72ab739c2f3ca4c69f6fd3c507e107e14451283b89e72fab8ece1dd6903d7f8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 277
+        },
+        {
+          "timestamp": 111978645,
+          "sha256": "4fb7845ef2bf24c30eb6a80a6a3170a9422381aebf84ce3d313fd05eb9d34853",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 253
+        },
+        {
+          "timestamp": 112379046,
+          "sha256": "7dc0d4c78c36aac71c327b34e7a40c6be3206d9df5548cef9f1a6e7a7c8b7b55",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 304
+        },
+        {
+          "timestamp": 113980647,
+          "sha256": "834a0f42e0da875b5354cd5b45c2b8dad33419a4f5ad53ebedce6c89f97fa86e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 285
+        },
+        {
+          "timestamp": 114381048,
+          "sha256": "a616b79d8a146e28b6d6800caf7c71668ffbf428a3d3a8bf066d17fae554ee39",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 336
+        },
+        {
+          "timestamp": 114781448,
+          "sha256": "b5ed55de73504fa743238fa857d54fc0a34bfbfa731b09d351dcae2f70a30636",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 489
+        },
+        {
+          "timestamp": 115582249,
+          "sha256": "19ed201f62cc7c96524b12356f12777d36c130a1aba07755775d095dac053078",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 601
+        },
+        {
+          "timestamp": 116383050,
+          "sha256": "7641e43f2567aee813d0bbfe2ea2062d10e8dd108edaad127cfff6745abb7f4c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 494
+        },
+        {
+          "timestamp": 116783450,
+          "sha256": "ed139fe1beeb36cee4da2aaa26e6f5fbc5ea6c4ebc4d61681b28fa3516828104",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 469
+        }
+      ],
+      "camera_metadata_sha256": "8ec9858f4132f8c8626aa59718aca655243b443ecc10144c189a7d47293379e6",
+      "pair_match_counts": [
+        29,
+        20,
+        17,
+        8,
+        7,
+        4,
+        5,
+        5,
+        4,
+        60,
+        46,
+        6,
+        5,
+        6,
+        11,
+        11,
+        2,
+        77,
+        24,
+        11,
+        14,
+        11,
+        10,
+        8,
+        16,
+        19,
+        18,
+        12,
+        13,
+        9,
+        111,
+        93,
+        39,
+        33,
+        25,
+        143,
+        72,
+        41,
+        28,
+        108,
+        50,
+        40,
+        113,
+        72,
+        146
+      ]
+    },
+    {
+      "sample_id": "realestate10k/03482c3bd66de195",
+      "frames": [
+        {
+          "timestamp": 64464400,
+          "sha256": "bffe95635297180dd640479a67d1da117a1a022ce71436f309e7152a7c6237aa",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 633
+        },
+        {
+          "timestamp": 65698967,
+          "sha256": "8facc65e309c796c07215e2193d348ead08dae88c5973283876ffc7672ae1f17",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 689
+        },
+        {
+          "timestamp": 66332933,
+          "sha256": "990829a43deb417f7da0fa3b65e6c7ab29402b0247b8e27badd2a371032fc162",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 639
+        },
+        {
+          "timestamp": 66933533,
+          "sha256": "e9ef2cf7bce5aac97a1af311b5ec2425c0de244afd8aed3df2db3310f842e48b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 732
+        },
+        {
+          "timestamp": 68168100,
+          "sha256": "a8dc1c5999cb44aeaef0b2253a38fb6c53997a70ba82aea5058a6c17ed7d4d7e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 778
+        },
+        {
+          "timestamp": 68802067,
+          "sha256": "d43452a241c5a60ea81517d859aac3ef4574e7bc9e16cd83987918938e6bdb81",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 809
+        },
+        {
+          "timestamp": 71871800,
+          "sha256": "2f8bcb9d45c85faf624f759764c48dbd54d76322f61c44101cecb1f97c40b3ae",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 642
+        },
+        {
+          "timestamp": 72505767,
+          "sha256": "f71eb80311f2378b373c1114bddd53154eaf5aef41bca1723d24a866045f628e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 764
+        },
+        {
+          "timestamp": 73106367,
+          "sha256": "42182275f5d0b480f96ebf24d8bc4d16350f6dd7219822e41d1eeb96f56db691",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 684
+        },
+        {
+          "timestamp": 73740333,
+          "sha256": "fe559d4ed3134d2b0da2a88446eaf6b5b71e9d994bb1fe05480a8e37eef661d9",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 664
+        }
+      ],
+      "camera_metadata_sha256": "2ca886f6384fb58eb6099edd5233fa9191b6f90ca5792ae02e7cb47589daa674",
+      "pair_match_counts": [
+        98,
+        49,
+        37,
+        10,
+        10,
+        8,
+        12,
+        6,
+        9,
+        145,
+        77,
+        17,
+        8,
+        11,
+        6,
+        8,
+        7,
+        157,
+        31,
+        19,
+        8,
+        4,
+        10,
+        5,
+        61,
+        44,
+        9,
+        14,
+        15,
+        16,
+        169,
+        19,
+        7,
+        10,
+        8,
+        13,
+        14,
+        8,
+        13,
+        130,
+        81,
+        59,
+        149,
+        101,
+        155
+      ]
+    },
+    {
+      "sample_id": "realestate10k/0362399a61c18ad5",
+      "frames": [
+        {
+          "timestamp": 86795042,
+          "sha256": "64ad7a2b313f2a7611d9bf9b44eb62314c618c5496bcb1280d0574ff7a19695c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 713
+        },
+        {
+          "timestamp": 87003583,
+          "sha256": "fae78201fc6b6f600408b7441825c36dfccc030eda63b8e14c231b3ed27ca121",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 699
+        },
+        {
+          "timestamp": 87212125,
+          "sha256": "9ed0bd08c3180c110a3348cadd64330cb0f3ec01bf5d81737a983172259c7e7d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 702
+        },
+        {
+          "timestamp": 87796042,
+          "sha256": "7edbb4af04f2d75db5fbb1687f5f33bb7a1c340c5ea0565628d81e7bdfcf8ba6",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 695
+        },
+        {
+          "timestamp": 88004583,
+          "sha256": "bd4024b333cb081cf043ef994ad27bccbce5e84739d8871613de2e92fd14fdcd",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 696
+        },
+        {
+          "timestamp": 88213125,
+          "sha256": "b9b760edcff48e751c82293ca4520338c37f64b0d372227f20aa29dbb8522e86",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 632
+        },
+        {
+          "timestamp": 88379958,
+          "sha256": "0dd098cf258e0ee38702af0cb498daf3025ad09cfdf3f0d3a2b1d0dd9af7149b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 641
+        },
+        {
+          "timestamp": 88797042,
+          "sha256": "d4229805b863a15e685916f12d284eec1ab45db72cba43b45bbe576cbbcb8d02",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 617
+        },
+        {
+          "timestamp": 89005583,
+          "sha256": "82d333690ab597dc13303f4b899d33bfdc4311233534198eafbc5adf6bda8b6f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 639
+        },
+        {
+          "timestamp": 89380958,
+          "sha256": "13e4cb819bdf510b588c89c6e918d989cee86af812f701ef2bcefeab566fbfc0",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 575
+        }
+      ],
+      "camera_metadata_sha256": "3651c0ce72c9efef9d607ef738a970eb1ca4e7854f8220b69a889d564c16bd5b",
+      "pair_match_counts": [
+        475,
+        434,
+        329,
+        303,
+        256,
+        243,
+        206,
+        196,
+        163,
+        475,
+        355,
+        323,
+        269,
+        260,
+        230,
+        218,
+        184,
+        392,
+        361,
+        284,
+        290,
+        245,
+        232,
+        193,
+        439,
+        366,
+        348,
+        277,
+        258,
+        207,
+        418,
+        401,
+        328,
+        274,
+        240,
+        446,
+        342,
+        283,
+        249,
+        391,
+        322,
+        268,
+        373,
+        310,
+        370
+      ]
+    },
+    {
+      "sample_id": "realestate10k/036f135766f38f78",
+      "frames": [
+        {
+          "timestamp": 69769700,
+          "sha256": "4a88a259a5bf8459d7f2ecd5dc4002ae20c09e6f67bd63e5ac49f1f8f32d83e1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 396
+        },
+        {
+          "timestamp": 70070000,
+          "sha256": "afbac80e4076d32d8bdbd43ce744bd80626d0db5b58a81e2c18073d90cc4a1ef",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 443
+        },
+        {
+          "timestamp": 70370300,
+          "sha256": "e798bbd1b733702f3de61f510388ddff55f5e6e0c8fa9dd399a7b23c37938f9b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 527
+        },
+        {
+          "timestamp": 70537133,
+          "sha256": "444e7175a0eafd1193b48456cdb25ada72fced027fa0d1d7cef517de56805628",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 519
+        },
+        {
+          "timestamp": 70703967,
+          "sha256": "5803c40053ed6eeb6b4d4acfdf6fc2c67f66c3d7a363952012f7e354d7347ef8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 580
+        },
+        {
+          "timestamp": 70837433,
+          "sha256": "2263ce70c3ce84c24b65714e7b979df1c57ec416545115675b924fc7d751c08b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 588
+        },
+        {
+          "timestamp": 71004267,
+          "sha256": "306277f66c6f6525598c662c363954cd3f7269d40109dbd883b80b509fd8c372",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 644
+        },
+        {
+          "timestamp": 71638233,
+          "sha256": "bde771ad28d02e20b9ff4d55d1724827310ce10715a21884f50ac87228f62ea4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 788
+        },
+        {
+          "timestamp": 71771700,
+          "sha256": "4a9f1279b4c8f899c352060d31769f31d78b4b18d528ca07aaec19f8b3d032c1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 676
+        },
+        {
+          "timestamp": 71938533,
+          "sha256": "aaa4cfe7d407d61e5ee00377e57da7ae8a3bd9eb96b26159810b742502e68117",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 575
+        }
+      ],
+      "camera_metadata_sha256": "fff44f7f848d731f9d14cb17f6ef6724705e623fe17590597d5f8549ee29c318",
+      "pair_match_counts": [
+        212,
+        186,
+        157,
+        135,
+        126,
+        111,
+        54,
+        41,
+        15,
+        236,
+        205,
+        188,
+        174,
+        146,
+        76,
+        46,
+        22,
+        291,
+        244,
+        230,
+        198,
+        102,
+        60,
+        31,
+        262,
+        224,
+        206,
+        107,
+        65,
+        29,
+        308,
+        292,
+        145,
+        93,
+        33,
+        339,
+        204,
+        115,
+        37,
+        219,
+        143,
+        53,
+        311,
+        122,
+        152
+      ]
+    },
+    {
+      "sample_id": "realestate10k/037e8191b3985142",
+      "frames": [
+        {
+          "timestamp": 109843067,
+          "sha256": "bc2f0ca148cc2a599746f930f31d2c9aecf5fdffb266096ee61f19672d7f3c8f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 656
+        },
+        {
+          "timestamp": 110710600,
+          "sha256": "53fdd5dc50b2c04570293f1dd165007acc98477784425ca0bb4367171ad26be8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 566
+        },
+        {
+          "timestamp": 111978533,
+          "sha256": "d20c70bee879c44f3ca4185c493beed911911024116254b2dffd41cf204a8a53",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 601
+        },
+        {
+          "timestamp": 112378933,
+          "sha256": "16010a2905363479fdc2651130978e039ae1cd4e0da025cb525227d586c1825e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 580
+        },
+        {
+          "timestamp": 112812700,
+          "sha256": "7dae9222a7562af62a785aa06ff4288c828c1d44dc9ed67e3b545f4fb66fa56d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 504
+        },
+        {
+          "timestamp": 113246467,
+          "sha256": "80348f3796380cee2bf45c8d29df9305573ea66720448e1a8e293a2b9a115d88",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 394
+        },
+        {
+          "timestamp": 113646867,
+          "sha256": "6ad0c174c39e00ab357db1ee2027454feba7c61c145c0e635c6595a753eccc35",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 330
+        },
+        {
+          "timestamp": 114514400,
+          "sha256": "9f4ce42e4b3d2b37992c21d412ae2f1219389438b766eb937ffb052b598ac38e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 187
+        },
+        {
+          "timestamp": 114914800,
+          "sha256": "2de1636bf767f750db41cf532f62e419bf058c69b9a9800132da37574bce10b3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 223
+        },
+        {
+          "timestamp": 115348567,
+          "sha256": "929eb487de7362b7b55e8596ccf9592940fa03198790037f61c89f6209129878",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 286
+        }
+      ],
+      "camera_metadata_sha256": "3291a34c3cece6fffd987f01d26492c8f0bf5eed40ebcf50732cf356f0a3300f",
+      "pair_match_counts": [
+        205,
+        87,
+        62,
+        35,
+        29,
+        20,
+        5,
+        2,
+        1,
+        128,
+        88,
+        45,
+        34,
+        16,
+        11,
+        4,
+        5,
+        235,
+        123,
+        68,
+        42,
+        17,
+        13,
+        8,
+        181,
+        98,
+        45,
+        15,
+        19,
+        12,
+        126,
+        58,
+        17,
+        15,
+        9,
+        96,
+        23,
+        17,
+        8,
+        28,
+        19,
+        11,
+        48,
+        24,
+        34
+      ]
+    },
+    {
+      "sample_id": "realestate10k/039b153af4fbfba7",
+      "frames": [
+        {
+          "timestamp": 197330000,
+          "sha256": "57cd803902b9facadb35f46e408fe83e7ec741096509050ba070b1d9f6d7d2b1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 451
+        },
+        {
+          "timestamp": 197964000,
+          "sha256": "3b980a28a7f2da883eeeff981c1acd534146f3377821df1bb730306f158ec886",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 501
+        },
+        {
+          "timestamp": 198564000,
+          "sha256": "1a27077f5e0fd7bf2dfc3667d5c433052d1d7a8b0c84399bcdecd16e744872dd",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 574
+        },
+        {
+          "timestamp": 199198000,
+          "sha256": "effee76bf67afaa90292ec2567715d27a4ba8244ac9f5cfb430e3f1e833df62e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 623
+        },
+        {
+          "timestamp": 199799000,
+          "sha256": "d12b155ab59a618bf633212cc0e9b5ac14464a9fbbd09f6442d7184008621bbb",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 591
+        },
+        {
+          "timestamp": 200433000,
+          "sha256": "070df34f4c7bea1898f77dec8c21eed52bebfd375b9c5c711ea5225064d03d66",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 624
+        },
+        {
+          "timestamp": 201668000,
+          "sha256": "50d87d704eaefd09e1a030bc49525a94cdc784e75a1a349b0cce878e4d5d334e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 624
+        },
+        {
+          "timestamp": 203503000,
+          "sha256": "1bc0caaebdcfd1dfb2ab3e986ba7031e72a3b3a7d2487339b08578feaf79e727",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 516
+        },
+        {
+          "timestamp": 204137000,
+          "sha256": "8074b15a60215992c251cf98a45261b4e14838402c5fe4e65c01fd2efa7442fe",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 481
+        },
+        {
+          "timestamp": 204738000,
+          "sha256": "1b51575bbcf87840e9d00d90ff02f83ddd36713465a22a03c2be7b371eab4bd2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 552
+        }
+      ],
+      "camera_metadata_sha256": "8a9e17cc6579b969e1eee3a0ef3e0968604ebc0b65eb33a627ccbe26760a02e6",
+      "pair_match_counts": [
+        164,
+        135,
+        100,
+        71,
+        45,
+        40,
+        14,
+        12,
+        8,
+        178,
+        123,
+        84,
+        53,
+        43,
+        17,
+        19,
+        8,
+        180,
+        107,
+        73,
+        52,
+        26,
+        14,
+        11,
+        161,
+        109,
+        63,
+        29,
+        15,
+        9,
+        172,
+        88,
+        39,
+        19,
+        12,
+        117,
+        43,
+        32,
+        9,
+        67,
+        44,
+        16,
+        142,
+        83,
+        131
+      ]
+    },
+    {
+      "sample_id": "realestate10k/03adff83538bdb4e",
+      "frames": [
+        {
+          "timestamp": 55055000,
+          "sha256": "5b70f2e80f18270bf1b2bfa545bb0dbc5743920721a1dd667bc00dec865c73df",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 540
+        },
+        {
+          "timestamp": 55096711,
+          "sha256": "370b2c039da9c4f04f91aa7f342982b3daedc777309ebf5a167d7b082f715668",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 564
+        },
+        {
+          "timestamp": 55138422,
+          "sha256": "5ca1e49311b1aae3a95f8b4b57deca8324e52dc788cc75925f78f4e8f3606e89",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 558
+        },
+        {
+          "timestamp": 55180122,
+          "sha256": "b6592cb24a24dd3fddb74608289ea3a0a81fcf2031fddcf9cb24840fa25cc4dc",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 550
+        },
+        {
+          "timestamp": 55263544,
+          "sha256": "c25c6e86e010a5f0bb24ba6c00efce8c3d9862a60811ab8aabcb79c815c5b864",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 582
+        },
+        {
+          "timestamp": 55305256,
+          "sha256": "aa5005742ed175e3e5e653e2909946666dd4ded821fba33b7ba7803a9198cfd1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 604
+        },
+        {
+          "timestamp": 55346956,
+          "sha256": "425e4fed302d768cbf3549554a2a12319eab57c652ed71e57db6595b63fa1639",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 589
+        },
+        {
+          "timestamp": 55430378,
+          "sha256": "65f916bc6e78b5f35d876862060a2b2b355ba399d7117bccbcb51f5090560f2e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 623
+        },
+        {
+          "timestamp": 55472089,
+          "sha256": "5f78866ab3a56732b6106ba1fabd01ea87b7d3de99cafe85539da49592a219a2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 630
+        },
+        {
+          "timestamp": 55513789,
+          "sha256": "94fcb77581938a49b68371563e63afe297cde979a1366e29a7496ae34c2c8ff4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 636
+        }
+      ],
+      "camera_metadata_sha256": "133b35dd271631a871e97e6bcf9fe6c8d4beaf67abb8459e9137c2f5d8a99b91",
+      "pair_match_counts": [
+        369,
+        351,
+        360,
+        346,
+        331,
+        334,
+        336,
+        314,
+        310,
+        361,
+        375,
+        355,
+        352,
+        352,
+        345,
+        329,
+        333,
+        374,
+        366,
+        353,
+        357,
+        346,
+        342,
+        329,
+        364,
+        360,
+        360,
+        359,
+        334,
+        337,
+        393,
+        396,
+        365,
+        341,
+        340,
+        403,
+        376,
+        353,
+        353,
+        378,
+        357,
+        348,
+        406,
+        388,
+        420
+      ]
+    },
+    {
+      "sample_id": "realestate10k/03de2844d3c8314e",
+      "frames": [
+        {
+          "timestamp": 33700333,
+          "sha256": "0029c099a82885e47b146854b845eb6172f3b040b55ec93efc939e073be82696",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 587
+        },
+        {
+          "timestamp": 33900533,
+          "sha256": "f3213180a4e12e74aead410ea6a7c4b176f66785916306e948c93c1f31a1b98f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 543
+        },
+        {
+          "timestamp": 34334300,
+          "sha256": "ebc620d7d573edc98af98a76e887d0fb0bc6b60d79a0032434b320e121e8f1d1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 400
+        },
+        {
+          "timestamp": 34768067,
+          "sha256": "7b37892b82c3fd27a531e4fc291fc16544feb4693285d1762670abee6dbff198",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 297
+        },
+        {
+          "timestamp": 34968267,
+          "sha256": "da247359125fab6e096ab469d8fdf8b52594f64ecd59f8937e6055e9fc7cfdb3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 241
+        },
+        {
+          "timestamp": 35435400,
+          "sha256": "92382efe3d87f366d07b2265d09280f09f5e21149abc560fd23e99287a29272a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 187
+        },
+        {
+          "timestamp": 35635600,
+          "sha256": "35c153b9bec2a6f3925e518ea88b5730f1a1e19d97a29525cff13db3abc08b87",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 166
+        },
+        {
+          "timestamp": 35835800,
+          "sha256": "0a6fdb318e0fb853c9da4ed384aaddd76305b730a1ce707f471140dfa46acfb2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 178
+        },
+        {
+          "timestamp": 36069367,
+          "sha256": "10f9976d2ed7d47a7342e0084fd4074579d67bf1cfd260a904f708d0aeef6351",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 173
+        },
+        {
+          "timestamp": 36903533,
+          "sha256": "c43c186801ff2fe9a5f515aa32461145b0a9d5b6fd3395bd64256dbe1caf5d9b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 173
+        }
+      ],
+      "camera_metadata_sha256": "0736c28c9ba1990c43d8bfdc3fa24078b963d6308d4d9998c29b3f7e80bba088",
+      "pair_match_counts": [
+        174,
+        63,
+        40,
+        28,
+        18,
+        17,
+        14,
+        15,
+        10,
+        90,
+        37,
+        23,
+        16,
+        19,
+        17,
+        14,
+        10,
+        61,
+        44,
+        22,
+        21,
+        19,
+        14,
+        7,
+        89,
+        33,
+        29,
+        27,
+        21,
+        14,
+        41,
+        27,
+        25,
+        21,
+        14,
+        67,
+        60,
+        37,
+        17,
+        79,
+        58,
+        30,
+        81,
+        33,
+        50
+      ]
+    },
+    {
+      "sample_id": "realestate10k/03fe94a439456692",
+      "frames": [
+        {
+          "timestamp": 42475809,
+          "sha256": "6b07016aff5054a3044a76ef4e6302a88569fdf3ba11fcbf2c6926f5d01687d0",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 655
+        },
+        {
+          "timestamp": 43677010,
+          "sha256": "50a765ded7fe1623075191194cbdf9f4a4a65f67c3447aa3c8408f5ddce0fa89",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 546
+        },
+        {
+          "timestamp": 44310978,
+          "sha256": "a9b34b93ca5c3db8de11d1813358cc4ae5ee61b5853c75ea6b07927f4c507afe",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 463
+        },
+        {
+          "timestamp": 44911578,
+          "sha256": "b259bf0245cf9b745431a261f15885c5f01bca836b69e3fdb66c56cd133eef5d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 484
+        },
+        {
+          "timestamp": 45578912,
+          "sha256": "d3cb31638808133ae02b900cc673689cfdf237ee6e6b278debfc9b028188d87f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 460
+        },
+        {
+          "timestamp": 46212796,
+          "sha256": "d59df634ed3c5e79d9f43f4c9c6bcae6fa00403a21622e428f4ad9df24ffce24",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 430
+        },
+        {
+          "timestamp": 46813397,
+          "sha256": "de71a66b385de694172eae76dc969854a8fd6eae497788cf1e02f4909286a77e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 334
+        },
+        {
+          "timestamp": 48047965,
+          "sha256": "b80fc4021b3fb10f4df3d3bcecdfcde49763c9d3acab733791ab52e96c726667",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 247
+        },
+        {
+          "timestamp": 48648565,
+          "sha256": "de33efc106f2d99661f57317385ec9be11635ac86272f6c7a2e33b7e05c441ac",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 208
+        },
+        {
+          "timestamp": 51151068,
+          "sha256": "e6451864635d25a65e6e935a5ae3ad18b74869df50b3f6943ed857d6deeb1f92",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 433
+        }
+      ],
+      "camera_metadata_sha256": "e46d2928c0bfba0b829c93e8f79632c21dd49d5f20ded951b312899727574e9f",
+      "pair_match_counts": [
+        122,
+        70,
+        48,
+        32,
+        28,
+        18,
+        8,
+        5,
+        3,
+        147,
+        103,
+        56,
+        45,
+        36,
+        16,
+        12,
+        6,
+        139,
+        78,
+        57,
+        40,
+        13,
+        13,
+        10,
+        127,
+        86,
+        60,
+        22,
+        18,
+        9,
+        98,
+        64,
+        35,
+        19,
+        11,
+        123,
+        48,
+        27,
+        13,
+        54,
+        30,
+        17,
+        46,
+        16,
+        18
+      ]
+    },
+    {
+      "sample_id": "realestate10k/04433dcf217ad9a0",
+      "frames": [
+        {
+          "timestamp": 153953800,
+          "sha256": "517260de9bc98452162b076c87be816a3c1ffc4177b1f8b848e692f8d8932cba",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 652
+        },
+        {
+          "timestamp": 154087267,
+          "sha256": "5651a170dfbff800aca2ae93bd6e38531cf476984fdcf31ef2bbb92e987df7db",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 616
+        },
+        {
+          "timestamp": 154354200,
+          "sha256": "01216eb31072cb2b78b4769098cfb98eb88e30e913a2f530981ebf071fca99da",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 632
+        },
+        {
+          "timestamp": 154654500,
+          "sha256": "6a316d88fa4c5c6fdc37699c617d329a09efefdaef915d21a0d0603288fa92ec",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 620
+        },
+        {
+          "timestamp": 154821333,
+          "sha256": "24191c8b376e3e77853c446ac29eedc3248a0fe51d2ba541c33b11cb66f3892e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 625
+        },
+        {
+          "timestamp": 154954800,
+          "sha256": "102293e71ffdd8b3aec83a817920c06fc55c5a13c9a433f38569631d26d9057b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 648
+        },
+        {
+          "timestamp": 155088267,
+          "sha256": "c1eac2892782383ae646fddecdc6b65b05a7f2f6619d73c461aba411fe21dcc2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 651
+        },
+        {
+          "timestamp": 155388567,
+          "sha256": "58586ad2a8d76909f7aa42dc77668f9f3d9d82a1834b24aeee016d99886a394b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 643
+        },
+        {
+          "timestamp": 155989167,
+          "sha256": "2f919f058ec6f53f933c61c75a8cdf7e4a21ad2b3bbf5047a0e99a02c5fa820d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 570
+        },
+        {
+          "timestamp": 156156000,
+          "sha256": "ed55ec27a7ff46317c6bb2d0705009ef3104d566ed4577f130ebcd99393d1aa3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 579
+        }
+      ],
+      "camera_metadata_sha256": "0dbee737e3bca0a752dbe2798576d15578bbb3ac11c5b487859da489ccf633bb",
+      "pair_match_counts": [
+        365,
+        265,
+        178,
+        126,
+        119,
+        105,
+        73,
+        51,
+        44,
+        287,
+        181,
+        151,
+        129,
+        106,
+        80,
+        51,
+        56,
+        233,
+        183,
+        157,
+        139,
+        99,
+        58,
+        65,
+        244,
+        215,
+        186,
+        147,
+        69,
+        75,
+        392,
+        325,
+        242,
+        118,
+        139,
+        383,
+        265,
+        145,
+        136,
+        303,
+        153,
+        146,
+        210,
+        176,
+        285
+      ]
+    },
+    {
+      "sample_id": "realestate10k/047c29e9138af233",
+      "frames": [
+        {
+          "timestamp": 100601000,
+          "sha256": "22d7718f728a76ae58151de8351ef731e5c8b5b774ff707633a8582f83f23e7a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 637
+        },
+        {
+          "timestamp": 101401000,
+          "sha256": "d8b3440b7790896c78ee7680053ca576bb39db435bb17e3e88027d0871232864",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 524
+        },
+        {
+          "timestamp": 102236000,
+          "sha256": "449bbcff3d70f14a191a4c56704fbacfb9ad46c1fea00779c34b7c25ad899fc4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 358
+        },
+        {
+          "timestamp": 102503000,
+          "sha256": "6e91bb841039009015729345604b856c29cb43a271fcd725af20cc0bb4526052",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 383
+        },
+        {
+          "timestamp": 102770000,
+          "sha256": "6a2b6cbc54dc0d2bb28362d1fe59dce31fc6c0c1c10a6fe31fbe212b84318eb9",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 359
+        },
+        {
+          "timestamp": 103304000,
+          "sha256": "08e81dbe24cc254979e2808bf0cbbec0d658518bfdcd4d12c29038d9881f1c8a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 438
+        },
+        {
+          "timestamp": 103570000,
+          "sha256": "5f11ef0735ff917a612bb6a2200d13c5ebd5b7cbac7daaa814308349233f996a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 457
+        },
+        {
+          "timestamp": 103871000,
+          "sha256": "a1dd1d8599b6db85d6a51a0a42e30e14fbf533724ccd4fac3440e50acad72263",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 555
+        },
+        {
+          "timestamp": 104138000,
+          "sha256": "1067e0f2bec7beba04c42c68d5ed55ef90e711216eb8167a7993930a2dfc95b2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 552
+        },
+        {
+          "timestamp": 104672000,
+          "sha256": "e92f403d10689bc158aad97fc67a6adff3808160da05741208620b67af419a71",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 735
+        }
+      ],
+      "camera_metadata_sha256": "210facc47d33685b26e26056f6675e4cb6431d4a5857216abb43ea5e3556b5e4",
+      "pair_match_counts": [
+        51,
+        19,
+        14,
+        15,
+        13,
+        11,
+        8,
+        12,
+        5,
+        97,
+        72,
+        62,
+        59,
+        61,
+        47,
+        53,
+        27,
+        176,
+        144,
+        105,
+        97,
+        84,
+        68,
+        27,
+        193,
+        133,
+        124,
+        102,
+        84,
+        27,
+        161,
+        142,
+        118,
+        92,
+        35,
+        224,
+        187,
+        142,
+        42,
+        239,
+        175,
+        63,
+        244,
+        81,
+        111
+      ]
+    },
+    {
+      "sample_id": "realestate10k/049a98f70ce9f471",
+      "frames": [
+        {
+          "timestamp": 128228000,
+          "sha256": "1cbc38e61e50d18517478df1673369e4402b3b0b25afbdd12b2ca1a73f027b60",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 128862000,
+          "sha256": "7655595b72919aaf0e6c7d2fd23a38e2fac32f4edf5d8df9f3694c25c9635dc0",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        },
+        {
+          "timestamp": 129463000,
+          "sha256": "70915a0f720f4d2bb6fc07a08e6495a2c462e8dc4fd3a357493d0567dec94015",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        },
+        {
+          "timestamp": 130697000,
+          "sha256": "ded1077c9c44b3d9e7a61a8d374d48885f601663156621dc754f5c2f5c15d99c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 131331000,
+          "sha256": "93e93469ba7133ad0dddc6ae9590f2d63ea40ad3c2cbb21eee7b8eed4b2c02dd",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 131932000,
+          "sha256": "620ec301ac1067e172d6de04969c0150f8ae50a986c85de728a76af9afc5ed70",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 134400000,
+          "sha256": "c4dbdee606d59abbad4d0b5eedfb437ca98babf764879e67b6a1ac1022dda1ed",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        },
+        {
+          "timestamp": 135034000,
+          "sha256": "31d9a1dbec7c41db7f1d6c624d3a863eb5814d36a0f0c62dabe51d3ffac4c1f1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 135635000,
+          "sha256": "d7e5bfabedce439948b7d92cc15de2e9fe03b5ae43eaec2e256a88db926cc16c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        },
+        {
+          "timestamp": 137503000,
+          "sha256": "8881c584d2f2d0fc414493ece695867311982374a3a17a0a901d3f5dc65b1f5b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        }
+      ],
+      "camera_metadata_sha256": "34d0ee5786ffd894e5e61a1ee06a5d73c520669281fd6fbe52c554d580104ba2",
+      "pair_match_counts": [
+        577,
+        332,
+        140,
+        83,
+        51,
+        18,
+        8,
+        9,
+        4,
+        547,
+        216,
+        142,
+        75,
+        19,
+        12,
+        13,
+        8,
+        360,
+        240,
+        118,
+        29,
+        22,
+        12,
+        5,
+        616,
+        254,
+        65,
+        42,
+        26,
+        9,
+        356,
+        84,
+        70,
+        44,
+        18,
+        148,
+        98,
+        82,
+        34,
+        695,
+        480,
+        189,
+        686,
+        246,
+        342
+      ]
+    },
+    {
+      "sample_id": "realestate10k/04b580ea1f4df0a5",
+      "frames": [
+        {
+          "timestamp": 31781000,
+          "sha256": "161b65098c1f90f3553f3a775bbfedd9c0480513b9c20b26d2c0a064bd8da722",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 968
+        },
+        {
+          "timestamp": 32783000,
+          "sha256": "ae6305b5be45c0538912b02b2bdc9062a74eed4d9dab0b29e1eeb3a8e31d2148",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 867
+        },
+        {
+          "timestamp": 33158000,
+          "sha256": "3844b155aaa978df96d1ff5e3b5675bca5beb5b3237250b58d7d82ee444873ed",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 881
+        },
+        {
+          "timestamp": 33825000,
+          "sha256": "97a4c0bc7b801acf48202291008335ec79f01ce94f1bb4bdf709faf4f6d7fc13",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 928
+        },
+        {
+          "timestamp": 34159000,
+          "sha256": "39cccc22cbc540fa90bcc9a31c7ce873aa8bd35e658ee043db789c53c23e19c2",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 931
+        },
+        {
+          "timestamp": 34826000,
+          "sha256": "77c303f0e1da47d4d9c9021e1602094118b6b8365e8de476599163117b64ddbc",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 961
+        },
+        {
+          "timestamp": 35869000,
+          "sha256": "2c068a2574ace1cba8ce645a414cffa1f11946edd6bc6552a20e981cd980e7a2",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 1021
+        },
+        {
+          "timestamp": 36203000,
+          "sha256": "d044e80db13292716f66dc149a6493928546cffabd5051e488c0475c98475584",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 1093
+        },
+        {
+          "timestamp": 36578000,
+          "sha256": "59c873ce4df7b1e6ccd1fbc4f38e463b4f1da76b7f1870f5aa9df0df19f17197",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 1102
+        },
+        {
+          "timestamp": 36912000,
+          "sha256": "00c0ca4b8414d01629f9bae02304afad0603ff7dd6c911c2884d127bf3a57880",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 1116
+        }
+      ],
+      "camera_metadata_sha256": "2ce3a05ebe2cccf6be688aa805c5012d86be9d22d6893a9b74b0b80140a1635c",
+      "pair_match_counts": [
+        309,
+        266,
+        165,
+        130,
+        96,
+        40,
+        37,
+        25,
+        15,
+        421,
+        257,
+        186,
+        114,
+        58,
+        42,
+        30,
+        17,
+        336,
+        252,
+        150,
+        88,
+        70,
+        48,
+        26,
+        472,
+        236,
+        113,
+        79,
+        66,
+        35,
+        293,
+        144,
+        111,
+        98,
+        66,
+        250,
+        217,
+        167,
+        106,
+        460,
+        354,
+        229,
+        508,
+        289,
+        376
+      ]
+    },
+    {
+      "sample_id": "realestate10k/04db26572a791881",
+      "frames": [
+        {
+          "timestamp": 44811433,
+          "sha256": "3eed6d158296eba1fdf35b6659ada680c3e82b6910431d27f641d38540d16c13",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 875
+        },
+        {
+          "timestamp": 45345300,
+          "sha256": "0756738b322ddf1dd9f5137ae4818cdecc799cd77ccc928b7c3558da37af295b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 841
+        },
+        {
+          "timestamp": 45879167,
+          "sha256": "0725e0da3ccfa4c3400341584c6e8b685bf23d9e06563342b0de7a2476740f95",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 801
+        },
+        {
+          "timestamp": 46413033,
+          "sha256": "b7a0fe1fd3ad13d6efcb7b1f4550d0236d7716c233b7df536cf70cbd70e57cac",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 872
+        },
+        {
+          "timestamp": 47514133,
+          "sha256": "e3e49dc42b61670818e5488755cab5c8cde4f9df6863ef4602fb705886b70a56",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 730
+        },
+        {
+          "timestamp": 48581867,
+          "sha256": "ae08496102cb18753226016821a0c867f56325bfe500fddc8a1fa3dd40024d22",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 736
+        },
+        {
+          "timestamp": 49115733,
+          "sha256": "df2093aa922a69b6a1bf2a91a43dff60793b080e6d710436d9e1857a03c2a795",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 765
+        },
+        {
+          "timestamp": 49649600,
+          "sha256": "42d36ccf5bf2f87013304d4ead7c9127bf4b2859484d31e330b295acacd5ae97",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 809
+        },
+        {
+          "timestamp": 51818433,
+          "sha256": "3d879ea8f7bd7409d9c0f34e1c083f7d40ff96df3c04eb7091fdd28ff5bf3945",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 717
+        },
+        {
+          "timestamp": 52352300,
+          "sha256": "508b28a63f6b8c4e8e5716805986722ec0c53e0ff08ee7750bfea2ee7f738fa6",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 733
+        }
+      ],
+      "camera_metadata_sha256": "25e529ed3fcbdbae94b1578ad29e8c31de75901b40dba80f1e0a54fb11c3118a",
+      "pair_match_counts": [
+        288,
+        175,
+        144,
+        106,
+        63,
+        45,
+        51,
+        48,
+        46,
+        269,
+        210,
+        126,
+        80,
+        52,
+        51,
+        54,
+        49,
+        275,
+        155,
+        95,
+        68,
+        64,
+        55,
+        47,
+        233,
+        129,
+        110,
+        87,
+        64,
+        55,
+        212,
+        142,
+        112,
+        75,
+        70,
+        321,
+        204,
+        90,
+        69,
+        318,
+        106,
+        88,
+        135,
+        96,
+        270
+      ]
+    },
+    {
+      "sample_id": "realestate10k/04e2be0415136fa9",
+      "frames": [
+        {
+          "timestamp": 87066667,
+          "sha256": "7d4d1f38bee983f80d0a47d96bbccdac94ad81d135a1c81a1cafea5dd485d700",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 139
+        },
+        {
+          "timestamp": 87200000,
+          "sha256": "39c350b71fafa77accea37804157a8c624f4bccdfa2d4a53fd54be492d37e144",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 163
+        },
+        {
+          "timestamp": 87366667,
+          "sha256": "d5ccf1b2166b40191b37dad5525e8053f439a57bde531cdad25d98d0d94b0463",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 151
+        },
+        {
+          "timestamp": 87533333,
+          "sha256": "fdc6155f12dd937930275c12fe84aa21a4e16ec810039f39c345b0b58c87ee5f",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 177
+        },
+        {
+          "timestamp": 87700000,
+          "sha256": "069ec7bcd39b298cbca9df4e855f831204e22181f33632b3598344441d04d128",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 214
+        },
+        {
+          "timestamp": 88000000,
+          "sha256": "2ecaf788bd7337de2221660c184f28bd4bf14d8e9dd37ead9d2b5d6501f2a8e2",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 410
+        },
+        {
+          "timestamp": 88333333,
+          "sha256": "4511ec789a0d592bda99d80dddb61e527b586a4af8a5052eca84c8e554440db9",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 823
+        },
+        {
+          "timestamp": 88466667,
+          "sha256": "e7cdbc006dc8a7008cd61eb68c0f105756d4ce82e6bce3499c17c1ffd7dac169",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 982
+        },
+        {
+          "timestamp": 88800000,
+          "sha256": "ae9371bb3d7312d0d3a2215fabd13fe1665ae70472eae03a2caf3c2da32fc2c4",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 89266667,
+          "sha256": "4d9f5ad12e070d13eeb6492bf6665a1826e41e867c703353efa0a1ebb384db13",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 1500
+        }
+      ],
+      "camera_metadata_sha256": "17909546555596306f1030e2a77bca49cbad6b64a1b11d6a31f78283994cd297",
+      "pair_match_counts": [
+        63,
+        44,
+        39,
+        35,
+        26,
+        20,
+        20,
+        10,
+        3,
+        63,
+        60,
+        44,
+        39,
+        31,
+        27,
+        21,
+        8,
+        74,
+        67,
+        56,
+        46,
+        52,
+        35,
+        8,
+        95,
+        83,
+        65,
+        61,
+        43,
+        11,
+        100,
+        81,
+        80,
+        62,
+        13,
+        221,
+        201,
+        165,
+        44,
+        523,
+        444,
+        149,
+        559,
+        189,
+        358
+      ]
+    },
+    {
+      "sample_id": "realestate10k/04ec725465dc5329",
+      "frames": [
+        {
+          "timestamp": 70236833,
+          "sha256": "637e3be717e2633aab8bbb106e70f51559271c5fa282cc4e23f000d93aa347c5",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 799
+        },
+        {
+          "timestamp": 71471400,
+          "sha256": "546e8289bcf0e84e2d63c70b2efb76b9f6fc9ca4160e27a7b83ee14a9b563f10",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 786
+        },
+        {
+          "timestamp": 72072000,
+          "sha256": "a74e53308fc1e915bfd623bf19c2a44293472eba53021adda97056a55929becd",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 820
+        },
+        {
+          "timestamp": 73306567,
+          "sha256": "71c7199981b9f4c648c4d236b89f370a7caaabc0e35b32216f1c345930435ff1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 739
+        },
+        {
+          "timestamp": 73940533,
+          "sha256": "0a716382cfc67b48840ac62fe77198e1f62d0ba296a56fd3e80498addea45c99",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 848
+        },
+        {
+          "timestamp": 74541133,
+          "sha256": "29396e848db25cc5b9363527b92163ef1295406b9de89d7a0f26cdce235b92af",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 875
+        },
+        {
+          "timestamp": 75775700,
+          "sha256": "74f211d014a50e9eb800bc783b03428c8b6a75cd15d5c4d6e3726c2c59296a7b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 909
+        },
+        {
+          "timestamp": 76409667,
+          "sha256": "18e78da6ce1c69da135770a7a3121776303628cc0c171977753efa69ced4ef4d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 916
+        },
+        {
+          "timestamp": 78244833,
+          "sha256": "3ed1cb93c7e4ab86eb95b10bb447cdbfd226b54652526b8bf8d741f08c1fd189",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 872
+        },
+        {
+          "timestamp": 78878800,
+          "sha256": "41b9a6626434bce4010c52dd1293316be1cfb09e6b685603d0822a1ef9150cf5",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 919
+        }
+      ],
+      "camera_metadata_sha256": "fdaf0a14e8a6c66ef57db52c8d367731e6ed8ab0a7f9a3f3acdc7b4a2b0ec71a",
+      "pair_match_counts": [
+        157,
+        137,
+        51,
+        49,
+        37,
+        45,
+        47,
+        47,
+        44,
+        244,
+        76,
+        76,
+        52,
+        47,
+        39,
+        33,
+        42,
+        132,
+        105,
+        72,
+        65,
+        59,
+        64,
+        57,
+        218,
+        156,
+        105,
+        95,
+        63,
+        67,
+        237,
+        130,
+        124,
+        77,
+        77,
+        180,
+        170,
+        95,
+        101,
+        347,
+        174,
+        169,
+        238,
+        194,
+        388
+      ]
+    },
+    {
+      "sample_id": "realestate10k/04f5153fc5255516",
+      "frames": [
+        {
+          "timestamp": 43576867,
+          "sha256": "f0662bc63fae11ebeced9a9d63f9f14a2223cd3ee2ba7c677babc0539e4db1fd",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 436
+        },
+        {
+          "timestamp": 43743700,
+          "sha256": "68486cb3a0309b1505fc7a2adbce32d47c46d9a8f851f9fd87f0a62a1d1c9663",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 439
+        },
+        {
+          "timestamp": 43943900,
+          "sha256": "269e0f47e1d12892840a440bd46fa42344741160fdfbdf9c903ae9154cdc1bd6",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 422
+        },
+        {
+          "timestamp": 44110733,
+          "sha256": "5dfecb3d82b3d6c6bfcf2cedf4ffca2a29e0ee39a4a0f9bc69bebb935df0371b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 429
+        },
+        {
+          "timestamp": 44277567,
+          "sha256": "c093a2f9869d9be519bcef370ea21ea0edc9ba2814cd79b689c0f5720f8da01f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 431
+        },
+        {
+          "timestamp": 44611233,
+          "sha256": "be1426c84225b4b950cd831d68f31d6f3bc24926553f28b26f7aca63cc3335f5",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 461
+        },
+        {
+          "timestamp": 44978267,
+          "sha256": "dfa9f8b469f2efedb4b622f4dde2ddb37644aa4dec66060580689ea3c56641a4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 463
+        },
+        {
+          "timestamp": 45311933,
+          "sha256": "119df2cd34436d4d7a83740597cb1c5b97fd685259720fde2743d87e2302f90f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 454
+        },
+        {
+          "timestamp": 45845800,
+          "sha256": "4c8a4d96b4d320c9253cde47d31b5a590e36a0b3737e18204e53ce303aa811d7",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 406
+        },
+        {
+          "timestamp": 46012633,
+          "sha256": "1680eded157f9a1d627abe568a68a0566bf806d73cfaa7390a4455119468aace",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 394
+        }
+      ],
+      "camera_metadata_sha256": "c7530312edaafd7dc3560ac548e23d7023ef864cb67417070356007a293d7aec",
+      "pair_match_counts": [
+        273,
+        236,
+        206,
+        199,
+        167,
+        158,
+        125,
+        100,
+        91,
+        277,
+        227,
+        213,
+        179,
+        158,
+        127,
+        111,
+        94,
+        250,
+        234,
+        197,
+        176,
+        139,
+        114,
+        113,
+        248,
+        204,
+        174,
+        145,
+        104,
+        106,
+        249,
+        195,
+        167,
+        129,
+        125,
+        236,
+        189,
+        137,
+        129,
+        247,
+        173,
+        160,
+        208,
+        186,
+        247
+      ]
+    },
+    {
+      "sample_id": "realestate10k/053e78d3134437a5",
+      "frames": [
+        {
+          "timestamp": 84250833,
+          "sha256": "c386cb8ca2cbcf192403c0093a3084e0f9214647eb1d28653727d9e23cb503be",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        },
+        {
+          "timestamp": 84451033,
+          "sha256": "f0e6a2757a2cbad077bc97cc5d6aeef15a3fe4d5c6e9c2c50ea23ce3063fc67a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 84651233,
+          "sha256": "2ed2c9bd6f7ea782e40a1c6aa0f8bc605f8024d9eb4133b0b8ac606ffdbeedcf",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        },
+        {
+          "timestamp": 84851433,
+          "sha256": "1ec09123b28918022d2c4ab6f08d566652358a146b341bd50fb1c0da8979a24b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1502
+        },
+        {
+          "timestamp": 85418667,
+          "sha256": "859ad0eb54aeb9351eeb08e720a572920319a3c25b5839a1486caafeb9be25f7",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 85618867,
+          "sha256": "bbe036d7e562c5468cb5ca74b52ed6dec852cc26447a2d7fc3de916dc7cb5ad2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 86019267,
+          "sha256": "c92b341750127d0d3fed31b59f5dd2fde4b48e5f543956e5df77ef40cdf30588",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 86219467,
+          "sha256": "696052551f24c8af9d06840cbaa06ff6d017b4a80e995774e88fc47c0d16f1ca",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 86786700,
+          "sha256": "7474e039aed5d5460b30478fbb7742f3844cbc77ce937b1725a93cb573a986b7",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 86986900,
+          "sha256": "3e69a0f9c901caf632774cefc8835841ea96a7ee66245d462c20e7ea9b3fa4c5",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        }
+      ],
+      "camera_metadata_sha256": "ee1a62acdd92f1d3fb39acb2599d15edba0d7e98c5081acd5082ff9ae9b8b085",
+      "pair_match_counts": [
+        726,
+        641,
+        543,
+        327,
+        337,
+        275,
+        251,
+        182,
+        149,
+        759,
+        645,
+        349,
+        316,
+        302,
+        274,
+        210,
+        200,
+        748,
+        383,
+        363,
+        329,
+        303,
+        221,
+        205,
+        394,
+        376,
+        346,
+        310,
+        212,
+        218,
+        736,
+        431,
+        402,
+        280,
+        252,
+        536,
+        488,
+        323,
+        307,
+        767,
+        460,
+        455,
+        554,
+        507,
+        749
+      ]
+    },
+    {
+      "sample_id": "realestate10k/0542630de1d734de",
+      "frames": [
+        {
+          "timestamp": 183349833,
+          "sha256": "317be6a01cbc5be83006d70da0dc488c8d286b5d28a06fce627b817a9c144391",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 585
+        },
+        {
+          "timestamp": 183750233,
+          "sha256": "6e4f7ba1e45931ed13544b5fe3c8c1620b95c575e5d84e3869f5c8bcc61d0554",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 563
+        },
+        {
+          "timestamp": 184117267,
+          "sha256": "74abc7c3338b7e8b7de8dd2baa8fc3e2f01d0b404c5d08a20af5ed16b631ff77",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 556
+        },
+        {
+          "timestamp": 184517667,
+          "sha256": "4a30da0aa75084b46054059edf4d8362db3af17a886fc3b2cd8f05510ca08ce3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 597
+        },
+        {
+          "timestamp": 184918067,
+          "sha256": "02fad2776745316c088f6eb58338768086fa5f3180aab7fb76b8095097c4ded8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 521
+        },
+        {
+          "timestamp": 185685500,
+          "sha256": "348d66d0d1bd79446de69ded2f8dd9a5bf1f33329e6a396d4ec02710838f6458",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 505
+        },
+        {
+          "timestamp": 186085900,
+          "sha256": "bc792524df7cf17dad28acd79ab3543f16cf58d922074250af832e7efdb56949",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 480
+        },
+        {
+          "timestamp": 187620767,
+          "sha256": "0cbef5238b1553592f5eb0261461e5022ff05e719732fc327ca5245aeb3f45ec",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 569
+        },
+        {
+          "timestamp": 188788600,
+          "sha256": "05f2a194ab23512d970362ff5b4e8670daf3f882342a9f367cf77899b3f07398",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 495
+        },
+        {
+          "timestamp": 189189000,
+          "sha256": "8b89cb8727775a5aac7232e853add38e01ce1a3b5bd865e3e049a30db1d226d4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 511
+        }
+      ],
+      "camera_metadata_sha256": "3ac7bd6ba192eee2d2f9f2130de859656c25b4ece3b4f02266529612c2697936",
+      "pair_match_counts": [
+        149,
+        92,
+        71,
+        44,
+        38,
+        28,
+        20,
+        15,
+        11,
+        153,
+        97,
+        63,
+        41,
+        36,
+        29,
+        20,
+        15,
+        170,
+        98,
+        53,
+        52,
+        42,
+        30,
+        25,
+        149,
+        71,
+        68,
+        44,
+        29,
+        30,
+        95,
+        85,
+        58,
+        35,
+        35,
+        169,
+        83,
+        48,
+        39,
+        106,
+        75,
+        55,
+        128,
+        120,
+        198
+      ]
+    },
+    {
+      "sample_id": "realestate10k/058c67085c217b96",
+      "frames": [
+        {
+          "timestamp": 60260200,
+          "sha256": "47a9bf0a95beb0e42db1c16de54e5d82b107b5085b82da0757ca9f1c98d8bcac",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        },
+        {
+          "timestamp": 60460400,
+          "sha256": "ec7d901145485cb67866020e103e3cafb64df1eeb384be75b295b21e31712154",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 60627233,
+          "sha256": "ebbf4e6bf277007488b8a9dd45d62e7e524abf29936662ced083cf10c4524a0e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 60994267,
+          "sha256": "866171aee17e55f6c4b9dce8334ca59f003c61a07bee63c78bf091301a29ad21",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        },
+        {
+          "timestamp": 61161100,
+          "sha256": "5e3a15a76b160efb0218136803f8dbf1cb87ea9f1d9bb541591bf2ec87e6a3cd",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 61361300,
+          "sha256": "467528020a229563c28f0576d3393b76f7810017b8014346b1b07f0b7f736054",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 61528133,
+          "sha256": "439215e064e7d37557269b84a198bf2a820cfc34c5a92388f44c47a51a75951a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 61728333,
+          "sha256": "0437a15a02e05807c491a377f632b9b1a6ba11a3960bc6190e5a6a447886c6ae",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 61895167,
+          "sha256": "6024c755343842949ee15f21950a8f143dc9d3e1f3e1e1e768cfc5c5d756ac3c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1502
+        },
+        {
+          "timestamp": 62796067,
+          "sha256": "fbb9ef6757ba652e047cf8760fa7f70adb062b7d5829602a7c89aea1ac86a317",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1374
+        }
+      ],
+      "camera_metadata_sha256": "88b86e2b3f2852ad17115eea43cb58f3c7de3282b5eba936ed77be8cbdb52a58",
+      "pair_match_counts": [
+        952,
+        856,
+        601,
+        545,
+        464,
+        431,
+        366,
+        328,
+        111,
+        954,
+        663,
+        621,
+        499,
+        451,
+        404,
+        350,
+        117,
+        725,
+        649,
+        526,
+        471,
+        427,
+        364,
+        119,
+        989,
+        787,
+        718,
+        611,
+        527,
+        141,
+        853,
+        757,
+        633,
+        553,
+        155,
+        974,
+        798,
+        666,
+        172,
+        907,
+        773,
+        195,
+        890,
+        218,
+        240
+      ]
+    },
+    {
+      "sample_id": "realestate10k/059058768c222bd6",
+      "frames": [
+        {
+          "timestamp": 157891067,
+          "sha256": "f16aa9e365f26ce6643ff1ca59020e828b06cd14caff45296d96d6a5f378a1fc",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 330
+        },
+        {
+          "timestamp": 158324833,
+          "sha256": "c0a7e29193aaf637150992d578f95e96f619a83110505d523002ee57b544fb93",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 333
+        },
+        {
+          "timestamp": 159159000,
+          "sha256": "6336f2abc76342222173c0030e9026074d6d2fb9569d9ef3315c70179b94250a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 364
+        },
+        {
+          "timestamp": 159559400,
+          "sha256": "4acfa4d202d1fcc97e98cec2df4869cce235f854e37e40064ed01375aa574572",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 347
+        },
+        {
+          "timestamp": 159959800,
+          "sha256": "6721122894552dbe37ab77f652efc8268e19b9239e36089b957fa65fd53c8948",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 326
+        },
+        {
+          "timestamp": 160393567,
+          "sha256": "0fb51b15db0d9dbd4f79a5ba7f379b1180698df6d76107afb1918aef978a21a2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 302
+        },
+        {
+          "timestamp": 161628133,
+          "sha256": "73e206a891aba2fed61e53fa5b484c11b061e711c2d3ea3b1c1e9901a614287f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 311
+        },
+        {
+          "timestamp": 162462300,
+          "sha256": "b5322718a67761f492b49e64d1e338e19c4542773433f4e4a97ceab517703f30",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 248
+        },
+        {
+          "timestamp": 162862700,
+          "sha256": "0ad022e0899b4fb4e1bdb2e203da33ccb6027c62b7796f17b619d2cb3f27b78f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 201
+        },
+        {
+          "timestamp": 163696867,
+          "sha256": "1607453268b2becab50b6bdf11e50562265907e70737f58e824e68be6500cb8e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 191
+        }
+      ],
+      "camera_metadata_sha256": "ac1e56ff4f4aea1649c385e930e1f100f81efe30edc17f21d5b2b8c2dcedc287",
+      "pair_match_counts": [
+        84,
+        30,
+        21,
+        24,
+        25,
+        43,
+        39,
+        15,
+        8,
+        65,
+        52,
+        42,
+        35,
+        64,
+        51,
+        21,
+        5,
+        151,
+        112,
+        120,
+        62,
+        29,
+        12,
+        6,
+        144,
+        118,
+        46,
+        23,
+        12,
+        2,
+        129,
+        51,
+        20,
+        18,
+        4,
+        51,
+        23,
+        12,
+        2,
+        56,
+        23,
+        3,
+        66,
+        20,
+        23
+      ]
+    },
+    {
+      "sample_id": "realestate10k/05a0ad1e2aa632e7",
+      "frames": [
+        {
+          "timestamp": 44177511,
+          "sha256": "24477a97fc8b7c4e0396781162268e6692a669f4b5f31a82daa46b05c86989a3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 620
+        },
+        {
+          "timestamp": 44811478,
+          "sha256": "4c13a17663108d5b939ae430e7fddec7e5766a1f4cb2d330f4d84f1b1c1114e8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 601
+        },
+        {
+          "timestamp": 45412079,
+          "sha256": "74da0f27914ab80ec937308f3931078cfa50e912469733e374d05f0bebd1d6cd",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 547
+        },
+        {
+          "timestamp": 46046046,
+          "sha256": "92f69c337f147829f6b52ef4414f2e4534adc6d3d5ffa8b16e99f6e22ea51251",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 562
+        },
+        {
+          "timestamp": 46646647,
+          "sha256": "19da9322d0c2e95c99206b36931b3ea4ecb98b2f2b33bf39ea9c159c318abb9e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 523
+        },
+        {
+          "timestamp": 48515182,
+          "sha256": "91dd6e8032a282eb32600d574c52be71520806929a320e3246fdf704b914ea00",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 680
+        },
+        {
+          "timestamp": 49749750,
+          "sha256": "44741ffc1fc89f115b73df7a737ce2567e0d691d3295028ba2b606729684758a",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 674
+        },
+        {
+          "timestamp": 50350350,
+          "sha256": "a386a94dca2457f10b8b246df51c20a043d27331c637cd8fb99d0921b73139cb",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 869
+        },
+        {
+          "timestamp": 51584918,
+          "sha256": "a32863bac2b7b69a220b0fb182e2732c90c274077740cefda317fd42d47b40d3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 696
+        },
+        {
+          "timestamp": 52819486,
+          "sha256": "e936939ccc51a7564fc4ac7a7351eb4ca0c5a33bb66e1b4cd44b91e15c35cfc4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 867
+        }
+      ],
+      "camera_metadata_sha256": "649a094f0c01a54fd3f79c73105e2312799570acd26a68d07782da8ad0ec9126",
+      "pair_match_counts": [
+        149,
+        85,
+        65,
+        55,
+        22,
+        19,
+        28,
+        14,
+        25,
+        133,
+        90,
+        66,
+        30,
+        21,
+        23,
+        11,
+        22,
+        159,
+        109,
+        44,
+        21,
+        28,
+        11,
+        31,
+        171,
+        53,
+        22,
+        29,
+        17,
+        24,
+        71,
+        37,
+        38,
+        20,
+        26,
+        138,
+        84,
+        50,
+        40,
+        178,
+        64,
+        44,
+        131,
+        70,
+        103
+      ]
+    },
+    {
+      "sample_id": "realestate10k/05a6149f1fcee38d",
+      "frames": [
+        {
+          "timestamp": 91057633,
+          "sha256": "b81161dd1cbe9b487040bc127e123f655e4cdbc1e87220c4edd14222699885c2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 301
+        },
+        {
+          "timestamp": 91591500,
+          "sha256": "da246f757df70cc76378c05c9b74cce9cd5ac61d8fd834624ca9c12e8195026b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 278
+        },
+        {
+          "timestamp": 92092000,
+          "sha256": "d53623d0991f3da5cbd217896785916e8d58603ce9b9619091d3183856d19ab4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 274
+        },
+        {
+          "timestamp": 93126367,
+          "sha256": "7cb174f4c2b863822ee477b72f0f822b4d61e4ebab0e966904078a1ec5dc908d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 286
+        },
+        {
+          "timestamp": 94160733,
+          "sha256": "78de39dce0ab69717778232ed27bbe694559b757b33d16de3606b41c46e1b8c1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 271
+        },
+        {
+          "timestamp": 94694600,
+          "sha256": "f61792d1c4a5a8bc8fd9742ed8e1800f835c37bc6ef3035dd7e89e6511e403fa",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 239
+        },
+        {
+          "timestamp": 95195100,
+          "sha256": "3f323d44dfc94798e853bb01afc4155a93ca47e37035d20ab1a41a4a4a0b1103",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 219
+        },
+        {
+          "timestamp": 96229467,
+          "sha256": "00f70b121b5b3723fcb59ccc27508ec14d998c4c386db63397b188e0692f9b6e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 243
+        },
+        {
+          "timestamp": 96763333,
+          "sha256": "42ab738f5deec9f550dd4f65c1c8bc8c4ad8f8261fac4c71aed130d1a874297b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 262
+        },
+        {
+          "timestamp": 97797700,
+          "sha256": "427995c863ad65a319816f1fbd0d74cd67b87e5fca77e13385a020d0202e62c1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 255
+        }
+      ],
+      "camera_metadata_sha256": "f5df3de30bf5c05fb1978abfbb7caa6930df993a7f4d6220701a6f0da1c65332",
+      "pair_match_counts": [
+        101,
+        72,
+        51,
+        33,
+        28,
+        32,
+        14,
+        15,
+        6,
+        103,
+        60,
+        39,
+        35,
+        35,
+        18,
+        21,
+        18,
+        71,
+        50,
+        42,
+        36,
+        28,
+        18,
+        17,
+        72,
+        51,
+        40,
+        23,
+        23,
+        19,
+        100,
+        66,
+        30,
+        27,
+        20,
+        83,
+        35,
+        25,
+        25,
+        43,
+        34,
+        32,
+        90,
+        62,
+        81
+      ]
+    },
+    {
+      "sample_id": "realestate10k/05b1462991e38e4d",
+      "frames": [
+        {
+          "timestamp": 127694000,
+          "sha256": "572f9c0ed1db2bb438481dc1af66671ff6d22950f19b94d83c93d5e9c4c085f7",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 128328000,
+          "sha256": "9f0f3a8be79204184f8a9204740d82f71a31f6404f4d4652ef286bd7bf7a0f8e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 128929000,
+          "sha256": "318241969c8c7b9bbfb86a47335939327e291a880271c88a29c753287de32030",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 130163000,
+          "sha256": "f2523f88a1bc7ad89fbee879b725538e27ca81d30c91e6177dd9f1137bfa72e2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 131398000,
+          "sha256": "997eaddb08767ba1162638cddc27be873e4824828c964568b968ea695c90e72e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1213
+        },
+        {
+          "timestamp": 134500000,
+          "sha256": "51cd9a7feb006700b5babe54ff44d799cd63a6af99330a4114af4236ade7f26f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1419
+        },
+        {
+          "timestamp": 135101000,
+          "sha256": "e9b626e7bf3f9daade63639215fe9a9c96633b17f9fd51e5ca081ba5be04e43b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1356
+        },
+        {
+          "timestamp": 135735000,
+          "sha256": "c2a624fc3ed7c2d00384648dfe935f1b88782a40870c410d64c6a327c0348234",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1329
+        },
+        {
+          "timestamp": 136336000,
+          "sha256": "c70b3ce42e4549c45d3da6682f3c6286544dde18a045ab775a97b77f38c1096d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1301
+        },
+        {
+          "timestamp": 136970000,
+          "sha256": "e9bc6cae1f1a2157e075a2c9705a889f5f84b94accd24f022e0c94d501cc93ca",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1349
+        }
+      ],
+      "camera_metadata_sha256": "37b37f726d1e6efc6c904afa4a8131239c10b7aa59189f8e65c062ce10825111",
+      "pair_match_counts": [
+        372,
+        192,
+        111,
+        75,
+        52,
+        33,
+        39,
+        51,
+        44,
+        455,
+        230,
+        122,
+        78,
+        62,
+        59,
+        52,
+        56,
+        393,
+        190,
+        74,
+        58,
+        55,
+        54,
+        53,
+        311,
+        110,
+        83,
+        75,
+        81,
+        76,
+        133,
+        115,
+        106,
+        95,
+        97,
+        533,
+        435,
+        358,
+        326,
+        537,
+        423,
+        327,
+        564,
+        438,
+        539
+      ]
+    },
+    {
+      "sample_id": "realestate10k/05c57211be152630",
+      "frames": [
+        {
+          "timestamp": 129829000,
+          "sha256": "cfdd8483ea5005e1dab5a6d52f579c2560c116cc10ce83065075e3c266ba349e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 129963000,
+          "sha256": "d7f7eb1ca38ceb6c7e96f4b33f2e02006923ec93a23cd5966528c6334bead4e2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 130196000,
+          "sha256": "1710587f6cef9cc22c13359e6ce6ff5f4062b7a6747f4e309464662343ac4f53",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 130330000,
+          "sha256": "b6cc1d2bea608c1564ed09f6706396e1c790019487c16df03dd4b1acd1c18872",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 130430000,
+          "sha256": "6ac52d1a70a3b91154fa8aa6ee7400aca72b40ec408eb7a854eeff52826530d2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 130563000,
+          "sha256": "29627a63763a29d72d718625a066680ece8fecf0bd0e94a3488cafde1971e144",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 130697000,
+          "sha256": "25997c59dfe3529718d8fe827bcef01db17395fe3cc74ae5c6858cb88c780f6d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        },
+        {
+          "timestamp": 130797000,
+          "sha256": "9c5f7ab864db04a4941a1ade2a903a01c129d0dd06c68587e2ee3f6b5b1c328e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 130930000,
+          "sha256": "5064968ac97a0773233668162f7b744b60cabb56f5ec293af8708d1e8997e74c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 131164000,
+          "sha256": "3e53e5ea040b9def99a715f3c2d2a1d9a76c0a6f40f986f7294ff8f2d3ca4067",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        }
+      ],
+      "camera_metadata_sha256": "6b93c53fedf7a909df44c6e8ed7a935379993b46811233a966637ac1e5830ea3",
+      "pair_match_counts": [
+        637,
+        417,
+        355,
+        312,
+        272,
+        245,
+        234,
+        228,
+        200,
+        518,
+        434,
+        373,
+        336,
+        291,
+        284,
+        270,
+        224,
+        681,
+        538,
+        444,
+        376,
+        347,
+        329,
+        288,
+        733,
+        540,
+        442,
+        408,
+        377,
+        320,
+        605,
+        475,
+        431,
+        418,
+        351,
+        655,
+        568,
+        485,
+        397,
+        730,
+        542,
+        435,
+        651,
+        490,
+        575
+      ]
+    },
+    {
+      "sample_id": "realestate10k/069597e1fe899530",
+      "frames": [
+        {
+          "timestamp": 266766000,
+          "sha256": "0b437b22c7bf91f5d8925ee3ae658debae91ba8d055d2bf4a50f405211ff2eb0",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 568
+        },
+        {
+          "timestamp": 267133000,
+          "sha256": "ddb83862fa647504baaa84383ab407a829256c995f51cde88af47d7a0c40f1b1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 560
+        },
+        {
+          "timestamp": 267534000,
+          "sha256": "8b4cb3be2624334308d404e93698324d2a8742b2310990a6d22e9c7d163b6e86",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 578
+        },
+        {
+          "timestamp": 267901000,
+          "sha256": "76ac41f95dd11b80717918e1649584a2eb8ba5847fb2ca4be5f81072d92d7c3e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 611
+        },
+        {
+          "timestamp": 269035000,
+          "sha256": "c9588b1bb9c29d6f6a48584619d26598907fb1bcbfeaddf4a2277a7064973f6c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 599
+        },
+        {
+          "timestamp": 269802000,
+          "sha256": "ce28359727dc4606ff38fc9c365a7de2f2dbe74dcbb4b6f5e1427593dbaebbda",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 659
+        },
+        {
+          "timestamp": 270569000,
+          "sha256": "2123fd8ae78099394d8387e041a06ba7a6293fd5927f4dd21579ff656a4a64d0",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 669
+        },
+        {
+          "timestamp": 270936000,
+          "sha256": "684f040e81cd701d94e9cb1ec41d4134412d3aaf17d8d69cc5848eb2939879c3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 641
+        },
+        {
+          "timestamp": 271337000,
+          "sha256": "5000b8c9a2ed42414f3601eb7a2abf7b1fee47299e1c3a571d2fa02788fe33a0",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 651
+        },
+        {
+          "timestamp": 272104000,
+          "sha256": "26eed7ca6808407ab0300e2fcc7945461f44069fc5d1f140b4cd2a507fb536c8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 766
+        }
+      ],
+      "camera_metadata_sha256": "9326ddbbc332a4f418b3ac97fe3ef111fae667bc568b9a156ca5bc2758ab1f3c",
+      "pair_match_counts": [
+        257,
+        183,
+        138,
+        72,
+        54,
+        37,
+        40,
+        33,
+        35,
+        212,
+        176,
+        81,
+        48,
+        36,
+        44,
+        30,
+        39,
+        233,
+        109,
+        69,
+        48,
+        45,
+        35,
+        54,
+        146,
+        99,
+        65,
+        56,
+        50,
+        69,
+        203,
+        106,
+        96,
+        96,
+        86,
+        169,
+        151,
+        128,
+        102,
+        283,
+        213,
+        141,
+        275,
+        146,
+        198
+      ]
+    },
+    {
+      "sample_id": "realestate10k/06a2911e9add96c6",
+      "frames": [
+        {
+          "timestamp": 44044000,
+          "sha256": "4564f230d6dfa51ee6fe2f6da02540e335d125402f33b4ed9bb5bf6ce2c1bb91",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 864
+        },
+        {
+          "timestamp": 45178467,
+          "sha256": "35789c9b83b11a8cc21c19fc2169d9eab95801191b0745b891e6680220a26837",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 845
+        },
+        {
+          "timestamp": 45745700,
+          "sha256": "2db3e073e32da7cebc4a69cb273484d20f655a7565978ab3cdc69f9a53b05fc6",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 720
+        },
+        {
+          "timestamp": 46046000,
+          "sha256": "24f9f014af4376c3df9ea3feca3e0d483a5b2846c30ff8014f63349b18ad7061",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 733
+        },
+        {
+          "timestamp": 46312933,
+          "sha256": "b074d8e805ea6a4c53927fff55c52266a1ee53a739291f0f9c2b3f5f09c3576b",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 645
+        },
+        {
+          "timestamp": 46613233,
+          "sha256": "2fc7c4dc2c3151593430f1e5c2b50457f8b56a8d77bbe0c9686826ef73051d37",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 654
+        },
+        {
+          "timestamp": 46913533,
+          "sha256": "fd23ce4cb1f408510108583c572546da6da5249b2a308603c517a14851460f1a",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 616
+        },
+        {
+          "timestamp": 47180467,
+          "sha256": "67ebb3397456519613c58e6d8f0e74aec548b47edd5c7a6f3ffc77d7ac18451d",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 596
+        },
+        {
+          "timestamp": 47480767,
+          "sha256": "30df12de998cd0dac31a7998c08509ac64da245508b4f0b34cd5d8f3dde846aa",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 413
+        },
+        {
+          "timestamp": 47747700,
+          "sha256": "ce579913f9f8d8d7a3c2cca8c07a6bf328dfb79e20944e7161f0380f558d5cfc",
+          "shape": [
+            480,
+            854
+          ],
+          "features": 362
+        }
+      ],
+      "camera_metadata_sha256": "edf9704c7f8a01bc2b9b7c8f8f2a64ac9145cf8883657d664b8943add71eb3d9",
+      "pair_match_counts": [
+        194,
+        96,
+        70,
+        51,
+        31,
+        20,
+        14,
+        8,
+        12,
+        270,
+        186,
+        110,
+        71,
+        57,
+        29,
+        20,
+        14,
+        325,
+        241,
+        153,
+        96,
+        61,
+        35,
+        18,
+        335,
+        208,
+        144,
+        99,
+        47,
+        32,
+        310,
+        204,
+        139,
+        68,
+        38,
+        269,
+        211,
+        106,
+        64,
+        255,
+        148,
+        84,
+        195,
+        126,
+        173
+      ]
+    },
+    {
+      "sample_id": "realestate10k/06b1d1272b162490",
+      "frames": [
+        {
+          "timestamp": 114047267,
+          "sha256": "0ea7dd3006773103b15a815d5f95761d373d368657ea5c5dc1497ecaff173f10",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 114147367,
+          "sha256": "2486632c6905d58318ad60a09ca7b8eeecd53211214cf9a367fbb4b9cc4c3256",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 114280833,
+          "sha256": "a41d087927a8347eb17fa220e2c0d7ab34909566dd9d10ac286ec7ff22fc9649",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 114380933,
+          "sha256": "2ad49664adb7b07cdb76358c150926f98e41bcbd01e4fafb442ed4f379152f72",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 114514400,
+          "sha256": "f9f39e50d383f7f0778e23c0ee65dba134ee9ff991f19660d0004b6757395760",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 114614500,
+          "sha256": "585272caabdfa31fe2ef568a29351586ae99c3eeb2ad64652adc98fdbafa2461",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 115081633,
+          "sha256": "2a80b51a7eb6fda41182bbf0a8583c9e96cb6150833da91e1c9bf5a0834352f0",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 115315200,
+          "sha256": "82d96dd9ef51c0c484007a2b6af445df95a5786960f2daa35f161081f6d351a8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1476
+        },
+        {
+          "timestamp": 115448667,
+          "sha256": "75e6723123e18a6ee2ef4a5ba97a985f5836ae2b7e66318a9f221213eb2c1a2c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1445
+        },
+        {
+          "timestamp": 115682233,
+          "sha256": "f3da75c8363475a6622a898914cf642102bcef5f87a952a09570ae8fdf05c773",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1395
+        }
+      ],
+      "camera_metadata_sha256": "f1174480f1f9840cb1c6af143b69a4b7f7aaaff1e29e09cff791f32395679ba8",
+      "pair_match_counts": [
+        674,
+        469,
+        439,
+        359,
+        315,
+        168,
+        118,
+        99,
+        80,
+        578,
+        512,
+        429,
+        368,
+        178,
+        140,
+        123,
+        94,
+        745,
+        602,
+        485,
+        243,
+        186,
+        158,
+        124,
+        659,
+        526,
+        256,
+        218,
+        176,
+        131,
+        739,
+        340,
+        257,
+        215,
+        171,
+        403,
+        308,
+        247,
+        188,
+        678,
+        533,
+        407,
+        760,
+        546,
+        636
+      ]
+    },
+    {
+      "sample_id": "realestate10k/0720bead0cc7cbbf",
+      "frames": [
+        {
+          "timestamp": 133166367,
+          "sha256": "57a99a201e91524fd6e61de1acfc90474b6c8525d17e4367e0a1ca50f15a28e1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 735
+        },
+        {
+          "timestamp": 134400933,
+          "sha256": "b504ad92e1b01f0a0381de109cebd0b3e53cb6c1cef99758d7e12ef731925145",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 963
+        },
+        {
+          "timestamp": 135635500,
+          "sha256": "b160376e6a673bc06d0dd5d8ec5e93f46dbe14403d7007b7f1be41bf09162f9d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1011
+        },
+        {
+          "timestamp": 136269467,
+          "sha256": "6e989ecb8ca39f48cce8cc3b58971b2d115f765f81434b71fc0631ff0964008e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 980
+        },
+        {
+          "timestamp": 136870067,
+          "sha256": "529d3e0f3702f1d6f1aeed55f6747b1b57ea7bfd5adefbc5e3a7457d344a888f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 923
+        },
+        {
+          "timestamp": 138738600,
+          "sha256": "3f1960a347f94fc5d8ab25629c28d526a21943a239e7ddadd01803bbb99d864d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 634
+        },
+        {
+          "timestamp": 139339200,
+          "sha256": "bffd1607aeb803687dc6d908e0e04d3932ed1eba3f389544ef5767f3fc28e03d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 706
+        },
+        {
+          "timestamp": 139973167,
+          "sha256": "84bc5efdc2003e908072029a16398c91c6ee1213bc4bb513ade35514b03f2ef4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 794
+        },
+        {
+          "timestamp": 140573767,
+          "sha256": "5aea831342ec934731542cc86fb1449b0beac47581d13b376f518754788b05e1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 864
+        },
+        {
+          "timestamp": 142442300,
+          "sha256": "8be1feab025a8cbe9d6d577bfb56d3b59ca5b61f99ead19c6668520bce33b3c4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 799
+        }
+      ],
+      "camera_metadata_sha256": "4d47f47ce54d0a179b03d338d99f4140412c354be8401057edc356900246304d",
+      "pair_match_counts": [
+        218,
+        142,
+        126,
+        135,
+        47,
+        15,
+        11,
+        4,
+        1,
+        248,
+        218,
+        207,
+        51,
+        17,
+        15,
+        5,
+        5,
+        486,
+        385,
+        65,
+        26,
+        17,
+        5,
+        10,
+        437,
+        61,
+        17,
+        12,
+        4,
+        4,
+        78,
+        25,
+        14,
+        8,
+        2,
+        128,
+        29,
+        22,
+        14,
+        151,
+        63,
+        21,
+        246,
+        23,
+        44
+      ]
+    },
+    {
+      "sample_id": "realestate10k/074653ff3928b9fe",
+      "frames": [
+        {
+          "timestamp": 200967000,
+          "sha256": "e8fbb970c0a88e59045bc0559741ed6cddcaaa7db19f024e1b8be5fe3fce6b6c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 353
+        },
+        {
+          "timestamp": 201100000,
+          "sha256": "6cf9a8ea88f31e177594afc4cd3c1fe3bc2c960f0e285b3222a2bec145ce024f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 354
+        },
+        {
+          "timestamp": 201267000,
+          "sha256": "20b6f646c1badb147817d1c2d0f5ff0ec174e04ab8e034b90079758d436a97a7",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 331
+        },
+        {
+          "timestamp": 201401000,
+          "sha256": "93092054d58790602199e53f14ecc9365273e8f05742b46d61304406581c4689",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 317
+        },
+        {
+          "timestamp": 201834000,
+          "sha256": "50d50f07800cfa9c34560e81afd172fb98b0288b378e8c9dcb6cbf2220b09103",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 335
+        },
+        {
+          "timestamp": 202001000,
+          "sha256": "29bbec88a908465aeb85270d5f79c762c03634f33ec14d845388435b253c9151",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 352
+        },
+        {
+          "timestamp": 202135000,
+          "sha256": "f15a54043cfa482ced8e80105042832567aeed2f994a398c5d245d47a1c3beb3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 352
+        },
+        {
+          "timestamp": 202268000,
+          "sha256": "ff7f94245552770f4cd6e181888684a451858596d900e96d661a770820aa6a6b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 369
+        },
+        {
+          "timestamp": 202568000,
+          "sha256": "d5eb4d81be8ba447ee25fb48de9d23024d407463ebaadcae448698693cc09ee3",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 390
+        },
+        {
+          "timestamp": 202735000,
+          "sha256": "475cbc0fa2629f4dc4cbe4623d9f9729fc507ef1446923f38db622c422f67d23",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 414
+        }
+      ],
+      "camera_metadata_sha256": "c95f18b6e172c52d1abc3a834e7c4798740e1c607294e8c0fc60c4f6c01818ac",
+      "pair_match_counts": [
+        197,
+        173,
+        160,
+        137,
+        113,
+        114,
+        116,
+        98,
+        85,
+        186,
+        175,
+        141,
+        128,
+        119,
+        116,
+        103,
+        100,
+        189,
+        146,
+        140,
+        129,
+        132,
+        114,
+        95,
+        150,
+        129,
+        125,
+        130,
+        104,
+        99,
+        194,
+        176,
+        171,
+        138,
+        125,
+        222,
+        198,
+        167,
+        149,
+        201,
+        161,
+        155,
+        200,
+        173,
+        214
+      ]
+    },
+    {
+      "sample_id": "realestate10k/075f0d808a621ae2",
+      "frames": [
+        {
+          "timestamp": 169969800,
+          "sha256": "e5883988c0f8c60e78a0968967b934bd3d0ad1a5b2c9d734b9dce7a19e60184c",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 631
+        },
+        {
+          "timestamp": 170203367,
+          "sha256": "af06fb8976385f096f7891e4807f22f7a650469461e8ac33f4bd3bbec9953202",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 648
+        },
+        {
+          "timestamp": 170470300,
+          "sha256": "609cceb55d69c8f55a7a8b7afc4663976e2a5b819cc09fb949158d62e9041a38",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 707
+        },
+        {
+          "timestamp": 170937433,
+          "sha256": "85d7909f5b97ff2cc3910162066041327398797a3b3df643fc016737a6df2598",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 732
+        },
+        {
+          "timestamp": 171171000,
+          "sha256": "32eba71a8b27454046728d43981b4b8932d5655cd5605162f9bc2966728ee9de",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 735
+        },
+        {
+          "timestamp": 171871700,
+          "sha256": "9d8583499d143ad9d08125a10f48a75f42cb86b569d6e1ada28d43a31374964b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 749
+        },
+        {
+          "timestamp": 172105267,
+          "sha256": "923ee001974925d9d2f4933458e99c7a432eb6d342d1606340ed906b5074666b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 731
+        },
+        {
+          "timestamp": 172372200,
+          "sha256": "3b67ce6ac1966c51b1b2d32dc15d4df808d395dba6d14e2243dd08d66b4e2b48",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 686
+        },
+        {
+          "timestamp": 172605767,
+          "sha256": "44e0f4862d41851973055dccfc4f8945e30d9fe0b527fb996fe83d8bc45eba0e",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 695
+        },
+        {
+          "timestamp": 173072900,
+          "sha256": "e6b12a2e666f8494e8d21d030071ba8d9442487336acf7d33af0e2e5e2b3b77f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 711
+        }
+      ],
+      "camera_metadata_sha256": "271626a0a80846f6a3f73ec9d5da720c4dfccc469e76f03ca68bfb3ea585e780",
+      "pair_match_counts": [
+        336,
+        279,
+        184,
+        168,
+        191,
+        151,
+        132,
+        134,
+        124,
+        364,
+        235,
+        213,
+        191,
+        175,
+        135,
+        141,
+        123,
+        291,
+        255,
+        218,
+        194,
+        172,
+        173,
+        149,
+        423,
+        298,
+        249,
+        202,
+        196,
+        175,
+        342,
+        286,
+        246,
+        232,
+        203,
+        403,
+        335,
+        316,
+        285,
+        391,
+        357,
+        305,
+        414,
+        333,
+        365
+      ]
+    },
+    {
+      "sample_id": "realestate10k/078b8bdc29565cac",
+      "frames": [
+        {
+          "timestamp": 126726600,
+          "sha256": "3ff01ac89b6f316a0b8a26bb305f904761eea35d62b580da6ed09a88f675d475",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 797
+        },
+        {
+          "timestamp": 126960167,
+          "sha256": "2ff83c4fe039ae12d286787849e80306cae9e29ec4a110f6d0c1661fe4750313",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 915
+        },
+        {
+          "timestamp": 127393933,
+          "sha256": "d77eb9579af22cc4d009d73696d8ba3d2754d1acb8f514a205354bbcf07d22a4",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1063
+        },
+        {
+          "timestamp": 128094633,
+          "sha256": "3504b77d26fe17a022290e8daedee2e8a9574b6285a9b341979dadd08b08e75f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1222
+        },
+        {
+          "timestamp": 128328200,
+          "sha256": "32d18002882b5e96bc1388a305b0b37844a7c0eafb6fe8c927797d2d265cd3d9",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1247
+        },
+        {
+          "timestamp": 128528400,
+          "sha256": "bfa6b51e2546f09d697022e904e5b51e8584f1aa6498abbaf2c61aa7dd2c3965",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1343
+        },
+        {
+          "timestamp": 129462667,
+          "sha256": "e0d678d228f5c4d67c14469513170c6bec00d02fd89043f7142e6f0b7c38f31f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1289
+        },
+        {
+          "timestamp": 129662867,
+          "sha256": "b2b9e076d738f981e18cb865ada5ad439b68654193e1cef26ae07a23ae219461",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1240
+        },
+        {
+          "timestamp": 129896433,
+          "sha256": "959d06138ed0ff627814ebddbdf841e7ae0898def19a86c23d46eb757f9a4740",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1201
+        },
+        {
+          "timestamp": 130130000,
+          "sha256": "818f9c5dcc7a019b1ad27d51fa216b18d55dca6132aa65efd879344ea306a783",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1055
+        }
+      ],
+      "camera_metadata_sha256": "03c888ac1d6fcde1a332607a6333d84d179e016005ceba10839de031c8fb1066",
+      "pair_match_counts": [
+        287,
+        134,
+        54,
+        37,
+        27,
+        13,
+        6,
+        12,
+        1,
+        178,
+        85,
+        46,
+        38,
+        10,
+        4,
+        10,
+        4,
+        128,
+        81,
+        69,
+        17,
+        9,
+        22,
+        9,
+        370,
+        232,
+        43,
+        46,
+        31,
+        23,
+        399,
+        81,
+        59,
+        37,
+        27,
+        87,
+        72,
+        55,
+        34,
+        445,
+        277,
+        166,
+        358,
+        214,
+        318
+      ]
+    },
+    {
+      "sample_id": "realestate10k/07d0229847bd7408",
+      "frames": [
+        {
+          "timestamp": 203870333,
+          "sha256": "e29ef0f2cab9b3734b23fb65837bde6f617d34591979023de7189f12fbf3e1c1",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 204103900,
+          "sha256": "8b1ae084788c13c6d58508156263de1213ab9c575b0cf3038fb0550dbbad79e2",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 204571033,
+          "sha256": "7f40d51e31bd81d903d54a340240d5c98f1894b064a8aad743dfc5c08a80f51b",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 204804600,
+          "sha256": "c454c689e2fbe40356686a0cabfcf6eab827192278e603c413edf18a7f202d64",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 205038167,
+          "sha256": "e2bbcd3f1f8b0be5ec163de1b0c7d7d08edacec96326721be50b3ec6236c259f",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 205772233,
+          "sha256": "4f631b0050b194ecbb83592132833cc12d23f9df6c748c472ebb1a1ec8e5d327",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1501
+        },
+        {
+          "timestamp": 206005800,
+          "sha256": "a133355b366b1b1c3e89a458ff46e7f92508a85a3633f3f99dab322948129ff8",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 206239367,
+          "sha256": "3a4fa6b3a19652755b2dfd7dcb1b53d3a373f364f8d9c90abe50bf789c622664",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 206472933,
+          "sha256": "78f877f159bb9b67a9f81107cec4be3c11b12fd1f8ba6125142e258978eef03d",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        },
+        {
+          "timestamp": 207173633,
+          "sha256": "090ecb87a6ef48bb4049abfbd07996afafbfcfbc97b995f0e66df44a6f236354",
+          "shape": [
+            360,
+            640
+          ],
+          "features": 1500
+        }
+      ],
+      "camera_metadata_sha256": "5debf0b8173107cb8cf167fb842e5f4286786932f295b639d45743b380cbd2f7",
+      "pair_match_counts": [
+        793,
+        494,
+        381,
+        297,
+        170,
+        166,
+        125,
+        113,
+        68,
+        614,
+        492,
+        363,
+        215,
+        189,
+        149,
+        134,
+        89,
+        792,
+        605,
+        309,
+        269,
+        218,
+        188,
+        120,
+        783,
+        368,
+        305,
+        253,
+        213,
+        136,
+        426,
+        348,
+        277,
+        267,
+        158,
+        725,
+        577,
+        464,
+        244,
+        785,
+        606,
+        303,
+        719,
+        317,
+        419
+      ]
+    }
+  ]
+}

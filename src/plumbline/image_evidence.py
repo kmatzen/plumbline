@@ -1,0 +1,49 @@
+"""Camera consistency against candidate-independent image correspondences.
+
+Sampson residuals are a conventional geometric baseline, not preference labels.
+Coordinates must be calibrated normalized image coordinates. A zero baseline
+cannot constrain epipolar geometry and returns no score rather than zero error.
+"""
+
+from __future__ import annotations
+
+from typing import Any
+
+import numpy as np
+from numpy.typing import NDArray
+
+
+def sampson_residuals(
+    first: NDArray[Any],
+    second: NDArray[Any],
+    world_from_first: NDArray[Any],
+    world_from_second: NDArray[Any],
+) -> NDArray[np.float64] | None:
+    """Return square-root Sampson errors, or None for zero translation.
+
+    The result is in normalized camera units, not pixels or meters. The essential
+    matrix is normalized so the result is invariant to global trajectory scale.
+    """
+    a, b = np.asarray(first, dtype=float), np.asarray(second, dtype=float)
+    if a.ndim != 2 or a.shape[1] != 2 or b.shape != a.shape:
+        raise ValueError("correspondences must have matching (N,2) shapes")
+    p, q = np.asarray(world_from_first, dtype=float), np.asarray(world_from_second, dtype=float)
+    if p.shape != (4, 4) or q.shape != (4, 4):
+        raise ValueError("poses must have shape (4,4)")
+    if not all(np.isfinite(x).all() for x in (a, b, p, q)):
+        raise ValueError("inputs must be finite")
+    relative = np.linalg.inv(q) @ p
+    translation = q[:3, :3].T @ (p[:3, 3] - q[:3, 3])
+    norm = float(np.linalg.norm(translation))
+    if norm <= np.finfo(float).tiny:
+        return None
+    x, y, z = translation / norm
+    skew = np.array([[0, -z, y], [z, 0, -x], [-y, x, 0]])
+    essential = skew @ relative[:3, :3]
+    a_h = np.column_stack((a, np.ones(len(a))))
+    b_h = np.column_stack((b, np.ones(len(b))))
+    ea = a_h @ essential.T
+    etb = b_h @ essential
+    numerator = np.abs(np.sum(b_h * ea, axis=1))
+    denominator = np.sqrt(np.sum(ea[:, :2] ** 2 + etb[:, :2] ** 2, axis=1))
+    return np.divide(numerator, denominator, out=np.full(len(a), np.inf), where=denominator > 1e-15)

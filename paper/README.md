@@ -45,6 +45,47 @@ jitter judgments on dense video. The camera-evaluation contribution still needs
 dense outputs, independent outcomes or reviewer labels, and held-out comparison
 against ATE, RPE, pose AUC, and a combined metric baseline.
 
+## Independent image evidence pilot
+
+`extract_image_matches.py` runs on the original native frames, with SIFT capped
+at 1,500 features and a mutual 0.75 ratio test. It uses neither candidate poses
+nor reference poses to select matches. Dataset intrinsics normalize the pixel
+coordinates; this tests calibrated extrinsics and does not evaluate a model's
+predicted intrinsics. Each source image and camera metadata file is SHA-256 hashed.
+
+`analyze_image_evidence.py` measures square-root Sampson residuals for each
+candidate on those shared correspondences. At least 16 matches support a frame
+pair and at least three common frame pairs support a method comparison. Each
+frame pair contributes one median; the clip score is the median across pairs.
+Zero-baseline predictions abstain because epipolar geometry is undefined there.
+The score cannot detect translation scale or direction sign and is a standard
+geometric baseline, not a novel preference evaluator.
+
+On 149 decisive native-input method comparisons from 50 clips, agreement is
+70.5% with pose AUC (clip-bootstrap 95% interval 62.4–78.4%) and 63.1% with ATE
+(54.7–71.1%). Among 27 AUC/ATE disagreements, image evidence agrees with AUC in
+19. The reference trajectory has a lower clip residual than all three estimates
+in 49 of 50 clips, a useful but imperfect geometric control. The study is a
+development-set pilot; no generalization or human-preference claim follows.
+
+The complete 35 MB correspondence file remains on Anima at
+`/data3/kmatzen/plumbline/research/image-evidence/matches.json`, using the large
+data disk. Its content hash, source image hashes, camera metadata hashes, and
+pair counts are committed in `results/image_evidence_manifest.json`. Pose-level
+results and grouped uncertainty are in `results/image_evidence_analysis.json`.
+
+To recompute locally after copying the correspondence file:
+
+```sh
+uv run python paper/analyze_image_evidence.py tmp/image-evidence/matches.json
+```
+
+The feature and residual definitions follow the standard
+[OpenCV feature matching](https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html)
+and [epipolar geometry](https://docs.opencv.org/4.x/da/de9/tutorial_py_epipolar_geometry.html)
+methods. These are baselines against which the proposed review methodology must
+be tested.
+
 Build from the repository root:
 
 ```sh
