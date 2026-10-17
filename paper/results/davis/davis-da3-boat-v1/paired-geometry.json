@@ -1,0 +1,1140 @@
+{
+  "scope": "development geometric diagnostic, not method ranking",
+  "sources": [
+    {
+      "run": "paper/results/davis/davis-dage-boat-v1",
+      "manifest_sha256": "78d768058c27b88177a92f0c68bada773c8f5b377cb246d080e5f8c21804d8a3"
+    },
+    {
+      "run": "paper/results/davis/davis-da3-boat-v1",
+      "manifest_sha256": "3ccfce1b92bc63f353e98d67941d2969045c375ac23d685c556114254d615d8c"
+    }
+  ],
+  "matches_sha256": "4619d302c46f232557667819f2985b4473a8e3016d13ddbe199db872f55d59f0",
+  "script_sha256": "19af69ab01aa36a65fa23cdf4c3cb40b4cadb95b13fc2c0c8335fc43db317686",
+  "metric": "mean of forward/backward point-to-epipolar-line distances in input pixels",
+  "calibration_swap": "off-diagonal cells are interventions, not native method outputs",
+  "frames_verified_per_method": 60,
+  "rows": [
+    {
+      "a": 0,
+      "b": 1,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 912,
+      "finite_count": 912,
+      "median_pixels": 0.16399876088162557,
+      "status": "measured"
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 912,
+      "finite_count": 912,
+      "median_pixels": 0.36877452578242753,
+      "status": "measured"
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 912,
+      "finite_count": 912,
+      "median_pixels": 0.5803272770573926,
+      "status": "measured"
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 912,
+      "finite_count": 912,
+      "median_pixels": 0.5760371469359171,
+      "status": "measured"
+    },
+    {
+      "a": 5,
+      "b": 6,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 937,
+      "finite_count": 937,
+      "median_pixels": 0.30749109608910885,
+      "status": "measured"
+    },
+    {
+      "a": 5,
+      "b": 6,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 937,
+      "finite_count": 937,
+      "median_pixels": 0.12059898666895208,
+      "status": "measured"
+    },
+    {
+      "a": 5,
+      "b": 6,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 937,
+      "finite_count": 937,
+      "median_pixels": 0.5683280622755689,
+      "status": "measured"
+    },
+    {
+      "a": 5,
+      "b": 6,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 937,
+      "finite_count": 937,
+      "median_pixels": 0.22709175572055074,
+      "status": "measured"
+    },
+    {
+      "a": 10,
+      "b": 11,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 871,
+      "finite_count": 871,
+      "median_pixels": 0.292445742042716,
+      "status": "measured"
+    },
+    {
+      "a": 10,
+      "b": 11,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 871,
+      "finite_count": 871,
+      "median_pixels": 0.21183675732186913,
+      "status": "measured"
+    },
+    {
+      "a": 10,
+      "b": 11,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 871,
+      "finite_count": 871,
+      "median_pixels": 0.43509108864094515,
+      "status": "measured"
+    },
+    {
+      "a": 10,
+      "b": 11,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 871,
+      "finite_count": 871,
+      "median_pixels": 0.3336334882682195,
+      "status": "measured"
+    },
+    {
+      "a": 15,
+      "b": 16,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 863,
+      "finite_count": 863,
+      "median_pixels": 0.7047478513969736,
+      "status": "measured"
+    },
+    {
+      "a": 15,
+      "b": 16,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 863,
+      "finite_count": 863,
+      "median_pixels": 0.2251777390122811,
+      "status": "measured"
+    },
+    {
+      "a": 15,
+      "b": 16,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 863,
+      "finite_count": 863,
+      "median_pixels": 0.683382641990363,
+      "status": "measured"
+    },
+    {
+      "a": 15,
+      "b": 16,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 863,
+      "finite_count": 863,
+      "median_pixels": 0.3737757645860853,
+      "status": "measured"
+    },
+    {
+      "a": 20,
+      "b": 21,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 848,
+      "finite_count": 848,
+      "median_pixels": 0.17310186859416987,
+      "status": "measured"
+    },
+    {
+      "a": 20,
+      "b": 21,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 848,
+      "finite_count": 848,
+      "median_pixels": 0.37377638791008394,
+      "status": "measured"
+    },
+    {
+      "a": 20,
+      "b": 21,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 848,
+      "finite_count": 848,
+      "median_pixels": 0.3393594322410678,
+      "status": "measured"
+    },
+    {
+      "a": 20,
+      "b": 21,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 848,
+      "finite_count": 848,
+      "median_pixels": 0.3227678384985282,
+      "status": "measured"
+    },
+    {
+      "a": 25,
+      "b": 26,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 912,
+      "finite_count": 912,
+      "median_pixels": 0.6209300384700853,
+      "status": "measured"
+    },
+    {
+      "a": 25,
+      "b": 26,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 912,
+      "finite_count": 912,
+      "median_pixels": 0.38862977080386685,
+      "status": "measured"
+    },
+    {
+      "a": 25,
+      "b": 26,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 912,
+      "finite_count": 912,
+      "median_pixels": 13.396319482782715,
+      "status": "measured"
+    },
+    {
+      "a": 25,
+      "b": 26,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 912,
+      "finite_count": 912,
+      "median_pixels": 8.901805778735138,
+      "status": "measured"
+    },
+    {
+      "a": 30,
+      "b": 31,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 933,
+      "finite_count": 933,
+      "median_pixels": 0.4743317781400691,
+      "status": "measured"
+    },
+    {
+      "a": 30,
+      "b": 31,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 933,
+      "finite_count": 933,
+      "median_pixels": 0.303647231959701,
+      "status": "measured"
+    },
+    {
+      "a": 30,
+      "b": 31,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 933,
+      "finite_count": 933,
+      "median_pixels": 1.0535220725366798,
+      "status": "measured"
+    },
+    {
+      "a": 30,
+      "b": 31,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 933,
+      "finite_count": 933,
+      "median_pixels": 0.814657164760419,
+      "status": "measured"
+    },
+    {
+      "a": 35,
+      "b": 36,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 840,
+      "finite_count": 840,
+      "median_pixels": 0.2998914812123772,
+      "status": "measured"
+    },
+    {
+      "a": 35,
+      "b": 36,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 840,
+      "finite_count": 840,
+      "median_pixels": 0.17125213143141593,
+      "status": "measured"
+    },
+    {
+      "a": 35,
+      "b": 36,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 840,
+      "finite_count": 840,
+      "median_pixels": 1.326380973694178,
+      "status": "measured"
+    },
+    {
+      "a": 35,
+      "b": 36,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 840,
+      "finite_count": 840,
+      "median_pixels": 0.6277388250744309,
+      "status": "measured"
+    },
+    {
+      "a": 40,
+      "b": 41,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 884,
+      "finite_count": 884,
+      "median_pixels": 0.617957143367839,
+      "status": "measured"
+    },
+    {
+      "a": 40,
+      "b": 41,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 884,
+      "finite_count": 884,
+      "median_pixels": 0.22485164262921842,
+      "status": "measured"
+    },
+    {
+      "a": 40,
+      "b": 41,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 884,
+      "finite_count": 884,
+      "median_pixels": 1.8904281481895922,
+      "status": "measured"
+    },
+    {
+      "a": 40,
+      "b": 41,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 884,
+      "finite_count": 884,
+      "median_pixels": 1.042459936306161,
+      "status": "measured"
+    },
+    {
+      "a": 45,
+      "b": 46,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 833,
+      "finite_count": 833,
+      "median_pixels": 0.2418079543644751,
+      "status": "measured"
+    },
+    {
+      "a": 45,
+      "b": 46,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 833,
+      "finite_count": 833,
+      "median_pixels": 0.42712551150205513,
+      "status": "measured"
+    },
+    {
+      "a": 45,
+      "b": 46,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 833,
+      "finite_count": 833,
+      "median_pixels": 0.211385310412453,
+      "status": "measured"
+    },
+    {
+      "a": 45,
+      "b": 46,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 833,
+      "finite_count": 833,
+      "median_pixels": 0.5000488807145587,
+      "status": "measured"
+    },
+    {
+      "a": 50,
+      "b": 51,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 826,
+      "finite_count": 826,
+      "median_pixels": 1.2144098182516387,
+      "status": "measured"
+    },
+    {
+      "a": 50,
+      "b": 51,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 826,
+      "finite_count": 826,
+      "median_pixels": 1.0177192348755852,
+      "status": "measured"
+    },
+    {
+      "a": 50,
+      "b": 51,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 826,
+      "finite_count": 826,
+      "median_pixels": 0.40142679507456336,
+      "status": "measured"
+    },
+    {
+      "a": 50,
+      "b": 51,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 826,
+      "finite_count": 826,
+      "median_pixels": 0.4036110226796552,
+      "status": "measured"
+    },
+    {
+      "a": 55,
+      "b": 56,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 857,
+      "finite_count": 857,
+      "median_pixels": 0.36802944753125644,
+      "status": "measured"
+    },
+    {
+      "a": 55,
+      "b": 56,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 857,
+      "finite_count": 857,
+      "median_pixels": 0.4113333214534691,
+      "status": "measured"
+    },
+    {
+      "a": 55,
+      "b": 56,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 857,
+      "finite_count": 857,
+      "median_pixels": 0.95721860181132,
+      "status": "measured"
+    },
+    {
+      "a": 55,
+      "b": 56,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 857,
+      "finite_count": 857,
+      "median_pixels": 0.41893257024997865,
+      "status": "measured"
+    },
+    {
+      "a": 0,
+      "b": 10,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 592,
+      "finite_count": 592,
+      "median_pixels": 1.5145664837590402,
+      "status": "measured"
+    },
+    {
+      "a": 0,
+      "b": 10,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 592,
+      "finite_count": 592,
+      "median_pixels": 0.4057570909062207,
+      "status": "measured"
+    },
+    {
+      "a": 0,
+      "b": 10,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 592,
+      "finite_count": 592,
+      "median_pixels": 1.8388016278780994,
+      "status": "measured"
+    },
+    {
+      "a": 0,
+      "b": 10,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 592,
+      "finite_count": 592,
+      "median_pixels": 1.6000790854064384,
+      "status": "measured"
+    },
+    {
+      "a": 5,
+      "b": 15,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 610,
+      "finite_count": 610,
+      "median_pixels": 1.5705550152422632,
+      "status": "measured"
+    },
+    {
+      "a": 5,
+      "b": 15,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 610,
+      "finite_count": 610,
+      "median_pixels": 0.7497886810159358,
+      "status": "measured"
+    },
+    {
+      "a": 5,
+      "b": 15,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 610,
+      "finite_count": 610,
+      "median_pixels": 1.2848997282180932,
+      "status": "measured"
+    },
+    {
+      "a": 5,
+      "b": 15,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 610,
+      "finite_count": 610,
+      "median_pixels": 1.0278939233347444,
+      "status": "measured"
+    },
+    {
+      "a": 10,
+      "b": 20,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 598,
+      "finite_count": 598,
+      "median_pixels": 0.5236870848093105,
+      "status": "measured"
+    },
+    {
+      "a": 10,
+      "b": 20,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 598,
+      "finite_count": 598,
+      "median_pixels": 0.3733935495762495,
+      "status": "measured"
+    },
+    {
+      "a": 10,
+      "b": 20,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 598,
+      "finite_count": 598,
+      "median_pixels": 0.7182288556273448,
+      "status": "measured"
+    },
+    {
+      "a": 10,
+      "b": 20,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 598,
+      "finite_count": 598,
+      "median_pixels": 0.5402312570576342,
+      "status": "measured"
+    },
+    {
+      "a": 15,
+      "b": 25,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 560,
+      "finite_count": 560,
+      "median_pixels": 0.9268642745389215,
+      "status": "measured"
+    },
+    {
+      "a": 15,
+      "b": 25,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 560,
+      "finite_count": 560,
+      "median_pixels": 0.7770668724154888,
+      "status": "measured"
+    },
+    {
+      "a": 15,
+      "b": 25,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 560,
+      "finite_count": 560,
+      "median_pixels": 15.319821512590572,
+      "status": "measured"
+    },
+    {
+      "a": 15,
+      "b": 25,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 560,
+      "finite_count": 560,
+      "median_pixels": 11.158727888456887,
+      "status": "measured"
+    },
+    {
+      "a": 20,
+      "b": 30,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 576,
+      "finite_count": 576,
+      "median_pixels": 0.560079017889386,
+      "status": "measured"
+    },
+    {
+      "a": 20,
+      "b": 30,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 576,
+      "finite_count": 576,
+      "median_pixels": 0.5153895901333989,
+      "status": "measured"
+    },
+    {
+      "a": 20,
+      "b": 30,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 576,
+      "finite_count": 576,
+      "median_pixels": 1.1249354063706107,
+      "status": "measured"
+    },
+    {
+      "a": 20,
+      "b": 30,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 576,
+      "finite_count": 576,
+      "median_pixels": 0.6515809824026917,
+      "status": "measured"
+    },
+    {
+      "a": 25,
+      "b": 35,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 583,
+      "finite_count": 583,
+      "median_pixels": 0.8702357319266554,
+      "status": "measured"
+    },
+    {
+      "a": 25,
+      "b": 35,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 583,
+      "finite_count": 583,
+      "median_pixels": 0.2718926153755348,
+      "status": "measured"
+    },
+    {
+      "a": 25,
+      "b": 35,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 583,
+      "finite_count": 583,
+      "median_pixels": 15.757364070615267,
+      "status": "measured"
+    },
+    {
+      "a": 25,
+      "b": 35,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 583,
+      "finite_count": 583,
+      "median_pixels": 10.679316645770427,
+      "status": "measured"
+    },
+    {
+      "a": 30,
+      "b": 40,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 577,
+      "finite_count": 577,
+      "median_pixels": 0.47903923248851754,
+      "status": "measured"
+    },
+    {
+      "a": 30,
+      "b": 40,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 577,
+      "finite_count": 577,
+      "median_pixels": 0.6070582553047927,
+      "status": "measured"
+    },
+    {
+      "a": 30,
+      "b": 40,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 577,
+      "finite_count": 577,
+      "median_pixels": 0.7463593231651089,
+      "status": "measured"
+    },
+    {
+      "a": 30,
+      "b": 40,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 577,
+      "finite_count": 577,
+      "median_pixels": 1.0306543716423562,
+      "status": "measured"
+    },
+    {
+      "a": 35,
+      "b": 45,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 568,
+      "finite_count": 568,
+      "median_pixels": 0.8736379509819727,
+      "status": "measured"
+    },
+    {
+      "a": 35,
+      "b": 45,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 568,
+      "finite_count": 568,
+      "median_pixels": 0.20765868756700456,
+      "status": "measured"
+    },
+    {
+      "a": 35,
+      "b": 45,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 568,
+      "finite_count": 568,
+      "median_pixels": 0.5821454455059012,
+      "status": "measured"
+    },
+    {
+      "a": 35,
+      "b": 45,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 568,
+      "finite_count": 568,
+      "median_pixels": 0.6675856970360812,
+      "status": "measured"
+    },
+    {
+      "a": 40,
+      "b": 50,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 546,
+      "finite_count": 546,
+      "median_pixels": 0.8807556832582009,
+      "status": "measured"
+    },
+    {
+      "a": 40,
+      "b": 50,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 546,
+      "finite_count": 546,
+      "median_pixels": 0.7576947132778216,
+      "status": "measured"
+    },
+    {
+      "a": 40,
+      "b": 50,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 546,
+      "finite_count": 546,
+      "median_pixels": 11.535965831380153,
+      "status": "measured"
+    },
+    {
+      "a": 40,
+      "b": 50,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 546,
+      "finite_count": 546,
+      "median_pixels": 7.901419318460114,
+      "status": "measured"
+    },
+    {
+      "a": 45,
+      "b": 55,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 576,
+      "finite_count": 576,
+      "median_pixels": 2.0662530255157137,
+      "status": "measured"
+    },
+    {
+      "a": 45,
+      "b": 55,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 576,
+      "finite_count": 576,
+      "median_pixels": 2.969387264425926,
+      "status": "measured"
+    },
+    {
+      "a": 45,
+      "b": 55,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 576,
+      "finite_count": 576,
+      "median_pixels": 0.5321155616112705,
+      "status": "measured"
+    },
+    {
+      "a": 45,
+      "b": 55,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 576,
+      "finite_count": 576,
+      "median_pixels": 1.3214131134514062,
+      "status": "measured"
+    },
+    {
+      "a": 0,
+      "b": 30,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 344,
+      "finite_count": 344,
+      "median_pixels": 1.2522751880020024,
+      "status": "measured"
+    },
+    {
+      "a": 0,
+      "b": 30,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 344,
+      "finite_count": 344,
+      "median_pixels": 0.7475964034379636,
+      "status": "measured"
+    },
+    {
+      "a": 0,
+      "b": 30,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 344,
+      "finite_count": 344,
+      "median_pixels": 2.7701763438109275,
+      "status": "measured"
+    },
+    {
+      "a": 0,
+      "b": 30,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 344,
+      "finite_count": 344,
+      "median_pixels": 1.6864302823926138,
+      "status": "measured"
+    },
+    {
+      "a": 5,
+      "b": 35,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 336,
+      "finite_count": 336,
+      "median_pixels": 1.3074825015091562,
+      "status": "measured"
+    },
+    {
+      "a": 5,
+      "b": 35,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 336,
+      "finite_count": 336,
+      "median_pixels": 1.1527142368336527,
+      "status": "measured"
+    },
+    {
+      "a": 5,
+      "b": 35,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 336,
+      "finite_count": 336,
+      "median_pixels": 1.820495376774062,
+      "status": "measured"
+    },
+    {
+      "a": 5,
+      "b": 35,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 336,
+      "finite_count": 336,
+      "median_pixels": 1.4074375035393594,
+      "status": "measured"
+    },
+    {
+      "a": 10,
+      "b": 40,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 314,
+      "finite_count": 314,
+      "median_pixels": 1.3231029211516159,
+      "status": "measured"
+    },
+    {
+      "a": 10,
+      "b": 40,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 314,
+      "finite_count": 314,
+      "median_pixels": 1.423793690328079,
+      "status": "measured"
+    },
+    {
+      "a": 10,
+      "b": 40,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 314,
+      "finite_count": 314,
+      "median_pixels": 1.9529710878288427,
+      "status": "measured"
+    },
+    {
+      "a": 10,
+      "b": 40,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 314,
+      "finite_count": 314,
+      "median_pixels": 1.9756686136752037,
+      "status": "measured"
+    },
+    {
+      "a": 15,
+      "b": 45,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 300,
+      "finite_count": 300,
+      "median_pixels": 1.1853958177503046,
+      "status": "measured"
+    },
+    {
+      "a": 15,
+      "b": 45,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 300,
+      "finite_count": 300,
+      "median_pixels": 1.237030974254381,
+      "status": "measured"
+    },
+    {
+      "a": 15,
+      "b": 45,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 300,
+      "finite_count": 300,
+      "median_pixels": 1.8208538948321333,
+      "status": "measured"
+    },
+    {
+      "a": 15,
+      "b": 45,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 300,
+      "finite_count": 300,
+      "median_pixels": 1.2001372559950312,
+      "status": "measured"
+    },
+    {
+      "a": 20,
+      "b": 50,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 317,
+      "finite_count": 317,
+      "median_pixels": 1.5771658209127537,
+      "status": "measured"
+    },
+    {
+      "a": 20,
+      "b": 50,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 317,
+      "finite_count": 317,
+      "median_pixels": 1.4872527749616609,
+      "status": "measured"
+    },
+    {
+      "a": 20,
+      "b": 50,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 317,
+      "finite_count": 317,
+      "median_pixels": 1.8676844876161454,
+      "status": "measured"
+    },
+    {
+      "a": 20,
+      "b": 50,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 317,
+      "finite_count": 317,
+      "median_pixels": 0.7477455159070985,
+      "status": "measured"
+    },
+    {
+      "a": 25,
+      "b": 55,
+      "pose_source": 0,
+      "calibration_source": 0,
+      "match_count": 345,
+      "finite_count": 345,
+      "median_pixels": 1.3772119425482288,
+      "status": "measured"
+    },
+    {
+      "a": 25,
+      "b": 55,
+      "pose_source": 0,
+      "calibration_source": 1,
+      "match_count": 345,
+      "finite_count": 345,
+      "median_pixels": 2.5061245468760305,
+      "status": "measured"
+    },
+    {
+      "a": 25,
+      "b": 55,
+      "pose_source": 1,
+      "calibration_source": 0,
+      "match_count": 345,
+      "finite_count": 345,
+      "median_pixels": 16.140902028495766,
+      "status": "measured"
+    },
+    {
+      "a": 25,
+      "b": 55,
+      "pose_source": 1,
+      "calibration_source": 1,
+      "match_count": 345,
+      "finite_count": 345,
+      "median_pixels": 9.032094410596713,
+      "status": "measured"
+    }
+  ]
+}

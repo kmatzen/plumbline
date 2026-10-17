@@ -600,7 +600,49 @@ then-running manifest; it is preserved remotely but excluded from analysis.
 The used boat `masks-v2` staging was made after completion, and the staging
 script now rejects unfinished runs explicitly.
 
-### ORE requirements
+### Second-method development comparison: DA3
+
+DA3-LARGE-1.1 was run on the exact same 60 input frames for `bear`, `bmx-bumps`,
+and `boat`, using pinned snapshot `0e109ae307c5982f319a67cf6f9f99ccdc0ec97c`.
+An initial full-attention `bear` attempt failed with CUDA out-of-memory and is
+retained under `results/davis/davis-da3-bear-v1/`. A research-only query-chunk
+wrapper then allowed all three runs to complete without dropping frames or
+keys/values. It splits queries into blocks of 256, preserves full attention
+context, rejects causal/dropout modes, and restores the original function after
+inference. Small CPU tests match full attention within 1e-6, including masked
+inputs; a successful unchunked 60-frame output was not available for direct
+end-to-end numerical comparison. The wrapper and its hash are retained.
+
+Successful outputs are `davis-da3-bear-v2`, `davis-da3-bmx-bumps-v1`, and
+`davis-da3-boat-v1` under `results/davis/`. Inputs were processed to 140x252.
+DA3 pixel intrinsics were converted by reversing its source-verified scale-only
+resize policy, then encoding input pixel centers as normalized UV coordinates.
+All source-frame and prediction hashes were checked. Runtime including loading
+was 9.43, 9.47, and 9.41 seconds respectively. These development settings and
+precision/memory implementations do not constitute a controlled speed benchmark.
+
+`compare_davis_geometry.py` reuses the exact previously selected correspondences
+and checks equality of frame records and decoded input hashes. It reports
+symmetric point-to-epipolar-line distances in **input pixels**, not the normalized
+Sampson units used in the earlier within-method analysis. This avoids directly
+comparing camera-coordinate residuals under different focal scales. A 2x2 swap
+of poses and calibration separates their influence diagnostically; off-diagonal
+conditions are interventions, not outputs of either method.
+
+| Clip | DAGE pose / DAGE K | DAGE pose / DA3 K | DA3 pose / DAGE K | DA3 pose / DA3 K |
+| --- | ---: | ---: | ---: | ---: |
+| bear | 1.1139 | 0.6823 | 1.6766 | 1.3317 |
+| bmx-bumps | 3.8438 | 3.9757 | 4.6681 | 4.6964 |
+| boat | 0.7875 | 0.4192 | 1.2049 | 0.9213 |
+
+Entries are median pair-median distances over 28 pairs per clip, retaining all
+matches including moving-object and erroneous matches. All conditions have
+finite measurements on every pair. Calibration alone changes these diagnostics
+substantially on two clips. Neither these values nor their ordering establish
+human preference, camera accuracy, or functional DNF. Three sequences and two
+models remain development evidence, not a validated comparative benchmark.
+
+### ORE comparison prerequisites
 
 Chen et al., [Object Reprojection Error (NeurIPS 2023)](https://papers.nips.cc/paper_files/paper/2023/file/eb206443c93d07da8b1974b768d8a0d4-Paper-Datasets_and_Benchmarks.pdf)
 already evaluate trajectories without reference camera poses. This is a required
