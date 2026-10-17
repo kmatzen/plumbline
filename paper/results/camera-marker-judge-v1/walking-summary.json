@@ -1,0 +1,190 @@
+{
+  "scope": "unlabeled camera-marker correspondence predictions; no accuracy or DNF validation",
+  "planned_presentations": 72,
+  "renderable_presentations": 14,
+  "arms": {
+    "base": {
+      "dage": {
+        "planned_presentations": 36,
+        "presented": 7,
+        "unavailable": {
+          "missing_prefix_observations": 24,
+          "query_outside_image": 2,
+          "nonpositive_prefix_depth": 3
+        },
+        "predicted_labels": {
+          "far": 7
+        },
+        "interpretation": "prediction counts, not accuracy or camera failure counts"
+      },
+      "da3": {
+        "planned_presentations": 36,
+        "presented": 7,
+        "unavailable": {
+          "missing_prefix_observations": 24,
+          "query_outside_image": 2,
+          "nonpositive_prefix_depth": 3
+        },
+        "predicted_labels": {
+          "far": 7
+        },
+        "interpretation": "prediction counts, not accuracy or camera failure counts"
+      }
+    },
+    "adapted": {
+      "dage": {
+        "planned_presentations": 36,
+        "presented": 7,
+        "unavailable": {
+          "missing_prefix_observations": 24,
+          "query_outside_image": 2,
+          "nonpositive_prefix_depth": 3
+        },
+        "predicted_labels": {
+          "occluded": 3,
+          "far": 4
+        },
+        "interpretation": "prediction counts, not accuracy or camera failure counts"
+      },
+      "da3": {
+        "planned_presentations": 36,
+        "presented": 7,
+        "unavailable": {
+          "missing_prefix_observations": 24,
+          "query_outside_image": 2,
+          "nonpositive_prefix_depth": 3
+        },
+        "predicted_labels": {
+          "far": 7
+        },
+        "interpretation": "prediction counts, not accuracy or camera failure counts"
+      }
+    }
+  },
+  "base_to_adapted_counts": {
+    "far->occluded": 3,
+    "far->far": 11
+  },
+  "paired_predictions": [
+    {
+      "id": "b8a57e4ee05c6c9dba78d757",
+      "model": "dage",
+      "slot": 1,
+      "frame": 30,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "76dda71c23f454abd83c6b88",
+      "model": "dage",
+      "slot": 1,
+      "frame": 60,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "87d3bd8bab6fd8580a2bc46e",
+      "model": "dage",
+      "slot": 1,
+      "frame": 89,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "d5263c5787ca25271c139792",
+      "model": "dage",
+      "slot": 6,
+      "frame": 30,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "e8b1e23cab07389142a59fac",
+      "model": "dage",
+      "slot": 6,
+      "frame": 89,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "4d70a6375fe246caba3c8073",
+      "model": "dage",
+      "slot": 10,
+      "frame": 30,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "5cd343946a053e1e858333ca",
+      "model": "dage",
+      "slot": 10,
+      "frame": 89,
+      "base": "far",
+      "adapted": "occluded"
+    },
+    {
+      "id": "ac3373f5dc5740bafad05120",
+      "model": "da3",
+      "slot": 1,
+      "frame": 30,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "a5a5d6bd7fac186c85e1f403",
+      "model": "da3",
+      "slot": 1,
+      "frame": 60,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "1a7cc0aa918498f69c455196",
+      "model": "da3",
+      "slot": 1,
+      "frame": 89,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "884d040f4a64ccf4f63bdfe1",
+      "model": "da3",
+      "slot": 6,
+      "frame": 30,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "941d60dbbff7ad7a96c7dc7c",
+      "model": "da3",
+      "slot": 6,
+      "frame": 89,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "90f3161d1c2edb2362cb79c1",
+      "model": "da3",
+      "slot": 10,
+      "frame": 30,
+      "base": "far",
+      "adapted": "far"
+    },
+    {
+      "id": "5bc269660e07058fe144c7cf",
+      "model": "da3",
+      "slot": 10,
+      "frame": 89,
+      "base": "far",
+      "adapted": "far"
+    }
+  ],
+  "limitations": "do not interpret close counts as camera ranking or far as DNF; unverified prefix fits, calibration, correspondence, and staticness; missing cases remain unassessed; no independent labels",
+  "input_sha256": {
+    "report": "f751e5b892f1f54680abccb886b29668608be9cedb20dfceeb74399bca304a9f",
+    "corpus": "746b847dbba84d777161b8953908e78c8807a39f1478ceb7301b8261f448ba22",
+    "training": "c16c4c3a0495e8bd813d0bad8009c89b29047c7142114370f27a51ab0aa58f26",
+    "evaluator": "4a7af77a9c97547b2707fd338c79a3c52379e5296b0fa0e840375dd3cf5c743f",
+    "analysis": "03b7dc3df7b2d6771681f5ee43b3a8a15ccdff129c12e9347a37de14920100e4"
+  }
+}

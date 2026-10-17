@@ -3517,3 +3517,35 @@ accuracy improvement. Full responses and audited accounting are retained in
 `results/camera-marker-judge-v1/static-evaluation.json` and
 `static-summary.json`. The remaining clip runs are separate and are not
 represented by this completed result.
+
+The office application also completed and passed the paired-input/provenance
+audit. DAGE has 28 presented / eight off-image cases; DA3 has 29 presented /
+seven off-image cases, each out of 36 planned. The base model again predicted
+`far` on every presented panel. The adapted predictions are 11 close / 10
+occluded / 7 far for DAGE and 12 close / 4 occluded / 13 far for DA3. Neither
+close-count ordering nor the different occlusion frequencies establish a
+camera-quality result: labels are unverified, availability differs, and
+prefix-fit error can also affect placement. Raw and audited reports are
+`office-evaluation.json` and `office-summary.json` in the same result directory.
+The full non-weight suite passes: 1,986 tests, one skip for an unstaged KITTI
+bundle, and six weight tests deselected. This validates the tested code paths,
+not the correctness of the model's visual predictions.
+
+The walking application then completed and passed the same audit. Each method
+has seven presented cases out of 36 planned: 24 are unavailable because of
+missing prefix observations, two because the query projection is off-image,
+and three because the fitted point has nonpositive prefix depth. The base
+predicts `far` on all fourteen panels. Adapted DAGE predictions are three
+occluded and four far; adapted DA3 predictions are seven far. Reports are
+`walking-evaluation.json` and `walking-summary.json`. These judgments do not
+establish that either trajectory failed, nor that all marked details are
+actually far or occluded.
+
+The entire fixed application is complete: 216 planned presentations, 129
+renderable panels, 87 unavailable presentations, and 258 paired-arm responses.
+The base predicts far throughout. Adapted totals are 50 close, 41 occluded,
+and 38 far. Neither arm abstains or emits an invalid label. Absence of
+abstention is an observed behavior, not calibrated confidence. The integration
+and provenance checks pass, but correspondence correctness on these panels
+and camera-level usefulness remain unvalidated. No DNF rate, method ranking,
+or fine-tuning accuracy improvement follows from these unlabeled counts.
