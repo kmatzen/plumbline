@@ -642,6 +642,39 @@ substantially on two clips. Neither these values nor their ordering establish
 human preference, camera accuracy, or functional DNF. Three sequences and two
 models remain development evidence, not a validated comparative benchmark.
 
+### Translation-sign and depth diagnostics
+
+`probe_davis_cheirality.py` tests a known epipolar ambiguity on the same fixed
+matches: reversing every camera center leaves the essential matrix unchanged up
+to sign. It therefore leaves the absolute epipolar residual unchanged, even
+though reconstructed point depths change sign. Positive depth (cheirality) is a
+classical constraint, not our contribution; see
+[Zisserman's two-view geometry lecture](https://www.robots.ox.ac.uk/~az/lectures/cv/lecture5.pdf).
+
+All 168 native pairs across six outputs had unchanged residuals under the sign
+intervention. The baseline-normalized least-squares two-ray diagnostic reports
+every match, including numerical degeneracy and mixed-sign depths. Synthetic
+checks cover known depths, rotated cameras, view swaps, positive scale, world
+coordinate changes, and parallel rays with fabricated translation.
+
+| Output | Matches | Positive depth in both cameras | Negative depth in both | Median pair-median ray angle |
+| --- | ---: | ---: | ---: | ---: |
+| DAGE bear | 22472 | 83.38% | 16.57% | 0.1318 degrees |
+| DA3 bear | 22472 | 85.19% | 14.70% | 0.1137 degrees |
+| DAGE bmx-bumps | 11626 | 68.31% | 31.44% | 0.2039 degrees |
+| DA3 bmx-bumps | 11626 | 59.33% | 40.46% | 0.2939 degrees |
+| DAGE boat | 18258 | 78.05% | 21.91% | 0.5013 degrees |
+| DA3 boat | 18258 | 49.56% | 50.35% | 0.3865 degrees |
+
+Percentages pool correspondences, not independent samples; repeated features and
+frames occur across pairs. Remaining matches have mixed-sign or zero depths.
+No observed match was numerically rank deficient, but the small angles warn that
+depth signs can be sensitive to calibration and measurement errors. This is not
+an empirically calibrated observability gate. Moving objects and mismatches are
+retained, and intrinsics are predicted. These fractions are not tracking accuracy
+or DNF rates. Per-pair counts and angle quantiles are retained in each run's
+`cheirality-probe.json`. No acceptance threshold has been fitted.
+
 ### DAVIS author-review pilot
 
 The eight-presentation pilot contains six outputs (DAGE and DA3 on the three
