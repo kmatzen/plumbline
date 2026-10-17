@@ -1,0 +1,2762 @@
+{
+  "scope": "camera-projected correspondence validation; no staticness or camera-DNF labels",
+  "sequence": "paragliding-launch",
+  "prompt": "Compare the marked detail in A with the candidate marked in B. The top row shows context; the bottom row shows native-pixel crops. Is the candidate close to the same detail, far from it, or is the original detail occluded? Reply with one label: close, far, occluded, or uncertain. Close means within 2 native pixels; far means at least 8 native pixels. Use uncertain when the images do not support a decision. Do not judge camera accuracy or whether the object is moving.",
+  "planned_presentations": 150,
+  "geometry_sha256": "dea2702c7e4da06ace2c94b0d90018e868704a95f4ef4ef93d574678988a1f2a",
+  "source_manifest_sha256": "d8e1903df707408ef3b392c8c85c951b8cd6a36f899690d76ca520ae331bb41d",
+  "source_file_sha256": "bc5929038a154c4e1a4fcaae7ae1c3843452527d2e14c1bcf9ecdde2c89b1423",
+  "tracker_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "script_sha256": "49f222e81751905ebeb20100c2eceac7eb15c8b92cc7230141b9a7a104cfbbfb",
+  "export_sha256": "de9a5ce6e5a1e04387e774bd078a58669739a64f55fb26394bdf4b8c116555cb",
+  "geometry_dependencies_sha256": {
+    "plumbline.image_evidence": "9fc932d5f4cea4008a9dc43106fe4075e67dff17274000853cd511bff17414f4",
+    "plumbline.conventions": "506969710476aafde4ec4adf63cb86d4164762bd32e81d1a1b3bfd5f72e242ad"
+  },
+  "dependencies_sha256": {
+    "tapvid_camera_markers.py": "769bb4e2f7d34574e9352f748ae441926ee8e937c20597a27c107d4299edcc8b",
+    "build_anchor_preview.py": "7568d7a8cc409e7ac630b0a3753dced03691b0350e34547355ccfe862b3ae1c3",
+    "build_tapvid_judge_corpus.py": "5f66c715c674336018bfe6d331d7b67f81acfaa8896757c65e1f7817686852e0",
+    "run_tapvid_cameras.py": "56b8884bdf6c42ea41ae0b3313dc9dcdb554821c98cd96f31f8615cf134ddbec"
+  },
+  "counts": {
+    "nonpositive_prefix_depth": 87,
+    "query_outside_image": 51,
+    "far": 3,
+    "nonpositive_query_depth": 8,
+    "occluded": 1
+  },
+  "records": [
+    {
+      "id": "9a8f99586e2d21a07cf2fdb5",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        421.4470099210739,
+        267.57762908935547
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4ca70fd08967135271e09d5e",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        421.4470099210739,
+        267.57762908935547
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5aac79c88446311dfdcc18c7",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        421.4470099210739,
+        267.57762908935547
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "17a92570732b50c1764f91dd",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        414.7336749434471,
+        188.57142448425293
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a49652239998b681ee36f478",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        414.7336749434471,
+        188.57142448425293
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5d1082aaead0fdc34643a9d4",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        414.7336749434471,
+        188.57142448425293
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4d6466e22ba452b232ba6d04",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        414.7336749434471,
+        231.80123805999756
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e089df5269f1bd6a2b13506a",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        414.7336749434471,
+        231.80123805999756
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d72d8436b819f47d5512bef3",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        414.7336749434471,
+        231.80123805999756
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5f9c63172e9230e952d577dc",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        432.63585913181305,
+        304.0993881225586
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "254ee31cc331e195a7de8eda",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        432.63585913181305,
+        304.0993881225586
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "585e0b4fef433f1f767fa76c",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        432.63585913181305,
+        304.0993881225586
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3f53b785e6cae8b85620b9b0",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        431.8899358510971,
+        285.4658317565918
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a8f0a45051eb42fbc463ebf1",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        431.8899358510971,
+        285.4658317565918
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b5cc2ac6f4dd84e1dc9049a5",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        431.8899358510971,
+        285.4658317565918
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9ea97df6aaee3620b44e1e96",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        416.96615093946457,
+        156.48000240325928
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "28826f74cf9f1f68a1151f12",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        416.96615093946457,
+        156.48000240325928
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b9bd730f831a9654ab0c4203",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        416.96615093946457,
+        156.48000240325928
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "471ef5f09d85eb9f18623e3c",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        400.6333630681038,
+        176.64000034332275
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b87121bff6bf35032985d529",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        400.6333630681038,
+        176.64000034332275
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "272f242f0a3fef7465082653",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        400.6333630681038,
+        176.64000034332275
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "832ac96b2c2ccc5affc2ea66",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        430.41666865348816,
+        195.83999633789062
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d67042371cff43ff3dd70846",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        430.41666865348816,
+        195.83999633789062
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "aace39399dad1d8fc667fa19",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        430.41666865348816,
+        195.83999633789062
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d08e691a1b5120843114f418",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        450.5924324989319,
+        224.6399974822998
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "706b3ef70ca77f77810b40e9",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        450.5924324989319,
+        224.6399974822998
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "41e2593d63488edd2e6f52ef",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        450.5924324989319,
+        224.6399974822998
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3dcbf7190224ac680c51a08d",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        433.29891335964203,
+        249.59999084472656
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "69c323323ce16fd930597402",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        433.29891335964203,
+        249.59999084472656
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ba0c0289f353fbf27d4aafca",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        433.29891335964203,
+        249.59999084472656
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a131c4f99ca30903a72067fc",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        436.36547553539276,
+        196.77018642425537
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d9243269a29dd5383283bc49",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        436.36547553539276,
+        196.77018642425537
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c010add61b53f1d3ad4bb3a9",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        436.36547553539276,
+        196.77018642425537
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5d79a118a9f8a9528aa56850",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        446.80840146541595,
+        213.1676959991455
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "307e9e756190ca3c4e3a0cc3",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        446.80840146541595,
+        213.1676959991455
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "58b0af3ec8c0e6c962d31443",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        446.80840146541595,
+        213.1676959991455
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "da400a4b15b2ff2b2c7cfd3e",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        472.9157671928406,
+        255.6521701812744
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "dbe91d0b4373adfaa053e4e8",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        472.9157671928406,
+        255.6521701812744
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "17bc50f75b7e7466c5ac85db",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        472.9157671928406,
+        255.6521701812744
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2cf625570665e8cc16b25e00",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        438.6032453775406,
+        250.4347801208496
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a1fa9e19c0657adc8647ff59",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        438.6032453775406,
+        250.4347801208496
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "485a5e05c47d4ef0c9dd0afe",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        438.6032453775406,
+        250.4347801208496
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "93eb1224c7edf0a137b6f10b",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        361.7730965614319,
+        201.24223709106445
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0d8d3afe5d076282bc2117d4",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        361.7730965614319,
+        201.24223709106445
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c57722e94af3581b14e57b94",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        361.7730965614319,
+        201.24223709106445
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "094425b6d6910bb4a3d6d16c",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        408.31939136981964,
+        157.44000434875488
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fbc67e4aa8d200e96c50297b",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        408.31939136981964,
+        157.44000434875488
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fa55c708d257d2a42d5ce5b0",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        408.31939136981964,
+        157.44000434875488
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a65ae341eb657b4cab2aa283",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        395.8296049237251,
+        159.35999393463135
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2c7f61e9fef40847f382f0d3",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        395.8296049237251,
+        159.35999393463135
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "40bc4456b14106b2adabce39",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        395.8296049237251,
+        159.35999393463135
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9e397ea572221898572b08ad",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        413.1231495141983,
+        146.87999725341797
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4e4ecbead61a46c2a4141115",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        413.1231495141983,
+        146.87999725341797
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "59aa126be6daa7e49ee9858a",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        413.1231495141983,
+        146.87999725341797
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6c62e4087ec7a09d7bbb468c",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        400.6333630681038,
+        144.95999336242676
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4a9992db048831f4c900da49",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        400.6333630681038,
+        144.95999336242676
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e87fbbe0c425493581e123e6",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        400.6333630681038,
+        144.95999336242676
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e9528da799acea2d9d365fed",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 6,
+      "source_xy": [
+        464.0429756641388,
+        167.03999519348145
+      ],
+      "lag": 15,
+      "frame": 21,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3ac252731b1c16eaac9318d4",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 6,
+      "source_xy": [
+        464.0429756641388,
+        167.03999519348145
+      ],
+      "lag": 30,
+      "frame": 36,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "34300fef8b7706e9e2ac6a80",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 6,
+      "source_xy": [
+        464.0429756641388,
+        167.03999519348145
+      ],
+      "lag": 60,
+      "frame": 66,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "36110c46e759e69082929255",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        350.13004553318024,
+        154.63557243347168
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ef90c254d82198762d33f110",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        350.13004553318024,
+        154.63557243347168
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "35b4cf99cbd4da0b5741bd72",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        350.13004553318024,
+        154.63557243347168
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "18996b7049642e6f95abf048",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        362.03445476293564,
+        147.63848304748535
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "49e3c06235c290447b43d0c0",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        362.03445476293564,
+        147.63848304748535
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d8cb9bc51821f66c03427099",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        362.03445476293564,
+        147.63848304748535
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cf587c68b98d8621a883fbb1",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        372.5383617281914,
+        146.23907089233398
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "95e644848e96d5569c3863b5",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        372.5383617281914,
+        146.23907089233398
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a5e731dac332675fe6fbdc90",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        372.5383617281914,
+        146.23907089233398
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "21634828475be4f6bb4ffa94",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        448.86668956279755,
+        137.1428632736206
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3b20c6354de98e23c23ae74e",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        448.86668956279755,
+        137.1428632736206
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7ec53dc543aed40eed027b32",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        448.86668956279755,
+        137.1428632736206
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "06317e243ab9a8300c7f26c9",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        447.4662127494812,
+        156.03498458862305
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "06eefb434147e16e7c0e5983",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        447.4662127494812,
+        156.03498458862305
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "aa3fe6596306ef55fe810acc",
+      "sequence": "paragliding-launch",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        447.4662127494812,
+        156.03498458862305
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f691139d49c44d78596c4c49",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        421.4470099210739,
+        267.57762908935547
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "82ef8b4ad7aea54450916ab2",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        421.4470099210739,
+        267.57762908935547
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a96ed8a991e835604aa2a1b7",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        421.4470099210739,
+        267.57762908935547
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ce581e26c9c6d3c489794593",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        414.7336749434471,
+        188.57142448425293
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        625.6797868114879,
+        -95.07117918466196
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c06d079723cc7a2f97064170",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        414.7336749434471,
+        188.57142448425293
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        4769.318015118107,
+        -1298.0295453404099
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c1c308b466616d25c9768b08",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        414.7336749434471,
+        188.57142448425293
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        1901.1767222188516,
+        573.76613504153
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1150a417f567229aeaf197e7",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        414.7336749434471,
+        231.80123805999756
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e917be5ed4446cabe5b02db8",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        414.7336749434471,
+        231.80123805999756
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e4dd1f1ceed93f07ac70349c",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        414.7336749434471,
+        231.80123805999756
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d4dc0b0eb1872d565cfdadec",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        432.63585913181305,
+        304.0993881225586
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        555.3821612792309,
+        77.46777711281945
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 277.67052842465466,
+      "image": "images/d4dc0b0eb1872d565cfdadec.png",
+      "image_sha256": "6463022b699d2d4f53c31847025fee9af9ad7448beb56ca2764f5b369e5b396d"
+    },
+    {
+      "id": "d02f52cd0e5ce8cd10c9418c",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        432.63585913181305,
+        304.0993881225586
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1730.2716250444507,
+        -56.70864770351384
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d760078b2604bf6e9644d683",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        432.63585913181305,
+        304.0993881225586
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        1047.390170017421,
+        589.2032335841333
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b926f391da47da130cd883d6",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        431.8899358510971,
+        285.4658317565918
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        748.6471625992842,
+        -150.2034740716991
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "45cc14b6c0f55d5731107fe6",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        431.8899358510971,
+        285.4658317565918
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5313b421d5cbce4ab314c069",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        431.8899358510971,
+        285.4658317565918
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        4707.407566370954,
+        1238.736953527239
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "812a134e8959353b01519352",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        416.96615093946457,
+        156.48000240325928
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        677.7220152664237,
+        -157.38906674302626
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6cd26b4d6837820fd49e21d6",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        416.96615093946457,
+        156.48000240325928
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        16663.68464162019,
+        -5468.464388695103
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b503d577171390b9a0ac09f4",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        416.96615093946457,
+        156.48000240325928
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        2637.610037754098,
+        641.1561376170173
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "25cfec04c679d9ec3aed0dd1",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        400.6333630681038,
+        176.64000034332275
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        668.8293790760997,
+        -151.4640154821845
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "990ad1d7a5194b69fee171fd",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        400.6333630681038,
+        176.64000034332275
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        23067.042406391916,
+        -7497.901853891287
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c6d68d846dcc0c5863cdefe2",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        400.6333630681038,
+        176.64000034332275
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        2734.7927447853867,
+        693.3126070080693
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "949dd3f392cdca298b97f0b7",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        430.41666865348816,
+        195.83999633789062
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        748.9273802012559,
+        -198.65892680515176
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d032ae04394384780bfb191e",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        430.41666865348816,
+        195.83999633789062
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f361aa309ab43f0f752a195b",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        430.41666865348816,
+        195.83999633789062
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        4477.591925093991,
+        1006.7552268036735
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3739abe2d78b5a7dd404ebcd",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        450.5924324989319,
+        224.6399974822998
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        786.1493812966485,
+        -207.5593713733498
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7affd197440aa3a67494d38d",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        450.5924324989319,
+        224.6399974822998
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c772d89ebf242a8d0f201f1a",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        450.5924324989319,
+        224.6399974822998
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        5543.856700392615,
+        1232.497468492995
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a8274e0965a57c4a952fb5e6",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        433.29891335964203,
+        249.59999084472656
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        714.3343878193441,
+        -134.19868968960316
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d3e076c7825cf653ac5385d2",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        433.29891335964203,
+        249.59999084472656
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fb03f47d14920a7c37f5f98d",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        433.29891335964203,
+        249.59999084472656
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        3485.346580117987,
+        940.5032248826537
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c6b384bd314c519894611a53",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        436.36547553539276,
+        196.77018642425537
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        660.0031765715919,
+        -100.6468649595119
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "657346da6d8947b9dceebca3",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        436.36547553539276,
+        196.77018642425537
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        6646.1320336829185,
+        -1792.0040471190064
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f7fa4ee35032d50bea6362b2",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        436.36547553539276,
+        196.77018642425537
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        2161.9667340545493,
+        627.6902478842277
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "11213346dfe9d64d456b4230",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        446.80840146541595,
+        213.1676959991455
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        757.8908774742508,
+        -183.5317883724878
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e08980b0ddcfad5c6d742390",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        446.80840146541595,
+        213.1676959991455
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f54c44e898ac48e2e798c7a1",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        446.80840146541595,
+        213.1676959991455
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        4359.173765752667,
+        1015.7211880499835
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7eb704f49e2230d9e60d8564",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        472.9157671928406,
+        255.6521701812744
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eac5595d6320b05c80eddc8d",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        472.9157671928406,
+        255.6521701812744
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5900994045256ca8d6450c9a",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        472.9157671928406,
+        255.6521701812744
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "416f4eec6dfc20c3100c29d8",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        438.6032453775406,
+        250.4347801208496
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        642.5498579176826,
+        -43.410181388399245
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9b03d88ea514045bf095ba31",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        438.6032453775406,
+        250.4347801208496
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        4626.562287269763,
+        -950.7822178143089
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "434da9cc73a88d246b7b39d0",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        438.6032453775406,
+        250.4347801208496
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        1899.4502404397865,
+        664.9219137941168
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "84f3a890bec6579cf64cb046",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        361.7730965614319,
+        201.24223709106445
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        514.5172813337008,
+        -11.082809530217414
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3bf3f25abdab24711dc2d030",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        361.7730965614319,
+        201.24223709106445
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1783.207991327346,
+        -316.6903923930143
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6f2675fbae82ea33ee7604c0",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        361.7730965614319,
+        201.24223709106445
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        1050.2135528970928,
+        481.9701838600517
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "00e265ecc970dcd83c5b3036",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        408.31939136981964,
+        157.44000434875488
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        742.3198051525676,
+        -226.37945415613706
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "26e4b30e5074e20ac480ee97",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        408.31939136981964,
+        157.44000434875488
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7cd3391322ace61d8dddf7ee",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        408.31939136981964,
+        157.44000434875488
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        4573.952066180423,
+        944.1957442397543
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7c952678fbe12a49eb56fb0c",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        395.8296049237251,
+        159.35999393463135
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        782.3654248885707,
+        -270.7507301391941
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "78cf76ea672ec5e24bdb45d0",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        395.8296049237251,
+        159.35999393463135
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0c2874c20303421bad7280ae",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        395.8296049237251,
+        159.35999393463135
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        7025.530727380038,
+        1337.0032068080252
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eb4d8ec30e6b0ba8f944d9ad",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        413.1231495141983,
+        146.87999725341797
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        670.0561284779599,
+        -159.68758398989922
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2dac9ca5f2822c82e9c69a48",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        413.1231495141983,
+        146.87999725341797
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        13651.362742524763,
+        -4549.661942906637
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1ee575338e38316f1e277b4f",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        413.1231495141983,
+        146.87999725341797
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        2549.369948638387,
+        613.6636488842231
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f5db59310e921da7c27c756c",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        400.6333630681038,
+        144.95999336242676
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        698.0461889701553,
+        -195.84611368642078
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c4639fa15ab3633c8d3a4335",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        400.6333630681038,
+        144.95999336242676
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "03714e41617158c6160a1195",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        400.6333630681038,
+        144.95999336242676
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        3329.619354123656,
+        732.3389276960602
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4595309738f2799f6f490225",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 6,
+      "source_xy": [
+        464.0429756641388,
+        167.03999519348145
+      ],
+      "lag": 15,
+      "frame": 21,
+      "candidate_xy": [
+        447.3508753789626,
+        72.9889913774254
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/4595309738f2799f6f490225.png",
+      "image_sha256": "071c87c682510aebdd6abde16a05267c32bdb8786dd8570eeb75e2865c4535f4"
+    },
+    {
+      "id": "83ecb8a8a8d7b00cff1fd472",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 6,
+      "source_xy": [
+        464.0429756641388,
+        167.03999519348145
+      ],
+      "lag": 30,
+      "frame": 36,
+      "candidate_xy": [
+        413.6893507059016,
+        96.42044104026975
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 105.87612401394409,
+      "image": "images/83ecb8a8a8d7b00cff1fd472.png",
+      "image_sha256": "630c6afd3874bad0d79c0c9179ac9994138826af6aee7c1dd24d541415192bde"
+    },
+    {
+      "id": "0c13c9a7a5f5c42548e6687e",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 6,
+      "source_xy": [
+        464.0429756641388,
+        167.03999519348145
+      ],
+      "lag": 60,
+      "frame": 66,
+      "candidate_xy": [
+        51.832693217353764,
+        264.91238581106364
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 367.24054447401477,
+      "image": "images/0c13c9a7a5f5c42548e6687e.png",
+      "image_sha256": "163ee7c5051a0349b69fd1c6a2b1fc672f958e6b2883d9a285492110d5f4e2bc"
+    },
+    {
+      "id": "735ec39b19ed8e951cbf6543",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        350.13004553318024,
+        154.63557243347168
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d3dc0c3a978bd54124183b2a",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        350.13004553318024,
+        154.63557243347168
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1e29294781ed35c454d43eec",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        350.13004553318024,
+        154.63557243347168
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b996e376e1a255b43b08a794",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        362.03445476293564,
+        147.63848304748535
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        596.3536085129243,
+        -125.7141568271212
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "dd909c9e4e8daffb543cb944",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        362.03445476293564,
+        147.63848304748535
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        5116.14241305298,
+        -1640.185166018636
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "19865d98048c482eec5204be",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        362.03445476293564,
+        147.63848304748535
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        1926.0813583991333,
+        540.9282344943525
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ee8f67fc6836672c5998792e",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        372.5383617281914,
+        146.23907089233398
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        631.3277712388978,
+        -152.25985635127842
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "979d8b4e2df09f094df32ffd",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        372.5383617281914,
+        146.23907089233398
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        10065.692596793413,
+        -3415.364437331699
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e240900eaaa03213f395c33b",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        372.5383617281914,
+        146.23907089233398
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        2368.6545736783155,
+        602.8969164478568
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "db650130a15be9028926db38",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        448.86668956279755,
+        137.1428632736206
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        650.1937356339877,
+        -123.22173199317268
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "bd5f7598aefcaba588300b4f",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        448.86668956279755,
+        137.1428632736206
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        4497.907303462601,
+        -1336.0540939772332
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "53cc26029d3af1b68a0bb90f",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        448.86668956279755,
+        137.1428632736206
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        1865.7534019458494,
+        485.6897397838047
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cf2045ede8fd8d7a4ee972c7",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        447.4662127494812,
+        156.03498458862305
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        665.1012721618614,
+        -125.24621004795948
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5611ed862911f361451a9378",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        447.4662127494812,
+        156.03498458862305
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        6113.415922639066,
+        -1806.4756853320032
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "78d302f9daf6c5066921510a",
+      "sequence": "paragliding-launch",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        447.4662127494812,
+        156.03498458862305
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        2103.264412406517,
+        550.8741793996843
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    }
+  ]
+}

@@ -3688,3 +3688,31 @@ an unstaged KITTI bundle, and six weight tests deselected. This includes the
 transfer geometry, reference-label separation, combined-input selection, and
 accuracy-accounting tests; it is not evidence that the judge's answers or
 camera-quality assessments are correct.
+
+All forty camera attempts have now completed across the fixed twenty-video
+roster. Their prediction arrays and manifests are archived under
+`results/tapvid-camera-transfer-v1/runs/`. Independent local checks verified
+prediction-file hashes, rigid poses, finite calibration with positive focal
+lengths, the runner hash, and input metadata against the staging manifest.
+Each method pair records identical per-frame RGB hashes. Package source hashes
+are consistent across all forty runs, and checkpoint hashes are consistent
+within each method. These checks validate the recorded inputs and output
+structure, not camera accuracy.
+
+All twenty per-video corpora are prepared and their frozen candidate bindings
+and geometry/export hashes pass verification. The full roster contains 2,610
+planned presentations: 30 close, 498 far, 170 occluded, 51 borderline/unlabeled,
+and 1,861 unavailable. Unavailable cases comprise 889 nonpositive-prefix-depth,
+578 beyond-video, 313 off-image-query, 51 nonpositive-query-depth, and 30
+missing-prefix cases. None is converted into a camera DNF label. There is no
+replacement of videos or adjustment of thresholds to change these counts.
+
+The combined corpus and its fixed source-patch NCC baseline are saved in
+`results/tapvid-camera-transfer-v1/combined-v1/`. The frozen base/adapted judge
+comparison has started on all 698 labeled presentations, with identical inputs
+for both arms and no further training. Its executed evaluator is archived.
+Responses and classification results remain pending. The low close-class
+count and substantial unavailable fraction require class-specific metrics and
+separate availability accounting; overall accuracy alone would be insufficient.
+This is a correspondence-transfer test, not yet validation of camera-level
+quality, staticness, or functional DNF. No new claims are added to the paper.

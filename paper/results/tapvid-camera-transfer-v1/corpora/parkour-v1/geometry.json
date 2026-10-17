@@ -1,0 +1,3064 @@
+{
+  "source": {
+    "source_manifest_sha256": "d8e1903df707408ef3b392c8c85c951b8cd6a36f899690d76ca520ae331bb41d",
+    "source_file_sha256": "4bff36f52397761b5c8998feda2f74f4434d2211ccfcb707d12912cc6780bc88",
+    "decoded_rgb_sha256": "582bee56fd9732dd3c3583809a4f4f3620b54aad97c693a229d963c264bda58c",
+    "shape": [
+      100,
+      480,
+      854,
+      3
+    ],
+    "frame_sha256": [
+      "951248663d619e6f38d47cc1d7f3b3667b7c3e29d73b7939809bb08101af7887",
+      "bc2358f3c96d4e3dfea8c5fe67eb9d33f097b9f1b60eb33ae9ed6b8a9bcbf147",
+      "b39b5307c46b5c3f54f91023429043f790d39270b201f3ad0619a43e6b126e06",
+      "ee2b7a7859956071fa17920beae3213a862769a815607b9ebce87c4e1eb94595",
+      "4abdf962ee0c375c9758769d3391bf19eded205bc1aeaecc6bbe54afc4e4eb76",
+      "84f7541e0edd27fcd73f255f2f402fb9d32c228c5ccd2a84bd1cff739893ad04",
+      "459dc257ec64ffd299a5546429d0884f1eb1cd29b90472e3c10726c5bc4e520b",
+      "a76a014353b36ecf2a44cfe057dbfa226caed069c34ce15d57a962627a672b47",
+      "30176a2adecbf0d60311d50d4e726bd7f9c36654e055dc45081a2dd44787dd86",
+      "c2bf15c290c2fabef47258a70ff8ae952cdc53974294e8d78ef6c2b0308baf1f",
+      "79c87c727827fec6a937f3066da716187def81d285de39f060526d21707bde4d",
+      "b0c382145ee1475beb8aaae039959b8447aa29fd32f90a1afb4e3177ec526d16",
+      "b5a3cf3f554cb5e4577f9c2bd400c8f3e3acca4d567145f323ed01a75ea6d864",
+      "135732457775d6e323083054986007699cec8e12403e729df36644e96c69b1fc",
+      "7bf0c97918e2abcf117df42710b3054ff49106c8f066bf379f58df5a6d8c3418",
+      "14e2cba31fbdb61cffbf5ca6c5d9931168af0f74b66fd71dff02129278db611b",
+      "12198cd53e4e5fa25a601afd50f84f7cfd28dd8d7a52ce9d09b5e683ffc7243e",
+      "38600d327f3c7158c9e570bc9aedfacd1fa1f3dda426a3e4a5771fde98e5dbad",
+      "1c957b92c5a7168be6b778dabe173666b2fa3993f66881b3c277cec1928668ea",
+      "bd48eee554bc923ee1ebc8316676b9d847e7136010e303c4f45bb5fa0a6ec762",
+      "cb3c52b6db2d05ad220d0e5f843333dd2214dc426fd2034fa834433dcc0ac216",
+      "92e821157e69e111cf23fabffafd63f0dd00b17ec29b495969128f7084ab9ffc",
+      "3b85590fbf75879c643dbfc15a7ddc13a7e46b3b2ea00a2aca5bb4d82ee3ad92",
+      "c4b49bbed961c73c515c849300bf70c457ee9c34db81e17a283cbca545011e03",
+      "4a966c73904c28db7d0b940ece4368a98f02336f9d268264c78bfafdb99c2279",
+      "5d92d6f07aeccac428d826da6e6c6e2888ded0e40d15608e848cefc0c27d9e72",
+      "19f124091dd3c5f83ac01766d7f1fdf8420a66b45132a7d1c507f26d2c473ef7",
+      "5b5153435977e90fbaafc81d57de2f21c674147e8914bbd664958305ab770b07",
+      "3f01118163ec06e462d555a988e1dd8719e4d9233cbc4c47de90f9e9cb0bbf63",
+      "9a6675f270a34cf156f642098f3c1839eefa4920b19ec706ba64ca9b39473cb7",
+      "3e8ffafb392bef38c82d492005bb0588c84dc5400dd94e6830063c501024d420",
+      "470234f2f6d38ed29fb86b3ab0a9ae484a77c8647b735596d8f6db372ba972ef",
+      "27f720bb47486f7d234e8ede413a98dc6762ff3547a6ac43872554e08a0fb0cf",
+      "371ef97f6f0f40348342592fe6bbe9e5cbaf6a28c4be26f834405c0e2d8283a4",
+      "27077ceca9fcfec17596fb5b8f2238e33b2268473c9e1c021a8f0f7a068cd5e3",
+      "be38509d76f480e1e59dea436e062965d87bb22c297ced3bd7ef4bee1f332230",
+      "650ccc8745e191628dca6e6fe4b975925fdab379c22d7d2cd3dd454731659f37",
+      "0cd80e23f7b786a10b3f32191294fa2207d1cdc068ecf8a669a0a100892b11ba",
+      "dc0a12cebb1f577e69d8651b4882de999f067bc14abcc231a812f4151d479836",
+      "3df3e59194e552f91b9949181456411073b5da045235df74fad376fab3bd6984",
+      "5e224777251dc8d7b489040c186f200c72d6934753203075795299ec1ea24fba",
+      "74d2cd3f33b17bd8410353f18f5b25b1c9b16630f3d5fb800be4455249990a06",
+      "ab8290e23a60845a46d35cbd7f75bace5d4ad7761c588139be00e5bd5f035588",
+      "0ef6182bbfd3d754ff0c14873c21f726dbda375ca6c495d71f4ebd7b32fe995e",
+      "fb0aba0b99f618058c868c0db44c7f92f3951275e76595fd9090ac89b65e1f71",
+      "c403a55e8f73b7141e9597c82eff9b79fd576868de4cedef03eaf95c81246212",
+      "8aa840337b5febc317b0a83b5713e5a33933f374aaab1a1efe4b7f15aa70b0f6",
+      "5c107ecbf43473d21801b1b0490c7bcf0e6152fc7e4467d8f444a3bfa2a069cd",
+      "a8bfd8dfdd249cd113d6d65e6a4f949335769dc2aaf89139658ac7559ca0266d",
+      "f06dbfda2de2a0b8b1be8056df2e015613a8e6293994c851ef735f4a86b4c1ff",
+      "66868fe996adb769933a7c2e90400b29fc1575a4f6ff2cff91a47c77c9a140d4",
+      "2756bec60710e72374e7c097e2bbaee931b588ca1495543f4130435aacb4d034",
+      "6907f5b4042cc8e5bf8974da4b4d94ef7f5e1a2a8654c818d164b375f19049d0",
+      "944570a8f970d8685277cf4b06aa248a1d32c77b9f28d6fadee019ba00bd314a",
+      "99bee0a1cda9b9a8f5a9cc4978dab493e2e8ad1bf15a2bc7d6b05cdddd510cb4",
+      "1c01411317c79db987759a97b46735b4992bd5a8438db2451569dd887befe283",
+      "5e1532f373a92aca80b0bb45cc4f92fce7657c4ac89ebc09bb858c427e952799",
+      "e6d48ed05d58b6d2273210b1e6c79beb75cca3bbe83b1d4423152ebbc85a8093",
+      "2c08a47a28dfd9c9c422cab9ea56d8be83e0c38209bebc2efcb26947f13534a4",
+      "b8c470009eba2414d5bb371518e6c51aadba560677b488700e0354c359bb2ce9",
+      "0fc816ccd151922e0e02ad1aec976d102b4ac914ddddbc0e8e2098e5c04380c0",
+      "d3bbf8c405cc1cb01209046832822ad7aa91afc0dfeda006083654e79ee75a4c",
+      "6c0d705c0f01955ee0e326c7ced71a74d1f2a67f664041f7dcc39bd0dc7e2003",
+      "3111d6fd896f6902052c24e806b68a4c6dae9a7ed08065a61cf44fd0c920fbab",
+      "abdd73dac62c7bfe7088bf96208b23aed7a7ceb41c67a9465d08f8158bed6547",
+      "fc613da59821ef1045e56c2fbc2577369e73f32422b3f69e69b9f21ff9659eee",
+      "3826bc3a4bd619fb889bdaf5c9289876d3c081e6ab657e49f0b1fd0173f3c447",
+      "c248312d55b0156b85a7b712590c7a0613f656c13008ad5e1e131d20a88a24c3",
+      "eb82a5171d14d578ba10093c1e3699d8cca1f156862b13ea4953ed110437f1d0",
+      "2ad503d2b655c86f3ff068f7b279ff44f6c0ed66b1a433c656352032d378246e",
+      "bfc097025d5a68b73b97275857ee33a117d5f763d3fc5e8e61442379daddd0ff",
+      "438d3d3f229d7fe90fc4787ed99fc73b5d57539ec9ed85630e5938294c81be12",
+      "0111c3c1de0262952af1bc45e489be0f4803605a7ef7e8b0df4540b429234647",
+      "563a0e3f18daccc30db803823aa9c48bbe8c9f70317d3fcef7f4a600f79fd262",
+      "87e7fa33d8975cf1b1d36cb5c7a5421948b3725b48783eb7d2606fa273d4de80",
+      "5f3a80e722ba5179bce59e6bc3c7fe26f0e196cda2d92da26e7854fd25238249",
+      "0e213eecf7a8ebc6dc3edf9d1dc13fe269db67a7c0e150e28ddfed3a9c56df92",
+      "9583a4a8acb46e0246a69eaadac40a79e6509ac043067babc4d94e07b72482e6",
+      "e939229d956ca9c272c434c62c8338e6930dae614e1c43299fe82ef9de364613",
+      "9148ac45b899604ef94e71fe5a6627744b771851dbf52206f541c7bb9488f329",
+      "3648f124bd3c16db51aa0c35c7eaaaa41b3e75dffa39b15e4f4f34a70ea25433",
+      "0db4b79080e2f2a93ec572f82d69d9525a6af9de76cbee635e95fa191d736f08",
+      "7249931b25a8b71027cc7ef4d072e00c654698a4a18cb48d394d624b598222cb",
+      "5cf669e9f2f07892d937caa6baf93d2ce9d82782cbc05534cc4df8034288beca",
+      "a65c2c90f3b4ccb305967b7e5fa1d562d0fd9385c87427aa764629fbbf5d92a2",
+      "49348f9b03b00f83bafe2f4fb6ada9ae3c0d00e3255ce57990134bbf996cfe97",
+      "fa469f723b37f6f0564277759971fe0c490603bb9f6ab91445209cddcb019ced",
+      "cbe6013005064d80e8fc2e554566e380f13f5153ffa3848847efba18564fe3cb",
+      "4e3a7e189928e36ace7f7c99c6c85539c5c925b07037d6a6b1323ffeb7191abd",
+      "0bf98299014cb2a14e70506e9eb165fda4c0e7704e18d01fb551619284ac2e29",
+      "3d0350e97baaf8f510a7b6cdd75916fd948dda0ead2e007ad412c17c190896e2",
+      "f11c778d84c43bbcb6ff348db1ffd1e8046a23c38c6ca0b7699388a8dc4feea5",
+      "2232dc12d8eef3c63563c260a5f996aac2a662eab7e777e939ce88f7631f8437",
+      "a67ab44f92e68b035e74467389d566baad9c7f976b508bc553e841e9d85b0067",
+      "48659ed9d2a88f2ff1b22311c6b7838902c8655d2a9fe4d4e33f4565af822cd0",
+      "640edbde68bb140268b784bdc7af7dca5633160535c1fe3af4741b0ff64ced0d",
+      "b0291793da567430902fac67d8b31b23be94b0417ef4dae9e1e14008157ca0f2",
+      "062a897baad119cb893312d728d871ba560fc114dc37f79d04985ac8c326193d",
+      "90877f732e2744ecff96621bbb2c5e002eb3c7fb39534dd4bd9cf2dcba7b8a8f",
+      "095499c56557aedbf1177c2446b4bd792a3f3a889b88e73ead9651aeae3050aa"
+    ]
+  },
+  "tracker_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "cameras": {
+    "dage": {
+      "manifest_sha256": "3e4bfce9c2a54387886cb9af2624e5bb5b2eb62c5103de6d264dd1594a646b76",
+      "status": "complete",
+      "prediction_sha256": "188bd0f860fe184201985eea48dc3d32a4a9b3c437b60505caa6b51e95c27ce4"
+    },
+    "da3": {
+      "manifest_sha256": "3aca982fcf42633d7c75a82062c491eb49115be9fd883e17860d40e5d85672da",
+      "status": "complete",
+      "prediction_sha256": "aa818452937e9ebc802b4040a1b0fc6bd67ba3347fbf89d801861bbee59959e2"
+    }
+  },
+  "fits": [
+    {
+      "model": "dage",
+      "track": 0,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.021851678821719307,
+        0.04301663840094463,
+        -0.22495789319686987
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 1,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.02282290792881088,
+        0.03491573542926331,
+        -0.221842907902626
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 2,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -1.9793642362825694,
+        0.3327421826781285,
+        -1.393048816791005
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 3,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.01749773521206595,
+        0.026423828336134315,
+        -0.04061767625788782
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 4,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -1.1806452043991715,
+        0.10145258205733268,
+        -1.6983072137581825
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 5,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -1.5431800611878923,
+        0.045603781603146584,
+        -1.8213774891987897
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 6,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -1.9073105587174422,
+        0.17297881481491845,
+        -1.6616643754373872
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 7,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0590987405670227,
+        0.026833973115065773,
+        -0.36602767481053133
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 8,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.08006354063629861,
+        0.017928597913369156,
+        -0.48586909410643386
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 9,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -2.166405157625787,
+        0.25191379708146483,
+        -1.539353796734293
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 10,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.041537158626342593,
+        0.04019096657131739,
+        -0.2531772238961687
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 11,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.0067153825095020575,
+        0.03636416019589438,
+        -0.08712742953407863
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 12,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.005413043836409815,
+        0.037581696412211874,
+        -0.08943086795858976
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 13,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0009611426810325387,
+        0.03894701175990641,
+        -0.10931584495826185
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 14,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -2.694124257847572,
+        0.3175695180730822,
+        -1.4534643470051456
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 15,
+      "status": "fitted",
+      "point_world": [
+        0.03549107124845753,
+        0.0022888862990910423,
+        0.028931067881799593
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        561.0275093317032,
+        101.60583972930908
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 436.2215553340611
+    },
+    {
+      "model": "dage",
+      "track": 16,
+      "status": "fitted",
+      "point_world": [
+        0.09222233501786592,
+        -0.07097633683602361,
+        0.23268802615150785
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        573.299968123436,
+        86.71532392501831
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 36.22709873471145
+    },
+    {
+      "model": "dage",
+      "track": 17,
+      "status": "fitted",
+      "point_world": [
+        0.08857498144551523,
+        -0.08568950954644118,
+        0.3125016847558549
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        543.7597467899323,
+        104.76191282272339
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 42.65480816739429
+    },
+    {
+      "model": "dage",
+      "track": 18,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.13446731409613505,
+        0.16956424987320778,
+        -1.9623957839492978
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 19,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.14799688468716096,
+        0.309676283608969,
+        -1.7590885414852016
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 20,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "dage",
+      "track": 21,
+      "status": "fitted",
+      "point_world": [
+        0.04161066223435788,
+        -0.013997581334854507,
+        0.07855271263230408
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        550.4044399261475,
+        97.25947380065918
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 125.11527001790563
+    },
+    {
+      "model": "dage",
+      "track": 22,
+      "status": "fitted",
+      "point_world": [
+        0.10521887942478593,
+        -0.133081081507558,
+        0.3742933979643718
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        544.8023290634155,
+        76.96792602539062
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 35.322703133813086
+    },
+    {
+      "model": "dage",
+      "track": 23,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.7859140131726428,
+        0.27938959511466543,
+        -1.5836523524902197
+      ]
+    },
+    {
+      "model": "dage",
+      "track": 24,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -1.2215277820686596,
+        0.16583205576623633,
+        -1.705065590544189
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 0,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.004332371100540124,
+        0.00535827221690944,
+        -0.026362414571659793
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 1,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.004934878641198876,
+        0.004277415631141309,
+        -0.028618123479049296
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 2,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.12956659063383244,
+        0.020996278326001275,
+        -0.10610853360060443
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 3,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0033001276396359865,
+        0.00579754835882277,
+        -0.016601174159457065
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 4,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.12373380593542188,
+        0.02079799113804331,
+        -0.10660777181576074
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 5,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.19716006645609557,
+        0.03226254535279732,
+        -0.07704476802086242
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 6,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.16697531302094407,
+        0.020081726189921136,
+        -0.10057826224843029
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 7,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.007899177339162252,
+        0.0031675455358054906,
+        -0.04237752002057112
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 8,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.008097372628677409,
+        0.002489542302422667,
+        -0.04670059893629022
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 9,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.21138660005806995,
+        0.04170924758560975,
+        -0.06781514317676604
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 10,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.004395446973232639,
+        0.004727535280120603,
+        -0.02090120384772989
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 11,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.005222411280195917,
+        0.0048851873538085944,
+        -0.023856824821163962
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 12,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.005254796716769199,
+        0.004761969934863657,
+        -0.0235526137437438
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 13,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.005122590154313034,
+        0.004999144559470793,
+        -0.022750784714415252
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 14,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.23863390781608715,
+        0.02705148486521258,
+        -0.06387971055115985
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 15,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0020492462662119264,
+        0.004891796647996315,
+        -0.011005696963195637
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 16,
+      "status": "fitted",
+      "point_world": [
+        0.0008164878414308095,
+        0.00021325934635661137,
+        0.0026352760216473673
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        573.299968123436,
+        86.71532392501831
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 373.87873275694284
+    },
+    {
+      "model": "da3",
+      "track": 17,
+      "status": "fitted",
+      "point_world": [
+        0.0009442862224281126,
+        -0.0007915273810670485,
+        0.006540762547384636
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        543.7597467899323,
+        104.76191282272339
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 144.72823902836797
+    },
+    {
+      "model": "da3",
+      "track": 18,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.05275053251422099,
+        0.026425887153898677,
+        -0.14324772919334777
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 19,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.03975144497601713,
+        0.03364211753441379,
+        -0.14566178956676984
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 20,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "da3",
+      "track": 21,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0015613296737752493,
+        0.004081111819070447,
+        -0.008299017910467698
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 22,
+      "status": "fitted",
+      "point_world": [
+        0.0014244418464971578,
+        -0.002681931163036883,
+        0.008714082732556031
+      ],
+      "source_frame": 0,
+      "source_xy": [
+        544.8023290634155,
+        76.96792602539062
+      ],
+      "fit_frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "prefix_max_pixel_error": 106.2065649245235
+    },
+    {
+      "model": "da3",
+      "track": 23,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.0981091812888606,
+        0.026311915593853076,
+        -0.11219505841335693
+      ]
+    },
+    {
+      "model": "da3",
+      "track": 24,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.09602792903176711,
+        0.013610011441509147,
+        -0.12795560135251802
+      ]
+    }
+  ],
+  "records": [
+    {
+      "id": "d67fbe9d6a09f90d8677e1d1",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        529.3740762472153,
+        158.4000062942505
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "062f583f8624db697f367290",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        529.3740762472153,
+        158.4000062942505
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "5939193143d6793000e2c4a6",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        529.3740762472153,
+        158.4000062942505
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "86c1256a4a8c6675b18f5eb5",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        538.9815925359726,
+        194.87999439239502
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "716e6d83d7f0059c52b851eb",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        538.9815925359726,
+        194.87999439239502
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "b2879de19421009d3075f9d9",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        538.9815925359726,
+        194.87999439239502
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "3cb090ae22b600679ac77b1e",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 56,
+      "source_xy": [
+        556.2751116752625,
+        325.4399871826172
+      ],
+      "lag": 15,
+      "frame": 71,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "cea7bb13aca84e58197d2831",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 56,
+      "source_xy": [
+        556.2751116752625,
+        325.4399871826172
+      ],
+      "lag": 30,
+      "frame": 86,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "5c691d612e6a3faaf1e62064",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 56,
+      "source_xy": [
+        556.2751116752625,
+        325.4399871826172
+      ],
+      "lag": 60,
+      "frame": 116,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "1d38ddd6e6c581f2dec636a0",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        575.4901442527771,
+        132.47999668121338
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "c9c21aa6ec1c991dbf52d633",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        575.4901442527771,
+        132.47999668121338
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "a69874561a800cc04c32a17b",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        575.4901442527771,
+        132.47999668121338
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "a3724c37d337b79495d2ebb7",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 55,
+      "source_xy": [
+        535.138565659523,
+        339.8400020599365
+      ],
+      "lag": 15,
+      "frame": 70,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "9203cc1504cc52a6e50a4fda",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 55,
+      "source_xy": [
+        535.138565659523,
+        339.8400020599365
+      ],
+      "lag": 30,
+      "frame": 85,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "e6af473f63ef4f08a8a96730",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 55,
+      "source_xy": [
+        535.138565659523,
+        339.8400020599365
+      ],
+      "lag": 60,
+      "frame": 115,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "7544fb47b93505961f503426",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 61,
+      "source_xy": [
+        614.8809406757355,
+        392.6400089263916
+      ],
+      "lag": 15,
+      "frame": 76,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f0a83362f5243960e23730da",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 61,
+      "source_xy": [
+        614.8809406757355,
+        392.6400089263916
+      ],
+      "lag": 30,
+      "frame": 91,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "386390be6f036317c7da8bd9",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 61,
+      "source_xy": [
+        614.8809406757355,
+        392.6400089263916
+      ],
+      "lag": 60,
+      "frame": 121,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "6b54f458ac9e8ae55055d35e",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 61,
+      "source_xy": [
+        607.1949378252029,
+        400.31999588012695
+      ],
+      "lag": 15,
+      "frame": 76,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "9817a1fb7113ef63deabbec3",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 61,
+      "source_xy": [
+        607.1949378252029,
+        400.31999588012695
+      ],
+      "lag": 30,
+      "frame": 91,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "36130469c3aa61f6af7912f9",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 61,
+      "source_xy": [
+        607.1949378252029,
+        400.31999588012695
+      ],
+      "lag": 60,
+      "frame": 121,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "2c42286f66b1bf3af28cc549",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        544.0144113302231,
+        211.2820529937744
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "de363a4989c017556560c9e2",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        544.0144113302231,
+        211.2820529937744
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "0e094dfe398e2663e91fbcc3",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        544.0144113302231,
+        211.2820529937744
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "c99c1794501e30368543bfdb",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        532.723553776741,
+        218.46154689788818
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "7d224a315cbbea7085409c58",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        532.723553776741,
+        218.46154689788818
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "e6f135054a3a935f864cf215",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        532.723553776741,
+        218.46154689788818
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "1a79e746203560bf2d9af2a3",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 61,
+      "source_xy": [
+        620.6454809904099,
+        385.9200096130371
+      ],
+      "lag": 15,
+      "frame": 76,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "c37ce2a286a7276618fe22be",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 61,
+      "source_xy": [
+        620.6454809904099,
+        385.9200096130371
+      ],
+      "lag": 30,
+      "frame": 91,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f429abdb79da293cc25c4465",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 61,
+      "source_xy": [
+        620.6454809904099,
+        385.9200096130371
+      ],
+      "lag": 60,
+      "frame": 121,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "4e1cd4893b58cf5deea1c5d6",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        570.6701482534409,
+        195.3284740447998
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "b47234472424fb4226e8ecb7",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        570.6701482534409,
+        195.3284740447998
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "cf24df42910c6018b3bcaf82",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        570.6701482534409,
+        195.3284740447998
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "1d34b03c2bf3bf30b03fa07c",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        578.5596078634262,
+        184.81751918792725
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "bf63065f1d20ed2641b6cb9f",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        578.5596078634262,
+        184.81751918792725
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "173fde768d29a8d46101169a",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        578.5596078634262,
+        184.81751918792725
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "1bb17d32a13894fae6150cf4",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        582.9426070451736,
+        188.32117080688477
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "481cb57909fb0b1d7893b180",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        582.9426070451736,
+        188.32117080688477
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f636b033d4c18641962e7552",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        582.9426070451736,
+        188.32117080688477
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "3c355ca82cad0503174d7c35",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        585.5724269151688,
+        179.56204891204834
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "76233abcaff8913a14228b3d",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        585.5724269151688,
+        179.56204891204834
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f930afdfc9ca9118bd304af6",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        585.5724269151688,
+        179.56204891204834
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "9c8f3542c4f432dda7d2e3ad",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 64,
+      "source_xy": [
+        563.6572782993317,
+        312.70073890686035
+      ],
+      "lag": 15,
+      "frame": 79,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f3370e000ad63cccada22f5b",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 64,
+      "source_xy": [
+        563.6572782993317,
+        312.70073890686035
+      ],
+      "lag": 30,
+      "frame": 94,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "025142e8575866a9f9a0ae14",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 64,
+      "source_xy": [
+        563.6572782993317,
+        312.70073890686035
+      ],
+      "lag": 60,
+      "frame": 124,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "8a353bf5fc5773b579e8305c",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        561.0275093317032,
+        101.60583972930908
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        657.5467430969552,
+        95.05077405865147
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "b2fd8d3d08aa3ef4462adf29",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        561.0275093317032,
+        101.60583972930908
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1268.4988363981836,
+        84.72555903641496
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "55618f9eb97c7adf7627ada4",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        561.0275093317032,
+        101.60583972930908
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth"
+    },
+    {
+      "id": "3ecb5347aadff708bb2fe802",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        573.299968123436,
+        86.71532392501831
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        663.4328226107376,
+        86.85022784861214
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "f254e51631ca5e59ea5a597e",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        573.299968123436,
+        86.71532392501831
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1192.3328115968043,
+        71.02084026558485
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "dc1064a0db4d4d6cdd6c8ae4",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        573.299968123436,
+        86.71532392501831
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth"
+    },
+    {
+      "id": "5e0ef44ff4a54ba152cda5ae",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        543.7597467899323,
+        104.76191282272339
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        644.552513754753,
+        95.53606510593477
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "718356df7cf2201c13ae84bb",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        543.7597467899323,
+        104.76191282272339
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1136.9728249895065,
+        80.2547033228434
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "a9e0f02cdd08546544b7836b",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        543.7597467899323,
+        104.76191282272339
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth"
+    },
+    {
+      "id": "7d11f033d457b15a1c8b4095",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 45,
+      "source_xy": [
+        536.482540845871,
+        256.64234161376953
+      ],
+      "lag": 15,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "7ec51b1c64175d9410fdb772",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 45,
+      "source_xy": [
+        536.482540845871,
+        256.64234161376953
+      ],
+      "lag": 30,
+      "frame": 75,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "842b7ff2f64baaffb1bdc06d",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 45,
+      "source_xy": [
+        536.482540845871,
+        256.64234161376953
+      ],
+      "lag": 60,
+      "frame": 105,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "fbfc8216e3640831e743b35e",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 46,
+      "source_xy": [
+        501.4182928800583,
+        184.81751918792725
+      ],
+      "lag": 15,
+      "frame": 61,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "6dbc1b13563459a8e4f69ed6",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 46,
+      "source_xy": [
+        501.4182928800583,
+        184.81751918792725
+      ],
+      "lag": 30,
+      "frame": 76,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "462cc9a415d6723564ca0e96",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 46,
+      "source_xy": [
+        501.4182928800583,
+        184.81751918792725
+      ],
+      "lag": 60,
+      "frame": 106,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "5976cdf000127f59a0a7dc13",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        542.7015883922577,
+        65.07288694381714
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "0c58de757899403c26483fe1",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        542.7015883922577,
+        65.07288694381714
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "487b0fab085dc832aaab5db3",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        542.7015883922577,
+        65.07288694381714
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "75c84f1e5d55e027f8614318",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        550.4044399261475,
+        97.25947380065918
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        650.4419408166892,
+        94.35098565638792
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "79a0a50a96e0b5481efb7e00",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        550.4044399261475,
+        97.25947380065918
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1230.6394631433227,
+        83.04467725588886
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "1b064bfb33903e0eef0d8d9f",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        550.4044399261475,
+        97.25947380065918
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth"
+    },
+    {
+      "id": "92d1b3f1fc838c98dc8664fa",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        544.8023290634155,
+        76.96792602539062
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        647.2738821533477,
+        77.25928693649803
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "82cc128435c03ce52d8dda9f",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        544.8023290634155,
+        76.96792602539062
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1128.0349038464858,
+        59.439550824282875
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "320048b20226cdf4ae363af4",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        544.8023290634155,
+        76.96792602539062
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth"
+    },
+    {
+      "id": "1cb66c004d9c974fc3c7fbf0",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 52,
+      "source_xy": [
+        495.08390057086945,
+        202.91544914245605
+      ],
+      "lag": 15,
+      "frame": 67,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f17bfbf022230e50df3aaaf4",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 52,
+      "source_xy": [
+        495.08390057086945,
+        202.91544914245605
+      ],
+      "lag": 30,
+      "frame": 82,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "246d0e8c85329bc005dc5e92",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 52,
+      "source_xy": [
+        495.08390057086945,
+        202.91544914245605
+      ],
+      "lag": 60,
+      "frame": 112,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "f98feee55790981ed89d4319",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 57,
+      "source_xy": [
+        554.6059721708298,
+        312.0699691772461
+      ],
+      "lag": 15,
+      "frame": 72,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "544997e15db3557679c15bc4",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 57,
+      "source_xy": [
+        554.6059721708298,
+        312.0699691772461
+      ],
+      "lag": 30,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "9a9017be60d972fd8cc7d490",
+      "sequence": "parkour",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 57,
+      "source_xy": [
+        554.6059721708298,
+        312.0699691772461
+      ],
+      "lag": 60,
+      "frame": 117,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "36ea11128b1f395265aa8634",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        529.3740762472153,
+        158.4000062942505
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "54879a29c241309b98859033",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        529.3740762472153,
+        158.4000062942505
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "04c28e78726254cbf5dfc769",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        529.3740762472153,
+        158.4000062942505
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "0f7817cc913c5c665fe04a71",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        538.9815925359726,
+        194.87999439239502
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "0400322c45c78f3463cdc8a2",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        538.9815925359726,
+        194.87999439239502
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "555608fd81855d922416728b",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        538.9815925359726,
+        194.87999439239502
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "45a2b6e686a7cc06cdf8e1dc",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 56,
+      "source_xy": [
+        556.2751116752625,
+        325.4399871826172
+      ],
+      "lag": 15,
+      "frame": 71,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "b0343099a598de259fbf76a0",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 56,
+      "source_xy": [
+        556.2751116752625,
+        325.4399871826172
+      ],
+      "lag": 30,
+      "frame": 86,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "5ebe66c9975cf5a4f9ac97c1",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 56,
+      "source_xy": [
+        556.2751116752625,
+        325.4399871826172
+      ],
+      "lag": 60,
+      "frame": 116,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "317f45431f7d67b4355625c4",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        575.4901442527771,
+        132.47999668121338
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "a52f04ba5e30e0101b5cca50",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        575.4901442527771,
+        132.47999668121338
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "7f0e1356f73b7cf2f7d46256",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        575.4901442527771,
+        132.47999668121338
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "acc6e1d111593ff6f0612b9e",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 55,
+      "source_xy": [
+        535.138565659523,
+        339.8400020599365
+      ],
+      "lag": 15,
+      "frame": 70,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "2d43ff3e461b3d9fe5db56e7",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 55,
+      "source_xy": [
+        535.138565659523,
+        339.8400020599365
+      ],
+      "lag": 30,
+      "frame": 85,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "89934c2bbf9b1ebab5c7af63",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 55,
+      "source_xy": [
+        535.138565659523,
+        339.8400020599365
+      ],
+      "lag": 60,
+      "frame": 115,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "9dbf70b2fa0f93e0bae93382",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 61,
+      "source_xy": [
+        614.8809406757355,
+        392.6400089263916
+      ],
+      "lag": 15,
+      "frame": 76,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "44e41c22094993bab4fdf992",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 61,
+      "source_xy": [
+        614.8809406757355,
+        392.6400089263916
+      ],
+      "lag": 30,
+      "frame": 91,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "ed5cf72b2806d577f55561fb",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 61,
+      "source_xy": [
+        614.8809406757355,
+        392.6400089263916
+      ],
+      "lag": 60,
+      "frame": 121,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "463f3d92133eae2979da02e7",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 61,
+      "source_xy": [
+        607.1949378252029,
+        400.31999588012695
+      ],
+      "lag": 15,
+      "frame": 76,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "15d993d4d9062d756851b815",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 61,
+      "source_xy": [
+        607.1949378252029,
+        400.31999588012695
+      ],
+      "lag": 30,
+      "frame": 91,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "3bcdd50406698f40e7714050",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 61,
+      "source_xy": [
+        607.1949378252029,
+        400.31999588012695
+      ],
+      "lag": 60,
+      "frame": 121,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "c51425f3947f9ef3193b3054",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        544.0144113302231,
+        211.2820529937744
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "13ba21b35c978a29092c548b",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        544.0144113302231,
+        211.2820529937744
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "8a73439ec3a7c05c98facdf7",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        544.0144113302231,
+        211.2820529937744
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "2c1db67abfeab26f8d41e10d",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        532.723553776741,
+        218.46154689788818
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "ea0589afb4dee028ced906bf",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        532.723553776741,
+        218.46154689788818
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "7d5b57cc37c521192d68bdb6",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        532.723553776741,
+        218.46154689788818
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "8c5c8974448e696aed3ead85",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 61,
+      "source_xy": [
+        620.6454809904099,
+        385.9200096130371
+      ],
+      "lag": 15,
+      "frame": 76,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "8f8e1e7206f6662a9eafb741",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 61,
+      "source_xy": [
+        620.6454809904099,
+        385.9200096130371
+      ],
+      "lag": 30,
+      "frame": 91,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "752662554607bdc027c1d7c3",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 61,
+      "source_xy": [
+        620.6454809904099,
+        385.9200096130371
+      ],
+      "lag": 60,
+      "frame": 121,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "328a59b33a864ae165051969",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        570.6701482534409,
+        195.3284740447998
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "9cc6f8303bcf8c79ed24750c",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        570.6701482534409,
+        195.3284740447998
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "b76cb5abe3286d728c07ae05",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        570.6701482534409,
+        195.3284740447998
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "11472b7384db038db395217b",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        578.5596078634262,
+        184.81751918792725
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f422705e3c8aca092ce0bf04",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        578.5596078634262,
+        184.81751918792725
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "a0e858ae9fbc41d879788915",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        578.5596078634262,
+        184.81751918792725
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "0100e89082e8c1e432e3d1b4",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        582.9426070451736,
+        188.32117080688477
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "26df9e95888b9da634d7ea1f",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        582.9426070451736,
+        188.32117080688477
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "451d11b58e9a21685ae0d9b0",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        582.9426070451736,
+        188.32117080688477
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "ebd6b3cc96ce5ded8daee355",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        585.5724269151688,
+        179.56204891204834
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "3b56296833c3fa74789ffeac",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        585.5724269151688,
+        179.56204891204834
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "165ce76c15abab69d11869eb",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        585.5724269151688,
+        179.56204891204834
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "493cfc7c35cb527ae3dea5a4",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 64,
+      "source_xy": [
+        563.6572782993317,
+        312.70073890686035
+      ],
+      "lag": 15,
+      "frame": 79,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "730c21833de62411b53d3361",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 64,
+      "source_xy": [
+        563.6572782993317,
+        312.70073890686035
+      ],
+      "lag": 30,
+      "frame": 94,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "594089be4dc368b9030b7337",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 64,
+      "source_xy": [
+        563.6572782993317,
+        312.70073890686035
+      ],
+      "lag": 60,
+      "frame": 124,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "d2e2a2ebac03604a8934c214",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        561.0275093317032,
+        101.60583972930908
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "7da583583afb82910d1004ba",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        561.0275093317032,
+        101.60583972930908
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "e6244b77de58c2917e69ec20",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        561.0275093317032,
+        101.60583972930908
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "a43535edffa5e0fe5d6e59be",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        573.299968123436,
+        86.71532392501831
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        625.6690327904503,
+        106.95858019256137
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "f9827d2b26fa009fd1bd3145",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        573.299968123436,
+        86.71532392501831
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1036.919267069462,
+        74.33163105073304
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "30c029d377f18d458231e31b",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        573.299968123436,
+        86.71532392501831
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth"
+    },
+    {
+      "id": "c50a62d3df5b832934c90d01",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        543.7597467899323,
+        104.76191282272339
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        618.5466949647779,
+        109.80256884307995
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "0dfe7f57e9cb48f392146d56",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        543.7597467899323,
+        104.76191282272339
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1016.9269087999747,
+        78.05971303897473
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "0184c912fc8ba03bad97374d",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        543.7597467899323,
+        104.76191282272339
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth"
+    },
+    {
+      "id": "35a5120059858e407772fa89",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 45,
+      "source_xy": [
+        536.482540845871,
+        256.64234161376953
+      ],
+      "lag": 15,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "03946c95dc6b1337452670dc",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 45,
+      "source_xy": [
+        536.482540845871,
+        256.64234161376953
+      ],
+      "lag": 30,
+      "frame": 75,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "fec77ce303fc8ef35e9fe185",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 45,
+      "source_xy": [
+        536.482540845871,
+        256.64234161376953
+      ],
+      "lag": 60,
+      "frame": 105,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "f2b396ac9ce2998786a136eb",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 46,
+      "source_xy": [
+        501.4182928800583,
+        184.81751918792725
+      ],
+      "lag": 15,
+      "frame": 61,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "d2e7fc152c70d11b14b74989",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 46,
+      "source_xy": [
+        501.4182928800583,
+        184.81751918792725
+      ],
+      "lag": 30,
+      "frame": 76,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "842caf275c6af78f5e568410",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 46,
+      "source_xy": [
+        501.4182928800583,
+        184.81751918792725
+      ],
+      "lag": 60,
+      "frame": 106,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "e7f0714d2d88b59767f41e3d",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        542.7015883922577,
+        65.07288694381714
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "e4234100c645ec8a455889dc",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        542.7015883922577,
+        65.07288694381714
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "fdcb8658ecfb6b0ea0354318",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        542.7015883922577,
+        65.07288694381714
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "c5ad73a6344d229fb88e8208",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        550.4044399261475,
+        97.25947380065918
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "dbf60d838d140374f4d254d0",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        550.4044399261475,
+        97.25947380065918
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "afaed24f05f1ddf40d5cce56",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        550.4044399261475,
+        97.25947380065918
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "2bc00f7d137448d2e43135de",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        544.8023290634155,
+        76.96792602539062
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        621.5489749792015,
+        97.1545182518856
+      ],
+      "status": "renderable"
+    },
+    {
+      "id": "1907423322724aabb4b288be",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        544.8023290634155,
+        76.96792602539062
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1013.8757863228468,
+        69.1658212939503
+      ],
+      "status": "query_outside_image"
+    },
+    {
+      "id": "326161440dcd6c3f02b09a99",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        544.8023290634155,
+        76.96792602539062
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth"
+    },
+    {
+      "id": "5aa27ca85f48a2c011c288df",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 52,
+      "source_xy": [
+        495.08390057086945,
+        202.91544914245605
+      ],
+      "lag": 15,
+      "frame": 67,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "4e2188026d9d527a36f291af",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 52,
+      "source_xy": [
+        495.08390057086945,
+        202.91544914245605
+      ],
+      "lag": 30,
+      "frame": 82,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "2b006287de9f102948689de2",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 52,
+      "source_xy": [
+        495.08390057086945,
+        202.91544914245605
+      ],
+      "lag": 60,
+      "frame": 112,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    },
+    {
+      "id": "0146f5e333b330403fd8a452",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 57,
+      "source_xy": [
+        554.6059721708298,
+        312.0699691772461
+      ],
+      "lag": 15,
+      "frame": 72,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "acc40e3496168618462f5a36",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 57,
+      "source_xy": [
+        554.6059721708298,
+        312.0699691772461
+      ],
+      "lag": 30,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "8172011a64a816e11e3ea406",
+      "sequence": "parkour",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 57,
+      "source_xy": [
+        554.6059721708298,
+        312.0699691772461
+      ],
+      "lag": 60,
+      "frame": 117,
+      "candidate_xy": null,
+      "status": "query_beyond_video"
+    }
+  ]
+}
