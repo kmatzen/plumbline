@@ -289,6 +289,10 @@ def validate_trajectory_pair(
     return TrajectoryGate(not errors, tuple(dict.fromkeys(errors)), n_frames, finite_fraction)
 
 
+class DegenerateAlignmentError(ValueError):
+    """Translation-only alignment cannot determine a diagnostic for this pair."""
+
+
 def _sim3_align(
     source: NDArray[np.float64], target: NDArray[np.float64]
 ) -> tuple[float, NDArray[np.float64], NDArray[np.float64]]:
@@ -297,6 +301,8 @@ def _sim3_align(
     target_mean = target.mean(axis=0)
     centered_source = source - source_mean
     centered_target = target - target_mean
+    if float(np.mean(np.sum(centered_target**2, axis=1))) <= np.finfo(np.float64).eps:
+        raise DegenerateAlignmentError("reference trajectory has no translational extent")
     covariance = centered_target.T @ centered_source / len(source)
     left, singular, right_t = np.linalg.svd(covariance)
     sign = np.ones(3)
@@ -305,7 +311,7 @@ def _sim3_align(
     rotation = left @ np.diag(sign) @ right_t
     variance = float(np.mean(np.sum(centered_source**2, axis=1)))
     if variance <= np.finfo(np.float64).eps:
-        raise ValueError("predicted trajectory has no translational extent")
+        raise DegenerateAlignmentError("predicted trajectory has no translational extent")
     scale = float(np.sum(singular * sign) / variance)
     offset = target_mean - scale * (rotation @ source_mean)
     return scale, rotation, offset
@@ -386,8 +392,14 @@ def write_tracking_review_artifact(
     gate = validate_trajectory_pair(pred, gt)
     recorded_metrics = dict(metrics or {})
     diagnostic_path: Path | None = None
+    diagnostic_unavailable_reason: str | None = None
+    diagnostics = None
     if gate.ok:
-        diagnostics = trajectory_diagnostics(pred, gt)
+        try:
+            diagnostics = trajectory_diagnostics(pred, gt)
+        except DegenerateAlignmentError as exc:
+            diagnostic_unavailable_reason = str(exc)
+    if diagnostics is not None:
         recorded_metrics.update(
             {
                 "review_translation_error_normalized_mean": float(
@@ -419,6 +431,7 @@ def write_tracking_review_artifact(
         "alignment": "sim3_umeyama",
         "input_fingerprint": _array_fingerprint(pred, gt),
         "gate": asdict(gate),
+        "diagnostic_unavailable_reason": diagnostic_unavailable_reason,
         "files": {
             "poses": "poses.npz",
             "metrics": "metrics.json",
@@ -487,6 +500,8 @@ def build_review_pair(
     out_dir.mkdir(parents=True, exist_ok=True)
     review_image: str | None = None
     if automatic_winner is None:
+        if any(not item["files"]["diagnostic"] for _, item in displayed):
+            raise ValueError("diagnostic unavailable; do not infer a winner from missing evidence")
         images = [
             Image.open(path / item["files"]["diagnostic"]).convert("RGB")
             for path, item in displayed

@@ -55,7 +55,8 @@ def analyze(run: Path, output: Path) -> dict:
         system="dage",
         config_hash=source_hash[:16],
     )
-    gate = json.loads((artifact / "manifest.json").read_text())["gate"]
+    artifact_manifest = json.loads((artifact / "manifest.json").read_text())
+    gate = artifact_manifest["gate"]
     timestamps = np.array([float(f["timestamp"]) for f in manifest["frames"]])
     result = {
         "source_manifest_sha256": source_hash,
@@ -65,6 +66,7 @@ def analyze(run: Path, output: Path) -> dict:
         "duration_seconds": float(timestamps[-1] - timestamps[0]),
         "median_frame_interval_seconds": float(np.median(np.diff(timestamps))),
         "gate": gate,
+        "diagnostic_unavailable_reason": artifact_manifest.get("diagnostic_unavailable_reason"),
         "artifact": str(artifact),
         "metrics": json.loads((artifact / "metrics.json").read_text()),
         "functional_verdict": "unreviewed",

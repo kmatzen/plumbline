@@ -98,6 +98,26 @@ def test_trajectory_diagnostics_remove_global_similarity() -> None:
     np.testing.assert_allclose(diagnostics.rotation_error_deg, 0.0, atol=1e-6)
 
 
+def test_stationary_reference_does_not_collapse_moving_prediction_to_perfection(tmp_path):
+    stationary = np.repeat(np.eye(4)[None], 20, axis=0)
+    with pytest.raises(ValueError, match="reference trajectory has no translational extent"):
+        trajectory_diagnostics(_trajectory(), stationary)
+    artifacts = [
+        write_tracking_review_artifact(
+            poses, stationary, tmp_path, dataset="d", sequence="s", system=name, config_hash="c"
+        )
+        for name, poses in (("still", stationary), ("moving", _trajectory()))
+    ]
+    for artifact in artifacts:
+        manifest = json.loads((artifact / "manifest.json").read_text())
+        assert manifest["gate"]["ok"]
+        assert manifest["files"]["diagnostic"] is None
+        assert "no translational extent" in manifest["diagnostic_unavailable_reason"]
+        assert json.loads((artifact / "metrics.json").read_text()) == {}
+    with pytest.raises(ValueError, match="do not infer a winner"):
+        build_review_pair(*artifacts, tmp_path / "pair", task_id="s", comparison_id="stationary")
+
+
 def test_render_trajectory_diagnostic_is_deterministic(tmp_path) -> None:
     gt = _trajectory()
     pred = gt.copy()

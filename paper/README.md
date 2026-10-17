@@ -194,7 +194,25 @@ The complete manifest and pose arrays are retained in
 `results/dense/dage-walking-xyz-v2-analysis/`. Source images remain on Anima;
 their hashes are in the manifest. A walking-static development run has been
 launched separately to test the stationary-camera/moving-foreground case; no
-result or usability label is implied by that launch.
+result or usability label is implied by that launch. That control subsequently
+completed and is retained in `results/dense/dage-walking-static-v1/` with derived
+diagnostics beside it. Its 90 frames span 9.016 s. The prediction and reference
+hashes verify and the mechanical gate passes; functional usability is unreviewed.
+
+This control exposes an alignment caveat: the reference camera-position RMS
+radius is only 0.023385 m. Mean orientation difference in the shared
+first-camera coordinate frame is 0.434 degrees, but mean orientation error after
+position-based Sim(3) alignment is 9.828 degrees. These are different gauges, not
+interchangeable scores. A large aligned orientation value alone is not a DNF
+label. Review packets must state the alignment and include evidence beyond the
+position-aligned orientation plot. The sequence name does not imply exactly
+zero measured reference motion.
+
+For exactly zero translational extent, the review code now marks the Sim(3)
+diagnostic unavailable instead of collapsing a moving prediction to zero error
+or crashing on two stationary paths. Pose validity remains separate. Such pairs
+cannot receive a preference inferred from missing diagnostic images. This fixes
+an exact degeneracy; it does not solve alignment sensitivity near zero motion.
 
 `build_source_preview.py MANIFEST DATA_ROOT NEW_OUTPUT` verifies the source-image
 hashes before staging frames and encoding a source-only MP4. Playback uses the
