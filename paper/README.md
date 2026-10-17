@@ -706,8 +706,10 @@ decisions when reference camera poses are absent. That claim is still unproven.
 Missing-observation bounds are basic partial-identification accounting, not a
 new statistical estimator. Neither the solver, accounting formula, nor combining
 them with an unvalidated VLM suffices as a novelty claim. The additional BibTeX
-records are staged for the next manuscript revision; the current PDF does not
-yet contain these staged citations.
+records are now cited in the revised manuscript's related-work section. The
+eight-page PDF was rebuilt with resolved citations and visually checked; this
+literature revision does not add the unsuccessful model-training experiments
+or establish the proposed camera-level contribution.
 
 [3D-DefectBench](https://arxiv.org/abs/2607.10826v2) studies how the model,
 rendering, evidence, and prompt affect human agreement for 3D-asset defects;
