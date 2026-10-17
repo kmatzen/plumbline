@@ -15,11 +15,13 @@ from paper.query_chunk_attention import query_chunk_attention
 from paper.run_davis_da3 import normalized_input_intrinsics
 
 
-def load_rgb(root,name):
+def load_rgb(root,name,expected_names=None):
     manifest_path = root/'manifest.json'
     manifest = json.loads(manifest_path.read_text())
-    if (manifest['status'] != 'complete' or manifest['expected_scenes'] != 4
-            or [s['name'] for s in manifest['scenes']] != ['3835','5397','4385','4970']):
+    expected_names = ['3835','5397','4385','4970'] if expected_names is None else list(expected_names)
+    if (not expected_names or len(set(expected_names)) != len(expected_names)
+            or manifest['status'] != 'complete' or manifest['expected_scenes'] != len(expected_names)
+            or [s['name'] for s in manifest['scenes']] != expected_names):
         raise ValueError('complete pilot roster required')
     entries = [s for s in manifest['scenes'] if s['name'] == name]
     if len(entries) != 1:
@@ -39,7 +41,7 @@ def load_rgb(root,name):
                      decoded_rgb_sha256=sha,frame_sha256=[hashlib.sha256(f.tobytes()).hexdigest() for f in video])
 
 
-def run(root,name,method,checkpoint,output):
+def run(root,name,method,checkpoint,output,expected_names=None):
     if method not in {'dage','da3'}:
         raise ValueError('unknown camera method')
     output.mkdir(parents=True,exist_ok=False)
@@ -47,13 +49,16 @@ def run(root,name,method,checkpoint,output):
         scope='four-scene MOVi-E development camera outputs, not held-out validation',
         input_policy='RGB-only NPZ; no reference poses, intrinsics, depths, masks, normals, or object motion loaded',
         script_sha256=digest(Path(__file__)))
+    if expected_names is not None:
+        report.update(scope='fixed-roster MOVi validation replication; not final test validation',
+                      expected_sequences=list(expected_names))
 
     def save():
         (output/'manifest.json').write_text(json.dumps(report,indent=2,allow_nan=False)+'\n')
 
     save()
     try:
-        video,provenance = load_rgb(root,name)
+        video,provenance = load_rgb(root,name,expected_names)
         import torch
         from plumbline.models.dage import DAGEAdapter
         from plumbline.models.depth_anything_3 import DepthAnything3Adapter
@@ -109,5 +114,6 @@ if __name__ == '__main__':
     parser.add_argument('root',type=Path); parser.add_argument('sequence')
     parser.add_argument('method',choices=('dage','da3'))
     parser.add_argument('checkpoint',type=Path); parser.add_argument('output',type=Path)
+    parser.add_argument('--sequences',nargs='+')
     args = parser.parse_args()
-    run(args.root,args.sequence,args.method,args.checkpoint,args.output)
+    run(args.root,args.sequence,args.method,args.checkpoint,args.output,args.sequences)

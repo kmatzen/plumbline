@@ -45,3 +45,19 @@ def test_changed_rgb_and_existing_attempt_rejected(tmp_path):
         load_rgb(tmp_path,'3835')
     with pytest.raises(FileExistsError):
         run(tmp_path,'3835','dage',tmp_path,tmp_path)
+
+
+def test_explicit_replication_roster_preserves_rgb_only_validation(tmp_path):
+    expected = fixture(tmp_path)
+    path = tmp_path/'manifest.json'
+    manifest = json.loads(path.read_text())
+    names = ['7097','4852','2373','4866']
+    for scene, name in zip(manifest['scenes'], names):
+        scene['name'] = name
+    path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match='roster'):
+        load_rgb(tmp_path, names[0])
+    actual, _ = load_rgb(tmp_path, names[0], names)
+    np.testing.assert_array_equal(actual, expected)
+    with pytest.raises(ValueError, match='roster'):
+        load_rgb(tmp_path, names[0], names[::-1])

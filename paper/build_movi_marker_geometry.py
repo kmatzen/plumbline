@@ -75,10 +75,10 @@ def marker_rows(track, poses, calibration):
     return fit, rows
 
 
-def build(root, runs, sequence, output):
+def build(root, runs, sequence, output, expected_names=None):
     if output.exists():
         raise ValueError('preserve previous geometry')
-    video, provenance = load_rgb(root, sequence)
+    video, provenance = load_rgb(root, sequence, expected_names)
     tracks = track_rgb(video)
     records, fits, cameras = [], [], {}
     for method in ('dage', 'da3'):
@@ -130,5 +130,6 @@ if __name__ == '__main__':
     parser.add_argument('runs', type=Path)
     parser.add_argument('sequence')
     parser.add_argument('output', type=Path)
+    parser.add_argument('--sequences', nargs='+')
     args = parser.parse_args()
-    print(build(args.root, args.runs, args.sequence, args.output)['counts'])
+    print(build(args.root, args.runs, args.sequence, args.output, args.sequences)['counts'])
