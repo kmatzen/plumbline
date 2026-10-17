@@ -4767,6 +4767,49 @@ replication does not establish the extra gates as a novel or better evaluation
 method. No thresholds were changed after viewing these results, and these
 development findings are not added to the manuscript.
 
+### Shared image-location uncertainty in paired comparisons
+
+The existing missing-outcome bounds already retain all planned slots. Such
+partial-identification arguments are established; see [Manski's discussion of
+missing data](https://www.sciencedirect.com/science/article/pii/S0888613X04001124).
+They do not certify the measured image locations. The separate
+`paired_location_bounds.squared_difference_bounds` kernel now quantifies how
+uncertainty in a shared target location affects a fixed paired comparison.
+
+For projected markers a and b and measured target q, the difference of squared
+errors is `||a-q||^2 - ||b-q||^2`. If the true target lies in a disk of radius r
+around q, this difference ranges exactly over the measured difference plus or
+minus `2*r*||a-b||`. The mean bounds average these per-point extremes. This is
+an elementary affine calculation, not a claimed novel bound. The shared target
+matters: identical candidate projections have exactly zero difference even
+when the target is uncertain. Tests construct both extremizing targets and
+check translation invariance, identical predictions, and invalid inputs.
+
+`probe_movi_location_sensitivity.py` applies the kernel to the unchanged
+forward-visible, common-renderable replication pairs, with all fixed radii
+0, 0.5, 1, 2, 4, and 8 pixels reported. This uses mean squared error, not the
+earlier mean Euclidean error; it does not replace that score or select whichever
+aggregation yields a preferred result. Supported-background subsets are shown
+separately, with reference locations used only to check the disk assumption.
+
+For the supported backgrounds, uniform radii that bring the paired difference
+bound to zero are 1.159, 65.382, 0.255, and 8.131 pixels for scenes 7097, 4852,
+2373, and 4866, respectively. Maximum observed reference tracking errors on
+those same subsets are 0.356, 1.395, 2.691, and 0.853 pixels. Scene 2373 is thus
+sensitive at a radius far smaller than the largest measured correspondence
+error. This is not proof that its measured ordering is wrong; it means an
+ordering cannot be certified under that larger uncertainty set. Replay tests
+verify that reference differences lie inside every bound whose disk assumption
+holds on all scored points.
+
+The artifact is `results/movi-replication-shard01-v1/location-sensitivity-v1.json`.
+These are post-replication conditional sensitivity results. The disks have not
+been calibrated without references; observations outside the fixed subset and
+undefined tasks are not bounded. No statistical confidence, full-plan ordering,
+staticness certificate, camera-DNF label, or novel evaluation contribution is
+claimed. This identifies a measurement-uncertainty requirement for further
+method development rather than a reason to add more filtering stages.
+
 ### Frozen-matrix correspondence intervention
 
 `audit_movi_motion_track_error.py` tests whether correspondence error explains

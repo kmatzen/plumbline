@@ -1,0 +1,2897 @@
+{
+  "scope": "post-replication conditional sensitivity diagnostic, not independent validation, novel bound, or DNF",
+  "policy": "fixed forward-visible common-renderable pairs, no motion/cycle filtering; radii 0,.5,1,2,4,8 pixels all reported; squared-error difference differs from prior mean Euclidean error and is not substituted for it",
+  "limitations": "disks are hypothetical, not calibrated; references only check containment on supported background subset; missing or undefined tasks outside subset are not bounded; no full-plan ordering or human usability claim",
+  "source_sha256": {
+    "evidence": "ad6474793bc285273a06b39b159f566c2ccf6689f5712cd97cc86f272308e22d",
+    "score": "37f958b9ec96868bd7e4ff79da43f186e1f83e5d9c85bf83b910dfad6e6e60ca"
+  },
+  "script_sha256": "b830f318ee208117d450efe6411d543a7ab4b71a633308a15bb17edb0d44833a",
+  "kernel_sha256": "811590959f290a6c3077dc361d63ea47db085b5748006405c160949555b51643",
+  "cases": [
+    {
+      "sequence": "7097",
+      "subset": "all_forward_visible_pairs",
+      "planned": 192,
+      "observations": 91,
+      "selected_slots": [
+        [
+          12,
+          6
+        ],
+        [
+          12,
+          7
+        ],
+        [
+          12,
+          14
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          12,
+          22
+        ],
+        [
+          12,
+          23
+        ],
+        [
+          12,
+          28
+        ],
+        [
+          12,
+          29
+        ],
+        [
+          12,
+          30
+        ],
+        [
+          12,
+          31
+        ],
+        [
+          12,
+          36
+        ],
+        [
+          12,
+          37
+        ],
+        [
+          12,
+          38
+        ],
+        [
+          12,
+          39
+        ],
+        [
+          12,
+          43
+        ],
+        [
+          12,
+          44
+        ],
+        [
+          12,
+          45
+        ],
+        [
+          12,
+          46
+        ],
+        [
+          12,
+          47
+        ],
+        [
+          12,
+          50
+        ],
+        [
+          12,
+          51
+        ],
+        [
+          12,
+          52
+        ],
+        [
+          12,
+          53
+        ],
+        [
+          12,
+          54
+        ],
+        [
+          12,
+          55
+        ],
+        [
+          12,
+          57
+        ],
+        [
+          12,
+          58
+        ],
+        [
+          12,
+          59
+        ],
+        [
+          12,
+          60
+        ],
+        [
+          12,
+          61
+        ],
+        [
+          12,
+          62
+        ],
+        [
+          12,
+          63
+        ],
+        [
+          18,
+          6
+        ],
+        [
+          18,
+          7
+        ],
+        [
+          18,
+          14
+        ],
+        [
+          18,
+          15
+        ],
+        [
+          18,
+          22
+        ],
+        [
+          18,
+          23
+        ],
+        [
+          18,
+          28
+        ],
+        [
+          18,
+          29
+        ],
+        [
+          18,
+          30
+        ],
+        [
+          18,
+          31
+        ],
+        [
+          18,
+          36
+        ],
+        [
+          18,
+          37
+        ],
+        [
+          18,
+          38
+        ],
+        [
+          18,
+          39
+        ],
+        [
+          18,
+          43
+        ],
+        [
+          18,
+          44
+        ],
+        [
+          18,
+          45
+        ],
+        [
+          18,
+          46
+        ],
+        [
+          18,
+          47
+        ],
+        [
+          18,
+          50
+        ],
+        [
+          18,
+          51
+        ],
+        [
+          18,
+          52
+        ],
+        [
+          18,
+          53
+        ],
+        [
+          18,
+          54
+        ],
+        [
+          18,
+          55
+        ],
+        [
+          18,
+          58
+        ],
+        [
+          18,
+          59
+        ],
+        [
+          18,
+          60
+        ],
+        [
+          18,
+          61
+        ],
+        [
+          18,
+          62
+        ],
+        [
+          18,
+          63
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          14
+        ],
+        [
+          23,
+          15
+        ],
+        [
+          23,
+          22
+        ],
+        [
+          23,
+          23
+        ],
+        [
+          23,
+          28
+        ],
+        [
+          23,
+          29
+        ],
+        [
+          23,
+          30
+        ],
+        [
+          23,
+          31
+        ],
+        [
+          23,
+          36
+        ],
+        [
+          23,
+          37
+        ],
+        [
+          23,
+          38
+        ],
+        [
+          23,
+          39
+        ],
+        [
+          23,
+          43
+        ],
+        [
+          23,
+          44
+        ],
+        [
+          23,
+          45
+        ],
+        [
+          23,
+          46
+        ],
+        [
+          23,
+          47
+        ],
+        [
+          23,
+          50
+        ],
+        [
+          23,
+          51
+        ],
+        [
+          23,
+          52
+        ],
+        [
+          23,
+          53
+        ],
+        [
+          23,
+          54
+        ],
+        [
+          23,
+          55
+        ],
+        [
+          23,
+          59
+        ],
+        [
+          23,
+          60
+        ],
+        [
+          23,
+          61
+        ],
+        [
+          23,
+          62
+        ]
+      ],
+      "curves": [
+        {
+          "observations": 91,
+          "estimated_mean_squared_error_difference": -3.6885786881465705,
+          "mean_squared_error_difference_bounds": [
+            -3.6885786881465705,
+            -3.6885786881465705
+          ],
+          "ordering": "left",
+          "radius_pixels": 0,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 91,
+          "estimated_mean_squared_error_difference": -3.6885786881465705,
+          "mean_squared_error_difference_bounds": [
+            -5.562759106937927,
+            -1.8143982693552125
+          ],
+          "ordering": "left",
+          "radius_pixels": 0.5,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 91,
+          "estimated_mean_squared_error_difference": -3.6885786881465705,
+          "mean_squared_error_difference_bounds": [
+            -7.436939525729285,
+            0.059782149436144266
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 1,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 91,
+          "estimated_mean_squared_error_difference": -3.6885786881465705,
+          "mean_squared_error_difference_bounds": [
+            -11.185300363312,
+            3.8081429870188583
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 2,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 91,
+          "estimated_mean_squared_error_difference": -3.6885786881465705,
+          "mean_squared_error_difference_bounds": [
+            -18.682022038477427,
+            11.304864662184288
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 4,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 91,
+          "estimated_mean_squared_error_difference": -3.6885786881465705,
+          "mean_squared_error_difference_bounds": [
+            -33.675465388808284,
+            26.298308012515143
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 8,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        }
+      ],
+      "reference_max_tracking_error_pixels": null,
+      "reference_mean_squared_error_difference": null,
+      "uniform_radius_to_zero_margin_pixels": 0.9840511220700147
+    },
+    {
+      "sequence": "7097",
+      "subset": "supported_background_subset",
+      "planned": 192,
+      "observations": 70,
+      "selected_slots": [
+        [
+          12,
+          6
+        ],
+        [
+          12,
+          7
+        ],
+        [
+          12,
+          14
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          12,
+          22
+        ],
+        [
+          12,
+          36
+        ],
+        [
+          12,
+          37
+        ],
+        [
+          12,
+          43
+        ],
+        [
+          12,
+          44
+        ],
+        [
+          12,
+          45
+        ],
+        [
+          12,
+          46
+        ],
+        [
+          12,
+          47
+        ],
+        [
+          12,
+          50
+        ],
+        [
+          12,
+          51
+        ],
+        [
+          12,
+          52
+        ],
+        [
+          12,
+          53
+        ],
+        [
+          12,
+          54
+        ],
+        [
+          12,
+          55
+        ],
+        [
+          12,
+          57
+        ],
+        [
+          12,
+          58
+        ],
+        [
+          12,
+          59
+        ],
+        [
+          12,
+          60
+        ],
+        [
+          12,
+          61
+        ],
+        [
+          12,
+          62
+        ],
+        [
+          12,
+          63
+        ],
+        [
+          18,
+          6
+        ],
+        [
+          18,
+          7
+        ],
+        [
+          18,
+          14
+        ],
+        [
+          18,
+          15
+        ],
+        [
+          18,
+          22
+        ],
+        [
+          18,
+          36
+        ],
+        [
+          18,
+          37
+        ],
+        [
+          18,
+          43
+        ],
+        [
+          18,
+          44
+        ],
+        [
+          18,
+          45
+        ],
+        [
+          18,
+          46
+        ],
+        [
+          18,
+          47
+        ],
+        [
+          18,
+          50
+        ],
+        [
+          18,
+          51
+        ],
+        [
+          18,
+          52
+        ],
+        [
+          18,
+          53
+        ],
+        [
+          18,
+          54
+        ],
+        [
+          18,
+          55
+        ],
+        [
+          18,
+          58
+        ],
+        [
+          18,
+          59
+        ],
+        [
+          18,
+          60
+        ],
+        [
+          18,
+          61
+        ],
+        [
+          18,
+          62
+        ],
+        [
+          18,
+          63
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          14
+        ],
+        [
+          23,
+          15
+        ],
+        [
+          23,
+          22
+        ],
+        [
+          23,
+          36
+        ],
+        [
+          23,
+          37
+        ],
+        [
+          23,
+          43
+        ],
+        [
+          23,
+          44
+        ],
+        [
+          23,
+          45
+        ],
+        [
+          23,
+          46
+        ],
+        [
+          23,
+          47
+        ],
+        [
+          23,
+          50
+        ],
+        [
+          23,
+          51
+        ],
+        [
+          23,
+          52
+        ],
+        [
+          23,
+          53
+        ],
+        [
+          23,
+          54
+        ],
+        [
+          23,
+          55
+        ],
+        [
+          23,
+          59
+        ],
+        [
+          23,
+          60
+        ],
+        [
+          23,
+          61
+        ],
+        [
+          23,
+          62
+        ]
+      ],
+      "curves": [
+        {
+          "observations": 70,
+          "estimated_mean_squared_error_difference": -4.804044755215276,
+          "mean_squared_error_difference_bounds": [
+            -4.804044755215276,
+            -4.804044755215276
+          ],
+          "ordering": "left",
+          "radius_pixels": 0,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": false
+        },
+        {
+          "observations": 70,
+          "estimated_mean_squared_error_difference": -4.804044755215276,
+          "mean_squared_error_difference_bounds": [
+            -6.877224975614301,
+            -2.7308645348162464
+          ],
+          "ordering": "left",
+          "radius_pixels": 0.5,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        },
+        {
+          "observations": 70,
+          "estimated_mean_squared_error_difference": -4.804044755215276,
+          "mean_squared_error_difference_bounds": [
+            -8.95040519601333,
+            -0.6576843144172182
+          ],
+          "ordering": "left",
+          "radius_pixels": 1,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        },
+        {
+          "observations": 70,
+          "estimated_mean_squared_error_difference": -4.804044755215276,
+          "mean_squared_error_difference_bounds": [
+            -13.096765636811387,
+            3.4886761263808377
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 2,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        },
+        {
+          "observations": 70,
+          "estimated_mean_squared_error_difference": -4.804044755215276,
+          "mean_squared_error_difference_bounds": [
+            -21.3894865184075,
+            11.78139700797695
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 4,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        },
+        {
+          "observations": 70,
+          "estimated_mean_squared_error_difference": -4.804044755215276,
+          "mean_squared_error_difference_bounds": [
+            -37.97492828159972,
+            28.36683877116917
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 8,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        }
+      ],
+      "reference_max_tracking_error_pixels": 0.35631616054064597,
+      "reference_mean_squared_error_difference": -4.668148928303897,
+      "uniform_radius_to_zero_margin_pixels": 1.1586172557373315
+    },
+    {
+      "sequence": "4852",
+      "subset": "all_forward_visible_pairs",
+      "planned": 192,
+      "observations": 108,
+      "selected_slots": [
+        [
+          12,
+          3
+        ],
+        [
+          12,
+          4
+        ],
+        [
+          12,
+          5
+        ],
+        [
+          12,
+          6
+        ],
+        [
+          12,
+          8
+        ],
+        [
+          12,
+          12
+        ],
+        [
+          12,
+          13
+        ],
+        [
+          12,
+          14
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          12,
+          16
+        ],
+        [
+          12,
+          20
+        ],
+        [
+          12,
+          21
+        ],
+        [
+          12,
+          22
+        ],
+        [
+          12,
+          24
+        ],
+        [
+          12,
+          28
+        ],
+        [
+          12,
+          29
+        ],
+        [
+          12,
+          30
+        ],
+        [
+          12,
+          31
+        ],
+        [
+          12,
+          33
+        ],
+        [
+          12,
+          37
+        ],
+        [
+          12,
+          38
+        ],
+        [
+          12,
+          39
+        ],
+        [
+          12,
+          40
+        ],
+        [
+          12,
+          42
+        ],
+        [
+          12,
+          43
+        ],
+        [
+          12,
+          44
+        ],
+        [
+          12,
+          45
+        ],
+        [
+          12,
+          46
+        ],
+        [
+          12,
+          47
+        ],
+        [
+          12,
+          48
+        ],
+        [
+          12,
+          52
+        ],
+        [
+          12,
+          53
+        ],
+        [
+          12,
+          54
+        ],
+        [
+          12,
+          55
+        ],
+        [
+          12,
+          59
+        ],
+        [
+          12,
+          60
+        ],
+        [
+          12,
+          61
+        ],
+        [
+          12,
+          62
+        ],
+        [
+          12,
+          63
+        ],
+        [
+          18,
+          3
+        ],
+        [
+          18,
+          4
+        ],
+        [
+          18,
+          5
+        ],
+        [
+          18,
+          6
+        ],
+        [
+          18,
+          8
+        ],
+        [
+          18,
+          12
+        ],
+        [
+          18,
+          13
+        ],
+        [
+          18,
+          14
+        ],
+        [
+          18,
+          15
+        ],
+        [
+          18,
+          16
+        ],
+        [
+          18,
+          20
+        ],
+        [
+          18,
+          21
+        ],
+        [
+          18,
+          22
+        ],
+        [
+          18,
+          24
+        ],
+        [
+          18,
+          29
+        ],
+        [
+          18,
+          30
+        ],
+        [
+          18,
+          31
+        ],
+        [
+          18,
+          33
+        ],
+        [
+          18,
+          38
+        ],
+        [
+          18,
+          39
+        ],
+        [
+          18,
+          40
+        ],
+        [
+          18,
+          42
+        ],
+        [
+          18,
+          43
+        ],
+        [
+          18,
+          44
+        ],
+        [
+          18,
+          45
+        ],
+        [
+          18,
+          46
+        ],
+        [
+          18,
+          47
+        ],
+        [
+          18,
+          52
+        ],
+        [
+          18,
+          53
+        ],
+        [
+          18,
+          55
+        ],
+        [
+          18,
+          59
+        ],
+        [
+          18,
+          60
+        ],
+        [
+          18,
+          61
+        ],
+        [
+          18,
+          62
+        ],
+        [
+          18,
+          63
+        ],
+        [
+          23,
+          3
+        ],
+        [
+          23,
+          4
+        ],
+        [
+          23,
+          5
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          8
+        ],
+        [
+          23,
+          12
+        ],
+        [
+          23,
+          13
+        ],
+        [
+          23,
+          14
+        ],
+        [
+          23,
+          15
+        ],
+        [
+          23,
+          16
+        ],
+        [
+          23,
+          20
+        ],
+        [
+          23,
+          21
+        ],
+        [
+          23,
+          22
+        ],
+        [
+          23,
+          24
+        ],
+        [
+          23,
+          28
+        ],
+        [
+          23,
+          29
+        ],
+        [
+          23,
+          30
+        ],
+        [
+          23,
+          31
+        ],
+        [
+          23,
+          33
+        ],
+        [
+          23,
+          38
+        ],
+        [
+          23,
+          39
+        ],
+        [
+          23,
+          40
+        ],
+        [
+          23,
+          42
+        ],
+        [
+          23,
+          43
+        ],
+        [
+          23,
+          46
+        ],
+        [
+          23,
+          47
+        ],
+        [
+          23,
+          52
+        ],
+        [
+          23,
+          53
+        ],
+        [
+          23,
+          55
+        ],
+        [
+          23,
+          59
+        ],
+        [
+          23,
+          60
+        ],
+        [
+          23,
+          61
+        ],
+        [
+          23,
+          62
+        ],
+        [
+          23,
+          63
+        ]
+      ],
+      "curves": [
+        {
+          "observations": 108,
+          "estimated_mean_squared_error_difference": 1173.15291265252,
+          "mean_squared_error_difference_bounds": [
+            1173.15291265252,
+            1173.15291265252
+          ],
+          "ordering": "right",
+          "radius_pixels": 0,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 108,
+          "estimated_mean_squared_error_difference": 1173.15291265252,
+          "mean_squared_error_difference_bounds": [
+            1163.6776565590271,
+            1182.6281687460125
+          ],
+          "ordering": "right",
+          "radius_pixels": 0.5,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 108,
+          "estimated_mean_squared_error_difference": 1173.15291265252,
+          "mean_squared_error_difference_bounds": [
+            1154.2024004655343,
+            1192.1034248395056
+          ],
+          "ordering": "right",
+          "radius_pixels": 1,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 108,
+          "estimated_mean_squared_error_difference": 1173.15291265252,
+          "mean_squared_error_difference_bounds": [
+            1135.251888278549,
+            1211.0539370264914
+          ],
+          "ordering": "right",
+          "radius_pixels": 2,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 108,
+          "estimated_mean_squared_error_difference": 1173.15291265252,
+          "mean_squared_error_difference_bounds": [
+            1097.350863904577,
+            1248.9549614004627
+          ],
+          "ordering": "right",
+          "radius_pixels": 4,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 108,
+          "estimated_mean_squared_error_difference": 1173.15291265252,
+          "mean_squared_error_difference_bounds": [
+            1021.5488151566343,
+            1324.7570101484057
+          ],
+          "ordering": "right",
+          "radius_pixels": 8,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        }
+      ],
+      "reference_max_tracking_error_pixels": null,
+      "reference_mean_squared_error_difference": null,
+      "uniform_radius_to_zero_margin_pixels": 61.90613219721757
+    },
+    {
+      "sequence": "4852",
+      "subset": "supported_background_subset",
+      "planned": 192,
+      "observations": 74,
+      "selected_slots": [
+        [
+          12,
+          3
+        ],
+        [
+          12,
+          4
+        ],
+        [
+          12,
+          5
+        ],
+        [
+          12,
+          6
+        ],
+        [
+          12,
+          8
+        ],
+        [
+          12,
+          12
+        ],
+        [
+          12,
+          13
+        ],
+        [
+          12,
+          16
+        ],
+        [
+          12,
+          20
+        ],
+        [
+          12,
+          21
+        ],
+        [
+          12,
+          24
+        ],
+        [
+          12,
+          28
+        ],
+        [
+          12,
+          30
+        ],
+        [
+          12,
+          33
+        ],
+        [
+          12,
+          37
+        ],
+        [
+          12,
+          38
+        ],
+        [
+          12,
+          39
+        ],
+        [
+          12,
+          44
+        ],
+        [
+          12,
+          45
+        ],
+        [
+          12,
+          46
+        ],
+        [
+          12,
+          47
+        ],
+        [
+          12,
+          52
+        ],
+        [
+          12,
+          53
+        ],
+        [
+          12,
+          54
+        ],
+        [
+          12,
+          55
+        ],
+        [
+          12,
+          60
+        ],
+        [
+          12,
+          61
+        ],
+        [
+          18,
+          3
+        ],
+        [
+          18,
+          4
+        ],
+        [
+          18,
+          5
+        ],
+        [
+          18,
+          6
+        ],
+        [
+          18,
+          8
+        ],
+        [
+          18,
+          12
+        ],
+        [
+          18,
+          13
+        ],
+        [
+          18,
+          16
+        ],
+        [
+          18,
+          20
+        ],
+        [
+          18,
+          21
+        ],
+        [
+          18,
+          24
+        ],
+        [
+          18,
+          30
+        ],
+        [
+          18,
+          33
+        ],
+        [
+          18,
+          38
+        ],
+        [
+          18,
+          39
+        ],
+        [
+          18,
+          44
+        ],
+        [
+          18,
+          45
+        ],
+        [
+          18,
+          46
+        ],
+        [
+          18,
+          47
+        ],
+        [
+          18,
+          52
+        ],
+        [
+          18,
+          53
+        ],
+        [
+          18,
+          55
+        ],
+        [
+          18,
+          60
+        ],
+        [
+          18,
+          61
+        ],
+        [
+          23,
+          3
+        ],
+        [
+          23,
+          4
+        ],
+        [
+          23,
+          5
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          8
+        ],
+        [
+          23,
+          12
+        ],
+        [
+          23,
+          13
+        ],
+        [
+          23,
+          16
+        ],
+        [
+          23,
+          20
+        ],
+        [
+          23,
+          21
+        ],
+        [
+          23,
+          24
+        ],
+        [
+          23,
+          28
+        ],
+        [
+          23,
+          30
+        ],
+        [
+          23,
+          33
+        ],
+        [
+          23,
+          38
+        ],
+        [
+          23,
+          39
+        ],
+        [
+          23,
+          46
+        ],
+        [
+          23,
+          47
+        ],
+        [
+          23,
+          52
+        ],
+        [
+          23,
+          53
+        ],
+        [
+          23,
+          55
+        ],
+        [
+          23,
+          60
+        ],
+        [
+          23,
+          61
+        ]
+      ],
+      "curves": [
+        {
+          "observations": 74,
+          "estimated_mean_squared_error_difference": 1713.3955645129327,
+          "mean_squared_error_difference_bounds": [
+            1713.3955645129327,
+            1713.3955645129327
+          ],
+          "ordering": "right",
+          "radius_pixels": 0,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": false
+        },
+        {
+          "observations": 74,
+          "estimated_mean_squared_error_difference": 1713.3955645129327,
+          "mean_squared_error_difference_bounds": [
+            1700.2925973060917,
+            1726.4985317197738
+          ],
+          "ordering": "right",
+          "radius_pixels": 0.5,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": false
+        },
+        {
+          "observations": 74,
+          "estimated_mean_squared_error_difference": 1713.3955645129327,
+          "mean_squared_error_difference_bounds": [
+            1687.1896300992512,
+            1739.6014989266146
+          ],
+          "ordering": "right",
+          "radius_pixels": 1,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": false
+        },
+        {
+          "observations": 74,
+          "estimated_mean_squared_error_difference": 1713.3955645129327,
+          "mean_squared_error_difference_bounds": [
+            1660.9836956855695,
+            1765.8074333402967
+          ],
+          "ordering": "right",
+          "radius_pixels": 2,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        },
+        {
+          "observations": 74,
+          "estimated_mean_squared_error_difference": 1713.3955645129327,
+          "mean_squared_error_difference_bounds": [
+            1608.5718268582054,
+            1818.2193021676599
+          ],
+          "ordering": "right",
+          "radius_pixels": 4,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        },
+        {
+          "observations": 74,
+          "estimated_mean_squared_error_difference": 1713.3955645129327,
+          "mean_squared_error_difference_bounds": [
+            1503.748089203478,
+            1923.043039822387
+          ],
+          "ordering": "right",
+          "radius_pixels": 8,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        }
+      ],
+      "reference_max_tracking_error_pixels": 1.3951331313828128,
+      "reference_mean_squared_error_difference": 1711.2229240546808,
+      "uniform_radius_to_zero_margin_pixels": 65.3819679720479
+    },
+    {
+      "sequence": "2373",
+      "subset": "all_forward_visible_pairs",
+      "planned": 192,
+      "observations": 68,
+      "selected_slots": [
+        [
+          12,
+          9
+        ],
+        [
+          12,
+          10
+        ],
+        [
+          12,
+          17
+        ],
+        [
+          12,
+          22
+        ],
+        [
+          12,
+          24
+        ],
+        [
+          12,
+          25
+        ],
+        [
+          12,
+          32
+        ],
+        [
+          12,
+          33
+        ],
+        [
+          12,
+          37
+        ],
+        [
+          12,
+          40
+        ],
+        [
+          12,
+          41
+        ],
+        [
+          12,
+          42
+        ],
+        [
+          12,
+          43
+        ],
+        [
+          12,
+          44
+        ],
+        [
+          12,
+          45
+        ],
+        [
+          12,
+          46
+        ],
+        [
+          12,
+          47
+        ],
+        [
+          12,
+          48
+        ],
+        [
+          12,
+          49
+        ],
+        [
+          12,
+          50
+        ],
+        [
+          12,
+          51
+        ],
+        [
+          12,
+          52
+        ],
+        [
+          12,
+          53
+        ],
+        [
+          12,
+          54
+        ],
+        [
+          12,
+          55
+        ],
+        [
+          18,
+          17
+        ],
+        [
+          18,
+          18
+        ],
+        [
+          18,
+          22
+        ],
+        [
+          18,
+          32
+        ],
+        [
+          18,
+          33
+        ],
+        [
+          18,
+          37
+        ],
+        [
+          18,
+          40
+        ],
+        [
+          18,
+          41
+        ],
+        [
+          18,
+          42
+        ],
+        [
+          18,
+          43
+        ],
+        [
+          18,
+          44
+        ],
+        [
+          18,
+          45
+        ],
+        [
+          18,
+          46
+        ],
+        [
+          18,
+          47
+        ],
+        [
+          18,
+          48
+        ],
+        [
+          18,
+          49
+        ],
+        [
+          18,
+          50
+        ],
+        [
+          18,
+          51
+        ],
+        [
+          18,
+          52
+        ],
+        [
+          18,
+          53
+        ],
+        [
+          18,
+          54
+        ],
+        [
+          18,
+          55
+        ],
+        [
+          23,
+          17
+        ],
+        [
+          23,
+          18
+        ],
+        [
+          23,
+          22
+        ],
+        [
+          23,
+          32
+        ],
+        [
+          23,
+          33
+        ],
+        [
+          23,
+          37
+        ],
+        [
+          23,
+          40
+        ],
+        [
+          23,
+          41
+        ],
+        [
+          23,
+          42
+        ],
+        [
+          23,
+          43
+        ],
+        [
+          23,
+          44
+        ],
+        [
+          23,
+          45
+        ],
+        [
+          23,
+          46
+        ],
+        [
+          23,
+          47
+        ],
+        [
+          23,
+          49
+        ],
+        [
+          23,
+          50
+        ],
+        [
+          23,
+          51
+        ],
+        [
+          23,
+          52
+        ],
+        [
+          23,
+          53
+        ],
+        [
+          23,
+          54
+        ],
+        [
+          23,
+          55
+        ]
+      ],
+      "curves": [
+        {
+          "observations": 68,
+          "estimated_mean_squared_error_difference": -3.6821371217708325,
+          "mean_squared_error_difference_bounds": [
+            -3.6821371217708325,
+            -3.6821371217708325
+          ],
+          "ordering": "left",
+          "radius_pixels": 0,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 68,
+          "estimated_mean_squared_error_difference": -3.6821371217708325,
+          "mean_squared_error_difference_bounds": [
+            -10.908756992620287,
+            3.5444827490786226
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 0.5,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 68,
+          "estimated_mean_squared_error_difference": -3.6821371217708325,
+          "mean_squared_error_difference_bounds": [
+            -18.135376863469745,
+            10.77110261992808
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 1,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 68,
+          "estimated_mean_squared_error_difference": -3.6821371217708325,
+          "mean_squared_error_difference_bounds": [
+            -32.58861660516866,
+            25.224342361627
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 2,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 68,
+          "estimated_mean_squared_error_difference": -3.6821371217708325,
+          "mean_squared_error_difference_bounds": [
+            -61.495096088566484,
+            54.13082184502482
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 4,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 68,
+          "estimated_mean_squared_error_difference": -3.6821371217708325,
+          "mean_squared_error_difference_bounds": [
+            -119.30805505536215,
+            111.94378081182046
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 8,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        }
+      ],
+      "reference_max_tracking_error_pixels": null,
+      "reference_mean_squared_error_difference": null,
+      "uniform_radius_to_zero_margin_pixels": 0.25476205941201757
+    },
+    {
+      "sequence": "2373",
+      "subset": "supported_background_subset",
+      "planned": 192,
+      "observations": 68,
+      "selected_slots": [
+        [
+          12,
+          9
+        ],
+        [
+          12,
+          10
+        ],
+        [
+          12,
+          17
+        ],
+        [
+          12,
+          22
+        ],
+        [
+          12,
+          24
+        ],
+        [
+          12,
+          25
+        ],
+        [
+          12,
+          32
+        ],
+        [
+          12,
+          33
+        ],
+        [
+          12,
+          37
+        ],
+        [
+          12,
+          40
+        ],
+        [
+          12,
+          41
+        ],
+        [
+          12,
+          42
+        ],
+        [
+          12,
+          43
+        ],
+        [
+          12,
+          44
+        ],
+        [
+          12,
+          45
+        ],
+        [
+          12,
+          46
+        ],
+        [
+          12,
+          47
+        ],
+        [
+          12,
+          48
+        ],
+        [
+          12,
+          49
+        ],
+        [
+          12,
+          50
+        ],
+        [
+          12,
+          51
+        ],
+        [
+          12,
+          52
+        ],
+        [
+          12,
+          53
+        ],
+        [
+          12,
+          54
+        ],
+        [
+          12,
+          55
+        ],
+        [
+          18,
+          17
+        ],
+        [
+          18,
+          18
+        ],
+        [
+          18,
+          22
+        ],
+        [
+          18,
+          32
+        ],
+        [
+          18,
+          33
+        ],
+        [
+          18,
+          37
+        ],
+        [
+          18,
+          40
+        ],
+        [
+          18,
+          41
+        ],
+        [
+          18,
+          42
+        ],
+        [
+          18,
+          43
+        ],
+        [
+          18,
+          44
+        ],
+        [
+          18,
+          45
+        ],
+        [
+          18,
+          46
+        ],
+        [
+          18,
+          47
+        ],
+        [
+          18,
+          48
+        ],
+        [
+          18,
+          49
+        ],
+        [
+          18,
+          50
+        ],
+        [
+          18,
+          51
+        ],
+        [
+          18,
+          52
+        ],
+        [
+          18,
+          53
+        ],
+        [
+          18,
+          54
+        ],
+        [
+          18,
+          55
+        ],
+        [
+          23,
+          17
+        ],
+        [
+          23,
+          18
+        ],
+        [
+          23,
+          22
+        ],
+        [
+          23,
+          32
+        ],
+        [
+          23,
+          33
+        ],
+        [
+          23,
+          37
+        ],
+        [
+          23,
+          40
+        ],
+        [
+          23,
+          41
+        ],
+        [
+          23,
+          42
+        ],
+        [
+          23,
+          43
+        ],
+        [
+          23,
+          44
+        ],
+        [
+          23,
+          45
+        ],
+        [
+          23,
+          46
+        ],
+        [
+          23,
+          47
+        ],
+        [
+          23,
+          49
+        ],
+        [
+          23,
+          50
+        ],
+        [
+          23,
+          51
+        ],
+        [
+          23,
+          52
+        ],
+        [
+          23,
+          53
+        ],
+        [
+          23,
+          54
+        ],
+        [
+          23,
+          55
+        ]
+      ],
+      "curves": [
+        {
+          "observations": 68,
+          "estimated_mean_squared_error_difference": -3.6821371217708325,
+          "mean_squared_error_difference_bounds": [
+            -3.6821371217708325,
+            -3.6821371217708325
+          ],
+          "ordering": "left",
+          "radius_pixels": 0,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": false
+        },
+        {
+          "observations": 68,
+          "estimated_mean_squared_error_difference": -3.6821371217708325,
+          "mean_squared_error_difference_bounds": [
+            -10.908756992620287,
+            3.5444827490786226
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 0.5,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": false
+        },
+        {
+          "observations": 68,
+          "estimated_mean_squared_error_difference": -3.6821371217708325,
+          "mean_squared_error_difference_bounds": [
+            -18.135376863469745,
+            10.77110261992808
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 1,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": false
+        },
+        {
+          "observations": 68,
+          "estimated_mean_squared_error_difference": -3.6821371217708325,
+          "mean_squared_error_difference_bounds": [
+            -32.58861660516866,
+            25.224342361627
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 2,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": false
+        },
+        {
+          "observations": 68,
+          "estimated_mean_squared_error_difference": -3.6821371217708325,
+          "mean_squared_error_difference_bounds": [
+            -61.495096088566484,
+            54.13082184502482
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 4,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        },
+        {
+          "observations": 68,
+          "estimated_mean_squared_error_difference": -3.6821371217708325,
+          "mean_squared_error_difference_bounds": [
+            -119.30805505536215,
+            111.94378081182046
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 8,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        }
+      ],
+      "reference_max_tracking_error_pixels": 2.691209159041592,
+      "reference_mean_squared_error_difference": -4.156354816803848,
+      "uniform_radius_to_zero_margin_pixels": 0.25476205941201757
+    },
+    {
+      "sequence": "4866",
+      "subset": "all_forward_visible_pairs",
+      "planned": 192,
+      "observations": 40,
+      "selected_slots": [
+        [
+          12,
+          24
+        ],
+        [
+          12,
+          25
+        ],
+        [
+          12,
+          31
+        ],
+        [
+          12,
+          32
+        ],
+        [
+          12,
+          33
+        ],
+        [
+          12,
+          34
+        ],
+        [
+          12,
+          39
+        ],
+        [
+          12,
+          40
+        ],
+        [
+          12,
+          41
+        ],
+        [
+          12,
+          48
+        ],
+        [
+          12,
+          49
+        ],
+        [
+          18,
+          24
+        ],
+        [
+          18,
+          25
+        ],
+        [
+          18,
+          30
+        ],
+        [
+          18,
+          31
+        ],
+        [
+          18,
+          32
+        ],
+        [
+          18,
+          33
+        ],
+        [
+          18,
+          34
+        ],
+        [
+          18,
+          39
+        ],
+        [
+          18,
+          40
+        ],
+        [
+          18,
+          41
+        ],
+        [
+          18,
+          43
+        ],
+        [
+          18,
+          47
+        ],
+        [
+          18,
+          48
+        ],
+        [
+          18,
+          49
+        ],
+        [
+          18,
+          50
+        ],
+        [
+          23,
+          24
+        ],
+        [
+          23,
+          25
+        ],
+        [
+          23,
+          30
+        ],
+        [
+          23,
+          31
+        ],
+        [
+          23,
+          32
+        ],
+        [
+          23,
+          33
+        ],
+        [
+          23,
+          34
+        ],
+        [
+          23,
+          39
+        ],
+        [
+          23,
+          40
+        ],
+        [
+          23,
+          41
+        ],
+        [
+          23,
+          47
+        ],
+        [
+          23,
+          48
+        ],
+        [
+          23,
+          49
+        ],
+        [
+          23,
+          50
+        ]
+      ],
+      "curves": [
+        {
+          "observations": 40,
+          "estimated_mean_squared_error_difference": 76.22138482833005,
+          "mean_squared_error_difference_bounds": [
+            76.22138482833005,
+            76.22138482833005
+          ],
+          "ordering": "right",
+          "radius_pixels": 0,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 40,
+          "estimated_mean_squared_error_difference": 76.22138482833005,
+          "mean_squared_error_difference_bounds": [
+            70.88809279802297,
+            81.55467685863712
+          ],
+          "ordering": "right",
+          "radius_pixels": 0.5,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 40,
+          "estimated_mean_squared_error_difference": 76.22138482833005,
+          "mean_squared_error_difference_bounds": [
+            65.55480076771589,
+            86.88796888894421
+          ],
+          "ordering": "right",
+          "radius_pixels": 1,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 40,
+          "estimated_mean_squared_error_difference": 76.22138482833005,
+          "mean_squared_error_difference_bounds": [
+            54.88821670710173,
+            97.55455294955837
+          ],
+          "ordering": "right",
+          "radius_pixels": 2,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 40,
+          "estimated_mean_squared_error_difference": 76.22138482833005,
+          "mean_squared_error_difference_bounds": [
+            33.55504858587342,
+            118.88772107078667
+          ],
+          "ordering": "right",
+          "radius_pixels": 4,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        },
+        {
+          "observations": 40,
+          "estimated_mean_squared_error_difference": 76.22138482833005,
+          "mean_squared_error_difference_bounds": [
+            -9.111287656583217,
+            161.5540573132433
+          ],
+          "ordering": "unresolved",
+          "radius_pixels": 8,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": null
+        }
+      ],
+      "reference_max_tracking_error_pixels": null,
+      "reference_mean_squared_error_difference": null,
+      "uniform_radius_to_zero_margin_pixels": 7.145810167078117
+    },
+    {
+      "sequence": "4866",
+      "subset": "supported_background_subset",
+      "planned": 192,
+      "observations": 32,
+      "selected_slots": [
+        [
+          12,
+          24
+        ],
+        [
+          12,
+          25
+        ],
+        [
+          12,
+          32
+        ],
+        [
+          12,
+          33
+        ],
+        [
+          12,
+          39
+        ],
+        [
+          12,
+          40
+        ],
+        [
+          12,
+          41
+        ],
+        [
+          12,
+          48
+        ],
+        [
+          12,
+          49
+        ],
+        [
+          18,
+          24
+        ],
+        [
+          18,
+          25
+        ],
+        [
+          18,
+          32
+        ],
+        [
+          18,
+          33
+        ],
+        [
+          18,
+          39
+        ],
+        [
+          18,
+          40
+        ],
+        [
+          18,
+          41
+        ],
+        [
+          18,
+          43
+        ],
+        [
+          18,
+          47
+        ],
+        [
+          18,
+          48
+        ],
+        [
+          18,
+          49
+        ],
+        [
+          18,
+          50
+        ],
+        [
+          23,
+          24
+        ],
+        [
+          23,
+          25
+        ],
+        [
+          23,
+          32
+        ],
+        [
+          23,
+          33
+        ],
+        [
+          23,
+          39
+        ],
+        [
+          23,
+          40
+        ],
+        [
+          23,
+          41
+        ],
+        [
+          23,
+          47
+        ],
+        [
+          23,
+          48
+        ],
+        [
+          23,
+          49
+        ],
+        [
+          23,
+          50
+        ]
+      ],
+      "curves": [
+        {
+          "observations": 32,
+          "estimated_mean_squared_error_difference": 86.49452573485513,
+          "mean_squared_error_difference_bounds": [
+            86.49452573485513,
+            86.49452573485513
+          ],
+          "ordering": "right",
+          "radius_pixels": 0,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": false
+        },
+        {
+          "observations": 32,
+          "estimated_mean_squared_error_difference": 86.49452573485513,
+          "mean_squared_error_difference_bounds": [
+            81.17564963256933,
+            91.81340183714099
+          ],
+          "ordering": "right",
+          "radius_pixels": 0.5,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": false
+        },
+        {
+          "observations": 32,
+          "estimated_mean_squared_error_difference": 86.49452573485513,
+          "mean_squared_error_difference_bounds": [
+            75.8567735302835,
+            97.13227793942679
+          ],
+          "ordering": "right",
+          "radius_pixels": 1,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        },
+        {
+          "observations": 32,
+          "estimated_mean_squared_error_difference": 86.49452573485513,
+          "mean_squared_error_difference_bounds": [
+            65.21902132571185,
+            107.77003014399844
+          ],
+          "ordering": "right",
+          "radius_pixels": 2,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        },
+        {
+          "observations": 32,
+          "estimated_mean_squared_error_difference": 86.49452573485513,
+          "mean_squared_error_difference_bounds": [
+            43.943516916568555,
+            129.04553455314175
+          ],
+          "ordering": "right",
+          "radius_pixels": 4,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        },
+        {
+          "observations": 32,
+          "estimated_mean_squared_error_difference": 86.49452573485513,
+          "mean_squared_error_difference_bounds": [
+            1.3925080982819615,
+            171.5965433714283
+          ],
+          "ordering": "right",
+          "radius_pixels": 8,
+          "assumption": "every true target lies within its declared image-location disk; fixed valid task set; not a confidence interval or camera-quality guarantee",
+          "all_scored_reference_locations_inside_disk": true
+        }
+      ],
+      "reference_max_tracking_error_pixels": 0.8530355661260083,
+      "reference_mean_squared_error_difference": 86.58848830997499,
+      "uniform_radius_to_zero_margin_pixels": 8.13090247558911
+    }
+  ]
+}
