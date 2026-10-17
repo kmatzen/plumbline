@@ -2947,3 +2947,28 @@ other rotation axes, or unseen failure types. Any abstention rule needs to be
 fixed on development data and evaluated separately, including correct-camera
 false alarms and evidence corruption. This proposal must be compared with
 simpler uncertainty and coverage measures, not merely with raw residuals.
+
+The first bounded profile is now implemented in `probe_evidence_sensitivity.py`
+and retained in `results/rendered-evidence-sensitivity-v1.json.gz`. It holds all
+observed image coordinates fixed and tests identity, one global rigid gauge
+change, signed five-degree rotations about each camera-local axis, and signed
+quarter-baseline translations along each local axis. Changes ramp across frames
+12–23; the earlier cameras remain unchanged except in the gauge control.
+Translation amplitudes use the candidate's maximum displacement from its first
+camera. These are stress-test scales, not validated functional-failure cutoffs.
+The compact joint checker retains the same available-prefix feasibility rule
+while omitting redundant per-query diagnostic solves.
+
+All 560 cases and 6,720 slot evaluations are retained. All 480 per-slot rigid-gauge
+comparisons preserve status, and all 960 identity/positive-yaw comparisons match
+the preceding full-checker results. For unobstructed sequential tracks, both
+signed x/y rotations contradict all 120 slots, but signed z rotations contradict
+only 60 each. Neither tested z translation contradicts any slot. Negative x
+translation contradicts all 120 while positive x translation contradicts none.
+For occluded direct matches, signed x rotations contradict 62 slots each, signed
+y rotations 49 each, and signed z rotations eight/seven; neither z translation
+is rejected. These differences show why yaw sensitivity alone does not establish
+general error sensitivity. A changed camera that remains compatible is not
+certified correct, nor is rejection itself a validated DNF label. The scene
+remains planar, amplitudes are fixed, and texture seeds are correlated. No
+admission threshold or learned policy was selected from this profile.
