@@ -1,0 +1,95 @@
+{
+  "status": "complete",
+  "scope": "all-step background reference consistency; not independent visibility truth or camera DNF",
+  "policy": "all 195 original background sources and 23 adjacent pairs; bilinear rendered flow sampled at frozen reference pixels; preserve unavailable and depth/mask rejected cases; summarize all finite samples and fixed interior/non-rejected pair subset separately",
+  "limitations": "rendered flow and depth share a source; interpolation near motion/depth boundaries can disagree; consistency is not a human label or evaluator accuracy",
+  "source_manifest_sha256": "9e6850a0bf4ced9cc2e6d3f69004e828cbd8748119623f028b0134353d4c359b",
+  "shard_sha256": "e024496a96010a4dfa0a75f64644ba7d0bb2495a7e215cd1c38bd7242d81d9db",
+  "script_sha256": "a8dfe6465a4a8640e37ddc36c0480eb7bf87e8c74bdea1533bcda27720773122",
+  "scenes": [
+    {
+      "name": "3835",
+      "file": "00-flow-consistency.npz",
+      "sha256": "99c06075c28bfb365dfc9d3c4a1db7573db2e314b50036302785b0e1da6264ea",
+      "background_sha256": "d61394d81895cb8684d4d0631df6ed37674365e9d8d0b937ed3919563827cfdf",
+      "planned_pairs": 1081,
+      "sampled_pairs": 1060,
+      "interior_nonrejected_pairs": 961,
+      "all_sampled_error_quantiles_pixels": [
+        3.6429747435642546e-05,
+        0.0003598619651840202,
+        0.4926528023350892,
+        13.47575840107227
+      ],
+      "interior_nonrejected_error_quantiles_pixels": [
+        3.6429747435642546e-05,
+        0.0003488859637575176,
+        0.0005833643481466546,
+        0.0008286756510718388
+      ]
+    },
+    {
+      "name": "5397",
+      "file": "01-flow-consistency.npz",
+      "sha256": "ee7f2526aa4dc440452f94f2d5d4f763d0466adb20dc1d4bee245d54392ef6de",
+      "background_sha256": "79838b8f6035d28ba388cd8ccb266189dacf4bd7013960571eb439a6efe53ed1",
+      "planned_pairs": 1035,
+      "sampled_pairs": 1035,
+      "interior_nonrejected_pairs": 914,
+      "all_sampled_error_quantiles_pixels": [
+        2.006343196846211e-06,
+        0.00040219277177457025,
+        4.752455059867653,
+        18.108893323885408
+      ],
+      "interior_nonrejected_error_quantiles_pixels": [
+        2.006343196846211e-06,
+        0.0003796024625704219,
+        0.0005890876203161957,
+        0.0008598572949586145
+      ]
+    },
+    {
+      "name": "4385",
+      "file": "02-flow-consistency.npz",
+      "sha256": "8a6d1365ee0cc2f09acecae529759d77bedb2f5e64f241dffd7b4ea361fa543e",
+      "background_sha256": "b99952e970d48371bbe647b77c16eb57df03ad1ca65f613cbc7756022d1d178c",
+      "planned_pairs": 1311,
+      "sampled_pairs": 1311,
+      "interior_nonrejected_pairs": 1146,
+      "all_sampled_error_quantiles_pixels": [
+        9.83139319569257e-05,
+        0.0005635108208621459,
+        4.448855750548002,
+        23.755141313852498
+      ],
+      "interior_nonrejected_error_quantiles_pixels": [
+        9.83139319569257e-05,
+        0.000546585098175674,
+        0.0007701930713636198,
+        0.0009732373531833933
+      ]
+    },
+    {
+      "name": "4970",
+      "file": "03-flow-consistency.npz",
+      "sha256": "04bf7a2166d363c337834de94e0e48e8481ff0b9a56d39d737dea9b4e4b5b61f",
+      "background_sha256": "952690fcfce5bfa1a9f6f270a94c1d2814f4ce5ba6cf3d2b6fd9fb5b5f3e828b",
+      "planned_pairs": 1058,
+      "sampled_pairs": 1032,
+      "interior_nonrejected_pairs": 826,
+      "all_sampled_error_quantiles_pixels": [
+        0.00010315123108602885,
+        0.0005318905713919799,
+        10.906994309587898,
+        30.015085448482186
+      ],
+      "interior_nonrejected_error_quantiles_pixels": [
+        0.00010315123108602885,
+        0.0004951410074398039,
+        0.0007119122246142392,
+        0.0008625240139586424
+      ]
+    }
+  ]
+}

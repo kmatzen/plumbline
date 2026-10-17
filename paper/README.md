@@ -4066,3 +4066,26 @@ on the other 142. There are three false-close answers under these reference
 cues. These figures measure agreement with diagnostic references, not verified
 camera accuracy. The first fixed panel was visually inspected for layout;
 that inspection is not a human judgment dataset, and no labels were added.
+
+### All-step background-flow reference check
+
+`audit_movi_background_flow.py` extends the first-step convention check to
+all 195 fixed background sources and 23 adjacent pairs (4,485 planned pairs).
+It samples released rendered forward flow bilinearly at the frozen projected
+reference points. All points remain stored: 4,438 pairs permit image sampling,
+and 3,847 have all four neighboring pixels labeled background and pass the
+existing depth/mask checks at both endpoints. The latter subset was specified
+before running this audit, not selected by measured flow error.
+
+On that subset, the maximum displacement disagreement is 0.000974 pixels.
+Outside it, disagreements reach 30.02 pixels, illustrating why flow from a
+different visible surface must not be treated as the tracked background's
+motion. The archive retains these cases and out-of-image pairs. This supports
+the temporal coordinate conversion, not independent visibility truth or the
+visual judge's accuracy. It does not change the current judge inputs or the
+baseline diagnostic's reference policy.
+
+Records and hashes are under
+`results/movi-geometry-pilot-v1/background-flow-audit-v1`. Two new tests check
+fractional-pixel interpolation, no extrapolation, temporal indexing, channel
+order, and retention of rejected cases; all 37 MOVi and analysis tests pass.
