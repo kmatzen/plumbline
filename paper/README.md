@@ -366,8 +366,47 @@ whose 3x3 depth neighborhood ranges from 2.365 to 3.208 m. Slot 4 samples
 depths above 8 m with broad local variation. No depth-range cutoff was applied.
 Slot 7 has narrow local depth ranges at both diameter endpoints, but that alone
 does not distinguish scene motion from a track following different surfaces.
-The next useful check is source-image inspection of these recorded witnesses,
-not conversion of the distances into automatic failure labels.
+The source-image inspection below examines these witnesses without converting
+the distances into automatic failure labels.
+
+`render_rgbd_witnesses.py` renders frame zero and both diameter endpoints for
+every slot with a measured diameter. It checks source RGB, depth, track, and
+audit hashes. Each figure shows the full source image, an enlarged RGB crop,
+and the matching depth crop on a fixed 0–10 m scale. The local figures are in
+`tmp/rgbd-witnesses-v1`; their hashes and selected frames are retained in
+`results/dense/tum-rgbd-witness-manifest-v1.json`. Selection uses the observed
+3D spread and is therefore exploratory, not a blinded validation set.
+
+Assistant inspection of all seven figures suggests distinct evidence problems:
+
+- Slot 4 marks a small background fixture. The target appears similar at the
+  endpoints, but its distant depth values vary substantially. These images
+  alone do not establish a tracking error.
+- Slot 5 marks a keyboard edge near a cable; only six depth-backed observations
+  exist. The shown endpoints appear consistent, but cannot certify the full
+  track or a precise surface correspondence.
+- Slot 6 lies near the monitor support and adjacent background. Its displayed
+  location remains similar, but the precise surface sampled by depth is
+  ambiguous near the boundary.
+- Slot 7 lies on a person's patterned shirt. The person changes position; the
+  repeated pattern and blur also make exact point identity uncertain. This is
+  not suitable as an assumed static-world anchor.
+- Slots 8 and 9 lie on a person's forearm and near the hand/knee. Their small
+  spreads cover only two and three depth-backed frames, respectively, and do
+  not establish stationary scene points.
+- Slot 10 follows the apparent intersection of a chair outline and the desk
+  edge. Such an occlusion intersection need not denote the same physical point
+  as the viewpoint changes. Its depth crop also crosses a surface boundary.
+  The large spread is not evidence of camera failure.
+
+These are assistant observations, not independent human labels, and are not
+training targets. They motivate a source-evidence qualification task before
+camera scoring: distinguish a named surface feature from a moving subject,
+repeated texture, or an occlusion intersection. A visible object or plausible
+2D track is not sufficient. The next evaluation should test that distinction
+on a separately selected source-only sample, with geometric results hidden.
+No existing measurements, selections, or camera rankings were changed by this
+inspection, and these development observations are not added to the manuscript.
 
 #### Reference timing sensitivity
 
