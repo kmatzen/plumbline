@@ -3881,3 +3881,42 @@ all per-point flags are archived in `visibility-audit-v1/`. Three tests verify
 normal transport, uncertainty handling, and preservation of off-image cases.
 Rendered surface orientation and conservative visibility still need independent
 checks before these records can serve as evaluation references.
+
+### Completed frozen camera-position transfer comparison
+
+The full comparison is complete. `results/tapvid-camera-transfer-v1/` now
+contains `judge-evaluation-v1.json` and `judge-summary-v1.json`. Both arms have
+all 698 labeled presentations with matching processed-pixel hashes and token
+counts. Input, training, evaluator, and corpus hashes pass analysis checks.
+An independent direct confusion-matrix recount matches the summary. Neither arm
+abstains or produces an invalid response. The 1,861 unavailable and 51 borderline
+presentations remain outside classification accuracy and inside the full roster.
+
+The base model answers far on all 698 cases: 498 correct (71.35% accuracy), with
+33.33% balanced accuracy and no detected close or occluded cases. The adapted
+model is correct on 334/698 (47.85%); recalls are 20/30 close, 244/498 far, and
+70/170 occluded, giving 52.28% balanced accuracy. However, only 20 of its 181 close
+predictions are correct (11.05% close precision): 149 far and 12 occluded cases
+are incorrectly called close. This does not support an automated quality gate.
+Improved balanced accuracy must not obscure these false acceptances.
+
+The exploratory RGB-track baseline answers 162 cases, 160 correctly. On exactly
+those cases the adapted judge is correct on 55/162. On the remaining 536 labeled
+cases where tracking abstains, the adapted judge is correct on 279/536 (52.05%),
+versus 352/536 (65.67%) for the training-majority far answer. Its close precision
+on that abstention subset is 7.69%. Thus this result does not establish a useful
+automatic fallback to the learned judge. Abstention is not treated as a wrong
+class label when discussing the baseline's conditional accuracy.
+
+Across the seventeen videos with labeled presentations, macro accuracy is
+73.38% base and 51.88% adapted. The descriptive paired-video bootstrap interval
+for adapted-minus-base macro accuracy is [-0.333, -0.102], with mean -0.215.
+The other three videos remain explicitly listed as unlabeled. These are not
+independent-frame confidence claims, a fresh untouched benchmark, camera-method
+rankings, or functional-DNF validation. This development result is not added to
+the manuscript. No failed cases are erased and no post-result thresholds or
+training changes are substituted into the frozen experiment.
+
+The full non-weight suite after the MOVi audit additions passes: 2,036 tests,
+one skip for an unstaged KITTI bundle, and six weight tests deselected. This is
+software verification, not validation of the proposed research contribution.
