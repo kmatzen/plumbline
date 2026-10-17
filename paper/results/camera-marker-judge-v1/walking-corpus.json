@@ -1,0 +1,873 @@
+{
+  "scope": "unlabeled development camera-marker judgments; no camera accuracy or DNF labels",
+  "policy": "all twelve slots, both methods, fixed fit frames 1..10 and queries 30/60/89; no later tracked positions used; no point replacement or query selection by residual; same frozen correspondence prompt and renderer",
+  "limitations": "a single fitted point is not a geometric certainty; image identity/staticness, calibration, prefix fits and cameras can cause errors; models used all frames; correspondence judgments cannot establish camera DNF; invalid projections are not failure labels",
+  "source_manifest_sha256": "eab2833e9787f9b3683ea19b16d192aab6d3d423e5917abca20ef3672b461a51",
+  "tracks_sha256": "e0d5e2b494dacbffb06c621a638889c6153965eb5a2b8fc07d99953d78f52ba4",
+  "provenance": {
+    "dage": {
+      "manifest_sha256": "c225441cae1270d5c3b303b832391c4fda49d0ce9242de993231a0878636cc77",
+      "model": "DAGE",
+      "prediction_file_sha256": "6176a50aa051a51f2dcb1d3b4be22e928500b59d3c5305e13043c92d8bf48bc3",
+      "verification": "source and decoded RGB reverified; all 90 rigid poses checked; no alignment used for point support"
+    },
+    "da3": {
+      "manifest_sha256": "7c541634f82d35ca864fd02b7ce5be8b32764734423e43da9c365bdfa174208f",
+      "model": "DA3-LARGE-1.1",
+      "prediction_file_sha256": "1f4359aa9a582d12f5ef2ae8bb9a7b1659c3bdaeb6689358f51f4f1ff26559af",
+      "verification": "source and decoded RGB reverified; all 90 rigid poses checked; no alignment used for point support"
+    }
+  },
+  "calibration": [
+    [
+      535.4,
+      0.0,
+      320.1
+    ],
+    [
+      0.0,
+      539.2,
+      247.6
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "source_frame": 1,
+  "fit_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "query_frames": [
+    30,
+    60,
+    89
+  ],
+  "prompt": "Compare the marked detail in A with the candidate marked in B. The top row shows context; the bottom row shows native-pixel crops. Is the candidate close to the same detail, far from it, or is the original detail occluded? Reply with one label: close, far, occluded, or uncertain. Close means within 2 native pixels; far means at least 8 native pixels. Use uncertain when the images do not support a decision. Do not judge camera accuracy or whether the object is moving.",
+  "planned_presentations": 72,
+  "export_sha256": "4422048393810b666d6d1c9cfc8568073ed451182ebffd89c500d54572a39b09",
+  "opencv_version": "4.13.0",
+  "dependencies_sha256": {
+    "build_camera_judge_corpus.py": "084e37aacf4a38023f97119be606168ab8b3e7712c1466e2e31b5fc78a7d8be9",
+    "build_anchor_preview.py": "7568d7a8cc409e7ac630b0a3753dced03691b0350e34547355ccfe862b3ae1c3",
+    "build_letter_camera_review.py": "8ab5df6425e61199813af92ba2103d12d7c2dfecee4e78257cff90af78221544",
+    "build_tapvid_judge_corpus.py": "5f66c715c674336018bfe6d331d7b67f81acfaa8896757c65e1f7817686852e0",
+    "probe_real_evidence_sensitivity.py": "7f7adb68ba0294bd0f67f100d0b177c45af5cb62286392e127da7eb10a7f1c5e",
+    "probe_static_point_support.py": "63bddbe90d4ccfa69fd5c1eccd02f11e3bdaceabec6105861d5db50d7d8d30e6",
+    "run_static_dage.py": "92de3ec0a0bd48836f97267ef0ed62bdca9b1cc226c76591034b8807564ecb64"
+  },
+  "fits": [
+    {
+      "model": "dage",
+      "slot": 0,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "dage",
+      "slot": 1,
+      "status": "fitted",
+      "point_world": [
+        -2.102878111734311,
+        -4.8244151873726295,
+        12.8124563713629
+      ],
+      "source_xy": [
+        232.2888946533203,
+        42.460182189941406
+      ],
+      "prefix_max_pixel_error": 2.6506912327429024
+    },
+    {
+      "model": "dage",
+      "slot": 2,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "dage",
+      "slot": 3,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "dage",
+      "slot": 4,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "dage",
+      "slot": 5,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "dage",
+      "slot": 6,
+      "status": "fitted",
+      "point_world": [
+        0.5539257490111889,
+        0.22635526905462702,
+        1.9465511598723713
+      ],
+      "source_xy": [
+        474.55364990234375,
+        309.2921142578125
+      ],
+      "prefix_max_pixel_error": 1.2782147523363467
+    },
+    {
+      "model": "dage",
+      "slot": 7,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        -0.054097185170468576,
+        -0.027046723560226225,
+        -0.3056798487279475
+      ]
+    },
+    {
+      "model": "dage",
+      "slot": 8,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "dage",
+      "slot": 9,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "dage",
+      "slot": 10,
+      "status": "fitted",
+      "point_world": [
+        0.39672453180890366,
+        0.2353117124600323,
+        1.6277439262266036
+      ],
+      "source_xy": [
+        451.8836975097656,
+        324.48162841796875
+      ],
+      "prefix_max_pixel_error": 1.2986065244743072
+    },
+    {
+      "model": "dage",
+      "slot": 11,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "da3",
+      "slot": 0,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "da3",
+      "slot": 1,
+      "status": "fitted",
+      "point_world": [
+        -0.33862159919080453,
+        -0.7975562758567977,
+        2.103137344854748
+      ],
+      "source_xy": [
+        232.2888946533203,
+        42.460182189941406
+      ],
+      "prefix_max_pixel_error": 3.0476588438493963
+    },
+    {
+      "model": "da3",
+      "slot": 2,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "da3",
+      "slot": 3,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "da3",
+      "slot": 4,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "da3",
+      "slot": 5,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "da3",
+      "slot": 6,
+      "status": "fitted",
+      "point_world": [
+        0.111658631483362,
+        0.045263639483818986,
+        0.39038277853831427
+      ],
+      "source_xy": [
+        474.55364990234375,
+        309.2921142578125
+      ],
+      "prefix_max_pixel_error": 2.9600558016637306
+    },
+    {
+      "model": "da3",
+      "slot": 7,
+      "status": "nonpositive_prefix_depth",
+      "point_world": [
+        0.0062290152034438,
+        -0.00011451788035841582,
+        -0.022017943227204757
+      ]
+    },
+    {
+      "model": "da3",
+      "slot": 8,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "da3",
+      "slot": 9,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "model": "da3",
+      "slot": 10,
+      "status": "fitted",
+      "point_world": [
+        0.08174839576522983,
+        0.04822047264179142,
+        0.3340852381379008
+      ],
+      "source_xy": [
+        451.8836975097656,
+        324.48162841796875
+      ],
+      "prefix_max_pixel_error": 2.5078872710456244
+    },
+    {
+      "model": "da3",
+      "slot": 11,
+      "status": "missing_prefix_observations"
+    }
+  ],
+  "counts": {
+    "missing_prefix_observations": 48,
+    "renderable": 14,
+    "query_outside_image": 4,
+    "nonpositive_prefix_depth": 6
+  },
+  "records": [
+    {
+      "id": "0b38cbac4924382501f93d37",
+      "model": "dage",
+      "slot": 0,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "de14be756bd3b12b84d40872",
+      "model": "dage",
+      "slot": 0,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "b1db3bf203b29b41709673af",
+      "model": "dage",
+      "slot": 0,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "b8a57e4ee05c6c9dba78d757",
+      "model": "dage",
+      "slot": 1,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        108.44891726764136,
+        47.39902268548753
+      ],
+      "image": "images/b8a57e4ee05c6c9dba78d757.png",
+      "image_sha256": "3e76169b4505f7421c8fc94f261e7290b8e132f9585a35ce9f23c581b1ea8133"
+    },
+    {
+      "id": "76dda71c23f454abd83c6b88",
+      "model": "dage",
+      "slot": 1,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        329.85994422309665,
+        141.39457222847145
+      ],
+      "image": "images/76dda71c23f454abd83c6b88.png",
+      "image_sha256": "35b0dbdf9c2510c0a7e7a25bb9e16ae080e00c83802fc1e256aea84f1c9bed65"
+    },
+    {
+      "id": "87d3bd8bab6fd8580a2bc46e",
+      "model": "dage",
+      "slot": 1,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        215.80919385821824,
+        137.18581238203907
+      ],
+      "image": "images/87d3bd8bab6fd8580a2bc46e.png",
+      "image_sha256": "7de3b3915b814ec5700ce7fe1d83a7ec8d33ca5aceb776b0a021d719c94c4019"
+    },
+    {
+      "id": "fa364f08a6a8054575e50d01",
+      "model": "dage",
+      "slot": 2,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "01f7c9d04df6998d052a5937",
+      "model": "dage",
+      "slot": 2,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "ddd04ec96c38d5df3a1a5c4d",
+      "model": "dage",
+      "slot": 2,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "07292a27c9837976f9fe529c",
+      "model": "dage",
+      "slot": 3,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "ecf37a03bd4c2c10f02bccc6",
+      "model": "dage",
+      "slot": 3,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "6240a29441a68ce2fa32a668",
+      "model": "dage",
+      "slot": 3,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "548b70d07d28e2537226e57f",
+      "model": "dage",
+      "slot": 4,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "4501f10f66255cc2cc32d007",
+      "model": "dage",
+      "slot": 4,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "664dd14b9f24e1d3decde8df",
+      "model": "dage",
+      "slot": 4,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "39869e3d3935aab7d6d592fb",
+      "model": "dage",
+      "slot": 5,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "07ab5ad938b8ed04e80beaf7",
+      "model": "dage",
+      "slot": 5,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "3efc85158426dc4c59ac1e39",
+      "model": "dage",
+      "slot": 5,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "d5263c5787ca25271c139792",
+      "model": "dage",
+      "slot": 6,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        332.4480669323422,
+        312.0923183688822
+      ],
+      "image": "images/d5263c5787ca25271c139792.png",
+      "image_sha256": "753c7f968b25011c48896e2ec10a9577fed5f4de2e4fdc017018740c5e6f8fa1"
+    },
+    {
+      "id": "3a17e7ce150f10635b520588",
+      "model": "dage",
+      "slot": 6,
+      "frame": 60,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        730.9041388572117,
+        387.90544200842237
+      ]
+    },
+    {
+      "id": "e8b1e23cab07389142a59fac",
+      "model": "dage",
+      "slot": 6,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        465.2278825911518,
+        432.98793121953065
+      ],
+      "image": "images/e8b1e23cab07389142a59fac.png",
+      "image_sha256": "3971d377dce436a26018324d310018eb049a28e83d04c2ddfaade825d1b21d12"
+    },
+    {
+      "id": "9ca03a5caceccfea4e326e5e",
+      "model": "dage",
+      "slot": 7,
+      "frame": 30,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "cb8d0b4db1d6c7b119f82c62",
+      "model": "dage",
+      "slot": 7,
+      "frame": 60,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "48e9cce5e3f41fd768a85fb2",
+      "model": "dage",
+      "slot": 7,
+      "frame": 89,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "f947708c484b0bd3e2d4e7dd",
+      "model": "dage",
+      "slot": 8,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "13ff117aa4b374e9d658d3a0",
+      "model": "dage",
+      "slot": 8,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "7bae8fa34d090bc6d75479aa",
+      "model": "dage",
+      "slot": 8,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "f55a083a1d3a91ba055a0afd",
+      "model": "dage",
+      "slot": 9,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "e0d697ce8d772b125343c196",
+      "model": "dage",
+      "slot": 9,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "3a332b8ae824082137d2eef3",
+      "model": "dage",
+      "slot": 9,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "4d70a6375fe246caba3c8073",
+      "model": "dage",
+      "slot": 10,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        304.0389078481775,
+        329.7071007496298
+      ],
+      "image": "images/4d70a6375fe246caba3c8073.png",
+      "image_sha256": "951d8908af25d2fdb226f89623118ff6aaaec8959ea85e6abf3a697b6dfa9b6d"
+    },
+    {
+      "id": "652c19046dace46b7d5cc52d",
+      "model": "dage",
+      "slot": 10,
+      "frame": 60,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        734.6916271512214,
+        407.45862691693594
+      ]
+    },
+    {
+      "id": "5cd343946a053e1e858333ca",
+      "model": "dage",
+      "slot": 10,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        444.7525531878818,
+        458.5380132867105
+      ],
+      "image": "images/5cd343946a053e1e858333ca.png",
+      "image_sha256": "128d1d0ce3adade96d1ca45610ff86fdaa90d7ecc81861c297d50ba24332bcf9"
+    },
+    {
+      "id": "f8886f99844d894a6f132f50",
+      "model": "dage",
+      "slot": 11,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "c2add857c5e26f129a3abaef",
+      "model": "dage",
+      "slot": 11,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "db2bbd5e3850b6cdec391912",
+      "model": "dage",
+      "slot": 11,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "718c54cb3dfff3fcff845dab",
+      "model": "da3",
+      "slot": 0,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "cd702713b6ddf491b88d7fcb",
+      "model": "da3",
+      "slot": 0,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "2b9805a46951d5364a697d17",
+      "model": "da3",
+      "slot": 0,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "ac3373f5dc5740bafad05120",
+      "model": "da3",
+      "slot": 1,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        113.68944657148522,
+        51.30426366637315
+      ],
+      "image": "images/ac3373f5dc5740bafad05120.png",
+      "image_sha256": "34b719b3d4bff9a179ba90e7411a17dda6059aec94319e843ef0b710f3fef88b"
+    },
+    {
+      "id": "a5a5d6bd7fac186c85e1f403",
+      "model": "da3",
+      "slot": 1,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        336.95236478831225,
+        142.09587961636637
+      ],
+      "image": "images/a5a5d6bd7fac186c85e1f403.png",
+      "image_sha256": "72ef5f54e7f86b65bac55a2b9594e911e766d96283f37bae864458cc6edacdc5"
+    },
+    {
+      "id": "1a7cc0aa918498f69c455196",
+      "model": "da3",
+      "slot": 1,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        218.1168472788204,
+        143.35539783383922
+      ],
+      "image": "images/1a7cc0aa918498f69c455196.png",
+      "image_sha256": "5c20086857b05b6a6d1d7f8481ddf1cf96a4b36cc24aed89afa92026340fc0d6"
+    },
+    {
+      "id": "e50e6cfb6253719edfb803f0",
+      "model": "da3",
+      "slot": 2,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "e4feee4b253d1edfed2c2fb0",
+      "model": "da3",
+      "slot": 2,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "2852aae156f566bc114fd037",
+      "model": "da3",
+      "slot": 2,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "1f4282965516e69f579784cb",
+      "model": "da3",
+      "slot": 3,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "cd8de14b25c3c5d7ffea23c8",
+      "model": "da3",
+      "slot": 3,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "a47147d2783f91679acc0040",
+      "model": "da3",
+      "slot": 3,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "391fcd8ce5adce4318a88d2a",
+      "model": "da3",
+      "slot": 4,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "e77e3d77f924e666f154451c",
+      "model": "da3",
+      "slot": 4,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "fa9a9b67723ccf01bffabf85",
+      "model": "da3",
+      "slot": 4,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "d2a124cd0a4d0b2b63230deb",
+      "model": "da3",
+      "slot": 5,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "753f00999378486b344be817",
+      "model": "da3",
+      "slot": 5,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "b722f34ad94eb6e0b4dfdd19",
+      "model": "da3",
+      "slot": 5,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "884d040f4a64ccf4f63bdfe1",
+      "model": "da3",
+      "slot": 6,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        332.0046567564397,
+        316.21647272947916
+      ],
+      "image": "images/884d040f4a64ccf4f63bdfe1.png",
+      "image_sha256": "265f82b375abe5658ddbb9d20ec5cc4f145dbd48774fdc8c0d703248d32464a4"
+    },
+    {
+      "id": "222a96d138f345ff9b378d7e",
+      "model": "da3",
+      "slot": 6,
+      "frame": 60,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        744.9163356938457,
+        389.29732545156946
+      ]
+    },
+    {
+      "id": "941d60dbbff7ad7a96c7dc7c",
+      "model": "da3",
+      "slot": 6,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        468.0687959724847,
+        451.41885108251023
+      ],
+      "image": "images/941d60dbbff7ad7a96c7dc7c.png",
+      "image_sha256": "bc1ed37227d91d0436fa243f1f8488869e19c05ab1ef8193c29dde86f174f254"
+    },
+    {
+      "id": "46191678d9fa3a1dbf492a5d",
+      "model": "da3",
+      "slot": 7,
+      "frame": 30,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "d2d3c750c3e1642acf41957b",
+      "model": "da3",
+      "slot": 7,
+      "frame": 60,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "ef0d9a1a6a4588f20858fbd7",
+      "model": "da3",
+      "slot": 7,
+      "frame": 89,
+      "status": "nonpositive_prefix_depth"
+    },
+    {
+      "id": "6f2958bd4f96acf4ef0a22e7",
+      "model": "da3",
+      "slot": 8,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "7da6610b0970a965afdc2aa0",
+      "model": "da3",
+      "slot": 8,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "c323a10fb3f3fba862c35084",
+      "model": "da3",
+      "slot": 8,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "ceead7486018e55bc219ea35",
+      "model": "da3",
+      "slot": 9,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "723fa2305c5b07dc082262ad",
+      "model": "da3",
+      "slot": 9,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "c26bad9f09eead84d5d22fe4",
+      "model": "da3",
+      "slot": 9,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "90f3161d1c2edb2362cb79c1",
+      "model": "da3",
+      "slot": 10,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        302.91671249293955,
+        334.1796631316922
+      ],
+      "image": "images/90f3161d1c2edb2362cb79c1.png",
+      "image_sha256": "8f8d6a0aa67fd395a71ee30c464be6196e7bc4bdc9a97badbfb7178bdf606083"
+    },
+    {
+      "id": "5ed92c50b75f2c281c23bffa",
+      "model": "da3",
+      "slot": 10,
+      "frame": 60,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        745.9853476023736,
+        409.63201751757583
+      ]
+    },
+    {
+      "id": "5bc269660e07058fe144c7cf",
+      "model": "da3",
+      "slot": 10,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        446.98259970380144,
+        478.7096007673352
+      ],
+      "image": "images/5bc269660e07058fe144c7cf.png",
+      "image_sha256": "61dbfad673b67e6a33b9525afe6b782d3db42f984d7afff6ca8954f2339b05e9"
+    },
+    {
+      "id": "26e72cee1c6845824b35da1d",
+      "model": "da3",
+      "slot": 11,
+      "frame": 30,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "e74b2d5f7dcb635575ec1186",
+      "model": "da3",
+      "slot": 11,
+      "frame": 60,
+      "status": "missing_prefix_observations"
+    },
+    {
+      "id": "4e01fe7d1a43c42ab47b86fe",
+      "model": "da3",
+      "slot": 11,
+      "frame": 89,
+      "status": "missing_prefix_observations"
+    }
+  ]
+}

@@ -3457,3 +3457,40 @@ to avoid incorrectly describing this third comparison as two clips; the
 score, calibration, frame roster, and reference metric rules did not change.
 The two focused score/association tests pass. These remain development
 results outside the manuscript and do not establish a novel learned method.
+
+### Applying the frozen correspondence judge to camera projections
+
+`build_camera_judge_corpus.py` connects the trained image judge to the actual
+DAGE/DA3 estimates on all three RGB-D development clips. For each original
+slot, it fits a 3D point using only frames 1–10, then projects that fixed point
+into frames 30, 60, and 89. The source marker uses frame 1. Later tracked
+positions are not read to create candidate markers or center their crops.
+Panels use exactly the existing correspondence renderer and prompt, without
+method names. Missing prefix observations, degenerate fits, nonpositive depth,
+and off-image projections remain explicit outcomes, not failure labels.
+No replacement point or favorable query is selected.
+
+The complete 216-presentation roster yields 58 static, 57 office, and 14
+walking panels. The other 87 presentations remain in the manifests. One
+walking endpoint panel was inspected visually for display correctness; this
+was not a correspondence label or camera-quality judgment. Prefix residuals
+are recorded, not used to select a cutoff. The fitted point is not certified:
+tracking, staticness, calibration, point fitting, and cameras can all affect
+its apparent placement.
+
+`results/camera-marker-judge-v1/protocol.json` fixes base-versus-adapted
+inference with the existing twenty-pass adapter, original prompt, and decoding
+settings. The three corpus manifests are retained alongside it; source-image
+panels stay local and on Anima. `evaluate_tapvid_lora.py --partition camera`
+requires the full presentation roster and frozen prompt, verifies image/export
+hashes, rejects supplied targets, and preserves all unavailable outcomes.
+It checks the original training manifest and adapter files without opening
+calibration exports or images. Camera inference produces unlabeled predictions,
+not an accuracy table, camera ranking, or functional DNF result. Execution is
+separate from corpus construction; no judge result is claimed here yet.
+
+Twenty-two targeted tests pass, including tests that later track loss does
+not prevent projection, later observations cannot change the prefix fit,
+invalid projections remain unavailable, the complete roster is required,
+and targets or changed prompts are rejected. Existing external-evaluation,
+training-membership, and analysis tests remain passing.

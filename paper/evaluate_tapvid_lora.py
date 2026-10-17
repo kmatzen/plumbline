@@ -1,4 +1,4 @@
-"""Frozen development/disjoint-video comparisons or training-fit; never calibration."""
+"""Frozen correspondence comparisons and unlabeled camera application; never calibration."""
 
 import argparse
 import contextlib
@@ -18,6 +18,35 @@ def digest(path):
 def parse_label(text):
     label = text.strip().lower()
     return label if label in {"close", "far", "occluded", "uncertain"} else "invalid"
+
+
+def select_camera_evaluation(corpus, train, manifest, development):
+    """Unlabeled application, never inserted into accuracy or held-out results."""
+    if development is None or manifest["prompt"] != development["prompt"]:
+        raise ValueError("camera inference requires the original frozen prompt")
+    records = manifest["records"]
+    expected = {(m, s, f) for m in ("dage", "da3") for s in range(12) for f in (30, 60, 89)}
+    if (len(records) != 72 or manifest["planned_presentations"] != 72
+            or {(r["model"], r["slot"], r["frame"]) for r in records} != expected
+            or len({r["id"] for r in records}) != 72):
+        raise ValueError("complete camera presentation roster required")
+    if set(train["training_ids"]) & {r["id"] for r in records}:
+        raise ValueError("camera IDs overlap training")
+    source = corpus/"inference.jsonl"
+    if digest(source) != manifest["export_sha256"]:
+        raise ValueError("camera export changed")
+    rows = [json.loads(line) for line in source.read_text().splitlines()]
+    allowed = {r["id"]: r for r in records if r["status"] == "renderable"}
+    if len(rows) != len(allowed) or {r["id"] for r in rows} != set(allowed):
+        raise ValueError("camera inference membership changed")
+    for row in rows:
+        item = allowed[row["id"]]
+        path = (corpus/row["image"]).resolve()
+        if (set(row) != {"id", "image", "prompt"} or row["prompt"] != manifest["prompt"]
+                or row["image"] != item["image"] or not path.is_relative_to(corpus.resolve())
+                or digest(path) != item["image_sha256"]):
+            raise ValueError("camera input changed or contains a target")
+    return source, rows, allowed
 
 
 def validate_test_partition(manifest, development):
@@ -42,6 +71,8 @@ def validate_test_partition(manifest, development):
 
 
 def select_evaluation(corpus, train, manifest, partition, development=None):
+    if partition == "camera":
+        return select_camera_evaluation(corpus, train, manifest, development)
     if partition not in {"train", "validation", "test"}:
         raise ValueError("only training-fit, validation, or explicit disjoint test evaluation is allowed")
     if partition == "test":
@@ -74,12 +105,12 @@ def run(corpus, training_run, output, partition="validation", development_manife
         raise ValueError("preserve previous comparison")
     train = json.loads((training_run / "manifest.json").read_text())
     manifest = json.loads((corpus / "manifest.json").read_text())
-    if (partition == "test") != (development_manifest is not None):
-        raise ValueError("test evaluation requires an explicit original development manifest, exclusively")
-    training_corpus_path = development_manifest if partition == "test" else corpus / "manifest.json"
+    if (partition in {"test", "camera"}) != (development_manifest is not None):
+        raise ValueError("test/camera evaluation requires an explicit original development manifest, exclusively")
+    training_corpus_path = development_manifest if partition in {"test", "camera"} else corpus / "manifest.json"
     if train["status"] != "complete" or train["corpus_manifest_sha256"] != digest(training_corpus_path):
         raise ValueError("completed training run with identical corpus required")
-    development = json.loads(development_manifest.read_text()) if partition == "test" else None
+    development = json.loads(development_manifest.read_text()) if partition in {"test", "camera"} else None
     source, rows, allowed = select_evaluation(corpus, train, manifest, partition, development)
     arms = ("adapted",) if partition == "train" else ("base", "adapted")
     checkpoint = Path(train["checkpoint"])
@@ -104,6 +135,13 @@ def run(corpus, training_run, output, partition="validation", development_manife
                       protocol="base with adapters disabled versus adapted; identical prepared quantized model and original panels/prompts; greedy max 8 new tokens; exact four-label parser; invalid and uncertain retained; no calibration examples read; no weight updates; no test-based selection")
     if partition == "validation":
         report["validation_export_sha256"] = digest(source)
+    if partition == "camera":
+        report.update(scope="unlabeled development camera-marker correspondence judgments; no accuracy, staticness, human agreement, or DNF labels",
+                      development_manifest_sha256=digest(development_manifest),
+                      evaluation_corpus_manifest_sha256=digest(corpus/"manifest.json"),
+                      planned_examples=len(manifest["records"]), renderable_examples=len(rows),
+                      unavailable_counts=manifest["counts"],
+                      protocol="base with adapters disabled versus adapted; identical prepared model and frozen correspondence prompt; greedy max 8 tokens; no weight updates, targets, or calibration examples; all unavailable/uncertain/invalid outcomes retained")
 
     def save():
         (output / "manifest.json").write_text(json.dumps(report, indent=2, allow_nan=False)+"\n")
@@ -168,14 +206,14 @@ def run(corpus, training_run, output, partition="validation", development_manife
                     if any(torch.isnan(s).any() or torch.isposinf(s).any() for s in generated.scores):
                         raise FloatingPointError("nonfinite generation scores")
                     raw = processor.batch_decode(generated.sequences[:, inputs["input_ids"].shape[1]:], skip_special_tokens=True)[0]
-                    item = {"id": row["id"], "sequence": allowed[row["id"]]["sequence"],
-                            "target_for_scoring_only": row["target"], "raw_response": raw, "parsed": parse_label(raw),
+                    item = {"id": row["id"], "sequence": allowed[row["id"]].get("sequence"),
+                            "target_for_scoring_only": row.get("target"), "raw_response": raw, "parsed": parse_label(raw),
                             "processed_pixel_sha256": pixel_sha, "image_tokens": image_tokens,
                             "elapsed_seconds": time.monotonic()-started}
                     report["results"][arm].append(item)
                     save()
                     print(arm, len(report["results"][arm]), row["id"], item["parsed"], flush=True)
-        if partition in {"validation", "test"}:
+        if partition in {"validation", "test", "camera"}:
             for a, b in zip(report["results"]["base"], report["results"]["adapted"], strict=True):
                 if a["id"] != b["id"] or a["processed_pixel_sha256"] != b["processed_pixel_sha256"]:
                     raise ValueError("paired inputs changed")
@@ -192,7 +230,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("corpus", "training_run", "output"):
         parser.add_argument(name, type=Path)
-    parser.add_argument("--partition", choices=("train", "validation", "test"), default="validation")
+    parser.add_argument("--partition", choices=("train", "validation", "test", "camera"), default="validation")
     parser.add_argument("--development-manifest", type=Path)
     args = parser.parse_args()
     run(args.corpus, args.training_run, args.output, args.partition, args.development_manifest)

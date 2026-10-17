@@ -1,0 +1,1343 @@
+{
+  "scope": "unlabeled development camera-marker judgments; no camera accuracy or DNF labels",
+  "policy": "all twelve slots, both methods, fixed fit frames 1..10 and queries 30/60/89; no later tracked positions used; no point replacement or query selection by residual; same frozen correspondence prompt and renderer",
+  "limitations": "a single fitted point is not a geometric certainty; image identity/staticness, calibration, prefix fits and cameras can cause errors; models used all frames; correspondence judgments cannot establish camera DNF; invalid projections are not failure labels",
+  "source_manifest_sha256": "958fd90988a6b235309cde8777db198565eac519d119304b93bbd09daf6fc6ff",
+  "tracks_sha256": "cdfac64d0abd043c691386a6eb881ec7b5bd02d5eeba9e7773cc83e7fd790ec1",
+  "provenance": {
+    "dage": {
+      "manifest_sha256": "e581e8106f6feff6a0ad79dcf5a4f969867df202b85dac6e07b083f38fd977f2",
+      "model": "DAGE",
+      "prediction_file_sha256": "822a2a673769ca06c563a5780d20d69eb876432fe10d65340f7abc655cd4ab5c",
+      "verification": "source and decoded RGB reverified; all 90 rigid poses checked; no alignment used for point support"
+    },
+    "da3": {
+      "manifest_sha256": "04b01eeb797f7f3af318e4a74189574326b1fe9f0e3acf9cfd92ef1948d486eb",
+      "model": "DA3-LARGE-1.1",
+      "prediction_file_sha256": "17c0ac29161d0380c1d1dfa60fe2f0c09a1357012f91c2619361368a83ae13ee",
+      "verification": "source and decoded RGB reverified; all 90 rigid poses checked; no alignment used for point support"
+    }
+  },
+  "calibration": [
+    [
+      535.4,
+      0.0,
+      320.1
+    ],
+    [
+      0.0,
+      539.2,
+      247.6
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "source_frame": 1,
+  "fit_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "query_frames": [
+    30,
+    60,
+    89
+  ],
+  "prompt": "Compare the marked detail in A with the candidate marked in B. The top row shows context; the bottom row shows native-pixel crops. Is the candidate close to the same detail, far from it, or is the original detail occluded? Reply with one label: close, far, occluded, or uncertain. Close means within 2 native pixels; far means at least 8 native pixels. Use uncertain when the images do not support a decision. Do not judge camera accuracy or whether the object is moving.",
+  "planned_presentations": 72,
+  "export_sha256": "4ca1edd99f173ef61354a16435804af85a4bdb74fff7ca62b84ee424bc8294eb",
+  "opencv_version": "4.13.0",
+  "dependencies_sha256": {
+    "build_camera_judge_corpus.py": "084e37aacf4a38023f97119be606168ab8b3e7712c1466e2e31b5fc78a7d8be9",
+    "build_anchor_preview.py": "7568d7a8cc409e7ac630b0a3753dced03691b0350e34547355ccfe862b3ae1c3",
+    "build_letter_camera_review.py": "8ab5df6425e61199813af92ba2103d12d7c2dfecee4e78257cff90af78221544",
+    "build_tapvid_judge_corpus.py": "5f66c715c674336018bfe6d331d7b67f81acfaa8896757c65e1f7817686852e0",
+    "probe_real_evidence_sensitivity.py": "7f7adb68ba0294bd0f67f100d0b177c45af5cb62286392e127da7eb10a7f1c5e",
+    "probe_static_point_support.py": "63bddbe90d4ccfa69fd5c1eccd02f11e3bdaceabec6105861d5db50d7d8d30e6",
+    "run_static_dage.py": "92de3ec0a0bd48836f97267ef0ed62bdca9b1cc226c76591034b8807564ecb64"
+  },
+  "fits": [
+    {
+      "model": "dage",
+      "slot": 0,
+      "status": "fitted",
+      "point_world": [
+        -1.1367088133117047,
+        -0.58762195726427,
+        2.351059953794133
+      ],
+      "source_xy": [
+        61.98910140991211,
+        112.7573013305664
+      ],
+      "prefix_max_pixel_error": 0.5897234084649247
+    },
+    {
+      "model": "dage",
+      "slot": 1,
+      "status": "fitted",
+      "point_world": [
+        -0.565122651177864,
+        -0.8046186363592729,
+        2.027832555642925
+      ],
+      "source_xy": [
+        172.2072296142578,
+        33.96994400024414
+      ],
+      "prefix_max_pixel_error": 0.38535621820825333
+    },
+    {
+      "model": "dage",
+      "slot": 2,
+      "status": "fitted",
+      "point_world": [
+        0.49207861217467463,
+        -3.3151257967764947,
+        7.478915355439774
+      ],
+      "source_xy": [
+        355.63763427734375,
+        9.567907333374023
+      ],
+      "prefix_max_pixel_error": 0.5423158208969138
+    },
+    {
+      "model": "dage",
+      "slot": 3,
+      "status": "fitted",
+      "point_world": [
+        3.5119269639652293,
+        -3.183985586327314,
+        7.3406388436366585
+      ],
+      "source_xy": [
+        576.4374389648438,
+        15.214500427246094
+      ],
+      "prefix_max_pixel_error": 0.8789413176981271
+    },
+    {
+      "model": "dage",
+      "slot": 4,
+      "status": "fitted",
+      "point_world": [
+        -0.8761564703009417,
+        -0.19023319949708756,
+        2.142748070166133
+      ],
+      "source_xy": [
+        101.81397247314453,
+        199.82626342773438
+      ],
+      "prefix_max_pixel_error": 0.451954767496
+    },
+    {
+      "model": "dage",
+      "slot": 5,
+      "status": "fitted",
+      "point_world": [
+        -0.048876378689755286,
+        -0.11685374418392461,
+        1.9851634985494533
+      ],
+      "source_xy": [
+        307.68707275390625,
+        216.57240295410156
+      ],
+      "prefix_max_pixel_error": 0.3331885083584691
+    },
+    {
+      "model": "dage",
+      "slot": 6,
+      "status": "fitted",
+      "point_world": [
+        0.32087872137938456,
+        -0.13691113010756054,
+        1.9586806156346488
+      ],
+      "source_xy": [
+        408.69500732421875,
+        210.89593505859375
+      ],
+      "prefix_max_pixel_error": 0.45200810039891426
+    },
+    {
+      "model": "dage",
+      "slot": 7,
+      "status": "fitted",
+      "point_world": [
+        0.80252274741563,
+        -0.16701406938730304,
+        1.9736501780369828
+      ],
+      "source_xy": [
+        538.5714721679688,
+        203.4053497314453
+      ],
+      "prefix_max_pixel_error": 0.528290051435528
+    },
+    {
+      "model": "dage",
+      "slot": 8,
+      "status": "fitted",
+      "point_world": [
+        -0.7704461983468529,
+        0.6551625355003108,
+        1.6631960743179799
+      ],
+      "source_xy": [
+        71.76033782958984,
+        460.16546630859375
+      ],
+      "prefix_max_pixel_error": 0.8419222109525696
+    },
+    {
+      "model": "dage",
+      "slot": 9,
+      "status": "fitted",
+      "point_world": [
+        -0.35217700177523614,
+        0.30313200181139344,
+        1.581054865196056
+      ],
+      "source_xy": [
+        201.4267578125,
+        351.3865051269531
+      ],
+      "prefix_max_pixel_error": 0.4849684135992565
+    },
+    {
+      "model": "dage",
+      "slot": 10,
+      "status": "fitted",
+      "point_world": [
+        0.5025531963098054,
+        0.3337656777457925,
+        1.8120320830829029
+      ],
+      "source_xy": [
+        469.15447998046875,
+        348.2783508300781
+      ],
+      "prefix_max_pixel_error": 0.5973345258704761
+    },
+    {
+      "model": "dage",
+      "slot": 11,
+      "status": "fitted",
+      "point_world": [
+        0.6453599909462968,
+        0.5137922074152862,
+        2.0000319870422136
+      ],
+      "source_xy": [
+        492.9865417480469,
+        387.6065979003906
+      ],
+      "prefix_max_pixel_error": 0.5609968566101247
+    },
+    {
+      "model": "da3",
+      "slot": 0,
+      "status": "fitted",
+      "point_world": [
+        -0.6094949246563094,
+        -0.31392147965971706,
+        1.2634065472627662
+      ],
+      "source_xy": [
+        61.98910140991211,
+        112.7573013305664
+      ],
+      "prefix_max_pixel_error": 0.7878264677743393
+    },
+    {
+      "model": "da3",
+      "slot": 1,
+      "status": "fitted",
+      "point_world": [
+        -0.3132037296616436,
+        -0.4455504103174327,
+        1.1263112793713563
+      ],
+      "source_xy": [
+        172.2072296142578,
+        33.96994400024414
+      ],
+      "prefix_max_pixel_error": 0.9756617239283608
+    },
+    {
+      "model": "da3",
+      "slot": 2,
+      "status": "fitted",
+      "point_world": [
+        0.20304209458219283,
+        -1.358393063235144,
+        3.0656271549601626
+      ],
+      "source_xy": [
+        355.63763427734375,
+        9.567907333374023
+      ],
+      "prefix_max_pixel_error": 0.7064408728967215
+    },
+    {
+      "model": "da3",
+      "slot": 3,
+      "status": "fitted",
+      "point_world": [
+        1.3296805565116663,
+        -1.2060917431990559,
+        2.7747805121889457
+      ],
+      "source_xy": [
+        576.4374389648438,
+        15.214500427246094
+      ],
+      "prefix_max_pixel_error": 0.7765007789418756
+    },
+    {
+      "model": "da3",
+      "slot": 4,
+      "status": "fitted",
+      "point_world": [
+        -0.47818131849444323,
+        -0.10280666767299772,
+        1.172671996173411
+      ],
+      "source_xy": [
+        101.81397247314453,
+        199.82626342773438
+      ],
+      "prefix_max_pixel_error": 0.6772124829057109
+    },
+    {
+      "model": "da3",
+      "slot": 5,
+      "status": "fitted",
+      "point_world": [
+        -0.026356991205409408,
+        -0.06445872788466835,
+        1.1046700239356162
+      ],
+      "source_xy": [
+        307.68707275390625,
+        216.57240295410156
+      ],
+      "prefix_max_pixel_error": 0.6619074545388018
+    },
+    {
+      "model": "da3",
+      "slot": 6,
+      "status": "fitted",
+      "point_world": [
+        0.17822477576494247,
+        -0.07544712828072937,
+        1.0832313925850934
+      ],
+      "source_xy": [
+        408.69500732421875,
+        210.89593505859375
+      ],
+      "prefix_max_pixel_error": 0.5277785604301689
+    },
+    {
+      "model": "da3",
+      "slot": 7,
+      "status": "fitted",
+      "point_world": [
+        0.4322385126342815,
+        -0.0898820717729968,
+        1.0611300281059421
+      ],
+      "source_xy": [
+        538.5714721679688,
+        203.4053497314453
+      ],
+      "prefix_max_pixel_error": 0.7637529009349711
+    },
+    {
+      "model": "da3",
+      "slot": 8,
+      "status": "fitted",
+      "point_world": [
+        -0.430035599809744,
+        0.3674754028168198,
+        0.9316117785584908
+      ],
+      "source_xy": [
+        71.76033782958984,
+        460.16546630859375
+      ],
+      "prefix_max_pixel_error": 1.1241300570933719
+    },
+    {
+      "model": "da3",
+      "slot": 9,
+      "status": "fitted",
+      "point_world": [
+        -0.19946626257560013,
+        0.1731020537177966,
+        0.8999277094210485
+      ],
+      "source_xy": [
+        201.4267578125,
+        351.3865051269531
+      ],
+      "prefix_max_pixel_error": 0.7055783855800758
+    },
+    {
+      "model": "da3",
+      "slot": 10,
+      "status": "fitted",
+      "point_world": [
+        0.27909315903141624,
+        0.1850214587245043,
+        1.002640948161127
+      ],
+      "source_xy": [
+        469.15447998046875,
+        348.2783508300781
+      ],
+      "prefix_max_pixel_error": 0.5186158839388352
+    },
+    {
+      "model": "da3",
+      "slot": 11,
+      "status": "fitted",
+      "point_world": [
+        0.3520452110094612,
+        0.2797114296059208,
+        1.0870749223681122
+      ],
+      "source_xy": [
+        492.9865417480469,
+        387.6065979003906
+      ],
+      "prefix_max_pixel_error": 0.6811305445810343
+    }
+  ],
+  "counts": {
+    "renderable": 57,
+    "query_outside_image": 15
+  },
+  "records": [
+    {
+      "id": "b3ea1770d8ee205a38dcb382",
+      "model": "dage",
+      "slot": 0,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        72.97567007604472,
+        122.73727630090126
+      ],
+      "image": "images/b3ea1770d8ee205a38dcb382.png",
+      "image_sha256": "a356989784e36ce7aa654269cadc7766af05fb7d2040d8dda9bceee862e8742a"
+    },
+    {
+      "id": "a9fe98b87d30b7ee37cc85c1",
+      "model": "dage",
+      "slot": 0,
+      "frame": 60,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        -26.906184102889064,
+        201.94161727243193
+      ]
+    },
+    {
+      "id": "5b4dd5280173bfc92c89c1bf",
+      "model": "dage",
+      "slot": 0,
+      "frame": 89,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        -31.317677236045107,
+        230.63174820647558
+      ]
+    },
+    {
+      "id": "d1b5d6ef278a79d20075c015",
+      "model": "dage",
+      "slot": 1,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        202.70213011155784,
+        40.24977129637603
+      ],
+      "image": "images/d1b5d6ef278a79d20075c015.png",
+      "image_sha256": "525e8a605cda5a3c3375800e0033feb61efda1dccf4567e74ba24d8bb6cdee91"
+    },
+    {
+      "id": "26ca6f4202e11ef1b75dbf35",
+      "model": "dage",
+      "slot": 1,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        186.559576034737,
+        57.52215434220867
+      ],
+      "image": "images/26ca6f4202e11ef1b75dbf35.png",
+      "image_sha256": "4208d9b90967f2b6272a030e63b5da7775a9486a1c878a21c4776557cb9a6e7b"
+    },
+    {
+      "id": "ce287706f5ab0307624a3d89",
+      "model": "dage",
+      "slot": 1,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        260.54517799081503,
+        30.33754538755339
+      ],
+      "image": "images/ce287706f5ab0307624a3d89.png",
+      "image_sha256": "15b6c0e7cb27c3c73b5ec2ee692e072f66582feb48ea158e00175d4fe125fb75"
+    },
+    {
+      "id": "61e6e5b7acdcb649099c14b8",
+      "model": "dage",
+      "slot": 2,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        297.28988112229405,
+        14.196080352532165
+      ],
+      "image": "images/61e6e5b7acdcb649099c14b8.png",
+      "image_sha256": "3bd68fcc7c5600603a84eaf90734d9582f8987fafb9b2b3a99ace6aae447a12f"
+    },
+    {
+      "id": "466c23e04d9ad842013a0a37",
+      "model": "dage",
+      "slot": 2,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        125.65791768331178,
+        31.923154393299644
+      ],
+      "image": "images/466c23e04d9ad842013a0a37.png",
+      "image_sha256": "54ba7dc377cbb8a58fbc97e922bbd8956d55983543697a368cf35e7650ef1107"
+    },
+    {
+      "id": "f4fabf64aa2e582c3972d127",
+      "model": "dage",
+      "slot": 2,
+      "frame": 89,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        -41.79298358598541,
+        20.587498728578403
+      ]
+    },
+    {
+      "id": "433e980dab55314d27a1bfd6",
+      "model": "dage",
+      "slot": 3,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        503.0971845654278,
+        19.852485030140194
+      ],
+      "image": "images/433e980dab55314d27a1bfd6.png",
+      "image_sha256": "12b57c58e86a43cd8dfdcf23b1cc9337d7e21b1fdd14df847d13456d5f3506d5"
+    },
+    {
+      "id": "56b76a7ce748ea4c68fa3823",
+      "model": "dage",
+      "slot": 3,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        338.78451994620036,
+        25.83962004910213
+      ],
+      "image": "images/56b76a7ce748ea4c68fa3823.png",
+      "image_sha256": "04381a412d4b698aecddedc67338c13d553bcc4b617d3a3fa3e3df33a67f24ee"
+    },
+    {
+      "id": "6fbd370940ba3019a746d703",
+      "model": "dage",
+      "slot": 3,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        206.65429608375325,
+        21.31249008329157
+      ],
+      "image": "images/6fbd370940ba3019a746d703.png",
+      "image_sha256": "654c67bc4d27add2e3eab693a6a272899432ec63c73708d1c12aebd86f4d4f45"
+    },
+    {
+      "id": "1282eeedc87d08b488f05d78",
+      "model": "dage",
+      "slot": 4,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        132.5777861115299,
+        210.67083821428332
+      ],
+      "image": "images/1282eeedc87d08b488f05d78.png",
+      "image_sha256": "18ddd7d624d2c9c88f34a8570e068b3fad574afb84caba8ade8d77a25d9047c3"
+    },
+    {
+      "id": "51cc136103c5ac654ff21cbd",
+      "model": "dage",
+      "slot": 4,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        118.8234080093885,
+        320.1268559215849
+      ],
+      "image": "images/51cc136103c5ac654ff21cbd.png",
+      "image_sha256": "c5c50c075f98f03162fd73361fba1cbbedbaf436f0d97e6e1470661a7352bd69"
+    },
+    {
+      "id": "f4e07842a62a365b804026d3",
+      "model": "dage",
+      "slot": 4,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        210.0120888022929,
+        366.891734717393
+      ],
+      "image": "images/f4e07842a62a365b804026d3.png",
+      "image_sha256": "189be6b5f81ceb2c04e29b08b67421bad26b1a5c8151080aa71d1d08372b11b8"
+    },
+    {
+      "id": "9c04705b75b592ed616ab100",
+      "model": "dage",
+      "slot": 5,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        350.0797803954511,
+        216.21385863507737
+      ],
+      "image": "images/9c04705b75b592ed616ab100.png",
+      "image_sha256": "486cbd417c8d62066127e6ed98343bbbead22bfe979d3b3b9a7f795b5ca71e96"
+    },
+    {
+      "id": "fd07cebde87e8c3091fcbd0d",
+      "model": "dage",
+      "slot": 5,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        415.62486881146805,
+        265.0299763872345
+      ],
+      "image": "images/fd07cebde87e8c3091fcbd0d.png",
+      "image_sha256": "6d14c5b06a88592b082331ee2a732bff1bed61cbb3b9d5973994d0a83829f5af"
+    },
+    {
+      "id": "fc9e02e8297c7dcae0e6a912",
+      "model": "dage",
+      "slot": 5,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        488.05731677397677,
+        259.97404672777094
+      ],
+      "image": "images/fc9e02e8297c7dcae0e6a912.png",
+      "image_sha256": "e0f6602f4b7fb90deac7eeabe6e1175f3dffcad63bde9191660b6fb42f56ad91"
+    },
+    {
+      "id": "3ea30725f61d9e7bda72341f",
+      "model": "dage",
+      "slot": 6,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        444.75970086581515,
+        205.77295101018845
+      ],
+      "image": "images/3ea30725f61d9e7bda72341f.png",
+      "image_sha256": "cbdebb4d1d15a980300d94a3935ad7c19f174ceeec09e64d86346ef890b545a8"
+    },
+    {
+      "id": "1c3816a5e7ef007a145100a6",
+      "model": "dage",
+      "slot": 6,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        508.2138752311884,
+        230.62741949912754
+      ],
+      "image": "images/1c3816a5e7ef007a145100a6.png",
+      "image_sha256": "d3eabdb2e52a3b36ddae13a9fae488462ca1f09c344d78bb826c0f85adbc6d6a"
+    },
+    {
+      "id": "8ed5e1fe634b3f8eaf28cd74",
+      "model": "dage",
+      "slot": 6,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        547.6840337321552,
+        216.83926422730755
+      ],
+      "image": "images/8ed5e1fe634b3f8eaf28cd74.png",
+      "image_sha256": "4dbe3aa3522bb8b803d5404b3945c8f65929b6e8d7749e814d9fbaa1153b5599"
+    },
+    {
+      "id": "d37c49c7b6a38eec0c8a9bd5",
+      "model": "dage",
+      "slot": 7,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        557.1226736833821,
+        192.97525858131834
+      ],
+      "image": "images/d37c49c7b6a38eec0c8a9bd5.png",
+      "image_sha256": "741a53f2a858b261c6ca09366e64c8c10d558ee4ad52dc09528c76c7e0fc090a"
+    },
+    {
+      "id": "40f916d9bcbfc357eaa1eb9f",
+      "model": "dage",
+      "slot": 7,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        595.9754234044453,
+        194.72017165275608
+      ],
+      "image": "images/40f916d9bcbfc357eaa1eb9f.png",
+      "image_sha256": "c4d8b4a33b3bc8fd4a6a76c7a6527298f96eaf5b814db565642291b036bdafc6"
+    },
+    {
+      "id": "9f5cc4a85c491ac9f430947f",
+      "model": "dage",
+      "slot": 7,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        591.69043903235,
+        177.16290260734158
+      ],
+      "image": "images/9f5cc4a85c491ac9f430947f.png",
+      "image_sha256": "81cec44c9b377560b975ef3b22b6857ce4ac90780c38658eaadf821a3791bc96"
+    },
+    {
+      "id": "22719dc6db21efbe6a1dce12",
+      "model": "dage",
+      "slot": 8,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        152.588765508326,
+        476.96771529879004
+      ],
+      "image": "images/22719dc6db21efbe6a1dce12.png",
+      "image_sha256": "972d65ee692175c51eee3a9f743e1403d929635bcd7c8181cfb8eb5520eb4def"
+    },
+    {
+      "id": "1fddb3bd52eb0cec5ed76dd9",
+      "model": "dage",
+      "slot": 8,
+      "frame": 60,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        315.76959034892,
+        747.0969927884966
+      ]
+    },
+    {
+      "id": "871e1d6fe5881c3408f72ed7",
+      "model": "dage",
+      "slot": 8,
+      "frame": 89,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        590.2734290533491,
+        828.9953599505624
+      ]
+    },
+    {
+      "id": "248a81a0aa5976deaa78db51",
+      "model": "dage",
+      "slot": 9,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        285.7091210154433,
+        353.0083437041119
+      ],
+      "image": "images/248a81a0aa5976deaa78db51.png",
+      "image_sha256": "6033eda3119b85f597b82ee57edaca77257eeef1930dca2d78b863be5c1fae85"
+    },
+    {
+      "id": "6eb0e9de8be00b40564c64b1",
+      "model": "dage",
+      "slot": 9,
+      "frame": 60,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        465.5599694940678,
+        485.3337355029292
+      ]
+    },
+    {
+      "id": "0d5d22bc2e940a0e2068cf50",
+      "model": "dage",
+      "slot": 9,
+      "frame": 89,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        659.6648330483073,
+        486.20857180332774
+      ]
+    },
+    {
+      "id": "6b2284fd2ed1bd51af1b6514",
+      "model": "dage",
+      "slot": 10,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        515.0675094828846,
+        329.63931816453527
+      ],
+      "image": "images/6b2284fd2ed1bd51af1b6514.png",
+      "image_sha256": "710a1a06db42f16d64ddf726490e6cd9286a0e69e0c098627fcdfcb5a9b237b4"
+    },
+    {
+      "id": "644ff2652414c275558622f5",
+      "model": "dage",
+      "slot": 10,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        618.4780911216793,
+        357.1811693523398
+      ],
+      "image": "images/644ff2652414c275558622f5.png",
+      "image_sha256": "e5bbdb81357dae7a6ef84668bbc10cb305b7fae46d4694f9d70e91c34b68e14e"
+    },
+    {
+      "id": "605a3fa6cb7279584232c711",
+      "model": "dage",
+      "slot": 10,
+      "frame": 89,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        650.4932130208862,
+        328.8167477349085
+      ]
+    },
+    {
+      "id": "960558ca17b1bba7253ee069",
+      "model": "dage",
+      "slot": 11,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        527.4573142187077,
+        365.2327600749397
+      ],
+      "image": "images/960558ca17b1bba7253ee069.png",
+      "image_sha256": "560ed50fe3772d51ee4d9f5dbfa5f404854b9d0639063ccaf7a150a4b7453bbb"
+    },
+    {
+      "id": "2298ff95a2dbfc8beab0bc0e",
+      "model": "dage",
+      "slot": 11,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        605.8653151725346,
+        387.9497220940997
+      ],
+      "image": "images/2298ff95a2dbfc8beab0bc0e.png",
+      "image_sha256": "f0af59a45106e861a5c16a39ca3dba12ea4538a76f47bf9e6bded05d6d96670b"
+    },
+    {
+      "id": "78fc472305162d6bcf311870",
+      "model": "dage",
+      "slot": 11,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        617.7522552551287,
+        359.40848444788196
+      ],
+      "image": "images/78fc472305162d6bcf311870.png",
+      "image_sha256": "08c8e5b0e39c6103b5d4edaceb4e3073535428f21fd537eab102452d30168b1f"
+    },
+    {
+      "id": "eb7dbde8beaa5d77987811d2",
+      "model": "da3",
+      "slot": 0,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        72.05345876990972,
+        122.87345840841073
+      ],
+      "image": "images/eb7dbde8beaa5d77987811d2.png",
+      "image_sha256": "d010940e4cc853c6a769b2e5aa73255b7c8c6272962134113c9c07937b7b7fd2"
+    },
+    {
+      "id": "013a956f5e0f58ae253ed5b2",
+      "model": "da3",
+      "slot": 0,
+      "frame": 60,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        -34.81722122216566,
+        207.12355059587804
+      ]
+    },
+    {
+      "id": "07f919269f208aac8f360188",
+      "model": "da3",
+      "slot": 0,
+      "frame": 89,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        -41.2254799038237,
+        246.03072515799525
+      ]
+    },
+    {
+      "id": "5f601bb98e8e14c87d2cb291",
+      "model": "da3",
+      "slot": 1,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        198.56622937008765,
+        40.677911335893825
+      ],
+      "image": "images/5f601bb98e8e14c87d2cb291.png",
+      "image_sha256": "825daeeb09ca2bde5bfab9486fb0d25263a16b06405e37be702e50dde6adc375"
+    },
+    {
+      "id": "58bc0803f1612dcbf6cd49bf",
+      "model": "da3",
+      "slot": 1,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        167.78187448701843,
+        60.26039014782793
+      ],
+      "image": "images/58bc0803f1612dcbf6cd49bf.png",
+      "image_sha256": "518c78cd7cd0ab911fa26a5849bcdb7f6ea3e8d87e4daff87518e540db5aa674"
+    },
+    {
+      "id": "f59b7d1a30c2101cd009f6d3",
+      "model": "da3",
+      "slot": 1,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        227.13826615674728,
+        39.73960326476839
+      ],
+      "image": "images/f59b7d1a30c2101cd009f6d3.png",
+      "image_sha256": "ff61e12440b1f52388537ebcc3ba4af820c129532fce40f305f02bedef9a9e58"
+    },
+    {
+      "id": "cb039d6b4eff94abb425730f",
+      "model": "da3",
+      "slot": 2,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        305.53987311557034,
+        11.984382741711931
+      ],
+      "image": "images/cb039d6b4eff94abb425730f.png",
+      "image_sha256": "7f7437751190aae80c2ec4b65d01d1791b50b83879353e332d1e50c99a11a675"
+    },
+    {
+      "id": "729e00b1ae7e9079d485d74b",
+      "model": "da3",
+      "slot": 2,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        144.79431241111374,
+        24.485141640606212
+      ],
+      "image": "images/729e00b1ae7e9079d485d74b.png",
+      "image_sha256": "ab52761efbd5f4aeabc7e5b6d00a3b5fe235dcd3bf1c55ce6d8438f4ccd047fd"
+    },
+    {
+      "id": "e3d0d39432f0a60bf9561dc5",
+      "model": "da3",
+      "slot": 2,
+      "frame": 89,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        -7.9109286356433515,
+        12.83781863909662
+      ]
+    },
+    {
+      "id": "feeacd3689bc53f0eaa6d57b",
+      "model": "da3",
+      "slot": 3,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        513.5965083302226,
+        18.502267303909516
+      ],
+      "image": "images/feeacd3689bc53f0eaa6d57b.png",
+      "image_sha256": "aa825a2c902c0711bb85516e073a46a4afe642f1e31e7ceb84a1449092b0903d"
+    },
+    {
+      "id": "1258dd4db21152529d39bc25",
+      "model": "da3",
+      "slot": 3,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        366.1058309790796,
+        18.222244998698322
+      ],
+      "image": "images/1258dd4db21152529d39bc25.png",
+      "image_sha256": "8c49a9a513f169c35b7979dce03ec5d61d8fba8400186f3bb2a6ac5cf535a8de"
+    },
+    {
+      "id": "b98ca64c1d3ca2fb2605d961",
+      "model": "da3",
+      "slot": 3,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        246.29032403310538,
+        14.351245751022184
+      ],
+      "image": "images/b98ca64c1d3ca2fb2605d961.png",
+      "image_sha256": "a8f59c2ffafdde9c9bac11396d75117845b376fc032d39ed452441e046fadf25"
+    },
+    {
+      "id": "df3a9f5790c0c03e5f36fe6d",
+      "model": "da3",
+      "slot": 4,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        129.93446270589286,
+        211.59008670606448
+      ],
+      "image": "images/df3a9f5790c0c03e5f36fe6d.png",
+      "image_sha256": "3e192b699863b0da5a9b00ec712b8cac82f4980f13c002e9261568daed3952f4"
+    },
+    {
+      "id": "d04d8b8f5ac3f4625c64a2f3",
+      "model": "da3",
+      "slot": 4,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        107.68163447608535,
+        326.7743385344549
+      ],
+      "image": "images/d04d8b8f5ac3f4625c64a2f3.png",
+      "image_sha256": "ed2b8a652bca6930a6eb01348b83042714b863f9f965042c05e813d09740d484"
+    },
+    {
+      "id": "c7bd3dfac76d17a9a3fd32bd",
+      "model": "da3",
+      "slot": 4,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        191.64069491984446,
+        382.8469681444931
+      ],
+      "image": "images/c7bd3dfac76d17a9a3fd32bd.png",
+      "image_sha256": "3383386433c73ad7b8a3acc452143b561a02541ab614ccfd4443138d0550727c"
+    },
+    {
+      "id": "d2699b4fb84d0c7753ed4f7e",
+      "model": "da3",
+      "slot": 5,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        345.90455276555986,
+        217.67714897072764
+      ],
+      "image": "images/d2699b4fb84d0c7753ed4f7e.png",
+      "image_sha256": "7ba6bc27b480f168d7db0486fcec6c8e1bfb7d29e798847d7c9caabe5f95fcfc"
+    },
+    {
+      "id": "39ad9f2e93701ebcf3aa1a54",
+      "model": "da3",
+      "slot": 5,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        399.70917563967254,
+        267.82396806230986
+      ],
+      "image": "images/39ad9f2e93701ebcf3aa1a54.png",
+      "image_sha256": "3c9892005a69fafe37859848f53d10c22f9dc3e7940afe7402b5791253b8bff9"
+    },
+    {
+      "id": "7d8e9221698946b7edb3457b",
+      "model": "da3",
+      "slot": 5,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        459.67951762471984,
+        267.3340026850879
+      ],
+      "image": "images/7d8e9221698946b7edb3457b.png",
+      "image_sha256": "650674cc579bc9a1c6c27de2595df7b34f248d7b18dc865a1ae42a36b11bdf99"
+    },
+    {
+      "id": "a123f1d2844c6b442d687743",
+      "model": "da3",
+      "slot": 6,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        441.2460659403637,
+        207.35471929322202
+      ],
+      "image": "images/a123f1d2844c6b442d687743.png",
+      "image_sha256": "fb0fb4c82f748b515f5564b5b3a8e476acfe86f1c6159b8321b44a8432c256b3"
+    },
+    {
+      "id": "c074eae9f75ed7269898a86f",
+      "model": "da3",
+      "slot": 6,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        494.5798414593161,
+        232.24127591701347
+      ],
+      "image": "images/c074eae9f75ed7269898a86f.png",
+      "image_sha256": "4c454ee0f7c89892d8d725a1d391291d61d4eb882b16838a17e450d72f8184cc"
+    },
+    {
+      "id": "c834ef5d5b00c8fa14c6f8cc",
+      "model": "da3",
+      "slot": 6,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        522.8651680592326,
+        221.92898933474288
+      ],
+      "image": "images/c834ef5d5b00c8fa14c6f8cc.png",
+      "image_sha256": "86b6188b3e0de19ee0bbd1aa793e5870ce676f3e2cab11bd6bd982eb8bd2bc07"
+    },
+    {
+      "id": "325db971051f65bc250be4a7",
+      "model": "da3",
+      "slot": 7,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        556.2252415549979,
+        194.61906566043362
+      ],
+      "image": "images/325db971051f65bc250be4a7.png",
+      "image_sha256": "9b199a7672fd5b7b79f9782f583d934667d7ab991d70edfd2532a048b8dd32ca"
+    },
+    {
+      "id": "8e41f7e4eaad0d6685161f5f",
+      "model": "da3",
+      "slot": 7,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        591.6427880063993,
+        195.02361523621568
+      ],
+      "image": "images/8e41f7e4eaad0d6685161f5f.png",
+      "image_sha256": "8f738b6a50f1e699328ce63bac13bb77bb0814a8bf70c49559a46c91844f30a4"
+    },
+    {
+      "id": "12723116e66af03de5977767",
+      "model": "da3",
+      "slot": 7,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        579.4912405266241,
+        179.70310986204998
+      ],
+      "image": "images/12723116e66af03de5977767.png",
+      "image_sha256": "f0468f66b9a4179f98c581c8394ef906db63ab84402c0cc33eaa29663068a0f7"
+    },
+    {
+      "id": "a793c1208ba15ee5ab42940c",
+      "model": "da3",
+      "slot": 8,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        146.62463960044602,
+        479.40448304419164
+      ],
+      "image": "images/a793c1208ba15ee5ab42940c.png",
+      "image_sha256": "ac5cce9d134f3faf763ba73bf5bc6ec37163712e510c931b8d8a652dfdb89a1d"
+    },
+    {
+      "id": "ae2342e995e1dd50a4098169",
+      "model": "da3",
+      "slot": 8,
+      "frame": 60,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        294.15057533121166,
+        753.322587890971
+      ]
+    },
+    {
+      "id": "7c0196aeb7a2c0753d440aed",
+      "model": "da3",
+      "slot": 8,
+      "frame": 89,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        548.6249889599136,
+        840.8644397241616
+      ]
+    },
+    {
+      "id": "018d6fdd7e90dd8c697a7e0c",
+      "model": "da3",
+      "slot": 9,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        277.5780589566528,
+        355.9254111930598
+      ],
+      "image": "images/018d6fdd7e90dd8c697a7e0c.png",
+      "image_sha256": "f5a83b8ba328a2bca78279e5b5924cb60295b90d24979311f14d4d40ed07f041"
+    },
+    {
+      "id": "a73e76fc7adb61ba667ce986",
+      "model": "da3",
+      "slot": 9,
+      "frame": 60,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        434.07080706264503,
+        490.40115265658045
+      ]
+    },
+    {
+      "id": "cc87e25c0943252381fa31c4",
+      "model": "da3",
+      "slot": 9,
+      "frame": 89,
+      "status": "query_outside_image",
+      "candidate_xy": [
+        605.1584553043471,
+        497.674594018796
+      ]
+    },
+    {
+      "id": "0ea6de5be2e6598664d88e9e",
+      "model": "da3",
+      "slot": 10,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        510.79662089617534,
+        331.53026158489234
+      ],
+      "image": "images/0ea6de5be2e6598664d88e9e.png",
+      "image_sha256": "7a5e84883fd49bfc5c16135c35cb9c61fc0b1a4ab22dca796c4c954576c8e18b"
+    },
+    {
+      "id": "b341fd078e6e02c7a522b9e1",
+      "model": "da3",
+      "slot": 10,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        603.1259055504055,
+        357.7587638982814
+      ],
+      "image": "images/b341fd078e6e02c7a522b9e1.png",
+      "image_sha256": "638bd5ab519d736910e5e9a4280fa4e552f9388d2147d2ce892e2f0b8311d89d"
+    },
+    {
+      "id": "95a9ba5816c8e208ed925909",
+      "model": "da3",
+      "slot": 10,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        623.302686144127,
+        331.69820059434073
+      ],
+      "image": "images/95a9ba5816c8e208ed925909.png",
+      "image_sha256": "f78f14bd81aafc7442ec8aff3b867f6ed131fa1fb2c4edbdf1db17cb01d78ee8"
+    },
+    {
+      "id": "1f1cb2fb484040f2251d6a65",
+      "model": "da3",
+      "slot": 11,
+      "frame": 30,
+      "status": "renderable",
+      "candidate_xy": [
+        524.8668376146644,
+        366.43676829821044
+      ],
+      "image": "images/1f1cb2fb484040f2251d6a65.png",
+      "image_sha256": "9026f896a3b0255682052e5b4b4c922ce6f6a4fed46ec949774361a1ba6df741"
+    },
+    {
+      "id": "1df6598f474877d84dc03f0e",
+      "model": "da3",
+      "slot": 11,
+      "frame": 60,
+      "status": "renderable",
+      "candidate_xy": [
+        597.3511782066948,
+        387.4121957507642
+      ],
+      "image": "images/1df6598f474877d84dc03f0e.png",
+      "image_sha256": "71fc5ac06bd6b8b6cb245a3768cfa2c26cc2ea85d21c73d36ad0a3eb02dc9da2"
+    },
+    {
+      "id": "7a45ff5bfb3ed56cc9675607",
+      "model": "da3",
+      "slot": 11,
+      "frame": 89,
+      "status": "renderable",
+      "candidate_xy": [
+        600.3192069719055,
+        360.1714621129937
+      ],
+      "image": "images/7a45ff5bfb3ed56cc9675607.png",
+      "image_sha256": "8b09a12d7501a96534c4a2bc4e98f8e7f121333b741c5e72ed7bac1f8a530470"
+    }
+  ]
+}
