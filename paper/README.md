@@ -155,6 +155,23 @@ in generated video. Neither establishes the proposed camera criterion. Merely
 using a VLM for failure detection is not a sufficient novelty claim. Full
 related-work coverage and actual camera experiments remain outstanding.
 
+### Fresh dense development runs
+
+`run_dense_dage.py` bypasses the prediction cache and rescans TUM timestamp files.
+It records ordered timestamps, hashes of each source file and decoded frame,
+checkpoint contents, Python source files, runtime versions, settings, and output
+hashes. It refuses to overwrite an attempt. Runs use the existing DAGE environment
+on Anima with `/home/kmatzen/git/geobench/src` on `PYTHONPATH`; the environment's
+actual source hashes, not the local checkout's revision, describe executed code.
+Artifacts live under `/data3/kmatzen/plumbline/research/dense-dnf/`.
+
+The first walking-XYZ attempt (`dage-walking-xyz-v1`) failed before inference
+because the runner passed a directory to a loader expecting `model.pt`. This is
+a development harness error, not a measured tracker failure. The corrected
+attempt is `dage-walking-xyz-v2`. Preserve both records. An attempt directory or
+`running` manifest alone does not prove a process is live; check the process or
+active execution handle. A `complete` result is still not a human usability label.
+
 ## Human diagnostic-review pilot
 
 `build_review_study.py` creates 150 native-input comparisons and 15 hidden
