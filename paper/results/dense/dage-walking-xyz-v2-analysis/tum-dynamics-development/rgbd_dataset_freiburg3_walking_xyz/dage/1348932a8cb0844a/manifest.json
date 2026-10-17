@@ -1,0 +1,23 @@
+{
+  "alignment": "sim3_umeyama",
+  "config_hash": "1348932a8cb0844a",
+  "coordinate_convention": "world_from_camera",
+  "dataset": "tum-dynamics-development",
+  "files": {
+    "diagnostic": "diagnostic.png",
+    "metrics": "metrics.json",
+    "poses": "poses.npz"
+  },
+  "gate": {
+    "errors": [],
+    "finite_fraction": 1.0,
+    "n_frames": 90,
+    "ok": true
+  },
+  "input_fingerprint": "560952a4aba40f2702e66b79a72a7fbd97502a156d544560e8befee20999ce39",
+  "plumbline_version": "0.2.1",
+  "renderer_version": "1",
+  "schema_version": "1.0.0",
+  "sequence": "rgbd_dataset_freiburg3_walking_xyz",
+  "system": "dage"
+}

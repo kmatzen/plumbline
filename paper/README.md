@@ -179,6 +179,23 @@ timestamps before rendering reference-assisted diagnostics. It does not recheck
 the remote source images or assign a functional-DNF label. Its summary reports
 the sampled duration and interval; a 90-frame sample is not an entire sequence.
 
+The corrected walking-XYZ development run completed: 90 frames spanning 8.980 s,
+with a median interval of 0.1000 s. Inference including model loading took
+173.96 s, with 6,539,740,672 bytes peak allocated CUDA memory. Prediction-file
+and reference-array hashes passed local verification. A separate check on Anima
+rehashed all 90 source-image files with zero mismatches. Its mechanical trajectory
+gate passes. Reference-assisted diagnostics report mean rotation error 2.388
+degrees and mean position error 0.04452 times the reference trajectory radius
+after Sim(3) alignment. These are descriptive observations from one development
+clip, not validation of a DNF evaluator. Functional usability remains unreviewed.
+
+The complete manifest and pose arrays are retained in
+`results/dense/dage-walking-xyz-v2/`, with derived diagnostics in
+`results/dense/dage-walking-xyz-v2-analysis/`. Source images remain on Anima;
+their hashes are in the manifest. A walking-static development run has been
+launched separately to test the stationary-camera/moving-foreground case; no
+result or usability label is implied by that launch.
+
 ## Human diagnostic-review pilot
 
 `build_review_study.py` creates 150 native-input comparisons and 15 hidden
