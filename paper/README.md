@@ -3060,3 +3060,17 @@ test results. The runner is staged separately under the external-corpus director
 the active training run's queued evaluator remains its original frozen file.
 A CPU-only selection preflight verified all 971 test examples and image hashes.
 No model weights were loaded or test responses generated during that check.
+
+`analyze_tapvid_external.py` fixes the reporting policy before test inference:
+the original training-majority class, the frozen FB/NCC close-or-abstain baseline,
+and base/adapted confusion matrices, false-close counts, abstentions, and format
+errors. Coverage is reported both on labeled examples and the entire planned
+roster; unscored borderline/missing cases are not imputed as correct or wrong.
+The paired base-to-adapted macro-accuracy difference uses whole-video bootstrap
+resampling (20,000 draws, seed 677), retaining within-video dependence and equal
+video weight. Videos without labeled examples are listed explicitly. The
+percentile interval is descriptive uncertainty, not proof of external validity.
+Input hashes must match the completed fixed 20-pass training manifest, original
+development manifest, test corpus, and original tracker results. Synthetic tests
+check that test-label frequencies cannot choose the majority baseline and that
+an all-abstaining model has zero answer coverage. No real test results exist yet.

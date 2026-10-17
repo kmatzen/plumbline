@@ -7,7 +7,7 @@ import json
 from collections import Counter
 from pathlib import Path
 
-from paper.evaluate_tapvid_lora import parse_label
+from paper.evaluate_tapvid_lora import parse_label, validate_test_partition
 
 TARGETS = ("close", "far", "occluded")
 ANSWERS = TARGETS + ("uncertain", "invalid")
@@ -60,12 +60,14 @@ def within_video_association(rows):
             "interpretation": "within-video answer/target association beyond marginal label frequencies; not causal image reliance, a trained baseline, or a significance test"}
 
 
-def compare(report, corpus, tracker):
-    if report.get("partition", "validation") != "validation":
-        raise ValueError("training-fit results are not validation evidence")
+def compare(report, corpus, tracker, *, partition="validation", training_corpus=None):
+    if partition not in {"validation", "test"} or report.get("partition", "validation") != partition:
+        raise ValueError(f"results are not {partition} evidence")
+    if partition == "test":
+        validate_test_partition(corpus, training_corpus)
     if report["status"] != "complete":
         raise ValueError("incomplete generation run")
-    selected = {r["id"]: r for r in corpus["records"] if r["partition"] == "validation" and r["status"] == "labeled"}
+    selected = {r["id"]: r for r in corpus["records"] if r["partition"] == partition and r["status"] == "labeled"}
     arms = {}
     pixels = {}
     for arm in ("base", "adapted"):
@@ -85,7 +87,8 @@ def compare(report, corpus, tracker):
                 raise ValueError("paired images differ")
             rows.append({"id": key, "sequence": target["sequence"], "target": target["label"], "answer": item["parsed"]})
         arms[arm] = rows
-    counts = Counter(r["label"] for r in corpus["records"] if r["partition"] == "train" and r["status"] == "labeled")
+    training_records = (training_corpus if partition == "test" else corpus)["records"]
+    counts = Counter(r["label"] for r in training_records if r["partition"] == "train" and r["status"] == "labeled")
     majority = sorted(counts, key=lambda c: (-counts[c], c))[0]
     baseline, close_gate = [], []
     for key, item in selected.items():
@@ -111,12 +114,12 @@ def compare(report, corpus, tracker):
                         "within_video_association": within_video_association(rows)}
     a = {r["id"]: r["answer"] == r["target"] for r in arms["base"]}
     b = {r["id"]: r["answer"] == r["target"] for r in arms["adapted"]}
-    return {"scope": "two-video development validation; not independent frame-level evidence or camera DNF",
+    return {"scope": ("video-disjoint correspondence test; classical baseline previously reported; not camera DNF" if partition == "test" else "two-video development validation; not independent frame-level evidence or camera DNF"),
             "selection": "only preselected labeled candidate panels; excludes borderline and unavailable cases by corpus construction",
             "baseline_policy": "majority from training labels only; image check may predict close or abstain, never infer far from rejection",
             "training_majority_label": majority, "arms": results,
             "paired_correctness_counts": dict(Counter(f"base_{a[k]}_adapted_{b[k]}" for k in selected)),
-            "limitations": "no scene-level significance claim from two videos; answered-only accuracy has a model-selected denominator and must be read with coverage and all-example accuracy; generation-format improvement is separate from class recognition; no calibration examples used"}
+            "limitations": "video/track observations are dependent; answered-only accuracy has a model-selected denominator and must be read with coverage and all-example accuracy; generation-format improvement is separate from class recognition; no calibration examples used"}
 
 
 if __name__ == "__main__":
