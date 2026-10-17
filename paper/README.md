@@ -277,6 +277,25 @@ that DAGE is more accurate than the reference. All tracks, failed fits, projecti
 and common-observation indices are retained in
 `paper/results/dense/tum-anchor-xyz-v1.json`.
 
+The follow-up `probe_anchor_prefix.py` holds image tracks fixed and fits the
+first 5, 11, 21, or 31 frames, evaluating only frames 31 onward. It retains all
+eight camera/prefix cases, not the best prefix. Only 49 of 708 potential later
+observations (two grid slots) are available in every case. On this common subset,
+reference/DAGE medians are 2.398/3.067, 2.681/3.055, 2.626/2.804, and 2.728/3.236
+pixels for the four prefix lengths. These values do not show general accuracy
+or select a preferred fitting window.
+
+Crucially, the original 11-frame fit on *all* its 70 available observations from
+frame 31 onward gives 3.337/2.577 pixels, with the opposite reference/DAGE order.
+Restricting those same fits to the 49-observation intersection alone reverses
+the ordering. This is a selection effect, not evidence that a longer prefix
+improves the evaluator. The result makes coverage accounting essential: an
+intersection can make comparisons matched while still changing what scene
+content is represented. Full per-case outcomes and observation membership are
+retained in `paper/results/dense/tum-anchor-prefix-v1.json`. Staticness and image
+track correctness remain unverified; the first-frame inspection alone cannot
+establish either across the video.
+
 `run_dense_dage.py` bypasses the prediction cache and rescans TUM timestamp files.
 It records ordered timestamps, hashes of each source file and decoded frame,
 checkpoint contents, Python source files, runtime versions, settings, and output

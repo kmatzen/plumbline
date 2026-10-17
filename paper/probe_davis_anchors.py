@@ -91,19 +91,23 @@ def track_feature(gray, masks, first):
     return rows
 
 
-def evaluate(track, poses, intrinsics, size):
-    fitting = track[:11]
+def evaluate(track, poses, intrinsics, size, *, fit_count=11):
+    if not 2 <= fit_count < len(track):
+        raise ValueError("fit_count must leave at least one evaluation frame")
+    fitting = track[:fit_count]
     status = "fit"
     point = None
     if any(r["xy"] is None or r["annotation_label"] != 0 for r in fitting):
         status = "insufficient_early_background_track"
     else:
-        point = fit_point(np.array([r["xy"] for r in fitting]), poses[:11], intrinsics[:11], size)
+        point = fit_point(
+            np.array([r["xy"] for r in fitting]), poses[:fit_count], intrinsics[:fit_count], size
+        )
         if point is None:
             status = "numerically_degenerate_fit"
         elif any(
             project(point, p, k, size) is None
-            for p, k in zip(poses[:11], intrinsics[:11], strict=True)
+            for p, k in zip(poses[:fit_count], intrinsics[:fit_count], strict=True)
         ):
             point, status = None, "nonpositive_fit_depth"
     rows = []
@@ -115,7 +119,7 @@ def evaluate(track, poses, intrinsics, size):
         rows.append(
             {
                 "frame": index,
-                "fit_frame": index < 11,
+                "fit_frame": index < fit_count,
                 "status": "fit_unavailable"
                 if point is None
                 else "nonpositive_projection_depth"

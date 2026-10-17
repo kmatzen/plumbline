@@ -29,6 +29,17 @@ def test_later_observations_cannot_change_fitted_point():
     assert np.isclose(original["rows"][-1]["distance_pixels"], 0)
 
 
+def test_shorter_prefix_does_not_use_later_observations():
+    poses, k, size, track = fixture()
+    original = evaluate(track, poses, k, size, fit_count=5)
+    changed = copy.deepcopy(track)
+    changed[5]["xy"][0] += 100
+    result = evaluate(changed, poses, k, size, fit_count=5)
+    np.testing.assert_allclose(result["point_world"], original["point_world"])
+    assert sum(r["fit_frame"] for r in result["rows"]) == 5
+    assert np.isclose(result["rows"][5]["distance_pixels"], 100)
+
+
 def test_empty_slots_and_lost_tracks_are_not_zero_errors():
     blank = np.zeros((60, 80), np.uint8)
     slots = grid_features(blank, blank)
