@@ -2813,3 +2813,29 @@ comparisons are within two pixels. The median paired error change is +0.0238
 pixels (193 improve, 248 worsen). This timing change does not establish exact
 image labels or remove the need to account for depth, visibility, and image-track
 uncertainty. No failure threshold was selected from these diagnostics.
+
+### Rendered correspondence control
+
+`render_camera_control.py` renders a textured plane and an optional moving
+foreground rectangle by ray/plane intersection. Camera poses, static-point
+projections, and visibility are exact for this procedural scene. They remain
+separate from RGB inputs. This is a controlled development fixture, not a
+replacement for real-video or camera-level validation.
+
+Run `uv run python -m paper.probe_rendered_tracking <new-output.json>` to reproduce
+`results/rendered-tracking-control-v1.json`. The fixed protocol uses seeds 0–9,
+24 frames, 12 static anchors, and clean/occluder paired conditions. LK tracks
+survive only with a forward/backward error at most one pixel and never restart.
+All 2,760 later observations per condition remain recorded. Without occlusion,
+all are accepted and within two pixels of their analytic projections. With
+occlusion, 1,011 are accepted: 979 correct, 25 occluded, and seven visible but
+more than two pixels away. These counts are correlated within sequences, not
+independent trials. Source hashes, RGB hashes, versions, and every observation
+are retained. The scene is a single plane with procedural texture; no VLM or
+estimated camera trajectory was evaluated. No DNF threshold is inferred.
+
+The renderer tests check deterministic output, unchanged background pixels,
+projection against a separate homogeneous-transform calculation, and analytic
+visibility against the rasterized surface IDs. The next useful control is
+camera consistency with observed versus exact tracks, retaining both clean
+camera and perturbed camera conditions. This study is not added to the paper.
