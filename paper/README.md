@@ -661,6 +661,29 @@ after rejection is not, by itself, improved tracking or improved evaluation.
 
 Related work to distinguish explicitly:
 
+- [Rabiee and Biswas, Introspective Perception for Mobile Robots (2023)](https://arxiv.org/abs/2306.16698)
+  learns perception-error distributions using sensor redundancy and consistency
+  constraints, including visual SLAM. Learning reliability from consistency is
+  therefore not itself new. Our intended output is an external, candidate-specific
+  camera usability decision, rather than an error model integrated into a robot's
+  estimator. That distinction still needs an experiment demonstrating value;
+  changing the output name to DNF is insufficient.
+- [Duan et al., AHA (2024)](https://arxiv.org/abs/2410.00371)
+  fine-tunes a VLM for manipulation failure detection using procedurally
+  perturbed simulation demonstrations. It also applies failure feedback to
+  downstream planning and reinforcement-learning workflows. Thus the general
+  failure-harness-to-training recipe and the use of a VLM as failure feedback
+  already have precedents. A camera-specific contribution needs validated
+  evidence construction and failure criteria, not only a new application label.
+- [Tan et al., Natural Language Camera Movement Understanding (ACaM, 2026)](https://arxiv.org/abs/2607.03043)
+  benchmarks and fine-tunes VLMs for camera-motion categories. Its task is motion
+  recognition, not assessing an estimated trajectory's geometric correctness.
+  The authors document confusion between camera and object motion, translation
+  and rotation, and movement directions. Consequently, recognizing plausible
+  motion language cannot certify our camera estimates. ACaM's training and
+  benchmark labels should not be treated as camera-DNF labels. These entries
+  were checked against primary abstracts and project material; no reproduction
+  or comprehensive full-paper comparison has yet been completed.
 - [Kahl, Multiple View Geometry and the L-infinity Norm (ICCV 2005)](https://vision.ucsd.edu/publications/2005/multiple-view-geometry-and-l-infinity-norm)
   formulates multiview triangulation with positive depth and bounded reprojection
   error as convex feasibility, using second-order cones for Euclidean image
@@ -684,7 +707,7 @@ Missing-observation bounds are basic partial-identification accounting, not a
 new statistical estimator. Neither the solver, accounting formula, nor combining
 them with an unvalidated VLM suffices as a novelty claim. The additional BibTeX
 records are staged for the next manuscript revision; the current PDF does not
-yet contain these two citations.
+yet contain these staged citations.
 
 [3D-DefectBench](https://arxiv.org/abs/2607.10826v2) studies how the model,
 rendering, evidence, and prompt affect human agreement for 3D-asset defects;
