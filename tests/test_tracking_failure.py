@@ -2,7 +2,56 @@
 
 import pytest
 
-from plumbline.tracking_failure import summarize_failure_review
+from plumbline.tracking_failure import compare_functional_reviews, summarize_failure_review
+
+
+def test_review_comparison_keeps_all_cells_and_denominators():
+    labels = ["usable", "unusable", "abstain", "missing"]
+    ids, predictions, references = [], [], []
+    for r in labels:
+        for p in labels:
+            key = f"{r}-{p}"
+            ids.append(key)
+            if r != "missing":
+                references.append(judgment(key, r))
+            if p != "missing":
+                predictions.append(judgment(key, p))
+    result = compare_functional_reviews(ids, predictions, references)
+    assert result["n_attempts"] == 16
+    assert all(n == 1 for row in result["confusion_reference_rows_prediction_columns"].values()
+               for n in row.values())
+    for row in result["by_reference_class"].values():
+        assert row == {"reference_n": 4, "decided_n": 2, "error_n": 1,
+                       "unresolved_n": 2, "coverage": .5,
+                       "error_rate_all_references": .25, "error_rate_decided": .5,
+                       "error_rate_bounds": [.25, .75]}
+
+
+def test_all_abstaining_judge_has_no_conditional_accuracy_claim():
+    result = compare_functional_reviews(
+        ["a"], [judgment("a", "abstain")], [judgment("a", "usable")])
+    row = result["by_reference_class"]["usable"]
+    assert row["coverage"] == 0
+    assert row["error_rate_decided"] is None
+    assert row["error_rate_bounds"] == [0, 1]
+    assert result["by_reference_class"]["unusable"]["error_rate_bounds"] is None
+
+
+def test_unresolved_reference_is_never_an_inferred_failure_label():
+    result = compare_functional_reviews(["a"], [judgment("a", "unusable")], [])
+    assert result["confusion_reference_rows_prediction_columns"]["missing"]["unusable"] == 1
+    assert all(row["reference_n"] == 0 for row in result["by_reference_class"].values())
+
+
+@pytest.mark.parametrize("ids,predictions,references", [
+    (["a", "a"], [], []),
+    ([""], [], []),
+    ([], [{"attempt_id": "a"}], []),
+    (["a"], [], [{"attempt_id": "a", "verdict": "usable"}]),
+])
+def test_review_comparison_rejects_invalid_inputs(ids, predictions, references):
+    with pytest.raises(ValueError):
+        compare_functional_reviews(ids, predictions, references)
 
 
 def judgment(key, verdict):
