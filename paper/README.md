@@ -4948,6 +4948,27 @@ must finish before the multipliers can be computed. No camera inference is
 needed for this correspondence-calibration component, and it does not by itself
 validate staticness, placement usability, camera DNF, or the paper's novelty.
 
+### Calibration tracking started on completed shards
+
+`run_movi_calibration_tracks.py` reads only completed, explicitly requested
+calibration shards. It rejects reserved evaluation indices, incomplete input
+manifests, changed decoded hashes, and existing output directories. The pinned
+CoTracker3 model, fixed 64-pixel query grid, full-video forward pass, reversed
+prefix passes, and visibility rules are unchanged. No camera predictions or
+reference geometry are needed or read by inference. Each shard retains every
+planned query, full forward arrays, reverse endpoints, visibility flags and
+cycle errors. Missing or failed inference is recorded rather than replaced.
+
+At this update, inference has completed on shards 00002--00007 (23 videos),
+and shards 00008--00010 are running while acquisition continues. Outputs from
+the first eight videos are retained locally under
+`results/movi-uncertainty-calibration-v1/shard-00002/` and `shard-00003/`.
+Replay tests verify the input/model hashes, all 1,536 unique point/frame
+observations across those eight videos, exact forward-array correspondence,
+and reverse-cycle arithmetic. The larger acquisition and tracking jobs remain
+in progress; reference scoring and calibration multipliers are not complete.
+All reserved evaluation data remains unopened.
+
 ### Frozen-matrix correspondence intervention
 
 `audit_movi_motion_track_error.py` tests whether correspondence error explains
