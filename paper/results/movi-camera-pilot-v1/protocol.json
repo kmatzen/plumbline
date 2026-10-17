@@ -1,0 +1,11 @@
+{
+  "scope": "Four-scene development pilot, not held-out or publication validation",
+  "input_manifest_sha256": "1e8af9575c9e881a8a83ae396bacff1d3be1ecd1bbc5b5cd6585f70ba28491ed",
+  "sequences": ["3835", "5397", "4385", "4970"],
+  "methods": ["dage", "da3"],
+  "input_policy": "All 24 native RGB frames; no reference intrinsics, poses, depth, masks, normals, or object motion as inputs",
+  "settings": "Same pinned checkpoints and 252-resolution inference settings as the completed DAVIS camera runs; no parameter selection on this pilot",
+  "accounting": "All eight planned attempts retained, including process failures and invalid outputs; no scene replacement",
+  "reference_policy": "Reference arrays only for separate subsequent evaluation; existing visibility diagnostics are not exact labels",
+  "claim_policy": "No DNF threshold, camera ranking, or evaluator advantage inferred from process completion"
+}

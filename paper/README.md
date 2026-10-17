@@ -3920,3 +3920,27 @@ training changes are substituted into the frozen experiment.
 The full non-weight suite after the MOVi audit additions passes: 2,036 tests,
 one skip for an unstaged KITTI bundle, and six weight tests deselected. This is
 software verification, not validation of the proposed research contribution.
+
+### Fixed RGB-only camera pilot on MOVi-E
+
+`run_movi_cameras.py` and `run_movi_camera_batch.py` start eight fresh camera
+attempts on the existing four development scenes, two methods per scene. The
+protocol is archived in `results/movi-camera-pilot-v1/protocol.json` and binds
+the exact decoded input manifest. No new scenes are selected. DAGE and DA3 use
+the same pinned checkpoints and 252-resolution settings as the completed DAVIS
+camera runs. Every attempt remains recorded; the batch continues after process
+failure and refuses to overwrite previous runs.
+
+The loader accepts only the RGB-only NPZ and checks its file and decoded-array
+hashes. It does not open reference NPZs, and it rejects archives carrying extra
+arrays. All 24 frames enter inference, with intrinsics predicted by each method.
+Four tests cover RGB/reference separation, frame retention, hash rejection,
+preservation of prior attempts, and continuation across all eight attempts.
+The GPU was confirmed free before launch. Outputs are under Anima's
+`/data3/kmatzen/plumbline/research/movi-camera-pilot-v1/runs/`.
+
+This pilot begins after the original judge transfer comparison is complete and
+does not change it. It is not held-out validation. The purpose is to compare
+predicted cameras against scene-motion-aware reference measurements in a
+controlled setting; no camera-quality threshold or functional-DNF label has
+been established. Inference and separate evaluation are pending.
