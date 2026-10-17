@@ -302,6 +302,27 @@ staticness, tracking-correctness, or camera-DNF ground truth. RGB-depth and
 RGB-reference timing offsets must both be reported. No real-data result from
 this audit is available yet, and it is not included in the paper's claims.
 
+The audit command now consumes the existing anchor-track record and a staged
+depth manifest, verifies both against the source experiment, and checks depth
+file hashes before reading measurements. It reports both timestamp offsets
+per frame and retains every original track/frame pair. Displacement is always
+relative to the frame-zero depth observation: if that observation is missing,
+later world points remain in the record but displacement is unavailable. It
+does not substitute a later origin or choose tracks based on these distances.
+The per-track median/max summaries exclude frame zero and explicitly report
+their number of comparable observations. An end-to-end synthetic fixture
+checks this missing-origin behavior and detects changed depth bytes.
+
+After staging, the development command is:
+
+```sh
+uv run python -m paper.rgbd_track_audit \
+  paper/results/dense/dage-walking-xyz-v2 \
+  paper/results/dense/tum-anchor-xyz-v1.json \
+  /path/to/staged-depth \
+  /path/to/new-audit.json
+```
+
 #### Source-track comprehension pilot
 
 The corrected 7B NF4 configuration was subsequently evaluated on the same three
