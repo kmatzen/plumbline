@@ -846,8 +846,57 @@ grid, normalized L1 distance outside boxes, and rejects depth hypotheses behind
 any observed camera. It reports depth-boundary solutions and unavailable cases.
 Synthetic tests check projection direction, depth recovery, coordinate/scale
 changes, and input rejection; they do not validate real-data ranking quality.
-The upstream implementation and its sampling, depth range, visibility, and
-aggregation rules must be checked before reporting published ORE reproduction.
+The official NeurIPS supplement has now been audited and its one-sequence demo
+executed. The development kernel is **not numerically equivalent** to that code.
+The demo uses radial ray distance, normalization by width plus height, capped
+penalties, and image-border rules that suppress the other coordinate's penalty.
+It does not explicitly reject projections behind a camera. Its two brute-force
+depth grids are `0.1:0.05:3.0` and `1.0:2.0:200.0` (upper limits excluded), with
+no optimizer refinement. It chooses a minimum per static track, then averages
+the four track scores for its supplied sample. Upstream pose loaders interpolate
+and extend some sparse estimates; this behavior is retained, not silently changed.
+
+`run_ore_demo.py` executes the external released code, with only a temporary
+`np.int = int` compatibility alias. The original source files are unchanged.
+The [official supplement](https://papers.neurips.cc/paper_files/paper/2023/file/eb206443c93d07da8b1974b768d8a0d4-Supplemental-Datasets_and_Benchmarks.zip)
+contains sample poses for one sequence, not the full benchmark. All seven supplied
+methods completed on its four eligible annotated-static tracks:
+
+| Supplied sample poses | Demo mean ORE |
+| --- | ---: |
+| DROID-SLAM | 0.068128 |
+| COLMAP | 0.053058 |
+| ORB-SLAM2 | 0.093732 |
+| ORB-SLAM3 | 0.099536 |
+| TartanVO | 0.209516 |
+| ParticleSfM | 0.098904 |
+| Monodepth2 | 0.138053 |
+
+These are evaluations of author-supplied poses, **not fresh model inference**,
+not a reproduction of full-dataset published numbers, and not evidence that our
+proposed evaluator is better. Logs, source hashes, per-track values, and dependency
+versions are retained in `paper/results/ore-official-demo-v1/`. The archive and
+source remain under `tmp/ore-upstream/`; no upstream code is vendored.
+
+`audit_ore_semantics.py` compares the external kernel and our prototype on six
+synthetic cases using the same numeric depth grid. The meaning of depth differs,
+so this is a policy audit, not a fairness-adjusted accuracy comparison:
+
+| Constructed case | Released kernel minimum | Prototype minimum |
+| --- | ---: | ---: |
+| Exact center-ray projection | 0 | 0 |
+| Reversed translation | 0.075 | 0.150 |
+| Off-axis ray (radial versus axial depth) | 0.008310 | 0 |
+| Box touching image border | 0 | 0.066667 |
+| Point behind later cameras | 0 | unavailable |
+| Large projection displacement | 0.666667 | 5.000000 |
+
+The behind-camera case has positive initial depth but later negative depth. The
+border case triggers the released code's axis-suppression rule. These constructed
+cases identify precise behaviors; they do not estimate their frequency in real
+data or invalidate ORE generally. Retain the official metric unchanged as a
+comparison and report any safety checks as separate variants. The audit record
+is `paper/results/ore-official-demo-v1/semantics-audit.json`.
 
 DAVIS segmentation objects cannot be assumed static. Intrinsics are also absent
 from our DAVIS inventory. Do not use arbitrary focal lengths or moving masks as

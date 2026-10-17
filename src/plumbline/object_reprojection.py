@@ -4,8 +4,11 @@ Based on Chen et al., Object Reprojection Error (NeurIPS 2023), sections 3.2–3
 Requires independently verified static-object boxes and explicit intrinsics.
 This implementation uses a caller-supplied finite depth grid, the first box
 center as anchor, and rejects depths projecting behind any observed camera.
-These policies must be compared with the authors' implementation before using
-the name ORE without qualification. It does not assign functional-DNF labels.
+An audit of the NeurIPS supplement confirms differences: its demo uses radial
+ray distance, width-plus-height normalization, clipped penalties, image-border
+suppression, and does not reject negative-depth projections. This prototype is
+not numerically equivalent and must not be called published ORE. It does not
+assign functional-DNF labels. See paper/audit_ore_semantics.py.
 """
 
 from __future__ import annotations
