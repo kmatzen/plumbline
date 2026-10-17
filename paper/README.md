@@ -506,6 +506,20 @@ different static point, and missing tracks can reduce the observed corruption.
 These controls do not justify a camera DNF decision. They remain in this research
 log, not the manuscript; any eventual method claim must respect these limits.
 
+`audit_rotation_witnesses.py` independently reprojects every positive witness
+from all 56 cases in world coordinates, checks positive depth and the original
+axis-wise pixel bounds, and verifies each observation mask against the retained
+tracks. `rotation-response-v1/witness-audit.json` records every slot, last
+observed frame, actual yaw at that frame, and verified residuals. Five checked
+tracks reach frame 89; six end earlier. At eight pixels, four of those five
+full-length tracks still have positive witnesses under the negative five-degree
+ramp, and three under the positive ramp. The endpoint residuals for those
+witnesses range from 3.68 to 7.79 pixels. Thus endpoint censoring cannot fully
+explain the gradual-drift result: these retained 3D points satisfy the bounds
+even after observing the full injected rotation. Requiring final-frame coverage
+alone would not resolve the ambiguity. This is a post-hoc diagnostic, not a
+new admission rule or a calibrated failure threshold.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is

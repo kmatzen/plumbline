@@ -1,0 +1,5984 @@
+{
+  "scope": "post-hoc witness verification and censoring audit; not functional labels",
+  "source_manifest_sha256": "d629324675f798ca74a7d7516a6574db209a7408598f2cf135e6ac05cf37be14",
+  "control_sha256": "1610d345a7ebe4fc67ffb78a10edef27ec2142a19cda14aa9aff321b6772bfeb",
+  "response_sha256": "481fb4edd708e26c49bbb7e2a281462ea6d9f9e58c748ab4ca4c2b8c2450254a",
+  "script_sha256": "04cb5288989a8f5c57ee6d22bf7d6da0628febc43cecac16e54c886ee87c30e2",
+  "rotation_script_sha256": "bfbed85971eaaf0925c1e446750ffdc032ba47423e399e07d0f699c367b1cc0f",
+  "cases": [
+    {
+      "schedule": "step",
+      "yaw_degrees": -5,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -5
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": -5,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -5
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": -5,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -5
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": -5,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -5
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": -1,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -1
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": -1,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -1
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": -1,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -1
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": -1,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -1,
+          "maximum_axis_residual_pixels": 8.000000000000028,
+          "last_observed_axis_residual_pixels": 7.999999999999957
+        },
+        {
+          "slot": 1,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 5.3771442671833825
+        },
+        {
+          "slot": 2,
+          "status": "positive_witness",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -1,
+          "maximum_axis_residual_pixels": 7.999999999999972,
+          "last_observed_axis_residual_pixels": 7.999999999999972
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -1,
+          "maximum_axis_residual_pixels": 8.000000000000078,
+          "last_observed_axis_residual_pixels": 7.172736969205744
+        },
+        {
+          "slot": 4,
+          "status": "positive_witness",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -1,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 8.000000000000057
+        },
+        {
+          "slot": 5,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1,
+          "maximum_axis_residual_pixels": 8.000000000000085,
+          "last_observed_axis_residual_pixels": 5.448689318420065
+        },
+        {
+          "slot": 6,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 6.253198609093602
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -1,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 7.04262717143655
+        },
+        {
+          "slot": 8,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 5.710455482941541
+        },
+        {
+          "slot": 9,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1,
+          "maximum_axis_residual_pixels": 8.0,
+          "last_observed_axis_residual_pixels": 5.532886854738763
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -1,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 8.000000000000114
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 5
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": -0.25,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -0.25
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": -0.25,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -0.25
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": -0.25,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 4.000000000000085,
+          "last_observed_axis_residual_pixels": 3.999999999999986
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 4.000000000000057,
+          "last_observed_axis_residual_pixels": 2.851685624855236
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 4.000000000000114,
+          "last_observed_axis_residual_pixels": 2.321185310798768
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 4.000000000000227,
+          "last_observed_axis_residual_pixels": 4.000000000000227
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": -0.25,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 8.000000000000114
+        },
+        {
+          "slot": 1,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000568,
+          "last_observed_axis_residual_pixels": 5.833759547018417
+        },
+        {
+          "slot": 2,
+          "status": "positive_witness",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 8.000000000000043
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.0,
+          "last_observed_axis_residual_pixels": 7.208530426007883
+        },
+        {
+          "slot": 4,
+          "status": "positive_witness",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.0,
+          "last_observed_axis_residual_pixels": 8.0
+        },
+        {
+          "slot": 5,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 5.909511081394953
+        },
+        {
+          "slot": 6,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 6.802800969316536
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 6.614114454096892
+        },
+        {
+          "slot": 8,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 5.795238276403495
+        },
+        {
+          "slot": 9,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000284,
+          "last_observed_axis_residual_pixels": 5.522868882699527
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 8.0
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 5
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 0,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 0,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 0,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 4.000000000000057,
+          "last_observed_axis_residual_pixels": 4.000000000000014
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 4.000000000000114,
+          "last_observed_axis_residual_pixels": 2.8120583915990665
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 4.0,
+          "last_observed_axis_residual_pixels": 2.1881745975333047
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 4.0000000000001705,
+          "last_observed_axis_residual_pixels": 3.9999999999998863
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 0,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 8.000000000000028,
+          "last_observed_axis_residual_pixels": 7.999999999999972
+        },
+        {
+          "slot": 1,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 8.000000000000085,
+          "last_observed_axis_residual_pixels": 5.98392912507677
+        },
+        {
+          "slot": 2,
+          "status": "positive_witness",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 7.999999999999915
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 7.220464123802458
+        },
+        {
+          "slot": 4,
+          "status": "positive_witness",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 8.000000000000085,
+          "last_observed_axis_residual_pixels": 8.000000000000071
+        },
+        {
+          "slot": 5,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 8.000000000000142,
+          "last_observed_axis_residual_pixels": 6.062010201238763
+        },
+        {
+          "slot": 6,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 8.0,
+          "last_observed_axis_residual_pixels": 6.9474165451820795
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 6.470338090670737
+        },
+        {
+          "slot": 8,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 4.628130971745975
+        },
+        {
+          "slot": 9,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 8.00000000000017,
+          "last_observed_axis_residual_pixels": 4.319224562470197
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0,
+          "maximum_axis_residual_pixels": 7.999999999999943,
+          "last_observed_axis_residual_pixels": 7.999999999999886
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 5
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 0.25,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.25
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 0.25,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.25
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 0.25,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 4.000000000000028,
+          "last_observed_axis_residual_pixels": 4.000000000000028
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 4.000000000000341,
+          "last_observed_axis_residual_pixels": 1.9955277680440986
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 4.000000000000227,
+          "last_observed_axis_residual_pixels": 4.0
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 0.25,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 8.000000000000057
+        },
+        {
+          "slot": 1,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.000000000000085,
+          "last_observed_axis_residual_pixels": 6.007915280103077
+        },
+        {
+          "slot": 2,
+          "status": "positive_witness",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 7.999999999999943
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.00000000000017,
+          "last_observed_axis_residual_pixels": 7.187882611386044
+        },
+        {
+          "slot": 4,
+          "status": "positive_witness",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 8.000000000000114
+        },
+        {
+          "slot": 5,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 5.75275419839906
+        },
+        {
+          "slot": 6,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.00000000000017,
+          "last_observed_axis_residual_pixels": 6.845852347784387
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.000000000000227,
+          "last_observed_axis_residual_pixels": 6.259614973227826
+        },
+        {
+          "slot": 8,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.00000000000037,
+          "last_observed_axis_residual_pixels": 4.542201751413302
+        },
+        {
+          "slot": 9,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.000000000000227,
+          "last_observed_axis_residual_pixels": 5.915187856005389
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.000000000000227,
+          "last_observed_axis_residual_pixels": 8.000000000000114
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 5
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 1,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 1
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 1,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 1
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 1,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 1
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 1,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 1,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 8.0
+        },
+        {
+          "slot": 1,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1,
+          "maximum_axis_residual_pixels": 8.0,
+          "last_observed_axis_residual_pixels": 5.171770775539812
+        },
+        {
+          "slot": 2,
+          "status": "positive_witness",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 1,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 8.000000000000057
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 1,
+          "maximum_axis_residual_pixels": 8.0,
+          "last_observed_axis_residual_pixels": 6.903704864982274
+        },
+        {
+          "slot": 4,
+          "status": "positive_witness",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 1,
+          "maximum_axis_residual_pixels": 8.000000000000199,
+          "last_observed_axis_residual_pixels": 8.000000000000199
+        },
+        {
+          "slot": 5,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1,
+          "maximum_axis_residual_pixels": 8.000000000000028,
+          "last_observed_axis_residual_pixels": 6.093249713900832
+        },
+        {
+          "slot": 6,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1,
+          "maximum_axis_residual_pixels": 8.0,
+          "last_observed_axis_residual_pixels": 6.120421257008218
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 1,
+          "maximum_axis_residual_pixels": 8.000000000000341,
+          "last_observed_axis_residual_pixels": 4.2491530452576
+        },
+        {
+          "slot": 8,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1,
+          "maximum_axis_residual_pixels": 8.000000000000014,
+          "last_observed_axis_residual_pixels": 5.231886793947183
+        },
+        {
+          "slot": 9,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1,
+          "maximum_axis_residual_pixels": 8.000000000000085,
+          "last_observed_axis_residual_pixels": 5.830925687630156
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 1,
+          "maximum_axis_residual_pixels": 8.00000000000017,
+          "last_observed_axis_residual_pixels": 7.999999999999886
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 5
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 5,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 5
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 5,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 5
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 5,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 5
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "step",
+      "yaw_degrees": 5,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 5
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": -5,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.949367088607595
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -3.10126582278481
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -2.151898734177215
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -1.2658227848101267
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -2.2784810126582276
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -1.89873417721519
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": -5,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.949367088607595
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -3.10126582278481
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -2.151898734177215
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -1.2658227848101267
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -2.2784810126582276
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -1.89873417721519
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": -5,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.949367088607595
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -3.10126582278481
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -2.151898734177215
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -1.2658227848101267
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -2.2784810126582276
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -1.89873417721519
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": -5,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.949367088607595,
+          "maximum_axis_residual_pixels": 8.000000000000071,
+          "last_observed_axis_residual_pixels": 8.000000000000071
+        },
+        {
+          "slot": 1,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0,
+          "maximum_axis_residual_pixels": 8.000000000000014,
+          "last_observed_axis_residual_pixels": 3.68182379816524
+        },
+        {
+          "slot": 2,
+          "status": "positive_witness",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -3.10126582278481,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 3.388124747135379
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -2.151898734177215,
+          "maximum_axis_residual_pixels": 8.000000000000227,
+          "last_observed_axis_residual_pixels": 6.9826325534987745
+        },
+        {
+          "slot": 4,
+          "status": "positive_witness",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -1.2658227848101267,
+          "maximum_axis_residual_pixels": 8.000000000000085,
+          "last_observed_axis_residual_pixels": 8.000000000000085
+        },
+        {
+          "slot": 5,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0,
+          "maximum_axis_residual_pixels": 8.000000000000341,
+          "last_observed_axis_residual_pixels": 5.077388035065667
+        },
+        {
+          "slot": 6,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0,
+          "maximum_axis_residual_pixels": 8.000000000000085,
+          "last_observed_axis_residual_pixels": 4.916276746278044
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -2.2784810126582276,
+          "maximum_axis_residual_pixels": 8.000000000000085,
+          "last_observed_axis_residual_pixels": 8.000000000000085
+        },
+        {
+          "slot": 8,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 6.423416600629423
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -5.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -1.89873417721519,
+          "maximum_axis_residual_pixels": 8.00000000000017,
+          "last_observed_axis_residual_pixels": 7.999999999999886
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 4
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": -1,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.189873417721519
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -0.620253164556962
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -0.43037974683544306
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -0.25316455696202533
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -0.45569620253164556
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -0.379746835443038
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": -1,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.189873417721519
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -0.620253164556962
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -0.43037974683544306
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -0.25316455696202533
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -0.45569620253164556
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -0.379746835443038
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": -1,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.189873417721519,
+          "maximum_axis_residual_pixels": 3.9999999999999716,
+          "last_observed_axis_residual_pixels": 3.999999999999858
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -0.620253164556962
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -0.43037974683544306,
+          "maximum_axis_residual_pixels": 4.00000000000005,
+          "last_observed_axis_residual_pixels": 2.811537867033735
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -0.25316455696202533
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -0.45569620253164556,
+          "maximum_axis_residual_pixels": 4.000000000000114,
+          "last_observed_axis_residual_pixels": 2.527509504629279
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -0.379746835443038,
+          "maximum_axis_residual_pixels": 4.000000000000057,
+          "last_observed_axis_residual_pixels": 3.9999999999998863
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": -1,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.189873417721519,
+          "maximum_axis_residual_pixels": 8.000000000000014,
+          "last_observed_axis_residual_pixels": 7.999999999999915
+        },
+        {
+          "slot": 1,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0,
+          "maximum_axis_residual_pixels": 8.000000000000199,
+          "last_observed_axis_residual_pixels": 4.948542302823057
+        },
+        {
+          "slot": 2,
+          "status": "positive_witness",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -0.620253164556962,
+          "maximum_axis_residual_pixels": 8.00000000000017,
+          "last_observed_axis_residual_pixels": 8.0
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -0.43037974683544306,
+          "maximum_axis_residual_pixels": 8.00000000000017,
+          "last_observed_axis_residual_pixels": 7.170312523203734
+        },
+        {
+          "slot": 4,
+          "status": "positive_witness",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -0.25316455696202533,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 8.000000000000057
+        },
+        {
+          "slot": 5,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 5.106527074985252
+        },
+        {
+          "slot": 6,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 5.8300779655319275
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -0.45569620253164556,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 6.825628728456536
+        },
+        {
+          "slot": 8,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 4.249933464318303
+        },
+        {
+          "slot": 9,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -1.0,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 4.372242898758145
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -0.379746835443038,
+          "maximum_axis_residual_pixels": 8.000000000000227,
+          "last_observed_axis_residual_pixels": 7.999999999999773
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 5
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": -0.25,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.04746835443037975
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -0.1550632911392405
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -0.10759493670886076
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -0.06329113924050633
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -0.11392405063291139
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -0.0949367088607595
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": -0.25,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.04746835443037975
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -0.1550632911392405
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -0.10759493670886076
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -0.06329113924050633
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -0.11392405063291139
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -0.0949367088607595
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": -0.25,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.04746835443037975,
+          "maximum_axis_residual_pixels": 4.000000000000043,
+          "last_observed_axis_residual_pixels": 4.000000000000043
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -0.1550632911392405
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -0.10759493670886076,
+          "maximum_axis_residual_pixels": 4.000000000000114,
+          "last_observed_axis_residual_pixels": 2.8512259290708926
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -0.06329113924050633
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -0.11392405063291139,
+          "maximum_axis_residual_pixels": 4.000000000000114,
+          "last_observed_axis_residual_pixels": 2.2730832612659526
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -0.0949367088607595,
+          "maximum_axis_residual_pixels": 4.000000000000114,
+          "last_observed_axis_residual_pixels": 4.0
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": -0.25,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": -0.04746835443037975,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 8.000000000000057
+        },
+        {
+          "slot": 1,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000227,
+          "last_observed_axis_residual_pixels": 5.722363053645779
+        },
+        {
+          "slot": 2,
+          "status": "positive_witness",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": -0.1550632911392405,
+          "maximum_axis_residual_pixels": 8.000000000000142,
+          "last_observed_axis_residual_pixels": 8.000000000000142
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": -0.10759493670886076,
+          "maximum_axis_residual_pixels": 7.99999999999995,
+          "last_observed_axis_residual_pixels": 7.207804386321868
+        },
+        {
+          "slot": 4,
+          "status": "positive_witness",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": -0.06329113924050633,
+          "maximum_axis_residual_pixels": 8.000000000000199,
+          "last_observed_axis_residual_pixels": 7.999999999999943
+        },
+        {
+          "slot": 5,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 7.999999999999915,
+          "last_observed_axis_residual_pixels": 5.820104717440643
+        },
+        {
+          "slot": 6,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000824,
+          "last_observed_axis_residual_pixels": 6.6930360878793635
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": -0.11392405063291139,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 6.559259340687561
+        },
+        {
+          "slot": 8,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 5.804342704692033
+        },
+        {
+          "slot": 9,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": -0.25,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 4.1427344821741485
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": -0.0949367088607595,
+          "maximum_axis_residual_pixels": 8.0,
+          "last_observed_axis_residual_pixels": 8.0
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 5
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 0,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.0
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 0,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.0
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 0,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 4.000000000000057,
+          "last_observed_axis_residual_pixels": 4.000000000000014
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 4.000000000000114,
+          "last_observed_axis_residual_pixels": 2.8120583915990665
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 4.0,
+          "last_observed_axis_residual_pixels": 2.1881745975333047
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 4.0000000000001705,
+          "last_observed_axis_residual_pixels": 3.9999999999998863
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 0,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 8.000000000000028,
+          "last_observed_axis_residual_pixels": 7.999999999999972
+        },
+        {
+          "slot": 1,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 8.000000000000085,
+          "last_observed_axis_residual_pixels": 5.98392912507677
+        },
+        {
+          "slot": 2,
+          "status": "positive_witness",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 7.999999999999915
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 7.220464123802458
+        },
+        {
+          "slot": 4,
+          "status": "positive_witness",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 8.000000000000085,
+          "last_observed_axis_residual_pixels": 8.000000000000071
+        },
+        {
+          "slot": 5,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 8.000000000000142,
+          "last_observed_axis_residual_pixels": 6.062010201238763
+        },
+        {
+          "slot": 6,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 8.0,
+          "last_observed_axis_residual_pixels": 6.9474165451820795
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 6.470338090670737
+        },
+        {
+          "slot": 8,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 4.628130971745975
+        },
+        {
+          "slot": 9,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 8.00000000000017,
+          "last_observed_axis_residual_pixels": 4.319224562470197
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.0,
+          "maximum_axis_residual_pixels": 7.999999999999943,
+          "last_observed_axis_residual_pixels": 7.999999999999886
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 5
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 0.25,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.04746835443037975
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.1550632911392405
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.10759493670886076
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.06329113924050633
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.11392405063291139
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.0949367088607595
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 0.25,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.04746835443037975
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.1550632911392405
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.10759493670886076
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.06329113924050633
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.11392405063291139
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.0949367088607595
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 0.25,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.04746835443037975,
+          "maximum_axis_residual_pixels": 4.0000000000001705,
+          "last_observed_axis_residual_pixels": 3.9999999999998863
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.1550632911392405
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.10759493670886076
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.06329113924050633
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.11392405063291139,
+          "maximum_axis_residual_pixels": 4.0,
+          "last_observed_axis_residual_pixels": 2.103216471928505
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.0949367088607595,
+          "maximum_axis_residual_pixels": 4.000000000000114,
+          "last_observed_axis_residual_pixels": 3.9999999999998863
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 0.25,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.04746835443037975,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 8.000000000000114
+        },
+        {
+          "slot": 1,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 6.247315448362542
+        },
+        {
+          "slot": 2,
+          "status": "positive_witness",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.1550632911392405,
+          "maximum_axis_residual_pixels": 7.999999999999773,
+          "last_observed_axis_residual_pixels": 7.999999999999773
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.10759493670886076,
+          "maximum_axis_residual_pixels": 8.00000000000017,
+          "last_observed_axis_residual_pixels": 7.233205610496839
+        },
+        {
+          "slot": 4,
+          "status": "positive_witness",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.06329113924050633,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 8.000000000000057
+        },
+        {
+          "slot": 5,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 6.305948687208911
+        },
+        {
+          "slot": 6,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.000000000000284,
+          "last_observed_axis_residual_pixels": 6.970015646749971
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.11392405063291139,
+          "maximum_axis_residual_pixels": 8.000000000000227,
+          "last_observed_axis_residual_pixels": 6.381351646780388
+        },
+        {
+          "slot": 8,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 7.999999999999943,
+          "last_observed_axis_residual_pixels": 4.729673800140631
+        },
+        {
+          "slot": 9,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 0.25,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 5.9366166634747515
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.0949367088607595,
+          "maximum_axis_residual_pixels": 8.0,
+          "last_observed_axis_residual_pixels": 8.0
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 5
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 1,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.189873417721519
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.620253164556962
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.43037974683544306
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.25316455696202533
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.45569620253164556
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.379746835443038
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 1,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.189873417721519
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.620253164556962
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.43037974683544306
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.25316455696202533
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.45569620253164556
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.379746835443038
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 1,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.189873417721519,
+          "maximum_axis_residual_pixels": 4.000000000000085,
+          "last_observed_axis_residual_pixels": 4.000000000000028
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.620253164556962
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.43037974683544306
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.25316455696202533
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.45569620253164556,
+          "maximum_axis_residual_pixels": 4.0000000000001705,
+          "last_observed_axis_residual_pixels": 1.8279532028088
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.379746835443038,
+          "maximum_axis_residual_pixels": 4.0000000000001705,
+          "last_observed_axis_residual_pixels": 4.000000000000114
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 1,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.189873417721519,
+          "maximum_axis_residual_pixels": 8.0000000000001,
+          "last_observed_axis_residual_pixels": 8.000000000000043
+        },
+        {
+          "slot": 1,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 7.048437320336461
+        },
+        {
+          "slot": 2,
+          "status": "positive_witness",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 0.620253164556962,
+          "maximum_axis_residual_pixels": 8.000000000000071,
+          "last_observed_axis_residual_pixels": 8.000000000000071
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 0.43037974683544306,
+          "maximum_axis_residual_pixels": 8.0,
+          "last_observed_axis_residual_pixels": 7.272355398968557
+        },
+        {
+          "slot": 4,
+          "status": "positive_witness",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 0.25316455696202533,
+          "maximum_axis_residual_pixels": 8.000000000000028,
+          "last_observed_axis_residual_pixels": 8.000000000000028
+        },
+        {
+          "slot": 5,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0,
+          "maximum_axis_residual_pixels": 8.00000000000017,
+          "last_observed_axis_residual_pixels": 6.683292017859571
+        },
+        {
+          "slot": 6,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0,
+          "maximum_axis_residual_pixels": 8.00000000000017,
+          "last_observed_axis_residual_pixels": 7.031665000524072
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 0.45569620253164556,
+          "maximum_axis_residual_pixels": 8.000000000000114,
+          "last_observed_axis_residual_pixels": 6.085300756118386
+        },
+        {
+          "slot": 8,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0,
+          "maximum_axis_residual_pixels": 8.0,
+          "last_observed_axis_residual_pixels": 5.129126560042721
+        },
+        {
+          "slot": 9,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 1.0,
+          "maximum_axis_residual_pixels": 8.000000000000284,
+          "last_observed_axis_residual_pixels": 6.109701150659646
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 0.379746835443038,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 8.0
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 5
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 5,
+      "tolerance_pixels": 1,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.949367088607595
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 3.10126582278481
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 2.151898734177215
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 1.2658227848101267
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 2.2784810126582276
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 1.89873417721519
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 5,
+      "tolerance_pixels": 2,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "solver_infeasible",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.949367088607595
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 3.10126582278481
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 2.151898734177215
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 1.2658227848101267
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 7,
+          "status": "solver_infeasible",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 2.2784810126582276
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 1.89873417721519
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 5,
+      "tolerance_pixels": 4,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.949367088607595,
+          "maximum_axis_residual_pixels": 4.000000000000028,
+          "last_observed_axis_residual_pixels": 3.175673585955849
+        },
+        {
+          "slot": 1,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 3.10126582278481
+        },
+        {
+          "slot": 3,
+          "status": "solver_infeasible",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 2.151898734177215
+        },
+        {
+          "slot": 4,
+          "status": "solver_infeasible",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 1.2658227848101267
+        },
+        {
+          "slot": 5,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 6,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 2.2784810126582276,
+          "maximum_axis_residual_pixels": 4.000000000000284,
+          "last_observed_axis_residual_pixels": 0.5230389594484564
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "solver_infeasible",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 1.89873417721519
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 0
+    },
+    {
+      "schedule": "ramp",
+      "yaw_degrees": 5,
+      "tolerance_pixels": 8,
+      "slots": [
+        {
+          "slot": 0,
+          "status": "positive_witness",
+          "last_observed_frame": 25,
+          "observes_final_frame": false,
+          "later_observations": 15,
+          "last_observed_yaw_degrees": 0.949367088607595,
+          "maximum_axis_residual_pixels": 8.000000000000043,
+          "last_observed_axis_residual_pixels": 8.000000000000043
+        },
+        {
+          "slot": 1,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0,
+          "maximum_axis_residual_pixels": 8.000000000000398,
+          "last_observed_axis_residual_pixels": 7.78719986509094
+        },
+        {
+          "slot": 2,
+          "status": "solver_infeasible",
+          "last_observed_frame": 59,
+          "observes_final_frame": false,
+          "later_observations": 49,
+          "last_observed_yaw_degrees": 3.10126582278481
+        },
+        {
+          "slot": 3,
+          "status": "positive_witness",
+          "last_observed_frame": 44,
+          "observes_final_frame": false,
+          "later_observations": 34,
+          "last_observed_yaw_degrees": 2.151898734177215,
+          "maximum_axis_residual_pixels": 8.000000000000227,
+          "last_observed_axis_residual_pixels": 7.282998055451117
+        },
+        {
+          "slot": 4,
+          "status": "positive_witness",
+          "last_observed_frame": 30,
+          "observes_final_frame": false,
+          "later_observations": 20,
+          "last_observed_yaw_degrees": 1.2658227848101267,
+          "maximum_axis_residual_pixels": 8.000000000000256,
+          "last_observed_axis_residual_pixels": 8.000000000000071
+        },
+        {
+          "slot": 5,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0,
+          "maximum_axis_residual_pixels": 8.000000000000284,
+          "last_observed_axis_residual_pixels": 6.943444583887867
+        },
+        {
+          "slot": 6,
+          "status": "positive_witness",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 7.260995948748416
+        },
+        {
+          "slot": 7,
+          "status": "positive_witness",
+          "last_observed_frame": 46,
+          "observes_final_frame": false,
+          "later_observations": 36,
+          "last_observed_yaw_degrees": 2.2784810126582276,
+          "maximum_axis_residual_pixels": 8.000000000000227,
+          "last_observed_axis_residual_pixels": 4.428160383524187
+        },
+        {
+          "slot": 8,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 9,
+          "status": "solver_infeasible",
+          "last_observed_frame": 89,
+          "observes_final_frame": true,
+          "later_observations": 79,
+          "last_observed_yaw_degrees": 5.0
+        },
+        {
+          "slot": 10,
+          "status": "insufficient_early_observations"
+        },
+        {
+          "slot": 11,
+          "status": "positive_witness",
+          "last_observed_frame": 40,
+          "observes_final_frame": false,
+          "later_observations": 30,
+          "last_observed_yaw_degrees": 1.89873417721519,
+          "maximum_axis_residual_pixels": 8.000000000000057,
+          "last_observed_axis_residual_pixels": 8.0
+        }
+      ],
+      "final_frame_observed_slots": 5,
+      "positive_witnesses_observing_final_frame": 3
+    }
+  ]
+}
