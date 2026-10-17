@@ -898,6 +898,43 @@ data or invalidate ORE generally. Retain the official metric unchanged as a
 comparison and report any safety checks as separate variants. The audit record
 is `paper/results/ore-official-demo-v1/semantics-audit.json`.
 
+#### Positive-depth audit of the supplied real estimates
+
+`audit_ore_depth_support.py` repeats both published demo search grids, verifies
+each selected score against the retained official execution, and records camera
+z for every annotated frame. It also computes a separate constrained minimum,
+requiring positive z throughout that object's annotations. The official scores
+remain unchanged. A constrained mean is unavailable if any of its four tracks
+has no admissible candidate; the other tracks are not silently averaged instead.
+
+| Supplied poses | Official mean | Positive-depth constrained mean | Selected fits with nonpositive z / 4 | No admissible grid depth / 4 |
+| --- | ---: | ---: | ---: | ---: |
+| DROID-SLAM | 0.068128 | 0.074437 | 2 | 0 |
+| COLMAP | 0.053058 | 0.053058 | 0 | 0 |
+| ORB-SLAM2 | 0.093732 | 0.093732 | 0 | 0 |
+| ORB-SLAM3 | 0.099536 | unavailable | 1 | 1 |
+| TartanVO | 0.209516 | unavailable | 4 | 4 |
+| ParticleSfM | 0.098904 | unavailable | 4 | 4 |
+| Monodepth2 | 0.138053 | 0.156302 | 1 | 0 |
+
+Twelve of 28 method/object fits have at least one nonpositive projected depth at
+the official optimum. Nine have no admissible depth in the released grids. For
+each ray, camera depth is affine in the initial radial distance, `z_i(d)=a_i*d+b_i`.
+Intersecting the strict inequalities `z_i(d)>0` with `d>0` shows that all nine also
+have an empty continuous feasible interval: extending the depth grid cannot fix
+those particular first-box-center rays under the supplied poses and calibration.
+Nine official minima lie on an endpoint of one of the search grids; that separate
+fact is retained without assuming the endpoint is the cause of every failure.
+
+This is **one sequence with four annotated objects and seven supplied estimates**,
+not 28 independent videos. Ray infeasibility is conditional on the anchor choice,
+pose interpolation, calibration, and annotations. It does not establish that
+every possible point in the first object box is infeasible, or certify camera
+DNF. The result motivates testing geometric admissibility explicitly; it does not
+validate a new metric or a method ranking. The complete search curves, negative
+depth counts, and continuous intervals are retained in
+`paper/results/ore-official-demo-v1/depth-support-audit.json`.
+
 DAVIS segmentation objects cannot be assumed static. Intrinsics are also absent
 from our DAVIS inventory. Do not use arbitrary focal lengths or moving masks as
 ORE ground truth. An annotated static-track subset and an explicit calibration
