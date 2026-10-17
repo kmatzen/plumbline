@@ -777,10 +777,29 @@ Median horizontal prediction widths at eight pixels are 994.73, 142.93, and
 32.20 pixels over twelve, nine, and five feasible slots respectively; these
 different surviving sets must not be presented as unconditional improvement.
 
-DA3 completed the office run. Its decoded inputs, 90 rigid poses, archived runner,
-helper, and loader were verified; checkpoint files, implementation source, and
-settings match the first control exactly. DAGE is running separately on the same
-fixed sample. The paired estimated-camera comparison is not yet complete.
+Both DA3 and DAGE completed the office run. Their decoded inputs, 90 rigid poses,
+archived runners, and saved prediction hashes were verified; DA3's helper and
+loader were also verified. Checkpoint files, implementation source, and settings
+match the first control exactly, and the two methods consumed identical decoded
+RGB frames. The paired estimated-camera comparison is retained in
+`predicted-query-consistency-v1.json`.
+
+At both four and eight pixels with 60 fitting frames, both methods are compatible
+on all four observed final-frame tracks. Seven slots have insufficient fitting
+observations and one has no final observation. On the four comparable slots,
+median horizontal/vertical prediction widths at four pixels are 15.58/6.49 for
+DAGE and 14.81/5.79 for DA3; at eight pixels they are 36.81/17.28 and 34.98/16.44.
+The four-pixel contradiction difference observed on the first sequence does
+not replicate here. All 24 method/prefix/tolerance cases remain retained; every
+one of the 61 compatible combined witnesses was independently reprojected to
+check positive depth and original pixel bounds.
+
+For context only, Sim(3)-aligned ATE over the 89 associated reference frames is
+0.006997 m for DAGE and 0.008564 m for DA3. Translation/rotation RPE is
+0.006783 m / 0.239158 degrees and 0.008862 m / 0.266156 degrees respectively,
+using the existing trajectory metric functions and nearest-time reference poses.
+These are not functional-failure labels. Two sequences with sparse tracked
+points do not establish which method is generally better.
 This replication supports only the narrow controlled endpoint sensitivity
 finding, not human agreement, general camera ranking, or a validated DNF rule.
 
