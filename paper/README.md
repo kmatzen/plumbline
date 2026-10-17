@@ -3128,3 +3128,25 @@ examples. It does not validate static-scene membership, camera poses, or a DNF
 decision. No model or threshold is selected using these test responses, and
 calibration remains unopened. The result is retained in this research ledger;
 it has not been added to the manuscript's reported camera experiments.
+
+### Non-planar camera-control preparation
+
+`render_layered_camera_control.py` adds a separate static scene at depths three,
+four, and six world units, using the existing 24-frame pinhole camera path.
+Two bounded foreground panels occlude an infinite rear wall. Twelve anchors
+(four per surface) are fixed by geometry, not selected by tracking results.
+The original planar controls and their results are unchanged. This preparation
+addresses the planar-scene limitation of the sensitivity experiments; it does
+not yet establish detection performance or a DNF threshold.
+
+RGB rendering uses nearest forward ray/surface intersections and seeded
+textures. Reference projections, surface IDs, and analytic visibility are
+returned separately for scoring and must not enter a reference-free evaluator.
+Tests check exact nearest-surface cases, independent homogeneous projections
+for every frame, raster visibility away from silhouette boundaries, repeatable
+RGB, and invalid reference rejection. Rounded pixels at a silhouette are not
+substituted for analytic reference visibility. Seven combined planar/layered
+renderer tests pass. Tracking and camera-sensitivity experiments on this scene
+have not yet been run. The next comparison should retain every anchor and
+camera change, report observed-track and exact-reference controls separately,
+and avoid treating finite perturbation magnitude as a functional failure label.
