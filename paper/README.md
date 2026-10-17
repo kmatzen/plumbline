@@ -4146,3 +4146,22 @@ cases. Learned appearance priors do not constitute a geometric certificate.
 The fixed control and its regression test are retained under
 `results/movi-camera-pilot-v1/focal-depth-ambiguity-control-v1.json`.
 No current judge input, reference label, or manuscript claim is changed.
+
+### Constant-answer controls for the pending judge comparison
+
+The 389 diagnostic labels contain 352 close and only 37 far cases. Therefore,
+an image-free always-close response attains 90.49% diagnostic agreement while
+detecting none of the far cases. `analyze_movi_judge.py` now reports all-close,
+all-far, and all-uncertain controls without choosing one from the evaluation
+results. All use the same renderable roster and paired reference subsets.
+These controls were added after label counts were known and before the judge
+finished; they do not change model inputs, thresholds, or weights.
+
+Every arm also reports close and far recall with abstentions in the denominator,
+and their mean only when both classes are present. This balanced agreement
+is 0.5 for either constant decisive answer. The selective RGB baseline retains
+98.79% conditional agreement, but its close/far recall is 68.47%/8.11% and its
+balanced agreement is 38.29%. These are different aspects of its performance:
+high agreement among answered cases does not establish broad failure coverage.
+The expanded baseline report is `rgb-baseline-diagnostic-v2.json`; version 1
+remains unchanged. Tests check the absent-class case and replay all controls.

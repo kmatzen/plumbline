@@ -16,7 +16,10 @@ def test_abstention_and_unresolved_are_not_correct_answers():
     assert result['conditional_agreement'] == 1
     assert result['agreement_on_all_diagnostic_labels'] == .5
     assert result['answer_coverage_on_diagnostic_labels'] == .5
+    assert result['per_label_recall_including_abstentions'] == dict(close=1., far=0.)
+    assert result['balanced_agreement_including_abstentions'] == .5
     assert agreement([], {})['conditional_agreement'] is None
+    assert agreement(rows[:1], dict(a='close'))['balanced_agreement_including_abstentions'] is None
 
 
 def test_model_pairing_leakage_and_partial_runs_rejected():
@@ -36,12 +39,15 @@ def test_model_pairing_leakage_and_partial_runs_rejected():
 def test_reference_roster_and_baseline_replay():
     root = Path(__file__).resolve().parents[1]/'paper/results/movi-camera-pilot-v1'
     result = run(root)
-    saved = json.loads((root/'rgb-baseline-diagnostic-v1.json').read_text())
+    saved = json.loads((root/'rgb-baseline-diagnostic-v2.json').read_text())
     assert result == saved
     all_rows = result['results']['rgb_track']['all']
     assert sum(all_rows['counts'].values()) == all_rows['planned'] == 1536
     assert all_rows['diagnostic_labeled'] == 389
     assert all_rows['correct'] == 244 and all_rows['answered'] == 247
+    for arm, correct in (('constant_close', 352), ('constant_far', 37), ('constant_uncertain', 0)):
+        assert result['results'][arm]['all']['correct'] == correct
+    assert result['results']['constant_close']['all']['balanced_agreement_including_abstentions'] == .5
     corpus = json.loads((root/'judge-corpus-v1/manifest.json').read_text())
     background = json.loads((root/'background-marker-audit-v1.json').read_text())
     motion = json.loads((root/'marker-motion-audit-v1.json').read_text())
