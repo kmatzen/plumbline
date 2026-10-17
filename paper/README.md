@@ -273,6 +273,35 @@ related-work coverage and actual camera experiments remain outstanding.
 
 ### Fresh dense development runs
 
+#### RGB-D evidence validation (in preparation)
+
+The existing TUM development subset contains only RGB and associated reference
+poses. `stage_rgbd_validation.py` stages depth from an official sequence archive
+into a separate directory, matching the existing RGB sample without selecting
+on tracking outcomes. It checks each RGB file against the experiment manifest,
+associates the nearest depth timestamp within 20 ms (earlier time on ties), and
+retains unmatched frames and repeated depth associations. The 20 ms tolerance
+is a declared development association policy, not a calibrated validity bound.
+Archive, index, RGB, and selected depth hashes are recorded.
+
+`rgbd_track_audit.py` backprojects the nearest depth pixel and transforms it
+with a reference camera-to-world pose. The
+[official format](https://cvg.cit.tum.de/data/datasets/rgbd-dataset/file_formats)
+specifies registered RGB/depth pixels, axial depth divided by 5000, and zero
+as missing. The audit retains the 3x3 neighborhood's nonzero depth range and
+missing count to expose depth-edge ambiguity; it does not fill holes or
+reject inconvenient measurements. Synthetic tests cover camera translation,
+a shifted track, axial versus radial depth, and missing observations.
+
+The intended experiment measures world-position change along the previously
+selected image tracks, without passing reference poses or depth to the
+reference-free evaluator. Scene motion, incorrect tracks, occlusion, sensor
+noise, and calibration/time association can all produce change. Therefore
+these measurements are additional validation evidence, not automatic
+staticness, tracking-correctness, or camera-DNF ground truth. RGB-depth and
+RGB-reference timing offsets must both be reported. No real-data result from
+this audit is available yet, and it is not included in the paper's claims.
+
 #### Source-track comprehension pilot
 
 The corrected 7B NF4 configuration was subsequently evaluated on the same three
