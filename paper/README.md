@@ -3377,3 +3377,28 @@ comparisons, not general ranking validation or human usability evidence.
 One test checks association verification and that missing reference poses are
 not imputed. The score and validation artifacts remain separate and preserve
 their input hashes and all per-method results.
+
+### Sensitivity to the selected real-video tracks
+
+`audit_real_track_selection.py` enumerates all 4,095 nonempty subsets of the
+twelve existing tracks for each real clip. Every comparison uses identical
+slots and observation indices for both methods. Unresolved scores retain their
+[0, infinity] bounds. The complete-roster score is not replaced by a favorable
+subset, and all subsets are saved in each clip's
+`track-selection-sensitivity-v1.json.gz`.
+
+On the first static clip, all subsets retaining at least ten tracks still
+prefer DAGE. Removing three tracks can make the median intervals overlap;
+no subset strictly prefers DA3. On office, every subset retaining at least five
+tracks prefers DAGE. With four retained tracks, 27 of 495 subsets prefer DA3;
+eight removals are therefore the minimum needed to reverse that comparison.
+These are exhaustive deletion checks within the observed roster, not independent
+samples, confidence intervals, evidence about unseen tracks, or human judgments.
+The audit is exploratory and uses no reference poses. It does not establish
+a learned evaluator's advantage or a functional failure threshold.
+
+Three focused tests check exhaustive enumeration, a known reversal, unresolved
+score accounting, and rejection of mismatched paired observations or duplicate
+slots. The preceding reference-validation revision passed 1,972 non-weight
+tests, with one unstaged-KITTI skip and six weight tests deselected; the three
+new audit tests also pass separately.
