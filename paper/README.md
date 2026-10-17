@@ -4262,3 +4262,31 @@ and later visual checking. It does not validate a new evaluation method or DNF
 threshold. The record is `results/movi-camera-pilot-v1/prefix-tracking-ablation-v1.json`.
 Tests check exact synthetic recovery, independence from later coordinates,
 full-roster accounting, and replay of the saved analysis.
+
+### Matched task-success curves without a selected tolerance
+
+`analyze_movi_task_tolerances.py` evaluates both methods on exactly the same
+reference-eligible slots within each task. It retains unavailable placements
+in the denominator without calling them camera failures. It computes every
+empirical error-curve breakpoint and also reports 1, 2, 4, 8, and 16 pixels;
+no tolerance is selected to maximize a method's advantage. These are classical
+empirical success curves, not a novel metric or a calibrated DNF rule.
+
+With predicted intrinsics and known-world anchors, DAGE weakly dominates DA3
+at every tolerance in three scenes. Scene 4385 crosses: at 2 pixels, DA3 has
+46/715 successful placements and DAGE 23/715; at 8 pixels, DAGE has 372/715
+and DA3 246/715. Thus DAGE's lower mean error on all four scenes does not mean
+it wins at every required precision. With reference intrinsics, scene 5397
+instead favors DA3 at every tolerance.
+
+For RGB-initialized surface markers, scene 5397 favors DA3 at every tolerance
+on the shared 111-slot roster; the other three scenes have crossing curves.
+The oracle-prefix surface-marker curves have the same crossing/noncrossing
+pattern. These tasks differ in initialization, support, and calibration, so
+their contrast is not an isolated causal effect of one component. It shows
+why a usable evaluation must state the task and precision requirement rather
+than treat one average as a universal camera ranking. All results remain
+four-scene development evidence, not validation of a reference-free evaluator.
+The complete paired curves are `results/movi-camera-pilot-v1/task-tolerances-v1.json`.
+Tests cover crossings, unavailable denominators, dominance, monotonicity, and
+exact replay with source hashes checked.
