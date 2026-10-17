@@ -481,6 +481,16 @@ uses a model-selected subset and cannot replace all-example accuracy. Tests
 cover fully formatted but entirely wrong answers and zero-answer cases. This
 reporting code has unit tests, not yet measured VLM results.
 
+Before obtaining validation predictions, the report also adds a descriptive
+within-video label-association check. For each video, the expected accuracy
+under uniformly permuted answers is computed exactly from the target and answer
+frequencies, including abstentions and invalid answers. Observed accuracy minus
+this expectation is averaged equally across videos. Constant answers within a
+video have zero excess, even if its dominant label makes accuracy high. This is
+not a significance test, a deployable baseline, or proof of causal image reliance;
+it only checks whether answers distinguish cases within the same video. The
+implementation is checked against exhaustive permutations on a small example.
+
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,
 collect verified data, then compare model training with the workflow held fixed.

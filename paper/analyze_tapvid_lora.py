@@ -36,6 +36,30 @@ def metrics(rows):
             "false_close_predictions": matrix["far"]["close"]+matrix["occluded"]["close"]}
 
 
+def within_video_association(rows):
+    """Exact expected accuracy after uniformly permuting answers within videos.
+
+    This preserves each video's answer frequencies, including abstentions. It
+    is a descriptive control for video-level label priors, not a permutation
+    significance test: observations within a video/track are dependent.
+    """
+    videos = sorted({r["sequence"] for r in rows})
+    details = {}
+    for video in videos:
+        subset = [r for r in rows if r["sequence"] == video]
+        targets = Counter(r["target"] for r in subset)
+        answers = Counter(r["answer"] for r in subset)
+        n = len(subset)
+        expected = sum(targets[c]*answers[c] for c in TARGETS)/(n*n)
+        observed = sum(r["target"] == r["answer"] for r in subset)/n
+        details[video] = dict(examples=n, observed_accuracy=observed,
+                             shuffled_expected_accuracy=expected,
+                             excess_accuracy=observed-expected)
+    return {"per_video": details,
+            "macro_video_excess_accuracy": sum(d["excess_accuracy"] for d in details.values())/len(details) if details else None,
+            "interpretation": "within-video answer/target association beyond marginal label frequencies; not causal image reliance, a trained baseline, or a significance test"}
+
+
 def compare(report, corpus, tracker):
     if report["status"] != "complete":
         raise ValueError("incomplete generation run")
@@ -81,7 +105,8 @@ def compare(report, corpus, tracker):
     for arm, rows in arms.items():
         per_video = {name: metrics([r for r in rows if r["sequence"] == name]) for name in sorted({r["sequence"] for r in rows})}
         results[arm] = {"all": metrics(rows), "per_video": per_video,
-                        "macro_video_accuracy": sum(v["accuracy_all_examples"] for v in per_video.values())/len(per_video)}
+                        "macro_video_accuracy": sum(v["accuracy_all_examples"] for v in per_video.values())/len(per_video),
+                        "within_video_association": within_video_association(rows)}
     a = {r["id"]: r["answer"] == r["target"] for r in arms["base"]}
     b = {r["id"]: r["answer"] == r["target"] for r in arms["adapted"]}
     return {"scope": "two-video development validation; not independent frame-level evidence or camera DNF",
