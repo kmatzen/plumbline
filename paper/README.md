@@ -4917,6 +4917,37 @@ fresh calibration, not a novel method or a validated camera-DNF rule. The
 extra image-derived features have not justified their complexity on this
 replication, and no new experiment is added to the manuscript.
 
+### Fresh uncertainty calibration split frozen before acquisition
+
+Commit `ef0db24` freezes the next uncertainty experiment before acquiring its
+examples. `results/movi-uncertainty-calibration-v1/protocol.json` selects MOVi-E
+validation shards 00002--00026 for calibration (97 scenes according to the
+publisher metadata) and reserves shards 00027--00036 for subsequent evaluation
+(40 scenes). Every contained scene is retained. The evaluation shards remain
+unopened until calibration multipliers and downstream evaluation rules are
+frozen. Dataset test shards and TAPVid calibration images/exports remain
+unopened as well.
+
+`model.json` is an exact export of the cycle-only quantile model from commit
+`32658ab`, checked against the retained fitted coefficients. Three scales are
+fixed: one pixel, `max(1,cycle_error)`, and `max(1,frozen_model_prediction)`.
+Each calibration scene contributes its maximum normalized error on supported,
+forward-and-reverse-visible reference projections. A failed or wholly unlabeled
+scene contributes an unbounded score, not an omitted sample. The nominal 95%
+multiplier is the `ceil((n+1)*0.95)` order statistic; all three scales are kept.
+Scene exchangeability is an assumption, not proved by the shard ordering.
+
+`stage_movi_calibration.py` acquires and decodes only calibration shards in a
+private directory on Anima:
+`/data3/kmatzen/plumbline/research/movi-uncertainty-calibration-v1`.
+Acquisition has started; its live `batch.json` retains every attempted shard,
+publisher checksums, decoded-manifest hashes, and any failure. The first shard
+download passed its publisher checksum and entered decoding. This is not a
+completed calibration result. RGB-only inference and separate reference scoring
+must finish before the multipliers can be computed. No camera inference is
+needed for this correspondence-calibration component, and it does not by itself
+validate staticness, placement usability, camera DNF, or the paper's novelty.
+
 ### Frozen-matrix correspondence intervention
 
 `audit_movi_motion_track_error.py` tests whether correspondence error explains
