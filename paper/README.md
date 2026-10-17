@@ -4551,3 +4551,36 @@ record is `results/movi-temporal-verifier-v1/joint-evidence-v1.json`, including
 per-scene/per-method accounting and every decision. Replay tests check the
 full roster, exact retained output, and missing-evidence behavior. These are
 development findings, not new manuscript claims.
+
+### Correct-camera motion control with oracle observations
+
+`audit_movi_oracle_motion_control.py` removes point-fitting and image-matching
+errors from the placement arm. It uses correct cameras, calibration, initial
+world points, and surface correspondences. For foregrounds, the retained
+reference audit supplies the discrepancy between a source-frozen point and
+the moving surface under the same correct camera. Static-background discrepancy
+is zero by definition, not a new numerical projection test. Only the motion
+gate still uses predicted image tracks. This is an oracle control, not an
+implementable reference-free metric, and changes initialization and matching
+together rather than isolating either effect.
+
+The complete roster contains 768 unique point/frame slots, without counting
+the two original methods twice: 513 supported static-background observations,
+60 supported foreground observations, and 195 unresolved references. With the
+unchanged 2/8-pixel thresholds, foregrounds yield 43 close, 13 far, and four
+borderline observations despite correct cameras. The crossfit motion gate
+retains 40 close and one far foreground observation, abstaining on the other
+19. It retains 485/513 static-background observations and abstains on 28.
+Unresolved references remain unresolved throughout.
+
+The surviving far observation is scene 4970, frame 12, source-grid slot 25:
+178.425 pixels of reference motion discrepancy but 0.769 pixels of held-out
+Sampson distance. This is a concrete counterexample to treating epipolar
+compatibility as a static-surface certificate. Removing 12/13 motion warnings
+in this small development control is not proof of camera-failure detection:
+the surviving warning is unsupported as a camera accusation, static coverage
+is lost, visibility references remain diagnostic, and no independent scene
+validation has occurred. The artifact is
+`results/movi-temporal-verifier-v1/oracle-motion-control-v1.json`; tests verify
+reference deduplication, exact replay, and full accounting. It remains outside
+the manuscript.
