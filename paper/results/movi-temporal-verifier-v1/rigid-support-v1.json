@@ -1,0 +1,8042 @@
+{
+  "scope": "development camera-independent epipolar-support baseline, not a staticness certificate, new method, or DNF",
+  "protocol": "64 fixed source/temporal correspondences; predictor visibility gate; per-pair RANSAC 1px confidence .99 max2000 seed0; Sampson distance <=1px compatible; three query frames; no candidate cameras or reference labels in fitting; method duplicates removed",
+  "limitation": "dominant motion can belong to moving objects; planar/rotational degeneracy and motion along epipolar lines can retain moving points; reference visibility remains diagnostic; no generalization claim",
+  "script_sha256": "eb31def0a463e50573b4a421cf4d4ae1155c2c41b3049584915010b1bef7076e",
+  "opencv_version": "4.13.0",
+  "source_sha256": {
+    "temporal": "8317152ee38f6663927ccfa3ae65bf61daf2129743c1c9e6348e90bb687e8db4",
+    "background": "486e07bc95e50566a80b3ada46946635781aec2aedce8e6f5f13bf0cd3525815",
+    "motion": "80a15784be2fd4168b5c00b081cb6753cd59cffe8876833751101946fac305ad",
+    "geometry": {
+      "3835": "f02612ad635397788023047f5b6c85f77572564e138e22354f68c5da6a5c0b72",
+      "5397": "c9e13dcf309a7791a9a4064c4979d4218290401e58d4c75378a498b7538fd20f",
+      "4385": "6acedde45aa9ea54dc301ef7000675effaec22b9d78aae2a986ee74223e730de",
+      "4970": "a6b8ca96de42cb359ef8ab45dabb1d4e478f725a2b8397183da72cb80d19b625"
+    }
+  },
+  "confusion": {
+    "static_background": {
+      "compatible": 489,
+      "unresolved": 15,
+      "incompatible": 9
+    },
+    "moving_foreground": {
+      "incompatible": 8,
+      "unresolved": 5
+    },
+    "unresolved": {
+      "unresolved": 124,
+      "compatible": 95,
+      "incompatible": 23
+    }
+  },
+  "fits": [
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "status": "estimated",
+      "fundamental_matrix": [
+        [
+          1.2363125927632534e-05,
+          -0.0001185567758735975,
+          -0.07987881939674242
+        ],
+        [
+          0.00016616263810219806,
+          -3.449512705850839e-05,
+          0.030689452148120428
+        ],
+        [
+          0.06886155175469448,
+          -0.030838683812479742,
+          1.0
+        ]
+      ],
+      "answers": [
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible"
+      ],
+      "distances": [
+        0.45347688792462265,
+        0.2713917221459409,
+        0.18466445576803697,
+        0.0028701388112914892,
+        0.07342214118228838,
+        0.06306334560557128,
+        1.264338704685363e-14,
+        0.0707859197276845,
+        0.6598963307481197,
+        0.021845939290314323,
+        0.1025431033592287,
+        63.32770715587202,
+        0.06484752910434448,
+        1.2607241260665118e-14,
+        0.05674646610757274,
+        0.12472884867473832,
+        0.7152378200852108,
+        null,
+        null,
+        null,
+        0.1269387283315193,
+        0.0329038499612739,
+        0.05944911389734464,
+        4.648921965886203e-14,
+        null,
+        null,
+        0.3428570642694374,
+        0.07941793918571428,
+        0.06167349850199992,
+        0.019103397951952986,
+        0.13472590453285183,
+        0.21614366520809308,
+        0.47274104298095376,
+        0.12365723684081247,
+        0.3073136313842377,
+        0.017351961064170387,
+        0.38069775535153483,
+        0.10927988181877377,
+        0.09312438968103551,
+        0.22377492364994653,
+        0.5881498055249388,
+        1.2059981135264353e-14,
+        0.24289383737121478,
+        0.05697927870703999,
+        0.016339462805954105,
+        5.582096989889718e-15,
+        1.0973345702175074e-14,
+        0.0963170049615273,
+        0.39606769979469625,
+        0.19567305091995818,
+        0.20993022612744375,
+        0.08920216113218594,
+        0.13174887392652498,
+        0.08811184220268363,
+        0.0509800942507835,
+        1.0399955806911597e-14,
+        null,
+        0.07683569194635592,
+        0.00138133077515228,
+        0.19499949716212212,
+        0.19400129488233842,
+        0.1494272163257365,
+        0.021778705373674486,
+        0.11041362413795064
+      ],
+      "ransac_inliers": 56
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "status": "estimated",
+      "fundamental_matrix": [
+        [
+          2.812096740308682e-05,
+          -0.00013543684878478986,
+          -0.08957085691786777
+        ],
+        [
+          0.0002196876963585198,
+          -7.324144325575721e-05,
+          0.05090707980321258
+        ],
+        [
+          0.06737916251959924,
+          -0.04163555113482384,
+          1.0
+        ]
+      ],
+      "answers": [
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible"
+      ],
+      "distances": [
+        0.11822260359881342,
+        4.280025418188902e-14,
+        0.2162311229030156,
+        0.24368179221350322,
+        0.2943232624447573,
+        0.4074910256344639,
+        0.3341885685038938,
+        null,
+        0.10834416271622152,
+        0.14617818143046815,
+        0.35612827776765327,
+        73.16708822027462,
+        0.07185474727389654,
+        0.12019324277659792,
+        7.12237714238712e-14,
+        0.3118031497082038,
+        2.6531899836336442e-14,
+        0.8327280868041554,
+        null,
+        null,
+        null,
+        4.106282233450378e-14,
+        0.03375854867058567,
+        0.18505434116982178,
+        null,
+        null,
+        0.12252547203585888,
+        0.06432048346051289,
+        0.7508009084823334,
+        0.6099892180568183,
+        null,
+        0.24788069906830154,
+        0.33749149303451204,
+        0.2522541558561455,
+        0.12692578095287257,
+        0.04502728976202388,
+        0.2316772698905294,
+        0.11463523297067797,
+        0.0841489187979167,
+        0.0005435399732713575,
+        0.07548097713312098,
+        0.19772844507911094,
+        0.5557700661449921,
+        0.047914896475027266,
+        0.08520127982208205,
+        2.3845182845558257e-14,
+        0.6016119234053481,
+        0.16358002324045867,
+        null,
+        0.32828139677746593,
+        2.764656403746283e-14,
+        0.061059377629141875,
+        0.033612584326895026,
+        0.1039207485873115,
+        0.0079203928892945,
+        0.10639508867223564,
+        null,
+        0.23964866426517364,
+        3.4098939908673986e-14,
+        0.03016051604901713,
+        0.08297165606044332,
+        0.12543235726809537,
+        0.14251080529340773,
+        0.15463661831544928
+      ],
+      "ransac_inliers": 52
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "status": "estimated",
+      "fundamental_matrix": [
+        [
+          1.4543970872096723e-05,
+          -1.3088191942762622e-05,
+          -0.04103692044089978
+        ],
+        [
+          3.805574716443873e-05,
+          -1.730603945568763e-05,
+          0.014276226114440986
+        ],
+        [
+          0.03231999594921383,
+          -0.016246792811171615,
+          1.0
+        ]
+      ],
+      "answers": [
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible"
+      ],
+      "distances": [
+        0.36442247608319384,
+        0.20173319734264894,
+        0.03529899743050894,
+        0.146586689182187,
+        0.0664510368899273,
+        0.0025992196113670926,
+        6.05693818584339e-05,
+        null,
+        0.22001333784002924,
+        2.2289343858679775e-14,
+        0.5896653227843045,
+        75.32021918183274,
+        0.09041966179094628,
+        0.055674939017437995,
+        4.290269045506297e-14,
+        null,
+        0.25747350213719333,
+        0.862545403387059,
+        null,
+        null,
+        0.10008629198918385,
+        0.08769129252705482,
+        0.08151030230702783,
+        7.02085447042918e-14,
+        null,
+        null,
+        0.26325443833245915,
+        0.08952248158147019,
+        0.515004853947601,
+        0.24999683519939855,
+        null,
+        0.09797318508051174,
+        3.268612968732968e-14,
+        0.7603181064218368,
+        0.997314729593445,
+        0.004221413606235388,
+        0.9579849581536979,
+        0.832004914369792,
+        0.21107269549175164,
+        0.1276293812269531,
+        0.43366600181440795,
+        1.7988840333406554e-14,
+        1.4285532658770372e-14,
+        2.8249627533658628e-14,
+        0.0852608594984003,
+        0.042723883102249734,
+        0.5763074944482259,
+        0.028566370169228757,
+        null,
+        0.21536721389644162,
+        0.01453872567005509,
+        0.2043221173080877,
+        0.18596686770151638,
+        0.17916721497824734,
+        0.14380797797269762,
+        0.010842815640747048,
+        null,
+        0.4590481833523179,
+        0.6066632000731711,
+        0.10546553544964991,
+        0.2594525178600555,
+        0.1921494599211653,
+        0.2050440922969929,
+        0.062056872143020914
+      ],
+      "ransac_inliers": 49
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "status": "estimated",
+      "fundamental_matrix": [
+        [
+          -7.619304552946841e-05,
+          0.0006896728281592174,
+          0.5404399952571276
+        ],
+        [
+          -0.00046222809887151007,
+          -0.00017021416527796682,
+          -0.8400054356114459
+        ],
+        [
+          -0.5291606251653521,
+          0.8228315187298808,
+          1.0
+        ]
+      ],
+      "answers": [
+        "incompatible",
+        "incompatible",
+        "incompatible",
+        "incompatible",
+        "incompatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "incompatible",
+        "incompatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "unresolved",
+        "incompatible",
+        "compatible",
+        "incompatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible"
+      ],
+      "distances": [
+        1.4644657340093288,
+        1.3431375317304932,
+        1.7887996359872733,
+        72.37443325297986,
+        67.06797379512105,
+        0.15870907790677044,
+        0.1822272370933124,
+        4.5307473055855806e-14,
+        3.984752647205746e-14,
+        null,
+        null,
+        45.184316068273034,
+        40.7564354186553,
+        0.03352118146439289,
+        0.30742183996094585,
+        0.0439091018179995,
+        null,
+        null,
+        null,
+        0.1646302776364457,
+        0.08414021592582097,
+        2.0592088685274816e-14,
+        0.058457912003449984,
+        0.04173805492005474,
+        0.03367440038492131,
+        0.5907223082841414,
+        0.5574328787169321,
+        0.4628476936304733,
+        0.1383566150899127,
+        0.06980147081332552,
+        0.02387905109723198,
+        0.4865667469238276,
+        null,
+        0.06302279727413902,
+        null,
+        3.5319329852681425,
+        0.06237658470656716,
+        3.3861970419849685,
+        6.6781397701992135e-15,
+        1.9771452828373488e-14,
+        0.473929676235497,
+        0.42986325777409157,
+        0.26885297507951794,
+        0.31251304875183966,
+        0.31669745156884616,
+        0.30783658534263536,
+        0.10754812390262616,
+        0.07169523528448875,
+        0.24688973168444117,
+        0.14959214680793287,
+        0.158206687104817,
+        0.0812808411293853,
+        0.10853623631171866,
+        0.07703401777161856,
+        0.12563023353582378,
+        0.017552613804281757,
+        0.7269459133389417,
+        0.07040195563393482,
+        0.0,
+        0.035706400590412316,
+        0.1471855920784234,
+        3.5212068119158344e-14,
+        0.14663791334552698,
+        0.13627102589094223
+      ],
+      "ransac_inliers": 47
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "status": "estimated",
+      "fundamental_matrix": [
+        [
+          6.979051614355068e-05,
+          -0.0011764491218848633,
+          -0.330999986029343
+        ],
+        [
+          0.0010268522425412622,
+          3.751990943309779e-05,
+          0.40416269113746517
+        ],
+        [
+          0.31215154595845734,
+          -0.38939299170677305,
+          1.0
+        ]
+      ],
+      "answers": [
+        "compatible",
+        "compatible",
+        "incompatible",
+        "incompatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "incompatible",
+        "compatible",
+        "incompatible",
+        "incompatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "unresolved",
+        "compatible",
+        "unresolved",
+        "incompatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible"
+      ],
+      "distances": [
+        0.3342255135986068,
+        0.2314442185264073,
+        1.2469241308513606,
+        97.16486723398368,
+        null,
+        0.3736510302374035,
+        7.117605818574453e-15,
+        0.34670388989097956,
+        1.8053130050964499,
+        1.7613316617293138,
+        0.062458822928064255,
+        64.7696919435773,
+        82.78404122028982,
+        0.6866991745082222,
+        0.1841781371535124,
+        0.4443385774487771,
+        null,
+        0.020883623606581393,
+        0.18525753814172655,
+        0.022185563806614923,
+        0.010763228103399816,
+        0.0,
+        0.022478556571170146,
+        0.12800717930752056,
+        null,
+        0.08750106937900215,
+        0.2508232239197812,
+        0.35668616108572754,
+        0.6705772866588579,
+        0.6443326376984306,
+        0.7189994435771784,
+        1.2891994322656437,
+        null,
+        0.12598074261532285,
+        null,
+        3.1995032214820136,
+        null,
+        null,
+        0.38849848868172865,
+        0.5180488871457927,
+        5.4302546813267525e-14,
+        0.12810191955190445,
+        0.17354122634368713,
+        1.3964999798341458e-14,
+        0.024857921256189835,
+        0.30748502268252903,
+        0.044246237050430834,
+        0.11846080727920878,
+        0.03399471659771379,
+        0.08483264424654739,
+        0.0786047236077053,
+        0.018693473231661047,
+        0.048339044761258505,
+        0.057275122777872264,
+        0.09867796123706922,
+        1.1216598261825235e-14,
+        0.6399842373717739,
+        0.17931111855304865,
+        4.0789938344693316e-14,
+        0.23221324107916014,
+        1.923871554692751e-14,
+        0.15347206843161226,
+        0.05174240265734937,
+        0.019328214406216845
+      ],
+      "ransac_inliers": 48
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "status": "estimated",
+      "fundamental_matrix": [
+        [
+          0.00023952699612646815,
+          -0.0016110776187429558,
+          -1.1715352735327156
+        ],
+        [
+          0.0008428095900093934,
+          0.0005611989480858583,
+          1.5266117177560485
+        ],
+        [
+          1.1211995250590998,
+          -1.4921430438443493,
+          1.0
+        ]
+      ],
+      "answers": [
+        "compatible",
+        "compatible",
+        "incompatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "incompatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "unresolved",
+        "compatible",
+        "unresolved",
+        "incompatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible"
+      ],
+      "distances": [
+        0.07564087183355472,
+        4.124489518161106e-14,
+        1.626871196577619,
+        null,
+        null,
+        0.23352726063445303,
+        0.16042719965440572,
+        0.5505532206815585,
+        1.8204619644392097,
+        1.788674571129113,
+        0.10248719026014144,
+        null,
+        null,
+        0.21109124536866247,
+        0.34513839886642483,
+        1.857657652376334e-14,
+        0.3522146528942249,
+        2.003002266690099e-14,
+        0.20162168212267853,
+        0.2370759731287255,
+        0.6221661599149089,
+        0.7292904025657212,
+        0.9851220415359524,
+        0.96452873935021,
+        0.0,
+        0.3512634302168993,
+        0.17348176404545831,
+        0.18056371064465923,
+        0.21707821998067567,
+        0.3015289066271388,
+        0.31185781220128883,
+        1.0943084188347318,
+        null,
+        0.48873418032710303,
+        null,
+        3.7919093580467567,
+        null,
+        null,
+        0.006014571003684474,
+        0.20873337210856882,
+        0.8810189735193303,
+        0.4447067958220053,
+        0.4326681464783614,
+        0.051725684419508255,
+        0.2637737647882245,
+        0.44108649272554507,
+        0.030143604728465858,
+        0.3022977210217629,
+        0.28198845505399583,
+        0.20995812578836923,
+        0.18220438742219014,
+        0.0,
+        0.1107421965187252,
+        2.738242790140215e-14,
+        0.027616598925504526,
+        0.03092418202412657,
+        null,
+        0.11110468872289184,
+        0.22433050207044916,
+        9.268699258260466e-15,
+        0.0126528230659861,
+        0.07518201597231303,
+        0.013820770095009817,
+        0.04373693764798563
+      ],
+      "ransac_inliers": 46
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "status": "estimated",
+      "fundamental_matrix": [
+        [
+          -5.700172728418801e-06,
+          -0.0007144118238841617,
+          0.06682149540584856
+        ],
+        [
+          0.0007338495511707041,
+          8.997954945069549e-06,
+          -0.15148741291767456
+        ],
+        [
+          -0.06861114436303709,
+          0.14240067318749575,
+          1.0
+        ]
+      ],
+      "answers": [
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "incompatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible"
+      ],
+      "distances": [
+        0.027365435307670483,
+        0.08030277383217134,
+        0.16509157830140014,
+        0.13467689572950428,
+        0.14430888773681183,
+        0.11158576664167955,
+        0.08083288883263905,
+        0.22443851791318067,
+        9.04115657033169e-15,
+        0.07394856632732906,
+        0.37116178401607075,
+        0.05957862327214962,
+        0.24786985711435702,
+        0.19333356780392527,
+        1.920154908686432e-14,
+        0.3737589188053422,
+        0.11999268551779062,
+        0.511383457931483,
+        1.3883281381321953e-14,
+        0.3187659390439154,
+        0.3970169341591958,
+        0.4205369458052906,
+        1.7503163236822527e-13,
+        0.3418985162901639,
+        9.232521219609964e-15,
+        2.2091711905098924e-14,
+        0.20857002730675553,
+        0.6385423941112154,
+        null,
+        0.3194014971296148,
+        0.06341889694254525,
+        0.4971521520852901,
+        null,
+        null,
+        null,
+        0.41560904242772295,
+        8.388929135682865,
+        0.21394003273980092,
+        0.017381282450941893,
+        0.26217454025828457,
+        8.894944072022511,
+        null,
+        null,
+        null,
+        null,
+        null,
+        0.061416501015736084,
+        0.3222774422245414,
+        null,
+        0.01520456358717335,
+        0.08332579911017743,
+        null,
+        null,
+        1.5276084469405595e-13,
+        0.05803997752028245,
+        0.22176902104366933,
+        0.025889538334007624,
+        0.09630253455805618,
+        0.01850164101181304,
+        0.04266541252151567,
+        0.11628243099350016,
+        0.01181023374235102,
+        0.3233600596319176,
+        0.20912959000810225
+      ],
+      "ransac_inliers": 50
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "status": "estimated",
+      "fundamental_matrix": [
+        [
+          -4.142411293140491e-06,
+          -0.00021049559878976267,
+          -0.0047080936719175615
+        ],
+        [
+          0.00022887666142413024,
+          4.669093253408196e-06,
+          -0.04947221815320125
+        ],
+        [
+          0.0007119416433160748,
+          0.04334305599732527,
+          1.0
+        ]
+      ],
+      "answers": [
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible"
+      ],
+      "distances": [
+        0.10653309637839929,
+        2.1561795301802374e-14,
+        0.10177769541070664,
+        0.28321699630569125,
+        0.34719059029801697,
+        0.3223166231836917,
+        5.956262541454537e-14,
+        0.622581265191302,
+        0.003698196129955132,
+        0.12309407669237758,
+        0.01939948580058379,
+        0.378263591084538,
+        0.1682676377833471,
+        0.08944610613705996,
+        4.456991683047419e-14,
+        0.417394508152043,
+        0.03165731877607577,
+        0.18464816247843358,
+        0.5101796031102462,
+        0.13547288580868344,
+        0.3918518552289985,
+        0.2169663452240712,
+        0.14113671169959902,
+        0.39218044836719856,
+        0.23731449394534013,
+        0.1976202394065209,
+        0.2053069134347544,
+        3.591849942736638e-14,
+        null,
+        0.1461570514028806,
+        0.0,
+        0.4171190938685549,
+        null,
+        0.2775865548401832,
+        0.18671736171245476,
+        0.08212981292609378,
+        null,
+        3.626252718981101e-14,
+        0.20263063652842603,
+        0.4321018832121086,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        0.5164810440036331,
+        null,
+        null,
+        0.37323782755585433,
+        0.2113628798557555,
+        null,
+        2.6282557322247635e-14,
+        0.25542564664121464,
+        0.4556956107486328,
+        null,
+        0.3686252511142083,
+        0.3927043726416924,
+        0.22183445217537912,
+        0.01932292839484119,
+        0.13046220373156217,
+        null,
+        0.5980745577338511
+      ],
+      "ransac_inliers": 49
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "status": "estimated",
+      "fundamental_matrix": [
+        [
+          -8.099966839986298e-06,
+          -0.0005079729037347792,
+          0.095077131924076
+        ],
+        [
+          0.000512529714768452,
+          2.391609179965858e-05,
+          -0.13532798905172047
+        ],
+        [
+          -0.08956861660827388,
+          0.1195243182856174,
+          1.0
+        ]
+      ],
+      "answers": [
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible"
+      ],
+      "distances": [
+        0.09469725216208996,
+        0.04998654599091082,
+        0.06575544063970362,
+        0.03129579617419753,
+        0.056865501215646735,
+        2.765600271437566e-14,
+        0.09509443446265847,
+        0.01520998316403306,
+        0.06366243503948815,
+        0.23181126729547952,
+        0.14804285751554946,
+        1.3859841183646275,
+        0.01019660110562551,
+        0.05501708000639066,
+        0.07257478303365264,
+        1.8807689812073693e-14,
+        1.952751559785798e-14,
+        0.23195285331236676,
+        2.1323254210153584,
+        0.18966997965076218,
+        0.03824355745895817,
+        0.00721962373434309,
+        0.155034393385068,
+        0.0,
+        0.0014577722640019743,
+        0.1223339177069743,
+        0.08067453139804727,
+        1.5580332111259483e-14,
+        null,
+        0.24115527480254048,
+        1.4128800722846202e-14,
+        0.12152229511888794,
+        0.015872586525285066,
+        0.11014739792326368,
+        0.2821485356960051,
+        0.06226800438325185,
+        null,
+        0.0933431607264918,
+        0.2525097914340748,
+        0.19317787404635284,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        0.19504597829576786,
+        null,
+        null,
+        null,
+        0.054081303510051526,
+        0.16478967385517004,
+        null,
+        0.005967928632841709,
+        0.22856012325892647,
+        0.1328642413550498,
+        0.1265094273412083,
+        0.1741918990910898,
+        0.0,
+        0.17267942200865968,
+        0.3132293552013246,
+        null,
+        0.35758056656298937
+      ],
+      "ransac_inliers": 48
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "status": "estimated",
+      "fundamental_matrix": [
+        [
+          2.3613144146237666e-05,
+          0.0005002543740475836,
+          -0.014302514902758738
+        ],
+        [
+          -0.00046726874393086115,
+          3.5147020577001116e-05,
+          0.05931873425297929
+        ],
+        [
+          0.004309272751725993,
+          -0.06902612326906257,
+          1.0
+        ]
+      ],
+      "answers": [
+        "unresolved",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "incompatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible"
+      ],
+      "distances": [
+        null,
+        0.5119185294641933,
+        null,
+        null,
+        null,
+        0.040243981719239826,
+        0.04537058629488589,
+        0.0885690539548943,
+        0.16776931795908684,
+        8.404145284900861e-14,
+        null,
+        null,
+        0.6741027598745127,
+        0.14979288249788508,
+        null,
+        6.439084182668682e-14,
+        0.1936946267525631,
+        79.74025555700183,
+        null,
+        null,
+        null,
+        null,
+        0.33872025867950434,
+        0.18707363972211496,
+        107.70028348065351,
+        93.6019917286958,
+        null,
+        0.33553106016728684,
+        0.3053712688512899,
+        0.26103282280972545,
+        0.541592104513241,
+        1.2794543574843966,
+        0.4389505434132856,
+        null,
+        0.0,
+        0.13202474026496502,
+        12.69140204762567,
+        0.3037697657991656,
+        null,
+        0.014215237246773545,
+        0.07083599774011427,
+        0.0010791613379740727,
+        0.0,
+        0.24828770777591141,
+        0.19195373310283806,
+        null,
+        null,
+        0.09810020840556231,
+        1.1898876411883275e-14,
+        0.035899588929657465,
+        0.028173581475278674,
+        0.3683215236239053,
+        0.021490241290944394,
+        0.08824704859612832,
+        0.1123091708354661,
+        3.652820841458997e-14,
+        0.1968233743668903,
+        0.044067460914133,
+        0.09449733892472753,
+        0.02111978370868598,
+        2.390964533776917e-14,
+        0.013160807861014175,
+        0.04199291047790752,
+        0.09753584031009356
+      ],
+      "ransac_inliers": 43
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "status": "estimated",
+      "fundamental_matrix": [
+        [
+          1.2119672517434601e-05,
+          -0.00013752420411960426,
+          -0.13392866277383783
+        ],
+        [
+          6.487996000102086e-05,
+          -1.4427033493584722e-05,
+          -0.021719600997127542
+        ],
+        [
+          0.13889442832589288,
+          0.018425051268055572,
+          1.0
+        ]
+      ],
+      "answers": [
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "incompatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "incompatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "unresolved",
+        "incompatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved"
+      ],
+      "distances": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        0.0,
+        0.2852840678135772,
+        null,
+        0.3690832822302098,
+        0.29868173915210916,
+        null,
+        null,
+        0.03178605248615294,
+        0.050900961718581994,
+        0.007158440408160981,
+        0.1385518445996843,
+        0.16675685632469336,
+        122.86002276937869,
+        null,
+        null,
+        0.11106189850054886,
+        0.006015339268457298,
+        0.3106786789425877,
+        0.027614617532779467,
+        null,
+        145.98032588640544,
+        null,
+        0.09693312473323962,
+        0.09645484717652532,
+        0.03587611451241671,
+        0.438930464439125,
+        1.0849511682719237,
+        4.558316495128965e-14,
+        null,
+        0.42843819637357755,
+        null,
+        24.905302504074086,
+        null,
+        0.029558426617194943,
+        0.0,
+        0.018225730144515014,
+        4.8770396892559424e-14,
+        0.40125936086756375,
+        0.6005862978565362,
+        0.06917798810660104,
+        0.15550304912090568,
+        0.07196915662974991,
+        null,
+        0.031196279950129496,
+        0.03101005565749223,
+        0.1056907369871181,
+        0.718491644130689,
+        0.0,
+        0.15023500116359745,
+        null,
+        null,
+        6.233608808820111e-14,
+        0.11518349504864143,
+        0.0984818297667859,
+        0.04473443878123856,
+        0.01623721189355304,
+        0.037962209745539974,
+        0.0,
+        null
+      ],
+      "ransac_inliers": 40
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "status": "estimated",
+      "fundamental_matrix": [
+        [
+          2.5307781379154593e-05,
+          -2.207396645631763e-05,
+          -0.1173815715945661
+        ],
+        [
+          -3.634692584654436e-05,
+          -1.8331816921682916e-05,
+          -0.03617862940574662
+        ],
+        [
+          0.12047998379818292,
+          0.031705763662415426,
+          1.0
+        ]
+      ],
+      "answers": [
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "incompatible",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "unresolved",
+        "unresolved",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "unresolved",
+        "incompatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "compatible",
+        "unresolved"
+      ],
+      "distances": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        0.3174495719403678,
+        0.02839044738329687,
+        null,
+        4.5586020833190794e-14,
+        0.08058139529490034,
+        null,
+        null,
+        2.0232850020235905e-14,
+        0.02531793080064022,
+        null,
+        null,
+        0.023102703322497038,
+        163.09515903934278,
+        null,
+        null,
+        0.15125820224277525,
+        0.21305719717922697,
+        null,
+        0.28782893347200317,
+        null,
+        null,
+        null,
+        0.06300745275061773,
+        0.07561705523652772,
+        0.1301400392465651,
+        0.03460595487681152,
+        0.7176213991932197,
+        0.12958498924139672,
+        null,
+        0.4240581997136073,
+        null,
+        26.76886687210037,
+        null,
+        0.269220816946322,
+        0.26195012061156087,
+        0.21955312836132795,
+        1.0213855312297224e-14,
+        1.0220204673355454e-14,
+        2.0442744925123886e-14,
+        0.06814237292214116,
+        0.08808492083526966,
+        0.06427230782825277,
+        0.10249731038555741,
+        0.014896655348784838,
+        0.08874020585632307,
+        0.13194075914130382,
+        0.1871653637939216,
+        0.07995380064163449,
+        0.18700981359320246,
+        0.0,
+        null,
+        0.02327408724197247,
+        0.06962150667428905,
+        0.11460437717990184,
+        0.1422025393796617,
+        4.09524502129793e-14,
+        0.04423928156767283,
+        0.1307563758819464,
+        null
+      ],
+      "ransac_inliers": 40
+    }
+  ],
+  "records": [
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 0,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.45347688792462265
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 1,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2713917221459409
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 2,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.18466445576803697
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 3,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0028701388112914892
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 4,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07342214118228838
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 5,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06306334560557128
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 6,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.264338704685363e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 7,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0707859197276845
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 8,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.6598963307481197
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 9,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.021845939290314323
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 10,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1025431033592287
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 11,
+      "predicted": "incompatible",
+      "reference": "moving_foreground",
+      "sampson_pixels": 63.32770715587202
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 12,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06484752910434448
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 13,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.2607241260665118e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 14,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.05674646610757274
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 15,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.12472884867473832
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 16,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.7152378200852108
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 17,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 18,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 19,
+      "predicted": "unresolved",
+      "reference": "moving_foreground",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 20,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.1269387283315193
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 21,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0329038499612739
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 22,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.05944911389734464
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 23,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 4.648921965886203e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 24,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 25,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 26,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3428570642694374
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 27,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07941793918571428
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 28,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.06167349850199992
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 29,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.019103397951952986
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 30,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.13472590453285183
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 31,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.21614366520809308
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 32,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.47274104298095376
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 33,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.12365723684081247
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 34,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.3073136313842377
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 35,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.017351961064170387
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 36,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.38069775535153483
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 37,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.10927988181877377
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 38,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.09312438968103551
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 39,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.22377492364994653
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 40,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.5881498055249388
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 41,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.2059981135264353e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 42,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.24289383737121478
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 43,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.05697927870703999
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 44,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.016339462805954105
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 45,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 5.582096989889718e-15
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 46,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.0973345702175074e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 47,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0963170049615273
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 48,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.39606769979469625
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 49,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.19567305091995818
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 50,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.20993022612744375
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 51,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08920216113218594
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 52,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.13174887392652498
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 53,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08811184220268363
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 54,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0509800942507835
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 55,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.0399955806911597e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 56,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 57,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07683569194635592
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 58,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.00138133077515228
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 59,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.19499949716212212
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 60,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.19400129488233842
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 61,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1494272163257365
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 62,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.021778705373674486
+    },
+    {
+      "sequence": "3835",
+      "frame": 12,
+      "track": 63,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.11041362413795064
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 0,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.11822260359881342
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 1,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 4.280025418188902e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 2,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2162311229030156
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 3,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.24368179221350322
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 4,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2943232624447573
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 5,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.4074910256344639
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 6,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3341885685038938
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 7,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 8,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.10834416271622152
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 9,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.14617818143046815
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 10,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.35612827776765327
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 11,
+      "predicted": "incompatible",
+      "reference": "moving_foreground",
+      "sampson_pixels": 73.16708822027462
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 12,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07185474727389654
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 13,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.12019324277659792
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 14,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 7.12237714238712e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 15,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3118031497082038
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 16,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.6531899836336442e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 17,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.8327280868041554
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 18,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 19,
+      "predicted": "unresolved",
+      "reference": "moving_foreground",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 20,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 21,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 4.106282233450378e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 22,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03375854867058567
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 23,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.18505434116982178
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 24,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 25,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 26,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.12252547203585888
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 27,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06432048346051289
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 28,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.7508009084823334
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 29,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.6099892180568183
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 30,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 31,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.24788069906830154
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 32,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.33749149303451204
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 33,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.2522541558561455
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 34,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.12692578095287257
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 35,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.04502728976202388
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 36,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.2316772698905294
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 37,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.11463523297067797
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 38,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0841489187979167
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 39,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0005435399732713575
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 40,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07548097713312098
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 41,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.19772844507911094
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 42,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.5557700661449921
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 43,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.047914896475027266
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 44,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08520127982208205
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 45,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.3845182845558257e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 46,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.6016119234053481
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 47,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.16358002324045867
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 48,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 49,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.32828139677746593
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 50,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 2.764656403746283e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 51,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.061059377629141875
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 52,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.033612584326895026
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 53,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1039207485873115
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 54,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0079203928892945
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 55,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.10639508867223564
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 56,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 57,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.23964866426517364
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 58,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 3.4098939908673986e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 59,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03016051604901713
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 60,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08297165606044332
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 61,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.12543235726809537
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 62,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.14251080529340773
+    },
+    {
+      "sequence": "3835",
+      "frame": 18,
+      "track": 63,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.15463661831544928
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 0,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.36442247608319384
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 1,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.20173319734264894
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 2,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03529899743050894
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 3,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.146586689182187
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 4,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0664510368899273
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 5,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0025992196113670926
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 6,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 6.05693818584339e-05
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 7,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 8,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.22001333784002924
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 9,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.2289343858679775e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 10,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.5896653227843045
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 11,
+      "predicted": "incompatible",
+      "reference": "moving_foreground",
+      "sampson_pixels": 75.32021918183274
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 12,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.09041966179094628
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 13,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.055674939017437995
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 14,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 4.290269045506297e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 15,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 16,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.25747350213719333
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 17,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.862545403387059
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 18,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 19,
+      "predicted": "unresolved",
+      "reference": "moving_foreground",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 20,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.10008629198918385
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 21,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08769129252705482
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 22,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08151030230702783
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 23,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 7.02085447042918e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 24,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 25,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 26,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.26325443833245915
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 27,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08952248158147019
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 28,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.515004853947601
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 29,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.24999683519939855
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 30,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 31,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.09797318508051174
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 32,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 3.268612968732968e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 33,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.7603181064218368
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 34,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.997314729593445
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 35,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.004221413606235388
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 36,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.9579849581536979
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 37,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.832004914369792
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 38,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.21107269549175164
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 39,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1276293812269531
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 40,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.43366600181440795
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 41,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.7988840333406554e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 42,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.4285532658770372e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 43,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.8249627533658628e-14
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 44,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0852608594984003
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 45,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.042723883102249734
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 46,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.5763074944482259
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 47,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.028566370169228757
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 48,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 49,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.21536721389644162
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 50,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.01453872567005509
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 51,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2043221173080877
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 52,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.18596686770151638
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 53,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.17916721497824734
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 54,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.14380797797269762
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 55,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.010842815640747048
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 56,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 57,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.4590481833523179
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 58,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.6066632000731711
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 59,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.10546553544964991
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 60,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2594525178600555
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 61,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1921494599211653
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 62,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2050440922969929
+    },
+    {
+      "sequence": "3835",
+      "frame": 23,
+      "track": 63,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.062056872143020914
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 0,
+      "predicted": "incompatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.4644657340093288
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 1,
+      "predicted": "incompatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.3431375317304932
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 2,
+      "predicted": "incompatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.7887996359872733
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 3,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 72.37443325297986
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 4,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 67.06797379512105
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 5,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.15870907790677044
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 6,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1822272370933124
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 7,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 4.5307473055855806e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 8,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 3.984752647205746e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 9,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 10,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 11,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 45.184316068273034
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 12,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 40.7564354186553
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 13,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03352118146439289
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 14,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.30742183996094585
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 15,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0439091018179995
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 16,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 17,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 18,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 19,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1646302776364457
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 20,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08414021592582097
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 21,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.0592088685274816e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 22,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.058457912003449984
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 23,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.04173805492005474
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 24,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.03367440038492131
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 25,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.5907223082841414
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 26,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.5574328787169321
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 27,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.4628476936304733
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 28,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.1383566150899127
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 29,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.06980147081332552
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 30,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.02387905109723198
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 31,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.4865667469238276
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 32,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 33,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06302279727413902
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 34,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 35,
+      "predicted": "incompatible",
+      "reference": "moving_foreground",
+      "sampson_pixels": 3.5319329852681425
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 36,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.06237658470656716
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 37,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 3.3861970419849685
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 38,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 6.6781397701992135e-15
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 39,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.9771452828373488e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 40,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.473929676235497
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 41,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.42986325777409157
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 42,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.26885297507951794
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 43,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.31251304875183966
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 44,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.31669745156884616
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 45,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.30783658534263536
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 46,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.10754812390262616
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 47,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07169523528448875
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 48,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.24688973168444117
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 49,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.14959214680793287
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 50,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.158206687104817
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 51,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0812808411293853
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 52,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.10853623631171866
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 53,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07703401777161856
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 54,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.12563023353582378
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 55,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.017552613804281757
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 56,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.7269459133389417
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 57,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07040195563393482
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 58,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 59,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.035706400590412316
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 60,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1471855920784234
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 61,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 3.5212068119158344e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 62,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.14663791334552698
+    },
+    {
+      "sequence": "5397",
+      "frame": 12,
+      "track": 63,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.13627102589094223
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 0,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3342255135986068
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 1,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2314442185264073
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 2,
+      "predicted": "incompatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.2469241308513606
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 3,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 97.16486723398368
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 4,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 5,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3736510302374035
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 6,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 7.117605818574453e-15
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 7,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.34670388989097956
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 8,
+      "predicted": "incompatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.8053130050964499
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 9,
+      "predicted": "incompatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.7613316617293138
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 10,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.062458822928064255
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 11,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 64.7696919435773
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 12,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 82.78404122028982
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 13,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.6866991745082222
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 14,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1841781371535124
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 15,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.4443385774487771
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 16,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 17,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.020883623606581393
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 18,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.18525753814172655
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 19,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.022185563806614923
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 20,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.010763228103399816
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 21,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 22,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.022478556571170146
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 23,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.12800717930752056
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 24,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 25,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.08750106937900215
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 26,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.2508232239197812
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 27,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.35668616108572754
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 28,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.6705772866588579
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 29,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.6443326376984306
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 30,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.7189994435771784
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 31,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.2891994322656437
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 32,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 33,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.12598074261532285
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 34,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 35,
+      "predicted": "incompatible",
+      "reference": "moving_foreground",
+      "sampson_pixels": 3.1995032214820136
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 36,
+      "predicted": "unresolved",
+      "reference": "moving_foreground",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 37,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 38,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.38849848868172865
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 39,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.5180488871457927
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 40,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 5.4302546813267525e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 41,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.12810191955190445
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 42,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.17354122634368713
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 43,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.3964999798341458e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 44,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.024857921256189835
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 45,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.30748502268252903
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 46,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.044246237050430834
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 47,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.11846080727920878
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 48,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03399471659771379
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 49,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08483264424654739
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 50,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0786047236077053
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 51,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.018693473231661047
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 52,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.048339044761258505
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 53,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.057275122777872264
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 54,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.09867796123706922
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 55,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.1216598261825235e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 56,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.6399842373717739
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 57,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.17931111855304865
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 58,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 4.0789938344693316e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 59,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.23221324107916014
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 60,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.923871554692751e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 61,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.15347206843161226
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 62,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.05174240265734937
+    },
+    {
+      "sequence": "5397",
+      "frame": 18,
+      "track": 63,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.019328214406216845
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 0,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07564087183355472
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 1,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 4.124489518161106e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 2,
+      "predicted": "incompatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.626871196577619
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 3,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 4,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 5,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.23352726063445303
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 6,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.16042719965440572
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 7,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.5505532206815585
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 8,
+      "predicted": "incompatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.8204619644392097
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 9,
+      "predicted": "incompatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.788674571129113
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 10,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.10248719026014144
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 11,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 12,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 13,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.21109124536866247
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 14,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.34513839886642483
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 15,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.857657652376334e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 16,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3522146528942249
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 17,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.003002266690099e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 18,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.20162168212267853
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 19,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2370759731287255
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 20,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.6221661599149089
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 21,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.7292904025657212
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 22,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.9851220415359524
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 23,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.96452873935021
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 24,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 25,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.3512634302168993
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 26,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.17348176404545831
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 27,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.18056371064465923
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 28,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.21707821998067567
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 29,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.3015289066271388
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 30,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.31185781220128883
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 31,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.0943084188347318
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 32,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 33,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.48873418032710303
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 34,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 35,
+      "predicted": "incompatible",
+      "reference": "moving_foreground",
+      "sampson_pixels": 3.7919093580467567
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 36,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 37,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 38,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.006014571003684474
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 39,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.20873337210856882
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 40,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.8810189735193303
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 41,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.4447067958220053
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 42,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.4326681464783614
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 43,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.051725684419508255
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 44,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2637737647882245
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 45,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.44108649272554507
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 46,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.030143604728465858
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 47,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3022977210217629
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 48,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.28198845505399583
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 49,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.20995812578836923
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 50,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.18220438742219014
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 51,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 52,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1107421965187252
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 53,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.738242790140215e-14
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 54,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.027616598925504526
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 55,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03092418202412657
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 56,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 57,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.11110468872289184
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 58,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.22433050207044916
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 59,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 9.268699258260466e-15
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 60,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0126528230659861
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 61,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07518201597231303
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 62,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.013820770095009817
+    },
+    {
+      "sequence": "5397",
+      "frame": 23,
+      "track": 63,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.04373693764798563
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 0,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.027365435307670483
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 1,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08030277383217134
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 2,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.16509157830140014
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 3,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.13467689572950428
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 4,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.14430888773681183
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 5,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.11158576664167955
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 6,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08083288883263905
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 7,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.22443851791318067
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 8,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 9.04115657033169e-15
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 9,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07394856632732906
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 10,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.37116178401607075
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 11,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.05957862327214962
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 12,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.24786985711435702
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 13,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.19333356780392527
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 14,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.920154908686432e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 15,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3737589188053422
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 16,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.11999268551779062
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 17,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.511383457931483
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 18,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.3883281381321953e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 19,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3187659390439154
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 20,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3970169341591958
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 21,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.4205369458052906
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 22,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.7503163236822527e-13
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 23,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3418985162901639
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 24,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 9.232521219609964e-15
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 25,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.2091711905098924e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 26,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.20857002730675553
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 27,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.6385423941112154
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 28,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 29,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3194014971296148
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 30,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06341889694254525
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 31,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.4971521520852901
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 32,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 33,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 34,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 35,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.41560904242772295
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 36,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 8.388929135682865
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 37,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.21394003273980092
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 38,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.017381282450941893
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 39,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.26217454025828457
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 40,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 8.894944072022511
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 41,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 42,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 43,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 44,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 45,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 46,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.061416501015736084
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 47,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3222774422245414
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 48,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 49,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.01520456358717335
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 50,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08332579911017743
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 51,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 52,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 53,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.5276084469405595e-13
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 54,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.05803997752028245
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 55,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.22176902104366933
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 56,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.025889538334007624
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 57,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.09630253455805618
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 58,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.01850164101181304
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 59,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.04266541252151567
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 60,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.11628243099350016
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 61,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.01181023374235102
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 62,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.3233600596319176
+    },
+    {
+      "sequence": "4385",
+      "frame": 12,
+      "track": 63,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.20912959000810225
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 0,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.10653309637839929
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 1,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.1561795301802374e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 2,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.10177769541070664
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 3,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.28321699630569125
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 4,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.34719059029801697
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 5,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3223166231836917
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 6,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 5.956262541454537e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 7,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.622581265191302
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 8,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.003698196129955132
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 9,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.12309407669237758
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 10,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.01939948580058379
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 11,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.378263591084538
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 12,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1682676377833471
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 13,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08944610613705996
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 14,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 4.456991683047419e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 15,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.417394508152043
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 16,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03165731877607577
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 17,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.18464816247843358
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 18,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.5101796031102462
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 19,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.13547288580868344
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 20,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3918518552289985
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 21,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2169663452240712
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 22,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.14113671169959902
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 23,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.39218044836719856
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 24,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.23731449394534013
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 25,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1976202394065209
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 26,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2053069134347544
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 27,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 3.591849942736638e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 28,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 29,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1461570514028806
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 30,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 31,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.4171190938685549
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 32,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 33,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2775865548401832
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 34,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.18671736171245476
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 35,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08212981292609378
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 36,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 37,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 3.626252718981101e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 38,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.20263063652842603
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 39,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.4321018832121086
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 40,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 41,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 42,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 43,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 44,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 45,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 46,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 47,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.5164810440036331
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 48,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 49,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 50,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.37323782755585433
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 51,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2113628798557555
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 52,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 53,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.6282557322247635e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 54,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.25542564664121464
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 55,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.4556956107486328
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 56,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 57,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3686252511142083
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 58,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3927043726416924
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 59,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.22183445217537912
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 60,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.01932292839484119
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 61,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.13046220373156217
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 62,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 18,
+      "track": 63,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.5980745577338511
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 0,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.09469725216208996
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 1,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.04998654599091082
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 2,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06575544063970362
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 3,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03129579617419753
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 4,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.056865501215646735
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 5,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.765600271437566e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 6,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.09509443446265847
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 7,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.01520998316403306
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 8,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06366243503948815
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 9,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.23181126729547952
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 10,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.14804285751554946
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 11,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.3859841183646275
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 12,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.01019660110562551
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 13,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.05501708000639066
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 14,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07257478303365264
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 15,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.8807689812073693e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 16,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.952751559785798e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 17,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.23195285331236676
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 18,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 2.1323254210153584
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 19,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.18966997965076218
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 20,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03824355745895817
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 21,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.00721962373434309
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 22,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.155034393385068
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 23,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 24,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0014577722640019743
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 25,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1223339177069743
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 26,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08067453139804727
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 27,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.5580332111259483e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 28,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 29,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.24115527480254048
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 30,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.4128800722846202e-14
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 31,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.12152229511888794
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 32,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.015872586525285066
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 33,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.11014739792326368
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 34,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2821485356960051
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 35,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06226800438325185
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 36,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 37,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0933431607264918
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 38,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2525097914340748
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 39,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.19317787404635284
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 40,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 41,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 42,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 43,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 44,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 45,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 46,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 47,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.19504597829576786
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 48,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 49,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 50,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 51,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.054081303510051526
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 52,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.16478967385517004
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 53,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 54,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.005967928632841709
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 55,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.22856012325892647
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 56,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1328642413550498
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 57,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1265094273412083
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 58,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1741918990910898
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 59,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 60,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.17267942200865968
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 61,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3132293552013246
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 62,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4385",
+      "frame": 23,
+      "track": 63,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.35758056656298937
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 0,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 1,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.5119185294641933
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 2,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 3,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 4,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 5,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.040243981719239826
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 6,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.04537058629488589
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 7,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0885690539548943
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 8,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.16776931795908684
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 9,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 8.404145284900861e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 10,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 11,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 12,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.6741027598745127
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 13,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.14979288249788508
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 14,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 15,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 6.439084182668682e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 16,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1936946267525631
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 17,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 79.74025555700183
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 18,
+      "predicted": "unresolved",
+      "reference": "moving_foreground",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 19,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 20,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 21,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 22,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.33872025867950434
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 23,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.18707363972211496
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 24,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 107.70028348065351
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 25,
+      "predicted": "incompatible",
+      "reference": "moving_foreground",
+      "sampson_pixels": 93.6019917286958
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 26,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 27,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.33553106016728684
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 28,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3053712688512899
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 29,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.26103282280972545
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 30,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.541592104513241
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 31,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.2794543574843966
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 32,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.4389505434132856
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 33,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 34,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 35,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.13202474026496502
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 36,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 12.69140204762567
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 37,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3037697657991656
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 38,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 39,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.014215237246773545
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 40,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07083599774011427
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 41,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.0010791613379740727
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 42,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 43,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.24828770777591141
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 44,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.19195373310283806
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 45,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 46,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 47,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.09810020840556231
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 48,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 1.1898876411883275e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 49,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.035899588929657465
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 50,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.028173581475278674
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 51,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.3683215236239053
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 52,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.021490241290944394
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 53,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08824704859612832
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 54,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1123091708354661
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 55,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 3.652820841458997e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 56,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1968233743668903
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 57,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.044067460914133
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 58,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.09449733892472753
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 59,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.02111978370868598
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 60,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.390964533776917e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 61,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.013160807861014175
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 62,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.04199291047790752
+    },
+    {
+      "sequence": "4970",
+      "frame": 12,
+      "track": 63,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.09753584031009356
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 0,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 1,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 2,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 3,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 4,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 5,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 6,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.2852840678135772
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 7,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 8,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3690832822302098
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 9,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.29868173915210916
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 10,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 11,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 12,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03178605248615294
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 13,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.050900961718581994
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 14,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.007158440408160981
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 15,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1385518445996843
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 16,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.16675685632469336
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 17,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 122.86002276937869
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 18,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 19,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 20,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.11106189850054886
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 21,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.006015339268457298
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 22,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3106786789425877
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 23,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.027614617532779467
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 24,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 25,
+      "predicted": "incompatible",
+      "reference": "moving_foreground",
+      "sampson_pixels": 145.98032588640544
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 26,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 27,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.09693312473323962
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 28,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.09645484717652532
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 29,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03587611451241671
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 30,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.438930464439125
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 31,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.0849511682719237
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 32,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 4.558316495128965e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 33,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 34,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.42843819637357755
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 35,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 36,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 24.905302504074086
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 37,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 38,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.029558426617194943
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 39,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 40,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.018225730144515014
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 41,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 4.8770396892559424e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 42,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.40125936086756375
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 43,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.6005862978565362
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 44,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06917798810660104
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 45,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.15550304912090568
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 46,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07196915662974991
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 47,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 48,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.031196279950129496
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 49,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03101005565749223
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 50,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1056907369871181
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 51,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.718491644130689
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 52,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 53,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.15023500116359745
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 54,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 55,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 56,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 6.233608808820111e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 57,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.11518349504864143
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 58,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0984818297667859
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 59,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.04473443878123856
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 60,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.01623721189355304
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 61,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.037962209745539974
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 62,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "4970",
+      "frame": 18,
+      "track": 63,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 0,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 1,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 2,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 3,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 4,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 5,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.3174495719403678
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 6,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.02839044738329687
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 7,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 8,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 4.5586020833190794e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 9,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08058139529490034
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 10,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 11,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 12,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 2.0232850020235905e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 13,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.02531793080064022
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 14,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 15,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 16,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.023102703322497038
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 17,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 163.09515903934278
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 18,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 19,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 20,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.15125820224277525
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 21,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.21305719717922697
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 22,
+      "predicted": "unresolved",
+      "reference": "static_background",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 23,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.28782893347200317
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 24,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 25,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 26,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 27,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06300745275061773
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 28,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07561705523652772
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 29,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1301400392465651
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 30,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.03460595487681152
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 31,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.7176213991932197
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 32,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.12958498924139672
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 33,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 34,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.4240581997136073
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 35,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 36,
+      "predicted": "incompatible",
+      "reference": "unresolved",
+      "sampson_pixels": 26.76886687210037
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 37,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 38,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.269220816946322
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 39,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.26195012061156087
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 40,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.21955312836132795
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 41,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.0213855312297224e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 42,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 1.0220204673355454e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 43,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 2.0442744925123886e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 44,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06814237292214116
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 45,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08808492083526966
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 46,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06427230782825277
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 47,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.10249731038555741
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 48,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.014896655348784838
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 49,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.08874020585632307
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 50,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.13194075914130382
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 51,
+      "predicted": "compatible",
+      "reference": "unresolved",
+      "sampson_pixels": 0.1871653637939216
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 52,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.07995380064163449
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 53,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.18700981359320246
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 54,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.0
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 55,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 56,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.02327408724197247
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 57,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.06962150667428905
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 58,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.11460437717990184
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 59,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1422025393796617
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 60,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 4.09524502129793e-14
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 61,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.04423928156767283
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 62,
+      "predicted": "compatible",
+      "reference": "static_background",
+      "sampson_pixels": 0.1307563758819464
+    },
+    {
+      "sequence": "4970",
+      "frame": 23,
+      "track": 63,
+      "predicted": "unresolved",
+      "reference": "unresolved",
+      "sampson_pixels": null
+    }
+  ]
+}

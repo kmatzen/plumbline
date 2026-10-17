@@ -4475,3 +4475,29 @@ camera arrays, source hashes, original IDs, and the ten-frame observation limit.
 Anima uses the existing private geometry helper via explicit import; the
 shared repository is unchanged. This is a development harness comparison,
 not a claimed contribution or a manuscript experiment.
+
+### Camera-independent rigid-motion support baseline
+
+`probe_movi_rigid_support.py` fits a fundamental matrix to temporal tracker
+correspondences without using either evaluated camera method. It uses all
+64 fixed points at frames 12, 18, and 23, gated by predicted visibility;
+OpenCV RANSAC uses 1 pixel, confidence 0.99, 2,000 iterations, and seed 0.
+Finite Sampson distances <=1 pixel are compatible; missing support stays
+unresolved. Duplicate method observations are checked for equality and removed,
+leaving 768 scene/frame/point cases. Reference motion and visibility cues enter
+only after fitting, for a separate diagnostic comparison.
+
+Among 513 depth/mask-nonrejected static background cases, 489 are compatible,
+nine incompatible, and 15 unresolved. Among 13 supported foreground cases
+with at least 8 pixels of counterfactual static displacement, eight are
+incompatible and five unresolved. The other 242 reference cases are retained
+as unresolved ground truth, not scored as static or moving. This is a small,
+developmental check of an existing geometric baseline, not a new motion
+detector or a claim of generalization.
+
+An incompatible observation is not proof of object motion: tracking errors
+and degenerate geometry remain alternatives. Conversely, epipolar compatibility
+does not certify a static surface. A camera evaluator must preserve these
+distinctions rather than silently drop all outliers or call them camera errors.
+The record is `results/movi-temporal-verifier-v1/rigid-support-v1.json`; tests
+check distance arithmetic, insufficient support, deduplication, and exact replay.
