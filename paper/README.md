@@ -3307,3 +3307,32 @@ preserved in `results/layered-direct-control-v1.json.gz`,
 `layered-direct-error-v1.json.gz`, and `layered-direct-coverage-v1.json`.
 These are development baselines on one synthetic scene/path, not manuscript
 camera-DNF results or a learned-method comparison.
+
+### Camera-level aggregation audit of the layered controls
+
+`analyze_layered_camera_ranking.py` checks whether the preceding track-level
+reversals actually imply trajectory-level ranking errors. It uses a simple
+median over all 12 planned track error brackets. Unresolved values are bounded
+by [0, infinity], not dropped or replaced by favorable scores. Monotonicity of
+the median propagates those intervals to camera-score bounds. Both candidates
+use identical retained observations; changed-view evidence counts remain
+explicit. This aggregation was chosen after inspecting development results,
+so it is an exploratory baseline, not a predeclared held-out outcome.
+
+All three arms—unfiltered sequential, NCC-filtered sequential, and direct
+matching—assign higher median error to the perturbed cameras in all 120
+seed/physical-change comparisons. Thus the 11 per-track reversals did not cause
+camera-level ranking reversals under this aggregate. Even the direct baseline
+separates these particular candidates despite its lower changed-view coverage.
+These are correlated comparisons on one scene/path, not 120 independent scenes.
+The controls do not establish that a learned evaluator improves camera ranking.
+They must not be used to claim such an advantage or validate a DNF cutoff.
+
+Full paired bounds and coverage are retained in
+`results/layered-observed-camera-ranking-v1.json`,
+`layered-ncc-camera-ranking-v1.json`, and
+`layered-direct-camera-ranking-v1.json`. Three tests check interval propagation,
+unknown-score handling, strict separation, and invalid inputs. A meaningful
+next camera-level validation needs real method outputs or a separate broader
+scene/path set and a fixed scoring policy; more texture seeds of this control
+would not supply that evidence.

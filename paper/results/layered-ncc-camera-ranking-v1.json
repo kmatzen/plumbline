@@ -1,0 +1,2174 @@
+{
+  "scope": "exploratory median baseline on development camera controls, not functional DNF",
+  "protocol": "median of all 12 planned track errors; unresolved scores bounded by [0,infinity], never dropped; identical retained observations per paired camera; coverage reported separately",
+  "limitations": "aggregate chosen after track-level inspection; one shared scene/path; correlated seeds/changes; synthetic camera perturbations; not independent confirmation or novelty",
+  "source_sha256": "fb77ac7c6339f482d694cb9f84815d1ddf9eb5658750b060b0d704cfc92a7a2e",
+  "tracks_sha256": "749614d86f5c7f0ca64a60df1ba2e387ad4ad53de12834db01859d772cb8db1d",
+  "script_sha256": "08ad303068e07a03a1eabc6b30883fa6053a3c3ff02d77914a062d7de62d6086",
+  "planned_camera_comparisons": 120,
+  "counts": {
+    "changed_higher_error": 120
+  },
+  "cases": [
+    {
+      "seed": 0,
+      "change": "rotation_x_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.4609375,
+        "upper": 11.46875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 0,
+      "change": "translation_x_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 2.578125,
+        "upper": 2.5859375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 0,
+      "change": "rotation_x_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.44921875,
+        "upper": 11.45703125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 0,
+      "change": "translation_x_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.546875,
+        "upper": 1.5546875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 0,
+      "change": "rotation_y_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.4921875,
+        "upper": 5.5,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 0,
+      "change": "translation_y_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.2421875,
+        "upper": 3.25,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 0,
+      "change": "rotation_y_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.69921875,
+        "upper": 5.70703125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 0,
+      "change": "translation_y_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.25,
+        "upper": 3.2578125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 0,
+      "change": "rotation_z_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.3359375,
+        "upper": 1.34375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 0,
+      "change": "translation_z_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.4375,
+        "upper": 0.4453125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 0,
+      "change": "rotation_z_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.3359375,
+        "upper": 1.34375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 0,
+      "change": "translation_z_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.4453125,
+        "upper": 0.453125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 1,
+      "change": "rotation_x_-5deg",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.45703125,
+        "upper": 11.46484375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 1,
+      "change": "translation_x_-1_quarter_baseline",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 2.5859375,
+        "upper": 2.59375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 1,
+      "change": "rotation_x_+5deg",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.46875,
+        "upper": 11.4765625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 1,
+      "change": "translation_x_+1_quarter_baseline",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.546875,
+        "upper": 1.5546875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 1,
+      "change": "rotation_y_-5deg",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.5,
+        "upper": 5.5078125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 1,
+      "change": "translation_y_-1_quarter_baseline",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.24609375,
+        "upper": 3.25390625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 1,
+      "change": "rotation_y_+5deg",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.69140625,
+        "upper": 5.69921875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 1,
+      "change": "translation_y_+1_quarter_baseline",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.2421875,
+        "upper": 3.25,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 1,
+      "change": "rotation_z_-5deg",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33984375,
+        "upper": 1.34765625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 1,
+      "change": "translation_z_-1_quarter_baseline",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.4375,
+        "upper": 0.4453125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 1,
+      "change": "rotation_z_+5deg",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33203125,
+        "upper": 1.33984375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 1,
+      "change": "translation_z_+1_quarter_baseline",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.453125,
+        "upper": 0.4609375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 2,
+      "change": "rotation_x_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.4609375,
+        "upper": 11.46875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 2,
+      "change": "translation_x_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 2.5859375,
+        "upper": 2.59375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 2,
+      "change": "rotation_x_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.44921875,
+        "upper": 11.4765625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 1
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 2,
+      "change": "translation_x_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.546875,
+        "upper": 1.5546875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 2,
+      "change": "rotation_y_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.4921875,
+        "upper": 5.5,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 2,
+      "change": "translation_y_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.24609375,
+        "upper": 3.25390625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 2,
+      "change": "rotation_y_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.6953125,
+        "upper": 5.703125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 2,
+      "change": "translation_y_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.24609375,
+        "upper": 3.25390625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 2,
+      "change": "rotation_z_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33203125,
+        "upper": 1.33984375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 2,
+      "change": "translation_z_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.4375,
+        "upper": 0.4453125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 2,
+      "change": "rotation_z_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33984375,
+        "upper": 1.34765625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 2,
+      "change": "translation_z_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.44921875,
+        "upper": 0.45703125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 3,
+      "change": "rotation_x_-5deg",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.46484375,
+        "upper": 11.47265625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 3,
+      "change": "translation_x_-1_quarter_baseline",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 2.5859375,
+        "upper": 2.59375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 3,
+      "change": "rotation_x_+5deg",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.45703125,
+        "upper": 11.46484375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 3,
+      "change": "translation_x_+1_quarter_baseline",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.54296875,
+        "upper": 1.55078125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 3,
+      "change": "rotation_y_-5deg",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.50390625,
+        "upper": 5.51171875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 3,
+      "change": "translation_y_-1_quarter_baseline",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.24609375,
+        "upper": 3.25390625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 3,
+      "change": "rotation_y_+5deg",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.6875,
+        "upper": 5.6953125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 3,
+      "change": "translation_y_+1_quarter_baseline",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.25,
+        "upper": 3.2578125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 3,
+      "change": "rotation_z_-5deg",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33984375,
+        "upper": 1.34765625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 3,
+      "change": "translation_z_-1_quarter_baseline",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.43359375,
+        "upper": 0.44140625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 3,
+      "change": "rotation_z_+5deg",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.3359375,
+        "upper": 1.34375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 3,
+      "change": "translation_z_+1_quarter_baseline",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.453125,
+        "upper": 0.4609375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 4,
+      "change": "rotation_x_-5deg",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.46484375,
+        "upper": 11.47265625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 4,
+      "change": "translation_x_-1_quarter_baseline",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 2.5859375,
+        "upper": 2.59375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 4,
+      "change": "rotation_x_+5deg",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.46484375,
+        "upper": 11.47265625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 4,
+      "change": "translation_x_+1_quarter_baseline",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.546875,
+        "upper": 1.5546875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 4,
+      "change": "rotation_y_-5deg",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.5,
+        "upper": 5.5078125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 4,
+      "change": "translation_y_-1_quarter_baseline",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.24609375,
+        "upper": 3.25390625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 4,
+      "change": "rotation_y_+5deg",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.6953125,
+        "upper": 5.703125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 4,
+      "change": "translation_y_+1_quarter_baseline",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.25,
+        "upper": 3.2578125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 4,
+      "change": "rotation_z_-5deg",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33203125,
+        "upper": 1.33984375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 4,
+      "change": "translation_z_-1_quarter_baseline",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.4375,
+        "upper": 0.4453125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 4,
+      "change": "rotation_z_+5deg",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33203125,
+        "upper": 1.33984375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 4,
+      "change": "translation_z_+1_quarter_baseline",
+      "original": {
+        "lower": 0.0234375,
+        "upper": 0.03125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.453125,
+        "upper": 0.4609375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 5,
+      "change": "rotation_x_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.4609375,
+        "upper": 11.46875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 5,
+      "change": "translation_x_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 2.58203125,
+        "upper": 2.58984375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 5,
+      "change": "rotation_x_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.4609375,
+        "upper": 11.46875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 5,
+      "change": "translation_x_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.546875,
+        "upper": 1.5546875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 5,
+      "change": "rotation_y_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.50390625,
+        "upper": 5.51171875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 5,
+      "change": "translation_y_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.24609375,
+        "upper": 3.25390625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 5,
+      "change": "rotation_y_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.69140625,
+        "upper": 5.69921875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 5,
+      "change": "translation_y_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.24609375,
+        "upper": 3.25390625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 5,
+      "change": "rotation_z_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33203125,
+        "upper": 1.33984375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 5,
+      "change": "translation_z_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.4375,
+        "upper": 0.4453125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 5,
+      "change": "rotation_z_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33203125,
+        "upper": 1.33984375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 5,
+      "change": "translation_z_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.44921875,
+        "upper": 0.45703125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 6,
+      "change": "rotation_x_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.46875,
+        "upper": 11.4765625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 6,
+      "change": "translation_x_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 2.5859375,
+        "upper": 2.59375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 6,
+      "change": "rotation_x_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.4609375,
+        "upper": 11.46875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 6,
+      "change": "translation_x_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.546875,
+        "upper": 1.5546875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 6,
+      "change": "rotation_y_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.50390625,
+        "upper": 5.51171875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 6,
+      "change": "translation_y_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.25,
+        "upper": 3.2578125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 6,
+      "change": "rotation_y_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.6875,
+        "upper": 5.6953125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 6,
+      "change": "translation_y_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.24609375,
+        "upper": 3.25390625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 6,
+      "change": "rotation_z_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33203125,
+        "upper": 1.33984375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 6,
+      "change": "translation_z_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.4375,
+        "upper": 0.4453125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 6,
+      "change": "rotation_z_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33984375,
+        "upper": 1.34765625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 6,
+      "change": "translation_z_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.44921875,
+        "upper": 0.45703125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 7,
+      "change": "rotation_x_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.4609375,
+        "upper": 11.46875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 7,
+      "change": "translation_x_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 2.5859375,
+        "upper": 2.59375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 7,
+      "change": "rotation_x_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.453125,
+        "upper": 11.4609375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 7,
+      "change": "translation_x_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.546875,
+        "upper": 1.5546875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 7,
+      "change": "rotation_y_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.50390625,
+        "upper": 5.51171875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 7,
+      "change": "translation_y_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.2421875,
+        "upper": 3.25,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 7,
+      "change": "rotation_y_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.6953125,
+        "upper": 5.703125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 7,
+      "change": "translation_y_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.25,
+        "upper": 3.2578125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 7,
+      "change": "rotation_z_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33203125,
+        "upper": 1.33984375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 7,
+      "change": "translation_z_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.4375,
+        "upper": 0.4453125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 7,
+      "change": "rotation_z_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.34375,
+        "upper": 1.3515625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 7,
+      "change": "translation_z_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.453125,
+        "upper": 0.4609375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 8,
+      "change": "rotation_x_-5deg",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.453125,
+        "upper": 11.4609375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 8,
+      "change": "translation_x_-1_quarter_baseline",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 2.5859375,
+        "upper": 2.59375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 8,
+      "change": "rotation_x_+5deg",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.4609375,
+        "upper": 11.46875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 8,
+      "change": "translation_x_+1_quarter_baseline",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.546875,
+        "upper": 1.5546875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 8,
+      "change": "rotation_y_-5deg",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.5,
+        "upper": 5.5078125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 8,
+      "change": "translation_y_-1_quarter_baseline",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.25,
+        "upper": 3.2578125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 8,
+      "change": "rotation_y_+5deg",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.69140625,
+        "upper": 5.69921875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 8,
+      "change": "translation_y_+1_quarter_baseline",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.25,
+        "upper": 3.2578125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 8,
+      "change": "rotation_z_-5deg",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33203125,
+        "upper": 1.33984375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 8,
+      "change": "translation_z_-1_quarter_baseline",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.4375,
+        "upper": 0.4453125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 8,
+      "change": "rotation_z_+5deg",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.33203125,
+        "upper": 1.33984375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 8,
+      "change": "translation_z_+1_quarter_baseline",
+      "original": {
+        "lower": 0.01953125,
+        "upper": 0.02734375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.44921875,
+        "upper": 0.45703125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 9,
+      "change": "rotation_x_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.44921875,
+        "upper": 11.45703125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 9,
+      "change": "translation_x_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 2.5859375,
+        "upper": 2.59375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 9,
+      "change": "rotation_x_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 11.4609375,
+        "upper": 11.46875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 9,
+      "change": "translation_x_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.546875,
+        "upper": 1.5546875,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 9,
+      "change": "rotation_y_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.5,
+        "upper": 5.5078125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 9,
+      "change": "translation_y_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.24609375,
+        "upper": 3.25390625,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 9,
+      "change": "rotation_y_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 5.6875,
+        "upper": 5.6953125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 9,
+      "change": "translation_y_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 3.2421875,
+        "upper": 3.25,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 9,
+      "change": "rotation_z_-5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.3359375,
+        "upper": 1.34375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 9,
+      "change": "translation_z_-1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.4375,
+        "upper": 0.4453125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 9,
+      "change": "rotation_z_+5deg",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 1.3359375,
+        "upper": 1.34375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    },
+    {
+      "seed": 9,
+      "change": "translation_z_+1_quarter_baseline",
+      "original": {
+        "lower": 0.015625,
+        "upper": 0.0234375,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "changed": {
+        "lower": 0.44921875,
+        "upper": 0.45703125,
+        "planned_tracks": 12,
+        "unresolved_tracks": 0
+      },
+      "verdict": "changed_higher_error",
+      "tracks_with_changed_view_evidence": 10
+    }
+  ]
+}
