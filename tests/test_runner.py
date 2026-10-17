@@ -80,6 +80,20 @@ class _EmptyPredictionModel(Model):
         return Prediction(depth=None)
 
 
+class _PoseModel(Model):
+    name = "pose-system"
+    version = "1.0"
+    capabilities = ModelCapabilities(tasks=frozenset({"pose"}), is_metric=False, min_views=2)
+
+    def __init__(self, device: str = "cpu") -> None:
+        self.device = device
+
+    def predict(self, images: np.ndarray, intrinsics: np.ndarray | None = None) -> Prediction:
+        poses = np.repeat(np.eye(4, dtype=np.float32)[None], len(images), axis=0)
+        poses[:, 0, 3] = np.arange(len(images), dtype=np.float32)
+        return Prediction(extrinsics=poses)
+
+
 class _SyntheticDataset(Dataset):
     name = "synthetic"
     split = "test"
@@ -108,6 +122,40 @@ class _SyntheticDataset(Dataset):
 
 
 class TestEvaluate:
+    def test_pose_run_writes_tracking_review_artifact(self, tmp_path: Path) -> None:
+        sample = Sample(
+            sample_id="scene/clip",
+            images=np.zeros((3, 8, 8, 3), dtype=np.uint8),
+            intrinsics=np.repeat(np.eye(3, dtype=np.float32)[None], 3, axis=0),
+            extrinsics_gt=np.repeat(np.eye(4, dtype=np.float32)[None], 3, axis=0),
+        )
+        sample.extrinsics_gt[:, 0, 3] = np.arange(3, dtype=np.float32)
+
+        class _PoseDataset(Dataset):
+            name = "pose-data"
+            split = "test"
+
+            def __iter__(self) -> Iterator[Sample]:
+                yield sample
+
+            def __len__(self) -> int:
+                return 1
+
+        review_dir = tmp_path / "review"
+        report = evaluate(
+            model=_PoseModel(),
+            dataset=_PoseDataset(),
+            tasks=["pose"],
+            cache=PredictionCache(tmp_path / "cache"),
+            tracking_review_dir=review_dir,
+            show_progress=False,
+        )
+
+        assert report.n_evaluated == 1
+        manifests = list(review_dir.rglob("manifest.json"))
+        assert len(manifests) == 1
+        assert (manifests[0].parent / "diagnostic.png").is_file()
+
     def test_perfect_depth_gives_ideal_metrics(self, tmp_path: Path) -> None:
         ds = _SyntheticDataset(n_samples=3)
         store = {s.sample_id: s.depth_gt for s in ds._samples}

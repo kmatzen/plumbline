@@ -23,6 +23,7 @@ import random
 import time
 import traceback
 from collections.abc import Iterator
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -95,6 +96,7 @@ def evaluate(
     geo_depth_thres: float = 0.01,
     geo_mask_thres: int = 3,
     geo_num_src_views: int = 4,
+    tracking_review_dir: str | Path | None = None,
     show_progress: bool = True,
 ) -> Report:
     """Evaluate a model on a dataset and return a :class:`Report`.
@@ -420,6 +422,36 @@ def evaluate(
             report.n_evaluated += 1
             for key, value in sample_metrics.items():
                 per_metric_values.setdefault(key, []).append(value)
+
+            if (
+                tracking_review_dir is not None
+                and "pose" in tasks
+                and prediction.extrinsics is not None
+                and trimmed_sample.extrinsics_gt is not None
+            ):
+                from plumbline.tracking_review import write_tracking_review_artifact
+
+                try:
+                    write_tracking_review_artifact(
+                        prediction.extrinsics,
+                        trimmed_sample.extrinsics_gt,
+                        tracking_review_dir,
+                        dataset=dataset.name,
+                        sequence=sample.sample_id,
+                        system=model.name,
+                        config_hash=model.config_hash(),
+                        metrics={
+                            key: float(value)
+                            for key, value in sample_metrics.items()
+                            if np.isfinite(value)
+                        },
+                    )
+                except (OSError, ValueError):
+                    log.warning(
+                        "Failed to write tracking review artifact for %s",
+                        sample.sample_id,
+                        exc_info=True,
+                    )
 
     finally:
         progress.stop()

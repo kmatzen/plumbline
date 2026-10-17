@@ -40,6 +40,13 @@ app = typer.Typer(
 
 console = Console()
 
+tracking_review_app = typer.Typer(
+    help="Build and rank pairwise camera-tracking review artifacts.",
+    no_args_is_help=True,
+    add_completion=False,
+)
+app.add_typer(tracking_review_app, name="tracking-review")
+
 
 def _parse_kv_value(v: str) -> object:
     """Parse a ``KEY=VALUE`` right-hand side into an int/float/bool/str.
@@ -158,6 +165,11 @@ def run_cmd(
     cache_dir: Path | None = typer.Option(
         None, "--cache-dir", help="Override prediction cache dir."
     ),
+    tracking_review_dir: Path | None = typer.Option(
+        None,
+        "--tracking-review-dir",
+        help="Write versioned camera-trajectory review artifacts to this directory.",
+    ),
     dataset_kwargs: list[str] = typer.Option(
         [],
         "--dataset-kwargs",
@@ -201,6 +213,7 @@ def run_cmd(
         scale_alignment=scale_alignment,
         max_views=max_views,
         cache=cache,
+        tracking_review_dir=tracking_review_dir,
     )
 
     console.print(report.to_markdown())
@@ -505,6 +518,205 @@ def report_cmd(
         typer.echo(report.to_json())
     else:
         raise typer.BadParameter(f"Unknown format: {format}")
+
+
+def _load_pose_array(path: Path, key: str) -> Any:
+    import numpy as np
+
+    if not path.is_file():
+        raise typer.BadParameter(f"Pose file not found: {path}")
+    if path.suffix == ".npy":
+        return np.load(path, allow_pickle=False)
+    if path.suffix == ".npz":
+        with np.load(path, allow_pickle=False) as archive:
+            if key not in archive.files:
+                raise typer.BadParameter(
+                    f"{path} has no array {key!r}; available: {', '.join(archive.files)}"
+                )
+            return archive[key]
+    raise typer.BadParameter(f"Pose file must be .npy or .npz: {path}")
+
+
+@tracking_review_app.command("render")
+def tracking_review_render(
+    predicted: Path = typer.Option(..., "--predicted", help="Predicted pose .npy/.npz."),
+    reference: Path = typer.Option(..., "--reference", help="GT pose .npy/.npz."),
+    output_root: Path = typer.Option(..., "--output-root", "-o", help="Artifact tree root."),
+    dataset: str = typer.Option(..., "--dataset"),
+    sequence: str = typer.Option(..., "--sequence"),
+    system: str = typer.Option(..., "--system"),
+    config_hash: str = typer.Option(..., "--config-hash"),
+    predicted_key: str = typer.Option("predicted", "--predicted-key"),
+    reference_key: str = typer.Option("reference", "--reference-key"),
+) -> None:
+    """Create a gated trajectory-review artifact from canonical poses."""
+    import json
+
+    from plumbline.tracking_review import write_tracking_review_artifact
+
+    artifact = write_tracking_review_artifact(
+        _load_pose_array(predicted, predicted_key),
+        _load_pose_array(reference, reference_key),
+        output_root,
+        dataset=dataset,
+        sequence=sequence,
+        system=system,
+        config_hash=config_hash,
+    )
+    manifest = json.loads((artifact / "manifest.json").read_text(encoding="utf-8"))
+    if manifest["gate"]["ok"]:
+        console.print(f"[green]review artifact ready[/green]: {artifact}")
+    else:
+        errors = ", ".join(manifest["gate"]["errors"])
+        console.print(f"[yellow]review artifact gated[/yellow]: {artifact} ({errors})")
+        raise typer.Exit(2)
+
+
+@tracking_review_app.command("rank")
+def tracking_review_rank(
+    comparisons: Path = typer.Option(
+        ..., "--comparisons", help="Append-only JSONL with task_id/system_a/system_b/winner."
+    ),
+    output: Path | None = typer.Option(None, "--output", "-o", help="Write rating JSON."),
+    bootstrap: int = typer.Option(1000, "--bootstrap", min=1),
+    seed: int = typer.Option(0, "--seed"),
+) -> None:
+    """Fit Bradley–Terry ratings with task-bootstrap confidence intervals."""
+    import json
+    from dataclasses import asdict
+
+    from plumbline.tracking_review import Comparison, bootstrap_ratings
+
+    if not comparisons.is_file():
+        raise typer.BadParameter(f"Comparisons file not found: {comparisons}")
+    rows: list[Comparison] = []
+    for line_number, line in enumerate(comparisons.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            item = json.loads(line)
+            rows.append(
+                Comparison(
+                    task_id=str(item["task_id"]),
+                    system_a=str(item["system_a"]),
+                    system_b=str(item["system_b"]),
+                    winner=str(item["winner"]),
+                )
+            )
+        except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+            raise typer.BadParameter(f"{comparisons}:{line_number}: {exc}") from exc
+    try:
+        ratings = bootstrap_ratings(rows, iterations=bootstrap, seed=seed)
+    except ValueError as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    payload = {
+        "schema_version": "1.0.0",
+        "n_comparisons": len(rows),
+        "n_rankable": sum(row.winner != "both_bad" for row in rows),
+        "n_tasks": len({row.task_id for row in rows}),
+        "bootstrap_iterations": bootstrap,
+        "seed": seed,
+        "ratings": {name: asdict(rating) for name, rating in ratings.items()},
+    }
+    rendered = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    if output is None:
+        typer.echo(rendered, nl=False)
+    else:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(rendered, encoding="utf-8")
+        console.print(f"[green]wrote ratings[/green]: {output}")
+
+
+@tracking_review_app.command("pair")
+def tracking_review_pair(
+    artifact_a: Path = typer.Option(..., "--artifact-a"),
+    artifact_b: Path = typer.Option(..., "--artifact-b"),
+    output: Path = typer.Option(..., "--output", "-o", help="Pair bundle directory."),
+    task_id: str = typer.Option(..., "--task-id"),
+    comparison_id: str = typer.Option(..., "--comparison-id"),
+) -> None:
+    """Build a deterministically blinded candidate A/B review bundle."""
+    import json
+
+    from plumbline.tracking_review import build_review_pair
+
+    try:
+        pair_path = build_review_pair(
+            artifact_a,
+            artifact_b,
+            output,
+            task_id=task_id,
+            comparison_id=comparison_id,
+        )
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    pair = json.loads(pair_path.read_text(encoding="utf-8"))
+    if pair["automatic_winner"] is None:
+        console.print(f"[green]review pair ready[/green]: {output / 'review.png'}")
+    else:
+        console.print(
+            "[yellow]gated comparison[/yellow]: "
+            f"automatic winner={pair['automatic_winner']} ({pair_path})"
+        )
+
+
+@tracking_review_app.command("vote")
+def tracking_review_vote(
+    pair: Path = typer.Option(..., "--pair", help="Pair bundle's pair.json."),
+    winner: str = typer.Option(..., "--winner", help="a | b | tie | both_bad"),
+    comparisons: Path = typer.Option(..., "--comparisons", help="Append-only JSONL log."),
+    reviewer: str | None = typer.Option(None, "--reviewer"),
+    source: str = typer.Option("human", "--source", help="human | vlm"),
+) -> None:
+    """Record one human or validity-gate verdict in an append-only log."""
+    import json
+
+    from plumbline.tracking_review import record_review_vote
+
+    try:
+        row = record_review_vote(pair, winner, comparisons, reviewer=reviewer, source=source)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    console.print(
+        f"[green]recorded[/green] {row['comparison_id']}: {row['winner']} ({row['source']})"
+    )
+
+
+@tracking_review_app.command("calibrate")
+def tracking_review_calibrate(
+    human: Path = typer.Option(..., "--human", help="Human verdict JSONL."),
+    judge: Path = typer.Option(..., "--judge", help="VLM verdict JSONL."),
+    output: Path | None = typer.Option(None, "--output", "-o"),
+) -> None:
+    """Measure VLM-judge agreement and coverage against human verdicts."""
+    import json
+
+    from plumbline.tracking_review import calibrate_judge_votes
+
+    def read_rows(path: Path) -> list[dict[str, Any]]:
+        if not path.is_file():
+            raise typer.BadParameter(f"Verdict file not found: {path}")
+        rows: list[dict[str, Any]] = []
+        for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if not line.strip():
+                continue
+            try:
+                item = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise typer.BadParameter(f"{path}:{line_number}: {exc}") from exc
+            if not isinstance(item, dict):
+                raise typer.BadParameter(f"{path}:{line_number}: expected JSON object")
+            rows.append(item)
+        return rows
+
+    result = calibrate_judge_votes(read_rows(human), read_rows(judge))
+    rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"
+    if output is None:
+        typer.echo(rendered, nl=False)
+    else:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(rendered, encoding="utf-8")
+        console.print(f"[green]wrote calibration[/green]: {output}")
 
 
 @app.command("clear-cache")

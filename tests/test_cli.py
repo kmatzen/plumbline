@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 from pathlib import Path
 
+import numpy as np
 from typer.testing import CliRunner
 
 from plumbline.cli import _unknown, app
@@ -100,6 +102,166 @@ def test_cache_info_empty(tmp_path: Path) -> None:
 def test_clear_cache_empty(tmp_path: Path) -> None:
     result = runner.invoke(app, ["clear-cache", "--cache-dir", str(tmp_path)])
     assert result.exit_code == 0
+
+
+def test_tracking_review_render_writes_gated_artifact(tmp_path: Path) -> None:
+    n = 8
+    reference = np.repeat(np.eye(4)[None], n, axis=0)
+    reference[:, 0, 3] = np.linspace(0.0, 1.0, n)
+    predicted = reference.copy()
+    predicted[:, 1, 3] = np.linspace(0.0, 0.1, n)
+    pred_path = tmp_path / "pred.npy"
+    ref_path = tmp_path / "ref.npy"
+    np.save(pred_path, predicted)
+    np.save(ref_path, reference)
+
+    result = runner.invoke(
+        app,
+        [
+            "tracking-review",
+            "render",
+            "--predicted",
+            str(pred_path),
+            "--reference",
+            str(ref_path),
+            "--output-root",
+            str(tmp_path / "review"),
+            "--dataset",
+            "tum-dynamics",
+            "--sequence",
+            "walking_xyz",
+            "--system",
+            "method-a",
+            "--config-hash",
+            "abc",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    manifests = list((tmp_path / "review").rglob("manifest.json"))
+    assert len(manifests) == 1
+    manifest = json.loads(manifests[0].read_text())
+    assert manifest["gate"]["ok"] is True
+    assert (manifests[0].parent / "diagnostic.png").is_file()
+
+
+def test_tracking_review_rank_reads_jsonl_and_reports_both_bad(tmp_path: Path) -> None:
+    comparisons = tmp_path / "comparisons.jsonl"
+    rows = [
+        {"task_id": "s1", "system_a": "strong", "system_b": "weak", "winner": "a"},
+        {"task_id": "s2", "system_a": "strong", "system_b": "weak", "winner": "a"},
+        {
+            "task_id": "s3",
+            "system_a": "strong",
+            "system_b": "weak",
+            "winner": "both_bad",
+        },
+    ]
+    comparisons.write_text("".join(json.dumps(row) + "\n" for row in rows))
+    result = runner.invoke(
+        app,
+        [
+            "tracking-review",
+            "rank",
+            "--comparisons",
+            str(comparisons),
+            "--bootstrap",
+            "20",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["n_comparisons"] == 3
+    assert payload["n_rankable"] == 2
+    assert payload["ratings"]["strong"]["score"] > payload["ratings"]["weak"]["score"]
+
+
+def test_tracking_review_pair_and_vote_commands(tmp_path: Path) -> None:
+    from plumbline.tracking_review import write_tracking_review_artifact
+
+    n = 8
+    reference = np.repeat(np.eye(4)[None], n, axis=0)
+    reference[:, 0, 3] = np.linspace(0.0, 1.0, n)
+    first = write_tracking_review_artifact(
+        reference,
+        reference,
+        tmp_path / "artifacts",
+        dataset="tum",
+        sequence="walk",
+        system="first",
+        config_hash="a",
+    )
+    second_poses = reference.copy()
+    second_poses[:, 1, 3] = np.linspace(0.0, 0.1, n)
+    second = write_tracking_review_artifact(
+        second_poses,
+        reference,
+        tmp_path / "artifacts",
+        dataset="tum",
+        sequence="walk",
+        system="second",
+        config_hash="b",
+    )
+    pair_dir = tmp_path / "pair"
+    result = runner.invoke(
+        app,
+        [
+            "tracking-review",
+            "pair",
+            "--artifact-a",
+            str(first),
+            "--artifact-b",
+            str(second),
+            "--output",
+            str(pair_dir),
+            "--task-id",
+            "tum/walk",
+            "--comparison-id",
+            "pair-1",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert (pair_dir / "review.png").is_file()
+
+    comparisons = tmp_path / "comparisons.jsonl"
+    result = runner.invoke(
+        app,
+        [
+            "tracking-review",
+            "vote",
+            "--pair",
+            str(pair_dir / "pair.json"),
+            "--winner",
+            "tie",
+            "--comparisons",
+            str(comparisons),
+            "--reviewer",
+            "tester",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert json.loads(comparisons.read_text())["winner"] == "tie"
+
+
+def test_tracking_review_calibrate_command(tmp_path: Path) -> None:
+    human = tmp_path / "human.jsonl"
+    judge = tmp_path / "judge.jsonl"
+    human.write_text(json.dumps({"comparison_id": "1", "winner": "a", "source": "human"}) + "\n")
+    judge.write_text(json.dumps({"comparison_id": "1", "winner": "a", "source": "vlm"}) + "\n")
+    result = runner.invoke(
+        app,
+        [
+            "tracking-review",
+            "calibrate",
+            "--human",
+            str(human),
+            "--judge",
+            str(judge),
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["coverage"] == 1.0
+    assert payload["accuracy"] == 1.0
 
 
 def test_python_m_entrypoint() -> None:

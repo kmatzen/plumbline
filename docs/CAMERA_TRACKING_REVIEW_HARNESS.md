@@ -1,7 +1,8 @@
 # Camera-tracking review harness
 
-Status: design accepted; ranking core implemented in
-`plumbline.tracking_review`; diagnostic artifact and judge CLI are next.
+Status: artifact, validity-gate, blinded-pair, human-vote, and ranking paths are
+implemented in `plumbline.tracking_review` and `plumbline tracking-review`.
+VLM calibration and Bayesian search remain.
 
 ## Decision
 
@@ -118,6 +119,40 @@ covering datasets and failure modes. Report judge coverage, accuracy, confusion
 matrix, and Cohen's kappa on decisive human labels. If calibration is weak, the
 VLM remains a triage tool and human ratings remain authoritative.
 
+### Current CLI
+
+```bash
+# Emit one artifact per evaluated sequence directly from a normal pose run.
+plumbline run --model vggt --dataset sintel --tasks pose \
+  --tracking-review-dir review
+
+# Canonical world_from_camera arrays, .npy or keyed .npz.
+plumbline tracking-review render \
+  --predicted pred.npy --reference gt.npy --output-root review \
+  --dataset tum-dynamics --sequence walking_xyz \
+  --system cut3r --config-hash "$CONFIG_HASH"
+
+# Deterministically randomizes which system is displayed as A/B.
+plumbline tracking-review pair \
+  --artifact-a review/.../cut3r/... --artifact-b review/.../dage/... \
+  --task-id tum-dynamics/walking_xyz --comparison-id tum-walk-001 \
+  --output pairs/tum-walk-001
+
+# Open review.png, then append one verdict. Gated pairs state their required
+# automatic verdict in pair.json and do not produce a review image.
+plumbline tracking-review vote \
+  --pair pairs/tum-walk-001/pair.json --winner a \
+  --comparisons comparisons.jsonl --reviewer human-1
+
+plumbline tracking-review rank \
+  --comparisons comparisons.jsonl --bootstrap 1000 --output ratings.json
+
+# A provider-specific VLM runner writes a separate verdict log with
+# `tracking-review vote --source vlm`; promotion requires human agreement.
+plumbline tracking-review calibrate \
+  --human human.jsonl --judge vlm.jsonl --output calibration.json
+```
+
 ## Design search
 
 ### Bayesian optimization: yes, after the review signal is calibrated
@@ -148,11 +183,12 @@ the search “RL” adds complexity without a defensible advantage.
 
 ## Delivery sequence
 
-1. Implement deterministic trajectory diagnostic PNGs and manifests from
-   cached predictions plus dataset GT.
-2. Add result-tree discovery, validity gates, and balanced pair generation.
-3. Add a local human-review CLI that writes append-only JSONL verdicts.
-4. Fit ratings and task-bootstrap intervals using `tracking_review`.
+1. ✅ Implement deterministic trajectory diagnostic PNGs and manifests from
+   canonical prediction/GT pose arrays, including direct emission from normal
+   `plumbline run` pose evaluations.
+2. ✅ Add validity gates and deterministically blinded pair generation.
+3. ✅ Add a local human-review CLI that writes append-only JSONL verdicts.
+4. ✅ Fit ratings and task-bootstrap intervals using `tracking_review`.
 5. Add an optional provider-neutral VLM judge and validate it against human
    labels.
 6. Only then add constrained multi-objective Bayesian search over explicitly

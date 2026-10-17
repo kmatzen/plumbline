@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 import numpy as np
 import pytest
 from PIL import Image
@@ -7,10 +9,15 @@ from PIL import Image
 from plumbline.tracking_review import (
     Comparison,
     bootstrap_ratings,
+    build_review_pair,
+    calibrate_judge_votes,
     choose_balanced_pairs,
     fit_bradley_terry,
+    record_review_vote,
     render_trajectory_diagnostic,
     trajectory_diagnostics,
+    validate_trajectory_pair,
+    write_tracking_review_artifact,
 )
 
 
@@ -60,7 +67,15 @@ def test_balanced_pair_selection_prefers_unseen_pairs() -> None:
 
 def test_invalid_winner_is_rejected() -> None:
     with pytest.raises(ValueError, match="winner"):
-        Comparison("task", "a", "b", "both_bad")
+        Comparison("task", "a", "b", "invalid")
+
+
+def test_both_bad_is_recorded_but_excluded_from_ranking() -> None:
+    rows = [
+        Comparison("x", "a", "b", "a"),
+        Comparison("y", "a", "b", "both_bad"),
+    ]
+    assert fit_bradley_terry(rows) == fit_bradley_terry(rows[:1])
 
 
 def _trajectory(n: int = 20) -> np.ndarray:
@@ -90,3 +105,166 @@ def test_render_trajectory_diagnostic_is_deterministic(tmp_path) -> None:
     assert first.read_bytes() == second.read_bytes()
     with Image.open(first) as image:
         assert image.size == (1200, 720)
+
+
+def test_gate_rejects_frozen_and_malformed_trajectories() -> None:
+    gt = _trajectory()
+    frozen = np.repeat(np.eye(4)[None], len(gt), axis=0)
+    gate = validate_trajectory_pair(frozen, gt)
+    assert not gate.ok
+    assert "frozen_predicted_trajectory" in gate.errors
+
+    malformed = gt.copy()
+    malformed[0, 3, 3] = 2.0
+    gate = validate_trajectory_pair(malformed, gt)
+    assert not gate.ok
+    assert "predicted_invalid_homogeneous_row" in gate.errors
+
+
+def test_valid_artifact_contains_manifest_poses_metrics_and_diagnostic(tmp_path) -> None:
+    gt = _trajectory()
+    pred = gt.copy()
+    pred[10:, 0, 3] += 0.1
+    artifact = write_tracking_review_artifact(
+        pred,
+        gt,
+        tmp_path,
+        dataset="tum/dynamics",
+        sequence="walking/xyz",
+        system="method A",
+        config_hash="abc123",
+        metrics={"trajectory_ate_rmse": 0.02},
+    )
+    assert (artifact / "poses.npz").is_file()
+    assert (artifact / "metrics.json").is_file()
+    assert (artifact / "diagnostic.png").is_file()
+    manifest = json.loads((artifact / "manifest.json").read_text())
+    assert manifest["gate"]["ok"] is True
+    assert manifest["dataset"] == "tum/dynamics"
+    assert manifest["files"]["diagnostic"] == "diagnostic.png"
+    metrics = json.loads((artifact / "metrics.json").read_text())
+    assert metrics["trajectory_ate_rmse"] == 0.02
+    assert "review_rotation_error_deg_p95" in metrics
+
+
+def test_failed_artifact_is_explicit_and_has_no_diagnostic(tmp_path) -> None:
+    gt = _trajectory()
+    pred = gt.copy()
+    pred[3] = np.nan
+    artifact = write_tracking_review_artifact(
+        pred,
+        gt,
+        tmp_path,
+        dataset="d",
+        sequence="s",
+        system="m",
+        config_hash="c",
+    )
+    manifest = json.loads((artifact / "manifest.json").read_text())
+    assert manifest["gate"]["ok"] is False
+    assert "nonfinite_pose_rendering_unsupported" in manifest["gate"]["errors"]
+    assert manifest["files"]["diagnostic"] is None
+    assert not (artifact / "diagnostic.png").exists()
+
+
+def test_blinded_pair_and_vote_round_trip(tmp_path) -> None:
+    gt = _trajectory()
+    first = write_tracking_review_artifact(
+        gt,
+        gt,
+        tmp_path / "artifacts",
+        dataset="tum",
+        sequence="walk",
+        system="first",
+        config_hash="a",
+    )
+    second_pred = gt.copy()
+    second_pred[10:, 0, 3] += 0.2
+    second = write_tracking_review_artifact(
+        second_pred,
+        gt,
+        tmp_path / "artifacts",
+        dataset="tum",
+        sequence="walk",
+        system="second",
+        config_hash="b",
+    )
+    pair_path = build_review_pair(
+        first,
+        second,
+        tmp_path / "pair",
+        task_id="tum/walk",
+        comparison_id="comparison-1",
+    )
+    pair = json.loads(pair_path.read_text())
+    assert pair["system_a"] != pair["system_b"]
+    assert pair["automatic_winner"] is None
+    assert (pair_path.parent / "review.png").is_file()
+
+    log = tmp_path / "comparisons.jsonl"
+    row = record_review_vote(pair_path, "a", log, reviewer="human-1")
+    assert row["source"] == "human"
+    assert json.loads(log.read_text())["comparison_id"] == "comparison-1"
+    with pytest.raises(ValueError, match="already recorded"):
+        record_review_vote(pair_path, "b", log)
+
+
+def test_gated_pair_has_automatic_outcome(tmp_path) -> None:
+    gt = _trajectory()
+    valid = write_tracking_review_artifact(
+        gt,
+        gt,
+        tmp_path / "artifacts",
+        dataset="tum",
+        sequence="walk",
+        system="valid",
+        config_hash="a",
+    )
+    invalid_pred = gt.copy()
+    invalid_pred[0] = np.nan
+    invalid = write_tracking_review_artifact(
+        invalid_pred,
+        gt,
+        tmp_path / "artifacts",
+        dataset="tum",
+        sequence="walk",
+        system="invalid",
+        config_hash="b",
+    )
+    pair_path = build_review_pair(
+        valid,
+        invalid,
+        tmp_path / "pair",
+        task_id="tum/walk",
+        comparison_id="comparison-2",
+    )
+    pair = json.loads(pair_path.read_text())
+    assert pair["automatic_winner"] in {"a", "b"}
+    assert pair["review_image"] is None
+    row = record_review_vote(
+        pair_path,
+        pair["automatic_winner"],
+        tmp_path / "comparisons.jsonl",
+    )
+    assert row["source"] == "gate"
+
+
+def test_judge_calibration_reports_coverage_accuracy_and_kappa() -> None:
+    human = [
+        {"comparison_id": "1", "winner": "a", "source": "human"},
+        {"comparison_id": "2", "winner": "b", "source": "human"},
+        {"comparison_id": "3", "winner": "a", "source": "human"},
+        {"comparison_id": "4", "winner": "a", "source": "gate"},
+    ]
+    judge = [
+        {"comparison_id": "1", "winner": "a", "source": "vlm"},
+        {"comparison_id": "2", "winner": "a", "source": "vlm"},
+        {"comparison_id": "3", "winner": "tie", "source": "vlm"},
+        {"comparison_id": "4", "winner": "a", "source": "gate"},
+    ]
+    result = calibrate_judge_votes(human, judge)
+    assert result["n_shared"] == 3
+    assert result["coverage"] == pytest.approx(2 / 3)
+    assert result["accuracy"] == pytest.approx(0.5)
+    assert result["cohen_kappa"] == pytest.approx(0.0)
+    assert result["confusion"] == {"a": {"a": 1, "b": 0}, "b": {"a": 1, "b": 0}}
