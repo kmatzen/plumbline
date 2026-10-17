@@ -564,9 +564,25 @@ Optimizer, adapter, image processing, loss masking, and fp32 quantized compute
 are unchanged. The final adapter generates labels for the nine examples with
 the same greedy decoding, without further updates. This tests small-set fit,
 not generalization; no validation or calibration export is read. The budget is
-fixed before execution, with no intermediate model selection. Completion and
-final generated labels are pending. A success would justify only that this
-setup can fit these examples, not a camera-quality metric.
+fixed before execution, with no intermediate model selection. The run completed
+all 180 updates with finite losses and positive finite gradient norms. Its final
+greedy answers were correct on all nine examples, including all three occlusions.
+The exact schedule, selected IDs, targets, script/corpus hashes, processed-image
+hashes, and saved-adapter hashes were independently checked. Processed images
+match those used in the earlier training-fit inference. The completed manifest
+and executed source are retained in `results/tapvid-memorization-v1/`.
+
+This verifies small-set fit and shows that the setup can generate the occlusion
+label after training. It does not establish visual reasoning or generalization:
+the examples span only three videos, and two close examples share a track.
+Different sample composition, class balance, and repeated exposure all changed
+relative to the original one-pass experiment, so the diagnostic does not isolate
+a single explanation for that model's low fit. A longer full-training study
+must start from the original base with a fixed training-only schedule, preserve
+the current validation results, and leave calibration untouched until a model
+and decision rule are fixed. The nine-example adapter is not a candidate for
+held-out performance claims. This implementation diagnostic remains outside
+the manuscript's reported experiments.
 
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,
