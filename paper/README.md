@@ -238,6 +238,32 @@ the functional-DNF annotation study.
 
 ## Human diagnostic-review pilot
 
+### Diagnostic-only VLM development pilot
+
+`run_vlm_dnf_pilot.py` is a single-image, reference-assisted development probe,
+not the proposed full-evidence DNF metric. It uses
+[Qwen2.5-VL-3B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct),
+with snapshot revision `66285546d2b821cf421d4f5eb2576359d3770cd3` selected for
+the initial trial. The download is stored on Anima's large data disk. The
+existing `/home/kmatzen/git/geobench/.venv` supports the model; the separate
+DAGE environment does not include Transformers and is left unchanged.
+
+The script takes a pinned local checkpoint, one diagnostic PNG, and a new output
+JSON path. It records prompt/image/runner/checkpoint hashes, software versions,
+hardware, generation settings, raw output, parse status, and any runtime failure.
+It uses float16 eager attention, greedy generation, a 1,280-visual-token pixel
+budget, and at most 256 generated tokens. No prediction is silently repaired or
+retried. Invalid JSON is an evaluator-format failure, not a tracker DNF.
+
+The prompt explains that source video and reprojection evidence are missing and
+allows abstention. It explicitly warns about position-based alignment on nearly
+stationary tracks. This probe tests whether the pipeline runs and what evidence
+the model claims to use; it cannot measure correctness without independent labels.
+Any diagnostic-only judgments must remain distinct from full-evidence judgments.
+The six response-parser tests use synthetic strings, not model or human outcomes.
+
+### Pairwise review interface
+
 `build_review_study.py` creates 150 native-input comparisons and 15 hidden
 repeated presentations, with method names removed and candidate sides randomized.
 The study asks reviewers to compare reference-based trajectory and rotation-error
