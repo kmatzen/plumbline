@@ -1,0 +1,121 @@
+{
+  "scope": "two constructed development controls; no reliability, human agreement, or camera-DNF accuracy estimate",
+  "script_sha256": "b93ba701b0d7e7a9005887830cec16e8c6f6a8bd57bc8982acc06819cc24bcfb",
+  "controls_sha256": "2e0dafd41d2dfbe3081848b63fa2d7476fcffe063da8da2773ce2d94ba89fa46",
+  "policy": "strict parsing retained; exact single-fence semantic audit reported separately; no JSON field repair or promotion to accepted labels",
+  "rows": [
+    {
+      "configuration": "3B-fp16-1280",
+      "control": "control_on",
+      "source": "paper/results/geometry-controls/control_on-qwen3b.json",
+      "source_sha256": "28014ca535c94dbd8414ae5ee29988d1b362f46c2ba425ebf587f50299eacbae",
+      "expected_visual_relation": "consistent",
+      "execution": "failed",
+      "response_status": "unavailable",
+      "verdict": null,
+      "matches_control": null
+    },
+    {
+      "configuration": "3B-fp16-768",
+      "control": "control_on",
+      "source": "paper/results/geometry-controls/control_on-qwen3b-768.json",
+      "source_sha256": "f4c5333970f526caccf9eaa1f9f99d68e50a38b2995a9b19123f5ed1f1328c70",
+      "expected_visual_relation": "consistent",
+      "execution": "complete",
+      "response_status": "invalid_json",
+      "verdict": null,
+      "matches_control": null,
+      "wrapper_only_audit": {
+        "scope": "descriptive semantic audit only; original strict API acceptance unchanged",
+        "error": null,
+        "verdict": "inconsistent",
+        "matches_control": false
+      }
+    },
+    {
+      "configuration": "7B-NF4-fp16-scores-768",
+      "control": "control_on",
+      "source": "paper/results/qwen7b-nf4-controls-v1/control_on.json",
+      "source_sha256": "8854f7163a9d3fb1f94c31a2fb98dd73fd88c285c9b1c3f17e50357c3b54c22b",
+      "expected_visual_relation": "consistent",
+      "execution": "complete",
+      "response_status": "invalid_json",
+      "verdict": null,
+      "matches_control": null,
+      "wrapper_only_audit": {
+        "scope": "descriptive semantic audit only; original strict API acceptance unchanged",
+        "error": "not_single_json_fence",
+        "verdict": null,
+        "matches_control": null
+      }
+    },
+    {
+      "configuration": "7B-NF4-fp32-scores-768",
+      "control": "control_on",
+      "source": "paper/results/qwen7b-nf4-controls-v1/fp32-control_on.json",
+      "source_sha256": "a9064d547195b77faa60f83ee27f9d7f5dd18c5985efb9ea920c2406ab004456",
+      "expected_visual_relation": "consistent",
+      "execution": "complete",
+      "response_status": "invalid_json",
+      "verdict": null,
+      "matches_control": null,
+      "wrapper_only_audit": {
+        "scope": "descriptive semantic audit only; original strict API acceptance unchanged",
+        "error": null,
+        "verdict": "inconsistent",
+        "matches_control": false
+      }
+    },
+    {
+      "configuration": "3B-fp16-768",
+      "control": "control_off",
+      "source": "paper/results/geometry-controls/control_off-qwen3b-768.json",
+      "source_sha256": "f8df799d02f2b7879581669dffa55ff0662ca687f41506685a280326e06eda69",
+      "expected_visual_relation": "inconsistent",
+      "execution": "complete",
+      "response_status": "invalid_json",
+      "verdict": null,
+      "matches_control": null,
+      "wrapper_only_audit": {
+        "scope": "descriptive semantic audit only; original strict API acceptance unchanged",
+        "error": null,
+        "verdict": "inconsistent",
+        "matches_control": true
+      }
+    },
+    {
+      "configuration": "7B-NF4-fp16-scores-768",
+      "control": "control_off",
+      "source": "paper/results/qwen7b-nf4-controls-v1/control_off.json",
+      "source_sha256": "1e6efb4de10cb38ad2c920d9b0994185c9fdfe138c395ec5788fa25d889a94e1",
+      "expected_visual_relation": "inconsistent",
+      "execution": "complete",
+      "response_status": "invalid_json",
+      "verdict": null,
+      "matches_control": null,
+      "wrapper_only_audit": {
+        "scope": "descriptive semantic audit only; original strict API acceptance unchanged",
+        "error": "not_single_json_fence",
+        "verdict": null,
+        "matches_control": null
+      }
+    },
+    {
+      "configuration": "7B-NF4-fp32-scores-768",
+      "control": "control_off",
+      "source": "paper/results/qwen7b-nf4-controls-v1/fp32-control_off.json",
+      "source_sha256": "d5265a7b9b36ad80ade01f27812306af374719d116f6a6914799b998ae5582b0",
+      "expected_visual_relation": "inconsistent",
+      "execution": "complete",
+      "response_status": "invalid_json",
+      "verdict": null,
+      "matches_control": null,
+      "wrapper_only_audit": {
+        "scope": "descriptive semantic audit only; original strict API acceptance unchanged",
+        "error": null,
+        "verdict": "inconsistent",
+        "matches_control": true
+      }
+    }
+  ]
+}

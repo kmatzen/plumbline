@@ -350,6 +350,18 @@ structured judgments. Raw-text observations above remain descriptive audits,
 not repaired labels. Tests ensure abstention and execution failure do not count
 as correct answers, and that fenced JSON is not silently accepted.
 
+Version 2 (`vlm-control-accounting-v2.json`) adds a separate, explicitly labeled
+wrapper-only semantic audit. It recognizes one exact Markdown JSON fence and
+applies the same schema validator to its unchanged contents. Prose, multiple
+fences, malformed JSON, invalid verdicts, and invalid fields remain invalid. It
+does not overwrite raw outputs, change strict API acceptance, fill missing
+fields, or promote answers to training labels. This separates a transport failure
+from semantic behavior instead of letting rejected formatting hide the latter.
+Both the 3B fp16 and corrected 7B NF4 configurations say `inconsistent` for both
+controls: each rejects the aligned case and gives the expected aggregate verdict
+on the displaced case. Their explanations still contain the documented visual
+errors. Two constructed controls do not support a general accuracy estimate.
+
 A separate source-identity VLM pilot uses the first frame of each of these three
 examples. It asks only what physical detail the cyan circle marks, or to abstain;
 it explicitly prohibits staticness, motion, camera-quality, and DNF judgments

@@ -1,7 +1,7 @@
 import json
 
 import pytest
-from paper.analyze_vlm_controls import assess
+from paper.analyze_vlm_controls import assess, wrapper_only_audit
 
 
 def result(verdict):
@@ -29,6 +29,17 @@ def test_fenced_answer_is_not_repaired():
         parse_error="invalid_json",
     )
     assert assess(r, "consistent")["matches_control"] is None
+    assert assess(r, "consistent")["wrapper_only_audit"]["matches_control"] is True
     r["parse_error"] = None
     with pytest.raises(ValueError, match="strict reparse"):
         assess(r, "consistent")
+
+
+def test_wrapper_audit_rejects_prose_multiple_fences_and_broken_json():
+    for raw in (
+        "Here is JSON:\n```json\n{}\n```",
+        "```json\n{}\n```\n```json\n{}\n```",
+        '```json\n{"verdict":\n```',
+    ):
+        parsed, error = wrapper_only_audit(raw)
+        assert parsed is None and error is not None
