@@ -477,7 +477,34 @@ as `review.json`; the source-containing image is local at
 The recorded verdict remains **unreviewed**. This sheet lacks synchronized
 dense video and independent reprojection evidence; it cannot establish DNF.
 
-### ORE comparison requirements
+### DAVIS image consistency with estimated calibration
+
+The pose-only DAGE adapter previously discarded the native intrinsics, and its
+docstring incorrectly described them as pixel-space. Inspection of vendored
+`DAGE.get_intrinsics` and `utils3d.image_uv` establishes width/height-normalized
+intrinsics with half-pixel centers. The research runner now retains that array;
+the production adapter's behavior is unchanged and its documentation is fixed.
+
+`results/davis/davis-dage-bear-v2/` retains a fresh run with native calibration.
+The 60 poses are elementwise identical to v1. Runtime was 72.08 seconds including
+loading, with the same peak allocation; this is not a controlled runtime study.
+The estimated horizontal focal length ranges from 1.38521 to 1.42794 in units of
+image width. These values are model outputs, not measured camera calibration.
+
+`analyze_davis_image_evidence.py` selects mutual SIFT matches with a 0.75 ratio
+test without using poses or calibration. It then computes Sampson residuals
+under the candidate poses and estimated calibration. Pair lags are 1, 10, and 30
+supplied frames, with starts every 5 frames. The retained JSON contains pixel
+coordinates and individual residuals: 28 pairs and 22,472 matches, all with
+finite residuals. Median pair-median residuals by lag are respectively
+0.000204, 0.000777, and 0.001353 in normalized camera coordinates. These are
+descriptive development measurements, not a quality ranking or validation.
+No motion mask or candidate-conditioned outlier removal was applied; matches
+can lie on moving objects or be incorrect. Near-zero camera translation also
+limits interpretation of epipolar residuals, regardless of numerical validity.
+This baseline is not ORE and does not establish functional DNF.
+
+### ORE prerequisites
 
 Chen et al., [Object Reprojection Error (NeurIPS 2023)](https://papers.nips.cc/paper_files/paper/2023/file/eb206443c93d07da8b1974b768d8a0d4-Paper-Datasets_and_Benchmarks.pdf)
 already evaluate trajectories without reference camera poses. This is a required

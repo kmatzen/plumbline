@@ -13,6 +13,36 @@ import numpy as np
 from numpy.typing import NDArray
 
 
+def rays_from_normalized_intrinsics(
+    pixels: NDArray[Any], intrinsics: NDArray[Any], image_size_wh: tuple[int, int]
+) -> NDArray[np.float64]:
+    """Convert integer-center pixel coordinates using width/height-normalized K.
+
+    DAGE's utils3d UV convention puts pixel centers at (j+0.5)/width,
+    (i+0.5)/height. OpenCV feature locations use integer centers, hence +0.5.
+    This is estimated calibration when K comes from DAGE, not ground truth.
+    """
+    xy = np.asarray(pixels, dtype=float)
+    k = np.asarray(intrinsics, dtype=float)
+    size = np.asarray(image_size_wh, dtype=float)
+    if xy.ndim != 2 or xy.shape[1] != 2 or k.shape != (3, 3):
+        raise ValueError("expected (N,2) pixels and (3,3) intrinsics")
+    if size.shape != (2,) or np.any(size <= 0):
+        raise ValueError("positive width and height required")
+    if not all(np.isfinite(a).all() for a in (xy, k, size)):
+        raise ValueError("inputs must be finite")
+    if (
+        not np.allclose(k[2], [0, 0, 1])
+        or k[0, 0] <= 0
+        or k[1, 1] <= 0
+        or abs(np.linalg.det(k)) < 1e-12
+    ):
+        raise ValueError("invalid normalized pinhole intrinsics")
+    uv = (xy + 0.5) / size
+    rays = np.linalg.solve(k, np.column_stack((uv, np.ones(len(xy)))).T).T
+    return rays[:, :2] / rays[:, 2:]
+
+
 def sampson_residuals(
     first: NDArray[Any],
     second: NDArray[Any],

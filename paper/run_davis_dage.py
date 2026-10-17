@@ -105,9 +105,30 @@ def run(root: Path, checkpoint: Path, sequence: str, output: Path, limit: int) -
         model = DAGEAdapter(checkpoint=str(checkpoint), **manifest["settings"])
         start = time.monotonic()
         torch.cuda.reset_peak_memory_stats()
+        # Research-only capture: preserve the native normalized calibration that
+        # the production pose-only adapter does not currently expose.
+        model._load()
+        native_infer = model._model.infer
+        captured = {}
+
+        def retain_calibration(*args, **kwargs):
+            native = native_infer(*args, **kwargs)
+            captured["intrinsics_normalized"] = np.asarray(
+                native["intrinsics"].detach().float().cpu(), dtype=np.float32
+            )
+            return native
+
+        model._model.infer = retain_calibration
         prediction = model.predict(batch, intrinsics=None)
         torch.cuda.synchronize()
-        np.savez_compressed(output / "prediction.npz", extrinsics=prediction.extrinsics)
+        calibration = captured["intrinsics_normalized"]
+        if calibration.shape != (len(frames), 3, 3) or not np.isfinite(calibration).all():
+            raise ValueError("invalid native calibration")
+        np.savez_compressed(
+            output / "prediction.npz",
+            extrinsics=prediction.extrinsics,
+            intrinsics_normalized=calibration,
+        )
         manifest.update(
             {
                 "status": "complete",
@@ -115,6 +136,12 @@ def run(root: Path, checkpoint: Path, sequence: str, output: Path, limit: int) -
                 "peak_allocated_bytes": torch.cuda.max_memory_allocated(),
                 "prediction_file_sha256": digest(output / "prediction.npz"),
                 "prediction_metadata": prediction.metadata,
+                "calibration": {
+                    "source": "DAGE predicted; not independently calibrated",
+                    "array": "intrinsics_normalized",
+                    "convention": "image width/height normalized; principal point 0.5,0.5",
+                    "pixel_center_conversion": "u_pixel = width*u_normalized - 0.5; likewise height",
+                },
                 "functional_verdict": "unreviewed",
             }
         )

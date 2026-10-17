@@ -14,7 +14,8 @@ and returns a dict with:
 - ``camera_poses``  ``(N, 4, 4)`` — camera-to-world (== plumbline ``world_from_camera``), metric.
 - ``global_points`` ``(N, h, w, 3)`` — world-frame points (at the lr stream resolution).
 - ``local_points``  ``(N, h, w, 3)`` — metric camera-frame points.
-- ``intrinsics``    ``(N, 3, 3)`` — at the lr stream resolution.
+- ``intrinsics``    ``(N, 3, 3)`` — normalized by image width and height,
+  with principal point (0.5, 0.5); not pixel intrinsics. Not retained here.
 - ``metric_scale``, ``mask``.
 
 This adapter wires the **pose** task (the camera_poses → ``Prediction.extrinsics``
