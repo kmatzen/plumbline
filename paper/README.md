@@ -4519,3 +4519,35 @@ rejected points as camera failures. The record is
 `results/movi-temporal-verifier-v1/crossfit-support-v1.json`. A direct intervention
 test changes a held-out group's coordinates and verifies that its fitted
 matrix remains unchanged; all fitting and held-out slot lists are retained.
+
+### Joint placement and motion evidence
+
+`audit_movi_joint_evidence.py` joins the frozen temporal placement check to the
+held-out-point epipolar support check, using their unchanged thresholds. The
+ungated arm retains close/far answers; the gated arm additionally requires
+epipolar compatibility. Occluded, unavailable, and uncertain answers remain
+unresolved in both arms. Neither arm assigns camera DNF. Reference labels are
+joined after the decisions, and all 1,536 method-point-frame slots remain.
+
+The ungated arm has 402 close, 44 far, and 1,090 unresolved answers. The gated
+arm has 390 close, 39 far, and 1,107 unresolved answers. All 334 determinate
+answers on reference-supported static backgrounds survive the gate (305 close,
+29 far). Among static-background diagnostic labels, 290/302 close cases and
+28/29 far cases are correctly answered; the remaining 13 abstain. Borderline
+and unresolved references are reported separately, not counted as correct.
+
+Only one of the 26 method-point-frame slots on supported moving foregrounds
+has a determinate placement answer: an ungated far warning. The gate abstains
+on it. This is too little motion coverage to establish a useful attribution
+advantage. The other 16 removed answers have unresolved motion references;
+their removal cannot be scored as an improvement. The four development scenes,
+repeated frames, and two methods are not independent samples.
+
+This joint audit identifies the next experimental requirement: obtain
+renderable moving-surface placements as well as static-surface placements,
+without choosing examples based on which evaluator wins. Correspondence
+agreement alone cannot validate camera failure attribution. The complete
+record is `results/movi-temporal-verifier-v1/joint-evidence-v1.json`, including
+per-scene/per-method accounting and every decision. Replay tests check the
+full roster, exact retained output, and missing-evidence behavior. These are
+development findings, not new manuscript claims.
