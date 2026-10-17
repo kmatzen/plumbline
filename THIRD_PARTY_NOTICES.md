@@ -1,5 +1,13 @@
 # Third-party notices
 
+Research-only external dependency: the DAVIS anchor experiments in `paper/`
+also use [CoTracker3](https://github.com/facebookresearch/co-tracker), by Meta
+Platforms, Inc. and affiliates, under its
+[CC BY-NC 4.0 license](https://github.com/facebookresearch/co-tracker/blob/82e02e8029753ad4ef13cf06be7f4fc5facdda4d/LICENSE.md).
+The code and checkpoint are not vendored here. The research runner records their
+revisions and hashes and uses an external checkout. This project's Apache-2.0
+license does not replace those upstream terms.
+
 plumbline (Apache-2.0) bundles **vendored** source from the projects below under
 `src/plumbline/_vendor/`. Each retains its own license (kept verbatim alongside
 the code). Only permissively- and NonCommercial-licensed code is vendored; GPL/

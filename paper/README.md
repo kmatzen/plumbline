@@ -720,7 +720,51 @@ may move, tracks may drift, and predicted calibration and poor parallax confound
 point fits. Better image tracks and separately reported temporal-window coverage
 are required before a useful evaluation can be claimed.
 
-### DAVIS author-review pilot (withdrawn)
+### CoTracker image-evidence comparison
+
+The next development probe uses [CoTracker3](https://github.com/facebookresearch/co-tracker)
+at repository commit `82e02e8029753ad4ef13cf06be7f4fc5facdda4d`, with the
+`facebook/cotracker3` `scaled_offline.pth` checkpoint at revision
+`bf55ea50d4390e1820a267f131cd6587240fb2c5`. Full checkpoint and source-file hashes
+are recorded for every run. Upstream code and weights stay outside this repository;
+the upstream license is CC BY-NC 4.0. This is a research dependency, not a claim
+that our repository's license applies to it.
+
+`run_cotracker_anchors.py` sends the same 12 first-frame query points as the LK
+probe. It preserves upstream support-grid, visibility, and query-correction
+behavior. Every clip is processed twice: its first 11 frames alone, then all 60.
+Only prefix-only observations enter the early 3D point fit. Full-video observations
+are used for the later comparison. This separation matters because offline image
+tracking can use later images to change earlier coordinates. Maximum early-coordinate
+differences between prefix and full processing were 1.642 pixels (bear), 12.923
+(BMX), and 8.483 (boat). These are tracker-consistency differences, not errors
+against known point tracks.
+
+`analyze_cotracker_anchors.py` verifies input hashes and evaluates both sets of
+camera estimates on the same observations. All visibility failures, lost support,
+and nonpositive-depth fits remain in the records.
+
+| Clip | Common later observations / 588 | Anchors / 12 | DAGE median pixels | DA3 median pixels |
+| --- | ---: | ---: | ---: | ---: |
+| bear | 472 | 11 | 5.104 | 2.398 |
+| bmx-bumps | 98 | 3 | 25.973 | 39.806 |
+| boat | 174 | 4 | 17.795 | 12.472 |
+
+BMX coverage increases from 3 to 98 common observations, but remains only 16.7%
+of planned observations. Neither this increase nor the higher measured distances
+establishes tracker accuracy: the available subset changed. The model's visibility
+output is not independent verification. Background can move, and both tracking
+systems can make related mistakes. There are only five later BMX observations with
+both usable LK and CoTracker coordinates, so agreement with LK supplies little
+validation on the difficult clip.
+
+Inference manifests and raw prefix/full arrays are under
+`paper/results/davis/cotracker-{bear,bmx-bumps,boat}-v1/`. Their `anchor-analysis.json`
+files retain observations and per-method point fits. Tests explicitly verify that
+full-video early coordinates cannot enter the fitting observations and that empty
+query slots, invisible points, and off-image predictions do not become zero errors.
+
+### DAVIS author-review pilot (withdrawn record)
 
 **Withdrawn from further review:** the project author reported that the examples
 did not make clear what to look for. This is qualitative evidence of an interface
