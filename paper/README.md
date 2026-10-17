@@ -803,6 +803,29 @@ points do not establish which method is generally better.
 This replication supports only the narrow controlled endpoint sensitivity
 finding, not human agreement, general camera ranking, or a validated DNF rule.
 
+#### Paired-image identity diagnostic
+
+`build_track_identity_pairs.py` creates matched native-resolution crops around
+the tracked locations at frames 1 and 89, without camera/depth filtering. The
+five available pairs on the first control and four on the office sequence are
+retained, alongside explicit unavailable-slot records and identical-image
+positive controls. Source images, crop coordinates, and output hashes are recorded
+in each sequence's `identity-pairs-v1.json`. Temporal pairs have no correctness
+labels. Duplicate controls cover only available temporal slots; there are no
+negative controls, so they cannot establish specificity. A pixel test confirms
+identical duplicate panels and unobscured center pixels. All nine temporal
+sheets were inspected by the assistant for rendering, not labeled by a human.
+
+Before model responses, the bounded pilot selects the first available slot in
+each original slot order: slot 1 on the first sequence and slot 4 on office.
+Run each temporal pair and its duplicate control, four images total, with the
+pinned Qwen2.5-VL-7B NF4 setup, fp32 attention scores, greedy decoding, and the
+previous 576 minimum / 768 maximum visual-token budget. The new `track_identity`
+prompt asks for the same exact marked detail, different detail, or abstention,
+with descriptions of both panels; it explicitly excludes camera/DNF judgments.
+Parsing checks the response schema and evidence-panel names only. This pilot
+cannot provide temporal accuracy, training labels, or camera-quality evidence.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is

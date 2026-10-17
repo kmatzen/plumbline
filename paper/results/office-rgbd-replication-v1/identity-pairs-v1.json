@@ -1,0 +1,244 @@
+{
+  "scope": "track-identity pilot inputs; temporal pairs unlabeled, not DNF evidence",
+  "policy": "all 12 slots retained; frame 1 to 89; missing endpoints unavailable; no camera/depth-based filtering",
+  "display": "equal native-resolution 161x161 crops; cyan ring at rounded target; neutral padding",
+  "limitation": "duplicate controls cover only slots with both endpoints; no negative controls or independent labels",
+  "source_manifest_sha256": "958fd90988a6b235309cde8777db198565eac519d119304b93bbd09daf6fc6ff",
+  "tracks_sha256": "cdfac64d0abd043c691386a6eb881ec7b5bd02d5eeba9e7773cc83e7fd790ec1",
+  "script_sha256": "531cc0d9c03783355c1175a374f83854295cc0969c4b1eff4680fabd280d4777",
+  "crop_script_sha256": "6cb23f34f59a969141f73df1bd3d15b072e4c66d317ea2781f6a08a9bd784845",
+  "items": [
+    {
+      "slot": 0,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 1,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 2,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 3,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 4,
+      "status": "ready",
+      "kind": "temporal",
+      "frames": [
+        1,
+        89
+      ],
+      "rounded_pixels": [
+        [
+          102,
+          200
+        ],
+        [
+          230,
+          371
+        ]
+      ],
+      "image": "slot-4-temporal.png",
+      "image_sha256": "ac913bbd0e0de33efa6e42b1f08f3b40c3c4d90ae5ae276eab01b73824fbcf44",
+      "label": null
+    },
+    {
+      "slot": 4,
+      "status": "ready",
+      "kind": "duplicate_control",
+      "frames": [
+        1,
+        1
+      ],
+      "rounded_pixels": [
+        [
+          102,
+          200
+        ],
+        [
+          102,
+          200
+        ]
+      ],
+      "image": "slot-4-duplicate_control.png",
+      "image_sha256": "86176cceceb6198e4a257e50a8bec31f24e1159ae866375bc55881f9a4798ded",
+      "label": "identical_image_detail"
+    },
+    {
+      "slot": 5,
+      "status": "ready",
+      "kind": "temporal",
+      "frames": [
+        1,
+        89
+      ],
+      "rounded_pixels": [
+        [
+          308,
+          217
+        ],
+        [
+          489,
+          267
+        ]
+      ],
+      "image": "slot-5-temporal.png",
+      "image_sha256": "76dd142b3cdb8dabf0761d3e4eefac53d49a20cc1784978d2b60e877b29c898f",
+      "label": null
+    },
+    {
+      "slot": 5,
+      "status": "ready",
+      "kind": "duplicate_control",
+      "frames": [
+        1,
+        1
+      ],
+      "rounded_pixels": [
+        [
+          308,
+          217
+        ],
+        [
+          308,
+          217
+        ]
+      ],
+      "image": "slot-5-duplicate_control.png",
+      "image_sha256": "62a1e64eeaed5c0c81477a322d787ec7ecb104be70e7124fbd46ee3ac1ad720e",
+      "label": "identical_image_detail"
+    },
+    {
+      "slot": 6,
+      "status": "ready",
+      "kind": "temporal",
+      "frames": [
+        1,
+        89
+      ],
+      "rounded_pixels": [
+        [
+          409,
+          211
+        ],
+        [
+          543,
+          220
+        ]
+      ],
+      "image": "slot-6-temporal.png",
+      "image_sha256": "2b8e8354a35f953fcfaef43d1b021ea081168cbd813fd67c331d398758cd420d",
+      "label": null
+    },
+    {
+      "slot": 6,
+      "status": "ready",
+      "kind": "duplicate_control",
+      "frames": [
+        1,
+        1
+      ],
+      "rounded_pixels": [
+        [
+          409,
+          211
+        ],
+        [
+          409,
+          211
+        ]
+      ],
+      "image": "slot-6-duplicate_control.png",
+      "image_sha256": "11a9d97c739aa5129c82ee1b7d566a7b06292957880418f082d6925370a4aabf",
+      "label": "identical_image_detail"
+    },
+    {
+      "slot": 7,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 8,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 9,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 10,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 11,
+      "status": "ready",
+      "kind": "temporal",
+      "frames": [
+        1,
+        89
+      ],
+      "rounded_pixels": [
+        [
+          493,
+          388
+        ],
+        [
+          597,
+          364
+        ]
+      ],
+      "image": "slot-11-temporal.png",
+      "image_sha256": "ec08d8e1f2c268550a3548f793de20089cf7689fc3bfed180345f59711aff822",
+      "label": null
+    },
+    {
+      "slot": 11,
+      "status": "ready",
+      "kind": "duplicate_control",
+      "frames": [
+        1,
+        1
+      ],
+      "rounded_pixels": [
+        [
+          493,
+          388
+        ],
+        [
+          493,
+          388
+        ]
+      ],
+      "image": "slot-11-duplicate_control.png",
+      "image_sha256": "98b547262b25d38a181cf1c39f80d0b2760c8b78e4cccd31d8a0808026457484",
+      "label": "identical_image_detail"
+    }
+  ]
+}

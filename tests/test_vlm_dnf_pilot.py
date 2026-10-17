@@ -16,6 +16,16 @@ def test_image_size_options_preserve_default_and_bound_scale_control():
             image_size_options(maximum, minimum)
 
 
+def test_track_identity_requires_both_panels_without_certifying_accuracy():
+    row = {"verdict": "same_detail", "reason": "The marked corner appears in both panels.", "evidence_panels": ["A", "B"]}
+    assert parse_response(json.dumps(row), "track_identity") == (row, None)
+    row["evidence_panels"] = ["A"]
+    assert parse_response(json.dumps(row), "track_identity")[1] == "invalid_evidence_panels"
+    row["verdict"] = "abstain"
+    row["evidence_panels"] = []
+    assert parse_response(json.dumps(row), "track_identity") == (row, None)
+
+
 def test_invalid_minimum_is_rejected_before_model_loading(tmp_path):
     with pytest.raises(ValueError, match="minimum visual"):
         run(Path("missing"), Path("missing.png"), tmp_path / "result.json",

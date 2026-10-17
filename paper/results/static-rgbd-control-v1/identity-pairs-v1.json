@@ -1,0 +1,282 @@
+{
+  "scope": "track-identity pilot inputs; temporal pairs unlabeled, not DNF evidence",
+  "policy": "all 12 slots retained; frame 1 to 89; missing endpoints unavailable; no camera/depth-based filtering",
+  "display": "equal native-resolution 161x161 crops; cyan ring at rounded target; neutral padding",
+  "limitation": "duplicate controls cover only slots with both endpoints; no negative controls or independent labels",
+  "source_manifest_sha256": "d629324675f798ca74a7d7516a6574db209a7408598f2cf135e6ac05cf37be14",
+  "tracks_sha256": "162851cc278393626f36f5d66e7ed0173f0c7f9091c973db2d8c3be2ed841764",
+  "script_sha256": "531cc0d9c03783355c1175a374f83854295cc0969c4b1eff4680fabd280d4777",
+  "crop_script_sha256": "6cb23f34f59a969141f73df1bd3d15b072e4c66d317ea2781f6a08a9bd784845",
+  "items": [
+    {
+      "slot": 0,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 1,
+      "status": "ready",
+      "kind": "temporal",
+      "frames": [
+        1,
+        89
+      ],
+      "rounded_pixels": [
+        [
+          249,
+          78
+        ],
+        [
+          443,
+          95
+        ]
+      ],
+      "image": "slot-1-temporal.png",
+      "image_sha256": "12378910b3215406090f5a58a6fb1c2a7e61d4f5c844d1d0109ced9ad05ee030",
+      "label": null
+    },
+    {
+      "slot": 1,
+      "status": "ready",
+      "kind": "duplicate_control",
+      "frames": [
+        1,
+        1
+      ],
+      "rounded_pixels": [
+        [
+          249,
+          78
+        ],
+        [
+          249,
+          78
+        ]
+      ],
+      "image": "slot-1-duplicate_control.png",
+      "image_sha256": "ed3db633b7573fdcba92d960c57b4742484c1bee10d1e926ad2e5e7df91f880e",
+      "label": "identical_image_detail"
+    },
+    {
+      "slot": 2,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 3,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 4,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 5,
+      "status": "ready",
+      "kind": "temporal",
+      "frames": [
+        1,
+        89
+      ],
+      "rounded_pixels": [
+        [
+          258,
+          223
+        ],
+        [
+          426,
+          231
+        ]
+      ],
+      "image": "slot-5-temporal.png",
+      "image_sha256": "fbe4d4377383d0955e7dfe0d7c9838d8e72320d17e8f395d9860ed9cbffb4464",
+      "label": null
+    },
+    {
+      "slot": 5,
+      "status": "ready",
+      "kind": "duplicate_control",
+      "frames": [
+        1,
+        1
+      ],
+      "rounded_pixels": [
+        [
+          258,
+          223
+        ],
+        [
+          258,
+          223
+        ]
+      ],
+      "image": "slot-5-duplicate_control.png",
+      "image_sha256": "0c5cecf033d61d8b3d00c0f86b809d90776f7703a0d26b4c96f854d9216310c7",
+      "label": "identical_image_detail"
+    },
+    {
+      "slot": 6,
+      "status": "ready",
+      "kind": "temporal",
+      "frames": [
+        1,
+        89
+      ],
+      "rounded_pixels": [
+        [
+          321,
+          194
+        ],
+        [
+          470,
+          192
+        ]
+      ],
+      "image": "slot-6-temporal.png",
+      "image_sha256": "1849c2c8774d88ae70f128abd7b025b25a9d2e88fc02a070060830664c9e726b",
+      "label": null
+    },
+    {
+      "slot": 6,
+      "status": "ready",
+      "kind": "duplicate_control",
+      "frames": [
+        1,
+        1
+      ],
+      "rounded_pixels": [
+        [
+          321,
+          194
+        ],
+        [
+          321,
+          194
+        ]
+      ],
+      "image": "slot-6-duplicate_control.png",
+      "image_sha256": "898fec5b54046adf503dabfede6bd36a519b3fbf8af001df7ea4d0391ad57c3f",
+      "label": "identical_image_detail"
+    },
+    {
+      "slot": 7,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    },
+    {
+      "slot": 8,
+      "status": "ready",
+      "kind": "temporal",
+      "frames": [
+        1,
+        89
+      ],
+      "rounded_pixels": [
+        [
+          117,
+          323
+        ],
+        [
+          330,
+          372
+        ]
+      ],
+      "image": "slot-8-temporal.png",
+      "image_sha256": "a082383e9e581cdcaae8a6b688c0ff79e6b25d8b4a058e2bda93ffae0c02ccea",
+      "label": null
+    },
+    {
+      "slot": 8,
+      "status": "ready",
+      "kind": "duplicate_control",
+      "frames": [
+        1,
+        1
+      ],
+      "rounded_pixels": [
+        [
+          117,
+          323
+        ],
+        [
+          117,
+          323
+        ]
+      ],
+      "image": "slot-8-duplicate_control.png",
+      "image_sha256": "f6a4009cc1e944208045b83fd17b3974a3a1cfdd625b9c25f6a7464600e556b3",
+      "label": "identical_image_detail"
+    },
+    {
+      "slot": 9,
+      "status": "ready",
+      "kind": "temporal",
+      "frames": [
+        1,
+        89
+      ],
+      "rounded_pixels": [
+        [
+          197,
+          320
+        ],
+        [
+          398,
+          341
+        ]
+      ],
+      "image": "slot-9-temporal.png",
+      "image_sha256": "6ff644706b60fc2b92e6d02672cdf06a9ba336e7907f415adb896c6947d4ecc9",
+      "label": null
+    },
+    {
+      "slot": 9,
+      "status": "ready",
+      "kind": "duplicate_control",
+      "frames": [
+        1,
+        1
+      ],
+      "rounded_pixels": [
+        [
+          197,
+          320
+        ],
+        [
+          197,
+          320
+        ]
+      ],
+      "image": "slot-9-duplicate_control.png",
+      "image_sha256": "5ea5e02f3094a8c8a76dc2f44f1aa511956d8289e2d20e7af61181f31681c2e4",
+      "label": "identical_image_detail"
+    },
+    {
+      "slot": 10,
+      "status": "unavailable",
+      "missing_frames": [
+        1,
+        89
+      ]
+    },
+    {
+      "slot": 11,
+      "status": "unavailable",
+      "missing_frames": [
+        89
+      ]
+    }
+  ]
+}
