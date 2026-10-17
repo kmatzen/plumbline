@@ -3716,3 +3716,22 @@ count and substantial unavailable fraction require class-specific metrics and
 separate availability accounting; overall accuracy alone would be insufficient.
 This is a correspondence-transfer test, not yet validation of camera-level
 quality, staticness, or functional DNF. No new claims are added to the paper.
+
+An analysis audit added planned/labeled counts and unavailable reasons by
+video, candidate method, and query lag, alongside classification metrics by
+lag. It changes reporting only, not the frozen experiment. Nine analysis
+tests pass, including all-unavailable and missing-class cases. Such groups
+report undefined accuracy, not perfect accuracy, and remain in availability
+accounting.
+
+The completed corpus has 319, 260, and 119 labeled presentations at lags 15,
+30, and 60 respectively, out of 870 planned at each lag. Close labels number
+28, two, and zero respectively. Car-shadow, horsejump-high, and libby have no
+labeled presentations. DAGE-origin candidates have 302 labeled presentations
+(30 close, 193 far, 79 occluded); DA3-origin candidates have 396 (zero close,
+305 far, 91 occluded), out of 1,305 planned for each. These are reference and
+availability counts, not judge results or a camera-method ranking. In
+particular, balanced three-class accuracy is undefined for the DA3 subgroup
+and the 60-frame subgroup. These differences must remain visible in the final
+analysis rather than being hidden by aggregate accuracy. Judge inference is
+still running; no parameters or thresholds have been changed.

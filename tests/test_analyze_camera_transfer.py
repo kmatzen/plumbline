@@ -45,6 +45,38 @@ def test_missing_classes_and_videos_remain_explicit():
     assert result["arms"]["source_patch_ncc"]["all"]["close_precision"] == 0
 
 
+def test_availability_breakdowns_preserve_every_slot():
+    report, corpus, dev = fixture()
+    corpus["records"][1].update(status="borderline_unlabeled", geometry_status="renderable")
+    result = analyze(report, corpus, dev)
+    assert result["roster"]["statuses"] == dict(labeled=2, borderline_unlabeled=1, unavailable=117)
+    assert result["roster"]["unavailable_reasons"] == dict(missing_prefix_observations=117)
+    for field in ("availability_by_video", "availability_by_candidate_method", "availability_by_query_lag"):
+        groups = result[field].values()
+        assert sum(g["planned_presentations"] for g in groups) == 120
+        assert sum(g["labeled_presentations"] for g in groups) == 2
+    assert result["availability_by_video"]["video2"]["label_coverage"] == 0
+    assert result["availability_by_candidate_method"]["da3"]["labeled_presentations"] == 0
+    assert result["availability_by_query_lag"]["60"]["planned_presentations"] == 40
+    assert result["arms"]["adapted"]["by_query_lag"]["60"]["accuracy_all_examples"] is None
+    assert result["arms"]["adapted"]["by_query_lag"]["15"]["uncertain_examples"] == 1
+
+
+def test_no_labeled_presentations_is_not_perfect_accuracy():
+    report, corpus, dev = fixture()
+    for row in corpus["records"]:
+        row.update(status="unavailable", label=None, geometry_status="missing_prefix_observations")
+    report.update(labeled_examples=0, results=dict(base=[], adapted=[]))
+    result = analyze(report, corpus, dev)
+    assert result["roster"]["label_coverage"] == 0
+    assert result["paired_video_uncertainty"] is None
+    for arm in result["arms"].values():
+        assert arm["all"]["accuracy_all_examples"] is None
+        assert arm["macro_accuracy_on_videos_with_labels"] is None
+        assert len(arm["videos_without_labeled_examples"]) == 20
+        assert arm["answered_fraction_of_planned"] == 0
+
+
 @pytest.mark.parametrize("change",["pixel","target","parser","baseline","roster","counts"])
 def test_corrupted_accuracy_comparison_rejected(change):
     report, corpus, dev = fixture()

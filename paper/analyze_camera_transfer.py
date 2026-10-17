@@ -11,6 +11,18 @@ from paper.analyze_tapvid_lora import metrics
 from paper.evaluate_tapvid_lora import digest, parse_label, validate_camera_transfer_roster, validate_test_partition
 
 
+def availability(records):
+    """Count every planned slot without assigning correctness to missing evidence."""
+    n = len(records)
+    labeled = [r for r in records if r["status"] == "labeled"]
+    return dict(planned_presentations=n, labeled_presentations=len(labeled),
+                label_coverage=len(labeled)/n if n else None,
+                statuses=dict(Counter(r["status"] for r in records)),
+                reference_labels=dict(Counter(r["label"] for r in labeled)),
+                unavailable_reasons=dict(Counter(r["geometry_status"] for r in records
+                                                 if r["status"] == "unavailable")))
+
+
 def analyze(report, corpus, development):
     if (report["status"] != "complete" or report["partition"] != "test"
             or report.get("application") != "camera_projection_transfer"
@@ -39,7 +51,7 @@ def analyze(report, corpus, development):
                 paired[item["id"]] = image
             elif image != paired[item["id"]]:
                 raise ValueError("paired processed images differ")
-            rows.append(dict(id=item["id"], sequence=reference["sequence"], model=reference["model"],
+            rows.append(dict(id=item["id"], sequence=reference["sequence"], model=reference["model"], lag=reference["lag"],
                              target=reference["label"], answer=item["parsed"]))
         arms[arm] = rows
     training_counts = Counter(r["label"] for r in development["records"]
@@ -49,7 +61,7 @@ def analyze(report, corpus, development):
     majority = sorted(training_counts, key=lambda label:(-training_counts[label], label))[0]
     arms["training_majority"], arms["source_patch_ncc"] = [], []
     for row in selected.values():
-        common = dict(id=row["id"], sequence=row["sequence"], model=row["model"], target=row["label"])
+        common = dict(id=row["id"], sequence=row["sequence"], model=row["model"], lag=row["lag"], target=row["label"])
         ncc = row["source_patch_ncc"]
         if ncc is not None and not (math.isfinite(ncc) and -1 <= ncc <= 1):
             raise ValueError("invalid patch correlation")
@@ -67,16 +79,17 @@ def analyze(report, corpus, development):
         summary = metrics(rows)
         summaries[arm] = dict(all=summary, per_video=per_video,
             by_candidate_method={m:metrics([r for r in rows if r["model"] == m]) for m in ("dage", "da3")},
+            by_query_lag={str(lag):metrics([r for r in rows if r["lag"] == lag]) for lag in (15, 30, 60)},
             macro_accuracy_on_videos_with_labels=sum(observed)/len(observed) if observed else None,
             videos_without_labeled_examples=[n for n,v in per_video.items() if not v["examples"]],
             answered_fraction_of_planned=summary["answered_examples"]/planned if planned else None)
     base = {n:v["accuracy_all_examples"] for n,v in summaries["base"]["per_video"].items() if v["examples"]}
     adapted = {n:summaries["adapted"]["per_video"][n]["accuracy_all_examples"] for n in base}
     return dict(scope="independently labeled projected-position correspondence accuracy; not camera quality or DNF",
-                roster=dict(planned_presentations=planned, labeled_presentations=len(selected),
-                            label_coverage=len(selected)/planned if planned else None,
-                            statuses=dict(Counter(r["status"] for r in corpus["records"])),
-                            reference_labels=dict(Counter(r["label"] for r in selected.values()))),
+                roster=availability(corpus["records"]),
+                availability_by_video={n:availability([r for r in corpus["records"] if r["sequence"] == n]) for n in names},
+                availability_by_candidate_method={m:availability([r for r in corpus["records"] if r["model"] == m]) for m in ("dage", "da3")},
+                availability_by_query_lag={str(lag):availability([r for r in corpus["records"] if r["lag"] == lag]) for lag in (15, 30, 60)},
                 arms=summaries, training_majority_label=majority,
                 paired_video_uncertainty=paired_video_interval(base, adapted) if len(base) >= 2 else None,
                 limitations="previously evaluated videos; dependent frames/tracks/methods grouped by video; accuracy excludes unavailable and borderline references, whose counts remain reported; absent reference classes make balanced accuracy unavailable; no camera-level DNF labels; NCC baseline added after first-video label inspection")
