@@ -1,0 +1,1091 @@
+{
+  "scope": "reference-timing development sensitivity; not camera quality or DNF labels",
+  "script_sha256": "c7d41473c82b49739581b6c22bdee5b5c1f4aad53d93bdbe063966903e2505c9",
+  "source_manifest_sha256": "1348932a8cb0844affc5d9d5860aa24f5422f3b78999e9bbdea26ff3b26af6b8",
+  "tracks_sha256": "a504e6590fa4c64a59f53a3fa4b38d4759e11902fc52623150e30cf6da3e5e46",
+  "groundtruth_sha256": "4117699f2b027a6e305f84d3b17f1928aa5361db300d5df10639824540d92b6d",
+  "reference_file_sha256": "2f79d9131398328ff153bbd75ad786cd81ec8129535377237d8805e13e6f0314",
+  "kernel_sha256": "fea5d6891dc14e6950443669aa2fa6381cfc28e83ccfa7d9a2b1e4b8697a97eb",
+  "policy": "linear translation and quaternion SLERP at RGB time; maximum bracket gap 50 ms; no extrapolation; same tracks and 11-frame fit",
+  "frames": [
+    {
+      "frame": 0,
+      "rgb_timestamp": "1341846313.622103",
+      "associated_minus_rgb_seconds": 0.015697002410888672,
+      "status": "outside_reference_span"
+    },
+    {
+      "frame": 1,
+      "rgb_timestamp": "1341846313.721918",
+      "associated_minus_rgb_seconds": -0.0033180713653564453,
+      "bracket_seconds": [
+        1341846313.7186,
+        1341846313.7284
+      ],
+      "gap_seconds": 0.009799957275390625,
+      "status": "interpolated",
+      "fraction": 0.3385801868431296
+    },
+    {
+      "frame": 2,
+      "rgb_timestamp": "1341846313.822075",
+      "associated_minus_rgb_seconds": -0.004174947738647461,
+      "bracket_seconds": [
+        1341846313.8179,
+        1341846313.8279
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.41749517201916886
+    },
+    {
+      "frame": 3,
+      "rgb_timestamp": "1341846313.922055",
+      "associated_minus_rgb_seconds": -0.00415492057800293,
+      "bracket_seconds": [
+        1341846313.9179,
+        1341846313.9278
+      ],
+      "gap_seconds": 0.00989985466003418,
+      "status": "interpolated",
+      "fraction": 0.419695108734918
+    },
+    {
+      "frame": 4,
+      "rgb_timestamp": "1341846314.022042",
+      "associated_minus_rgb_seconds": -0.004142045974731445,
+      "bracket_seconds": [
+        1341846314.0179,
+        1341846314.0284
+      ],
+      "gap_seconds": 0.010499954223632812,
+      "status": "interpolated",
+      "fraction": 0.39448228882833786
+    },
+    {
+      "frame": 5,
+      "rgb_timestamp": "1341846314.122037",
+      "associated_minus_rgb_seconds": -0.004036903381347656,
+      "bracket_seconds": [
+        1341846314.118,
+        1341846314.1278
+      ],
+      "gap_seconds": 0.009799957275390625,
+      "status": "interpolated",
+      "fraction": 0.4119307123394317
+    },
+    {
+      "frame": 6,
+      "rgb_timestamp": "1341846314.225969",
+      "associated_minus_rgb_seconds": 0.004431009292602539,
+      "bracket_seconds": [
+        1341846314.2178,
+        1341846314.2304
+      ],
+      "gap_seconds": 0.012600183486938477,
+      "status": "interpolated",
+      "fraction": 0.6483377168915211
+    },
+    {
+      "frame": 7,
+      "rgb_timestamp": "1341846314.325981",
+      "associated_minus_rgb_seconds": 0.0019190311431884766,
+      "bracket_seconds": [
+        1341846314.3178,
+        1341846314.3279
+      ],
+      "gap_seconds": 0.01009988784790039,
+      "status": "interpolated",
+      "fraction": 0.8099948066663519
+    },
+    {
+      "frame": 8,
+      "rgb_timestamp": "1341846314.427905",
+      "associated_minus_rgb_seconds": -5.0067901611328125e-06,
+      "bracket_seconds": [
+        1341846314.4279,
+        1341846314.4379
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.000500679493598455
+    },
+    {
+      "frame": 9,
+      "rgb_timestamp": "1341846314.526085",
+      "associated_minus_rgb_seconds": 0.0018150806427001953,
+      "bracket_seconds": [
+        1341846314.5181,
+        1341846314.5279
+      ],
+      "gap_seconds": 0.009799957275390625,
+      "status": "interpolated",
+      "fraction": 0.8147868820552744
+    },
+    {
+      "frame": 10,
+      "rgb_timestamp": "1341846314.626096",
+      "associated_minus_rgb_seconds": 0.0018038749694824219,
+      "bracket_seconds": [
+        1341846314.6179,
+        1341846314.6279
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.8196123310206709
+    },
+    {
+      "frame": 11,
+      "rgb_timestamp": "1341846314.725910",
+      "associated_minus_rgb_seconds": 0.001990079879760742,
+      "bracket_seconds": [
+        1341846314.7178,
+        1341846314.7279
+      ],
+      "gap_seconds": 0.010100126266479492,
+      "status": "interpolated",
+      "fraction": 0.8029648514033473
+    },
+    {
+      "frame": 12,
+      "rgb_timestamp": "1341846314.826092",
+      "associated_minus_rgb_seconds": 0.0018079280853271484,
+      "bracket_seconds": [
+        1341846314.8178,
+        1341846314.8279
+      ],
+      "gap_seconds": 0.01009988784790039,
+      "status": "interpolated",
+      "fraction": 0.8209952315754686
+    },
+    {
+      "frame": 13,
+      "rgb_timestamp": "1341846314.925969",
+      "associated_minus_rgb_seconds": 0.0019311904907226562,
+      "bracket_seconds": [
+        1341846314.9178,
+        1341846314.9279
+      ],
+      "gap_seconds": 0.010100126266479492,
+      "status": "interpolated",
+      "fraction": 0.8087954110898662
+    },
+    {
+      "frame": 14,
+      "rgb_timestamp": "1341846315.029900",
+      "associated_minus_rgb_seconds": -0.0020999908447265625,
+      "bracket_seconds": [
+        1341846315.0278,
+        1341846315.0378
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.20999928474358057
+    },
+    {
+      "frame": 15,
+      "rgb_timestamp": "1341846315.129851",
+      "associated_minus_rgb_seconds": -0.0019512176513671875,
+      "bracket_seconds": [
+        1341846315.1279,
+        1341846315.1378
+      ],
+      "gap_seconds": 0.009900093078613281,
+      "status": "interpolated",
+      "fraction": 0.19709083903284846
+    },
+    {
+      "frame": 16,
+      "rgb_timestamp": "1341846315.230076",
+      "associated_minus_rgb_seconds": -0.002176046371459961,
+      "bracket_seconds": [
+        1341846315.2279,
+        1341846315.2378
+      ],
+      "gap_seconds": 0.00989985466003418,
+      "status": "interpolated",
+      "fraction": 0.21980589071117212
+    },
+    {
+      "frame": 17,
+      "rgb_timestamp": "1341846315.329931",
+      "associated_minus_rgb_seconds": -0.0021309852600097656,
+      "bracket_seconds": [
+        1341846315.3278,
+        1341846315.3378
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.2130987292277615
+    },
+    {
+      "frame": 18,
+      "rgb_timestamp": "1341846315.429923",
+      "associated_minus_rgb_seconds": 0.0003769397735595703,
+      "bracket_seconds": [
+        1341846315.418,
+        1341846315.4303
+      ],
+      "gap_seconds": 0.01230001449584961,
+      "status": "interpolated",
+      "fraction": 0.969354526070944
+    },
+    {
+      "frame": 19,
+      "rgb_timestamp": "1341846315.530008",
+      "associated_minus_rgb_seconds": -0.0022079944610595703,
+      "bracket_seconds": [
+        1341846315.5278,
+        1341846315.5378
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.22079965667691867
+    },
+    {
+      "frame": 20,
+      "rgb_timestamp": "1341846315.630109",
+      "associated_minus_rgb_seconds": -0.002109050750732422,
+      "bracket_seconds": [
+        1341846315.628,
+        1341846315.6378
+      ],
+      "gap_seconds": 0.009799957275390625,
+      "status": "interpolated",
+      "fraction": 0.21521019852082524
+    },
+    {
+      "frame": 21,
+      "rgb_timestamp": "1341846315.733985",
+      "associated_minus_rgb_seconds": 0.0038149356842041016,
+      "bracket_seconds": [
+        1341846315.7282,
+        1341846315.7378
+      ],
+      "gap_seconds": 0.009599924087524414,
+      "status": "interpolated",
+      "fraction": 0.6026077238296287
+    },
+    {
+      "frame": 22,
+      "rgb_timestamp": "1341846315.834140",
+      "associated_minus_rgb_seconds": 0.003659963607788086,
+      "bracket_seconds": [
+        1341846315.8279,
+        1341846315.8378
+      ],
+      "gap_seconds": 0.009900093078613281,
+      "status": "interpolated",
+      "fraction": 0.6303101820633851
+    },
+    {
+      "frame": 23,
+      "rgb_timestamp": "1341846315.936901",
+      "associated_minus_rgb_seconds": 0.0009989738464355469,
+      "bracket_seconds": [
+        1341846315.9279,
+        1341846315.9379
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.9001025200867845
+    },
+    {
+      "frame": 24,
+      "rgb_timestamp": "1341846316.034204",
+      "associated_minus_rgb_seconds": 0.003695964813232422,
+      "bracket_seconds": [
+        1341846316.0279,
+        1341846316.0379
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.63040316620175
+    },
+    {
+      "frame": 25,
+      "rgb_timestamp": "1341846316.134066",
+      "associated_minus_rgb_seconds": 0.0038340091705322266,
+      "bracket_seconds": [
+        1341846316.1279,
+        1341846316.1379
+      ],
+      "gap_seconds": 0.010000228881835938,
+      "status": "interpolated",
+      "fraction": 0.6166078580965096
+    },
+    {
+      "frame": 26,
+      "rgb_timestamp": "1341846316.233979",
+      "associated_minus_rgb_seconds": 0.003921031951904297,
+      "bracket_seconds": [
+        1341846316.2278,
+        1341846316.2379
+      ],
+      "gap_seconds": 0.010100126266479492,
+      "status": "interpolated",
+      "fraction": 0.6117838679980171
+    },
+    {
+      "frame": 27,
+      "rgb_timestamp": "1341846316.334208",
+      "associated_minus_rgb_seconds": 0.0037920475006103516,
+      "bracket_seconds": [
+        1341846316.3278,
+        1341846316.338
+      ],
+      "gap_seconds": 0.010200023651123047,
+      "status": "interpolated",
+      "fraction": 0.6282314992286475
+    },
+    {
+      "frame": 28,
+      "rgb_timestamp": "1341846316.438069",
+      "associated_minus_rgb_seconds": 0.00033092498779296875,
+      "bracket_seconds": [
+        1341846316.4278,
+        1341846316.4384
+      ],
+      "gap_seconds": 0.010600090026855469,
+      "status": "interpolated",
+      "fraction": 0.9687809266756635
+    },
+    {
+      "frame": 29,
+      "rgb_timestamp": "1341846316.537975",
+      "associated_minus_rgb_seconds": -7.510185241699219e-05,
+      "bracket_seconds": [
+        1341846316.5379,
+        1341846316.5479
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.007510192403976826
+    },
+    {
+      "frame": 30,
+      "rgb_timestamp": "1341846316.638009",
+      "associated_minus_rgb_seconds": -0.0002090930938720703,
+      "bracket_seconds": [
+        1341846316.6378,
+        1341846316.6478
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.020909329327897384
+    },
+    {
+      "frame": 31,
+      "rgb_timestamp": "1341846316.738062",
+      "associated_minus_rgb_seconds": -0.00016188621520996094,
+      "bracket_seconds": [
+        1341846316.7379,
+        1341846316.7478
+      ],
+      "gap_seconds": 0.009900093078613281,
+      "status": "interpolated",
+      "fraction": 0.016351989211058664
+    },
+    {
+      "frame": 32,
+      "rgb_timestamp": "1341846316.838029",
+      "associated_minus_rgb_seconds": -0.0002288818359375,
+      "bracket_seconds": [
+        1341846316.8378,
+        1341846316.8478
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.02288820542164366
+    },
+    {
+      "frame": 33,
+      "rgb_timestamp": "1341846316.937940",
+      "associated_minus_rgb_seconds": -0.0001399517059326172,
+      "bracket_seconds": [
+        1341846316.9378,
+        1341846316.9478
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.013995183940109197
+    },
+    {
+      "frame": 34,
+      "rgb_timestamp": "1341846317.037936",
+      "associated_minus_rgb_seconds": 0.000164031982421875,
+      "bracket_seconds": [
+        1341846317.0278,
+        1341846317.0381
+      ],
+      "gap_seconds": 0.010299921035766602,
+      "status": "interpolated",
+      "fraction": 0.9840744427212333
+    },
+    {
+      "frame": 35,
+      "rgb_timestamp": "1341846317.137887",
+      "associated_minus_rgb_seconds": 1.3113021850585938e-05,
+      "bracket_seconds": [
+        1341846317.1278,
+        1341846317.1379
+      ],
+      "gap_seconds": 0.010100126266479492,
+      "status": "interpolated",
+      "fraction": 0.9987016972357954
+    },
+    {
+      "frame": 36,
+      "rgb_timestamp": "1341846317.248131",
+      "associated_minus_rgb_seconds": 0.0015690326690673828,
+      "bracket_seconds": [
+        1341846317.2381,
+        1341846317.2497
+      ],
+      "gap_seconds": 0.011600017547607422,
+      "status": "interpolated",
+      "fraction": 0.8647387676244502
+    },
+    {
+      "frame": 37,
+      "rgb_timestamp": "1341846317.348137",
+      "associated_minus_rgb_seconds": 0.0012631416320800781,
+      "bracket_seconds": [
+        1341846317.3378,
+        1341846317.3494
+      ],
+      "gap_seconds": 0.011600017547607422,
+      "status": "interpolated",
+      "fraction": 0.8911086447157479
+    },
+    {
+      "frame": 38,
+      "rgb_timestamp": "1341846317.442569",
+      "associated_minus_rgb_seconds": -0.004769086837768555,
+      "bracket_seconds": [
+        1341846317.4378,
+        1341846317.4478
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.4769091385928522
+    },
+    {
+      "frame": 39,
+      "rgb_timestamp": "1341846317.542282",
+      "associated_minus_rgb_seconds": -0.0044820308685302734,
+      "bracket_seconds": [
+        1341846317.5378,
+        1341846317.5478
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.44820351429320743
+    },
+    {
+      "frame": 40,
+      "rgb_timestamp": "1341846317.643553",
+      "associated_minus_rgb_seconds": 0.004246950149536133,
+      "bracket_seconds": [
+        1341846317.6378,
+        1341846317.6478
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.5753045800252724
+    },
+    {
+      "frame": 41,
+      "rgb_timestamp": "1341846317.741834",
+      "associated_minus_rgb_seconds": -0.003933906555175781,
+      "bracket_seconds": [
+        1341846317.7379,
+        1341846317.7479
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.3933910306845004
+    },
+    {
+      "frame": 42,
+      "rgb_timestamp": "1341846317.841886",
+      "associated_minus_rgb_seconds": 0.0004138946533203125,
+      "bracket_seconds": [
+        1341846317.8278,
+        1341846317.8423
+      ],
+      "gap_seconds": 0.014499902725219727,
+      "status": "interpolated",
+      "fraction": 0.9714553496555239
+    },
+    {
+      "frame": 43,
+      "rgb_timestamp": "1341846317.946031",
+      "associated_minus_rgb_seconds": 0.0018689632415771484,
+      "bracket_seconds": [
+        1341846317.9378,
+        1341846317.9479
+      ],
+      "gap_seconds": 0.010100126266479492,
+      "status": "interpolated",
+      "fraction": 0.8149564478436372
+    },
+    {
+      "frame": 44,
+      "rgb_timestamp": "1341846318.045949",
+      "associated_minus_rgb_seconds": 0.0018510818481445312,
+      "bracket_seconds": [
+        1341846318.0382,
+        1341846318.0478
+      ],
+      "gap_seconds": 0.009600162506103516,
+      "status": "interpolated",
+      "fraction": 0.8071822381165251
+    },
+    {
+      "frame": 45,
+      "rgb_timestamp": "1341846318.145957",
+      "associated_minus_rgb_seconds": 0.0018429756164550781,
+      "bracket_seconds": [
+        1341846318.1378,
+        1341846318.1478
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.8157022625944734
+    },
+    {
+      "frame": 46,
+      "rgb_timestamp": "1341846318.245970",
+      "associated_minus_rgb_seconds": 0.0018301010131835938,
+      "bracket_seconds": [
+        1341846318.2378,
+        1341846318.2478
+      ],
+      "gap_seconds": 0.010000228881835938,
+      "status": "interpolated",
+      "fraction": 0.816994087354568
+    },
+    {
+      "frame": 47,
+      "rgb_timestamp": "1341846318.345989",
+      "associated_minus_rgb_seconds": 0.0019109249114990234,
+      "bracket_seconds": [
+        1341846318.3378,
+        1341846318.3479
+      ],
+      "gap_seconds": 0.01009988784790039,
+      "status": "interpolated",
+      "fraction": 0.8107974127756008
+    },
+    {
+      "frame": 48,
+      "rgb_timestamp": "1341846318.446035",
+      "associated_minus_rgb_seconds": 0.0018651485443115234,
+      "bracket_seconds": [
+        1341846318.4378,
+        1341846318.4479
+      ],
+      "gap_seconds": 0.010100126266479492,
+      "status": "interpolated",
+      "fraction": 0.8153341359204966
+    },
+    {
+      "frame": 49,
+      "rgb_timestamp": "1341846318.546259",
+      "associated_minus_rgb_seconds": 0.001741170883178711,
+      "bracket_seconds": [
+        1341846318.5378,
+        1341846318.548
+      ],
+      "gap_seconds": 0.010200023651123047,
+      "status": "interpolated",
+      "fraction": 0.8292973680519845
+    },
+    {
+      "frame": 50,
+      "rgb_timestamp": "1341846318.650038",
+      "associated_minus_rgb_seconds": -0.002238035202026367,
+      "bracket_seconds": [
+        1341846318.6478,
+        1341846318.6578
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.22380373363850942
+    },
+    {
+      "frame": 51,
+      "rgb_timestamp": "1341846318.749905",
+      "associated_minus_rgb_seconds": -0.0021049976348876953,
+      "bracket_seconds": [
+        1341846318.7478,
+        1341846318.7578
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.21049996423717904
+    },
+    {
+      "frame": 52,
+      "rgb_timestamp": "1341846318.850072",
+      "associated_minus_rgb_seconds": -0.002271890640258789,
+      "bracket_seconds": [
+        1341846318.8478,
+        1341846318.8578
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.22718928069046088
+    },
+    {
+      "frame": 53,
+      "rgb_timestamp": "1341846318.950044",
+      "associated_minus_rgb_seconds": -0.00214385986328125,
+      "bracket_seconds": [
+        1341846318.9479,
+        1341846318.9578
+      ],
+      "gap_seconds": 0.00989985466003418,
+      "status": "interpolated",
+      "fraction": 0.21655468053849675
+    },
+    {
+      "frame": 54,
+      "rgb_timestamp": "1341846319.050745",
+      "associated_minus_rgb_seconds": -4.506111145019531e-05,
+      "bracket_seconds": [
+        1341846319.0507,
+        1341846319.0578
+      ],
+      "gap_seconds": 0.007100105285644531,
+      "status": "interpolated",
+      "fraction": 0.006346541302887844
+    },
+    {
+      "frame": 55,
+      "rgb_timestamp": "1341846319.150093",
+      "associated_minus_rgb_seconds": -0.002293109893798828,
+      "bracket_seconds": [
+        1341846319.1478,
+        1341846319.1578
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.2293112080680924
+    },
+    {
+      "frame": 56,
+      "rgb_timestamp": "1341846319.250034",
+      "associated_minus_rgb_seconds": -0.002134084701538086,
+      "bracket_seconds": [
+        1341846319.2479,
+        1341846319.2578
+      ],
+      "gap_seconds": 0.009900093078613281,
+      "status": "interpolated",
+      "fraction": 0.21556208457759368
+    },
+    {
+      "frame": 57,
+      "rgb_timestamp": "1341846319.350268",
+      "associated_minus_rgb_seconds": -0.0024678707122802734,
+      "bracket_seconds": [
+        1341846319.3478,
+        1341846319.3579
+      ],
+      "gap_seconds": 0.01009988784790039,
+      "status": "interpolated",
+      "fraction": 0.2443463481422029
+    },
+    {
+      "frame": 58,
+      "rgb_timestamp": "1341846319.453961",
+      "associated_minus_rgb_seconds": 0.0037391185760498047,
+      "bracket_seconds": [
+        1341846319.4478,
+        1341846319.4577
+      ],
+      "gap_seconds": 0.009900093078613281,
+      "status": "interpolated",
+      "fraction": 0.6223148058953858
+    },
+    {
+      "frame": 59,
+      "rgb_timestamp": "1341846319.554083",
+      "associated_minus_rgb_seconds": 0.0037169456481933594,
+      "bracket_seconds": [
+        1341846319.5485,
+        1341846319.5578
+      ],
+      "gap_seconds": 0.009299993515014648,
+      "status": "interpolated",
+      "fraction": 0.6003281462301638
+    },
+    {
+      "frame": 60,
+      "rgb_timestamp": "1341846319.653962",
+      "associated_minus_rgb_seconds": 0.003838062286376953,
+      "bracket_seconds": [
+        1341846319.6477,
+        1341846319.6578
+      ],
+      "gap_seconds": 0.01009988784790039,
+      "status": "interpolated",
+      "fraction": 0.6199896133327039
+    },
+    {
+      "frame": 61,
+      "rgb_timestamp": "1341846319.754063",
+      "associated_minus_rgb_seconds": 0.003737211227416992,
+      "bracket_seconds": [
+        1341846319.7478,
+        1341846319.7578
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.6262785208497246
+    },
+    {
+      "frame": 62,
+      "rgb_timestamp": "1341846319.853917",
+      "associated_minus_rgb_seconds": 0.0038831233978271484,
+      "bracket_seconds": [
+        1341846319.8478,
+        1341846319.8578
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.6116872898934268
+    },
+    {
+      "frame": 63,
+      "rgb_timestamp": "1341846319.953946",
+      "associated_minus_rgb_seconds": 0.0038537979125976562,
+      "bracket_seconds": [
+        1341846319.9478,
+        1341846319.9578
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.6146198412130749
+    },
+    {
+      "frame": 64,
+      "rgb_timestamp": "1341846320.054177",
+      "associated_minus_rgb_seconds": 0.0036230087280273438,
+      "bracket_seconds": [
+        1341846320.048,
+        1341846320.0578
+      ],
+      "gap_seconds": 0.009799957275390625,
+      "status": "interpolated",
+      "fraction": 0.6303036200856365
+    },
+    {
+      "frame": 65,
+      "rgb_timestamp": "1341846320.157952",
+      "associated_minus_rgb_seconds": -0.00015211105346679688,
+      "bracket_seconds": [
+        1341846320.1578,
+        1341846320.1678
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.015211119853134015
+    },
+    {
+      "frame": 66,
+      "rgb_timestamp": "1341846320.258015",
+      "associated_minus_rgb_seconds": -0.0002148151397705078,
+      "bracket_seconds": [
+        1341846320.2578,
+        1341846320.2678
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.021481534463438475
+    },
+    {
+      "frame": 67,
+      "rgb_timestamp": "1341846320.357890",
+      "associated_minus_rgb_seconds": 1.0013580322265625e-05,
+      "bracket_seconds": [
+        1341846320.3478,
+        1341846320.3579
+      ],
+      "gap_seconds": 0.01009988784790039,
+      "status": "interpolated",
+      "fraction": 0.9990085453944573
+    },
+    {
+      "frame": 68,
+      "rgb_timestamp": "1341846320.458122",
+      "associated_minus_rgb_seconds": 0.0005779266357421875,
+      "bracket_seconds": [
+        1341846320.4478,
+        1341846320.4587
+      ],
+      "gap_seconds": 0.010900020599365234,
+      "status": "interpolated",
+      "fraction": 0.9469793079312306
+    },
+    {
+      "frame": 69,
+      "rgb_timestamp": "1341846320.558091",
+      "associated_minus_rgb_seconds": -0.00029087066650390625,
+      "bracket_seconds": [
+        1341846320.5578,
+        1341846320.5701
+      ],
+      "gap_seconds": 0.01230001449584961,
+      "status": "interpolated",
+      "fraction": 0.023647993797247528
+    },
+    {
+      "frame": 70,
+      "rgb_timestamp": "1341846320.664916",
+      "associated_minus_rgb_seconds": 0.0028839111328125,
+      "bracket_seconds": [
+        1341846320.6578,
+        1341846320.6678
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.7116086116872898
+    },
+    {
+      "frame": 71,
+      "rgb_timestamp": "1341846320.763877",
+      "associated_minus_rgb_seconds": 0.004023075103759766,
+      "bracket_seconds": [
+        1341846320.7578,
+        1341846320.7679
+      ],
+      "gap_seconds": 0.01009988784790039,
+      "status": "interpolated",
+      "fraction": 0.6016713091922006
+    },
+    {
+      "frame": 72,
+      "rgb_timestamp": "1341846320.863887",
+      "associated_minus_rgb_seconds": 0.003912925720214844,
+      "bracket_seconds": [
+        1341846320.8578,
+        1341846320.8678
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.6087070548124837
+    },
+    {
+      "frame": 73,
+      "rgb_timestamp": "1341846320.967866",
+      "associated_minus_rgb_seconds": 0.0026340484619140625,
+      "bracket_seconds": [
+        1341846320.9578,
+        1341846320.9705
+      ],
+      "gap_seconds": 0.012700080871582031,
+      "status": "interpolated",
+      "fraction": 0.7925959300142674
+    },
+    {
+      "frame": 74,
+      "rgb_timestamp": "1341846321.068047",
+      "associated_minus_rgb_seconds": 0.00045299530029296875,
+      "bracket_seconds": [
+        1341846321.0578,
+        1341846321.0685
+      ],
+      "gap_seconds": 0.010699987411499023,
+      "status": "interpolated",
+      "fraction": 0.9576639408186457
+    },
+    {
+      "frame": 75,
+      "rgb_timestamp": "1341846321.167887",
+      "associated_minus_rgb_seconds": -8.702278137207031e-05,
+      "bracket_seconds": [
+        1341846321.1678,
+        1341846321.1778
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.0087022864363541
+    },
+    {
+      "frame": 76,
+      "rgb_timestamp": "1341846321.267939",
+      "associated_minus_rgb_seconds": -3.910064697265625e-05,
+      "bracket_seconds": [
+        1341846321.2679,
+        1341846321.2778
+      ],
+      "gap_seconds": 0.009900093078613281,
+      "status": "interpolated",
+      "fraction": 0.00394952316732492
+    },
+    {
+      "frame": 77,
+      "rgb_timestamp": "1341846321.367913",
+      "associated_minus_rgb_seconds": -1.3113021850585938e-05,
+      "bracket_seconds": [
+        1341846321.3679,
+        1341846321.3778
+      ],
+      "gap_seconds": 0.009900093078613281,
+      "status": "interpolated",
+      "fraction": 0.001324535208554089
+    },
+    {
+      "frame": 78,
+      "rgb_timestamp": "1341846321.467946",
+      "associated_minus_rgb_seconds": 0.0046539306640625,
+      "bracket_seconds": [
+        1341846321.4579,
+        1341846321.4726
+      ],
+      "gap_seconds": 0.014699935913085938,
+      "status": "interpolated",
+      "fraction": 0.6834046970286752
+    },
+    {
+      "frame": 79,
+      "rgb_timestamp": "1341846321.568960",
+      "associated_minus_rgb_seconds": -0.0002598762512207031,
+      "bracket_seconds": [
+        1341846321.5687,
+        1341846321.5779
+      ],
+      "gap_seconds": 0.009199857711791992,
+      "status": "interpolated",
+      "fraction": 0.02824785549537409
+    },
+    {
+      "frame": 80,
+      "rgb_timestamp": "1341846321.668306",
+      "associated_minus_rgb_seconds": -0.0005061626434326172,
+      "bracket_seconds": [
+        1341846321.6678,
+        1341846321.6778
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.05061631261473905
+    },
+    {
+      "frame": 81,
+      "rgb_timestamp": "1341846321.771881",
+      "associated_minus_rgb_seconds": -0.003881216049194336,
+      "bracket_seconds": [
+        1341846321.768,
+        1341846321.7778
+      ],
+      "gap_seconds": 0.009800195693969727,
+      "status": "interpolated",
+      "fraction": 0.39603454567570856
+    },
+    {
+      "frame": 82,
+      "rgb_timestamp": "1341846321.871882",
+      "associated_minus_rgb_seconds": -0.0040819644927978516,
+      "bracket_seconds": [
+        1341846321.8678,
+        1341846321.8778
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.40819683856662614
+    },
+    {
+      "frame": 83,
+      "rgb_timestamp": "1341846322.004094",
+      "associated_minus_rgb_seconds": 0.003706216812133789,
+      "bracket_seconds": [
+        1341846321.9978,
+        1341846322.0078
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.6293779653339056
+    },
+    {
+      "frame": 84,
+      "rgb_timestamp": "1341846322.107979",
+      "associated_minus_rgb_seconds": 0.0016210079193115234,
+      "bracket_seconds": [
+        1341846322.0978,
+        1341846322.1096
+      ],
+      "gap_seconds": 0.011800050735473633,
+      "status": "interpolated",
+      "fraction": 0.8626270381670135
+    },
+    {
+      "frame": 85,
+      "rgb_timestamp": "1341846322.202932",
+      "associated_minus_rgb_seconds": 0.004868030548095703,
+      "bracket_seconds": [
+        1341846322.1978,
+        1341846322.2078
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.5131964809384164
+    },
+    {
+      "frame": 86,
+      "rgb_timestamp": "1341846322.301996",
+      "associated_minus_rgb_seconds": -0.003895998001098633,
+      "bracket_seconds": [
+        1341846322.2981,
+        1341846322.3078
+      ],
+      "gap_seconds": 0.00970005989074707,
+      "status": "interpolated",
+      "fraction": 0.40164679857441316
+    },
+    {
+      "frame": 87,
+      "rgb_timestamp": "1341846322.402292",
+      "associated_minus_rgb_seconds": -0.004492044448852539,
+      "bracket_seconds": [
+        1341846322.3978,
+        1341846322.4081
+      ],
+      "gap_seconds": 0.010299921035766602,
+      "status": "interpolated",
+      "fraction": 0.4361241637925048
+    },
+    {
+      "frame": 88,
+      "rgb_timestamp": "1341846322.502433",
+      "associated_minus_rgb_seconds": -0.0034329891204833984,
+      "bracket_seconds": [
+        1341846322.499,
+        1341846322.5087
+      ],
+      "gap_seconds": 0.009699821472167969,
+      "status": "interpolated",
+      "fraction": 0.35392291810048176
+    },
+    {
+      "frame": 89,
+      "rgb_timestamp": "1341846322.601920",
+      "associated_minus_rgb_seconds": -0.004119873046875,
+      "bracket_seconds": [
+        1341846322.5978,
+        1341846322.6078
+      ],
+      "gap_seconds": 0.009999990463256836,
+      "status": "interpolated",
+      "fraction": 0.41198769758958587
+    }
+  ],
+  "interpolation_counts": {
+    "outside_reference_span": 1,
+    "interpolated": 89
+  },
+  "comparison_status": "unavailable_incomplete_pose_sequence"
+}

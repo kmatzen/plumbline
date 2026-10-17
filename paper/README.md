@@ -323,6 +323,38 @@ uv run python -m paper.rgbd_track_audit \
   /path/to/new-audit.json
 ```
 
+#### Reference timing sensitivity
+
+`probe_tum_pose_timing.py` reproduces the retained reference poses from the
+original trajectory file before comparing timestamp policies. It interpolates
+translation linearly and rotation with quaternion SLERP at RGB timestamps,
+without extrapolation or interpolation across gaps above 50 ms. On the XYZ
+development clip, absolute associated-pose offsets have median 2.13 ms and
+maximum 15.70 ms. Frame zero precedes the reference trajectory; the original
+90-frame comparison is therefore unavailable, retained as
+`results/dense/tum-pose-timing-xyz-v1.json` with its executed source.
+
+The explicitly separate v2 comparison starts at original frame 1 for both
+variants, fits frames 1–11, and evaluates frames 12–89. No image tracks are
+recomputed or selected by outcomes. Both variants have 141 comparable later
+observations across four slots, out of 936 planned track/frame pairs. Their
+aggregate medians are 3.217 px (associated poses) and 3.228 px (interpolated).
+The median absolute paired change is 0.350 px, but it is not uniformly small:
+
+| Slot | Comparable observations | Median absolute change (px) | Maximum (px) |
+| --- | ---: | ---: | ---: |
+| 1 | 40 | 0.601 | 1.664 |
+| 6 | 46 | 0.230 | 1.809 |
+| 7 | 14 | 54.758 | 72.858 |
+| 10 | 41 | 0.246 | 1.856 |
+
+Slot 7 already has very large residuals under both policies: at frame 20,
+692.115 versus 619.257 px. Thus the large change does not represent a switch
+from good tracking to failure. The timing comparison demonstrates sensitivity
+in this early-fit diagnostic, not that either reference association resolves
+the scene-motion, track-correctness, or conditioning confounds. Original
+production references and reported method scores remain unchanged.
+
 #### Source-track comprehension pilot
 
 The corrected 7B NF4 configuration was subsequently evaluated on the same three
