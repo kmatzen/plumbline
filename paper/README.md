@@ -529,6 +529,16 @@ the next diagnostic should distinguish failure to fit the training task from
 failure to transfer to new videos, using training-only examples and the same
 saved adapter. These development findings are not added to the manuscript.
 
+The training-fit diagnostic is now launched at
+`/data3/kmatzen/plumbline/research/tapvid-training-fit-v1/run`. It generates
+answers for all 188 original training panels using the completed adapter,
+without weight updates, resampling, or changing decoding. It reads the training
+export only; validation and calibration exports are not used. The report is
+explicitly marked `partition: train`, and the validation analyzer rejects it.
+Comparing fit on the training set with development validation can help separate
+poor task fit from poor transfer; it does not identify a unique cause or
+establish generalization. Results are pending.
+
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,
 collect verified data, then compare model training with the workflow held fixed.

@@ -61,6 +61,8 @@ def within_video_association(rows):
 
 
 def compare(report, corpus, tracker):
+    if report.get("partition", "validation") != "validation":
+        raise ValueError("training-fit results are not validation evidence")
     if report["status"] != "complete":
         raise ValueError("incomplete generation run")
     selected = {r["id"]: r for r in corpus["records"] if r["partition"] == "validation" and r["status"] == "labeled"}

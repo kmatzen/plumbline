@@ -67,6 +67,8 @@ def test_within_video_association_weights_videos_equally():
 
 
 def test_partial_run_cannot_be_summarized_as_complete():
+    with pytest.raises(ValueError, match="not validation"):
+        compare(dict(status="complete", partition="train"), {}, {})
     with pytest.raises(ValueError, match="incomplete"):
         compare(dict(status="evaluating"), {}, {})
     with pytest.raises(ValueError, match="missing"):

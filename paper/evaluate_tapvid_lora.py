@@ -1,4 +1,4 @@
-"""Frozen base/adapted generation comparison on validation only, not calibration."""
+"""Frozen validation comparison or training-fit diagnostic; never calibration."""
 
 import argparse
 import contextlib
@@ -20,28 +20,39 @@ def parse_label(text):
     return label if label in {"close", "far", "occluded", "uncertain"} else "invalid"
 
 
-def run(corpus, training_run, output):
+def select_evaluation(corpus, train, manifest, partition):
+    if partition not in {"train", "validation"}:
+        raise ValueError("only training-fit or validation evaluation is allowed")
+    source = corpus / f"{partition}.jsonl"
+    if digest(source) != manifest["exports_sha256"][partition]:
+        raise ValueError("evaluation export changed")
+    rows = [json.loads(line) for line in source.read_text().splitlines()]
+    allowed = {r["id"]: r for r in manifest["records"] if r["partition"] == partition and r["status"] == "labeled"}
+    if {r["id"] for r in rows} != set(allowed) or len(rows) != len(allowed):
+        raise ValueError("evaluation membership changed")
+    if partition == "validation" and set(train["training_ids"]) & set(allowed):
+        raise ValueError("training/validation ID overlap")
+    if partition == "train" and (set(train["training_ids"]) != set(allowed)
+                                  or len(train["training_ids"]) != len(allowed)):
+        raise ValueError("training-fit requires the complete training partition")
+    for row in rows:
+        item = allowed[row["id"]]
+        if row["target"] != item["label"] or row["image"] != item["image"] or row["prompt"] != manifest["prompt"]:
+            raise ValueError("evaluation content changed")
+        if digest(corpus / row["image"]) != item["image_sha256"]:
+            raise ValueError("evaluation image changed")
+    return source, rows, allowed
+
+
+def run(corpus, training_run, output, partition="validation"):
     if output.exists():
         raise ValueError("preserve previous comparison")
     train = json.loads((training_run / "manifest.json").read_text())
     manifest = json.loads((corpus / "manifest.json").read_text())
     if train["status"] != "complete" or train["corpus_manifest_sha256"] != digest(corpus / "manifest.json"):
         raise ValueError("completed training run with identical corpus required")
-    source = corpus / "validation.jsonl"
-    if digest(source) != manifest["exports_sha256"]["validation"]:
-        raise ValueError("validation export changed")
-    rows = [json.loads(line) for line in source.read_text().splitlines()]
-    allowed = {r["id"]: r for r in manifest["records"] if r["partition"] == "validation" and r["status"] == "labeled"}
-    if {r["id"] for r in rows} != set(allowed) or len(rows) != len(allowed):
-        raise ValueError("validation membership changed")
-    if set(train["training_ids"]) & set(allowed):
-        raise ValueError("training/validation ID overlap")
-    for row in rows:
-        item = allowed[row["id"]]
-        if row["target"] != item["label"] or row["image"] != item["image"] or row["prompt"] != manifest["prompt"]:
-            raise ValueError("validation content changed")
-        if digest(corpus / row["image"]) != item["image_sha256"]:
-            raise ValueError("validation image changed")
+    source, rows, allowed = select_evaluation(corpus, train, manifest, partition)
+    arms = ("base", "adapted") if partition == "validation" else ("adapted",)
     checkpoint = Path(train["checkpoint"])
     for name, sha in train["checkpoint_files"].items():
         if digest(checkpoint / name) != sha:
@@ -50,11 +61,14 @@ def run(corpus, training_run, output):
         if digest(training_run / "adapter" / name) != sha:
             raise ValueError("adapter changed")
     output.mkdir(parents=True)
-    report = {"status": "starting", "scope": "development validation comparison, not camera DNF or an external test",
+    report = {"status": "starting", "scope": ("development validation comparison, not camera DNF or an external test" if partition == "validation" else "training-fit diagnostic only; not generalization or model selection"),
+              "partition": partition, "evaluation_export_sha256": digest(source),
               "training_manifest_sha256": digest(training_run / "manifest.json"),
-              "validation_export_sha256": digest(source), "script_sha256": digest(Path(__file__)),
-              "protocol": "base with adapters disabled versus adapted; identical prepared quantized model, panels and prompts; greedy max 8 new tokens; exact four-label parser; invalid and uncertain retained; no calibration examples read",
-              "results": {"base": [], "adapted": []}}
+              "script_sha256": digest(Path(__file__)),
+              "protocol": "validation: base with adapters disabled versus adapted; training-fit: adapted only; identical prepared quantized model and original panels/prompts; greedy max 8 new tokens; exact four-label parser; invalid and uncertain retained; no calibration examples read; no weight updates",
+              "results": {arm: [] for arm in arms}}
+    if partition == "validation":
+        report["validation_export_sha256"] = digest(source)
 
     def save():
         (output / "manifest.json").write_text(json.dumps(report, indent=2, allow_nan=False)+"\n")
@@ -96,7 +110,7 @@ def run(corpus, training_run, output):
             raise ValueError("evaluation model has trainable weights")
         report["status"] = "evaluating"
         save()
-        for arm in ("base", "adapted"):
+        for arm in arms:
             manager = model.disable_adapter() if arm == "base" else contextlib.nullcontext()
             with manager, torch.inference_mode():
                 for row in rows:
@@ -126,9 +140,10 @@ def run(corpus, training_run, output):
                     report["results"][arm].append(item)
                     save()
                     print(arm, len(report["results"][arm]), row["id"], item["parsed"], flush=True)
-        for a, b in zip(report["results"]["base"], report["results"]["adapted"], strict=True):
-            if a["id"] != b["id"] or a["processed_pixel_sha256"] != b["processed_pixel_sha256"]:
-                raise ValueError("paired inputs changed")
+        if partition == "validation":
+            for a, b in zip(report["results"]["base"], report["results"]["adapted"], strict=True):
+                if a["id"] != b["id"] or a["processed_pixel_sha256"] != b["processed_pixel_sha256"]:
+                    raise ValueError("paired inputs changed")
         report["status"] = "complete"
         save()
     except Exception as exc:
@@ -142,5 +157,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("corpus", "training_run", "output"):
         parser.add_argument(name, type=Path)
+    parser.add_argument("--partition", choices=("train", "validation"), default="validation")
     args = parser.parse_args()
-    run(args.corpus, args.training_run, args.output)
+    run(args.corpus, args.training_run, args.output, args.partition)

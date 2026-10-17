@@ -3,7 +3,29 @@ import torch
 import json
 
 from paper.train_tapvid_lora_pilot import digest, mask_prompt, select_training
-from paper.evaluate_tapvid_lora import parse_label
+from paper.evaluate_tapvid_lora import parse_label, select_evaluation
+
+
+def test_training_fit_reads_only_exact_training_partition(tmp_path):
+    image = tmp_path / "panel.png"
+    image.write_bytes(b"hash checked input")
+    row = dict(id="t", image=image.name, target="close", prompt="inspect")
+    source = tmp_path / "train.jsonl"
+    source.write_text(json.dumps(row)+"\n")
+    record = dict(id="t", partition="train", status="labeled", label="close",
+                  image=image.name, image_sha256=digest(image))
+    manifest = dict(records=[record], prompt="inspect", exports_sha256={"train": digest(source)})
+    train = dict(training_ids=["t"])
+    assert select_evaluation(tmp_path, train, manifest, "train")[1] == [row]
+    assert not (tmp_path / "validation.jsonl").exists()
+    assert not (tmp_path / "calibration.jsonl").exists()
+    with pytest.raises(ValueError, match="complete training partition"):
+        select_evaluation(tmp_path, dict(training_ids=[]), manifest, "train")
+    with pytest.raises(ValueError, match="only training-fit"):
+        select_evaluation(tmp_path, train, manifest, "calibration")
+    image.write_bytes(b"changed")
+    with pytest.raises(ValueError, match="image changed"):
+        select_evaluation(tmp_path, train, manifest, "train")
 
 
 def test_only_assistant_extension_is_supervised():
