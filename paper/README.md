@@ -700,6 +700,35 @@ Every compatible combined witness was independently reprojected to check
 positive depth and original pixel bounds. These development results remain
 outside the manuscript until the evaluation protocol has broader validation.
 
+#### Separate-sequence replication protocol (before results)
+
+The next sequence is `rgbd_dataset_freiburg3_long_office_household`, selected
+from the [official TUM catalog](https://cvg.cit.tum.de/data/datasets/rgbd-dataset/download#freiburg3_long_office_household)
+for its different household/office scene while retaining Freiburg-3 calibration.
+This choice is based on the catalog description, before inspecting selected
+images, tracking outcomes, or prediction scores. It is a separate-sequence
+replication, not a guarantee that the models never encountered this data in
+training or that every observed point is static.
+
+Freeze the existing sampling and analysis settings: first 90 chronological RGB
+frames at stride three; original 12 grid/LK slots; prefixes ending at 10, 30,
+and 60; final query 89; all 1/2/4/8-pixel tolerances; both methods and their
+existing inference settings; published Freiburg-3 calibration; no pose alignment
+for consistency tests. Controlled final-yaw offsets remain 0, ±0.25, ±1, and
+±5 degrees. Preserve all missing tracks, unavailable reference associations,
+infeasible fitting windows, and numerical failures. Do not move the sample or
+window to obtain more favorable coverage. Reference/depth associations use the
+unchanged nearest-within-20ms rule and are validation-only. If a fixed reference
+window is unavailable, report it as unavailable rather than interpolating or
+substituting frames. Evaluate estimated cameras independently of reference availability.
+
+The source archive is the catalog's
+`https://cvg.cit.tum.de/rgbd/dataset/freiburg3/rgbd_dataset_freiburg3_long_office_household.tgz`;
+HEAD returned 1,483,556,251 bytes before acquisition. Store source data on Anima's
+`/data3` disk. Any implementation changes needed to handle missing data must be
+tested and documented separately from these frozen choices. No paper results
+are claimed before the replication completes.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is
