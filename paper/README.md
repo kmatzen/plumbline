@@ -935,6 +935,43 @@ validate a new metric or a method ranking. The complete search curves, negative
 depth counts, and continuous intervals are retained in
 `paper/results/ore-official-demo-v1/depth-support-audit.json`.
 
+#### Attempt to relax the first-box-center assumption
+
+The optional `--box-support` audit uses a linear program to search for any common
+3D point in the observed box frusta with positive camera depth. A second mode
+uses only the first box's image constraints, retaining depth constraints at all
+annotated frames. Returned witnesses are checked by explicit reprojection.
+Solver infeasibility is a numerical result, not an exact certificate. A common
+point is also a stronger assumption than a static extended object whose visible
+surface changes; failure would not by itself establish camera DNF.
+
+On the supplied sample, input validation prevents either mode from running:
+
+| Object track | Annotated frames | Reversed processed boxes |
+| --- | ---: | ---: |
+| 2 | 143 | 24 |
+| 1 | 974 | 371 |
+| 4 | 1309 | 40 |
+| 6 | 961 | 429 |
+
+None of these raw annotation rows has negative width or height. The released
+preprocessing rescales coordinates, undistorts two opposite corners, and casts
+to integers without restoring box ordering. Thus the observed reversals occur
+in the processed representation; this audit does not establish whether the
+underlying cause is calibration, distortion inversion, or annotation geometry.
+The boxes are identical across methods, so these are four affected object tracks,
+not 28 independent input failures. We neither sort the corners nor discard bad
+frames. Both modes conservatively return `invalid_boxes` for the entire track.
+Consequently this experiment provides no comparison of box-support feasibility
+between methods and does not relax the earlier center-ray finding on real data.
+
+The initial attempt stopped on input validation and is retained as
+`box-support-failed-v1.json`. The completed diagnostic records every invalid
+frame and box in `box-support-audit-v2.json`, in the same results directory.
+Published ORE scores remain unchanged. Six synthetic tests cover positive
+witnesses, conflicting boxes, opposing cameras, coordinate gauge changes, and
+rejection of reversed corners; they do not validate real-data failure decisions.
+
 DAVIS segmentation objects cannot be assumed static. Intrinsics are also absent
 from our DAVIS inventory. Do not use arbitrary focal lengths or moving masks as
 ORE ground truth. An annotated static-track subset and an explicit calibration

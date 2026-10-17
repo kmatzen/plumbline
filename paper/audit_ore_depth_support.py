@@ -48,7 +48,7 @@ def positive_depth_interval(slopes, offsets):
     }
 
 
-def audit(source, demo_path, output):
+def audit(source, demo_path, output, box_support_enabled=False):
     source, demo_path, output = source.resolve(), demo_path.resolve(), output.resolve()
     if output.exists():
         raise ValueError("preserve previous audits")
@@ -65,6 +65,7 @@ def audit(source, demo_path, output):
         "script_sha256": digest(Path(__file__)),
         "constraint": "strictly positive camera z at every annotated frame; no new score threshold",
         "methods": [],
+        "box_support_enabled": box_support_enabled,
     }
 
     def save():
@@ -176,6 +177,32 @@ def audit(source, demo_path, output):
                         ],
                     }
                 )
+                if box_support_enabled:
+                    from plumbline.frustum_support import box_support
+
+                    observed_boxes = np.array([boxes[i] for i in indices])
+                    invalid = ~np.isfinite(observed_boxes).all(axis=1) | (
+                        observed_boxes[:, :2] > observed_boxes[:, 2:]
+                    ).any(axis=1)
+                    tracks[-1]["invalid_box_frames"] = indices[invalid].tolist()
+                    tracks[-1]["invalid_boxes_xyxy"] = observed_boxes[invalid].tolist()
+                    if invalid.any():
+                        tracks[-1]["box_support"] = {
+                            mode: {"status": "invalid_boxes", "invalid_count": int(invalid.sum())}
+                            for mode in ("anchor_only", "all_observations")
+                        }
+                    else:
+                        tracks[-1]["box_support"] = {
+                            "anchor_only": box_support(
+                                poses[indices], camera[:3, :3], observed_boxes, anchor_only=True
+                            ),
+                            "all_observations": box_support(
+                                poses[indices], camera[:3, :3], observed_boxes
+                            ),
+                        }
+                    record["box_support_kernel_sha256"] = digest(
+                        Path(__file__).parents[1] / "src/plumbline/frustum_support.py"
+                    )
             record["methods"].append(
                 {
                     "model": model,
@@ -209,5 +236,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("source", "demo", "output"):
         parser.add_argument(name, type=Path)
+    parser.add_argument("--box-support", action="store_true")
     args = parser.parse_args()
-    audit(args.source, args.demo, args.output)
+    audit(args.source, args.demo, args.output, args.box_support)
