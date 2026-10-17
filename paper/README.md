@@ -406,9 +406,49 @@ the remote corpus directory. All 598 rendered image hashes and annotation
 targets, and all 435 labeled export records, were independently checked.
 The partitions and class imbalance are explicit. This small, six-video training
 set supports a bounded component pilot, not a claim of a large training corpus.
-No model has yet been trained on it. Validation/calibration must not be merged
+The training pilot below now uses the training partition. Validation/calibration must not be merged
 into training, and the earlier held-out baseline result is not fresh evidence
 for any future model-selection loop.
+
+**LoRA feasibility and fixed one-pass pilot.**
+`train_tapvid_lora_pilot.py` completed three training-only steps, one per target
+class, using the pinned Qwen2.5-VL-3B-Instruct revision
+`66285546d2b821cf421d4f5eb2576359d3770cd3`. It uses NF4 double quantization,
+fp16 quantized matrix computation, fp32 language-attention scores, and PEFT's
+k-bit preparation. This modified arithmetic is not certified equivalent to the
+unquantized model. PEFT 0.21.0 is isolated in
+`/data3/kmatzen/plumbline/research/peft-0.21.0`; bitsandbytes 0.48.2 uses its
+existing isolated directory. The shared environment was not upgraded.
+
+Only 1,843,200 LoRA parameters in language attention `q_proj`/`v_proj` are
+trainable (rank 8, alpha 16, dropout 0). The vision encoder and base model remain
+frozen. Image/prompt tokens are masked from the supervised loss; only the
+assistant target extension is supervised. All three losses and gradient tensors
+were finite, with nonzero gradient norms. Peak allocation was 5,121,092,608 bytes.
+The adapter and executed source are retained on Anima under
+`/data3/kmatzen/plumbline/research/tapvid-lora-pilot-v1/smoke-1`; its complete
+manifest and source hashes are in `results/tapvid-lora-pilot-v1/`. This verifies
+training feasibility, not improved predictions or generalization.
+
+A separate one-pass run over all 188 training examples is launched under
+`/data3/kmatzen/plumbline/research/tapvid-lora-epoch-v1/run`. It starts again from
+the pinned base, not the smoke adapter. Order is shuffled with Python seed 0;
+batch size is 1, AdamW learning rate 1e-4, and gradient norm clipping is 1.
+No epoch count or hyperparameter is selected from validation responses. Record
+completion and resulting evaluation before claiming a trained-checker benefit.
+
+`evaluate_tapvid_lora.py` freezes the next comparison: all 128 validation panels
+under the same prepared quantized model, once with adapters disabled and once
+enabled. Greedy generation permits eight new tokens. The parser accepts only a
+single `close`, `far`, `occluded`, or `uncertain` label (case/outer whitespace
+normalized); everything else is invalid. Report the full class confusion,
+overall and class-balanced correctness, per-video results, invalids and
+abstentions. Do not condition accuracy on answered examples alone. There are
+only two validation videos, so these observations are not 128 independent scenes.
+The 119 calibration examples remain unused. The evaluator verifies identical
+processed image hashes and the saved base/adapter file hashes. Its GPU execution
+is pending the training run; parser and training-mask tests are not end-to-end
+evaluation evidence.
 
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,
@@ -438,7 +478,7 @@ judgments; RL could study which frames or geometric checks to request under a
 budget. Neither should optimize against the evaluator's own unchecked scores.
 Any Bayesian optimization of the harness uses development scenes only, and all
 ablation choices and model settings must be frozen before held-out evaluation.
-No fine-tuning or RL has begun. Camera-failure labels remain insufficient for
+The correspondence LoRA pilot has begun; no RL has begun. Camera-failure labels remain insufficient for
 a defensible camera-judge training experiment; the narrower correspondence
 corpus above supplies a separate component-training pilot, not those labels.
 
