@@ -13,6 +13,46 @@ The synthetic search experiment tests the optimizer, not tracking improvements.
 
 ## Real-data pilot
 
+### Joint later-frame consistency (development)
+
+`probe_joint_query_consistency.py` extends the final-frame check to every later
+observation. It requires one fixed 3D point to satisfy the fitting observations
+and all available later observations, rather than allowing a different point
+for each query. It retains all 12 original track slots, fitting prefixes
+1–10/1–30/1–60, and coordinate-wise tolerances 1/2/4/8 pixels. Missing later
+observations are counted but impose no constraint. Missing fitting observations
+and inconsistent fitting geometry remain separate outcomes. This is classical
+multi-view feasibility, not a new triangulation method or a camera-failure label.
+
+Results are retained as `joint-query-consistency-v1.json.gz` in both
+`results/static-rgbd-control-v1/` and `results/office-rgbd-replication-v1/`.
+These are gzip-compressed complete JSON records, including individual checks,
+joint witnesses, input provenance, and code hashes. The runner emits uncompressed
+JSON; compression uses `gzip -n`. Both camera methods use their existing full-clip
+RGB-only predictions. Evaluation does not read reference cameras or sensor depth.
+
+Across the repeated prefix/tolerance/method/slot configurations, 23 near-scene
+and 18 office-scene cases passed every available individual query but failed
+the joint check. These are overlapping development configurations, not independent
+examples or an accuracy estimate. Independently projecting all 87 near-scene and
+109 office-scene joint witnesses confirmed positive depth and the requested pixel
+bounds. A synthetic unit test also constructs individually feasible queries with
+no common point, and another detects a middle-frame error despite a passing final
+frame.
+
+At prefix 60 and 4 pixels, the near scene has five jointly compatible DAGE tracks
+and five contradictory DA3 tracks. The office scene has three compatible and two
+contradictory DAGE tracks, versus five compatible DA3 tracks. Each setting also
+has seven slots with insufficient fitting observations. One of the five office
+tracks has no final-frame observation but does have earlier query observations;
+thus this denominator differs from the endpoint test. At 8 pixels, both methods
+have five compatible tracks in both scenes. These results do not establish a
+general method ranking. Correspondence error, scene motion, calibration error,
+and camera error can all produce a contradiction. Compatibility does not prove
+accuracy, and missing observations do not imply successful tracking. No DNF
+threshold is selected, and these development results have not been added to the
+manuscript.
+
 `inventory_pose_cache.py` inventories camera predictions on Anima without loading
 the large depth and point-cloud arrays. `export_realestate_poses.py` runs in the
 original `/home/kmatzen/git/geobench/.venv` environment and reconstructs seed-0,
