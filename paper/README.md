@@ -3336,3 +3336,29 @@ unknown-score handling, strict separation, and invalid inputs. A meaningful
 next camera-level validation needs real method outputs or a separate broader
 scene/path set and a fixed scoring policy; more texture seeds of this control
 would not supply that evidence.
+
+### Continuous baseline on saved real camera methods
+
+`probe_real_minimum_error.py` applies the same classical coordinate-reprojection
+search to the saved DAGE/DA3 full-clip estimates on both TUM development clips.
+It rechecks decoded RGB, prediction manifests/bytes, runner hashes, frame order,
+and track provenance. Scoring uses the common published calibration, unchanged
+RGB-derived tracks, and frames 1–89; it does not use reference-pose or depth
+values. All twelve tracks enter median bounds, including unresolved scores.
+The native-pixel calibration is explicit rather than borrowed from the renderer.
+
+On the first static clip, DAGE's median bracket is [2.8125, 3.1875] pixels and
+DA3's is [4.2227, 4.4609], with one unresolved track per method. On office,
+DAGE's bracket is [2.0273, 2.0352] and DA3's is [3.3008, 3.3086], with no
+unresolved tracks. All positive upper-bound witnesses pass independent
+reprojection/depth checks. Complete traces are saved as `minimum-error-v1.json.gz`
+in each clip's result directory. A test checks agreement with the frozen
+synthetic solver and use of changed focal length/principal point.
+
+Separately inspecting the existing first-clip reference metrics shows the same
+preference: DAGE/DA3 Sim(3)-aligned ATE is .00643/.00796 m and relative rotation
+error is .315/.358 degrees. These are prior validation metrics, not score inputs
+or functional failure labels. No matching office reference-metric file was
+found in that clip's result directory during this audit; its geometric preference
+is not independently validated here. Two development clips and two methods do
+not establish general ranking accuracy, a novel advantage, or a DNF cutoff.
