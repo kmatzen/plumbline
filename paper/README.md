@@ -2799,3 +2799,17 @@ pixel ground truth or camera-DNF labels. A two-pixel training target built by
 silently transferring these depth samples would be unjustified; reference
 uncertainty and visibility need separate treatment. This development audit is
 not added to the manuscript's experiments.
+
+The timestamp sensitivity arm is retained as `seed-transfer-interpolated-v1.json`
+in both directories. It changes only reference-pose association: translation is
+linear and rotation uses quaternion SLERP at RGB timestamps, with a maximum
+50 ms bracket gap and no extrapolation. Depth samples, tracks, fixed source
+frame, and query frames are unchanged. In the near sequence, frame 1 precedes
+the available reference span, so all 948 planned observations are unavailable
+under this policy; selecting a later source after seeing this outcome would be
+a different experiment. In the office sequence, the same 441 comparisons remain
+available. Median error changes from 3.225 to 3.309 pixels; 130 rather than 124
+comparisons are within two pixels. The median paired error change is +0.0238
+pixels (193 improve, 248 worsen). This timing change does not establish exact
+image labels or remove the need to account for depth, visibility, and image-track
+uncertainty. No failure threshold was selected from these diagnostics.
