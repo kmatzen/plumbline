@@ -843,7 +843,22 @@ executed-runner hashes. Both processed-image audits contain finite tensors and
 temporal responses both abstain, citing ambiguity/blur without identifying the
 marked detail. Both wrap their JSON in Markdown fences and therefore fail the
 unchanged strict parser. These are preserved as raw outputs, not accepted labels.
-The two office responses are still pending inspection; no pilot accuracy is claimed.
+The two office responses have now completed and been inspected. Both also
+abstain, including the identical-image control, and both fail the unchanged
+strict parser because they wrap JSON in Markdown fences. All four runs use the
+same prompt/checkpoint/settings, contain distinct finite processed pixel
+payloads with 608 matched tokens, and reproduce their saved parse outcomes.
+The completed raw records are retained in `results/track-identity-pairs-v1`.
+
+Decision: do not expand this VLM setup or use its outputs as identity gates,
+training labels, or camera-quality evidence. Removing Markdown fences would
+address formatting only, not the lack of useful identity judgments. This
+four-input diagnostic is too small and lacks negative controls to estimate
+accuracy or specificity. Keep its development record outside the manuscript.
+Continue the geometric evaluation separately; it must not be described as
+validated by a VLM. Revisit model-assisted identity checking only with a materially
+different model/setup and a stated validation plan, not another equivalent
+prompt or image-scale sweep.
 
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
