@@ -86,6 +86,75 @@ and [epipolar geometry](https://docs.opencv.org/4.x/da/de9/tutorial_py_epipolar_
 methods. These are baselines against which the proposed review methodology must
 be tested.
 
+## Proposed functional-DNF study
+
+Status: protocol under development, not a preregistration or a validated metric.
+The research question is whether a VLM can identify task-failing camera estimates
+that deterministic validity checks and conventional metric baselines miss.
+Crashes, timeouts, and invalid trajectories are mechanical DNFs. A complete,
+valid trajectory can separately be judged functionally unusable. Do not describe
+this second category as a failure to execute.
+
+The initial target task is camera-motion recovery for stable placement of static
+3D content across a clip, up to one global similarity transform. The proposed
+failure criterion is loss of that correspondence, not merely a nonzero pose
+error or an unattractive path plot. Failure examples to test include sustained
+background misregistration, tracking a moving foreground instead of the camera,
+and discontinuities inconsistent with the source video. A stationary estimate
+on a stationary-camera clip is not a failure. Rapid real camera motion is not
+jitter. Source blur, poor feature matches, uncertain reference poses, and moving
+objects can make the evidence inconclusive rather than prove tracker failure.
+The annotation pilot must establish concrete severity and duration anchors
+before any held-out evaluation; those thresholds are not yet established.
+
+Each candidate should receive a fixed evidence packet with ordered source frames
+and timestamps, candidate camera visualization, and independently constructed
+static-scene reprojection evidence where available. Record unavailable channels.
+Give both humans and the VLM the same evidence. Separate a reference-free arm
+from a reference-assisted arm; do not leak ground-truth error plots into claims
+about reference-free evaluation. Blind method identity and leaderboard scores.
+Require `usable`, `unusable`, or `abstain`, an evidence identifier, and an
+explanation identifying the supporting frames or intervals. Missing evidence
+must not be converted into a tracker DNF. VLM prose and confidence are not
+ground truth or calibrated probabilities.
+
+Collect individual labels from at least two independent reviewers, keep their
+disagreements, and adjudicate separately. The existing A/B pilot does not provide
+these labels: preferring A over B says neither whether A is usable nor whether B
+is unusable. Project-member labels can refine the rubric but should not be
+presented as external validation. No current pairwise votes will be relabeled
+as functional DNFs.
+
+Compare against validity-only rules, individual ATE/RPE/AUC thresholds, a
+combined-metric classifier, and image-correspondence residuals. Fit thresholds
+and any learned baseline only on training/calibration scenes. Freeze the rubric,
+prompt, model version, evidence renderer, and acceptance rule before testing.
+Split by original scene, grouping all methods, variants, windows, and repeats;
+also evaluate a tracking method excluded from calibration. Report false
+rejection among human-usable results, failure recall among human-unusable
+results, abstention coverage, and task-clustered intervals. Compare gates at a
+matched false-rejection target selected before testing, rather than only at
+their most favorable accuracy. Report all target violations. Test sensitivity
+to evidence channels, frame density, prompt wording, and repeat calls.
+
+`plumbline.tracking_failure.summarize_failure_review` implements the accounting
+for one system/configuration. Start from a complete attempt roster. Report
+mechanical DNF, functional DNF, and unresolved fractions over all attempts,
+alongside both raw complete-output metrics and accepted-output metrics with
+their counts. Missing/abstaining judgments remain unresolved. Failure-rate
+bounds assign unresolved attempts first to nonfailure and then to failure;
+these are accounting bounds, not statistical confidence intervals. No existing
+leaderboard is filtered by this experimental code. A reduced conditional error
+after rejection is not, by itself, improved tracking or improved evaluation.
+
+Related work to distinguish explicitly:
+[3D-DefectBench](https://arxiv.org/abs/2607.10826v2) studies how the model,
+rendering, evidence, and prompt affect human agreement for 3D-asset defects;
+[Spotlight](https://spotlight-video.github.io/) studies localized error detection
+in generated video. Neither establishes the proposed camera criterion. Merely
+using a VLM for failure detection is not a sufficient novelty claim. Full
+related-work coverage and actual camera experiments remain outstanding.
+
 ## Human diagnostic-review pilot
 
 `build_review_study.py` creates 150 native-input comparisons and 15 hidden
