@@ -1,8 +1,11 @@
+import json
+
 import numpy as np
 import pytest
 
-from paper.probe_static_point_support import support
+from paper.probe_static_point_support import load_prediction, support
 from paper.probe_static_rgbd_control import reference_cases
+from paper.stage_static_rgbd_control import digest
 
 
 def test_support_uses_common_fit_indices_without_missing_reference_frame():
@@ -30,3 +33,27 @@ def test_support_uses_common_fit_indices_without_missing_reference_frame():
     assert support(track, cases["reference"], k, 4)["status"] == "insufficient_early_observations"
     with pytest.raises(ValueError, match="positive"):
         support(track, cases["reference"], k, 0)
+
+
+def test_prediction_provenance_and_rigid_pose_checks(tmp_path):
+    runner = tmp_path / "executed-runner.py"
+    runner.write_text("# synthetic runner fixture\n")
+    prediction = tmp_path / "prediction.npz"
+    np.savez(prediction, extrinsics=np.repeat(np.eye(4)[None], 90, axis=0))
+    record = {"status": "complete", "source_manifest_sha256": "source", "frames": ["synthetic"],
+              "input_sha256": "input", "runner_sha256": digest(runner),
+              "prediction_file_sha256": digest(prediction)}
+    (tmp_path / "manifest.json").write_text(json.dumps(record))
+    poses, _ = load_prediction(tmp_path, "source", ["synthetic"], "input")
+    assert poses.shape == (90, 4, 4)
+    with pytest.raises(ValueError, match="inputs"):
+        load_prediction(tmp_path, "source", ["different"], "input")
+    prediction.write_bytes(b"changed")
+    with pytest.raises(ValueError, match="bytes"):
+        load_prediction(tmp_path, "source", ["synthetic"], "input")
+    poses[3, 0, 0] = 2
+    np.savez(prediction, extrinsics=poses)
+    record["prediction_file_sha256"] = digest(prediction)
+    (tmp_path / "manifest.json").write_text(json.dumps(record))
+    with pytest.raises(AssertionError, match="orthonormal"):
+        load_prediction(tmp_path, "source", ["synthetic"], "input")

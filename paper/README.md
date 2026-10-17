@@ -433,7 +433,7 @@ common frame mapping, the expected rotation-control separation, and explicit
 missing-observation accounting. This is an implementation control for a
 classical geometric component, not evidence of novelty or a validated DNF rule.
 
-A fresh DAGE run is now active at
+A fresh DAGE run completed at
 `/data3/kmatzen/plumbline/research/static-rgbd-validation-v1/dage-v1`.
 `run_static_dage.py` reads the fixed RGB sample directly, without reusing the
 dynamic-dataset loader or a prediction cache. It supplies only RGB and published
@@ -442,9 +442,39 @@ inputs. It records the decoded RGB hashes, pinned checkpoint contents, executed
 adapter source hashes, settings, environment, runtime, and prediction hash.
 The loader test verifies that validation metadata is ignored and modified RGB
 bytes are rejected. The checkpoint and 252-pixel/float16 settings match the
-earlier DAGE development configuration, while actual executed source hashes
-will determine whether the implementation is unchanged. No model comparison
-result is claimed before this run completes and its provenance is verified.
+earlier DAGE development configuration. Executed source hashes, rather than
+a local branch name, identify the implementation used for this comparison.
+
+The complete prediction and executed runner are retained under
+`results/static-rgbd-control-v1/dage-v1`. The comparison loader re-read and
+hashed all RGB files and decoded images, checked exact frame ordering and
+prediction bytes, and validated all 90 rigid camera poses. Checkpoint contents,
+executed adapter source files, and settings match the earlier walking-XYZ run
+exactly. Runtime including load was 181.65 seconds, with 6.54 GB peak allocated
+GPU memory; this is not a controlled runtime benchmark.
+
+`results/static-rgbd-control-v1/dage-point-support-v1.json` contains the model
+comparison. It reproduces all eight prior reference/rotation tolerance cases
+exactly and adds DAGE without changing tracks, calibration, fitting frames,
+tolerances, or solver settings. The original support script is archived as
+`executed-point-support-v1.py` beside the original results. Among the same 11
+checked tracks (579 later observations / 948 planned), DAGE has positive
+full-track witnesses for 0, 3, 11, and 11 tracks at 1, 2, 4, and 8 pixels,
+respectively. All 11 early windows have witnesses at each tolerance. The
+twelfth slot remains insufficiently observed.
+
+On the 89 frames with reference associations, conventional Sim(3)-aligned
+ATE-RMSE is 0.006427 m, adjacent-frame translation RPE-RMSE is 0.006296 m, and
+rotation RPE-RMSE is 0.315421 degrees. These use the retained nearest-timestamp
+reference, not interpolated poses. The reference metrics are kept separate
+from the reference-free support calculation, which uses no pose alignment.
+The smaller pixel tolerance needed for DAGE than for the supplied reference
+does not mean it is more physically accurate: consistency with image tracks,
+reference timing/noise, and calibration are different quantities. Both DAGE
+and reference are supported at eight pixels, while the known rotation
+intervention is not. This is a favorable single-sequence component control,
+not an operational failure threshold, method ranking, or validation of the
+proposed complete evaluator. No manuscript claims are added from this run.
 
 #### RGB-D evidence validation
 
