@@ -4501,3 +4501,21 @@ does not certify a static surface. A camera evaluator must preserve these
 distinctions rather than silently drop all outliers or call them camera errors.
 The record is `results/movi-temporal-verifier-v1/rigid-support-v1.json`; tests
 check distance arithmetic, insufficient support, deduplication, and exact replay.
+
+### Held-out-point check of rigid support
+
+`probe_movi_crossfit_support.py` divides the fixed 8x8 source grid into four
+interleaved groups using row/column parity. Each group's judgments use a matrix
+fit only to visible points in the other three groups. RANSAC settings and the
+1-pixel Sampson threshold are unchanged. This removes direct own-point fitting,
+not dependence between tracks or scenes, and is not independent validation.
+
+The held-out check changes 25/768 decisions. Among the 513 supported static
+background cases, 485 pass, 13 fail, and 15 remain unresolved. Among the 13
+supported moving foreground cases, seven fail, one passes, and five remain
+unresolved. The in-sample check had nine static rejections and eight moving
+rejections. Neither version certifies staticness or justifies treating all
+rejected points as camera failures. The record is
+`results/movi-temporal-verifier-v1/crossfit-support-v1.json`. A direct intervention
+test changes a held-out group's coordinates and verifies that its fitted
+matrix remains unchanged; all fitting and held-out slot lists are retained.
