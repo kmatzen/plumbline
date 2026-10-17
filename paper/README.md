@@ -475,7 +475,11 @@ and includes abstentions/invalids in all-example accuracy. Its frozen baselines
 are the majority label from training only and the original image check, which
 may admit `close` or abstain but never infer `far` merely from rejection. Per-video
 confusions, close-admission precision, class recall, and paired correctness counts
-are retained. This reporting code has unit tests, not yet measured VLM results.
+are retained. Answer coverage and answered-only accuracy are also reported to
+separate response-format compliance from recognition. Answered-only accuracy
+uses a model-selected subset and cannot replace all-example accuracy. Tests
+cover fully formatted but entirely wrong answers and zero-answer cases. This
+reporting code has unit tests, not yet measured VLM results.
 
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,

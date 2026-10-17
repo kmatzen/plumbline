@@ -21,11 +21,14 @@ def metrics(rows):
     correct = sum(matrix[c][c] for c in TARGETS)
     recall = {c: matrix[c][c]/sum(matrix[c].values()) if sum(matrix[c].values()) else None for c in TARGETS}
     close_count = sum(matrix[c]["close"] for c in TARGETS)
+    answered = sum(matrix[c][a] for c in TARGETS for a in TARGETS)
     return {"examples": n, "confusion": matrix,
             "accuracy_all_examples": correct/n if n else None,
             "class_recall": recall,
             "balanced_accuracy": sum(recall.values())/3 if all(v is not None for v in recall.values()) else None,
-            "answered_examples": sum(matrix[c][a] for c in TARGETS for a in TARGETS),
+            "answered_examples": answered,
+            "answer_coverage": answered/n if n else None,
+            "accuracy_answered_only": correct/answered if answered else None,
             "uncertain_examples": sum(matrix[c]["uncertain"] for c in TARGETS),
             "invalid_examples": sum(matrix[c]["invalid"] for c in TARGETS),
             "close_predictions": close_count,
@@ -86,7 +89,7 @@ def compare(report, corpus, tracker):
             "baseline_policy": "majority from training labels only; image check may predict close or abstain, never infer far from rejection",
             "training_majority_label": majority, "arms": results,
             "paired_correctness_counts": dict(Counter(f"base_{a[k]}_adapted_{b[k]}" for k in selected)),
-            "limitations": "no scene-level significance claim from two videos; generation-format improvement is separate from class recognition; no calibration examples used"}
+            "limitations": "no scene-level significance claim from two videos; answered-only accuracy has a model-selected denominator and must be read with coverage and all-example accuracy; generation-format improvement is separate from class recognition; no calibration examples used"}
 
 
 if __name__ == "__main__":
