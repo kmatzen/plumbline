@@ -3960,3 +3960,30 @@ DA3 on 5397 and 4385. Adjacent translation error favors DAGE on three scenes
 and DA3 on 5397. These conventional pose measurements provide comparison
 targets; they do not validate the new evaluator or define functional DNF.
 No result from this pilot has been added to the manuscript.
+
+### Frozen MOVi marker proposals and separate motion audit
+
+`build_movi_marker_geometry.py` uses RGB only and the saved cameras. It starts
+64 fixed pixel slots at coordinates 12,44,...,236 on each axis, retains lost
+tracks, and fits each marker from frames 0..9. Query frames are 12,18,23.
+Later RGB tracks are saved but cannot change the fit. No reference mask or
+motion annotation selects points. All four scenes and both camera methods
+produce 1,536 planned proposals: 944 are inside the image, 546 lack a complete
+fitting track, 43 project outside, and 3 have nonpositive fitting depth.
+The four `marker-geometry-*-v1.json` files preserve every slot and fit.
+
+The Anima run loaded the private copy of `plumbline.image_evidence`, without
+changing the shared installation. Its SHA256 matches the local source:
+`9fc932d5f4cea4008a9dc43106fe4075e67dff17274000853cd511bff17414f4`.
+
+Only after those files were saved, `audit_movi_marker_motion.py` joined them
+to the existing temporal and visibility diagnostic records. The raster-center
+conversion is explicit: reference coordinates subtract 0.5 before comparison
+with LK coordinates. All 1,536 proposals remain in `marker-motion-audit-v1.json`.
+There are 366 foreground-reference proposals and 1,170 without a foreground
+reference. Foreground visibility evidence is supported for 120, unresolved for
+158, and rejected for 88, including unavailable proposals. These are diagnostic
+cues, not independently verified visibility labels. No binary staticness or
+DNF threshold is introduced, and no accuracy or camera ranking is inferred.
+Three tests check fixed-slot retention, exclusion of later observations from
+marker fits, coordinate conversion, and preservation of unresolved references.
