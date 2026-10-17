@@ -275,6 +275,19 @@ related-work coverage and actual camera experiments remain outstanding.
 
 #### Source-track comprehension pilot
 
+The corrected 7B NF4 configuration was subsequently evaluated on the same three
+source-identity inputs and identical prompt used by 3B. All three attempts
+completed and their raw answers abstain because the marked detail appears too
+small and blurred; all use Markdown fences and fail strict parsing. Thus the
+larger configuration supplied no scene identities on this pilot, even apart
+from formatting. This does not establish that the details are objectively
+unidentifiable or that the model cannot perform broader scene interpretation.
+The pilot lacks a clear-target positive control and human answers, so excessive
+abstention versus appropriate uncertainty remains unresolved. Records are in
+`paper/results/source-identity-7b-v1/`; input and prompt hashes match the 3B trials,
+and runner hashes match the archived corrected 7B runner. No prompt retries,
+labels, staticness judgments, or DNF decisions were generated from these answers.
+
 The larger-model follow-up is Qwen2.5-VL-7B-Instruct at pinned revision
 `cc594898137f460bfe9f0759e9844b3ce807cfb5`, staged in Anima's `/data3` HF cache.
 `bitsandbytes==0.48.2` is installed without dependencies in the isolated directory
