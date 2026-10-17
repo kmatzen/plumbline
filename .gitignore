@@ -53,7 +53,14 @@ results/
 
 # Outputs
 *.log
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.out
+paper/main.pdf
 results/
+!paper/results/
+!paper/results/*.json
 reports/
 tmp/
 
