@@ -3196,3 +3196,24 @@ structure, unlike this true-point scoring calculation. Two tests verify
 independent projections, consistent world/camera gauge changes, and unchanged
 prefix projections under a suffix camera rotation. These are control diagnostics,
 not manuscript DNF results.
+
+`probe_layered_minimum_error.py` adds a classical continuous-error baseline:
+numerically bracket the minimum coordinate-wise reprojection tolerance by
+bisecting the existing feasibility solver. The fixed search is zero to 64
+pixels with .01-pixel resolution, using all visible frames of each of the 12
+unique oracle tracks for every camera variant. An unresolved solver result
+stops the search without being treated as infeasibility. This is classical
+bounded-reprojection fitting, not the proposed novel contribution.
+
+All 168 brackets completed and their upper-bound 3D witnesses passed a separate
+positive-depth/reprojection check. Identity and global-gauge controls lie in
+[0, .0078125] pixels. Every tested nonidentity/nongauge track has a positive
+numerical lower bound. Signed forward/backward translations require roughly
+.08 to 1.68 pixels after structure refitting, below the previous two-pixel
+gate but separated from exact reference cameras. Thus binary tolerance hid
+differences present in continuous fitting error; this control does not establish
+unobservability in the zero-noise limit. Real track uncertainty, staticness,
+calibration, and application usefulness remain separate unresolved questions.
+Full solver traces are preserved in `results/layered-minimum-error-v1.json.gz`.
+Three tests check bisection against a known monotone oracle and preserve both
+mocked numerical uncertainty and a real coincident-camera boundary case.
