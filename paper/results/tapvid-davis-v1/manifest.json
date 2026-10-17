@@ -1,0 +1,798 @@
+{
+  "source_url": "https://storage.googleapis.com/dm-tapnet/tapvid_davis.zip",
+  "archive_sha256": "60eb6239c57a9877900c269d14637c2b6eece8fa280f59e4592324c6392031b6",
+  "archive_bytes": 1668710491,
+  "upstream_documentation_commit": "730cda1c730877cfedbe01bf87fb1cadb78a565d",
+  "script_sha256": "1fd621895873fa0761468f92f848b1e5f098214b886c7f7d77d19b9a65a2e66d",
+  "numpy_version": "2.4.4",
+  "coordinate_policy": "original normalized xy retained; raster xy = points * [width,height], not [width-1,height-1]",
+  "annotation_scope": "human-reviewed, optical-flow-assisted point positions and visibility; not staticness, camera ground truth, or DNF labels",
+  "split_policy": "sort SHA256(plumbline-track-identity-v1: + name); first ten development; remaining twenty held out; no metrics examined before split",
+  "training_policy": "no training or threshold selection on held-out sequences; pretrained model exposure unknown",
+  "documents_sha256": {
+    "README.md": "7c0d8b82c56fc1b28a8255786068a10ef5042524259627e1916adc395e7ba539",
+    "SOURCES.md": "889de97e611e362e4d4fa677ebcf5c829cf36ef253aae4f0cd6dfdfa3fdcbec1"
+  },
+  "sequences": {
+    "goat": {
+      "split": "development",
+      "video_shape": [
+        90,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        5,
+        90,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 450,
+      "occluded_observations": 0,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "58f2d208a99b05fadfdde100c6128e3f5236ef8a98007dd7e1be2126bdc3f6b1",
+        "occluded": "15308fa38ef2964d8267500d4c25b27a51ef20e736817baff196c60380f8c73d",
+        "video": "668a98d25383ce70c5885c7164ef3fcf4f43d46428987a92e70550395e5dc86b"
+      },
+      "file": "goat.npz",
+      "file_sha256": "6cffa179aa266d36ac69c858da952b2035d352c18a5d471dfb4dface25e842e1"
+    },
+    "car-roundabout": {
+      "split": "held_out",
+      "video_shape": [
+        75,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        20,
+        75,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 600,
+      "occluded_observations": 900,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "29d7e95293bb4f760773b2473960391b7af138cdb52f5fabc5744197e29c626e",
+        "occluded": "c537a3add6660a7577a011ebf536163fd69dd56bb4ecf00fc5b2e34aabe81db0",
+        "video": "4113c3df6ed02ae8b90013b011501d392254edda0ae209340857ff673adbe608"
+      },
+      "file": "car-roundabout.npz",
+      "file_sha256": "f4968c5299170cde574140c4374609e62f5a2bcfad0ad982b86803017e088962"
+    },
+    "motocross-jump": {
+      "split": "held_out",
+      "video_shape": [
+        40,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        40,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 401,
+      "occluded_observations": 599,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "b8cf20db76fcc2ac33988e8d827526e82ef5d2c4a1c288744fa9609780347b62",
+        "occluded": "915eab9d7de5d8a8ce4585d1a4259571d6936c64e63a4f757e2d0b2e2f954a66",
+        "video": "e8c2a5ff2cfdaf5875a0d1339e21e58415512c0ca7daf4e9c7076f410b27d00c"
+      },
+      "file": "motocross-jump.npz",
+      "file_sha256": "b59f734e0742402b1db008270d54ba083d52d271ac8524a48eafc158a4edd1fa"
+    },
+    "breakdance": {
+      "split": "development",
+      "video_shape": [
+        84,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        84,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1361,
+      "occluded_observations": 739,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "e1c02f4b5826c76b49649cfec41ff8d113bcefeb5515f472122adcecdad55d91",
+        "occluded": "c7cdb82001f72efbe7401784c2f10a614b99935566e51afc7acace71d14979f9",
+        "video": "f4e63ce53435082d68bb8c89aacdf07a6cbc22082f2b3cafad63922093be03d4"
+      },
+      "file": "breakdance.npz",
+      "file_sha256": "8d2cf7bc0c45e9a8bdbd254dc159453fc8f3fd2ed076ec0f40d3df73cd70ebce"
+    },
+    "drift-chicane": {
+      "split": "held_out",
+      "video_shape": [
+        52,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        52,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 648,
+      "occluded_observations": 652,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "ff047741b2321624bca4bd1c5ecca8fc6bb7a9712de1843cac245196d1a3e2a7",
+        "occluded": "5ceb88242570ec82094c3dc75185795c6f2d2e1b1f742d0138e914f6ca197d10",
+        "video": "5daf4d7dde9910a15f627851e7210cae58ee3b7439cac053fab3d9c43d75f7a3"
+      },
+      "file": "drift-chicane.npz",
+      "file_sha256": "a414658af06721329045ad469cec05ac4e82de292f773c630a7734a4c7198311"
+    },
+    "drift-straight": {
+      "split": "development",
+      "video_shape": [
+        50,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        50,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 405,
+      "occluded_observations": 845,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "0dc8f03dfd010de1d3b69d49169d4456c6453d076c6460e8aacb62d65752487d",
+        "occluded": "c17db1d95e0a9b3dd65f53148456b01f45b628971d768696efaf60622bc8b0a7",
+        "video": "6233060a94216fdc74ebf5e41e1079d2468657d816fe3b1c1dc94aa165e1e5ac"
+      },
+      "file": "drift-straight.npz",
+      "file_sha256": "3916a76f36bf1a60b05d62fc35f738c6065a4aec54f6764772eaa568aba08924"
+    },
+    "judo": {
+      "split": "development",
+      "video_shape": [
+        34,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        34,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 571,
+      "occluded_observations": 279,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "1ed24953426748cd7c7d4e5423bec22247df83590feec9209a895a391c1bea2a",
+        "occluded": "ac6999e39ece8826e4ab85bf3205f7a3952b4115941b8b5bb7f8649f3c16c0e5",
+        "video": "c9d8c99120bbe9a18b572f3097319c8703b8565a3216c927a233e2b89e702c4e"
+      },
+      "file": "judo.npz",
+      "file_sha256": "a8729910d639fad5ff71ee0bafdf7df4d241991b48acb18203a6ba47226221f9"
+    },
+    "soapbox": {
+      "split": "held_out",
+      "video_shape": [
+        99,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        99,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1642,
+      "occluded_observations": 833,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "ead28708bc1cbfb38a45f203e137b3e4c2ebef5c7137b0ce77c17bdbb0a01eab",
+        "occluded": "08d2f7d7b8e42d1cbbc226b7e84e27ec4c782ed0d6561b00e6ef6b66e9fa2f09",
+        "video": "4f436aa5e2fd0198d05e187a436c44010ccee60b0a40876d7a411042e413538a"
+      },
+      "file": "soapbox.npz",
+      "file_sha256": "69af27bea0d2008c56ca8faca39faadd693f1247868db06f3df911026fd7723f"
+    },
+    "dogs-jump": {
+      "split": "development",
+      "video_shape": [
+        66,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        66,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1121,
+      "occluded_observations": 529,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "3942313e9b43e3b00a86f0f659fc2f807ed9ebf49c152780de9303deebcf5f7b",
+        "occluded": "1177f349fea7ef6d287a20b5f88d5861210a3a1348501175196cba08576fa40d",
+        "video": "abe8f07564bf3778fff05323c29e103a5d9a216834c305eafa874409554f7030"
+      },
+      "file": "dogs-jump.npz",
+      "file_sha256": "f65107cd21d58dc1935980a1b8e777aaad0fdce930a883b4492826e453eb5d64"
+    },
+    "parkour": {
+      "split": "held_out",
+      "video_shape": [
+        100,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        100,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1084,
+      "occluded_observations": 1416,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "e951f6b28ba475e2365a433944f4e9cc270338057c2bfcf7e88c4b9a32ef59ee",
+        "occluded": "c8340f0eae2c19233559d511c790718c93224688c08e6652acac846a308002ac",
+        "video": "582bee56fd9732dd3c3583809a4f4f3620b54aad97c693a229d963c264bda58c"
+      },
+      "file": "parkour.npz",
+      "file_sha256": "4bff36f52397761b5c8998feda2f74f4434d2211ccfcb707d12912cc6780bc88"
+    },
+    "india": {
+      "split": "held_out",
+      "video_shape": [
+        81,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        81,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1341,
+      "occluded_observations": 684,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "3f52772b7993fc3d24f4d6da8859c46c7dd6dce5ef665ab13b5a5c36461b82f1",
+        "occluded": "0395c451b5bcea0d1e7e413a5d684458b8ed438e5cea71c50c219150a48b6053",
+        "video": "490c1d3813cd4b6c2af971dd4d5fab36ccb28b43f1ddfeff2282c8badff6e074"
+      },
+      "file": "india.npz",
+      "file_sha256": "133b08df8793166761d16b550e19d8959a0111f069274db15af42214cb988b80"
+    },
+    "pigs": {
+      "split": "held_out",
+      "video_shape": [
+        79,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        15,
+        79,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 792,
+      "occluded_observations": 393,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "4ec81b2be073717119f53e7ea3a4554ad8d6788e09f62bd468b13d9b16867106",
+        "occluded": "f42e7f6dc13013867d89ff04ec9010c2749a5547917f4902ef2a2cf6ab554c21",
+        "video": "0071c3c7f4fa2a94101bfc035cc9ad376b9ea206bf45f34c3ad4cace74402b1c"
+      },
+      "file": "pigs.npz",
+      "file_sha256": "54e3cc8b8a4006bc22e809aa062ccc0daa7262428b2cd0261ad401105a237d67"
+    },
+    "cows": {
+      "split": "held_out",
+      "video_shape": [
+        104,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        10,
+        104,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1030,
+      "occluded_observations": 10,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "347c3aead69a11c59b092b5ceec687d97a923367faf3b2ef0971636c343f9169",
+        "occluded": "a234ba21f88198c1c73d2d68cf71f6e28823a0ccce02eb4cdd31bb615b76fd7d",
+        "video": "d187484fe1dff027cb67380167fb715a25af19e21fc79ea9656b5a3a78c3fc5f"
+      },
+      "file": "cows.npz",
+      "file_sha256": "719b2353018063586c0b631bff84ea0a41b1a30c5ce50d658ab630a10903bed5"
+    },
+    "gold-fish": {
+      "split": "held_out",
+      "video_shape": [
+        78,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        78,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1625,
+      "occluded_observations": 325,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "ef509337798afd6811717c3817aed370a142e3017d34df2be283e7993074b1c7",
+        "occluded": "440a61f15f8c83f1650afc4186b9d3dfc4f734fedaa1a07167d83e1f0de4b4d4",
+        "video": "94ac6a7729af998534216b2db24fcaa499360bc5768f35ea75e5b6173834f0a8"
+      },
+      "file": "gold-fish.npz",
+      "file_sha256": "2fda86af9ba9ed9f17c0a0bec31b0a48bc174823bbe8cd6cf4fca4bb20d5163e"
+    },
+    "paragliding-launch": {
+      "split": "held_out",
+      "video_shape": [
+        80,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        80,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1883,
+      "occluded_observations": 117,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "ab23d84a870136303f7fcdbba90e1115ab23dd8c37e0945b76424c54e046f955",
+        "occluded": "76dc680374b3434762988b5aff3e265845ccb31010fcde2e9bad963720966ad3",
+        "video": "2bebe138a9c50241899ebeff47a314c713025fb732240844d2d5227397f350c1"
+      },
+      "file": "paragliding-launch.npz",
+      "file_sha256": "bc5929038a154c4e1a4fcaae7ae1c3843452527d2e14c1bcf9ecdde2c89b1423"
+    },
+    "camel": {
+      "split": "development",
+      "video_shape": [
+        90,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        10,
+        90,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 760,
+      "occluded_observations": 140,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "8f34d644bf62480f1b09df155cff496d92cc5cd8f064f17c1c8c77cdd4527871",
+        "occluded": "7199ed60063cdb150ccd22e10a81c1a211b13c7e1108fe55b8e2f42416e0a002",
+        "video": "df9cb1c33aa97beb68bc37ef20ae5f56e030c8dc91c703a7fae684a7d259c814"
+      },
+      "file": "camel.npz",
+      "file_sha256": "624cd5d4dbd9620ff459240765edc5e3abe400fb8e6e236652921306614dd24b"
+    },
+    "blackswan": {
+      "split": "held_out",
+      "video_shape": [
+        50,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        5,
+        50,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 250,
+      "occluded_observations": 0,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "36930cec2913e1550700903f64b6f97e14a02d4ba882509a48ef9c861e50c293",
+        "occluded": "1a5ce2eb33e4dcd8bf09a57d740649e2aec359dc2c0fd952ac0d19d4a63d0c42",
+        "video": "b713dd6df10928e32c08afeb9743190213013485ff49c726a564d73cda8ccf57"
+      },
+      "file": "blackswan.npz",
+      "file_sha256": "57c95d595ff29dc0ddfece9b02cf35d6cba7846bde52e419f1a92a30ac444153"
+    },
+    "dog": {
+      "split": "held_out",
+      "video_shape": [
+        60,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        10,
+        60,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 416,
+      "occluded_observations": 184,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "c62104fc7022763330f25cb18fcc74f10385240d43ba38eae77daad7d22b4e9c",
+        "occluded": "e57ffa7574111a3f5b38578134be20408335e376acd3a7f155860c078e491c68",
+        "video": "a9e8567c321fb03c80daf1fd2e727d4d170ea11dca487a7efba3098035aa25ff"
+      },
+      "file": "dog.npz",
+      "file_sha256": "a5783a81d7406ee6e739a60ebfb27e38e4dbacae985faf9178d762becdb0e8b7"
+    },
+    "bike-packing": {
+      "split": "held_out",
+      "video_shape": [
+        69,
+        480,
+        910,
+        3
+      ],
+      "points_shape": [
+        25,
+        69,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1067,
+      "occluded_observations": 658,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "d5ec0d5f67fd93f948a7a6af1d2353c76ee658a3d2291378f41eb8bc6de0e7f8",
+        "occluded": "995b57a409e41eb1795c15f6c6a5c201095c93ab60235b9ad70a8cbaa113d211",
+        "video": "5d41b12f0ed6be94a82ee870e6e7cecaa6bdb7d448291cc1c21acd44715f6302"
+      },
+      "file": "bike-packing.npz",
+      "file_sha256": "7c2f71010d15ad7302fb48d5dd45a8fdfa25bcd87eb350067eb0b37850dd65df"
+    },
+    "shooting": {
+      "split": "development",
+      "video_shape": [
+        40,
+        480,
+        1152,
+        3
+      ],
+      "points_shape": [
+        25,
+        40,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 468,
+      "occluded_observations": 532,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "306602445adddbeb0782aee169604e13df73c986d348e6b63de68de52223ac32",
+        "occluded": "7300b5d41a2c72fb7c41a3f91e9eba16ca17bc3f04ffea5ef32a11d2b3e837f0",
+        "video": "bd235b9cf60afaf50b7dcb6730d6122ed1fa30e4612e1591cb3fadf444d78155"
+      },
+      "file": "shooting.npz",
+      "file_sha256": "6412431e40027906da6bbe994a7875b30487fbcd7daae6ab80fd90ee34e22196"
+    },
+    "lab-coat": {
+      "split": "held_out",
+      "video_shape": [
+        47,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        47,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 940,
+      "occluded_observations": 235,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "ed6797a3fd9bc5d232a7e88f993a58ad9911aefdcf9191e5d2af8a84cb03931e",
+        "occluded": "91c0243b2e86f2b0fe3b0d82c70a51b74d3346231b2cb5c6143f2d4fa7dd348e",
+        "video": "ebf9fa387c4d1a02182f4b84e25f7e172393053b75a26eb314ea61d659b718e4"
+      },
+      "file": "lab-coat.npz",
+      "file_sha256": "8d4dc5c3d5703bab0f41d76db2ae5c3d4a9ca9468ad902631cb3f2d66da2d3d4"
+    },
+    "kite-surf": {
+      "split": "development",
+      "video_shape": [
+        50,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        50,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1243,
+      "occluded_observations": 7,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "faaef8c54a527b156468793cb052b764827bca307c9aada1ab664d69700e626e",
+        "occluded": "646bef367205cbb18ed13c766977d0c1fe5cb1aa924b532eaa6bbc4941f58113",
+        "video": "44c1986cd054053908920a4824a31cc5d91ac8d922c6a0afccf9db1b64b8cf52"
+      },
+      "file": "kite-surf.npz",
+      "file_sha256": "ea9a8eb2cd32e77a281759755d0b9818a4c636401faacd3f76651789a5fc9a14"
+    },
+    "bmx-trees": {
+      "split": "held_out",
+      "video_shape": [
+        80,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        80,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1219,
+      "occluded_observations": 781,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "ec4b8c50728ce08ab5472c8c2136d7ebb9d5659bccad7e963e33c1f3bd08ec2e",
+        "occluded": "72ec5cf06a736c5820936bb21419a57e63ab58bdcbeda6b99d5998d21296fb06",
+        "video": "ee11084dbae098fbdd422c5f9daf46f9a75b055eb00594cc32979e2eb07f8ef2"
+      },
+      "file": "bmx-trees.npz",
+      "file_sha256": "82af6bae4e9e343361aa8f48b97f0e9eb840981a064f0e21062ad6e594f06998"
+    },
+    "dance-twirl": {
+      "split": "held_out",
+      "video_shape": [
+        90,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        90,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1710,
+      "occluded_observations": 540,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "f3ca99b69729cb191f308de055e8796102ac23f773ab231439805791f40b3fa6",
+        "occluded": "a8d488d5336af91bc308fa32604e7f416e31c80a1002ecfe0e923882fe0a524b",
+        "video": "0960bd668aa7e4a644ddf5aec2c9f8af6851cf86d33f3dbe16fa501d5f9e3699"
+      },
+      "file": "dance-twirl.npz",
+      "file_sha256": "ec20a4f592447942ddb3ac5d2cc1a804f4c17a12662abd9f267bc7a03b358837"
+    },
+    "car-shadow": {
+      "split": "held_out",
+      "video_shape": [
+        40,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        40,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 774,
+      "occluded_observations": 226,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "f7ff7eb97de3d36912c3703dd334ec9f64196252e31817566adfce64d08a0302",
+        "occluded": "4dcff14e4da16295e106ed705ded441773e6651cee7c214ba9246c3ceca50fee",
+        "video": "cb0c5e094c7291dcf1ec9e039a59c4761f43578b21f0d009c7a2e5584ca6f97e"
+      },
+      "file": "car-shadow.npz",
+      "file_sha256": "d642fc7ff49a0a8fdd5da54da03d677ed207f714067c2ec4541aee931bd2a296"
+    },
+    "libby": {
+      "split": "held_out",
+      "video_shape": [
+        49,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        49,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 315,
+      "occluded_observations": 910,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "96d25a1979e729e93dc88d423faf93cd63a5f6468efbf3486610f0daa7c539c2",
+        "occluded": "da7d316fd7bdf01972f4dd2c3a7c3b1078b0edcf364cf0d2ce830dda74fea1cb",
+        "video": "031a5a2ba7442e4fd51101e786313d3f86f69615da585527785dea1046d1bdf3"
+      },
+      "file": "libby.npz",
+      "file_sha256": "f82c3e66339afc096b984b2e576598a07c4238879c7fa6304c01203b97afc3cb"
+    },
+    "scooter-black": {
+      "split": "held_out",
+      "video_shape": [
+        43,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        43,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 951,
+      "occluded_observations": 124,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "35ee395704d000bcae1e7d7553bdcc6fc769026901e0accca96cd17c7972e12d",
+        "occluded": "1bddc72813d43bdfa010136b7a5b92edb0b18cdac6032c6214482053bbc61a2e",
+        "video": "0bdc938ca0ac46d30b41be01101257258886591b62d704b8e27c88d2ba1fdc57"
+      },
+      "file": "scooter-black.npz",
+      "file_sha256": "fb01779f631a9f5beb2d54c8816dc576310319967ec81853b94fe11c6a0baa7a"
+    },
+    "mbike-trick": {
+      "split": "development",
+      "video_shape": [
+        79,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        79,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1548,
+      "occluded_observations": 427,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "de93b81e35b96dc30057a55011ab8412d3c0a7357d9ed2222a490da5fd1a7862",
+        "occluded": "f725512480f21d75324da297a755b774d52c90c6c6bf45bce1150fed8022bdc2",
+        "video": "1f37186192d0bb520875cf5b69690f278a831db085cd71a18bfcdb1f60d45ff0"
+      },
+      "file": "mbike-trick.npz",
+      "file_sha256": "dbc5eab2b4ac680714860b33a78a84dc18d7406273e734e057977655cb895080"
+    },
+    "loading": {
+      "split": "development",
+      "video_shape": [
+        50,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        50,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1016,
+      "occluded_observations": 234,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "fb78377d6b9f2685fafe5c7d391eab0e287ef248948782c9adf027304d1383d9",
+        "occluded": "be1ee328668acfce7f9514ebbe8fcb71a9e5686e8de5f23ef47256f64477c893",
+        "video": "13cb23fe88ed0e9d05b0c5d15ef8ef48b2e6919260907aa8bfb5ed93e2fd178f"
+      },
+      "file": "loading.npz",
+      "file_sha256": "cc8959ecbebcf8b4cf8486ee18e19f948538636399cbf539353ca98fe4dc9afa"
+    },
+    "horsejump-high": {
+      "split": "held_out",
+      "video_shape": [
+        50,
+        480,
+        854,
+        3
+      ],
+      "points_shape": [
+        25,
+        50,
+        2
+      ],
+      "points_dtype": "float32",
+      "visible_observations": 1193,
+      "occluded_observations": 57,
+      "all_occluded_tracks": 0,
+      "visible_outside_unit_square": 0,
+      "decoded_array_sha256": {
+        "points": "8d142a131af70d6fd70d2e450be586776edd826f2c15563bbcd4b193ba0038af",
+        "occluded": "7dca5875e3f02eb55b4629d82ae332c3e6fdb2108782e8fbc970f350319279f3",
+        "video": "ce48ea6272016b9298fd0b244b4783572d2e471ea560444ea8f26d511d8fb3f1"
+      },
+      "file": "horsejump-high.npz",
+      "file_sha256": "7d33ddb1739d4db96bd5f144dbc5bcf934fe59beafeeb90f75989a4b283350ef"
+    }
+  }
+}

@@ -13,6 +13,50 @@ The synthetic search experiment tests the optimizer, not tracking improvements.
 
 ## Real-data pilot
 
+### Independent point annotations for identity validation
+
+The official [TAP-Vid DAVIS release](https://github.com/google-deepmind/tapnet/blob/730cda1c730877cfedbe01bf87fb1cadb78a565d/tapnet/tapvid/README.md)
+is staged at `/data3/kmatzen/plumbline/research/tapvid-davis-v1/staged` on Anima.
+It contains 30 videos, 1,999 frames, and 650 annotated tracks. These point
+positions and visibility flags were produced with human review and optical-flow
+assistance. They supply external position/visibility references for evaluating
+track checks; they do not label static scene points, camera accuracy, or DNF.
+They are not perfect independent hand clicks on every frame.
+
+`stage_tapvid_davis.py` pins the official archive SHA-256
+`60eb6239c57a9877900c269d14637c2b6eece8fa280f59e4592324c6392031b6`
+and byte count 1,668,710,491. Its MD5 also matched the Google Storage response.
+The loader checks the archive before reading its NumPy pickle through a restricted
+constructor allowlist. Subsequent consumers use per-video NPZ files with
+`allow_pickle=False`. The complete manifest and release license/source notes are
+retained in `results/tapvid-davis-v1/`; source videos remain on Anima, not in Git.
+All 30 NPZ archives and all 90 decoded array hashes were checked after staging.
+
+The split was fixed before evaluating an identity checker: sort video names by
+SHA-256 of `plumbline-track-identity-v1:` followed by the name, assign the first
+ten videos to development, and reserve the other twenty. The split is by video,
+not frame or track. Development has 633 frames and 215 tracks; held-out has
+1,366 frames and 435 tracks. No held-out metric has been computed. Thresholds
+and presentation choices must be fixed using development only; held-out data
+must not be used for fine-tuning. This is a project-specific validation split,
+not the standard full TAP-Vid benchmark, and prior exposure of pretrained models
+to these public videos is unknown.
+
+Keep the original normalized `(x,y)` coordinates. Raster conversion multiplies
+by `(width,height)`, following the pinned upstream reader, not by `(width-1,height-1)`.
+All stored videos have height 480, but widths vary (854, 910, and 1152); do not
+assume a common width. Occluded points must not become positive visible-identity
+examples. There are 28,824 visible and 13,376 occluded observations, no entirely
+occluded tracks, and no visible coordinates outside the unit square. No tracks
+or observations were filtered during staging.
+
+Next use: evaluate image-only identity checks against these annotations before
+allowing those checks to admit tracks into a camera-consistency decision. Source
+coordinates may initialize a tracking query; later annotation coordinates and
+visibility are scoring targets, not checker inputs. This validates correspondence
+evidence only. Staticness and camera-failure attribution still require separate
+validation. No performance claim or manuscript result follows from staging data.
+
 ### Camera-versus-track intervention control
 
 `probe_consistency_attribution.py` tests whether counts of contradictory tracks
