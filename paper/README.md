@@ -3037,3 +3037,14 @@ untouched benchmark. The intended comparison is base versus the fixed trained
 judge on video-disjoint correspondence examples, not camera-DNF validation.
 Preparing panels performs no model inference. No test-derived model selection,
 threshold adjustment, or success claim is authorized by this preparation.
+
+Preparation completed on Anima under
+`/data3/kmatzen/plumbline/research/tapvid-external-corpus-v1/corpus`:
+1,740 planned examples and 971 labeled exports. The manifest and export are
+retained locally in `results/tapvid-external-corpus-v1/`; image panels remain on
+Anima. Every exported image hash, label/prompt mapping, source-code hash, and
+export hash was checked. All test video names and example IDs are disjoint from
+the development corpus. No learned-judge inference has been performed on this
+partition, and the calibration export/images were not opened. The omitted
+borderline/unavailable observations must remain visible in subsequent coverage
+accounting rather than being counted as correct or usable.
