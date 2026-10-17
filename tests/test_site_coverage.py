@@ -153,6 +153,16 @@ class TestVerifiedCountConsistency:
             f"site verified count ({site}) != REPRODUCTIONS.md '= N total' ({repro})"
         )
 
+    def test_verified_cells_are_unique_primary_measurements(self) -> None:
+        cells = _explore_verified_cells()
+        required = {"model", "ds", "metric", "obs", "paper", "d", "task", "cite", "proto"}
+        identities: list[tuple[str, str, str, str]] = []
+        for cell in cells:
+            assert required <= cell.keys(), f"verified cell lacks provenance fields: {cell}"
+            assert cell["cite"].get("src") and cell["cite"].get("loc")
+            identities.append((cell["model"], cell["ds"], cell["metric"], cell["cite"]["loc"]))
+        assert len(identities) == len(set(identities)), "duplicate primary verified cells"
+
     def test_readme_counts_match_reproductions_total(self) -> None:
         readme = README_MD.read_text(encoding="utf-8")
         repro = _reproductions_verified_total()

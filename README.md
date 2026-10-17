@@ -36,9 +36,10 @@ API will still change before 1.0.
   (video depth, one-sample-per-sequence), **TUM-Dynamics** (freiburg3
   video-pose, MonST3R/DAGE Table 4 trajectory eval), plus Booster, DDAD,
   RealEstate10K, and Sun-RGBD protocol-specific loaders.
-- **47 paper-match reproductions** with `source_confidence: verified_pdf`
-  — see [REPRODUCTIONS.md](./REPRODUCTIONS.md). Each cell audited
-  table-+-column-+-row against the source paper
+- **47 paper-match reproductions** — one primary metric per cell, audited from
+  the source PDF and within its declared tolerance; companion metrics do not
+  inflate the count. See [REPRODUCTIONS.md](./REPRODUCTIONS.md). Each cell is
+  audited table-+-column-+-row against the source paper
   ([reproductions/AUDIT.md](./reproductions/AUDIT.md)).
 - **Pose metrics** include both absolute per-view and **pairwise
   relative-pose AUC** (the aggregation VGGT / MASt3R / DUSt3R papers

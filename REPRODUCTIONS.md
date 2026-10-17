@@ -4,14 +4,16 @@ A **reproduction** is a pinned config that re-produces a specific number from
 a specific paper, within a documented relative tolerance. Running it is the
 harness's acceptance test.
 
-> **Note (2026-05-03):** status matrix below reflects all GPU runs
-> through 2026-04-27. Open discrepancies and next-session priorities
-> are in `docs/DISCREPANCIES.md`. Per-YAML paper-citation audit (now
-> 32 paper-pinned YAMLs, 32 verified as of 2026-05-30; was 15 at the
-> 2026-05-23 MASt3R direct-PDF read) is in
+> **Count definition (2026-06-18):** 47 paper-match cells. A cell counts
+> exactly once when its primary reported metric has a target audited directly
+> from the source PDF and the recorded full run is within the cell's declared
+> tolerance. Companion metrics and structurally correct but off-paper runs do
+> not increase the count. The machine-readable canonical ledger is
+> `site/explore.html#verified-cells`; cross-surface consistency is enforced by
+> `tests/test_site_coverage.py`. Citation evidence is in
 > [`reproductions/AUDIT.md`](./reproductions/AUDIT.md).
 
-## Status matrix (2026-05-03)
+## Status matrix
 
 Model × dataset cell statuses:
 
