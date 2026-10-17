@@ -1,0 +1,78 @@
+{
+  "scope": "reference visibility evidence audit, not independently validated ground truth or camera DNF",
+  "policy": "upstream-style four-neighbor max depth <0.99 projected radial depth, no matching instance, or trustworthy transported back-facing normal rejects; outside/behind rejects; normals with >2 diagonal neighbors differing by >0.05 or back-facing at source are unresolved unless another cue rejects",
+  "differences": "fixed source grid and conservative image-center bounds; uncertain normals remain unresolved instead of being ignored; not an exact reproduction of upstream sampling/visibility",
+  "upstream": "https://github.com/google-research/kubric/blob/main/challenges/point_tracking/dataset.py",
+  "source_sha256": {
+    "decoded": "e7c8b767228c45af179f9ab5a1e01c8791a2d0da75e267c8a7fb81f51885e4a0",
+    "normals": "9bc31a846440903a43f1aba546360d775c10647940846254f610ea759ec1df16",
+    "temporal": "a043274bbe16fbc4739dac02fcda674907e6977f76a923587504030a0f1f3084"
+  },
+  "script_sha256": "03988d0e06a43b7f59a703fe90a98f48f89c840219a15d23a1684c3ecd633b40",
+  "scenes": [
+    {
+      "name": "7097",
+      "records_file": "00-visibility.npz",
+      "records_sha256": "54a1ad47830c061e841482b0452e0ce04683f86382ae51114aeafbdd781c9d62",
+      "planned_point_frames": 7800,
+      "usable_source_normals": 116,
+      "counts": {
+        "supported": 2485,
+        "rejected": 1374,
+        "unresolved": 3941,
+        "depth_rejected": 532,
+        "mask_rejected": 278,
+        "normal_rejected": 152,
+        "outside_or_behind": 797
+      }
+    },
+    {
+      "name": "4852",
+      "records_file": "01-visibility.npz",
+      "records_sha256": "b7fb85891dcd9e2969e3d01029ec0d42dec0a96a257375742958920fb21875cd",
+      "planned_point_frames": 9192,
+      "usable_source_normals": 249,
+      "counts": {
+        "supported": 5719,
+        "rejected": 542,
+        "unresolved": 2931,
+        "depth_rejected": 398,
+        "mask_rejected": 244,
+        "normal_rejected": 69,
+        "outside_or_behind": 111
+      }
+    },
+    {
+      "name": "2373",
+      "records_file": "02-visibility.npz",
+      "records_sha256": "703949cfd522500ea8a5beb0359eb8d89c162affe653bed9cc0297f63ceb9f3c",
+      "planned_point_frames": 3936,
+      "usable_source_normals": 81,
+      "counts": {
+        "supported": 1508,
+        "rejected": 748,
+        "unresolved": 1680,
+        "depth_rejected": 583,
+        "mask_rejected": 197,
+        "normal_rejected": 317,
+        "outside_or_behind": 59
+      }
+    },
+    {
+      "name": "4866",
+      "records_file": "03-visibility.npz",
+      "records_sha256": "34dc8e89102be2006c98d3f90159bdf1940a59ae5d5eb2cae87286a1a780efb6",
+      "planned_point_frames": 4512,
+      "usable_source_normals": 124,
+      "counts": {
+        "supported": 1848,
+        "rejected": 1727,
+        "unresolved": 937,
+        "depth_rejected": 501,
+        "mask_rejected": 268,
+        "normal_rejected": 700,
+        "outside_or_behind": 1212
+      }
+    }
+  ]
+}

@@ -68,7 +68,10 @@ def run(source, decoded, output):
     from tfrecord import tfrecord_iterator, example_pb2
     manifest_path = decoded/'manifest.json'
     manifest = json.loads(manifest_path.read_text())
-    shard = source/'movi_e-validation.tfrecord-00000-of-00064'
+    shard_index = manifest.get('shard_index', 0)
+    if not isinstance(shard_index, int) or not 0 <= shard_index < 64:
+        raise ValueError('invalid validation shard index')
+    shard = source/f'movi_e-validation.tfrecord-{shard_index:05d}-of-00064'
     if manifest['status'] != 'complete' or digest(shard) != manifest['shard_sha256']:
         raise ValueError('fixed shard mismatch')
     output.mkdir(parents=True, exist_ok=False)

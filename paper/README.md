@@ -4678,7 +4678,7 @@ archives are separate under Anima's private
 The local staging and decoded manifests retain the source and artifact hashes.
 
 Camera inference and image-based evidence generation are now complete, as
-recorded below; scoring against the separate reference geometry remains.
+recorded below; the subsequent reference scoring is also retained below.
 No new accuracy, ranking, or DNF result follows from successful execution. If settings
 are revised after inspecting these results, the batch becomes development
 data for that revision and another independently selected batch is required.
@@ -4716,6 +4716,56 @@ every motion decision from the retained forward arrays and verify cycle
 arithmetic and full accounting. The new scenes are unseen by this evaluation
 development sequence, but frozen-model pretraining overlap is unknown. The
 experiment does not yet establish evaluator accuracy or a novel contribution.
+
+### Prospective replication reference scores
+
+After commit `7ccf4cf` froze all camera and image-evidence outputs, the original
+background, foreground-motion, and visibility procedures were applied to the
+new shard. Only shard selection was generalized; the projection and visibility
+rules are unchanged. All 191 background source points were retained. Their
+maximum first-step disagreement with rendered flow is 0.004201 pixels. This
+checks coordinate consistency within the same renderer, not independent
+visibility truth. Foreground normals remain a visibility cue, with ambiguous
+cases unresolved rather than silently labeled.
+
+`score_movi_replication.py` scores the fixed outputs in three separate parts:
+correspondence checks, motion support, and paired placement errors. The 768
+point/frame slots contain 413 supported static-background observations, 14
+supported moving observations (at least 8 pixels of counterfactual motion),
+65 other supported foreground observations, and 276 unresolved references.
+Forward visibility retains 383/413 static observations and one of the 14
+moving observations. The motion gate retains 368 static observations and none
+of those moving observations. Adding cycle consistency retains 353 static
+observations and still none of the moving observations. The last check adds
+no moving-point exclusion in this batch and costs 15 more static observations.
+
+Of the 1,536 camera-placement slots, 320 have clearly close/far diagnostic
+labels (246 close, 74 far), 278 are borderline, and 938 lack a usable label.
+Tracking alone correctly answers 285/320 (227 close, 58 far); adding motion
+support answers 275/320 correctly; adding both checks answers 268/320
+correctly. None of these variants swaps a clearly close case with a clearly
+far case in this diagnostic subset. The additional checks mainly reduce
+coverage here. There are also answers on borderline and unresolved references;
+they are retained but cannot be counted as correct. These are not camera-DNF
+labels, and the visibility-supported subset is not certified ground truth.
+
+All three variants' matched mean placement preferences agree with reference
+means on their respective scored backgrounds. This does not establish an
+improvement over tracking alone. On scene 2373, the mean preference changes
+from DAGE to DA3 when the joint gate reduces the scored set from 68 to 52
+observations; the reference mean changes too. This is selection sensitivity,
+not correction of the same ranking. Median preferences have additional
+disagreements, and both aggregations remain reported. Paired accepted counts
+are 307, 293, and 266 for tracking, motion, and joint checks, respectively.
+
+The complete record is `results/movi-replication-shard01-v1/score-v1.json`, with
+all point and method-level observations. Background, temporal and visibility
+reference arrays are retained alongside it, with hashes linking them to the
+separately decoded references. Tests replay the entire score, check all
+denominators, and verify that selection does not use reference labels. This
+replication does not establish the extra gates as a novel or better evaluation
+method. No thresholds were changed after viewing these results, and these
+development findings are not added to the manuscript.
 
 ### Frozen-matrix correspondence intervention
 
