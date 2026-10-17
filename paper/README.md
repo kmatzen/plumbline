@@ -3175,3 +3175,24 @@ seeds, not a camera-method benchmark or a functional failure label. These
 controls stay outside the manuscript's reported experiments. Six focused tests
 cover the new renderer/probe, including separate missing, occluded, and wrong
 observation accounting and tracking without later reference inputs.
+
+`analyze_layered_displacement.py` audits the image-space size of those changes
+using the true scene points for scoring only. It keeps true 3D points fixed
+except for the global-gauge control, where world coordinates change with the
+cameras. It verifies the saved dependency hashes and oracle projections, and
+collapses identical texture-seed oracle geometry to 12 unique tracks. Full
+visible-query displacements are retained in `results/layered-displacement-v1.json`.
+
+For each signed forward/backward translation, eight compatible tracks have
+maximum coordinate displacement at most two pixels; four exceed two pixels.
+The largest coordinate displacements are 6.06 and 6.60 pixels respectively.
+Those above-tolerance tracks nevertheless admit a different fitted 3D point
+within all image boxes. Signed lateral translations retain four/eight tracks
+with above-tolerance true-point shifts; signed roll retains six above-tolerance
+and two below-tolerance tracks each. Thus small perturbation size explains
+some, but not all, compatibility. The audit does not convert these changes to
+functional failures: reference-free feasibility permits refitting unknown
+structure, unlike this true-point scoring calculation. Two tests verify
+independent projections, consistent world/camera gauge changes, and unchanged
+prefix projections under a suffix camera rotation. These are control diagnostics,
+not manuscript DNF results.
