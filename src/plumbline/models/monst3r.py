@@ -7,31 +7,28 @@ of Motion" (Zhang et al. 2024, arXiv:2410.03825).
 MonST3R is DUSt3R fine-tuned on dynamic-scene data so it estimates geometry
 even when objects move — the canonical "video" member of the DUSt3R family.
 Architecturally it *is* a DUSt3R model (``AsymmetricCroCo3DStereo``) with
-MonST3R weights, so inference reuses dust3r's pairwise ``inference`` +
-``global_aligner`` exactly like the MASt3R N-view path. This adapter
-therefore delegates to the shared, tested dust3r runner.
+MonST3R weights. Single-frame depth uses the paper's duplicated-pair recipe.
+Unordered multi-view inference uses the shared DUSt3R aligner. Pose protocols
+can set ``video_pose=True`` to use MonST3R's video pipeline.
 
 Faithfulness scope (read before trusting numbers)
 -------------------------------------------------
-MonST3R's *full* video pipeline (``demo.py``) adds, on top of the base
-global alignment: optical-flow consistency loss (``flow_loss_weight``),
-temporal smoothing, per-frame motion masks, and window-wise alignment for
-long sequences. Those refinements are **not** wired here — this adapter runs
-MonST3R weights through the base dust3r ``PointCloudOptimizer``
-(``flow_loss_weight=0`` equivalent), which yields genuine MonST3R per-view
-geometry but the *plain* global alignment, not MonST3R's flow-refined
-trajectory. That refinement is a scoped follow-up (it needs the bundled flow
-network + motion masks and is best validated on a GPU against MonST3R's own
-video-depth eval). Treat this as "MonST3R base inference"; do not pin a
-flow-dependent paper cell to it without that work.
+With ``video_pose=True`` and three or more frames, the adapter uses MonST3R's
+sliding-window pair graph, optical-flow consistency loss, motion masks,
+temporal smoothing, and extended global aligner. This path is GPU-validated on
+the Sintel Table 4 trajectory cell. The default remains ``False`` because
+single-image depth and unordered image collections do not use the video
+recipe. Optional SAM2 mask refinement still requires a separate SAM2 install
+and checkpoint; the shipped pose reproductions do not enable it.
 
 Install
 -------
-Recursive clone (ships its own ``dust3r``/``croco`` fork), not on PyPI::
+The compatible MonST3R source is bundled with Plumbline. A development checkout
+can override it with ``MONST3R_ROOT``::
 
     git clone --recursive https://github.com/Junyi42/monst3r /workspace/deps/monst3r
     export MONST3R_ROOT=/workspace/deps/monst3r
-    uv pip install roma scikit-learn trimesh   # dust3r transitive deps
+    uv pip install roma scikit-learn trimesh
 
 Weights are pulled from HuggingFace
 (``Junyi42/MonST3R_PO-TA-S-W_ViTLarge_BaseDecoder_512_dpt``) via

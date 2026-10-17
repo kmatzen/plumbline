@@ -88,8 +88,12 @@ the released *checkpoint* doesn't match the paper (e.g. GeoWizard).
   0.664; fixed: 0.850, +18.6 pts over DUSt3R). A controlled CO3Dv2 A/B shows
   only a +2.3-pt gap there — narrow baselines hid it, which is why the old
   CO3Dv2 ✅ passed on the wrong method (it must be re-validated full-410 on
-  `sparse_ga`; the 30-sample subset confirms it survives). **monst3r N>=3**
-  still uses dust3r's PCO (flow-refined path is a remaining follow-up).
+  `sparse_ga`; the 30-sample subset confirms it survives).
+- **monst3r video pose — FIXED 2026-06-18.** Pose protocols can set
+  `video_pose: true` to run the sliding-window graph and MonST3R's extended
+  optimizer with flow, motion-mask, and temporal terms. The Sintel Table 4
+  trajectory cell GPU-validates this path. The ordinary multi-view default
+  still uses the base aligner by design.
 
 ---
 
