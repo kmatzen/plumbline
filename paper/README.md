@@ -2918,3 +2918,32 @@ matching check improves this occluded control while discarding useful evidence
 in the clean one. Neither precision alone nor contradiction count alone is an
 adequate evaluator objective. These are track-level counts with shared scene
 geometry, not independent sequence-level failure rates or a novel method claim.
+
+### Prior work and the proposed evidence-sensitivity check
+
+The related-work section now includes Hu and Kantor's
+[RSS 2017 introspective evaluation](https://www.roboticsproceedings.org/rss13/p33.pdf)
+and [CoRL 2017 Bayesian parameter tuning](https://proceedings.mlr.press/v78/hu17a.html),
+plus [OdoTest](https://doi.org/10.1145/3808128). The RSS method uses an approximate
+posterior to estimate loss; its reliability depends on that approximation.
+The CoRL work already combines introspection and Bayesian optimization for
+odometry. OdoTest tests VIO through input transformations and metamorphic
+relations. RSS method text and the official CoRL/ACM abstracts and metadata were
+checked; OdoTest's full implementation has not been reproduced. None of these
+ideas alone supports a novelty claim for this project.
+
+A candidate extension is to measure the sensitivity of the evaluator's evidence
+to camera changes, alongside its verdict. This is a proposed experiment, not an
+implemented or validated metric. Keep images, correspondences, admission rules,
+and calibration fixed while changing only the candidate trajectory. Report
+signed perturbations and retained query coverage, not just a pooled rejection
+fraction. Include identity and global-gauge controls, which should preserve
+the geometric result. Rejection of a changed candidate does not validate the
+original; a perturbation to an unknown real estimate might even correct an
+error. Consequently, only reference-camera controls can supply known camera
+errors at this stage, and their magnitude is not automatically a functional
+failure label. A yaw-only check cannot establish sensitivity to translation,
+other rotation axes, or unseen failure types. Any abstention rule needs to be
+fixed on development data and evaluated separately, including correct-camera
+false alarms and evidence corruption. This proposal must be compared with
+simpler uncertainty and coverage measures, not merely with raw residuals.
