@@ -3267,3 +3267,23 @@ must be compared against this precision/coverage tradeoff, not just against
 unfiltered tracking. No new threshold was fitted, and these development controls
 remain outside the manuscript's reported camera experiments. Fifteen focused
 tests pass across the layered rendering, tracking, admission, and scoring code.
+
+`analyze_camera_evidence_coverage.py` makes the missing-evidence distinction
+explicit in saved reports, without rerunning or changing the experiments. It
+verifies input/dependency hashes, the complete seed/variant/slot roster, and
+identical unique observation indices for paired scores. Identity and global
+gauge are excluded from physical discrimination counts. A comparison with no
+retained observation from any changed camera view is labeled
+`no_changed_view_evidence`, while its raw bracket comparison is also preserved.
+Having one such observation is only a necessary condition, not an observability
+certificate or a usability verdict.
+
+`results/layered-observed-coverage-v1.json` retains all 1,440 comparisons:
+1,425 higher-error, 11 lower-error, three unresolved, and one overlapping pair.
+`results/layered-ncc-coverage-v1.json` retains the same denominator: 1,199
+higher-error, 240 without changed-view evidence, and one unresolved. Changed-view
+evidence coverage is 100% versus 83.3%; higher-error comparisons account for
+99.0% versus 83.3% of all planned comparisons. These dependent synthetic counts
+are not method-level success rates. Four tests check missing-view evidence,
+supported ties, numerical uncertainty, mismatched/duplicate indices, and identity
+controls. This accounting is a protocol component, not a standalone novelty claim.
