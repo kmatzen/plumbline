@@ -647,6 +647,32 @@ verify that arbitrary changes to later image coordinates and sensor depth do
 not change any bounds for all three prefix lengths. No manuscript claim or
 human validation result follows from this sensitivity study alone.
 
+#### Conditional final-observation check
+
+`probe_static_query_consistency.py` tests whether the fitting observations and
+the frame-89 observation admit a common positive-depth point. It separates
+missing fitting observations, unestablished fitting geometry, missing query
+observations, compatible queries, contradictions, and numerical failures.
+Query-image data enter only this comparison, not the preceding projection bounds.
+All 84 prefix/tolerance/signed-yaw cases are in `query-consistency-v1.json`.
+
+At eight pixels, the 10- and 30-frame prefixes accept all five available
+final-frame tracks for every tested yaw, including ±5 degrees. With 60 fitting
+frames, all five accept the reference query and all five contradict either
+five-degree query perturbation. Both signs of one-degree and quarter-degree
+perturbations remain compatible. Seven original slots have insufficient fitting
+observations in the 60-frame case; they are not accepted or rejected cameras.
+All tolerances remain recorded; eight pixels is not a calibrated DNF threshold.
+
+The fitting poses are unmodified reference poses. Only the final camera
+orientation is changed, so this experiment does not test errors accumulating
+within the fitting window or distinguish a step from a ramp between the prefix
+and final frame. Every fitting record was checked to remain identical across
+query perturbations. Compatible witnesses were independently reprojected to
+verify positive depth and all original pixel bounds. This demonstrates a narrow
+controlled sensitivity result, not a validated novel evaluator, and remains
+outside the manuscript pending broader validation.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is
