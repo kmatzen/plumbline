@@ -36,7 +36,6 @@ Download (public, no auth)::
 
 from __future__ import annotations
 
-import json
 from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
@@ -50,6 +49,7 @@ from plumbline.conventions import (
     assert_valid_intrinsics,
 )
 from plumbline.datasets._common import DatasetNotAvailable, env_path
+from plumbline.datasets._moge_eval_common import process_moge_bundle_sample
 from plumbline.datasets.base import Dataset, Sample
 from plumbline.datasets.registry import register_dataset
 
@@ -118,6 +118,28 @@ class ETH3DMogeEvalDataset(Dataset):
             )
         self.root = root_path
 
+        # Parse and filter the lightweight index before importing/constructing
+        # the MoGe pipeline. A typo or empty scene filter should fail without
+        # paying for torch + the model's evaluation stack, and enumeration
+        # remains testable independently of that optional runtime.
+        index_path = root_path / "ETH3D" / ".index.txt"
+        lines = [
+            ln.strip()
+            for ln in index_path.read_text().splitlines()
+            if ln.strip() and not ln.startswith("#")
+        ]
+        if scenes is not None:
+            wanted = set(scenes)
+            lines = [ln for ln in lines if ln.split("/", 1)[0] in wanted]
+        self._records: list[dict[str, Any]] = [
+            {"sample_path": ln, "sample_id": f"eth3d-moge/{ln.replace('/', '_')}"} for ln in lines
+        ]
+        if not self._records:
+            raise DatasetNotAvailable(
+                f"No ETH3D MoGe-bundle samples under {root_path}/ETH3D "
+                "(empty .index.txt or scene filter matched nothing)."
+            )
+
         # Build a MoGe EvalDataLoaderPipeline handle for its
         # ``_process_instance`` warp logic only (we don't ``.start()`` the
         # worker processes). Mirrors DIODEMogeEvalLoader / KITTIMogeEvalLoader.
@@ -139,24 +161,6 @@ class ETH3DMogeEvalDataset(Dataset):
             drop_max_depth=self.DROP_MAX_DEPTH,
         )
 
-        index_path = root_path / "ETH3D" / ".index.txt"
-        lines = [
-            ln.strip()
-            for ln in index_path.read_text().splitlines()
-            if ln.strip() and not ln.startswith("#")
-        ]
-        if scenes is not None:
-            wanted = set(scenes)
-            lines = [ln for ln in lines if ln.split("/", 1)[0] in wanted]
-        self._records: list[dict[str, Any]] = [
-            {"sample_path": ln, "sample_id": f"eth3d-moge/{ln.replace('/', '_')}"} for ln in lines
-        ]
-        if not self._records:
-            raise DatasetNotAvailable(
-                f"No ETH3D MoGe-bundle samples under {root_path}/ETH3D "
-                "(empty .index.txt or scene filter matched nothing)."
-            )
-
     def __iter__(self) -> Iterator[Sample]:
         for rec in self._records:
             yield self._load_sample(rec)
@@ -165,37 +169,16 @@ class ETH3DMogeEvalDataset(Dataset):
         return len(self._records)
 
     def _load_sample(self, rec: dict[str, Any]) -> Sample:
-        # Replicate DIODEMogeEvalLoader._load_sample: build the raw dict that
-        # MoGe's ``_process_instance`` expects, run the warp, convert tensors.
-        from moge.utils.io import read_depth as _moge_read_depth
-        from moge.utils.io import read_image as _moge_read_image
-
         sample_root = self.root / "ETH3D" / rec["sample_path"]
         img_path = _find_image(sample_root)
         if img_path is None:
             raise ValueError(f"{rec['sample_id']}: no image.{{jpg,png}} in {sample_root}")
-        image_np = _moge_read_image(img_path)
-        depth_np = _moge_read_depth(sample_root / "depth.png")
-        meta = json.loads((sample_root / "meta.json").read_text())
-        raw = {
-            "filename": rec["sample_path"],
-            "width": self.TARGET_WIDTH,
-            "height": self.TARGET_HEIGHT,
-            "image": image_np,
-            "depth": np.nan_to_num(depth_np, nan=1, posinf=1, neginf=1),
-            "depth_mask": np.isfinite(depth_np),
-            "depth_mask_inf": np.isinf(depth_np),
-            "intrinsics": np.array(meta["intrinsics"], dtype=np.float32),
-        }
-        inst = self._moge_pipe._process_instance(raw)
-
-        img_t = inst["image"]  # (3, H, W) float in [0, 1]
-        image = (img_t.permute(1, 2, 0).numpy() * 255.0).clip(0, 255).astype(np.uint8)
-        depth = inst["depth"].numpy().astype(np.float32)
-        valid = inst["depth_mask"].numpy().astype(bool)
-        # MoGe zeros out invalid pixels; plumbline's assert_valid_depth needs
-        # finite > 0, so restore a safe placeholder for masked-out pixels.
-        depth_clean = np.where(valid, depth, np.float32(1.0))
+        image, depth_clean, valid, K_pix = process_moge_bundle_sample(
+            self._moge_pipe,
+            sample_root=sample_root,
+            sample_path=rec["sample_path"],
+            image_path=img_path,
+        )
 
         images = image[None]
         depth_gt = depth_clean[None]
@@ -203,12 +186,6 @@ class ETH3DMogeEvalDataset(Dataset):
         assert_valid_image(images, name=f"{rec['sample_id']}/image")
         assert_valid_depth(depth_gt, name=f"{rec['sample_id']}/depth")
 
-        # MoGe target intrinsics are normalized (fx/W, fy/H, cx/cy in [0,1]).
-        K_norm = inst["intrinsics"].numpy().astype(np.float32)
-        h, w, _ = image.shape
-        K_pix = K_norm.copy()
-        K_pix[0, :] *= w
-        K_pix[1, :] *= h
         K_stack = K_pix[None]
         E_eye = np.eye(4, dtype=np.float32)[None]
 

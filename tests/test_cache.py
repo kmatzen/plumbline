@@ -24,7 +24,11 @@ class TestSanitize:
         assert sanitize_id("scene_0000_view_01") == "scene_0000_view_01"
 
     def test_unsafe_chars(self) -> None:
-        assert sanitize_id("scene/00 00:0 7") == "scene_00_00_0_7"
+        out = sanitize_id("scene/00 00:0 7")
+        assert out.startswith("scene_00_00_0_7_")
+
+    def test_sanitized_ids_cannot_collide_with_literal_underscores(self) -> None:
+        assert sanitize_id("scene/0001") != sanitize_id("scene_0001")
 
     def test_long_id_truncated(self) -> None:
         long = "a" * 200
@@ -35,7 +39,7 @@ class TestSanitize:
         assert out != out2
 
     def test_empty_fallback(self) -> None:
-        assert sanitize_id("") == "_"
+        assert sanitize_id("").startswith("__")
 
 
 class TestCacheRoundTrip:

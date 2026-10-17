@@ -23,6 +23,7 @@ content that already lives in a canonical file.
 | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) | Dev setup, PR expectations |
 | [`SOURCE_AUDIT.md`](SOURCE_AUDIT.md) | Adapter vs upstream source fidelity |
 | [`../reproductions/AUDIT.md`](../reproductions/AUDIT.md) | Paper citation / PDF audit per YAML |
+| [`CAMERA_TRACKING_REVIEW_HARNESS.md`](CAMERA_TRACKING_REVIEW_HARNESS.md) | Human/VLM pairwise camera-tracking review, ratings, and design search |
 
 ## Blocked cells (`blocked/`)
 

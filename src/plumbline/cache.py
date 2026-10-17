@@ -30,6 +30,7 @@ import hashlib
 import json
 import os
 import re
+import tempfile
 from collections.abc import Iterable
 from dataclasses import asdict
 from pathlib import Path
@@ -53,13 +54,17 @@ def sanitize_id(sample_id: str) -> str:
     """Replace characters that are awkward on Windows/POSIX filesystems.
 
     Preserves dots, dashes, underscores, and ASCII alphanumerics. Any run of
-    other characters collapses to a single underscore. Long IDs are truncated
-    and suffixed with a short hash to stay under 128 bytes.
+    other characters collapses to a single underscore. If sanitization changes
+    the ID, a short hash preserves uniqueness (``a/b`` must not collide with
+    ``a_b``). Long IDs are truncated and similarly hash-suffixed to stay under
+    128 bytes.
     """
-    cleaned = _UNSAFE.sub("_", sample_id.strip())
+    stripped = sample_id.strip()
+    cleaned = _UNSAFE.sub("_", stripped)
     if not cleaned:
         cleaned = "_"
-    if len(cleaned) > 128:
+    changed = cleaned != sample_id
+    if changed or len(cleaned) > 128:
         tail = hashlib.sha256(sample_id.encode()).hexdigest()[:8]
         cleaned = cleaned[:119] + "_" + tail
     return cleaned
@@ -151,16 +156,16 @@ class PredictionCache:
         meta = prediction.metadata or {}
         arrays["_meta_json"] = np.asarray(json.dumps(meta, default=_json_default))
 
-        # np.savez_compressed appends ".npz"; write to a distinct basename and
-        # move into place atomically. The tmp name carries the pid so two
-        # processes sharing a cache dir (common on rental GPU boxes) can't
-        # interleave writes into one file and promote a corrupt archive.
+        # Write to a unique file beside the destination and move into place
+        # atomically. PID-only names still collide between threads in one
+        # process, so let tempfile supply an unpredictable unique suffix.
         # The numpy stub claims the second positional arg is `bool`, but
         # runtime accepts **arrays; suppress.
-        tmp = path.with_name(f"{path.stem}.{os.getpid()}.tmp")
-        tmp_npz = tmp.with_suffix(".tmp.npz")
+        fd, tmp_name = tempfile.mkstemp(prefix=f".{path.stem}.", suffix=".tmp.npz", dir=path.parent)
+        os.close(fd)
+        tmp_npz = Path(tmp_name)
         try:
-            np.savez_compressed(tmp, **arrays)  # type: ignore[arg-type]
+            np.savez_compressed(tmp_npz, **arrays)  # type: ignore[arg-type]
             os.replace(tmp_npz, path)
         finally:
             with contextlib.suppress(OSError):

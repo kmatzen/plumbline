@@ -9,6 +9,13 @@ public API may change between 0.x releases.
 
 ### Fixed
 
+- Prediction-cache filenames now append a stable hash whenever sanitization
+  changes a sample ID, preventing collisions such as `scene/0001` versus
+  `scene_0001`; atomic writes use truly unique temp files so concurrent threads
+  in one process cannot race. NYU CUT3R sample IDs are now dataset-prefixed.
+- The DIODE, KITTI, and ETH3D MoGe-bundle loaders share one audited decode/FoV
+  warp path. ETH3D parses and filters its lightweight index before constructing
+  the MoGe pipeline, so empty filters fail without loading the model stack.
 - **Trajectory ATE/RPE crashed with unbounded evo** — evo 1.38 removed the
   `est_name` keyword from `ape()` / `rpe()`. The integration now uses the
   compatible API, evo is a base dependency pinned below 1.38 because the
@@ -38,6 +45,15 @@ public API may change between 0.x releases.
   as fake installation steps. Base-complete adapters are true no-ops, while
   manual checkpoints and environment overrides are printed as non-executable
   guidance (not shell exports that cannot persist from the installer process).
+
+### Added
+
+- Camera-tracking review groundwork inspired by the scorer architecture of
+  3DCodeBench/4DCodeBench: deterministic GT-scaled trajectory diagnostic PNGs,
+  balanced pair selection, Bradley–Terry ratings, and task-level bootstrap
+  confidence intervals. The review-harness design documents human/VLM
+  calibration, validity gates, multi-objective Bayesian optimization, and why
+  RL is reserved for genuinely sequential tracking policies.
 
 Codebase review sweep (issues #163–#182). Highest-impact first:
 

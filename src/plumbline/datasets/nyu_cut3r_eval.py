@@ -105,7 +105,7 @@ class NYUCut3rEvalDataset(Dataset):
             if self.max_gt_depth is not None:
                 valid &= depth < self.max_gt_depth
             yield Sample(
-                sample_id=sid,
+                sample_id=f"nyu-cut3r-eval/{sid}",
                 images=rgb[None],
                 intrinsics=K_stack,
                 extrinsics_gt=E_eye,

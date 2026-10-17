@@ -2921,12 +2921,12 @@ class TestNYUCut3rEval:
         np.testing.assert_allclose(s.extrinsics_gt[0], np.eye(4), atol=1e-6)
         assert s.metadata["dataset"] == "nyu-cut3r-eval"
 
-    def test_sample_ids_are_bare_stems_and_sorted(self, tmp_path: Path) -> None:
+    def test_sample_ids_are_dataset_prefixed_and_sorted(self, tmp_path: Path) -> None:
         _write_fake_nyu_cut3r(tmp_path, n=3)
         assert [s.sample_id for s in NYUCut3rEvalDataset(root=tmp_path)] == [
-            "00000",
-            "00001",
-            "00002",
+            "nyu-cut3r-eval/00000",
+            "nyu-cut3r-eval/00001",
+            "nyu-cut3r-eval/00002",
         ]
 
     def test_intrinsics_are_nyuv2_defaults(self, tmp_path: Path) -> None:

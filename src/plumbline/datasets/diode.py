@@ -67,6 +67,7 @@ from plumbline.datasets._common import (
     read_rgb_uint8,
     save_manifest,
 )
+from plumbline.datasets._moge_eval_common import process_moge_bundle_sample
 from plumbline.datasets.base import Dataset, Sample
 from plumbline.datasets.registry import register_dataset
 
@@ -588,42 +589,12 @@ class DIODEMogeEvalLoader(Dataset):
     # -- per-sample ------------------------------------------------------
 
     def _load_sample(self, rec: dict[str, Any]) -> Sample:
-        # Build the input dict that MoGe's ``_process_instance`` expects.
-        # We don't call its ``_load_instance`` because upstream references
-        # an undefined ``read_meta`` symbol there (stale after a refactor
-        # — same upstream bug as on the KITTI path). Replicate the
-        # ``_load_instance`` body inline.
-        import json as _json
-
-        from moge.utils.io import read_depth as _moge_read_depth
-        from moge.utils.io import read_image as _moge_read_image
-
         sample_root = self.root / "DIODE" / rec["sample_path"]
-        image_np = _moge_read_image(sample_root / "image.jpg")
-        depth_np = _moge_read_depth(sample_root / "depth.png")
-        meta = _json.loads((sample_root / "meta.json").read_text())
-        raw = {
-            "filename": rec["sample_path"],
-            "width": self.TARGET_WIDTH,
-            "height": self.TARGET_HEIGHT,
-            "image": image_np,
-            "depth": np.nan_to_num(depth_np, nan=1, posinf=1, neginf=1),
-            "depth_mask": np.isfinite(depth_np),
-            "depth_mask_inf": np.isinf(depth_np),
-            "intrinsics": np.array(meta["intrinsics"], dtype=np.float32),
-        }
-        inst = self._moge_pipe._process_instance(raw)
-
-        # MoGe returns torch tensors in CHW / HW. Plumbline wants
-        # uint8 HWC image + float32 HW depth + bool HW mask as numpy.
-        img_t = inst["image"]  # (3, H, W) float in [0,1]
-        image = (img_t.permute(1, 2, 0).numpy() * 255.0).clip(0, 255).astype(np.uint8)
-        depth = inst["depth"].numpy().astype(np.float32)
-        valid = inst["depth_mask"].numpy().astype(bool)
-        # MoGe zeros out invalid pixels (line 169 of its dataloader.py);
-        # plumbline's assert_valid_depth requires finite > 0. Restore a
-        # safe placeholder for the masked-out pixels.
-        depth_clean = np.where(valid, depth, np.float32(1.0))
+        image, depth_clean, valid, K_pix = process_moge_bundle_sample(
+            self._moge_pipe,
+            sample_root=sample_root,
+            sample_path=rec["sample_path"],
+        )
 
         images = image[None]
         depth_gt = depth_clean[None]
@@ -631,14 +602,6 @@ class DIODEMogeEvalLoader(Dataset):
         assert_valid_image(images, name=f"diode_moge/{rec['sample_id']}/image")
         assert_valid_depth(depth_gt, name=f"diode_moge/{rec['sample_id']}/depth")
 
-        # MoGe's target intrinsics are normalized (fx_norm = fx_pix / W,
-        # fy_norm = fy_pix / H, cx/cy in [0, 1]). Denormalize to pixel
-        # units on the warped frame.
-        K_norm = inst["intrinsics"].numpy().astype(np.float32)
-        h, w, _ = image.shape
-        K_pix = K_norm.copy()
-        K_pix[0, :] *= w
-        K_pix[1, :] *= h
         K_stack = K_pix[None]
         E_eye = np.eye(4, dtype=np.float32)[None]
 
