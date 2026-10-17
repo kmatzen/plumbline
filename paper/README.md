@@ -4621,6 +4621,42 @@ in `diagnostic.json` retains every joined decision. Tests verify eligibility,
 the fixed threshold, source-script identity, full accounting, and exact
 diagnostic replay. These development results remain outside the manuscript.
 
+### Paired camera-placement comparison after evidence checks
+
+`audit_movi_paired_placement.py` applies the evidence checks to the actual
+DAGE/DA3 marker proposals. Both candidates must be renderable, and the same
+candidate-independent evidence selection is applied to both. All 768 planned
+paired slots remain in the record. Continuous pixel errors are summarized with
+both mean and median, without selecting an aggregation that favors a method.
+Reference-scored comparisons use supported background projections on exactly
+the same selected observations; deployed scores also include observations with
+unresolved reference status and are reported separately.
+
+Tracking alone accepts 438 pairs; adding epipolar compatibility accepts 419;
+adding reverse consistency accepts 413. The corresponding reference-scored
+counts are 338, 336, and 335. All three variants favor DAGE in scenes 3835 and
+4970 and DA3 in 4385 and 5397 by mean placement error. On the matched scored
+observations, these preferences agree with the reference means in every scene.
+Thus this experiment does not establish an added ranking benefit from the
+extra gates. Per-point preference agreement is 325/338, 323/336, and 322/335,
+respectively; repeated observations are not independent validation samples.
+
+Median aggregation illustrates selection sensitivity. On scene 3835, tracking
+alone has matched reference medians 2.208303 pixels for DAGE and 2.206753 for
+DA3, a difference of approximately 0.00155 pixels. Dropping two observations
+with the motion gate changes the matched reference preference to DAGE. That
+is a change in the scored subset, not evidence that the gate corrected the
+same ranking problem. Full-common-reference summaries are retained alongside
+each selected subset so this distinction is visible.
+
+These are RGB-initialized placement errors, which include calibration and point
+initialization, not isolated camera-pose errors or DNF labels. The results
+support testing harder, independently selected scenes rather than claiming
+that additional gates already improve method selection. The artifact is
+`results/movi-reverse-tracking-v1/paired-placement-v1.json`; tests check exact
+replay, common support, nested coverage, and missing-score handling. No new
+claim is added to the manuscript.
+
 ### Frozen-matrix correspondence intervention
 
 `audit_movi_motion_track_error.py` tests whether correspondence error explains
