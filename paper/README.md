@@ -3860,3 +3860,24 @@ also uses surface-normal checks; this diagnostic is not claimed to reproduce
 its full visibility procedure. Two new tests separate object motion from camera
 motion, preserve off-image records, and ensure the initial flag does not override
 geometry. No candidate methods or evaluator accuracy have been measured here.
+
+The released normal PNGs are now extracted separately in `normals-v1/`, with
+the exact scene order checked against the decoded pilot. Existing RGB and
+reference arrays were not changed. `normals-manifest.json` archives hashes.
+`audit_movi_visibility.py` combines normal orientation with the saved depth
+neighborhoods and instance-mask evidence. It follows the depth, mask, and normal
+checks described in the
+[upstream point-tracking code](https://github.com/google-research/kubric/blob/main/challenges/point_tracking/dataset.py),
+but is not an exact reproduction: it uses the fixed frame-zero grid, conservative
+image-center bounds, and leaves unreliable normals unresolved rather than
+ignoring them. All component flags remain available, including overlapping
+reasons for rejection.
+
+The audit yields 9,706 evidence-supported, 4,105 rejected, and 11,581 unresolved
+point-frame records out of 25,392. Rejection components overlap: depth 2,967,
+mask 954, normals 1,017, and outside/behind 987. These are algorithmic visibility
+diagnostics, not independently validated labels or camera outcomes. Results and
+all per-point flags are archived in `visibility-audit-v1/`. Three tests verify
+normal transport, uncertainty handling, and preservation of off-image cases.
+Rendered surface orientation and conservative visibility still need independent
+checks before these records can serve as evaluation references.
