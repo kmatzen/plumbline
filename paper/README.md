@@ -456,7 +456,7 @@ is unchanged. The non-weight regression suite passed 1,836 tests, with one
 missing KITTI-bundle skip and six weight-backed tests excluded; that verifies
 software behavior, not the proposed metric's scientific validity.
 
-A matched scale diagnostic is now running in
+A matched scale diagnostic completed in
 `/data3/kmatzen/plumbline/research/source-crops-scale-v1`. It reuses all 12
 original crop files, the exact caption prompt, checkpoint, quantization,
 attention implementation, greedy decoding, and 768-token ceiling. The only
@@ -472,21 +472,35 @@ previous processor options; tests cover the optional size bounds and reject
 invalid minima before model loading. All results will be retained. The completed
 `default-slot-0.json` replay exactly matches the original processed-input audit,
 raw/parsed response, image, prompt, checkpoint files, settings, and attention
-helper/implementation hashes. Each scaled run still needs comparison against
-the original image/model/prompt/settings before interpreting response
-differences. No scale-comparison result or accuracy improvement is claimed yet.
-This remains a development diagnostic, not held-out validation.
+helper/implementation hashes. All 12 scaled runs now pass the paired checks
+described below. This remains a development diagnostic, not held-out validation.
 
-The first two scaled responses are retrieved. `compare_crop_scale.py` checks
-their paired image, prompt, checkpoint, software, quantization, attention, and
-decoding settings, allowing only the declared minimum-pixel change. Both
-actually use 576 rather than 36 image tokens. The partial accounting in
+`compare_crop_scale.py` checks
+the paired image, prompt, checkpoint, software, quantization, attention, and
+decoding settings, allowing only the declared minimum-pixel change. All 12
+actually use 576 rather than 36 image tokens. The earlier partial accounting in
 `results/source-crops-scale-v1/comparison-partial-v1.json` retains all 12 slots:
-two matched responses and ten not yet retrieved, with no inferred execution
-status for those ten. Raw responses are kept alongside the comparison; changed
-wording is not counted as an improvement. Both early pairs remain broad scene
-descriptions. The comparison test rejects altered images, prompts, seeds,
+two matched responses and ten then not yet retrieved, with no inferred execution
+status for those ten. The completed accounting is
+`results/source-crops-scale-v1/comparison-complete-v1.json`, with 12 matched
+pairs and no unavailable rows. Raw responses are kept alongside the comparison; changed
+wording is not counted as an improvement. All 12 responses changed, but the
+inspection does not establish improved target recognition. The comparison test rejects altered images, prompts, seeds,
 decoding settings, incomplete attempts, and an incorrect realized image scale.
+
+Assistant inspection finds persistent localization and factual errors. At the
+larger scale, slot 6 describes a keyboard rather than the monitor-support
+boundary. Slots 8 and 9 describe desk surfaces although their centers lie near
+the forearm and hand/knee. Slot 10 identifies a chair but adds an unsupported
+patterned backrest and armrest, and does not explain the chair/desk occlusion
+intersection. These are illustrative inspection observations, not independent
+accuracy labels. The larger scale changes the model's answers but does not
+establish a dependable source-point qualification rule. The crop-only caption
+setup will not be used to accept or reject camera evidence or generate training
+labels. No further scale sweep is justified by this diagnostic alone; any
+replacement needs a defined target-recognition task and independently checked
+answers, rather than more detailed prose. No findings from this development
+comparison are added to the paper.
 
 #### Reference timing sensitivity
 

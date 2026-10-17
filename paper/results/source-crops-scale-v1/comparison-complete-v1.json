@@ -1,0 +1,151 @@
+{
+  "scope": "paired presentation audit, not visual accuracy or DNF validation",
+  "input_manifest_sha256": "22817868b0a31a11b8f8ef038d70576d2a6a943edf1ce17af04ce38b2a311001",
+  "script_sha256": "e9df1ba916e32cc70f438127938e799c8e753ee2f200135b959b43e547bcfed1",
+  "rows": [
+    {
+      "slot": 0,
+      "status": "matched",
+      "original_sha256": "a5bb940ab99bf089ddbaca56203dce7b87285fe4a957baada6c8fe8f265473b8",
+      "scaled_sha256": "006b617927965613587a397a3547f0ac91e5f055ad52b08281efebeaec883860",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The physical object at the exact center of the image appears to be a white wall with a visible intersection where two panels meet, forming a corner. There are no clear surface details or additional objects overlapping this area that can be discerned.",
+      "scaled_response": "The central area of the image appears to be a section of a wall or a piece of furniture with a light-colored finish. There is a noticeable intersection where two vertical elements meet, possibly indicating a corner or a joint in the structure.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 1,
+      "status": "matched",
+      "original_sha256": "eeb4611f7db2c5c08d76798b9369f67d83a2a7a81a51924b117ad25d4894b6fe",
+      "scaled_sha256": "8fbd67cc222efc99794198130751cc89e8b350e44ff046e2b00b69df4225df40",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The central area of the image appears to be a section of a ceiling with exposed ductwork and piping. The surface detail includes the metallic framework of the ducts and pipes, which intersect and overlap in a complex pattern.",
+      "scaled_response": "The central area of the image appears to be a section of a ceiling with exposed beams and ductwork. The surface detail includes the texture of the ceiling panels and the metallic sheen of the ducts, while the outlines are defined by the edges of the beams and the structure's framework.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 2,
+      "status": "matched",
+      "original_sha256": "b5760464612b2724668da863a9e2054e9f8bd7ffb95166af8055fa05f5a0791f",
+      "scaled_sha256": "cb587871560fb1b38ea93c2d999bd48da66ca5ca245fecaab0c34f89d63228f3",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The center of the image appears to be a section of a metal structure, possibly part of a cage or a similar framework, with visible horizontal and vertical bars. The surface details include the texture and slight variations in the metal's finish, while the outlines define the edges of the bars.",
+      "scaled_response": "The center of the image appears to be a section of a metal structure, possibly part of a shelving unit or a similar industrial setup. The surface details include the metallic bars and the grid-like pattern formed by their intersections.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 3,
+      "status": "matched",
+      "original_sha256": "dc2cf10bad59f560b7c558523823dcf6efbc4879f315853c4cd7b230a1431792",
+      "scaled_sha256": "9fdcb45db293f0e4884af6fae0fbb26ba0260e2589ab6ff327d4344a255f1e6d",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The center of the image appears to be a blurred section that includes a mix of light and dark areas, possibly indicating a surface with varying textures or reflections. There is no clear distinction between a surface detail and an outline due to the blurriness and lack of sharp edges.",
+      "scaled_response": "The center of the image appears to be a close-up view of a textured surface, possibly a piece of fabric or a patterned material, with a blurred background that includes what looks like a chair and some indistinct shapes. The surface has a checkered pattern, which could be a detail of the material itself.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 4,
+      "status": "matched",
+      "original_sha256": "08c01a33b97846e6aded2625cdf00867ba008041853dfaa6683b7d61cee7be41",
+      "scaled_sha256": "f124ee2bae054a6b26267627b0b65eaa2e5087b5327467de8679700a44ef4e9e",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The physical object at the center appears to be a piece of equipment with a metallic frame and various components attached, possibly part of a gym or exercise apparatus. The surface detail visible includes a textured area that might be a grip or handle on the equipment.",
+      "scaled_response": "The central area of the image appears to be a section of a wall or a large piece of equipment with a metallic frame and some cables or wires attached to it. There is no clear distinction between a surface detail and an outline or intersection of different objects due to the lack of visible texture or distinct lines in that specific region.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 5,
+      "status": "matched",
+      "original_sha256": "6a5a4c527e095ebe3adb27c42e52b7d13de2a7cdb9627cfc804dfd8d6b2dc129",
+      "scaled_sha256": "25df8a163b1346d3d3b25e96238a4a959bcd8e9c1a1a09654a6c90f7e1b43a69",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The center of the image appears to be occupied by a computer keyboard resting on a desk surface. The edge of the keyboard is clearly visible, indicating its outline and position relative to the desk.",
+      "scaled_response": "The center of the image appears to be occupied by a computer keyboard resting on a desk. The surface beneath the keyboard is a light-colored desk with a visible seam running horizontally across its length.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 6,
+      "status": "matched",
+      "original_sha256": "54d3f16afaee272be59714ca48b07438e877fcd7879091fa69bb9f68ceaecf61",
+      "scaled_sha256": "58fe4c967e427acb86438ce887043fadb4011ccef2ae165d31acb75fd16a3fe8",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The physical object at the center appears to be a flat-screen television, with its screen facing forward and displaying no visible content. The outline of the television frame is clearly defined against the background.",
+      "scaled_response": "The center of the image appears to be occupied by a computer keyboard resting on a desk. The surface detail visible includes the keys and the edge of the keyboard, which contrasts with the surrounding desk surface.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 7,
+      "status": "matched",
+      "original_sha256": "8e4cb11934f4c0f1f2deef8b3c3784c7e3d9c61722b32b33ed1073d0b127d535",
+      "scaled_sha256": "57f0ea6468fa000bcd73be9879d3eac8f22af6f42d3f6a149d57b1dc484cc7dd",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The center of the image shows a portion of a person's torso wearing a green and white checkered shirt. The shirt appears to be tucked into dark-colored pants. There is no clear indication of a specific surface detail or intersection of different objects within the central area due to the limited field of view.",
+      "scaled_response": "The center of the image shows a person wearing a green and white checkered shirt with their hand partially visible, pointing towards themselves. The shirt's fabric texture and the pattern of the checkered design are clearly visible.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 8,
+      "status": "matched",
+      "original_sha256": "026e46515c7ac52923f2ee00cc930f9257e70e8716085df4740a1370df35b411",
+      "scaled_sha256": "34214f36bc1da188d29223e089e48c26e51e95521866561fc7e06f595a0930c1",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The center of the image shows a person's hand resting on a surface that appears to be a desk or table. The surface has a light-colored, possibly wooden texture with visible grain patterns.",
+      "scaled_response": "The center of the image appears to be occupied by a desk surface with a computer keyboard partially visible on the right side. The desk has a light-colored finish and there's a piece of paper resting on it.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 9,
+      "status": "matched",
+      "original_sha256": "bf0dfe6be6509ba6d46e3517bffa02dd87033772fd467ad867f31bff8c6bb7d5",
+      "scaled_sha256": "a4700c4d88cedb6839fcf5783e8bd8012f2a00a655c6842263d269079d71ad54",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The center of the image shows a person's knee and part of their leg, wearing camouflage shorts. The surface beneath appears to be a desk with a keyboard and mouse on it, indicating a workspace setting.",
+      "scaled_response": "The center of the image appears to be a section of a desk with a keyboard and mouse on top. The surface of the desk has a patterned texture, which is a surface detail.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 10,
+      "status": "matched",
+      "original_sha256": "e8521b3c5aada0248bb8e05ca6d3cca35affe14b695a4a46f847f62519e9a75d",
+      "scaled_sha256": "cc14c2956905ffb85167ba95cf07728e02b817dc3fdc0616d5c6d5af15e948f0",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The center of the image appears to be occupied by a light-colored surface, possibly a desk or table, with a slight curve visible on its edge. There is no clear distinction between a surface detail and an outline or intersection of different objects within this central area due to the lack of additional context or details.",
+      "scaled_response": "The center of the image appears to be occupied by a beige chair with a patterned backrest. The chair's armrest and part of its seat are visible, but the exact center is partially obscured by the edge of the frame.",
+      "visual_correctness": "not_assessed"
+    },
+    {
+      "slot": 11,
+      "status": "matched",
+      "original_sha256": "96c4323b197bb52d1ecf4b30c63f750967f302c2b04eeda9f732e41f30aa7252",
+      "scaled_sha256": "8b0e63caa85d3a5a1bd7f85a892cd105c318a8dd4b7bcd1e3523c596b7368d4d",
+      "original_image_tokens": 36,
+      "scaled_image_tokens": 576,
+      "response_changed": true,
+      "original_response": "The center of the image shows a portion of a person's torso wearing a green and white checkered shirt, with part of their hand visible near the chest area. The background appears to be a plain wall.",
+      "scaled_response": "The center of the image appears to be a plain white surface, possibly a wall or floor, with no distinct features or objects overlapping it. There are no clear intersections or outlines that suggest the presence of additional objects.",
+      "visual_correctness": "not_assessed"
+    }
+  ]
+}
