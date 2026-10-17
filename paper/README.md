@@ -3987,3 +3987,32 @@ cues, not independently verified visibility labels. No binary staticness or
 DNF threshold is introduced, and no accuracy or camera ranking is inferred.
 Three tests check fixed-slot retention, exclusion of later observations from
 marker fits, coordinate conversion, and preservation of unresolved references.
+
+### Background references for the same MOVi proposals
+
+`audit_movi_background.py` follows the released point-tracking convention for
+static background: unproject frame-zero pixels with radial depth and retain
+their world positions. This is a separate reference operation, never an input
+to camera inference or marker construction. The 195 background points cover
+the 1,170 previously unreferenced proposals. All 24 frames remain stored with
+depth/mask rejection diagnostics; non-rejection is not certified visibility.
+
+An additional first-step consistency check compares these projections with
+the released rendered forward flow, decoding its quantized range and row/column
+order. All 195 points agree within 0.000879 pixels. The depth and flow share
+the renderer, so this is a convention check, not independent physical truth
+or a long-range visibility test. Raw first-flow arrays and all residuals are
+archived in `results/movi-geometry-pilot-v1/background-audit-v1`.
+
+`audit_movi_background_markers.py` joins those references to the already saved
+RGB proposals and later RGB tracks. It retains all 1,536 proposals and reports
+paired method summaries only on common renderable background slots not rejected
+by reference depth/masks. Marker errors also contain prefix-tracking and
+intrinsics errors; they are not pure camera errors or functional-DNF labels.
+Tests cover radial depth off axis, rotated-camera round trips, retained
+occlusions, flow channel order/quantization, and exact replay of the archived
+marker audit. The manuscript is unchanged.
+
+Reference implementations:
+[Kubric point tracking](https://raw.githubusercontent.com/google-research/kubric/main/challenges/point_tracking/dataset.py)
+and [MOVi-E format](https://raw.githubusercontent.com/google-research/kubric/main/challenges/movi/movi_e.py).

@@ -1,0 +1,71 @@
+{
+  "status": "complete",
+  "scope": "background reference consistency only, not independently validated visibility or DNF",
+  "policy": "fixed RGB-harness grid; background at frame 0; static world points from radial depth; all 24 frames; compare first displacement with rendered forward flow; retain every background source",
+  "limitations": "depth and flow share the renderer; first-step agreement does not validate long-range visibility; depth/mask non-rejection is not certified visibility",
+  "sources": [
+    "https://raw.githubusercontent.com/google-research/kubric/main/challenges/point_tracking/dataset.py",
+    "https://raw.githubusercontent.com/google-research/kubric/main/challenges/movi/movi_e.py"
+  ],
+  "decoded_manifest_sha256": "1e8af9575c9e881a8a83ae396bacff1d3be1ecd1bbc5b5cd6585f70ba28491ed",
+  "shard_sha256": "e024496a96010a4dfa0a75f64644ba7d0bb2495a7e215cd1c38bd7242d81d9db",
+  "script_sha256": "8820b88dabed1ddf70cdf8f9300a43f53376bf5c10a10914feb8749d38582c77",
+  "scenes": [
+    {
+      "name": "3835",
+      "file": "00-background.npz",
+      "sha256": "d61394d81895cb8684d4d0631df6ed37674365e9d8d0b937ed3919563827cfdf",
+      "reference_sha256": "34e4dc87c1ab1379e27f7e5fb748b9b4c62ea68f687d86146c952d0db90a3d50",
+      "source_points": 47,
+      "flow_error_quantiles_pixels": [
+        0.00011387256014955246,
+        0.0004203190817550931,
+        0.0005726864015681943,
+        0.0006019547690954236
+      ],
+      "maximum_source_roundtrip_pixels": 6.355287432313019e-14
+    },
+    {
+      "name": "5397",
+      "file": "01-background.npz",
+      "sha256": "79838b8f6035d28ba388cd8ccb266189dacf4bd7013960571eb439a6efe53ed1",
+      "reference_sha256": "d08d6768651f608c3ff8390c9d1b55e795ceeb25d64ca7c2d6f329e91ffc74c0",
+      "source_points": 45,
+      "flow_error_quantiles_pixels": [
+        5.1941860957153785e-05,
+        0.0003915191616429815,
+        0.0006120743191366631,
+        0.0008462478220463954
+      ],
+      "maximum_source_roundtrip_pixels": 8.526512829121202e-14
+    },
+    {
+      "name": "4385",
+      "file": "02-background.npz",
+      "sha256": "b99952e970d48371bbe647b77c16eb57df03ad1ca65f613cbc7756022d1d178c",
+      "reference_sha256": "cda00dc47b7bf4f29034c6b38e933f8c2caf5e7c66977ee30e026021eda868ae",
+      "source_points": 57,
+      "flow_error_quantiles_pixels": [
+        0.00015716010843855655,
+        0.0005663699567179454,
+        0.0008249494292753005,
+        0.0008785036928238132
+      ],
+      "maximum_source_roundtrip_pixels": 8.038873388460929e-14
+    },
+    {
+      "name": "4970",
+      "file": "03-background.npz",
+      "sha256": "952690fcfce5bfa1a9f6f270a94c1d2814f4ce5ba6cf3d2b6fd9fb5b5f3e828b",
+      "reference_sha256": "26147ecc5020d2424e4131188305d11cba03d223b19f6a2f7ea8bd7852ee33ea",
+      "source_points": 46,
+      "flow_error_quantiles_pixels": [
+        0.00010315123108618113,
+        0.0005394513220845747,
+        0.0007601206601497898,
+        0.0008582751186978657
+      ],
+      "maximum_source_roundtrip_pixels": 1.0247593068766006e-13
+    }
+  ]
+}
