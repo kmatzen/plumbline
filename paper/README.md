@@ -4887,6 +4887,36 @@ accurately bounding the largest errors in a video. A tail-focused predictor
 would still require fresh scene-level calibration and evaluation. The
 manuscript is unchanged.
 
+### Upper-tail error prediction baseline
+
+`probe_movi_error_quantiles.py` changes the training objective from average
+squared log error to fixed 0.9-quantile pinball loss on `log(1+error)`. It uses
+the same original-four-scene training rows and replication rows as the ridge
+probe. Each training scene retains total weight one; feature standardization
+uses training data only. A linear program fits an unpenalized intercept and
+an L1 slope penalty of 0.1. Constant, cycle-only, and seven-feature models are
+all retained, with no hyperparameter search. The known constant-quantile test
+and a recomputed optimizer objective check the loss formulation.
+
+Replication macro scene pinball losses are 0.06814, 0.06033, and 0.06753 for
+constant, cycle-only, and all-feature models. Of 440 labeled eligible points,
+the predicted values are exceeded by 50, 35, and 57 points, respectively.
+The cycle-only model is better on these two summaries, but is not uniformly
+better across scenes. Its median predicted radii range from 0.570 to 1.126
+pixels across scenes, while maxima range from 1.834 to 200.355 pixels. Every
+replication scene still has at least one labeled exceedance; pointwise
+containment must not be confused with simultaneous video-level containment.
+
+The record is `results/movi-replication-shard01-v1/error-quantiles-v1.json`,
+including fitted coefficients, per-scene losses, radius sizes, and all
+predictions. Predicted quantiles do not themselves supply finite-sample 90%
+coverage. These already-inspected scenes are development data, visibility
+references remain diagnostic, and unlabeled eligible observations remain
+unscored. The cycle-only quantile model is a baseline candidate for separate
+fresh calibration, not a novel method or a validated camera-DNF rule. The
+extra image-derived features have not justified their complexity on this
+replication, and no new experiment is added to the manuscript.
+
 ### Frozen-matrix correspondence intervention
 
 `audit_movi_motion_track_error.py` tests whether correspondence error explains
