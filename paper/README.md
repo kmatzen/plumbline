@@ -247,6 +247,38 @@ related-work coverage and actual camera experiments remain outstanding.
 
 ### Fresh dense development runs
 
+#### Placement-consistency bounds with missing observations
+
+`placement_bounds.paired_bounds` treats every planned anchor/frame observation
+as a binary placement-consistency outcome at a stated pixel tolerance. If N is
+the planned count, s the number of measured errors at or below that tolerance,
+and u the unavailable count, the hypothetical completed success fraction lies
+in `[s/N, (s+u)/N]`. For two methods A and B, subtract B's upper bound from A's
+lower bound and B's lower bound from A's upper bound to bound A minus B. A strict
+ordering is reported only when that interval excludes zero. There is no
+missing-at-random or independent-frame assumption. These are identification
+bounds, not statistical confidence intervals. Empty evidence cannot imply
+perfect consistency. A missing fit remains unknown, not an automatic failure.
+
+This calculation is conditional on the validity of measured image tracks and
+errors. It neither proves staticness nor supplies a meaningful hypothetical
+placement outcome where the task itself is undefined. Such cases need a separate
+evidence-validity decision. The calculation does not establish functional DNF,
+camera accuracy, or a general method ranking.
+
+`analyze_placement_bounds.py` applies a fixed descriptive sweep of 1, 2, 4, 8,
+and 16 source pixels to six DAVIS clip/image-tracker cases and two TUM controls.
+No operating cutoff is selected. All 588 planned DAVIS observations or 948 TUM
+observations remain in the denominator. Of 40 case/tolerance comparisons, 36
+remain unresolved. The four strict comparisons favor DA3 placement consistency
+on bear at 2 and 4 pixels, under both LK and CoTracker3, even if missing outcomes
+are assigned adversarially. This remains conditional on measured evidence and
+does not validate a usability preference. Both TUM comparisons remain unresolved,
+including reference versus the five-degree rotation control: low coverage can
+prevent a robust full-plan conclusion even when measured errors differ greatly.
+All bounds and counts are in `paper/results/placement-bounds-v1.json`. Tests
+compare small missing-data cases against exhaustive binary completions.
+
 #### Early-fit image anchors with a reference-camera control
 
 `probe_tum_anchors.py` applies the fixed 4-by-3 first-frame feature grid and
