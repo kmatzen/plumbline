@@ -677,6 +677,31 @@ or DNF rates. Per-pair counts and angle quantiles are retained in each run's
 
 ### DAVIS author-review pilot
 
+**Withdrawn from further review:** the project author reported that the examples
+did not make clear what to look for. This is qualitative evidence of an interface
+failure, not a usable camera-quality label. Retain the original packet and its
+mapping for audit, but do not ask for more ratings in that format.
+
+The replacement development preview, `build_anchor_preview.py`, shows a cyan dot
+from image tracking and an orange ring from projection of a fixed fitted 3D point.
+It fits only frames 0–10 and projects into frames 11–59 without refitting. A zoom
+follows the observed dot. The initial strongest-background-corner trial selected
+a leaf and lost tracking; that attempt is retained. A second, explicitly manual
+first-frame wall ROI `[200, 20, 400, 120]` produces an interpretable prototype.
+This manual choice was made after inspecting the first attempt and is development
+work, not an independent or automatically selected benchmark sample.
+
+The local preview is `tmp/anchor-preview-bear-wall-v3/preview.mp4`. Metadata and
+all per-frame observations/projections are archived under
+`paper/results/davis/anchor-preview-development/`. Cyan tracks can drift, background
+annotations do not certify static surfaces, and triangulation uses predicted
+calibration. This is a joint pose/calibration/point-fit consistency check, not a
+test of pose alone. Synthetic tests verify known-point recovery, held-out camera
+perturbation sensitivity, and unavailable stationary/behind-camera cases. A
+training example with explicitly simulated correct and incorrect overlays,
+multi-anchor coverage, and independent track/static-region checks remain needed
+before requesting a new review session.
+
 The eight-presentation pilot contains six outputs (DAGE and DA3 on the three
 development clips) and two repeated presentations. The public packet hides method
 names and shows source video plus reference-free trajectory diagnostics. Video
