@@ -45,6 +45,40 @@ held-out evaluation requires `--split held_out`. No held-out results have been
 examined at protocol-freeze commit `3b57b0e`. This validation does not authorize a camera-DNF
 claim and does not assess a VLM or a learned identity verifier.
 
+**Secondary native-pixel / whole-track audit.** After the primary result,
+`audit_tapvid_native_support.py` replays exactly the same joint acceptance rule
+against annotation coordinates in native pixels. This is a descriptive secondary
+analysis, not a new preregistered endpoint or threshold-selection exercise. It
+checks visibility and both coordinate residuals against the existing geometry
+tolerances, including the boundary (`<=`). Whole-track agreement requires every
+accepted later observation to meet that condition; the denominator includes
+tracks with at least two accepted later observations. It does not establish that
+those observations are widely separated, static, or sufficient for triangulation.
+
+| Native box tolerance | Held-out macro accepted-observation agreement | Held-out macro whole-track agreement |
+|---|---:|---:|
+| 1 px | 50.7% | 28.7% |
+| 2 px | 74.1% | 57.1% |
+| 4 px | 88.6% | 75.7% |
+| 8 px | 95.6% | 87.1% |
+
+The 435 held-out tracks include 74 with zero accepted later observations, 47
+with one, and 314 with at least two. These categories remain explicit; an empty
+track is not declared reliable. At four native pixels, 3,771/4,245 accepted
+observations and 234/314 eligible tracks agree with the annotations (pooled
+descriptive counts, different from the video-macro percentages above). Fifteen
+accepted observations are annotated occluded and fail every tolerance. Development
+and held-out audit records preserve all accepted coordinates' residuals, visibility,
+and frame lag in `results/tapvid-davis-v1/native-support-*-v1.json`.
+
+The earlier 96.2% accepted precision at 256-scale does not certify tight native
+boxes, and per-observation agreement does not establish simultaneous whole-track
+agreement. Annotation uncertainty also contributes to measured residuals. Do not
+use these image checks to assert error-free geometric constraints or to issue
+camera-DNF labels. No acceptance threshold, geometric tolerance, or camera verdict
+was changed after this audit. The manuscript has not been modified with these
+development findings.
+
 The frozen held-out run is now complete. No rule or threshold changed after
 development. All 435 reserved queries and their 26,374 later observations are
 retained. Exact executed-runner hashes, sequence split membership, initialization
