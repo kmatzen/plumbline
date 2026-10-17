@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 HTML = (ROOT / "site" / "explore.html").read_text()
 TEX = (ROOT / "paper" / "main.tex").read_text()
-CONTROLLED = json.loads((ROOT / "paper" / "results" / "controlled_evaluator.json").read_text())
+SENSITIVITY = json.loads((ROOT / "paper" / "results" / "sensitivity.json").read_text())
 SEARCH = json.loads((ROOT / "paper" / "results" / "design_search.json").read_text())
 
 
@@ -44,13 +44,14 @@ assert round(max(deviations), 1) == 7.3
 for phrase in ("47 verified", "39 depth", "8 pose", "16 method", "13 dataset", "46 of 47"):
     assert phrase in TEX, f"missing checked manuscript phrase: {phrase}"
 
-assert round(CONTROLLED["review_pairwise_accuracy"] * 100, 1) == 92.9
-assert round(CONTROLLED["ate_pairwise_accuracy"] * 100, 1) == 79.6
-assert CONTROLLED["design"]["pairwise_trials"] == 240
+assert len(SENSITIVITY["rows"]) == 480
+assert SENSITIVITY["summary"]["rotation"]["ate"]["tie_fraction"] == 1.0
+assert SENSITIVITY["summary"]["rotation"]["rpe_rotation"]["increasing_amplitude_concordance"] == 1.0
+assert "92.9" not in TEX and "79.6" not in TEX, "withdrawn comparison restored"
 assert SEARCH["trials"] == 60
 assert round(SEARCH["bayes_success_at_20"] * 100, 1) == 48.3
 assert round(SEARCH["random_success_at_20"] * 100, 1) == 10.0
-for phrase in ("92.9", "79.6", "240", "48.3", "10.0", "60 trials"):
+for phrase in ("480", "48.3", "10.0", "60 trials"):
     assert phrase in TEX, f"missing checked experiment phrase: {phrase}"
 
 print("paper claims match the canonical ledger")

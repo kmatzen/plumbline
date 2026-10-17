@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Run the controlled evaluator and design-search experiments for the paper."""
+"""Historical exploratory experiments, retained for reproducibility.
+
+The cross-family severity ordering is arbitrary. Its accuracy numbers are
+withdrawn and must not be used as evidence of evaluator quality. Use
+run_sensitivity.py for the replacement within-family implementation checks.
+The design-search experiment is a synthetic optimizer check only.
+"""
 
 from __future__ import annotations
 
