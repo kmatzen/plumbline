@@ -3242,3 +3242,28 @@ errors while retaining enough evidence to distinguish the other camera changes.
 No admission rule or threshold has been fitted to these results. Five focused
 tests cover the continuous solver and observed-track comparison, including
 missing evidence, overlapping brackets, and unresolved solves.
+
+`filter_layered_image_evidence.py` tests the existing fixed 17x17 source-patch
+NCC threshold (.8) on the same sequential coordinates. Admission sees only
+grayscale images and tracked coordinates, not cameras or reference labels;
+initial supplied queries are retained. RGB hashes are reverified. The saved
+filtered tracks are in `results/layered-ncc-control-v1.json.gz`, with their
+unchanged continuous-error evaluation in `results/layered-ncc-error-v1.json.gz`.
+
+The filter retains 2,376/2,760 later observations. All retained observations are
+visible and within two pixels in this control; it removes all 187 incorrect or
+occluded observations but also 197 correct ones. This is not a real-data
+precision claim. Across the same 1,440 perturbed-track comparisons, 1,199 have
+higher error, 240 have overlapping brackets, one is unresolved, and none has
+lower error. The overlaps are all from slots 1 and 3 in every seed: the filter
+removes every suffix observation from those tracks. Their remaining prefix
+cameras are unchanged under every perturbation, so these are missing-evidence
+ties, not successful discrimination. The other 100 seed/track cases distinguish
+1,199 of 1,200 changes with one unresolved solve. All gauge comparisons overlap.
+
+Thus the fixed classical filter removes the observed ranking reversals, but
+does not recover evidence for the affected tracks. A proposed learned method
+must be compared against this precision/coverage tradeoff, not just against
+unfiltered tracking. No new threshold was fitted, and these development controls
+remain outside the manuscript's reported camera experiments. Fifteen focused
+tests pass across the layered rendering, tracking, admission, and scoring code.
