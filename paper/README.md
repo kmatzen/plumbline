@@ -291,9 +291,25 @@ The initial 7B control job uses the same geometry prompt, two control images,
 3B trials. This is a comparison of model configurations, not an isolated
 parameter-count experiment, because precision also changes. The remote attempt
 directory is `/data3/kmatzen/plumbline/research/qwen7b-nf4-controls-v1`.
-At this update the model loaded with 358 quantized linear layers and the first
-response was still running; no accuracy or DNF result is asserted. Final raw
-outputs must be retrieved and checked before interpreting the comparison.
+Both scheduled controls completed with 358 quantized linear layers. Each output
+is 256 exclamation marks, reaches the 256-token cap, and fails JSON parsing.
+Generation took 119.63 and 120.29 seconds for on/off controls, respectively.
+Input and prompt hashes match the retained 3B trials, and the executed runner
+hash matches its archived copy. These are unusable responses, not interpretable
+geometry judgments; an execution/numerical issue must be investigated before
+attributing them to visual reasoning. Both records and the exact executed runner
+are retained in `paper/results/qwen7b-nf4-controls-v1/`.
+
+The runner now offers a separate `--numeric-preflight-only` mode: it installs
+leaf-module output checks, runs one uncached forward pass without generation,
+and records the first nonfinite output's module, shape, dtype, and count. A
+completed finite preflight is not an accuracy result. The initial on-line control
+preflight stopped on nonfinite output from
+`model.language_model.layers.0.self_attn.o_proj`. Its failed record and exact
+diagnostic runner are archived alongside the responses. This localizes a
+numerical failure before interpreting the punctuation as a visual judgment; it
+does not yet distinguish invalid projection weights, upstream attention values,
+or arithmetic overflow. Neither scheduled response is overwritten or repaired.
 
 A separate source-identity VLM pilot uses the first frame of each of these three
 examples. It asks only what physical detail the cyan circle marks, or to abstain;

@@ -101,6 +101,7 @@ def run(
     task: str = "dnf",
     visual_tokens: int = 1280,
     quantization: str = "none",
+    numeric_preflight_only: bool = False,
 ) -> None:
     if task not in {"dnf", "geometry", "source_identity"}:
         raise ValueError("unknown pilot task")
@@ -124,6 +125,7 @@ def run(
         "status": "running",
         "scope": "diagnostic-only development pilot",
         "task": task,
+        "numeric_preflight_only": numeric_preflight_only,
         "checkpoint": str(checkpoint.resolve()),
         "image_sha256": hashlib.sha256(image.read_bytes()).hexdigest(),
         "prompt": prompt,
@@ -203,6 +205,55 @@ def run(
             )
         torch.cuda.reset_peak_memory_stats()
         start = time.monotonic()
+        if numeric_preflight_only:
+            handles = []
+
+            def check_output(name, value):
+                if isinstance(value, torch.Tensor) and (
+                    value.is_floating_point() or value.is_complex()
+                ):
+                    finite = torch.isfinite(value)
+                    if not finite.all().item():
+                        result["first_nonfinite_output"] = {
+                            "module": name,
+                            "shape": list(value.shape),
+                            "dtype": str(value.dtype),
+                            "nonfinite_count": int((~finite).sum().item()),
+                            "elements": value.numel(),
+                        }
+                        save()
+                        raise ValueError(f"nonfinite module output: {name}")
+                elif isinstance(value, (tuple, list)):
+                    for index, item in enumerate(value):
+                        check_output(f"{name}[{index}]", item)
+                elif isinstance(value, dict):
+                    for key, item in value.items():
+                        check_output(f"{name}.{key}", item)
+
+            for name, module in model.named_modules():
+                if not list(module.children()):
+                    handles.append(
+                        module.register_forward_hook(
+                            lambda module, args, value, name=name: check_output(name, value)
+                        )
+                    )
+            try:
+                with torch.inference_mode():
+                    forward = model(**inputs, use_cache=False)
+                check_output("final_logits", forward.logits)
+                result.update(
+                    {
+                        "status": "complete",
+                        "numeric_preflight": "finite_module_outputs_and_logits",
+                        "elapsed_seconds": time.monotonic() - start,
+                        "peak_allocated_bytes": torch.cuda.max_memory_allocated(),
+                    }
+                )
+                save()
+            finally:
+                for handle in handles:
+                    handle.remove()
+            return
         with torch.inference_mode():
             generated = model.generate(**inputs, max_new_tokens=256, do_sample=False)
         torch.cuda.synchronize()
@@ -237,5 +288,14 @@ if __name__ == "__main__":
     parser.add_argument("--task", choices=("dnf", "geometry", "source_identity"), default="dnf")
     parser.add_argument("--visual-tokens", type=int, default=1280)
     parser.add_argument("--quantization", choices=("none", "nf4"), default="none")
+    parser.add_argument("--numeric-preflight-only", action="store_true")
     args = parser.parse_args()
-    run(args.checkpoint, args.image, args.output, args.task, args.visual_tokens, args.quantization)
+    run(
+        args.checkpoint,
+        args.image,
+        args.output,
+        args.task,
+        args.visual_tokens,
+        args.quantization,
+        args.numeric_preflight_only,
+    )
