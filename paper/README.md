@@ -427,9 +427,13 @@ held-out evaluation.
 The 12-item batch has been launched sequentially on Anima using the pinned 7B
 checkpoint, NF4, fp32 language-attention scores, a 768-token image ceiling, and
 greedy generation. The input manifest, executed runner/helper, and completed
-responses are retained in `results/source-crops-v1`. At this checkpoint only
-slot 0 has been retrieved; the batch is still running and no aggregate result
-is claimed. Its processed crop has 36 image tokens (the ceiling does not force
+responses are retained in `results/source-crops-v1`. At this checkpoint slots
+0–2 have been retrieved and their image, runner/helper, checkpoint, prompt, and
+settings hashes checked. No aggregate result is claimed while the batch is
+incomplete. Slot 0 describes a white wall/panel corner; slots 1 and 2 describe
+ceiling or metal framework. Broad scene descriptions alone do not establish
+the exact physical target's identity. These are raw answers, not correctness
+labels. Their processed crops have 36 image tokens (the ceiling does not force
 upsampling). Neither these captions nor assistant assessments of them are
 independent human ground truth or training labels. The paper is unchanged.
 
