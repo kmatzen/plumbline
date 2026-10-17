@@ -520,6 +520,32 @@ even after observing the full injected rotation. Requiring final-frame coverage
 alone would not resolve the ambiguity. This is a post-hoc diagnostic, not a
 new admission rule or a calibrated failure threshold.
 
+#### Sensor-depth diagnostic
+
+`probe_depth_constrained_rotation.py` repeats all 56 rotation cases with two
+additional first-camera axial-depth intervals: measured frame-one depth ±10%
+and ±25%. These are diagnostic bands, not calibrated sensor uncertainties.
+Depth is external evidence unavailable to the intended DAVIS evaluator. Missing
+frame-one depth is not replaced by a later observation. The result therefore
+contains ten eligible slots, one missing-depth slot, and one insufficient-track
+slot in each case. All 112 cases are retained in
+`rotation-response-v1/depth-oracle.json`.
+
+At eight pixels, all ten eligible reference slots have witnesses with either
+band. Five-degree negative/positive ramps have six/six witnesses with the 10%
+band and nine/seven with the 25% band. Among the five tracks reaching frame 89,
+the corresponding counts are three/two and four/three. Thus even the tighter
+sensor-depth band does not eliminate the gradual-drift ambiguity. A single
+depth constraint is not sufficient evidence for a DNF rule.
+
+The optional `first_depth_interval` in `frustum_support.box_support` constrains
+axial depth in the same units as the camera translations; default behavior is
+unchanged. Tests cover a feasible interval, a conflicting interval, scale
+changes, and invalid bounds. All 271 positive witnesses in this diagnostic
+were independently reprojected in world coordinates, verifying positive depth,
+pixel bounds, and the specified sensor-depth interval. These findings remain
+development evidence outside the manuscript.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is

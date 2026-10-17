@@ -22,6 +22,19 @@ def test_known_static_point_has_positive_witness():
     assert (xy >= boxes[:, :2] - 1e-6).all() and (xy <= boxes[:, 2:] + 1e-6).all()
 
 
+def test_independent_depth_interval_restricts_feasible_points_and_scales():
+    poses, k, boxes = fixture()
+    result = box_support(poses, k, boxes, first_depth_interval=[4.9, 5.1])
+    assert result["status"] == "positive_witness"
+    assert 4.9 - 1e-8 <= result["point_world"][2] <= 5.1 + 1e-8
+    assert box_support(poses, k, boxes, first_depth_interval=[1, 2])["status"] == "solver_infeasible"
+    poses[:, :3, 3] *= 7
+    assert box_support(poses, k, boxes, first_depth_interval=[34.3, 35.7])["status"] == "positive_witness"
+    for invalid in ([0, 1], [2, 1], [1, np.inf], [1]):
+        with pytest.raises(ValueError, match="depth interval"):
+            box_support(poses, k, boxes, first_depth_interval=invalid)
+
+
 def test_anchor_relaxation_is_not_full_track_consistency():
     poses, k, boxes = fixture()
     poses[:] = np.eye(4)
