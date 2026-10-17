@@ -3360,5 +3360,20 @@ preference: DAGE/DA3 Sim(3)-aligned ATE is .00643/.00796 m and relative rotation
 error is .315/.358 degrees. These are prior validation metrics, not score inputs
 or functional failure labels. No matching office reference-metric file was
 found in that clip's result directory during this audit; its geometric preference
-is not independently validated here. Two development clips and two methods do
+was not independently validated at that stage. Two development clips and two methods do
 not establish general ranking accuracy, a novel advantage, or a DNF cutoff.
+
+`validate_real_camera_baseline.py` subsequently validates both frozen scores
+against reference poses in a separate step. It rechecks the ground-truth file
+hash and every saved nearest-timestamp association, requires unambiguous reference
+poses for all original scored frames 1–89, and revalidates RGB/prediction
+provenance. Reference poses are not passed to the geometric scorer. Results are
+saved as `minimum-error-reference-validation-v1.json` in each clip directory.
+The first clip exactly reproduces the previously recorded metrics. On office,
+DAGE/DA3 aligned ATE is .00700/.00856 m, relative translation error is
+.00678/.00886 m, and relative rotation error is .239/.266 degrees. All three
+metrics agree with the lower geometric score for DAGE. This is two development
+comparisons, not general ranking validation or human usability evidence.
+One test checks association verification and that missing reference poses are
+not imputed. The score and validation artifacts remain separate and preserve
+their input hashes and all per-method results.
