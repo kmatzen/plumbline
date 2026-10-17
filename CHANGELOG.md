@@ -115,10 +115,10 @@ Codebase review sweep (issues #163–#182). Highest-impact first:
   image's, as previously documented and contradicted by the runner and every
   multi-view adapter), and `confidence` is model-native and monotone rather than
   normalized to `[0, 1]` — half the adapters emit unbounded values.
-- `marigold` gained `per_sample_seed` (default off) — the shared generator makes
-  per-sample output depend on evaluation order, so subset/resumed runs disagree
-  with full runs. Default is unchanged because the published Marigold cells were
-  produced under the streaming-generator semantics (#171).
+- `marigold` now defaults to per-sample seeding, so a cached prediction no
+  longer depends on which samples were evaluated before it. Legacy paper-run
+  configs explicitly retain streaming-generator semantics, and the two modes
+  have distinct cache hashes (#171).
 - ETH3D per-scene GT caches are now single-slot; a 13-scene run no longer
   retains every prior scene's ~450 MB cloud (#182).
 - The DUSt3R and MonST3R single-frame eval helpers were byte-identical copies;

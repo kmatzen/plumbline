@@ -11,6 +11,7 @@ model:
     ensemble_size: 10
     dtype: float32
     seed: 1234
+    per_sample_seed: false  # preserve the recorded legacy streaming-generator run
     processing_res: 0
 scale_alignment: scale_shift
 device: cuda:0

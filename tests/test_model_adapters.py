@@ -26,7 +26,7 @@ import plumbline.models.marigold
 import plumbline.models.mast3r
 import plumbline.models.metric3d_v2
 import plumbline.models.moge
-import plumbline.models.vggt  # noqa: F401
+import plumbline.models.vggt
 from plumbline.models.registry import MODEL_REGISTRY
 
 
@@ -297,6 +297,60 @@ def test_marigold_config_hash_varies_by_inference_params() -> None:
     fast = cls(device="cpu", num_inference_steps=1, ensemble_size=1).config_hash()  # type: ignore[call-arg]
     paper = cls(device="cpu", num_inference_steps=4, ensemble_size=10).config_hash()  # type: ignore[call-arg]
     assert fast != paper
+
+
+def test_marigold_defaults_to_order_independent_cache_semantics() -> None:
+    cls = MODEL_REGISTRY["marigold"]
+    stable = cls(device="cpu")  # type: ignore[call-arg]
+    legacy = cls(device="cpu", per_sample_seed=False)  # type: ignore[call-arg]
+    assert stable.per_sample_seed is True
+    assert stable.config_hash() != legacy.config_hash()
+
+
+def test_marigold_reseeds_each_predict_call(monkeypatch: pytest.MonkeyPatch) -> None:
+    import numpy as np
+
+    class _Generator:
+        def __init__(self, device: str) -> None:
+            self.value = 0
+
+        def manual_seed(self, seed: int) -> _Generator:
+            self.value = seed
+            return self
+
+    class _Torch:
+        Generator = _Generator
+
+    class _Output:
+        def __init__(self, value: int) -> None:
+            self.prediction = np.full((1, 4, 4, 1), value / 100.0, dtype=np.float32)
+
+    class _Pipe:
+        def __call__(self, image: object, **kwargs: object) -> _Output:
+            generator = kwargs["generator"]
+            assert isinstance(generator, _Generator)
+            value = generator.value
+            generator.value += 1
+            return _Output(value)
+
+    monkeypatch.setattr(plumbline.models.marigold, "ensure_torch", lambda: _Torch())
+    images = np.zeros((1, 4, 4, 3), dtype=np.uint8)
+
+    stable = MODEL_REGISTRY["marigold"](device="cpu", seed=7)  # type: ignore[call-arg]
+    stable._pipe = _Pipe()
+    first = stable.predict(images).depth
+    second = stable.predict(images).depth
+    np.testing.assert_array_equal(first, second)
+
+    legacy = MODEL_REGISTRY["marigold"](  # type: ignore[call-arg]
+        device="cpu", seed=7, per_sample_seed=False
+    )
+    legacy._pipe = _Pipe()
+    legacy._generator = _Generator("cpu").manual_seed(7)
+    legacy_first = legacy.predict(images).depth
+    legacy_second = legacy.predict(images).depth
+    assert legacy_first is not None and legacy_second is not None
+    assert not np.array_equal(legacy_first, legacy_second)
 
 
 def test_marigold_capabilities_are_mono_relative() -> None:

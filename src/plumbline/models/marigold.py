@@ -81,6 +81,10 @@ class MarigoldAdapter(Model):
         Integer seed for the diffusion latent generator. Set this for
         reproducibility; plumbline caches predictions by config_hash so
         the seed is part of the cache key.
+    per_sample_seed
+        Reset the generator at the start of every ``predict`` call so cached
+        output is independent of evaluation order. Enabled by default. Set to
+        ``False`` only to reproduce legacy streaming-generator runs.
     """
 
     version = "1.1"
@@ -103,7 +107,7 @@ class MarigoldAdapter(Model):
         dtype: str = "float16",
         seed: int = 0,
         processing_res: int | None = None,
-        per_sample_seed: bool = False,
+        per_sample_seed: bool = True,
     ) -> None:
         if variant not in _HF_CHECKPOINTS:
             raise ValueError(f"variant must be one of {list(_HF_CHECKPOINTS)}; got {variant!r}")
@@ -141,13 +145,11 @@ class MarigoldAdapter(Model):
         # silently disagree between them.
         #
         # ``per_sample_seed=True`` reseeds per call, making each sample's
-        # output independent of evaluation order. It is OFF by default
-        # because every published Marigold paper-match cell (NYU, GSO,
-        # ETH3D) was produced under the streaming-generator semantics, and
-        # flipping the default would change those verified numbers. It is
-        # part of ``config_hash``, so the two modes never share cache
-        # entries. GeoWizard has the same order-dependence, deliberately
-        # (see geowizard.py — it matches upstream `seed_all`).
+        # output independent of evaluation order. Legacy reproduction configs
+        # explicitly opt out because their recorded runs used the streaming
+        # generator. The mode is part of ``config_hash``, so the two semantics
+        # never share cache entries. GeoWizard remains order-dependent by
+        # design (see geowizard.py — it matches upstream `seed_all`).
         self.per_sample_seed = bool(per_sample_seed)
         self._pipe: Any = None
         self._generator: Any = None
