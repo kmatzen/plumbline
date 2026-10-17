@@ -1,0 +1,22 @@
+{
+  "status": "frozen_before_acquisition",
+  "development_commit": "32658ab",
+  "dataset": "MOVi-E/256x256/1.0.0",
+  "split": "validation",
+  "calibration_shards": [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26],
+  "expected_calibration_scenes": 97,
+  "reserved_evaluation_shards": [27,28,29,30,31,32,33,34,35,36],
+  "expected_reserved_evaluation_scenes": 40,
+  "selection": "Contiguous publisher shard order after the two development shards. Retain every scene in every selected shard. No replacement based on difficulty, tracking quality, reference availability, or method performance.",
+  "phase": "Acquire and process calibration shards only. Reserved evaluation shards remain unopened until calibrated multipliers and downstream evaluation rules are frozen.",
+  "input_policy": "Separate RGB and reference archives. Image inference reads only RGB. Reference geometry is used only after per-scene image outputs are frozen. No MOVi test shards or TAPVid calibration images/exports are opened.",
+  "image_checks": "Same 64 frame-zero queries x,y=12,44,...,236; all 24 native frames for pinned CoTracker3 forward inference; target frames 12,18,23; reverse target-frame-to-zero prefixes; forward and reverse visibility and finite in-image reverse query eligibility unchanged. No camera inference is needed to calibrate correspondence error.",
+  "models": ["constant_scale_one_pixel", "max_one_pixel_or_cycle_error", "frozen_cycle_quantile_scale"],
+  "learned_scale": "The cycle-only .9 log-error quantile model from error-quantiles-v1.json, copied verbatim into model.json. Radius scale is max(1 pixel, predicted error). No coefficient, feature, quantile, penalty, or visibility-threshold changes.",
+  "score": "For each scene and each fixed scale, take the maximum reference error divided by that scale over forward-and-reverse-visible points with supported reference projections. Report all eligible but unlabeled points separately. A scene with no labeled eligible point contributes an unbounded score rather than being dropped.",
+  "calibration": "For each of the three scales, use the ceil((n+1)*0.95) order statistic of all scene scores, including unbounded scores. Rank beyond n or an unbounded selected score yields an unbounded multiplier. Use one scene as one calibration unit, not one point or frame.",
+  "reference_policy": "Use unchanged background depth/mask non-rejection and foreground depth/mask/normal support rules from the existing audits. These are renderer-derived diagnostic visibility cues, not certified physical visibility. The target event is containment of supported eligible reference projections, not all physical points.",
+  "failure_policy": "Retain every acquisition, decoding, inference, and scoring failure. Do not replace scenes or silently lower n. Failed or wholly unlabeled calibration scenes cannot supply a finite score.",
+  "reporting": "All three scales remain in the comparison. Report scene-level simultaneous containment, pointwise containment, radii, eligibility and label coverage, and all failures. No favorable scale is selected using evaluation outcomes.",
+  "limitations": "Scene exchangeability and independence are assumptions, not established by publisher shard order. Frozen-model pretraining overlap is unknown. Correspondence calibration alone does not certify staticness, camera quality, placement usability, or functional DNF, and is not itself a novel contribution. The reserved evaluation set is not a camera-method holdout."
+}

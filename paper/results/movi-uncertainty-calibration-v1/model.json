@@ -1,0 +1,19 @@
+{
+  "source_commit": "32658ab",
+  "source_file": "paper/results/movi-replication-shard01-v1/error-quantiles-v1.json",
+  "source_model": "cycle_quantile",
+  "feature": "log1p(reverse_cycle_error_pixels)",
+  "prediction": "expm1(max(0, intercept + slope * ((feature - mean) / scale)))",
+  "radius_scale": "max(1, prediction)",
+  "model": {
+    "columns": [0],
+    "mean": [0.24774305758945656],
+    "scale": [0.24598748133397325],
+    "coefficients": [0.7264980075905908,0.6042621363257262],
+    "quantile": 0.9,
+    "l1_penalty": 0.1,
+    "training_points": 541,
+    "training_scenes": ["3835","4385","4970","5397"],
+    "objective": 0.34839633036212236
+  }
+}
