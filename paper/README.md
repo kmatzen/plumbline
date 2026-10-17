@@ -370,6 +370,42 @@ defined functional-failure decision, independent validation targets, comparison
 with existing metrics, and a frozen held-out evaluation. The manuscript is
 unchanged while this control is being prepared.
 
+`probe_static_rgbd_control.py` has now run the reference/rotation comparison;
+the full record is `results/static-rgbd-control-v1/reference-control-v1.json`.
+It reconstructs source selection and associations, verifies RGB/depth/index
+hashes, tracks all 12 original grid slots, and maps every result back to the
+90 original frame indices. The synthetic test verifies exact projection under
+translation and that the rotation intervention starts at original frame 11,
+not inside the fit window.
+
+Eleven slots have an early fit and one loses its track during fitting. On
+579 common later observations out of 948 planned, the median early-fit
+projection errors are 679.896 pixels for reference cameras and 540.249 pixels
+for the five-degree later-yaw control. Thus this point-estimate diagnostic is
+not a valid camera-quality criterion on this control. These values are internal
+development records, not results added to the manuscript.
+
+A post-hoc depth-assisted check identifies a severe anchor-depth discrepancy.
+The diameter of reference camera centers over fit frames 1–10 is only 0.004707 m.
+For the ten fitted slots with a measured depth at frame 1, fitted axial depths
+at that frame range from 0.164 to 0.265 m, while sensor depths range from 1.031
+to 1.415 m. Fixing a point from that frame's depth and reference pose, then
+projecting it into later frames without refitting, yields median error 3.486
+pixels on 564 common observations; the original fitted points give 710.660
+pixels on that same subset. The remaining slots and missing observations are
+not included in that paired median and remain in the full record. Depth-derived
+points are validation-only and are not passed to the reference-free evaluator.
+
+This supports poor early depth estimation as the immediate problem, with the
+very short fitting baseline as a plausible cause; it does not certify every
+track or eliminate calibration, timing, or sensor noise. A visible track can
+have useful later evidence while its early 3D point estimate is unreliable.
+Before interpreting model rankings, the evaluator must represent this point
+uncertainty or return insufficient evidence. The next check should test the
+existing set-valued point-support formulation on this control, not tune a
+failure threshold against these two observed medians. The DAGE comparison has
+not been run, and no functional-DNF decision has been assigned.
+
 #### RGB-D evidence validation
 
 The existing TUM development subset contains only RGB and associated reference
