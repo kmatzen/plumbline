@@ -504,7 +504,33 @@ can lie on moving objects or be incorrect. Near-zero camera translation also
 limits interpretation of epipolar residuals, regardless of numerical validity.
 This baseline is not ORE and does not establish functional DNF.
 
-### ORE prerequisites
+### Controlled rotation sensitivity on the DAVIS development clip
+
+`probe_davis_rotation.py` holds image matches and predicted calibration fixed,
+then changes only the target camera's orientation for each pair. It evaluates
+local X/Y/Z rotations at -15, -5, -1, 0, 1, 5, and 15 degrees. These are pairwise
+interventions, not a single modified full trajectory. All 588 measurements
+(28 pairs, 3 axes, 7 angles) are retained in
+`results/davis/davis-dage-bear-v2/rotation-probe.json`.
+
+The median across pair medians is 0.000659 at zero perturbation. At +15 degrees
+it is 0.172628, 0.083314, and 0.030510 for local X, Y, and Z respectively.
+Each of those +15-degree conditions increases the residual on all 28 pairs.
+This is a development sensitivity check, not evidence of human preference
+accuracy: the unperturbed estimate is not ground truth, and these changes do
+not define functional-failure labels. Both signs and all magnitudes remain
+available for inspection, including changes that might improve an estimate.
+
+The local overlay `tmp/davis-rotation-probe-v2/overlay.png` shows frames 0 and 30,
+using six matches selected at evenly spaced indices without residual-based
+selection. Target-image lines are predicted epipolar constraints; circles are
+observed feature matches. The lower row changes local Y rotation by +15 degrees.
+Titles disclose this intervention, so this image is explanatory evidence and
+must not be used as a blinded judge test or training example. Static correct
+matches should meet their lines, but satisfying this constraint does not prove
+correct pose. Moving objects and false matches remain possible confounders.
+
+### ORE annotation and calibration requirements
 
 Chen et al., [Object Reprojection Error (NeurIPS 2023)](https://papers.nips.cc/paper_files/paper/2023/file/eb206443c93d07da8b1974b768d8a0d4-Paper-Datasets_and_Benchmarks.pdf)
 already evaluate trajectories without reference camera poses. This is a required
