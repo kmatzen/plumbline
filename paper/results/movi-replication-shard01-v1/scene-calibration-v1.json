@@ -1,0 +1,432 @@
+{
+  "scope": "retrospective calibration-feasibility diagnostic, not conformal coverage validation or novel methodology",
+  "policy": "original four scenes provide one maximum normalized error each; replication scenes used only for reporting; both fixed constant and max(1px,cycle_error) scales; forward and reverse visibility required; all 768 slots per split accounted for; .8,.9,.95 nominal levels all shown",
+  "limitations": "data already used in development; calibration and score choices not preregistered; scene exchangeability unverified; reference visibility is diagnostic and unlabeled accepted points remain; scene-level containment applies only to labeled eligible points, not all tracks, staticness, task success, or camera DNF",
+  "source_sha256": {
+    "old_reverse": "0be1e75867a005f1a0e6780a6c9cccff501428615251fb8e70263bf94e513587",
+    "old_reference": "933bc55b1d58134c2219c1dd2f38dfef2fe5c5b01593d4c063aab30550d96e7a",
+    "new_evidence": "ad6474793bc285273a06b39b159f566c2ccf6689f5712cd97cc86f272308e22d",
+    "new_reference": "37f958b9ec96868bd7e4ff79da43f186e1f83e5d9c85bf83b910dfad6e6e60ca"
+  },
+  "script_sha256": "8f74ffa662e17c1578e2d5bd97ee2b144eb5079634411670dc2a8b7d3f64d53f",
+  "methods": {
+    "constant": {
+      "calibration": [
+        {
+          "sequence": "3835",
+          "planned": 192,
+          "eligible": 165,
+          "labeled": 137,
+          "unlabeled_eligible": 28,
+          "score": 1.6490777862333479
+        },
+        {
+          "sequence": "4385",
+          "planned": 192,
+          "eligible": 150,
+          "labeled": 145,
+          "unlabeled_eligible": 5,
+          "score": 1.0045312198756158
+        },
+        {
+          "sequence": "4970",
+          "planned": 192,
+          "eligible": 129,
+          "labeled": 111,
+          "unlabeled_eligible": 18,
+          "score": 0.7261782760405432
+        },
+        {
+          "sequence": "5397",
+          "planned": 192,
+          "eligible": 163,
+          "labeled": 148,
+          "unlabeled_eligible": 15,
+          "score": 19.123687104330177
+        }
+      ],
+      "levels": [
+        {
+          "scenes": 4,
+          "nominal_coverage": 0.8,
+          "rank": 4,
+          "multiplier": 19.123687104330177,
+          "status": "finite",
+          "replication": [
+            {
+              "sequence": "2373",
+              "eligible": 96,
+              "labeled": 88,
+              "unlabeled_eligible": 8,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": 19.123687104330177,
+              "radius_max": 19.123687104330177,
+              "missed_slots": [],
+              "radius_status": "finite"
+            },
+            {
+              "sequence": "4852",
+              "eligible": 151,
+              "labeled": 133,
+              "unlabeled_eligible": 18,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": 19.123687104330177,
+              "radius_max": 19.123687104330177,
+              "missed_slots": [],
+              "radius_status": "finite"
+            },
+            {
+              "sequence": "4866",
+              "eligible": 108,
+              "labeled": 108,
+              "unlabeled_eligible": 0,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": 19.123687104330177,
+              "radius_max": 19.123687104330177,
+              "missed_slots": [],
+              "radius_status": "finite"
+            },
+            {
+              "sequence": "7097",
+              "eligible": 135,
+              "labeled": 111,
+              "unlabeled_eligible": 24,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": 19.123687104330177,
+              "radius_max": 19.123687104330177,
+              "missed_slots": [],
+              "radius_status": "finite"
+            }
+          ]
+        },
+        {
+          "scenes": 4,
+          "nominal_coverage": 0.9,
+          "rank": 5,
+          "multiplier": null,
+          "status": "unbounded",
+          "replication": [
+            {
+              "sequence": "2373",
+              "eligible": 96,
+              "labeled": 88,
+              "unlabeled_eligible": 8,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            },
+            {
+              "sequence": "4852",
+              "eligible": 151,
+              "labeled": 133,
+              "unlabeled_eligible": 18,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            },
+            {
+              "sequence": "4866",
+              "eligible": 108,
+              "labeled": 108,
+              "unlabeled_eligible": 0,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            },
+            {
+              "sequence": "7097",
+              "eligible": 135,
+              "labeled": 111,
+              "unlabeled_eligible": 24,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            }
+          ]
+        },
+        {
+          "scenes": 4,
+          "nominal_coverage": 0.95,
+          "rank": 5,
+          "multiplier": null,
+          "status": "unbounded",
+          "replication": [
+            {
+              "sequence": "2373",
+              "eligible": 96,
+              "labeled": 88,
+              "unlabeled_eligible": 8,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            },
+            {
+              "sequence": "4852",
+              "eligible": 151,
+              "labeled": 133,
+              "unlabeled_eligible": 18,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            },
+            {
+              "sequence": "4866",
+              "eligible": 108,
+              "labeled": 108,
+              "unlabeled_eligible": 0,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            },
+            {
+              "sequence": "7097",
+              "eligible": 135,
+              "labeled": 111,
+              "unlabeled_eligible": 24,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            }
+          ]
+        }
+      ]
+    },
+    "cycle_scaled": {
+      "calibration": [
+        {
+          "sequence": "3835",
+          "planned": 192,
+          "eligible": 165,
+          "labeled": 137,
+          "unlabeled_eligible": 28,
+          "score": 1.6490777862333479
+        },
+        {
+          "sequence": "4385",
+          "planned": 192,
+          "eligible": 150,
+          "labeled": 145,
+          "unlabeled_eligible": 5,
+          "score": 1.0045312198756158
+        },
+        {
+          "sequence": "4970",
+          "planned": 192,
+          "eligible": 129,
+          "labeled": 111,
+          "unlabeled_eligible": 18,
+          "score": 0.6448081517678942
+        },
+        {
+          "sequence": "5397",
+          "planned": 192,
+          "eligible": 163,
+          "labeled": 148,
+          "unlabeled_eligible": 15,
+          "score": 16.005552956276706
+        }
+      ],
+      "levels": [
+        {
+          "scenes": 4,
+          "nominal_coverage": 0.8,
+          "rank": 4,
+          "multiplier": 16.005552956276706,
+          "status": "finite",
+          "replication": [
+            {
+              "sequence": "2373",
+              "eligible": 96,
+              "labeled": 88,
+              "unlabeled_eligible": 8,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": 16.005552956276706,
+              "radius_max": 751.591384074127,
+              "missed_slots": [],
+              "radius_status": "finite"
+            },
+            {
+              "sequence": "4852",
+              "eligible": 151,
+              "labeled": 133,
+              "unlabeled_eligible": 18,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": 16.005552956276706,
+              "radius_max": 116.22625180598074,
+              "missed_slots": [],
+              "radius_status": "finite"
+            },
+            {
+              "sequence": "4866",
+              "eligible": 108,
+              "labeled": 108,
+              "unlabeled_eligible": 0,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": 16.005552956276706,
+              "radius_max": 16.005552956276706,
+              "missed_slots": [],
+              "radius_status": "finite"
+            },
+            {
+              "sequence": "7097",
+              "eligible": 135,
+              "labeled": 111,
+              "unlabeled_eligible": 24,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": 16.005552956276706,
+              "radius_max": 172.79012652867826,
+              "missed_slots": [],
+              "radius_status": "finite"
+            }
+          ]
+        },
+        {
+          "scenes": 4,
+          "nominal_coverage": 0.9,
+          "rank": 5,
+          "multiplier": null,
+          "status": "unbounded",
+          "replication": [
+            {
+              "sequence": "2373",
+              "eligible": 96,
+              "labeled": 88,
+              "unlabeled_eligible": 8,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            },
+            {
+              "sequence": "4852",
+              "eligible": 151,
+              "labeled": 133,
+              "unlabeled_eligible": 18,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            },
+            {
+              "sequence": "4866",
+              "eligible": 108,
+              "labeled": 108,
+              "unlabeled_eligible": 0,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            },
+            {
+              "sequence": "7097",
+              "eligible": 135,
+              "labeled": 111,
+              "unlabeled_eligible": 24,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            }
+          ]
+        },
+        {
+          "scenes": 4,
+          "nominal_coverage": 0.95,
+          "rank": 5,
+          "multiplier": null,
+          "status": "unbounded",
+          "replication": [
+            {
+              "sequence": "2373",
+              "eligible": 96,
+              "labeled": 88,
+              "unlabeled_eligible": 8,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            },
+            {
+              "sequence": "4852",
+              "eligible": 151,
+              "labeled": 133,
+              "unlabeled_eligible": 18,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            },
+            {
+              "sequence": "4866",
+              "eligible": 108,
+              "labeled": 108,
+              "unlabeled_eligible": 0,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            },
+            {
+              "sequence": "7097",
+              "eligible": 135,
+              "labeled": 111,
+              "unlabeled_eligible": 24,
+              "labeled_misses": 0,
+              "all_labeled_covered": true,
+              "radius_median": null,
+              "radius_max": null,
+              "missed_slots": [],
+              "radius_status": "unbounded"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

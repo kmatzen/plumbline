@@ -4810,6 +4810,45 @@ staticness certificate, camera-DNF label, or novel evaluation contribution is
 claimed. This identifies a measurement-uncertainty requirement for further
 method development rather than a reason to add more filtering stages.
 
+### Scene-level uncertainty calibration feasibility
+
+`probe_movi_scene_calibration.py` tests two fixed uncertainty scales: a constant
+pixel radius and `max(1 pixel, reverse-cycle error)`. Each original development
+video contributes one maximum labeled eligible error divided by its scale.
+Eligibility requires forward and reverse visibility, not reference labels;
+unlabeled eligible points remain counted and are not treated as covered. The
+four replication scenes are used only for reporting, not fitting the radius.
+This is retrospective: these datasets and the score choices have already been
+used in development, so no conformal guarantee or fresh validation is claimed.
+
+The order statistic is `ceil((n+1)*coverage)` among n scene scores, with an
+unbounded radius when that rank exceeds n. This follows the standard
+[conformal calibration construction](https://arxiv.org/html/2107.07511v6), not
+a new method. Dependence within videos cannot be removed by counting frames
+as independent calibration samples; see [distribution-free inference with
+hierarchical data](https://arxiv.org/abs/2306.06342). Treating each scene as one
+unit still requires appropriate exchangeability and a fixed score for a valid
+future coverage claim, neither of which this retrospective check establishes.
+
+With four calibration scenes, nominal 90% and 95% levels require rank five and
+therefore give unbounded radii. At nominal 80%, the constant radius is 19.124
+pixels. The cycle-scaled multiplier is 16.006, yielding a median radius of
+16.006 pixels in each replication scene and maxima up to 751.591 pixels. Both
+cover all labeled eligible replication points. This is broad containment,
+not evidence of useful precision or coverage of unlabeled points. The small
+minimum radii needed for some paired placement decisions in the preceding
+sensitivity analysis are not supplied by these simple uncertainty scores.
+
+The implementation uses exact decimal rank arithmetic and tests that repeating
+points within a scene does not create more calibration units. Nineteen scenes
+are the minimum for a finite 95% order statistic in this construction, not a
+sufficient sample size for a useful or stable evaluator. An improved score
+would need separate development, fresh scene-level calibration, and another
+evaluation set; the current four-scene replication must not be relabeled fresh
+for that revised method. The artifact is
+`results/movi-replication-shard01-v1/scene-calibration-v1.json`. No new manuscript
+claim follows from this feasibility calculation.
+
 ### Frozen-matrix correspondence intervention
 
 `audit_movi_motion_track_error.py` tests whether correspondence error explains
