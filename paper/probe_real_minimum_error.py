@@ -73,7 +73,7 @@ def run(root, control_path, predictions):
              Path(__file__).with_name("run_static_dage.py"), repo/"src/plumbline/frustum_support.py"]
     return dict(scope="two-method development RGB geometric baseline; not ground-truth-free accuracy certification or DNF",
                 protocol="unchanged RGB tracks and published calibration; frames 1..89; all 12 tracks; native-pixel [0,64] bisection to .01; unresolved slots retained in median bounds",
-                limitations="full-clip predictions; unverified staticness/identity/calibration; two development clips; no reference poses or depth values used for score",
+                limitations="full-clip predictions; unverified staticness/identity/calibration; development comparison; no reference poses or depth values used for score",
                 source_manifest_sha256=source_hash, tracks_sha256=digest(control_path),
                 calibration=K.tolist(), dependencies_sha256={str(p.relative_to(repo)):digest(p) for p in paths}, cases=cases)
 

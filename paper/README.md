@@ -3427,3 +3427,33 @@ unavailable) and 83 depth associations. Thus all preselected scoring frames
 1–89 have reference associations for the later validation step. Depth is not
 an input to inference or geometric scoring. Camera inference is a separate
 step; staging success does not establish successful method outputs.
+
+Both fresh runs subsequently completed: DAGE in 185.2 seconds including model
+load, and DA3 in 24.9 seconds under its recorded timing convention. Their
+manifests, predictions, executed runners, and DA3 helper scripts are retained
+under `dage-v1/` and `da3-v1/`. Source RGB bytes, decoded arrays, frame order,
+prediction hashes, runner hashes, and all ninety rigid poses were verified.
+The original fixed-grid tracker retained 215 of 1,068 planned scored
+observations, with per-slot counts `[9,52,4,3,3,7,53,23,5,3,53,0]`.
+No track provides evidence after frame 53: frames 54–89 are entirely uncovered.
+The twelve slots remain in the aggregate, including the empty slot.
+
+The frozen RGB-only geometric median bounds are [1.3008, 1.8203] pixels for
+DAGE and [1.9688, 3.2070] for DA3. Both have one unresolved slot. The score
+was saved before separate reference validation. DAGE/DA3 aligned ATE is
+.01501/.02086 m, relative translation error .01266/.02042 m, and relative
+rotation error .3197/.3370 degrees on the fixed original frames 1–89.
+All three metrics agree with the geometric preference, but they do not
+validate functional usability or the missing image evidence in the final
+36 frames. In particular, a low geometric error is not evidence that those
+unobserved frames are accurate. The next evaluator comparison needs a way
+to obtain and validate evidence across that interval; it must not infer
+whole-clip reliability from the surviving early tracks.
+
+The full score traces and separate reference report are retained as
+`minimum-error-v1.json.gz` and `minimum-error-reference-validation-v1.json`.
+Only descriptive scope text in the scoring/validation helpers was updated
+to avoid incorrectly describing this third comparison as two clips; the
+score, calibration, frame roster, and reference metric rules did not change.
+The two focused score/association tests pass. These remain development
+results outside the manuscript and do not establish a novel learned method.

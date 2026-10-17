@@ -63,7 +63,7 @@ def run(root, predictions, score_path):
                 reference_sha256=digest(reference_path), script_sha256=digest(Path(__file__)),
                 scored_original_indices=indices, reference_association_counts=dict(Counter(a["status"] for a in associations)),
                 maximum_scored_timestamp_delta_seconds=max(abs(associations[i]["delta_seconds"]) for i in indices),
-                limitations="two development methods/clips; nearest timestamp rather than exact synchronization; pose errors are not human usability labels; score already computed without reference",
+                limitations="two development methods on this clip; nearest timestamp rather than exact synchronization; pose errors are not human usability labels; score already computed without reference",
                 methods=rows)
 
 
