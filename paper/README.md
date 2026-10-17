@@ -3287,3 +3287,23 @@ evidence coverage is 100% versus 83.3%; higher-error comparisons account for
 are not method-level success rates. Four tests check missing-view evidence,
 supported ties, numerical uncertainty, mismatched/duplicate indices, and identity
 controls. This accounting is a protocol component, not a standalone novelty claim.
+
+`probe_layered_direct_evidence.py` reuses the frozen first-to-target LK recovery
+baseline (FB<=1 pixel, 17x17 NCC>=.8) on all layered-control queries. It makes
+each match independently from the initial frame; a rejected intermediate match
+does not prevent later matching. Images are rehashed, and later reference
+coordinates/visibility are used only for scoring after predictions. No camera
+trajectory enters matching. One regression test checks recovery after rejection.
+
+The complete direct baseline retains 1,415/2,760 observations, all visible and
+within two pixels in this control, versus 2,376 for filtered sequential tracks.
+Its unchanged geometric comparison yields 718 higher-error comparisons, two
+numerically unresolved comparisons, and 720 without any changed-view evidence
+out of 1,440 planned comparisons. Thus direct matching does not recover the
+lost evidence here; it reduces changed-view coverage from 83.3% to 50%. Its
+zero observed ranking reversals cannot be reported without that coverage loss.
+The matching records, full geometric solver traces, and coverage report are
+preserved in `results/layered-direct-control-v1.json.gz`,
+`layered-direct-error-v1.json.gz`, and `layered-direct-coverage-v1.json`.
+These are development baselines on one synthetic scene/path, not manuscript
+camera-DNF results or a learned-method comparison.
