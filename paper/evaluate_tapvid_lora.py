@@ -81,10 +81,14 @@ def run(corpus, training_run, output):
         implementation.eager_attention_forward = attention
         torch.manual_seed(0)
         processor = AutoProcessor.from_pretrained(checkpoint, local_files_only=True, min_pixels=576*28*28, max_pixels=768*28*28)
+        compute_dtype = train["configuration"].get("quantized_compute_dtype", "float16")
+        if compute_dtype not in {"float16", "float32"}:
+            raise ValueError("unknown training arithmetic")
+        report["quantized_compute_dtype"] = compute_dtype
         base = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             checkpoint, local_files_only=True, torch_dtype=torch.float16, attn_implementation="eager",
             device_map={"": 0}, quantization_config=BitsAndBytesConfig(load_in_4bit=True,
-                bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=torch.float16, bnb_4bit_use_double_quant=True))
+                bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=getattr(torch, compute_dtype), bnb_4bit_use_double_quant=True))
         base = prepare_model_for_kbit_training(base, use_gradient_checkpointing=False)
         model = PeftModel.from_pretrained(base, training_run / "adapter", is_trainable=False)
         model.eval()

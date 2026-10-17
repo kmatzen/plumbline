@@ -54,18 +54,26 @@ def mask_prompt(full_ids, prompt_ids):
     return labels
 
 
-def run(corpus, checkpoint, output, steps, order="class_smoke"):
+def run(corpus, checkpoint, output, steps, order="class_smoke", probe_index=None, compute_dtype="float16"):
+    if compute_dtype not in {"float16", "float32"}:
+        raise ValueError("unsupported quantized compute dtype")
     if output.exists():
         raise ValueError("preserve prior training runs")
     rows = select_training(corpus, steps, order)
+    if probe_index is not None:
+        if not 0 <= probe_index < len(rows):
+            raise ValueError("probe index outside selected training order")
+        rows = [rows[probe_index]]
     output.mkdir(parents=True)
     report = {"status": "starting", "scope": "training feasibility only, not generalization or camera evaluation",
               "training_ids": [r["id"] for r in rows], "corpus_manifest_sha256": digest(corpus / "manifest.json"),
               "train_export_sha256": digest(corpus / "train.jsonl"), "script_sha256": digest(Path(__file__)),
-              "checkpoint": str(checkpoint), "steps_requested": steps, "steps": [],
+              "checkpoint": str(checkpoint), "steps_requested": len(rows), "selection_pool_steps": steps,
+              "diagnostic_probe_index": probe_index, "steps": [],
               "order": order,
               "policy": "training only; seed 0; one pass maximum; no calibration/validation files read; class_smoke prioritizes one per class; seeded shuffles every training example",
               "configuration": {"rank": 8, "alpha": 16, "dropout": 0., "learning_rate": 1e-4,
+                                "quantized_compute_dtype": compute_dtype,
                                 "target_modules": ["q_proj", "v_proj"], "visual_min_tokens": 576,
                                 "visual_max_tokens": 768, "batch_size": 1, "gradient_clip": 1.}}
 
@@ -105,7 +113,7 @@ def run(corpus, checkpoint, output, steps, order="class_smoke"):
         model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             checkpoint, local_files_only=True, torch_dtype=torch.float16, attn_implementation="eager",
             device_map={"": 0}, quantization_config=BitsAndBytesConfig(load_in_4bit=True,
-                bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=torch.float16, bnb_4bit_use_double_quant=True))
+                bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=getattr(torch, compute_dtype), bnb_4bit_use_double_quant=True))
         model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True,
                                                gradient_checkpointing_kwargs={"use_reentrant": False})
         model.config.use_cache = False
@@ -169,5 +177,7 @@ if __name__ == "__main__":
         parser.add_argument(name, type=Path)
     parser.add_argument("--steps", type=int, default=3)
     parser.add_argument("--order", choices=("class_smoke", "seeded"), default="class_smoke")
+    parser.add_argument("--probe-index", type=int, help="diagnose one indexed training example from the unchanged base")
+    parser.add_argument("--compute-dtype", choices=("float16", "float32"), default="float16")
     args = parser.parse_args()
-    run(args.corpus, args.checkpoint, args.output, args.steps, args.order)
+    run(args.corpus, args.checkpoint, args.output, args.steps, args.order, args.probe_index, args.compute_dtype)

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import hashlib
+import gzip
 import json
 import re
 from pathlib import Path
@@ -217,6 +218,30 @@ for excluded in (
     "Audit of the released ORE sample",
 ):
     assert excluded not in TEX, f"development-only narrative restored: {excluded}"
+
+tapvid_root = ROOT / "paper/results/tapvid-davis-v1"
+tapvid_raw = (tapvid_root / "identity-held-out-v1.json.gz").read_bytes()
+tapvid = json.loads(gzip.decompress(tapvid_raw))
+tapvid_summary = json.loads((tapvid_root / "identity-held-out-summary-v1.json").read_text())
+assert tapvid_summary["source_sha256"] == hashlib.sha256(tapvid_raw).hexdigest()
+assert len(tapvid["sequences"]) == 20
+assert sum(len(s["tracks"]) for s in tapvid["sequences"].values()) == 435
+for gate, label in (("lk_available", "LK available"), ("fb_1px", "Forward--backward"),
+                    ("ncc_0.8", "Starting-patch NCC"), ("both", "Both")):
+    records = [tapvid["sequences"][name]["counts"][gate] for name in sorted(tapvid["sequences"])]
+    precision = np.array([c["accepted_correct"]/c["accepted"] for c in records])
+    recall = np.array([c["accepted_correct"]/c["visible"] for c in records])
+    assert f"{label} & {precision.mean()*100:.1f} & {recall.mean()*100:.1f}" in TEX
+    if gate == "both":
+        assert sum(c["planned"] for c in records) == 26374
+        assert sum(c["accepted"] for c in records) == 4245
+        assert sum(c["accepted_correct"] for c in records) == 4133
+        assert sum(c["accepted_wrong"] for c in records) == 97
+        assert sum(c["accepted_occluded"] for c in records) == 15
+        indices = np.random.default_rng(677).integers(0, 20, (20000, 20))
+        for values in (precision, recall):
+            lo, hi = np.quantile(values[indices].mean(axis=1), [.025, .975])*100
+            assert f"{lo:.1f}--{hi:.1f}" in TEX
 
 print(
     "Selected manuscript counts match retained records; human validation and general claims are not certified"

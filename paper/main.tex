@@ -28,7 +28,7 @@ This development report contains:
 \begin{enumerate}
   \item an implemented separation of structural failure, functional judgment, and unresolved evidence;
   \item reference-free source and geometric diagnostics with retained input and output provenance;
-  \item controlled sensitivity measurements and placement-evidence coverage tests; and
+  \item controlled sensitivity measurements, placement-evidence coverage tests, and held-out validation of a correspondence check; and
   \item a validation protocol for the proposed evaluator, with pairwise review and design search retained as supporting components.
 \end{enumerate}
 
@@ -120,7 +120,7 @@ Each of 60 trials starts from four shared random observations. Bayesian and rand
 
 \subsection{Reference-free DAVIS development runs}
 The pilot uses DAGE \cite{dage2026} and Depth Anything 3 (DA3) \cite{yang2025depthanything3} as sources of camera estimates, not as the proposed evaluation method.
-We staged 90 DAVIS train/validation sequences with 6,208 frames, preserving split lists and frame hashes. Development uses the first 60 frames of the first three listed training sequences: \emph{bear}, \emph{bmx-bumps}, and \emph{boat}. Validation sequences have not been used for development inference. DAGE produces camera poses and normalized intrinsics. On bear, a repeat run retaining calibration reproduced the original poses elementwise. Its runtime was 72.08 seconds including loading, with 7.04 GB peak allocated GPU memory. These development settings do not form a controlled runtime benchmark.
+We staged 90 DAVIS train/validation sequences with 6,208 frames, preserving split lists and frame hashes. Camera-estimator development uses the first 60 frames of the first three listed training sequences: \emph{bear}, \emph{bmx-bumps}, and \emph{boat}. The separate correspondence study below uses annotated DAVIS validation videos, not camera-estimator results on them. DAGE produces camera poses and normalized intrinsics. On bear, a repeat run retaining calibration reproduced the original poses elementwise. Its runtime was 72.08 seconds including loading, with 7.04 GB peak allocated GPU memory. These development settings do not form a controlled runtime benchmark.
 
 The DA3 runs use query-chunked attention with the same keys and values. Unit tests compare the attention kernel with unchunked evaluation; end-to-end numerical equivalence has not been measured. Native processed-image intrinsics are converted back to source-image coordinates using the audited resize convention. Both methods use the same source frames and decoded inputs.
 
@@ -156,6 +156,33 @@ Offline tracking changed early coordinates when future images were supplied. Max
 
 
 
+\subsection{Validating correspondence evidence}
+Point tracks should be checked independently before they are used to judge camera estimates. We use TAP-Vid DAVIS \cite{doersch2022tapvid}, whose point-position and visibility annotations were produced with human review and optical-flow assistance. These annotations do not establish staticness or camera accuracy. Before evaluating an image check, we partition the 30 videos by a deterministic hash of the video name: ten development videos and twenty reserved videos. This is a project-specific split, not a result on the standard full TAP-Vid benchmark.
+
+Each annotated track is initialized once at its first visible point. LK then runs independently at native image resolution, without later annotation inputs or restart after loss. We compare four fixed admission rules: any available estimate; forward--backward error at most one native pixel; normalized cross-correlation (NCC) of at least 0.8 with the starting grayscale patch; and both checks. NCC uses a $17\times17$ subpixel patch without scale or rotation alignment. Image-border and textureless patches cannot pass the patch check. The rules are fixed before scoring the reserved videos.
+
+For scoring only, an accepted estimate is correct if the annotated point is visible and its Euclidean error is below four pixels after scaling coordinates to $256\times256$. Accepted occluded estimates are errors. Precision is the correct fraction among accepted estimates; visible-correct recall is the correctly accepted fraction of all visible target observations. We compute each quantity per video and then average across videos. Rejected and unavailable observations remain in the recall denominator. This scoring tolerance must not be confused with a four-native-pixel geometric bound.
+
+The reserved set contains 435 first-visible queries and 26,374 subsequent observations. Table~\ref{tab:correspondence} reports all four rules. The joint rule achieves 96.2\% mean precision and 24.0\% mean visible-correct recall. Descriptive 95\% percentile intervals from 20,000 video-bootstrap resamples are 94.3--97.8\% and 16.6--33.0\%, respectively. Every reserved video has at least one accepted estimate. Pooled counts, which are not the macro averages, comprise 4,245 accepted estimates: 4,133 correct, 97 visible but outside tolerance, and 15 occluded. The source-patch check reduces incorrect admission while discarding substantial evidence. It is a classical baseline, not the claimed novel evaluator.
+
+\begin{table}[t]
+\centering
+\caption{Correspondence admission on twenty reserved TAP-Vid DAVIS videos. Percentages are video-macro averages. Recall includes all visible target observations, including those without an estimate.}
+\label{tab:correspondence}
+\begin{tabular}{lrr}
+\toprule
+Rule & Precision (\%) & Recall (\%)\\
+\midrule
+LK available & 49.3 & 53.0\\
+Forward--backward & 53.3 & 50.9\\
+Starting-patch NCC & 95.2 & 24.7\\
+Both & 96.2 & 24.0\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This experiment validates a correspondence-admission component under the stated tolerance, not a camera-failure rule. Image agreement does not prove that a surface is static, and occasional accepted errors can invalidate a multi-frame geometric constraint. Annotation uncertainty, native-pixel tolerances, and simultaneous whole-track reliability must be addressed before interpreting geometric inconsistency as camera failure. The model-training study remains outside these reported results.
+
 \subsection{Conventional metric sensitivity checks}
 ATE and translation RPE increase with amplitude in all tested translation-corruption comparisons. For rotation-only corruption, ATE remains tied, while rotation RPE increases in all tested comparisons. These are implementation sensitivity checks. Standard RPE already detects the selected rotation defect, so this result does not demonstrate an advantage over a conventional multi-metric baseline.
 
@@ -178,7 +205,7 @@ The primary missing experiment is human validation of functional usability on re
 
 The final comparison must include ORE where its static-track and calibration requirements are met, simpler geometric checks, conventional pose metrics where references exist, and untuned and tuned judge variants. The primary failure-detection measures are false DNF among human-usable outputs, missed failure among human-unusable outputs, and coverage including all abstentions. Thresholds must be selected on development data and fixed before held-out evaluation. Sequence-level resampling must retain correlated frame pairs together. A claim of cross-method generalization also requires holding out tracker identities, not merely frames from familiar videos.
 
-DAVIS masks do not establish that an object is static, and our staged data does not provide measured intrinsics or camera poses. The current three-clip, two-method development study is insufficient to evaluate generalization, ranking, or semantic interpretation. Improved evidence coverage does not establish image-track correctness. The available author review does not replace independent validation, and no independent reviewers are currently available. Fine-tuning and reinforcement learning remain future experiments, contingent on trustworthy supervision and a frozen held-out protocol.
+DAVIS masks do not establish that an object is static, and our staged data does not provide measured intrinsics or camera poses. The current three-clip, two-method camera study is insufficient to evaluate generalization, ranking, or semantic interpretation. The separate correspondence study provides independent position/visibility references but not camera-usability labels. The available author review does not replace independent validation, and no independent reviewers are currently available. This report includes no validated fine-tuning or reinforcement-learning result for camera evaluation.
 
 The trajectory study measures response to injected amplitude. It cannot show that the proposed method matches human preference or improves selection over existing metrics. The highest-priority next experiment is a study using real tracking outputs, independent reviewers, repeated hidden pairs, strong multi-metric baselines, and a held-out judge-calibration set.
 
