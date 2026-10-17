@@ -1,0 +1,343 @@
+{
+  "scope": "in-sample diagnostic; not validation or camera-DNF accuracy",
+  "all": {
+    "examples": 188,
+    "confusion": {
+      "close": {
+        "close": 69,
+        "far": 0,
+        "occluded": 0,
+        "uncertain": 0,
+        "invalid": 0
+      },
+      "far": {
+        "close": 0,
+        "far": 84,
+        "occluded": 0,
+        "uncertain": 0,
+        "invalid": 0
+      },
+      "occluded": {
+        "close": 0,
+        "far": 0,
+        "occluded": 35,
+        "uncertain": 0,
+        "invalid": 0
+      }
+    },
+    "accuracy_all_examples": 1.0,
+    "class_recall": {
+      "close": 1.0,
+      "far": 1.0,
+      "occluded": 1.0
+    },
+    "balanced_accuracy": 1.0,
+    "answered_examples": 188,
+    "answer_coverage": 1.0,
+    "accuracy_answered_only": 1.0,
+    "uncertain_examples": 0,
+    "invalid_examples": 0,
+    "close_predictions": 69,
+    "close_precision": 1.0,
+    "false_close_predictions": 0
+  },
+  "per_video": {
+    "camel": {
+      "examples": 24,
+      "confusion": {
+        "close": {
+          "close": 17,
+          "far": 0,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        },
+        "far": {
+          "close": 0,
+          "far": 6,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        },
+        "occluded": {
+          "close": 0,
+          "far": 0,
+          "occluded": 1,
+          "uncertain": 0,
+          "invalid": 0
+        }
+      },
+      "accuracy_all_examples": 1.0,
+      "class_recall": {
+        "close": 1.0,
+        "far": 1.0,
+        "occluded": 1.0
+      },
+      "balanced_accuracy": 1.0,
+      "answered_examples": 24,
+      "answer_coverage": 1.0,
+      "accuracy_answered_only": 1.0,
+      "uncertain_examples": 0,
+      "invalid_examples": 0,
+      "close_predictions": 17,
+      "close_precision": 1.0,
+      "false_close_predictions": 0
+    },
+    "dogs-jump": {
+      "examples": 50,
+      "confusion": {
+        "close": {
+          "close": 7,
+          "far": 0,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        },
+        "far": {
+          "close": 0,
+          "far": 34,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        },
+        "occluded": {
+          "close": 0,
+          "far": 0,
+          "occluded": 9,
+          "uncertain": 0,
+          "invalid": 0
+        }
+      },
+      "accuracy_all_examples": 1.0,
+      "class_recall": {
+        "close": 1.0,
+        "far": 1.0,
+        "occluded": 1.0
+      },
+      "balanced_accuracy": 1.0,
+      "answered_examples": 50,
+      "answer_coverage": 1.0,
+      "accuracy_answered_only": 1.0,
+      "uncertain_examples": 0,
+      "invalid_examples": 0,
+      "close_predictions": 7,
+      "close_precision": 1.0,
+      "false_close_predictions": 0
+    },
+    "drift-straight": {
+      "examples": 50,
+      "confusion": {
+        "close": {
+          "close": 23,
+          "far": 0,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        },
+        "far": {
+          "close": 0,
+          "far": 9,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        },
+        "occluded": {
+          "close": 0,
+          "far": 0,
+          "occluded": 18,
+          "uncertain": 0,
+          "invalid": 0
+        }
+      },
+      "accuracy_all_examples": 1.0,
+      "class_recall": {
+        "close": 1.0,
+        "far": 1.0,
+        "occluded": 1.0
+      },
+      "balanced_accuracy": 1.0,
+      "answered_examples": 50,
+      "answer_coverage": 1.0,
+      "accuracy_answered_only": 1.0,
+      "uncertain_examples": 0,
+      "invalid_examples": 0,
+      "close_predictions": 23,
+      "close_precision": 1.0,
+      "false_close_predictions": 0
+    },
+    "goat": {
+      "examples": 8,
+      "confusion": {
+        "close": {
+          "close": 5,
+          "far": 0,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        },
+        "far": {
+          "close": 0,
+          "far": 3,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        },
+        "occluded": {
+          "close": 0,
+          "far": 0,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        }
+      },
+      "accuracy_all_examples": 1.0,
+      "class_recall": {
+        "close": 1.0,
+        "far": 1.0,
+        "occluded": null
+      },
+      "balanced_accuracy": null,
+      "answered_examples": 8,
+      "answer_coverage": 1.0,
+      "accuracy_answered_only": 1.0,
+      "uncertain_examples": 0,
+      "invalid_examples": 0,
+      "close_predictions": 5,
+      "close_precision": 1.0,
+      "false_close_predictions": 0
+    },
+    "loading": {
+      "examples": 46,
+      "confusion": {
+        "close": {
+          "close": 16,
+          "far": 0,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        },
+        "far": {
+          "close": 0,
+          "far": 24,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        },
+        "occluded": {
+          "close": 0,
+          "far": 0,
+          "occluded": 6,
+          "uncertain": 0,
+          "invalid": 0
+        }
+      },
+      "accuracy_all_examples": 1.0,
+      "class_recall": {
+        "close": 1.0,
+        "far": 1.0,
+        "occluded": 1.0
+      },
+      "balanced_accuracy": 1.0,
+      "answered_examples": 46,
+      "answer_coverage": 1.0,
+      "accuracy_answered_only": 1.0,
+      "uncertain_examples": 0,
+      "invalid_examples": 0,
+      "close_predictions": 16,
+      "close_precision": 1.0,
+      "false_close_predictions": 0
+    },
+    "shooting": {
+      "examples": 10,
+      "confusion": {
+        "close": {
+          "close": 1,
+          "far": 0,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        },
+        "far": {
+          "close": 0,
+          "far": 8,
+          "occluded": 0,
+          "uncertain": 0,
+          "invalid": 0
+        },
+        "occluded": {
+          "close": 0,
+          "far": 0,
+          "occluded": 1,
+          "uncertain": 0,
+          "invalid": 0
+        }
+      },
+      "accuracy_all_examples": 1.0,
+      "class_recall": {
+        "close": 1.0,
+        "far": 1.0,
+        "occluded": 1.0
+      },
+      "balanced_accuracy": 1.0,
+      "answered_examples": 10,
+      "answer_coverage": 1.0,
+      "accuracy_answered_only": 1.0,
+      "uncertain_examples": 0,
+      "invalid_examples": 0,
+      "close_predictions": 1,
+      "close_precision": 1.0,
+      "false_close_predictions": 0
+    }
+  },
+  "training_majority_label": "far",
+  "training_majority_accuracy": 0.44680851063829785,
+  "within_video_association": {
+    "per_video": {
+      "camel": {
+        "examples": 24,
+        "observed_accuracy": 1.0,
+        "shuffled_expected_accuracy": 0.5659722222222222,
+        "excess_accuracy": 0.4340277777777778
+      },
+      "dogs-jump": {
+        "examples": 50,
+        "observed_accuracy": 1.0,
+        "shuffled_expected_accuracy": 0.5144,
+        "excess_accuracy": 0.48560000000000003
+      },
+      "drift-straight": {
+        "examples": 50,
+        "observed_accuracy": 1.0,
+        "shuffled_expected_accuracy": 0.3736,
+        "excess_accuracy": 0.6264000000000001
+      },
+      "goat": {
+        "examples": 8,
+        "observed_accuracy": 1.0,
+        "shuffled_expected_accuracy": 0.53125,
+        "excess_accuracy": 0.46875
+      },
+      "loading": {
+        "examples": 46,
+        "observed_accuracy": 1.0,
+        "shuffled_expected_accuracy": 0.4102079395085066,
+        "excess_accuracy": 0.5897920604914935
+      },
+      "shooting": {
+        "examples": 10,
+        "observed_accuracy": 1.0,
+        "shuffled_expected_accuracy": 0.66,
+        "excess_accuracy": 0.33999999999999997
+      }
+    },
+    "macro_video_excess_accuracy": 0.49076163971154524,
+    "interpretation": "within-video answer/target association beyond marginal label frequencies; not causal image reliance, a trained baseline, or a significance test"
+  },
+  "source_sha256": {
+    "paper/results/tapvid-lora-twenty-pass-v1/training-fit.json": "42a7f58e4470be8b1b2cc1440d817e04359613fba0bb1e7b5427348adee8e953",
+    "paper/results/tapvid-lora-twenty-pass-v1/training.json": "c16c4c3a0495e8bd813d0bad8009c89b29047c7142114370f27a51ab0aa58f26",
+    "paper/results/tapvid-judge-corpus-v1/manifest.json": "24cee1801f19d85f11a57cb6e85770bb6cb5659e7c3047f496a260d8c039a5fc",
+    "/Users/kmatzen/git/plumbline/paper/analyze_tapvid_training_fit.py": "cb7bde8e57c160a7c90ac8e5eb805902fd0de38af5f45fb7b1cb342117fc0c32",
+    "/Users/kmatzen/git/plumbline/paper/analyze_tapvid_lora.py": "ffe6cf8b6202f6ce4b1014910a636128cad6bbbd5fdb4d30dc83040063c93936"
+  }
+}

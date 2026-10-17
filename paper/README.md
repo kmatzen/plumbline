@@ -603,9 +603,13 @@ training manifest records unique training membership separately from the
 repeated update schedule. Training completed all 3,760 updates with finite
 losses and finite, positive gradient norms. The saved adapter files match their
 recorded SHA-256 hashes. The complete training record is preserved in
-`results/tapvid-lora-twenty-pass-v1/training.json`. Training-fit evaluation is
-running; validation and external-video results remain pending. Completion of
-training is not evidence of generalization or camera-failure detection.
+`results/tapvid-lora-twenty-pass-v1/training.json`. Saved-adapter training-fit
+evaluation completed: 188/188 correct (69 close, 84 far, 35 occluded), with no
+invalid responses or abstentions. The complete predictions and hash-checked
+analysis are retained as `training-fit.json` and `training-fit-summary.json`
+in the same directory. This establishes fit on the training set, not
+generalization or camera-failure detection. Validation and external-video
+results remain pending.
 
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,
