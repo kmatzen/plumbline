@@ -476,6 +476,36 @@ intervention is not. This is a favorable single-sequence component control,
 not an operational failure threshold, method ranking, or validation of the
 proposed complete evaluator. No manuscript claims are added from this run.
 
+#### Controlled rotation response (development only)
+
+`probe_static_rotation_response.py` evaluates the same reference poses and
+tracks at signed local-yaw offsets of 0, 0.25, 1, and 5 degrees. Two schedules
+leave frames 1–10 unchanged: a step at frame 11, and a linear ramp reaching the
+specified angle at frame 89. All 56 schedule/angle/tolerance cases are retained
+in `results/static-rgbd-control-v1/rotation-response-v1/response.json`. This is
+a controlled sensitivity check, not a new dataset or functional-failure label.
+
+At eight pixels, the unmodified reference and both one-degree steps support
+11 of 11 checked points. Both five-degree steps support zero. The five-degree
+ramps support 10 points in the negative direction and eight in the positive
+direction. At four pixels the unmodified reference supports four points,
+versus zero for both one-degree steps and zero/two for negative/positive
+five-degree ramps. One of the 12 original slots remains insufficient in every
+case. No pixel tolerance was selected as a failure threshold.
+
+All early solver results and observed-frame masks are unchanged across the
+perturbations. Both zero-offset schedules reproduce the archived reference
+results exactly, and the positive five-degree step reproduces the earlier
+rotation control exactly. Unit tests check local-axis composition, ramp
+endpoints, unchanged camera centers, and preservation of source arrays.
+
+The differing step and ramp responses limit the interpretation of the earlier
+five-degree result: rejecting an abrupt rotation does not establish sensitivity
+to gradual drift. Joint fitting can accommodate some camera errors with a
+different static point, and missing tracks can reduce the observed corruption.
+These controls do not justify a camera DNF decision. They remain in this research
+log, not the manuscript; any eventual method claim must respect these limits.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is
