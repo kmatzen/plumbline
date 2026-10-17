@@ -4193,3 +4193,26 @@ in the development record, not the manuscript. Do not adjust thresholds on
 these results and report them as held-out validation. The next method must
 address functional camera failure rather than equating point-match judgments
 with camera usability, and must be validated on fresh scenes after development.
+
+### RGB-only focal sensitivity after judge completion
+
+`probe_movi_focal_sensitivity.py` varies both focal axes by fixed factors
+0.5, 0.8, 1, 1.25, and 2 while leaving predicted poses unchanged, then refits
+each point using only frames 0..9. All 512 scene/method/track slots are retained.
+It compares forecasts at frames 12, 18, and 23 without reading reference
+arrays. The unchanged 2-pixel prefix tolerance and 8-pixel disagreement
+threshold are diagnostic thresholds, not calibrated uncertainty limits.
+
+The numbers of tracks with both original and modified prefix fits within
+2 pixels are respectively 185, 213, 226, 214, and 179. Their maximum later
+forecast differences are 8.469, 4.809, 0, 4.431, and 6.462 pixels. Only one
+query pair exceeds 8 pixels, at focal factor 0.5. All compatible query
+pairs have finite positive-depth forecasts; off-image forecasts are retained.
+The complete record is `results/movi-camera-pilot-v1/focal-sensitivity-v1.json`.
+
+These are per-track alternatives, not jointly supported whole-scene models.
+Tracks may move or be incorrect. This restricted, unoptimized search cannot
+certify uniqueness when it finds no disagreement, and does not establish a
+dominant ambiguity explanation for the judge's errors. Tests reproduce the
+parallel-motion ambiguity, show later forward motion can separate forecasts,
+and verify missing-prefix accounting and independence from later observations.
