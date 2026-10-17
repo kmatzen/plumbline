@@ -56,13 +56,16 @@ def load_prediction(run_path, source_hash, frames, input_hash):
         raise ValueError("prediction frame count mismatch")
     assert_valid_extrinsics(poses)
     return poses, {"manifest_sha256": digest(run_path / "manifest.json"),
+                   "model": manifest.get("model", "DAGE"),
                    "prediction_file_sha256": digest(path),
                    "verification": "source and decoded RGB reverified; all 90 rigid poses checked; no alignment used for point support"}
 
 
-def run(root, control_path, output, prediction_run=None):
+def run(root, control_path, output, prediction_run=None, prediction_name="dage"):
     if output.exists():
         raise ValueError("preserve previous analyses")
+    if prediction_name not in {"dage", "da3"}:
+        raise ValueError("unknown prediction name")
     manifest_path = root / "staging-manifest.json"
     manifest = json.loads(manifest_path.read_text())
     control = json.loads(control_path.read_text())
@@ -88,7 +91,10 @@ def run(root, control_path, output, prediction_run=None):
         predicted, prediction_record = load_prediction(
             prediction_run, source_hash, frames, hashlib.sha256(images.tobytes()).hexdigest())
         del images
-        cases["dage"] = predicted
+        expected_model = {"dage": "DAGE", "da3": "DA3-LARGE-1.1"}[prediction_name]
+        if prediction_record["model"] != expected_model:
+            raise ValueError("prediction label does not match model manifest")
+        cases[prediction_name] = predicted
         reference = np.stack(poses[1:])
         translation, rotation = trajectory_rpe_rmse_sim3(predicted[1:], reference)
         prediction_record["reference_metrics"] = {
@@ -127,6 +133,7 @@ if __name__ == "__main__":
     for name in ("root", "control", "output"):
         parser.add_argument(name, type=Path)
     parser.add_argument("--prediction-run", type=Path)
+    parser.add_argument("--prediction-name", choices=("dage", "da3"), default="dage")
     args = parser.parse_args()
-    for row in run(args.root, args.control, args.output, args.prediction_run)["cases"]:
+    for row in run(args.root, args.control, args.output, args.prediction_run, args.prediction_name)["cases"]:
         print(row["method"], row["tolerance_pixels"], row["counts"])

@@ -476,6 +476,46 @@ intervention is not. This is a favorable single-sequence component control,
 not an operational failure threshold, method ranking, or validation of the
 proposed complete evaluator. No manuscript claims are added from this run.
 
+DA3 has now completed the same 90-frame control. Inputs are byte-identical to
+DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
+and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is
+`run_static_da3.py`; outputs, the executed runner, input loader, and attention
+helper are retained in `results/static-rgbd-control-v1/da3-v1`. It uses 252-pixel
+upper-bound resizing and 256-query chunks, with all keys/values retained.
+Kernel equivalence is unit-tested; end-to-end equivalence with unchunked
+inference is not established. Runtime including load was 24.04 seconds and
+peak allocated GPU memory 5.11 GB; these timings are not a controlled benchmark.
+
+An adapter inspection clarifies the inference inputs: the earlier DAGE runner
+passed the optional calibration argument, but the adapter does not forward it
+to the network. Both networks therefore infer cameras from RGB only. The
+geometric comparison uses the same published Freiburg-3 calibration for both,
+not either model's estimated intrinsics. DA3's processed-image intrinsics are
+retained separately and are not interpreted as native-resolution calibration.
+
+`results/static-rgbd-control-v1/da3-point-support-v1.json` reproduces the eight
+reference/rotation cases exactly and adds DA3. The preceding DAGE comparison
+script is archived as `executed-point-support-dage-v1.py`. Model labels are
+checked against each manifest so a DA3 result cannot silently be called DAGE.
+The full-track comparison on the same 11 checked slots is:
+
+| Axis-wise tolerance (px) | Reference witnesses | DAGE witnesses | DA3 witnesses | Later-yaw control witnesses |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 0 | 0 | 0 | 0 |
+| 2 | 0 | 3 | 0 | 0 |
+| 4 | 4 | 11 | 4 | 0 |
+| 8 | 11 | 11 | 11 | 0 |
+
+One additional slot is insufficiently observed for every case, and the shared
+later support is 579 / 948 planned observations. DA3's early window supports
+10 slots at one pixel and 11 at the other tolerances. Over original frames
+1–89, its Sim(3)-aligned ATE-RMSE is 0.007964 m, translation RPE-RMSE is
+0.007796 m, and rotation RPE-RMSE is 0.358041 degrees. These are comparable with
+the DAGE metrics above, not a new sampled estimate of method superiority.
+The single favorable scene and close trajectory errors do not justify a
+general ranking, significance claim, or functional-failure label. This
+comparison remains in the development records, outside the manuscript.
+
 #### RGB-D evidence validation
 
 The existing TUM development subset contains only RGB and associated reference

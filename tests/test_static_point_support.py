@@ -44,8 +44,12 @@ def test_prediction_provenance_and_rigid_pose_checks(tmp_path):
               "input_sha256": "input", "runner_sha256": digest(runner),
               "prediction_file_sha256": digest(prediction)}
     (tmp_path / "manifest.json").write_text(json.dumps(record))
-    poses, _ = load_prediction(tmp_path, "source", ["synthetic"], "input")
+    poses, metadata = load_prediction(tmp_path, "source", ["synthetic"], "input")
     assert poses.shape == (90, 4, 4)
+    assert metadata["model"] == "DAGE"
+    record["model"] = "DA3-LARGE-1.1"
+    (tmp_path / "manifest.json").write_text(json.dumps(record))
+    assert load_prediction(tmp_path, "source", ["synthetic"], "input")[1]["model"] == "DA3-LARGE-1.1"
     with pytest.raises(ValueError, match="inputs"):
         load_prediction(tmp_path, "source", ["different"], "input")
     prediction.write_bytes(b"changed")
