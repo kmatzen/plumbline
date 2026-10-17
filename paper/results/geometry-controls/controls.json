@@ -1,0 +1,42 @@
+{
+  "scope": "constructed visual grounding controls, not camera usability",
+  "manifest_sha256": "14c3ba76d48870bd32149857506ebb42f45372a2641d6bd4b4d230c8838a094c",
+  "evidence_sha256": "660c945972fbaffb1b11a818015e721b3e89f0026ee9039607232b1950dc51f5",
+  "renderer_sha256": "b1e147d16fa18875bcfc4c0b0a5cbce0c774a95256e10db0c48fbb54e75be53f",
+  "match_indices": [
+    0,
+    105,
+    211,
+    317,
+    423,
+    529
+  ],
+  "cases": [
+    {
+      "name": "control_on",
+      "image_sha256": "f02fb29c19fc0dbc5fb5162757920ccc469663de403655b4913c1f6ab112f24d",
+      "point_line_distance_pixels": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected_visual_relation": "consistent"
+    },
+    {
+      "name": "control_off",
+      "image_sha256": "a50621a541c749bf72b36fd754983a199dd0d03c423bb1d03b1dbe5a6ba011fb",
+      "point_line_distance_pixels": [
+        49.99999999999994,
+        50.0,
+        50.0,
+        50.0,
+        50.0,
+        50.0
+      ],
+      "expected_visual_relation": "inconsistent"
+    }
+  ]
+}

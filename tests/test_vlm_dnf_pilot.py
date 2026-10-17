@@ -27,3 +27,11 @@ def test_abstention_retains_reason_without_inventing_evidence():
 )
 def test_invalid_model_output_is_not_silently_repaired(raw, error):
     assert parse_response(raw) == (None, error)
+
+
+def test_geometry_verdict_is_not_a_dnf_label():
+    row = {"verdict": "consistent", "reason": "centers meet lines", "evidence_panels": ["1"]}
+    assert parse_response(json.dumps(row), "geometry") == (row, None)
+    assert parse_response(json.dumps(row), "dnf") == (None, "invalid_verdict")
+    row["verdict"] = "usable"
+    assert parse_response(json.dumps(row), "geometry") == (None, "invalid_verdict")

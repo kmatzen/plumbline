@@ -530,7 +530,36 @@ must not be used as a blinded judge test or training example. Static correct
 matches should meet their lines, but satisfying this constraint does not prove
 correct pose. Moving objects and false matches remain possible confounders.
 
-### ORE annotation and calibration requirements
+### VLM geometric-reading controls: failed positive control
+
+`build_geometry_controls.py` constructs two six-panel images from the fixed
+DAVIS feature set. It retains each line's direction, but moves the line to pass
+through its marked point (all six distances zero), or displaces it by 50 pixels
+(all six distances 50). The images disclose neither the expected answer nor
+camera quality. These are drawing-reading controls, not physical camera outputs.
+Both images were visually inspected and all 12 distances numerically checked.
+
+Three actual Qwen2.5-VL-3B attempts are retained in `results/geometry-controls/`,
+along with the executed runner versions and control hashes. Source-containing
+control PNGs remain local in `tmp/geometry-controls-v1/`. At the original 1,280
+visual-token budget the matching control failed with CUDA out-of-memory; the
+second control was not attempted at that setting. At 768 visual tokens both
+calls completed. Both raw answers said `inconsistent`: the matching control
+incorrectly claimed panels 4--6 were not aligned. The displaced control's raw
+category matched its construction. Both answers used Markdown fences and were
+rejected by the unchanged strict JSON parser. There are no valid structured
+verdicts and no usability labels from these calls.
+
+This failed positive control is substantive, not just a formatting issue. It
+does not establish failure rates for other models or inputs. It does rule out
+treating this pilot configuration as a reliable reader of geometric evidence.
+The next method revision should compute geometric relations deterministically,
+and test any VLM role separately: identifying potentially moving scene regions,
+recognizing missing evidence, and explaining measured contradictions. Semantic
+judgments still need independent annotation; a VLM must not override measured
+point-line distances or turn low residuals into proof of camera usability.
+
+### ORE prerequisites for comparative experiments
 
 Chen et al., [Object Reprojection Error (NeurIPS 2023)](https://papers.nips.cc/paper_files/paper/2023/file/eb206443c93d07da8b1974b768d8a0d4-Paper-Datasets_and_Benchmarks.pdf)
 already evaluate trajectories without reference camera poses. This is a required

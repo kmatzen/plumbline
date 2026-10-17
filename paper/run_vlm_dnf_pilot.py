@@ -42,18 +42,33 @@ def digest_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def parse_response(raw: str) -> tuple[dict | None, str | None]:
+GEOMETRY_PROMPT = """Inspect the six numbered image panels. Each panel has one red
+circle marking a feature and one cyan line. Judge only whether the red circle's
+center lies on the cyan line, not whether the photograph or camera motion is good.
+Return exactly one JSON object, without Markdown fences, with keys verdict,
+reason, evidence_panels. verdict must be consistent if all six centers lie on
+their lines, inconsistent if there are clear separations, or abstain if you cannot
+tell. reason must describe visible evidence. evidence_panels must be a list of
+panel numbers as strings. These are diagnostic drawings, not ground-truth camera
+trajectories. Do not infer tracking usability or DNF from this image.
+"""
+
+
+def parse_response(raw: str, task: str = "dnf") -> tuple[dict | None, str | None]:
+    if task not in {"dnf", "geometry"}:
+        raise ValueError("unknown pilot task")
     try:
         response = json.loads(raw)
     except json.JSONDecodeError:
         return None, "invalid_json"
     if not isinstance(response, dict) or set(response) != {"verdict", "reason", "evidence_panels"}:
         return None, "invalid_keys"
-    if not isinstance(response["verdict"], str) or response["verdict"] not in {
-        "usable",
-        "unusable",
-        "abstain",
-    }:
+    allowed = (
+        {"usable", "unusable", "abstain"}
+        if task == "dnf"
+        else {"consistent", "inconsistent", "abstain"}
+    )
+    if not isinstance(response["verdict"], str) or response["verdict"] not in allowed:
         return None, "invalid_verdict"
     if not isinstance(response["reason"], str) or not response["reason"].strip():
         return None, "missing_reason"
@@ -65,7 +80,12 @@ def parse_response(raw: str) -> tuple[dict | None, str | None]:
     return response, None
 
 
-def run(checkpoint: Path, image: Path, output: Path) -> None:
+def run(checkpoint: Path, image: Path, output: Path, task: str = "dnf", visual_tokens: int = 1280) -> None:
+    if task not in {"dnf", "geometry"}:
+        raise ValueError("unknown pilot task")
+    prompt = PROMPT if task == "dnf" else GEOMETRY_PROMPT
+    if not 64 <= visual_tokens <= 1280:
+        raise ValueError("visual token budget must be between 64 and 1280")
     if output.exists():
         raise ValueError("preserve existing runs; choose a new output file")
     if not checkpoint.is_dir():
@@ -80,10 +100,11 @@ def run(checkpoint: Path, image: Path, output: Path) -> None:
     result = {
         "status": "running",
         "scope": "diagnostic-only development pilot",
+        "task": task,
         "checkpoint": str(checkpoint.resolve()),
         "image_sha256": hashlib.sha256(image.read_bytes()).hexdigest(),
-        "prompt": PROMPT,
-        "prompt_sha256": hashlib.sha256(PROMPT.encode()).hexdigest(),
+        "prompt": prompt,
+        "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
         "runner_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "python": platform.python_version(),
         "torch": torch.__version__,
@@ -94,7 +115,7 @@ def run(checkpoint: Path, image: Path, output: Path) -> None:
         "settings": {
             "dtype": "float16",
             "attention": "eager",
-            "max_pixels": 1280 * 28 * 28,
+            "max_pixels": visual_tokens * 28 * 28,
             "max_new_tokens": 256,
             "do_sample": False,
         },
@@ -114,7 +135,7 @@ def run(checkpoint: Path, image: Path, output: Path) -> None:
         save()
         torch.manual_seed(0)
         processor = AutoProcessor.from_pretrained(
-            str(checkpoint), local_files_only=True, max_pixels=1280 * 28 * 28
+            str(checkpoint), local_files_only=True, max_pixels=visual_tokens * 28 * 28
         )
         model = (
             Qwen2_5_VLForConditionalGeneration.from_pretrained(
@@ -127,7 +148,7 @@ def run(checkpoint: Path, image: Path, output: Path) -> None:
             .eval()
         )
         messages = [
-            {"role": "user", "content": [{"type": "image"}, {"type": "text", "text": PROMPT}]}
+            {"role": "user", "content": [{"type": "image"}, {"type": "text", "text": prompt}]}
         ]
         text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
         with Image.open(image) as source:
@@ -142,7 +163,7 @@ def run(checkpoint: Path, image: Path, output: Path) -> None:
         raw = processor.batch_decode(
             generated[:, inputs.input_ids.shape[1] :], skip_special_tokens=True
         )[0]
-        response, error = parse_response(raw)
+        response, error = parse_response(raw, task)
         result.update(
             {
                 "status": "complete",
@@ -167,5 +188,7 @@ if __name__ == "__main__":
     parser.add_argument("checkpoint", type=Path)
     parser.add_argument("image", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--task", choices=("dnf", "geometry"), default="dnf")
+    parser.add_argument("--visual-tokens", type=int, default=1280)
     args = parser.parse_args()
-    run(args.checkpoint, args.image, args.output)
+    run(args.checkpoint, args.image, args.output, args.task, args.visual_tokens)
