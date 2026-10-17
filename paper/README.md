@@ -4390,3 +4390,33 @@ The next representation must separate local correspondence from full-frame
 visibility, with temporal evidence or abstention when visibility is unresolved.
 Do not relabel outside-crop visible points as occluded or claim that these
 counts validate a new metric.
+
+### Frozen temporal correspondence and visibility baseline
+
+`probe_tapvid_cotracker_verifier.py` runs the already pinned CoTracker3 offline
+predictor on all 316 labeled training/validation cases. Queries are the same
+supplied initial points, grouped by video and source frame. Each RGB window
+ends at its last requested observation and spans at most 61 frames. Checkpoint
+and all predictor-source hashes match the earlier retained CoTracker run.
+No new training, threshold selection, camera outputs, calibration source files,
+or calibration exports are involved. Source annotations beyond the supplied
+queries do not enter tracking; targets are attached only for scoring.
+
+Upstream visibility false produces an `occluded` prediction. Otherwise, distance
+to the original candidate determines close <=2 pixels, far >=8 pixels, or
+uncertain between them. All 316 cases completed. Training agreement is 167/188.
+Validation agreement is 99/128, with 12 uncertain answers. The validation
+confusion is: close -> 36 close and 10 uncertain; far -> 21 far, 14 occluded,
+and 2 uncertain; occluded -> 42 occluded and 3 far. Thus temporal evidence is
+useful in this small comparison, but a tracker visibility rejection is not
+proof of occlusion. No validation close prediction is false in this sample;
+this is not a calibrated precision guarantee or camera-success certificate.
+
+This is an existing-method baseline, not our novel contribution. Windows,
+inputs, and pretraining differ from the visual probes, so this is not an
+isolated temporal-context ablation. These videos have already been inspected;
+pretraining overlap has not been excluded, and no fresh-test claim is made.
+Future evaluator comparisons must include this stronger temporal baseline and
+report its visibility errors, coverage, and task limitations. The complete
+record is `results/tapvid-cotracker-verifier-v1/manifest.json`; an artifact test
+checks exact membership, provenance, decisions, window limits, and counts.
