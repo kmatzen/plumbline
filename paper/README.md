@@ -275,6 +275,26 @@ related-work coverage and actual camera experiments remain outstanding.
 
 #### Source-track comprehension pilot
 
+The larger-model follow-up is Qwen2.5-VL-7B-Instruct at pinned revision
+`cc594898137f460bfe9f0759e9844b3ce807cfb5`, staged in Anima's `/data3` HF cache.
+`bitsandbytes==0.48.2` is installed without dependencies in the isolated directory
+`/data3/kmatzen/plumbline/research/bnb-0.48.2`, rather than modifying the shared
+tracker environment. A CUDA Linear4bit smoke test produced finite outputs on
+compute capability 6.1. The runner's optional `--quantization nf4` uses NF4,
+double quantization, fp16 compute, eager attention, and a single-GPU device map;
+the default unquantized mode is unchanged. It records the configuration, package
+version, and actual count of quantized linear modules, and rejects a requested
+quantization that produces no quantized layers.
+
+The initial 7B control job uses the same geometry prompt, two control images,
+768-token visual budget, greedy decoding, seed, and response cap as the retained
+3B trials. This is a comparison of model configurations, not an isolated
+parameter-count experiment, because precision also changes. The remote attempt
+directory is `/data3/kmatzen/plumbline/research/qwen7b-nf4-controls-v1`.
+At this update the model loaded with 358 quantized linear layers and the first
+response was still running; no accuracy or DNF result is asserted. Final raw
+outputs must be retrieved and checked before interpreting the comparison.
+
 A separate source-identity VLM pilot uses the first frame of each of these three
 examples. It asks only what physical detail the cyan circle marks, or to abstain;
 it explicitly prohibits staticness, motion, camera-quality, and DNF judgments

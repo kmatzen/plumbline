@@ -95,11 +95,18 @@ def parse_response(raw: str, task: str = "dnf") -> tuple[dict | None, str | None
 
 
 def run(
-    checkpoint: Path, image: Path, output: Path, task: str = "dnf", visual_tokens: int = 1280
+    checkpoint: Path,
+    image: Path,
+    output: Path,
+    task: str = "dnf",
+    visual_tokens: int = 1280,
+    quantization: str = "none",
 ) -> None:
     if task not in {"dnf", "geometry", "source_identity"}:
         raise ValueError("unknown pilot task")
     prompt = {"dnf": PROMPT, "geometry": GEOMETRY_PROMPT, "source_identity": SOURCE_PROMPT}[task]
+    if quantization not in {"none", "nf4"}:
+        raise ValueError("unknown quantization")
     if not 64 <= visual_tokens <= 1280:
         raise ValueError("visual token budget must be between 64 and 1280")
     if output.exists():
@@ -130,6 +137,7 @@ def run(
         "seed": 0,
         "settings": {
             "dtype": "float16",
+            "quantization": quantization,
             "attention": "eager",
             "max_pixels": visual_tokens * 28 * 28,
             "max_new_tokens": 256,
@@ -153,16 +161,38 @@ def run(
         processor = AutoProcessor.from_pretrained(
             str(checkpoint), local_files_only=True, max_pixels=visual_tokens * 28 * 28
         )
-        model = (
-            Qwen2_5_VLForConditionalGeneration.from_pretrained(
-                str(checkpoint),
-                local_files_only=True,
-                torch_dtype=torch.float16,
-                attn_implementation="eager",
+        load_options = {}
+        if quantization == "nf4":
+            import bitsandbytes
+            from transformers import BitsAndBytesConfig
+
+            config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.float16,
+                bnb_4bit_use_double_quant=True,
             )
-            .to("cuda")
-            .eval()
+            load_options = {"quantization_config": config, "device_map": {"": 0}}
+            result["bitsandbytes"] = bitsandbytes.__version__
+            result["quantization_config"] = config.to_dict()
+            save()
+        model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            str(checkpoint),
+            local_files_only=True,
+            torch_dtype=torch.float16,
+            attn_implementation="eager",
+            **load_options,
         )
+        if quantization == "none":
+            model = model.to("cuda")
+        model.eval()
+        if quantization == "nf4":
+            result["quantized_linear_modules"] = sum(
+                isinstance(m, bitsandbytes.nn.Linear4bit) for m in model.modules()
+            )
+            if not result["quantized_linear_modules"]:
+                raise ValueError("requested quantization produced no quantized layers")
+            save()
         messages = [
             {"role": "user", "content": [{"type": "image"}, {"type": "text", "text": prompt}]}
         ]
@@ -206,5 +236,6 @@ if __name__ == "__main__":
     parser.add_argument("output", type=Path)
     parser.add_argument("--task", choices=("dnf", "geometry", "source_identity"), default="dnf")
     parser.add_argument("--visual-tokens", type=int, default=1280)
+    parser.add_argument("--quantization", choices=("none", "nf4"), default="none")
     args = parser.parse_args()
-    run(args.checkpoint, args.image, args.output, args.task, args.visual_tokens)
+    run(args.checkpoint, args.image, args.output, args.task, args.visual_tokens, args.quantization)

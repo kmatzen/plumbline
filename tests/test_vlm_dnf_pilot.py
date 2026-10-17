@@ -1,12 +1,19 @@
 import json
+from pathlib import Path
 
 import pytest
-from paper.run_vlm_dnf_pilot import parse_response
+from paper.run_vlm_dnf_pilot import parse_response, run
 
 
 def test_abstention_retains_reason_without_inventing_evidence():
     row = {"verdict": "abstain", "reason": "Source video is missing", "evidence_panels": []}
     assert parse_response(json.dumps(row)) == (row, None)
+
+
+def test_unknown_quantization_rejected_before_model_loading(tmp_path):
+    with pytest.raises(ValueError, match="unknown quantization"):
+        run(Path("missing"), Path("missing.png"), tmp_path / "output.json", quantization="int8")
+    assert not (tmp_path / "output.json").exists()
 
 
 @pytest.mark.parametrize(
