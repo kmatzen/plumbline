@@ -1,0 +1,876 @@
+{
+  "source_manifest_sha256": "0949cefa4468cdc2dcd4cc032ad9f548e7d4f5ece5eb8ee590cf9b76f83d5954",
+  "mask_sha256": "1b2b6b25db6e1f4ffb7f69b7bb1ec1959154d6af6477400345edabc27043a124",
+  "script_sha256": "7568d7a8cc409e7ac630b0a3753dced03691b0350e34547355ccfe862b3ae1c3",
+  "video_sha256": "bf55139bac5bdf7c9b9f88965fa66635f52ce521e603940752071900d8bafcfe",
+  "fit_frames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "point_world": [
+    -0.03769682848802593,
+    -0.12924118220238717,
+    0.8765362865538726
+  ],
+  "selection": "strongest first-frame corner in eroded background mask and optional manual ROI; no pose-dependent selection",
+  "manual_first_frame_roi_xyxy": [
+    200,
+    20,
+    400,
+    120
+  ],
+  "scope": "development evidence preview; tracks and background labels are not verified static ground truth",
+  "display_fps": 10,
+  "capture_timing": null,
+  "rows": [
+    {
+      "frame": 0,
+      "fit_frame": true,
+      "observed_xy": [
+        367.0,
+        86.0
+      ],
+      "predicted_xy": [
+        366.938712244323,
+        86.43429593572392
+      ],
+      "forward_backward_pixels": 0.0,
+      "distance_pixels": 0.4385990752181754
+    },
+    {
+      "frame": 1,
+      "fit_frame": true,
+      "observed_xy": [
+        369.1818542480469,
+        86.27014923095703
+      ],
+      "predicted_xy": [
+        368.7825183560462,
+        86.92500433762352
+      ],
+      "forward_backward_pixels": 0.0009251722367480397,
+      "distance_pixels": 0.7670100164712107
+    },
+    {
+      "frame": 2,
+      "fit_frame": true,
+      "observed_xy": [
+        371.885498046875,
+        86.48527526855469
+      ],
+      "predicted_xy": [
+        370.899586562661,
+        86.80620167952367
+      ],
+      "forward_backward_pixels": 0.0013459125766530633,
+      "distance_pixels": 1.0368294054291107
+    },
+    {
+      "frame": 3,
+      "fit_frame": true,
+      "observed_xy": [
+        374.5399169921875,
+        86.6570816040039
+      ],
+      "predicted_xy": [
+        373.529303652428,
+        87.24189253859265
+      ],
+      "forward_backward_pixels": 0.0011297946330159903,
+      "distance_pixels": 1.1676228636483803
+    },
+    {
+      "frame": 4,
+      "fit_frame": true,
+      "observed_xy": [
+        377.3115234375,
+        86.7040786743164
+      ],
+      "predicted_xy": [
+        377.25376278828924,
+        86.63165608615921
+      ],
+      "forward_backward_pixels": 0.0003814697265625,
+      "distance_pixels": 0.09263543529684307
+    },
+    {
+      "frame": 5,
+      "fit_frame": true,
+      "observed_xy": [
+        379.8984375,
+        86.70440673828125
+      ],
+      "predicted_xy": [
+        380.41565265647483,
+        85.41203205400888
+      ],
+      "forward_backward_pixels": 0.00042751847649924457,
+      "distance_pixels": 1.3920286788121163
+    },
+    {
+      "frame": 6,
+      "fit_frame": true,
+      "observed_xy": [
+        382.7418212890625,
+        86.76982116699219
+      ],
+      "predicted_xy": [
+        383.463140100478,
+        86.13053234105386
+      ],
+      "forward_backward_pixels": 0.0007052549044601619,
+      "distance_pixels": 0.9638418079080343
+    },
+    {
+      "frame": 7,
+      "fit_frame": true,
+      "observed_xy": [
+        385.7247619628906,
+        86.94359588623047
+      ],
+      "predicted_xy": [
+        385.83908895727285,
+        86.96483580889509
+      ],
+      "forward_backward_pixels": 0.0005201994208618999,
+      "distance_pixels": 0.11628325743318456
+    },
+    {
+      "frame": 8,
+      "fit_frame": true,
+      "observed_xy": [
+        388.8704833984375,
+        86.94286346435547
+      ],
+      "predicted_xy": [
+        389.3712936440741,
+        87.16438701444122
+      ],
+      "forward_backward_pixels": 0.000334651384036988,
+      "distance_pixels": 0.5476162756686469
+    },
+    {
+      "frame": 9,
+      "fit_frame": true,
+      "observed_xy": [
+        392.2071533203125,
+        86.82429504394531
+      ],
+      "predicted_xy": [
+        391.1096950857736,
+        87.71783349798079
+      ],
+      "forward_backward_pixels": 0.0011964291334152222,
+      "distance_pixels": 1.4152121909443105
+    },
+    {
+      "frame": 10,
+      "fit_frame": true,
+      "observed_xy": [
+        395.4186706542969,
+        86.8367691040039
+      ],
+      "predicted_xy": [
+        397.19512198810776,
+        85.69984299337062
+      ],
+      "forward_backward_pixels": 0.00020142178982496262,
+      "distance_pixels": 2.109118375634281
+    },
+    {
+      "frame": 11,
+      "fit_frame": false,
+      "observed_xy": [
+        398.4792785644531,
+        86.99756622314453
+      ],
+      "predicted_xy": [
+        399.47322158892,
+        87.78911491093477
+      ],
+      "forward_backward_pixels": 0.002913839416578412,
+      "distance_pixels": 1.270618770925738
+    },
+    {
+      "frame": 12,
+      "fit_frame": false,
+      "observed_xy": [
+        401.3031921386719,
+        87.21640014648438
+      ],
+      "predicted_xy": [
+        399.9782711104151,
+        87.32525501810494
+      ],
+      "forward_backward_pixels": 0.004518688656389713,
+      "distance_pixels": 1.3293852391961103
+    },
+    {
+      "frame": 13,
+      "fit_frame": false,
+      "observed_xy": [
+        403.9776306152344,
+        87.44120788574219
+      ],
+      "predicted_xy": [
+        403.7171243058181,
+        87.60257827594441
+      ],
+      "forward_backward_pixels": 0.0013859693426638842,
+      "distance_pixels": 0.30643749783552326
+    },
+    {
+      "frame": 14,
+      "fit_frame": false,
+      "observed_xy": [
+        407.2076110839844,
+        87.64032745361328
+      ],
+      "predicted_xy": [
+        404.8028700744804,
+        88.75815368377431
+      ],
+      "forward_backward_pixels": 0.0002557839034125209,
+      "distance_pixels": 2.65185120314589
+    },
+    {
+      "frame": 15,
+      "fit_frame": false,
+      "observed_xy": [
+        410.9289855957031,
+        88.04257202148438
+      ],
+      "predicted_xy": [
+        408.58221523568284,
+        87.8771774799517
+      ],
+      "forward_backward_pixels": 0.0018864208832383156,
+      "distance_pixels": 2.3525914386137154
+    },
+    {
+      "frame": 16,
+      "fit_frame": false,
+      "observed_xy": [
+        414.8612976074219,
+        88.28337097167969
+      ],
+      "predicted_xy": [
+        414.6659498388983,
+        88.02298623017236
+      ],
+      "forward_backward_pixels": 0.0003598778275772929,
+      "distance_pixels": 0.32551645776668553
+    },
+    {
+      "frame": 17,
+      "fit_frame": false,
+      "observed_xy": [
+        418.84625244140625,
+        88.56417846679688
+      ],
+      "predicted_xy": [
+        417.2783998127014,
+        89.5555956120291
+      ],
+      "forward_backward_pixels": 0.0003452669770922512,
+      "distance_pixels": 1.8550120811458453
+    },
+    {
+      "frame": 18,
+      "fit_frame": false,
+      "observed_xy": [
+        422.92852783203125,
+        88.81268310546875
+      ],
+      "predicted_xy": [
+        421.9819232111517,
+        89.31246640820471
+      ],
+      "forward_backward_pixels": 0.0010376257123425603,
+      "distance_pixels": 1.0704408708397644
+    },
+    {
+      "frame": 19,
+      "fit_frame": false,
+      "observed_xy": [
+        427.07763671875,
+        89.01983642578125
+      ],
+      "predicted_xy": [
+        425.74626023533983,
+        89.22306785442275
+      ],
+      "forward_backward_pixels": 0.0017913486808538437,
+      "distance_pixels": 1.3467985573816486
+    },
+    {
+      "frame": 20,
+      "fit_frame": false,
+      "observed_xy": [
+        430.93841552734375,
+        89.17276000976562
+      ],
+      "predicted_xy": [
+        429.13186941180925,
+        89.29440239059804
+      ],
+      "forward_backward_pixels": 0.0006959078600630164,
+      "distance_pixels": 1.8106368317162267
+    },
+    {
+      "frame": 21,
+      "fit_frame": false,
+      "observed_xy": [
+        434.80609130859375,
+        89.20780944824219
+      ],
+      "predicted_xy": [
+        432.76466092430496,
+        89.01272702562142
+      ],
+      "forward_backward_pixels": 0.0008631674572825432,
+      "distance_pixels": 2.050730398056521
+    },
+    {
+      "frame": 22,
+      "fit_frame": false,
+      "observed_xy": [
+        438.2933044433594,
+        89.15966796875
+      ],
+      "predicted_xy": [
+        435.2602619892914,
+        90.05930603268118
+      ],
+      "forward_backward_pixels": 0.00021375923824962229,
+      "distance_pixels": 3.163652189203573
+    },
+    {
+      "frame": 23,
+      "fit_frame": false,
+      "observed_xy": [
+        441.3641357421875,
+        89.2066421508789
+      ],
+      "predicted_xy": [
+        438.2508069450636,
+        90.58156074672752
+      ],
+      "forward_backward_pixels": 0.00042724609375,
+      "distance_pixels": 3.4034126026991554
+    },
+    {
+      "frame": 24,
+      "fit_frame": false,
+      "observed_xy": [
+        444.0354919433594,
+        89.49494171142578
+      ],
+      "predicted_xy": [
+        441.3936708299413,
+        90.86843407351026
+      ],
+      "forward_backward_pixels": 0.0011902833357453346,
+      "distance_pixels": 2.977532546254686
+    },
+    {
+      "frame": 25,
+      "fit_frame": false,
+      "observed_xy": [
+        446.54241943359375,
+        89.53553771972656
+      ],
+      "predicted_xy": [
+        445.35625778119925,
+        92.32106519410434
+      ],
+      "forward_backward_pixels": 0.0007632827037014067,
+      "distance_pixels": 3.027563835185754
+    },
+    {
+      "frame": 26,
+      "fit_frame": false,
+      "observed_xy": [
+        448.87835693359375,
+        89.62869262695312
+      ],
+      "predicted_xy": [
+        449.30036215629485,
+        91.27165234193761
+      ],
+      "forward_backward_pixels": 0.001342860166914761,
+      "distance_pixels": 1.6962915530795135
+    },
+    {
+      "frame": 27,
+      "fit_frame": false,
+      "observed_xy": [
+        451.28765869140625,
+        89.56866455078125
+      ],
+      "predicted_xy": [
+        451.9637570441174,
+        91.49061932473737
+      ],
+      "forward_backward_pixels": 0.0004816197033505887,
+      "distance_pixels": 2.0374050004040574
+    },
+    {
+      "frame": 28,
+      "fit_frame": false,
+      "observed_xy": [
+        453.71905517578125,
+        89.55427551269531
+      ],
+      "predicted_xy": [
+        453.19199893083214,
+        91.70085134398525
+      ],
+      "forward_backward_pixels": 0.0031223525293171406,
+      "distance_pixels": 2.210333930612734
+    },
+    {
+      "frame": 29,
+      "fit_frame": false,
+      "observed_xy": [
+        456.1336975097656,
+        89.52989959716797
+      ],
+      "predicted_xy": [
+        455.5313791883591,
+        91.6609107771034
+      ],
+      "forward_backward_pixels": 0.00037126237293705344,
+      "distance_pixels": 2.2144967846695467
+    },
+    {
+      "frame": 30,
+      "fit_frame": false,
+      "observed_xy": [
+        458.74432373046875,
+        89.5779800415039
+      ],
+      "predicted_xy": [
+        457.4281138998512,
+        90.90370889700424
+      ],
+      "forward_backward_pixels": 0.0006735074566677213,
+      "distance_pixels": 1.8681448863834045
+    },
+    {
+      "frame": 31,
+      "fit_frame": false,
+      "observed_xy": [
+        462.0484619140625,
+        89.57832336425781
+      ],
+      "predicted_xy": [
+        462.76842105245316,
+        104.14106837928345
+      ],
+      "forward_backward_pixels": 0.0002750817220658064,
+      "distance_pixels": 14.580530975708887
+    },
+    {
+      "frame": 32,
+      "fit_frame": false,
+      "observed_xy": [
+        464.9942626953125,
+        89.372802734375
+      ],
+      "predicted_xy": [
+        463.27071694176675,
+        90.51852491973025
+      ],
+      "forward_backward_pixels": 0.002723864745348692,
+      "distance_pixels": 2.0696109031846555
+    },
+    {
+      "frame": 33,
+      "fit_frame": false,
+      "observed_xy": [
+        467.66253662109375,
+        89.25747680664062
+      ],
+      "predicted_xy": [
+        465.5902042263184,
+        90.43323486813145
+      ],
+      "forward_backward_pixels": 0.0009212316363118589,
+      "distance_pixels": 2.3826389935523125
+    },
+    {
+      "frame": 34,
+      "fit_frame": false,
+      "observed_xy": [
+        470.75445556640625,
+        89.32329559326172
+      ],
+      "predicted_xy": [
+        469.0791190592161,
+        90.10329786007378
+      ],
+      "forward_backward_pixels": 0.001955269603058696,
+      "distance_pixels": 1.8480140552917903
+    },
+    {
+      "frame": 35,
+      "fit_frame": false,
+      "observed_xy": [
+        473.4916687011719,
+        89.24945068359375
+      ],
+      "predicted_xy": [
+        472.11750192657564,
+        91.26261232990815
+      ],
+      "forward_backward_pixels": 0.0025024879723787308,
+      "distance_pixels": 2.4374482842914893
+    },
+    {
+      "frame": 36,
+      "fit_frame": false,
+      "observed_xy": [
+        475.88140869140625,
+        89.2291488647461
+      ],
+      "predicted_xy": [
+        475.32578399983726,
+        90.7377410535433
+      ],
+      "forward_backward_pixels": 0.00029311177786439657,
+      "distance_pixels": 1.6076595379560605
+    },
+    {
+      "frame": 37,
+      "fit_frame": false,
+      "observed_xy": [
+        478.5257263183594,
+        89.27800750732422
+      ],
+      "predicted_xy": [
+        478.38569799009235,
+        89.94360630802784
+      ],
+      "forward_backward_pixels": 0.00023834990861359984,
+      "distance_pixels": 0.6801688733067355
+    },
+    {
+      "frame": 38,
+      "fit_frame": false,
+      "observed_xy": [
+        480.87347412109375,
+        89.1611557006836
+      ],
+      "predicted_xy": [
+        481.6521136136758,
+        89.47452214490006
+      ],
+      "forward_backward_pixels": 0.0009896180126816034,
+      "distance_pixels": 0.83933186986394
+    },
+    {
+      "frame": 39,
+      "fit_frame": false,
+      "observed_xy": [
+        483.54449462890625,
+        89.05271911621094
+      ],
+      "predicted_xy": [
+        483.34253769256554,
+        89.94231376473705
+      ],
+      "forward_backward_pixels": 0.002411480061709881,
+      "distance_pixels": 0.912230915296354
+    },
+    {
+      "frame": 40,
+      "fit_frame": false,
+      "observed_xy": [
+        486.24334716796875,
+        89.1727523803711
+      ],
+      "predicted_xy": [
+        484.9767764154224,
+        90.3255144010212
+      ],
+      "forward_backward_pixels": 0.0025968647096306086,
+      "distance_pixels": 1.7126183893264368
+    },
+    {
+      "frame": 41,
+      "fit_frame": false,
+      "observed_xy": [
+        488.5840759277344,
+        89.05257415771484
+      ],
+      "predicted_xy": [
+        487.65331095281454,
+        90.32809720386722
+      ],
+      "forward_backward_pixels": 0.0008999129058793187,
+      "distance_pixels": 1.5790131347786045
+    },
+    {
+      "frame": 42,
+      "fit_frame": false,
+      "observed_xy": [
+        491.36163330078125,
+        89.19525909423828
+      ],
+      "predicted_xy": [
+        490.8530929474513,
+        90.76454753116474
+      ],
+      "forward_backward_pixels": 0.00030981353484094143,
+      "distance_pixels": 1.6496301067924464
+    },
+    {
+      "frame": 43,
+      "fit_frame": false,
+      "observed_xy": [
+        494.7402038574219,
+        89.67376708984375
+      ],
+      "predicted_xy": [
+        493.6956421371567,
+        91.85014912314249
+      ],
+      "forward_backward_pixels": 0.00533460546284914,
+      "distance_pixels": 2.414072894986575
+    },
+    {
+      "frame": 44,
+      "fit_frame": false,
+      "observed_xy": [
+        498.0320129394531,
+        89.88430786132812
+      ],
+      "predicted_xy": [
+        497.04062121667505,
+        91.12891771202577
+      ],
+      "forward_backward_pixels": 0.002309880219399929,
+      "distance_pixels": 1.5911980481531798
+    },
+    {
+      "frame": 45,
+      "fit_frame": false,
+      "observed_xy": [
+        500.95947265625,
+        89.86727142333984
+      ],
+      "predicted_xy": [
+        500.46877346021785,
+        92.01248207469658
+      ],
+      "forward_backward_pixels": 0.0008707208326086402,
+      "distance_pixels": 2.2006168316363
+    },
+    {
+      "frame": 46,
+      "fit_frame": false,
+      "observed_xy": [
+        504.4915466308594,
+        90.3227310180664
+      ],
+      "predicted_xy": [
+        501.4210406814551,
+        92.1237940756537
+      ],
+      "forward_backward_pixels": 0.0005270360270515084,
+      "distance_pixels": 3.5597520872572987
+    },
+    {
+      "frame": 47,
+      "fit_frame": false,
+      "observed_xy": [
+        507.25494384765625,
+        90.12474822998047
+      ],
+      "predicted_xy": [
+        505.0585779831465,
+        91.71586035234657
+      ],
+      "forward_backward_pixels": 0.0007069036364555359,
+      "distance_pixels": 2.712132149568672
+    },
+    {
+      "frame": 48,
+      "fit_frame": false,
+      "observed_xy": [
+        509.6241760253906,
+        89.70459747314453
+      ],
+      "predicted_xy": [
+        507.7307361359467,
+        91.64411115393553
+      ],
+      "forward_backward_pixels": 0.0014838142087683082,
+      "distance_pixels": 2.7105032619262532
+    },
+    {
+      "frame": 49,
+      "fit_frame": false,
+      "observed_xy": [
+        512.531982421875,
+        89.47483825683594
+      ],
+      "predicted_xy": [
+        510.6051061916534,
+        91.5458323011677
+      ],
+      "forward_backward_pixels": 0.003538361517712474,
+      "distance_pixels": 2.8287573841265683
+    },
+    {
+      "frame": 50,
+      "fit_frame": false,
+      "observed_xy": [
+        515.0377197265625,
+        88.28522491455078
+      ],
+      "predicted_xy": [
+        513.1024401648199,
+        91.1526659906015
+      ],
+      "forward_backward_pixels": 0.0031782633159309626,
+      "distance_pixels": 3.459411121379134
+    },
+    {
+      "frame": 51,
+      "fit_frame": false,
+      "observed_xy": [
+        517.5389404296875,
+        86.21402740478516
+      ],
+      "predicted_xy": [
+        515.7344717508626,
+        88.4185128920666
+      ],
+      "forward_backward_pixels": 0.002943681087344885,
+      "distance_pixels": 2.8488354597088894
+    },
+    {
+      "frame": 52,
+      "fit_frame": false,
+      "observed_xy": [
+        519.5984497070312,
+        82.92591094970703
+      ],
+      "predicted_xy": [
+        517.1510214517798,
+        87.17092418789221
+      ],
+      "forward_backward_pixels": 0.0006243530078791082,
+      "distance_pixels": 4.900004332342023
+    },
+    {
+      "frame": 53,
+      "fit_frame": false,
+      "observed_xy": [
+        520.6953125,
+        78.73377990722656
+      ],
+      "predicted_xy": [
+        518.5517788556618,
+        83.49281272248027
+      ],
+      "forward_backward_pixels": 0.000639823789242655,
+      "distance_pixels": 5.219495169177882
+    },
+    {
+      "frame": 54,
+      "fit_frame": false,
+      "observed_xy": [
+        521.110107421875,
+        74.02071380615234
+      ],
+      "predicted_xy": [
+        517.7984406540853,
+        80.16246427372221
+      ],
+      "forward_backward_pixels": 0.0012155662989243865,
+      "distance_pixels": 6.977695578540041
+    },
+    {
+      "frame": 55,
+      "fit_frame": false,
+      "observed_xy": [
+        521.1964111328125,
+        69.31761932373047
+      ],
+      "predicted_xy": [
+        518.2113265570041,
+        76.9213885454591
+      ],
+      "forward_backward_pixels": 0.0007372142863459885,
+      "distance_pixels": 8.168723052107763
+    },
+    {
+      "frame": 56,
+      "fit_frame": false,
+      "observed_xy": [
+        521.20458984375,
+        64.78558349609375
+      ],
+      "predicted_xy": [
+        519.8039651328132,
+        73.67232624117949
+      ],
+      "forward_backward_pixels": 0.0018071361118927598,
+      "distance_pixels": 8.996440751665114
+    },
+    {
+      "frame": 57,
+      "fit_frame": false,
+      "observed_xy": [
+        520.7130126953125,
+        60.48240280151367
+      ],
+      "predicted_xy": [
+        519.2178548296131,
+        70.92212808937595
+      ],
+      "forward_backward_pixels": 0.001684351940639317,
+      "distance_pixels": 10.546248675685296
+    },
+    {
+      "frame": 58,
+      "fit_frame": false,
+      "observed_xy": [
+        519.898193359375,
+        56.340660095214844
+      ],
+      "predicted_xy": [
+        519.4221403332097,
+        68.4809229477922
+      ],
+      "forward_backward_pixels": 0.0008680091705173254,
+      "distance_pixels": 12.149592940234283
+    },
+    {
+      "frame": 59,
+      "fit_frame": false,
+      "observed_xy": [
+        519.4534301757812,
+        52.99113464355469
+      ],
+      "predicted_xy": [
+        519.3157149134992,
+        65.63613039938284
+      ],
+      "forward_backward_pixels": 0.0034979775082319975,
+      "distance_pixels": 12.645745654502834
+    }
+  ]
+}

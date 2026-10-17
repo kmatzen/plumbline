@@ -698,9 +698,23 @@ annotations do not certify static surfaces, and triangulation uses predicted
 calibration. This is a joint pose/calibration/point-fit consistency check, not a
 test of pose alone. Synthetic tests verify known-point recovery, held-out camera
 perturbation sensitivity, and unavailable stationary/behind-camera cases. A
-training example with explicitly simulated correct and incorrect overlays,
-multi-anchor coverage, and independent track/static-region checks remain needed
+training example with explicitly simulated attached and drifting overlays is now
+available from `build_anchor_lesson.py` at `tmp/anchor-lesson-v2/index.html`.
+Both panels use the same image track; the right ring receives a known horizontal
+offset, reaching 50 pixels. Neither panel is a method output or validation label.
+The page explains image-track failure, moving surfaces, and calibration/point-fit
+confounds. Multi-anchor coverage and independent track/static-region checks remain needed
 before requesting a new review session.
+
+The same manual first-frame wall ROI and fitting frames were also used with DA3.
+All 60 image observations are identical between the two previews, with 49 test
+frames after the 11 fit frames. Median test-frame marker distances are 5.618 pixels
+for DAGE and 2.214 pixels for DA3. This one manually selected development anchor
+does not rank the methods. It does illustrate why the pooled epipolar diagnostic
+(which was lower for native DAGE on bear) and a particular held-out placement test
+need not tell the same story. There is no validated usability threshold, and the
+image track itself has not been independently verified. DA3's per-frame record is
+`paper/results/davis/anchor-preview-development/da3-manual-wall-v1.json`.
 
 The eight-presentation pilot contains six outputs (DAGE and DA3 on the three
 development clips) and two repeated presentations. The public packet hides method
