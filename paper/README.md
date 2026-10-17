@@ -673,6 +673,33 @@ verify positive depth and all original pixel bounds. This demonstrates a narrow
 controlled sensitivity result, not a validated novel evaluator, and remains
 outside the manuscript pending broader validation.
 
+#### Estimated-camera query checks
+
+`probe_predicted_query_consistency.py` applies projection bounds and conditional
+query comparisons to the saved DAGE and DA3 predictions. RGB bytes are decoded
+and rehashed; input records, executed runners, prediction hashes, model names,
+and all 90 rigid poses are verified before evaluation. No reference poses or
+sensor depth enter the geometric checks. Both methods use the same published
+calibration and tracks. Results are in `predicted-query-consistency-v1.json`.
+The inference models saw all 90 RGB frames: restricting geometric fitting to
+a prefix is not causal prefix-only model inference or independent validation.
+
+With 60 fitting frames and eight-pixel tolerance, both methods are compatible
+on all five final-frame tracks; seven original slots are insufficient. Median
+horizontal/vertical prediction widths on those five tracks are 30.29/15.60
+pixels for DAGE and 28.70/14.24 for DA3. At four pixels, DAGE remains compatible
+on all five while DA3 has two compatible queries and three contradictions;
+median widths are 14.06/6.89 and 10.17/4.70 pixels respectively. Tighter bounds
+do not by themselves establish higher accuracy. No tolerance is selected here
+as a quality threshold, and this comparison does not establish a general ranking.
+
+All three prefix lengths and all four tolerances retain every slot and separate
+fitting failure from final-query contradiction. Tests modify the final image
+observation and verify that only the comparison changes, not prediction bounds.
+Every compatible combined witness was independently reprojected to check
+positive depth and original pixel bounds. These development results remain
+outside the manuscript until the evaluation protocol has broader validation.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is
