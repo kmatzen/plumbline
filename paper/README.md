@@ -4046,3 +4046,23 @@ Outputs are under Anima's
 The comparison is developmental and was added after reference audits; it is
 not a held-out validation claim. Reference visibility remains diagnostic,
 and correspondence agreement cannot establish functional camera DNF.
+
+`analyze_movi_judge.py` checks exact proposal identity against both separate
+reference audits. It reports diagnostic agreement only for the unchanged <=2
+and >=8 pixel ranges, with depth/mask non-rejected backgrounds and
+normal-supported foregrounds. It does not assign occluded labels from the
+rejection cues. Unavailable geometry, uncertain/rejected visibility, and
+borderline distances remain separate. Complete model comparisons additionally
+require all 944 IDs in both arms, matching processed image hashes/token counts,
+the original parser, and absent targets. Partial results cannot enter the
+comparison. Results are split by scene, foreground/background, and the same
+RGB-baseline answered/abstained subsets for every arm.
+
+The baseline-only diagnostic is archived before the judge finishes. Among all
+1,536 planned proposals, 389 have diagnostic labels, 393 are borderline, 162
+have unresolved/rejected reference visibility, and 592 lack renderable geometry.
+The baseline answers 247 of the 389 labeled cases and agrees on 244; it abstains
+on the other 142. There are three false-close answers under these reference
+cues. These figures measure agreement with diagnostic references, not verified
+camera accuracy. The first fixed panel was visually inspected for layout;
+that inspection is not a human judgment dataset, and no labels were added.
