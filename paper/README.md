@@ -675,7 +675,52 @@ retained, and intrinsics are predicted. These fractions are not tracking accurac
 or DNF rates. Per-pair counts and angle quantiles are retained in each run's
 `cheirality-probe.json`. No acceptance threshold has been fitted.
 
-### DAVIS author-review pilot
+### Fixed-grid anchor coverage probe
+
+`probe_davis_anchors.py` replaces the manual wall choice with 12 fixed first-frame
+grid cells. Each contributes its strongest corner in an eroded annotated-background
+mask, or an explicit empty slot. Both methods receive exactly the same image
+observations. Fits use frames 0–10 only. Later observations cannot change the
+fitted point (covered by a regression test).
+
+Chained Lucas–Kanade tracks stop permanently after a failed forward/backward
+check (1 pixel). A separate first-frame-to-current-frame LK pass provides a
+cross-check, requiring agreement within 3 pixels and annotated background.
+These are fixed development choices, not calibrated correctness thresholds;
+the two tracking paths can share errors. The stricter comparison also requires
+cross-check agreement throughout the fitting frames. No score-based anchor
+selection or restart occurs. All slots, observations, failed fits, projections,
+and comparison subsets are retained in `paper/results/davis/grid-anchors-v1/`.
+
+Each clip has 12 slots × 49 later frames = 588 possible test observations.
+The following are pooled medians over **common available** background observations;
+the stricter row is a different subset and must not be compared as an improvement
+in camera quality.
+
+| Clip | Common observations | Common anchors | DAGE pixels | DA3 pixels |
+| --- | ---: | ---: | ---: | ---: |
+| bear, chained | 494 / 588 | 11 / 12 | 4.936 | 2.323 |
+| bear, cross-checked | 167 / 588 | 9 / 12 | 4.344 | 2.018 |
+| bmx-bumps, chained | 3 / 588 | 1 / 12 | 10.516 | 17.747 |
+| bmx-bumps, cross-checked | 1 / 588 | 1 / 12 | 10.516 | 17.747 |
+| boat, chained | 127 / 588 | 3 / 12 | 14.212 | 10.609 |
+| boat, cross-checked | 68 / 588 | 3 / 12 | 8.495 | 8.059 |
+
+Fit accounting also matters. Bear has 11 fits and one insufficient image track
+for each method. BMX has nine insufficient early tracks for each; DAGE has two
+fits and one nonpositive-depth fit, while DA3 has three fits. All 12 BMX image
+tracks are lost by the final frame. Boat has ten DAGE fits and five DA3 fits;
+the remaining two and seven respectively have nonpositive fitted depth. Those
+unavailable cases are retained, not assigned zero error or omitted from coverage.
+
+This probe does not establish method rankings or DNF. It shows that this tracker
+and long-window protocol supply almost no comparable evidence on BMX, and that
+fit availability can differ substantially between camera estimates. Background
+may move, tracks may drift, and predicted calibration and poor parallax confound
+point fits. Better image tracks and separately reported temporal-window coverage
+are required before a useful evaluation can be claimed.
+
+### DAVIS author-review pilot (withdrawn)
 
 **Withdrawn from further review:** the project author reported that the examples
 did not make clear what to look for. This is qualitative evidence of an interface
