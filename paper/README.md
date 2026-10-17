@@ -4584,3 +4584,35 @@ validation has occurred. The artifact is
 `results/movi-temporal-verifier-v1/oracle-motion-control-v1.json`; tests verify
 reference deduplication, exact replay, and full accounting. It remains outside
 the manuscript.
+
+### Frozen-matrix correspondence intervention
+
+`audit_movi_motion_track_error.py` tests whether correspondence error explains
+the accepted moving point in the oracle control. It holds each crossfit matrix,
+source coordinate, and 1-pixel threshold fixed, replacing only the held-out
+target coordinate with its reference projection. All 768 unique planned
+point/frame slots are retained. There are 573 supported reference projections
+and 195 unresolved references. Predictor-invisible cases are reported separately
+and are not treated as deployed motion-gate answers.
+
+For the accepted moving point (4970/frame 12/slot 25), the predicted coordinate
+is 8.207 pixels from the reference projection. Its Sampson residual changes
+from 0.769 to 4.785 pixels, changing compatibility to incompatibility under the
+same matrix. Thus the observed pass is not evidence that this exact surface
+motion lies within the fitted epipolar tolerance: the predicted correspondence
+causes the pass. This does not establish that the fitted matrix is correct.
+
+Among the eight predictor-visible supported moving observations, seven remain
+incompatible and this one changes to incompatible. Among 498 predictor-visible
+static-background observations, 476 remain compatible, five remain incompatible,
+eight change from incompatible to compatible, and nine change in the opposite
+direction. Exact held-out coordinates therefore do not make the fitted matrices
+a staticness certificate: errors in their other input tracks, geometric
+degeneracy, and reference uncertainty remain. The intervention does not refit
+matrices with ground truth or claim an improved deployed evaluator.
+
+The retained record is `results/movi-temporal-verifier-v1/motion-track-error-v1.json`.
+Tests check fixed-matrix residual arithmetic, full visibility accounting, and
+exact replay. The development implication is to evaluate correspondence
+reliability and fitted-geometry uncertainty separately before assigning camera
+failure; this result is not added to the manuscript.
