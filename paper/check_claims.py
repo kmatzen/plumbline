@@ -152,6 +152,35 @@ for clip in ("bear", "bmx-bumps", "boat"):
         assert [m["fit_counts"]["fit"] for m in co["methods"]] == [10, 6]
         assert [m["fit_counts"]["nonpositive_fit_depth"] for m in co["methods"]] == [2, 6]
 
+tum = json.loads((ROOT / "paper/results/dense/tum-anchor-xyz-v1.json").read_text())
+assert tum["possible_later_observations"] == 948
+common = tum["common_observations"]
+assert len(common) == 130
+for name in ("reference", "dage", "reference_later_yaw_5deg"):
+    assert f"{np.median([r['pixels'][name] for r in common]):.3f}" in TEX
+later = [r for r in common if r["frame"] >= 31]
+assert len(later) == 70
+prefix = json.loads((ROOT / "paper/results/dense/tum-anchor-prefix-v1.json").read_text())
+intersection = [r for r in prefix["rows"] if r["common"]]
+assert len(intersection) == 49 and len(prefix["rows"]) == 708
+for name in ("reference", "dage"):
+    assert f"{np.median([r['pixels'][name] for r in later]):.3f}" in TEX
+    assert f"{np.median([r['errors'][name + '_11'] for r in intersection]):.3f}" in TEX
+ore_root = ROOT / "paper/results/ore-official-demo-v1"
+depth = json.loads((ore_root / "depth-support-audit.json").read_text())
+tracks = [t for m in depth["methods"] for t in m["tracks"]]
+assert len(tracks) == 28
+assert sum(t["official_nonpositive_frames"] > 0 for t in tracks) == 12
+assert sum(t["positive_depth_candidate_count"] == 0 for t in tracks) == 9
+assert sum(not t["positive_depth_interval"]["feasible"] for t in tracks) == 9
+boxes = json.loads((ore_root / "box-preprocessing-v2.json").read_text())["tracks"]
+assert [t["reversed_after_integer_cast"] for t in boxes] == [24, 371, 40, 429]
+assert sum(t["frames"] for t in boxes) * 2 == 6774
+assert sum(v > 1 for t in boxes for r in t["rows"] for v in r["roundtrip_error_pixels"]) == 3995
+assert all(not r["reversed_before_distortion"] for t in boxes for r in t["rows"])
+for phrase in ("3,995 of 6,774", "130 of 948", "49 of 708", "Twelve of 28"):
+    assert phrase in TEX
+
 print(
     "Selected manuscript counts match retained records; human validation and general claims are not certified"
 )
