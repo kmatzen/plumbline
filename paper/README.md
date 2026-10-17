@@ -729,8 +729,10 @@ HEAD returned 1,483,556,251 bytes before acquisition. Store source data on Anima
 tested and documented separately from these frozen choices. No paper results
 are claimed before the replication completes.
 
-The archive transfer has been started on Anima under
+The archive transfer completed on Anima under
 `/data3/kmatzen/plumbline/research/office-rgbd-replication-v1/office.tgz`.
+It is exactly 1,483,556,251 bytes, passed `gzip -t`, and has SHA-256
+`c7cd8e1afb87c80e5744a356214819b110fa09b4744fa4ba0cc2382f9ba59e9c`.
 The staging utility now accepts the explicitly named office sequence without
 changing sampling or association rules. Seven staging tests pass for both
 supported archive roots and unsafe-name rejection; the original executed
@@ -741,8 +743,10 @@ reference/depth diagnostics, so unavailable reference poses do not block the
 estimated-camera tests. It retains the original OpenCV grayscale decoder.
 Re-running it on the first control exactly reproduces every one of the 12×90
 original track records; that check is retained as `rgb-only-tracks-v1.json`.
-The office sample has not yet been scored. The transfer must complete and pass
-archive integrity checks before staging or inference.
+The office sample has not yet been scored. Staging began only after the transfer
+completed and passed archive integrity checks. The unchanged DAGE/DA3 runners
+and query-chunk helper have been copied to the separate replication directory;
+16 targeted staging, input, runner, and geometry tests passed before inference.
 
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
