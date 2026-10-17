@@ -584,7 +584,7 @@ and decision rule are fixed. The nine-example adapter is not a candidate for
 held-out performance claims. This implementation diagnostic remains outside
 the manuscript's reported experiments.
 
-**Fixed twenty-pass full-training study.** The next study starts from the
+**Fixed twenty-pass full-training study.** This study starts from the
 original pinned base, not either learned adapter, under
 `/data3/kmatzen/plumbline/research/tapvid-lora-twenty-pass-v1/`. All 188 training
 examples receive exactly twenty updates each (3,760 total). The first pass
@@ -600,7 +600,12 @@ the final adapter. Calibration remains unopened. The validation videos have
 already informed development and are not a fresh test set; no cross-scene
 significance or camera-DNF claim can follow from this comparison alone. The
 training manifest records unique training membership separately from the
-repeated update schedule. Results remain pending.
+repeated update schedule. Training completed all 3,760 updates with finite
+losses and finite, positive gradient norms. The saved adapter files match their
+recorded SHA-256 hashes. The complete training record is preserved in
+`results/tapvid-lora-twenty-pass-v1/training.json`. Training-fit evaluation is
+running; validation and external-video results remain pending. Completion of
+training is not evidence of generalization or camera-failure detection.
 
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,
