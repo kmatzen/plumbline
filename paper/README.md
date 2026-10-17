@@ -3549,3 +3549,33 @@ abstention is an observed behavior, not calibrated confidence. The integration
 and provenance checks pass, but correspondence correctness on these panels
 and camera-level usefulness remain unvalidated. No DNF rate, method ranking,
 or fine-tuning accuracy improvement follows from these unlabeled counts.
+
+### Camera-projection correspondence transfer with independent point labels
+
+The twenty existing TAP-Vid test videos do not overlap the three DAVIS camera
+development clips (`bear`, `boat`, `bmx-bumps`). They contain reviewed point
+positions and visibility, which can validate a judge's answer about a projected
+marker without treating that judge's answer as truth. They do not annotate
+staticness, camera poses, or functional camera usability. This validation
+therefore targets candidate-position correspondence, not a camera DNF rule.
+
+`results/tapvid-camera-transfer-v1/protocol.json` fixes a forty-attempt camera
+batch: DAGE and DA3 on every original frame of all twenty videos, with the same
+pinned checkpoints and prior inference settings. `run_tapvid_cameras.py` reads
+only the RGB array, verifies its staged byte and decoded hashes, and saves poses
+and estimated calibration. It does not load point/visibility annotations.
+`run_tapvid_camera_batch.py` runs attempts in separate processes, records process
+failures, and continues the full roster. A zero process exit is not labeled as
+an independently verified prediction result. Three tests check RGB-only access,
+partition restrictions, attempt preservation, and complete accounting after a
+failed process. The batch is separate from subsequent marker construction and
+judge scoring; successful execution is not assumed here.
+
+The later marker protocol uses each frozen track's first-visible query and ten
+consecutive early RGB observations, then projects without later refitting at
+lags 15/30/60. Only afterward may the annotated positions/visibility label the
+candidate, using the unchanged <=2 / >=8 native-pixel rule and explicit
+occluded/borderline outcomes. The original twenty-pass judge remains frozen.
+These test videos were already used for prior correspondence comparisons, so
+this is a declared transfer study, not a fresh untouched benchmark. Moving
+points and uncertain prefix geometry remain limitations for camera-level use.
