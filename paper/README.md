@@ -247,6 +247,36 @@ related-work coverage and actual camera experiments remain outstanding.
 
 ### Fresh dense development runs
 
+#### Early-fit image anchors with a reference-camera control
+
+`probe_tum_anchors.py` applies the fixed 4-by-3 first-frame feature grid and
+11-frame point fit to the retained 90-frame walking-XYZ run. All 90 source image
+hashes are verified. Dataset calibration is used for every camera variant;
+predicted DAGE calibration is not tested. All image regions are admitted without
+semantic masks. Zero-valued admission masks in this experiment are **not static
+background annotations**; the shared kernel's `insufficient_early_background_track`
+status means insufficient early image tracking here. Features and image tracks
+are selected without reference poses or projection errors.
+
+The reference cameras, DAGE, and a control with a five-degree camera-local yaw
+added only after the fitting frames all support the same 130 later observations
+out of 948 possible. Their median placement errors are respectively 2.995, 1.851,
+and 49.177 pixels. Each has three admissible point fits, eight insufficient early
+tracks, and one nonpositive-depth fit. Reversing all reference camera centers
+leaves one admissible fit with 15 later observations and a 742.245-pixel median;
+this is a separate coverage set and is not directly comparable as a ranking.
+
+This is an important negative result: the score responds strongly to the chosen
+rotation corruption, but the estimated cameras score lower than the reference
+cameras on the unmodified video. It therefore cannot yet serve as a trustworthy
+camera-accuracy ranking. Image-track drift, independently moving features,
+reference timestamp association, calibration, and the early 3D fit can contribute
+to the discrepancy. This experiment does not isolate their contributions. It is
+one development clip, not held-out evaluation, a functional-DNF label, or proof
+that DAGE is more accurate than the reference. All tracks, failed fits, projections,
+and common-observation indices are retained in
+`paper/results/dense/tum-anchor-xyz-v1.json`.
+
 `run_dense_dage.py` bypasses the prediction cache and rescans TUM timestamp files.
 It records ordered timestamps, hashes of each source file and decoded frame,
 checkpoint contents, Python source files, runtime versions, settings, and output
