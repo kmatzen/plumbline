@@ -12,7 +12,7 @@
 \begin{abstract}
 Camera trajectories are often estimated on videos without reference camera poses. We study how to assess whether such estimates are usable, while separating malformed outputs, functional failures, and insufficient evidence. Our proposed protocol combines source images, independently selected image correspondences, deterministic geometric measurements, and separately validated visual interpretation. Every attempted sequence remains in the accounting, including failures and abstentions.
 
-This report presents a development implementation, not a validated metric. On a 60-frame DAVIS training clip, we retain a fresh DAGE estimate and measure 22,472 feature matches across 28 frame pairs using predicted calibration. Controlled rotation interventions test sensitivity of the geometric evidence. A Qwen2.5-VL-3B pilot fails a constructed point--line alignment control, showing that this configuration cannot be trusted to interpret even that simple diagnostic. Independent usability judgments, comparison with existing reference-free metrics, and held-out evaluation remain incomplete. The intended contribution is a validated failure-review methodology; the present results do not yet establish it.
+This report presents a development implementation, not a validated metric. On three 60-frame DAVIS training clips, we retain DAGE and Depth Anything 3 estimates and compare geometric consistency and early-fit, later-frame point placement. Translation-sign controls expose an ambiguity of epipolar residuals. Image-track availability sharply limits placement comparisons: on the BMX clip, replacing Lucas--Kanade with CoTracker3 increases common support from 3 to 98 of 588 planned observations. Separate prefix inference prevents future images from changing the coordinates used for the early point fit. A Qwen2.5-VL-3B pilot fails a constructed point--line alignment control, and an author-review pilot is withdrawn because the display did not make the task clear. Independent usability judgments, comparison with existing reference-free metrics, and held-out validation remain incomplete. The intended contribution is a validated failure-review methodology; the present results do not yet establish it.
 \end{abstract}
 
 \section{Introduction}
@@ -20,7 +20,7 @@ A camera trajectory can have a good global alignment score and still look wrong.
 
 This creates a practical problem when choosing between camera-tracking methods. Researchers inspect videos, plots, point clouds, and per-frame errors, then make an informal judgment. The judgment may be useful, but it is hard to repeat. The views can differ between methods, labels may reveal the method, invalid outputs may disappear, and a final ranking may have no uncertainty estimate.
 
-We propose \method, a reproducible evaluation layer for camera tracking. It does not replace pose metrics. It turns the broader review process into a declared protocol. Every candidate first passes deterministic gates. Valid candidates become versioned artifacts containing poses, scalar metrics, and a standard diagnostic render. Candidate pairs are blinded and balanced. A reviewer answers the same concrete questions for each pair. Pairwise outcomes are aggregated with a statistical model, while the original metrics remain available for diagnosis.
+We propose \method, a reproducible evaluation layer for camera tracking. It does not replace pose metrics. Every candidate first passes deterministic validity checks. Geometric and image evidence then support localized tests of the target task, while unavailable evidence is recorded explicitly. Our current placement test fits a static point from early image observations and projects it into later frames without refitting. Source-video overlays show the observed image feature and the predicted marker together. Such a discrepancy is diagnostic, not sufficient to assign camera failure: image tracks, calibration, and point fitting can also be wrong. Blinded pairwise review remains a supporting protocol rather than the main contribution.
 
 This design draws on pairwise evaluation in 3DCodeBench, where automated measures alone do not capture all differences in generated 3D assets \cite{gao2026codebench}. The camera problem requires added controls: trajectory conventions, Sim(3) alignment, non-finite poses, frozen tracks, and separation between automatic rejection and subjective review.
 
@@ -28,7 +28,7 @@ This development report contains:
 \begin{enumerate}
   \item an implemented separation of structural failure, functional judgment, and unresolved evidence;
   \item reference-free source and geometric diagnostics with retained input and output provenance;
-  \item controlled sensitivity measurements and a failed visual-judging sanity test; and
+  \item controlled sensitivity measurements, placement-evidence coverage tests, and a failed visual-judging sanity test; and
   \item a validation protocol for the proposed evaluator, with pairwise review and design search retained as supporting components.
 \end{enumerate}
 
@@ -53,6 +53,13 @@ Let $N$ be the number of attempted sequences, $M$ the mechanical failures, $F$ t
 The implemented DAVIS diagnostics combine sampled source frames with the predicted path, orientation glyphs, and between-frame motion. They do not use reference poses or invent capture timestamps. Independent SIFT matching supplies geometric evidence: matches are selected without candidate poses, then tested against those poses and the model's estimated intrinsics. We retain every selected match, including possible false matches and moving objects. A low epipolar residual alone cannot establish a correct trajectory, and pure rotation or negligible translation can make this evidence uninformative.
 
 The proposed learned component must interpret scene evidence without replacing numerical measurements. Potential roles include identifying regions whose motion is independent of the camera and recognizing when evidence is insufficient. These roles are not yet implemented and validated as a complete evaluator. The failed geometric-reading control in Section~\ref{sec:vlmcontrol} motivates keeping point--line measurements deterministic. Model explanations must not contradict those measurements. Training an evaluator will require independently checked labels; neither perturbation magnitude nor an unvalidated model answer supplies a usability label.
+
+\subsection{Early-fit placement evidence and coverage}
+We divide the first source image into a fixed $4\times3$ grid and select the strongest eligible corner in each cell, using an eroded DAVIS background mask. Empty cells remain in the accounting. Selection does not use a candidate's poses or projection errors. Background annotation is not a static-scene certificate.
+
+For each candidate, a 3D point is fit to the rays from frames 0--10 using that candidate's poses and intrinsics. The fitted point remains fixed when projected into frames 11--59. A degenerate fit or a point behind a fitting camera is unavailable, not a zero-error placement. For each later observation we retain projection error, image-track availability, visibility checks, and annotation membership. Comparisons use the same observations for both candidates and report coverage out of the full $12\times49=588$ planned observations per clip. This is a joint pose/calibration/point-fit consistency diagnostic, not pose error in isolation.
+
+The Lucas--Kanade (LK) arm uses a 1-pixel forward/backward check and does not restart a lost track. An additional direct first-frame-to-current-frame pass provides a sensitivity check, with a 3-pixel agreement criterion; it is not independent verification. The CoTracker3 arm \cite{karaev2024cotracker3} uses the same query locations and retains the upstream predictor's visibility and support-grid behavior. Its offline inference is run separately on the early prefix and the full video. Only prefix-only coordinates enter the point fit. Otherwise, later images can influence early coordinates even when the geometric fitting code uses only early frame indices. None of these development thresholds is a validated correctness or functional-DNF threshold.
 
 \subsection{Review artifact}
 For system $i$ on task $t$, the harness writes an immutable artifact
@@ -111,13 +118,45 @@ Each of 60 trials starts from four shared random observations. Bayesian and rand
 
 \section{Results}
 
-\subsection{Reference-free DAVIS development run}
-The pilot uses DAGE \cite{dage2026} as one source of estimated camera trajectories, not as the proposed evaluation method.
-We staged 90 DAVIS train/validation sequences with 6,208 frames, preserving split lists and frame hashes. We used the first 60 frames of the first listed training sequence, \emph{bear}, for development; validation sequences have not been used for development inference. DAGE produces camera poses and normalized intrinsics. A repeat run retaining calibration reproduced the original poses elementwise. Its runtime was 72.08 seconds including loading, with 7.04 GB peak allocated GPU memory. This single run is not a runtime benchmark.
+\subsection{Reference-free DAVIS development runs}
+The pilot uses DAGE \cite{dage2026} and Depth Anything 3 (DA3) \cite{yang2025depthanything3} as sources of camera estimates, not as the proposed evaluation method.
+We staged 90 DAVIS train/validation sequences with 6,208 frames, preserving split lists and frame hashes. Development uses the first 60 frames of the first three listed training sequences: \emph{bear}, \emph{bmx-bumps}, and \emph{boat}. Validation sequences have not been used for development inference. DAGE produces camera poses and normalized intrinsics. On bear, a repeat run retaining calibration reproduced the original poses elementwise. Its runtime was 72.08 seconds including loading, with 7.04 GB peak allocated GPU memory. These development settings do not form a controlled runtime benchmark.
 
-Mutual SIFT ratio matching retains 22,472 matches over 28 pairs at supplied-frame lags of 1, 10, and 30. Sampson residuals use predicted, not independently measured, calibration. Median pair-median residuals are 0.000204, 0.000777, and 0.001353 for the three lags, in normalized camera coordinates. We do not interpret these values as camera accuracy or usability.
+An initial DA3 bear attempt fails with GPU out-of-memory and remains in the records. The completed DA3 runs use query-chunked attention with the same keys and values. Unit tests compare the attention kernel with unchunked evaluation, but the failed full-sequence attempt does not supply an end-to-end numerical-equivalence check. Native processed-image intrinsics are converted back to source-image coordinates using the audited resize convention. Both methods use the same source frames and decoded inputs.
+
+On bear, mutual SIFT ratio matching retains 22,472 matches over 28 frame pairs at supplied-frame lags of 1, 10, and 30. Sampson residuals use predicted, not independently measured, calibration. Median pair-median residuals are 0.000204, 0.000777, and 0.001353 for the three lags, in normalized camera coordinates. BMX and boat retain 11,626 and 18,258 matches respectively. Cross-method diagnostics instead use symmetric point-to-epipolar-line distance in source pixels to avoid directly comparing residuals in differently scaled normalized camera coordinates. We do not interpret these values as camera accuracy or usability.
 
 We independently change each pair's target-camera rotation by $-15,-5,-1,0,1,5,15$ degrees around each local axis, holding matches and calibration fixed. The 588 retained measurements are pairwise interventions, not modified full trajectories. A positive 15-degree change increases median residuals on all 28 pairs for each axis. This demonstrates response to the selected interventions, not superiority to existing metrics or agreement with people.
+
+\subsection{Ambiguity and placement-evidence coverage}
+Reversing all predicted camera centers changes the essential matrix only by sign. Across all 168 native pairs from six outputs, absolute epipolar residuals therefore remain unchanged. A conventional positive-depth check distinguishes that sign ambiguity on nondegenerate static correspondences. It is not our contribution and cannot by itself certify an estimate: predicted calibration, mismatches, small parallax, and moving surfaces still affect the result.
+
+Table~\ref{tab:anchors} reports early-fit placement measurements with their available support. The same image observations are used by both camera methods within each row. Across rows, changing the image tracker changes the subset; a lower or higher median is not evidence that the evaluator improved. Median errors also omit unavailable fits, whose counts must remain visible. On BMX, LK supplies only three common later observations and all 12 tracks are lost by the final frame. CoTracker supplies 98 common observations, but this is still only 16.7\% of the planned evidence. On boat, the CoTracker arm has ten valid early fits for DAGE and six for DA3; the remaining two and six fits respectively have nonpositive depth. These are unresolved diagnostic cases, not established functional failures.
+
+\begin{table*}[t]
+\centering
+\caption{Development placement diagnostics. Each row uses common available background observations for the two camera estimates. Each clip plans 588 later observations across 12 query slots. Image tracks and annotated background are not ground truth; these values do not establish method rankings.}
+\label{tab:anchors}
+\begin{tabular}{llrrrr}
+\toprule
+Clip & Image tracker & Observations / 588 & Anchors / 12 & DAGE median (px) & DA3 median (px)\\
+\midrule
+bear & LK & 494 & 11 & 4.936 & 2.323\\
+bear & CoTracker3 & 472 & 11 & 5.104 & 2.398\\
+bmx-bumps & LK & 3 & 1 & 10.516 & 17.747\\
+bmx-bumps & CoTracker3 & 98 & 3 & 25.973 & 39.806\\
+boat & LK & 127 & 3 & 14.212 & 10.609\\
+boat & CoTracker3 & 174 & 4 & 17.795 & 12.472\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Offline tracking changed early coordinates when future images were supplied. Maximum differences between prefix-only and full-video CoTracker coordinates over the fitting frames were 1.642 pixels on bear, 12.923 on BMX, and 8.483 on boat. These are differences between predictions, not measured tracking errors. Separate prefix inference avoids using the full-video early coordinates in the fit; it does not make the later tracks ground truth.
+
+\subsection{Unsuccessful author-review interface}
+An eight-presentation pilot paired source videos with trajectory plots for six outputs and two repeats. The available reviewer, a project author, reported that it was unclear what to look for. We withdrew this interface rather than treating the response as a camera-quality label. No independent usability judgments were obtained.
+
+The replacement prototype draws an observed image feature and a projected marker directly on the video, with a close-up. A teaching display contrasts an attached marker with an explicitly simulated drifting marker; neither teaching panel is a method output. An initial automatically selected background feature lay on a leaf and was lost. A manually chosen wall region made the prototype easier to inspect, but is not independent validation or an automatically selected benchmark case. The fixed-grid probes above broaden the development evidence without treating that manual choice as a general method. Whether the revised display yields repeatable judgments remains untested.
 
 \subsection{A failed VLM visual-grounding control}
 \label{sec:vlmcontrol}
@@ -147,7 +186,7 @@ The primary missing experiment is human validation of functional usability on re
 
 The final comparison must include ORE where its static-track and calibration requirements are met, simpler geometric checks, conventional pose metrics where references exist, and untuned and tuned judge variants. The primary failure-detection measures are false DNF among human-usable outputs, missed failure among human-unusable outputs, and coverage including all abstentions. Thresholds must be selected on development data and fixed before held-out evaluation. Sequence-level resampling must retain correlated frame pairs together. A claim of cross-method generalization also requires holding out tracker identities, not merely frames from familiar videos.
 
-DAVIS masks do not establish that an object is static, and our staged data does not provide measured intrinsics or camera poses. The current one-clip result is insufficient to evaluate generalization, ranking, or semantic interpretation. Fine-tuning and reinforcement learning remain future experiments, contingent on trustworthy supervision and a frozen held-out protocol.
+DAVIS masks do not establish that an object is static, and our staged data does not provide measured intrinsics or camera poses. The current three-clip, two-method development study is insufficient to evaluate generalization, ranking, or semantic interpretation. Improved evidence coverage does not establish image-track correctness. The available author review does not replace independent validation, and no independent reviewers are currently available. Fine-tuning and reinforcement learning remain future experiments, contingent on trustworthy supervision and a frozen held-out protocol.
 
 The trajectory study measures response to injected amplitude. It cannot show that the proposed method matches human preference or improves selection over existing metrics. The highest-priority next experiment is a study using real tracking outputs, independent reviewers, repeated hidden pairs, strong multi-metric baselines, and a held-out judge-calibration set.
 
@@ -156,7 +195,7 @@ The existing pairwise diagnostic uses ground-truth poses; it must not be confuse
 The Bayesian experiment uses a smooth synthetic objective. Gaussian processes can struggle in high-dimensional or conditional spaces. Search can also overfit the evaluator, which is why a held-out final set is required. Finally, the current implementation has not measured inter-rater reliability, learning effects, or vision-language judge calibration on a real comparison set.
 
 \section{Conclusion}
-The development experiments support two limited conclusions: the retained geometric evidence responds to controlled rotation changes, and the tested VLM configuration fails a simple visual-grounding control. They do not establish a new camera-quality metric. Our next test is whether deterministic measurements combined with separately validated scene interpretation can identify functional failures in agreement with independent reviewers, including on videos without reference poses. Search and evaluator training should follow that validation, not substitute for it.
+The development experiments identify several requirements for a camera-failure evaluator. Epipolar consistency does not resolve translation sign. Placement tests need explicit evidence-coverage accounting and checks on the observations used for point fitting. An offline image tracker can change early coordinates when later images are supplied. Finally, neither a plausible diagnostic layout nor a VLM response establishes that the evidence is understood: the author-review interface was withdrawn, and the tested VLM failed a simple control. These results do not establish a new camera-quality metric. The remaining test is whether deterministic measurements combined with separately validated scene interpretation identify functional failures on held-out outputs. Search and evaluator training should follow that validation, not substitute for it.
 
 \section*{Data and Code Availability}
 The development repository is \url{https://github.com/kmatzen/plumbline}. Current local experiments retain scripts, hashes, and raw result records; synchronization of the latest artifacts and a citable release remain pending. Source-containing diagnostic images are retained locally rather than redistributed in the repository. Public model and dataset artifacts remain subject to their original licenses.

@@ -8,6 +8,8 @@ import json
 import re
 from pathlib import Path
 
+import numpy as np
+
 ROOT = Path(__file__).resolve().parents[1]
 HTML = (ROOT / "site" / "explore.html").read_text()
 TEX = (ROOT / "paper" / "main.tex").read_text()
@@ -99,6 +101,56 @@ failed = json.loads((controls / "control_on-qwen3b.json").read_text())
 assert failed["status"] == "failed" and "OutOfMemoryError" in failed["traceback"]
 for phrase in ("22,472", "28 frame pairs", "588", "72.08", "768-token"):
     assert phrase in TEX, f"missing checked development phrase: {phrase}"
+
+for clip in ("bear", "bmx-bumps", "boat"):
+    baseline_path = ROOT / f"paper/results/davis/grid-anchors-v1/{clip}.json"
+    baseline = json.loads(baseline_path.read_text())
+    co_dir = ROOT / f"paper/results/davis/cotracker-{clip}-v1"
+    co_manifest = json.loads((co_dir / "manifest.json").read_text())
+    co = json.loads((co_dir / "anchor-analysis.json").read_text())
+    assert co_manifest["status"] == "complete"
+    assert co["baseline_sha256"] == hashlib.sha256(baseline_path.read_bytes()).hexdigest()
+    assert co_manifest["baseline_sha256"] == co["baseline_sha256"]
+    arrays = {}
+    for phase in co_manifest["phases"]:
+        path = co_dir / f"{phase['name']}.npz"
+        assert phase["status"] == "complete"
+        assert phase["prediction_sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()
+        with np.load(path, allow_pickle=False) as data:
+            arrays[phase["name"]] = data["tracks"]
+    prefix_delta = np.linalg.norm(arrays["prefix"] - arrays["full"][:11], axis=-1)
+    assert np.allclose(
+        np.percentile(prefix_delta, [0, 50, 100]),
+        co["prefix_full_coordinate_delta_quantiles_0_50_100"],
+    )
+    assert f"{prefix_delta.max():.3f}" in TEX
+    for tracker, data in (("LK", baseline), ("CoTracker3", co)):
+        errors = [[], []]
+        anchor_count = 0
+        for slot, track in enumerate(data["tracks"]):
+            count = 0
+            for frame in range(11, len(track)):
+                values = [
+                    method["anchors"][slot]["rows"][frame]["distance_pixels"]
+                    for method in data["methods"]
+                ]
+                if track[frame].get("annotation_label") == 0 and all(v is not None for v in values):
+                    count += 1
+                    for index, value in enumerate(values):
+                        errors[index].append(value)
+            anchor_count += count > 0
+        assert data["possible_test_observations"] == 588
+        table_row = (
+            f"{clip} & {tracker} & {len(errors[0])} & {anchor_count} & "
+            f"{np.median(errors[0]):.3f} & {np.median(errors[1]):.3f}"
+        )
+        assert table_row in TEX, f"unmatched placement row: {table_row}"
+    assert len(baseline["tracks"]) == 12
+    if clip == "bmx-bumps":
+        assert all(track[-1]["status"] == "lost" for track in baseline["tracks"])
+    if clip == "boat":
+        assert [m["fit_counts"]["fit"] for m in co["methods"]] == [10, 6]
+        assert [m["fit_counts"]["nonpositive_fit_depth"] for m in co["methods"]] == [2, 6]
 
 print(
     "Selected manuscript counts match retained records; human validation and general claims are not certified"
