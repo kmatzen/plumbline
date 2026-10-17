@@ -1,4 +1,4 @@
-"""Frozen validation comparison or training-fit diagnostic; never calibration."""
+"""Frozen development/disjoint-video comparisons or training-fit; never calibration."""
 
 import argparse
 import contextlib
@@ -20,9 +20,34 @@ def parse_label(text):
     return label if label in {"close", "far", "occluded", "uncertain"} else "invalid"
 
 
-def select_evaluation(corpus, train, manifest, partition):
-    if partition not in {"train", "validation"}:
-        raise ValueError("only training-fit or validation evaluation is allowed")
+def validate_test_partition(manifest, development):
+    if development is None:
+        raise ValueError("test evaluation requires the original development manifest")
+    names = manifest.get("partitions", {})
+    dev_names = development.get("partitions", {})
+    if len(names) != 20 or len(dev_names) != 10 or set(names) & set(dev_names):
+        raise ValueError("twenty test videos must be disjoint from ten development videos")
+    if set(names.values()) != {"test"}:
+        raise ValueError("test-only partition required")
+    if (manifest["prompt"] != development["prompt"]
+            or manifest["source_manifest_sha256"] != development["source_manifest_sha256"]):
+        raise ValueError("test prompt or staging source differs from development")
+    dev_ids = {r["id"] for r in development["records"]}
+    ids = [r["id"] for r in manifest["records"]]
+    if len(ids) != len(set(ids)) or set(ids) & dev_ids:
+        raise ValueError("test IDs duplicate or overlap development")
+    for row in manifest["records"]:
+        if row["partition"] != "test" or row["sequence"] not in names:
+            raise ValueError("test record outside declared video partition")
+
+
+def select_evaluation(corpus, train, manifest, partition, development=None):
+    if partition not in {"train", "validation", "test"}:
+        raise ValueError("only training-fit, validation, or explicit disjoint test evaluation is allowed")
+    if partition == "test":
+        validate_test_partition(manifest, development)
+    elif development is not None:
+        raise ValueError("development manifest is only supplied for test evaluation")
     source = corpus / f"{partition}.jsonl"
     if digest(source) != manifest["exports_sha256"][partition]:
         raise ValueError("evaluation export changed")
@@ -30,7 +55,7 @@ def select_evaluation(corpus, train, manifest, partition):
     allowed = {r["id"]: r for r in manifest["records"] if r["partition"] == partition and r["status"] == "labeled"}
     if {r["id"] for r in rows} != set(allowed) or len(rows) != len(allowed):
         raise ValueError("evaluation membership changed")
-    if partition == "validation" and set(train["training_ids"]) & set(allowed):
+    if partition in {"validation", "test"} and set(train["training_ids"]) & set(allowed):
         raise ValueError("training/validation ID overlap")
     if partition == "train" and (set(train["training_ids"]) != set(allowed)
                                   or len(train["training_ids"]) != len(allowed)):
@@ -44,15 +69,19 @@ def select_evaluation(corpus, train, manifest, partition):
     return source, rows, allowed
 
 
-def run(corpus, training_run, output, partition="validation"):
+def run(corpus, training_run, output, partition="validation", development_manifest=None):
     if output.exists():
         raise ValueError("preserve previous comparison")
     train = json.loads((training_run / "manifest.json").read_text())
     manifest = json.loads((corpus / "manifest.json").read_text())
-    if train["status"] != "complete" or train["corpus_manifest_sha256"] != digest(corpus / "manifest.json"):
+    if (partition == "test") != (development_manifest is not None):
+        raise ValueError("test evaluation requires an explicit original development manifest, exclusively")
+    training_corpus_path = development_manifest if partition == "test" else corpus / "manifest.json"
+    if train["status"] != "complete" or train["corpus_manifest_sha256"] != digest(training_corpus_path):
         raise ValueError("completed training run with identical corpus required")
-    source, rows, allowed = select_evaluation(corpus, train, manifest, partition)
-    arms = ("base", "adapted") if partition == "validation" else ("adapted",)
+    development = json.loads(development_manifest.read_text()) if partition == "test" else None
+    source, rows, allowed = select_evaluation(corpus, train, manifest, partition, development)
+    arms = ("adapted",) if partition == "train" else ("base", "adapted")
     checkpoint = Path(train["checkpoint"])
     for name, sha in train["checkpoint_files"].items():
         if digest(checkpoint / name) != sha:
@@ -67,6 +96,12 @@ def run(corpus, training_run, output, partition="validation"):
               "script_sha256": digest(Path(__file__)),
               "protocol": "validation: base with adapters disabled versus adapted; training-fit: adapted only; identical prepared quantized model and original panels/prompts; greedy max 8 new tokens; exact four-label parser; invalid and uncertain retained; no calibration examples read; no weight updates",
               "results": {arm: [] for arm in arms}}
+    if partition == "test":
+        report.update(scope="video-disjoint correspondence comparison; classical baseline previously reported; not camera DNF",
+                      development_manifest_sha256=digest(development_manifest),
+                      evaluation_corpus_manifest_sha256=digest(corpus / "manifest.json"),
+                      planned_examples=len(manifest["records"]), labeled_examples=len(rows),
+                      protocol="base with adapters disabled versus adapted; identical prepared quantized model and original panels/prompts; greedy max 8 new tokens; exact four-label parser; invalid and uncertain retained; no calibration examples read; no weight updates; no test-based selection")
     if partition == "validation":
         report["validation_export_sha256"] = digest(source)
 
@@ -140,7 +175,7 @@ def run(corpus, training_run, output, partition="validation"):
                     report["results"][arm].append(item)
                     save()
                     print(arm, len(report["results"][arm]), row["id"], item["parsed"], flush=True)
-        if partition == "validation":
+        if partition in {"validation", "test"}:
             for a, b in zip(report["results"]["base"], report["results"]["adapted"], strict=True):
                 if a["id"] != b["id"] or a["processed_pixel_sha256"] != b["processed_pixel_sha256"]:
                     raise ValueError("paired inputs changed")
@@ -157,6 +192,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("corpus", "training_run", "output"):
         parser.add_argument(name, type=Path)
-    parser.add_argument("--partition", choices=("train", "validation"), default="validation")
+    parser.add_argument("--partition", choices=("train", "validation", "test"), default="validation")
+    parser.add_argument("--development-manifest", type=Path)
     args = parser.parse_args()
-    run(args.corpus, args.training_run, args.output, args.partition)
+    run(args.corpus, args.training_run, args.output, args.partition, args.development_manifest)

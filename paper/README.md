@@ -3048,3 +3048,15 @@ the development corpus. No learned-judge inference has been performed on this
 partition, and the calibration export/images were not opened. The omitted
 borderline/unavailable observations must remain visible in subsequent coverage
 accounting rather than being counted as correct or usable.
+
+The test runner now requires `--partition test --development-manifest <original>`.
+It verifies that training used that exact development manifest, checks all
+twenty test video names and example IDs against development, and requires the
+same staging source and prompt. Test inference uses both base and adapted arms
+with identical image payloads, fixed greedy decoding, and the unchanged parser;
+planned and labeled counts remain explicit. The planned tested adapter is the
+currently running fixed 20-pass model, not an adapter selected after viewing
+test results. The runner is staged separately under the external-corpus directory;
+the active training run's queued evaluator remains its original frozen file.
+A CPU-only selection preflight verified all 971 test examples and image hashes.
+No model weights were loaded or test responses generated during that check.
