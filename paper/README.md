@@ -3801,3 +3801,22 @@ yet been decoded, no camera methods run, and no DNF labels inferred. Downstream
 work must retain every scene in this shard and keep reference annotations out
 of camera/evaluator inputs. The existing DAVIS judge comparison continues
 unchanged on the GPU; staging this small pilot used CPU/network only.
+
+All four scenes in the selected shard are now decoded: 3835, 5397, 4385, and
+4970, each with 24 frames and respectively 13, 8, 10, and 16 objects. RGB-only
+NPZs and separate reference NPZs remain on Anima in `decoded-v1/`. Their hashes,
+raw record hashes, scene membership, and decoder dependency versions are
+archived in `decoded-manifest.json`. Reader dependencies were installed into a
+separate pilot directory, without changing the shared environment or running
+judge. Integer depth/object-coordinate precision is retained; PNG channel
+order and shape checks are tested.
+
+`audit_movi_camera_metadata.py` independently projects the released object
+positions using the camera-to-world wxyz quaternions and the camera convention
+in the [upstream implementation](https://github.com/google-research/kubric/blob/main/kubric/core/cameras.py).
+All 1,128 object-center/frame comparisons agree with released image positions
+within 0.000021 native pixels. Per-comparison residuals and input hashes are
+saved in `metadata-projection-audit-v1.json`. Seven pilot tests pass. This is
+metadata consistency, not validation of rendered surface coordinates, depth
+decoding, visibility, static support, or a camera-evaluation method. Those
+checks are still required before this pilot can supply task-level references.

@@ -1,0 +1,64 @@
+{
+  "status": "complete",
+  "scope": "geometry development only; no validated projection or DNF labels",
+  "source_manifest_sha256": "8e2e3a394836a5a9e30c5d779eb9b717e124e58371d20c125785a5d36a55a7dc",
+  "shard_sha256": "e024496a96010a4dfa0a75f64644ba7d0bb2495a7e215cd1c38bd7242d81d9db",
+  "expected_scenes": 4,
+  "scenes": [
+    {
+      "index": 0,
+      "name": "3835",
+      "frames": 24,
+      "instances": 13,
+      "rgb_file": "scene-00-rgb.npz",
+      "rgb_sha256": "85498aa21aa4211b5ca858f58ab74c3d8ab11448aeb6ef705bfbda16ad3388a0",
+      "decoded_rgb_sha256": "1d53a4960505e03ed4b369c010597c6b749eedd6520943790591868aa68acfc8",
+      "reference_file": "scene-00-references.npz",
+      "reference_sha256": "34e4dc87c1ab1379e27f7e5fb748b9b4c62ea68f687d86146c952d0db90a3d50",
+      "record_sha256": "ad916001e92ead67b51d7cc8f1efc3ffe11ffb5b6824e4880fe43932f34c9aa0"
+    },
+    {
+      "index": 1,
+      "name": "5397",
+      "frames": 24,
+      "instances": 8,
+      "rgb_file": "scene-01-rgb.npz",
+      "rgb_sha256": "f558d57dabacfd1eb95fb0da4006c3251614feef4ff5ca28af5f20860a41c2d8",
+      "decoded_rgb_sha256": "d89d9e24b2dbaca6f69e84962d3e6fe921ab96265f028a5e6b08e0034c081713",
+      "reference_file": "scene-01-references.npz",
+      "reference_sha256": "d08d6768651f608c3ff8390c9d1b55e795ceeb25d64ca7c2d6f329e91ffc74c0",
+      "record_sha256": "b900995e83d111e37eb57691c10be223a0ccf7a8ab46b7f5eee89284ae605295"
+    },
+    {
+      "index": 2,
+      "name": "4385",
+      "frames": 24,
+      "instances": 10,
+      "rgb_file": "scene-02-rgb.npz",
+      "rgb_sha256": "7446a2e5541c80afb74fa40af3549cbae098122575270b203b3f7ea3b5fd0d09",
+      "decoded_rgb_sha256": "d3dc48bd4f4d96a0c59aa67edcae0fc3255e02570fa33a0ebcd2a7dcfb39c851",
+      "reference_file": "scene-02-references.npz",
+      "reference_sha256": "cda00dc47b7bf4f29034c6b38e933f8c2caf5e7c66977ee30e026021eda868ae",
+      "record_sha256": "80e35af8ca162ac8e97fddce708e29ed609d87860157723c31fd2167a7693688"
+    },
+    {
+      "index": 3,
+      "name": "4970",
+      "frames": 24,
+      "instances": 16,
+      "rgb_file": "scene-03-rgb.npz",
+      "rgb_sha256": "5481a4a712e32e310fe7a7b9b02260d4e2702aae463ef87f8c196824848c75e0",
+      "decoded_rgb_sha256": "bae2ffeb4345e9b6585ad94c6b2b57a257d38755607b5ecfa548769385a6f048",
+      "reference_file": "scene-03-references.npz",
+      "reference_sha256": "26147ecc5020d2424e4131188305d11cba03d223b19f6a2f7ea8bd7852ee33ea",
+      "record_sha256": "06931ae4d003e360127bfaa52b1d35db66b21e671f710c41e6c2302fcef0d584"
+    }
+  ],
+  "script_sha256": "4443a31a0350996ebb0d6bc61a41b397a544e8c073243dc3e655fce9ea61b2c7",
+  "versions": {
+    "tfrecord": "1.14.6",
+    "protobuf": "3.20.3",
+    "crc32c": "2.7.1",
+    "numpy": "2.4.4"
+  }
+}
