@@ -40,13 +40,20 @@ def decode(source, output):
             raise ValueError("staged file changed")
     info = json.loads((source/"dataset_info.json").read_text())
     split = next(s for s in info["splits"] if s["name"] == "validation")
-    expected = int(split["shardLengths"][0])
-    shard = source/"movi_e-validation.tfrecord-00000-of-00064"
+    shard_index = manifest.get('shard_index', 0)
+    if not isinstance(shard_index, int) or not 0 <= shard_index < 64:
+        raise ValueError('invalid validation shard index')
+    expected = int(split["shardLengths"][shard_index])
+    shard = source/f"movi_e-validation.tfrecord-{shard_index:05d}-of-00064"
+    if shard.name not in {entry['file'] for entry in manifest['files']}:
+        raise ValueError('selected shard absent from verified manifest')
     output.mkdir(parents=True, exist_ok=False)
     result = dict(status="decoding", scope="geometry development only; no validated projection or DNF labels",
                   source_manifest_sha256=digest(source/"manifest.json"), shard_sha256=digest(shard),
                   expected_scenes=expected, scenes=[], script_sha256=digest(Path(__file__)),
                   versions={n:importlib.metadata.version(n) for n in ("tfrecord","protobuf","crc32c","numpy")})
+    if shard_index != 0:
+        result.update(shard_index=shard_index, scope='prospective validation-shard replication; references separated from RGB; no validated DNF labels')
     try:
         for index, payload in enumerate(tfrecord_iterator(str(shard))):
             example = example_pb2.Example()

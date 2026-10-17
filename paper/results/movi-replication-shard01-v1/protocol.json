@@ -1,0 +1,21 @@
+{
+  "status": "frozen_before_shard_acquisition",
+  "baseline_commit": "68a0761",
+  "dataset": "MOVi-E/256x256/1.0.0",
+  "split": "validation",
+  "shard_index": 1,
+  "selection": "Next validation shard after the four-scene development shard 00000. Retain every record in shard 00001 in publisher order. No outcome-based scene replacement or exclusions.",
+  "scope": "Prospective replication of fixed evidence checks on new scenes. Not final test-set validation, a preregistered public study, proof of novelty, or camera-DNF accuracy.",
+  "camera_methods": ["dage", "da3"],
+  "camera_settings": "Same checkpoints and 252-resolution settings as the original four-scene camera pilot; RGB-only inference on all 24 frames.",
+  "placement": "Same 64 frame-zero raster queries at x,y=12,44,...,236; original LK prefix initialization and unchanged marker fit; evaluate frames 12,18,23. All missing or invalid proposals remain in accounting.",
+  "temporal_verifier": "Same pinned offline CoTracker3 checkpoint and defaults; full-video forward queries; reverse only the prefix ending at each target frame; no clipping of reverse queries; visibility required.",
+  "motion_check": "Same four interleaved spatial holdout groups; other-group visible points fit RANSAC fundamental matrices with 1px threshold, confidence 0.99, max 2000 iterations and seed 0; heldout Sampson threshold 1px.",
+  "cycle_check": "Reverse endpoint must be visible and within 1px of the original source query.",
+  "comparisons": ["tracking", "tracking_motion", "tracking_motion_cycle"],
+  "reporting": "Report full planned counts, missing evidence, supported-reference coverage, correspondence close/far confusion at unchanged 2/8px thresholds, moving/static support counts, and matched paired placement means and medians for every scene. No aggregation chosen after inspecting which method wins.",
+  "reference_policy": "Reference geometry, depth, segmentation, object motion and visibility cues only enter scoring after image-based outputs are frozen. Ground-truth foreground status does not enter the evaluator. Visibility cues remain diagnostic, not certified labels.",
+  "failure_policy": "Retain crashes, timeouts, malformed outputs, unavailable projections and unresolved labels separately; do not count missing evidence as a camera failure.",
+  "holdout_policy": "Keep MOVi test shards and TAPVid calibration images/exports unopened. If any evaluator setting changes after replication results are inspected, label this batch development and use a new independently selected batch for that revised evaluator.",
+  "limitations": "Only one additional shard; repeated points and frames are dependent; pretraining overlap for frozen models is unknown; existing checks alone are not the paper's novel contribution. A new camera-method holdout and broader independent validation remain necessary."
+}

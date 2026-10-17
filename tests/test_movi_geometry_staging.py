@@ -22,3 +22,10 @@ def test_preserves_prior_output_and_limits_to_validation(tmp_path):
         stage(tmp_path)
     shards = [n for n in FILES if "tfrecord" in n]
     assert shards == ["movi_e-validation.tfrecord-00000-of-00064"]
+
+
+def test_invalid_shard_rejected_before_output_creation(tmp_path):
+    for index in (-1, 64, 'test'):
+        with pytest.raises(ValueError, match='validation shard'):
+            stage(tmp_path/'new', index)
+        assert not (tmp_path/'new').exists()
