@@ -1,0 +1,16 @@
+{
+  "scope": "Post-hoc CPU replay of the original processor, checkpoint, prompt, and three images; not instrumentation captured during the original generation",
+  "checkpoint_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+  "max_pixels": 1003520,
+  "pixel_shape": [4472, 1176],
+  "image_grid_thw": [[1, 52, 86]],
+  "image_token_count": 1118,
+  "input_tokens": 1374,
+  "all_pixel_values_finite": true,
+  "pixel_tensor_sha256": {
+    "walking-xyz-diagnostic.png": "0c014ffda817df2c15e40e63232e2cd9c368da2c5612b52cedf860df592e163d",
+    "walking-static-diagnostic.png": "14dcadf91f85844e2b28e9419f93ecc1d04e84986ec89bc650b428e820a2b058",
+    "control-reference.png": "741faeda85c3793b38ce5d74f674446274a67238770013ae70f24849edecfe9a"
+  },
+  "interpretation": "Replay includes image tokens and distinct finite tensors. It does not establish model attention to evidence, numerical health of hidden states, or judgment correctness."
+}

@@ -88,6 +88,47 @@ be tested.
 
 ## Proposed functional-DNF study
 
+### Reference-free setting: DAVIS
+
+The primary intended use includes videos without reference camera trajectories,
+not just rejudging ground-truth error plots. DAVIS is the first proposed dataset
+for this arm. The official [DAVIS 2017 release](https://davischallenge.org/davis2017/code.html)
+provides video frames and segmentation annotations; these annotations are not
+camera-pose ground truth. Use the official 480p train/validation archive at
+`https://data.vision.ee.ethz.ch/csergi/share/davis/DAVIS-2017-trainval-480p.zip`.
+The archive is being staged on Anima under `/data3/kmatzen/data/davis-downloads/`.
+Do not infer camera intrinsics, frame rate, or capture timestamps from filenames.
+Record ordered frame indices and mark unavailable calibration/timing explicitly.
+
+Use DAVIS training sequences for evidence-design development. Reserve validation
+sequences for a frozen-protocol assessment; all windows, candidate methods, and
+variants of an original sequence must stay in the same partition. Do not choose
+test clips by looking for favorable model outcomes. A sequence roster and an
+attempt log must include inference errors and unreviewable cases.
+
+The main evidence packet must not contain reference poses, pose-error metrics,
+human segmentation masks, or method identities. It should combine source frames,
+synchronized estimated camera motion, independently extracted image tracks, and
+candidate reprojection or epipolar evidence when supported. Pose-only output
+does not provide depth: do not invent 3D reprojections. Predicted depth/intrinsics
+must be identified as estimates, and their errors can confound pose judgments.
+Image matches and estimated static-background regions can also be wrong; missing
+support should lead to uncertainty, not automatic rejection of the tracker.
+Segmentation-assisted analysis is a separate oracle ablation, and annotated
+objects must not be equated with all moving pixels or static background truth.
+
+Ask independent reviewers and VLMs whether the estimate is consistent with the
+visible camera motion and whether the provided evidence establishes task failure.
+Require supporting frames/intervals and permit `cannot judge`. Evaluate agreement
+and false rejection against independent human judgments, with disagreements and
+coverage retained. Without camera truth, this measures agreement about visible
+plausibility and task usability, not geometric accuracy. Complement it with
+reference-available datasets and controlled corruptions. The existing TUM plots
+and failed plot-only VLM pilot are supporting diagnostics, not this primary
+reference-free method. The DAVIS arm has no tracking or judging results yet.
+
+### Failure definition and validation
+
 Status: protocol under development, not a preregistration or a validated metric.
 The research question is whether a VLM can identify task-failing camera estimates
 that deterministic validity checks and conventional metric baselines miss.
@@ -281,6 +322,13 @@ failure prevents this pipeline from serving as the proposed DNF gate. Audit
 image preprocessing and plot readability, and compare evidence presentations
 and model choices before any deployment or superiority claim. Do not silently
 repair the recorded responses or tune on held-out labels.
+
+A post-hoc replay of the original processor on Anima yielded distinct finite
+pixel tensors for the three images. Each input contains 1,118 image tokens and
+1,374 total tokens, with image grid `[1, 52, 86]`. The hashes and scope are retained
+in `results/vlm-dnf/preprocessing-audit.json`. This rules out absent image tokens
+or identical preprocessed tensors in the replay, not numerical problems inside
+the model or failures to interpret the plots. It is not an original-run trace.
 
 ### Pairwise review interface
 
