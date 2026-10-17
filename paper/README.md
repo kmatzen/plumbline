@@ -756,8 +756,33 @@ and invalid zero quaternions, reject altered associations, and confirm that a
 missing frame zero does not shift windows starting at frame one. On the original
 control it reproduces 89 available poses and one out-of-tolerance association;
 all three fixed windows remain available. That audit is retained as
-`reference-availability-v1.json`. Office staging is still running; no office
-reference availability or evaluation outcome is assumed in advance.
+`reference-availability-v1.json`.
+
+Office staging has now completed. All 90 selected RGB frames, raw indices,
+depth associations, and 86 native uint16 depth images were reverified locally.
+Depth associations are unavailable at frames 13, 61, 64, and 66; reference pose
+zero is unavailable, but all fixed fitting/query windows are available. The
+unchanged RGB tracker retains all twelve slots: twelve, nine, and five have
+complete observations through frames 10, 30, and 60; four reach frame 89.
+All records are under `results/office-rgbd-replication-v1`.
+
+The fixed reference-camera comparison has completed all 84 cases. At eight
+pixels, prefixes ending at 10 and 30 accept all four final-frame tracks for
+both ±5-degree query errors and the reference. The 60-frame prefix accepts
+all four reference queries and contradicts all four for either five-degree
+error. Seven slots lack complete fitting observations and one lacks the final
+observation. All 1/2/4/8-pixel and signed-yaw results remain recorded, without
+selecting a threshold. Compatible witnesses were independently reprojected.
+Median horizontal prediction widths at eight pixels are 994.73, 142.93, and
+32.20 pixels over twelve, nine, and five feasible slots respectively; these
+different surviving sets must not be presented as unconditional improvement.
+
+DA3 completed the office run. Its decoded inputs, 90 rigid poses, archived runner,
+helper, and loader were verified; checkpoint files, implementation source, and
+settings match the first control exactly. DAGE is running separately on the same
+fixed sample. The paired estimated-camera comparison is not yet complete.
+This replication supports only the narrow controlled endpoint sensitivity
+finding, not human agreement, general camera ranking, or a validated DNF rule.
 
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,

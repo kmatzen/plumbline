@@ -1,0 +1,3689 @@
+{
+  "scope": "reference-camera development diagnostic; no depth or query-image observations used",
+  "fit_original_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "query_frames": [
+    89
+  ],
+  "limitations": "conditional on positive query depth; separate coordinate extrema need not form a feasible corner",
+  "policy": "no image-bound clipping; retain unbounded, infeasible, and insufficient results",
+  "source_sha256": "958fd90988a6b235309cde8777db198565eac519d119304b93bbd09daf6fc6ff",
+  "control_sha256": "cdfac64d0abd043c691386a6eb881ec7b5bd02d5eeba9e7773cc83e7fd790ec1",
+  "script_sha256": "f75090bb542f4764703ef6436fcc01518b5bc7752550ea9fe112e826784fe099",
+  "kernel_sha256": "970e52aec5aabb493a64446ae544f920ed6c8f8ca66849104e3cc63a80bf4a51",
+  "support_kernel_sha256": "bf7a93ea5c55eaecc1d7c141d3feb4d041e7ee7fbe4f54af0a858f269b9d1dcd",
+  "rows": [
+    {
+      "slot": 0,
+      "tolerance_pixels": 1,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 32.47011432947507,
+        "maximum_normalized_constraint_violation": 1.1829669502979412e-14,
+        "maximum_box_violation_pixels": 2.2737367544323206e-13,
+        "point_world": [
+          0.6746855762737922,
+          -0.2810506641689412,
+          0.9151040350763674
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -100.26002338863691,
+          "homogeneous_point_first_camera": [
+            -1.1392018623855646,
+            -0.5903045718393749,
+            2.3699251567159214,
+            0.07276157712227654
+          ],
+          "maximum_constraint_violation": 4.440892098500626e-15
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 67.57329794957525,
+          "homogeneous_point_first_camera": [
+            -1.127465621121834,
+            -0.5807201738428941,
+            2.335146864812999,
+            0.08434739840342613
+          ],
+          "maximum_constraint_violation": 2.4424906541753444e-15
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 230.04543025771818,
+          "homogeneous_point_first_camera": [
+            -1.127465621121834,
+            -0.5807201738428941,
+            2.335146864812999,
+            0.08434739840342613
+          ],
+          "maximum_constraint_violation": 2.4424906541753444e-15
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 241.03826674149377,
+          "homogeneous_point_first_camera": [
+            -1.1389583778318235,
+            -0.5881525658538831,
+            2.369437157656766,
+            0.07271526352088904
+          ],
+          "maximum_constraint_violation": 3.3306690738754696e-16
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "tolerance_pixels": 1,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 28.866206713829694,
+        "maximum_normalized_constraint_violation": 8.817011820625468e-15,
+        "maximum_box_violation_pixels": 1.7763568394002505e-13,
+        "point_world": [
+          -0.0146625143770307,
+          -0.11904191474808679,
+          1.3585946545899203
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 179.84219433876467,
+          "homogeneous_point_first_camera": [
+            -0.501113605760052,
+            -0.7191959953464426,
+            1.8237801747615923,
+            0.06316677251098468
+          ],
+          "maximum_constraint_violation": 1.214306433183765e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 225.06886560516284,
+          "homogeneous_point_first_camera": [
+            -0.5027351156441989,
+            -0.7170713906779772,
+            1.8183924753046639,
+            0.0665390307813035
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 35.84871339879027,
+          "homogeneous_point_first_camera": [
+            -0.5027351156441989,
+            -0.7170713906779772,
+            1.8183924753046639,
+            0.0665390307813035
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 37.90135838830099,
+          "homogeneous_point_first_camera": [
+            -0.501113605760052,
+            -0.7191959953464426,
+            1.8237801747615923,
+            0.06316677251098468
+          ],
+          "maximum_constraint_violation": 1.214306433183765e-17
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "tolerance_pixels": 1,
+      "query_frame": 89,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 3,
+      "tolerance_pixels": 1,
+      "query_frame": 89,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 4,
+      "tolerance_pixels": 1,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 30.18289596779565,
+        "maximum_normalized_constraint_violation": 5.148738464316115e-15,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          0.36581474328791086,
+          0.15084087013852887,
+          0.5908185233521583
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 132.88921206070268,
+          "homogeneous_point_first_camera": [
+            -0.821127309251711,
+            -0.1753180144351275,
+            2.0210374520190233,
+            0.06684113398731963
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 283.57400448122587,
+          "homogeneous_point_first_camera": [
+            -0.815381010144545,
+            -0.17582419387280235,
+            1.9949458410643357,
+            0.07763839643380768
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-15
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 365.4491358177914,
+          "homogeneous_point_first_camera": [
+            -0.815381010144545,
+            -0.17582419387280235,
+            1.9949458410643357,
+            0.07763839643380768
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-15
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 378.1850340882648,
+          "homogeneous_point_first_camera": [
+            -0.821127309251711,
+            -0.1753180144351275,
+            2.0210374520190233,
+            0.06684113398731963
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        }
+      }
+    },
+    {
+      "slot": 5,
+      "tolerance_pixels": 1,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 29.227996315547912,
+        "maximum_normalized_constraint_violation": 1.1966573649982926e-14,
+        "maximum_box_violation_pixels": 1.7053025658242404e-13,
+        "point_world": [
+          -0.6926687252596432,
+          0.2916676697647187,
+          0.5830465865604604
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 407.0256699990381,
+          "homogeneous_point_first_camera": [
+            -0.02836231954318782,
+            -0.07341982876944017,
+            1.318386270202382,
+            0.045106967168360344
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 520.4876248099041,
+          "homogeneous_point_first_camera": [
+            -0.03167309889691162,
+            -0.0738686542756083,
+            1.30501268381976,
+            0.053625347130776574
+          ],
+          "maximum_constraint_violation": 1.734723475976807e-18
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 259.0075674048964,
+          "homogeneous_point_first_camera": [
+            -0.03167309889691162,
+            -0.0738686542756083,
+            1.30501268381976,
+            0.053625347130776574
+          ],
+          "maximum_constraint_violation": 1.734723475976807e-18
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 267.2600392502595,
+          "homogeneous_point_first_camera": [
+            -0.02836231954318782,
+            -0.07341982876944017,
+            1.318386270202382,
+            0.045106967168360344
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        }
+      }
+    },
+    {
+      "slot": 6,
+      "tolerance_pixels": 1,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 29.033698922303085,
+        "maximum_normalized_constraint_violation": 8.512208373926282e-15,
+        "maximum_box_violation_pixels": 1.4210854715202004e-13,
+        "point_world": [
+          -1.1894000950151562,
+          0.30209530336347346,
+          0.6278392728420423
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 472.78148979126775,
+          "homogeneous_point_first_camera": [
+            0.18876756608794087,
+            -0.0749010080113501,
+            1.1311491726781875,
+            0.038959871275969706
+          ],
+          "maximum_constraint_violation": 3.8163916471489756e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 571.6655564277539,
+          "homogeneous_point_first_camera": [
+            0.184241987136889,
+            -0.07539174282243505,
+            1.1208521746623625,
+            0.04646859855360075
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 215.54973247005123,
+          "homogeneous_point_first_camera": [
+            0.184241987136889,
+            -0.07539174282243505,
+            1.1208521746623625,
+            0.04646859855360075
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 222.49836917951978,
+          "homogeneous_point_first_camera": [
+            0.18876756608794087,
+            -0.0749010080113501,
+            1.1311491726781875,
+            0.038959871275969706
+          ],
+          "maximum_constraint_violation": 3.8163916471489756e-17
+        }
+      }
+    },
+    {
+      "slot": 7,
+      "tolerance_pixels": 1,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 29.344648762143603,
+        "maximum_normalized_constraint_violation": 6.86428554815964e-15,
+        "maximum_box_violation_pixels": 1.7053025658242404e-13,
+        "point_world": [
+          -1.8414838061044259,
+          0.2688840324674411,
+          0.6650581728993936
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 526.1995502029265,
+          "homogeneous_point_first_camera": [
+            0.39195558587611795,
+            -0.07667538103884902,
+            0.9571408773795528,
+            0.032617220438989104
+          ],
+          "maximum_constraint_violation": 1.734723475976807e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 615.705101947416,
+          "homogeneous_point_first_camera": [
+            0.386308561535288,
+            -0.07666123160065372,
+            0.9490316558744797,
+            0.039484736526319765
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-15
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 175.25210599992565,
+          "homogeneous_point_first_camera": [
+            0.386308561535288,
+            -0.07666123160065372,
+            0.9490316558744797,
+            0.039484736526319765
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-15
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 181.027819006424,
+          "homogeneous_point_first_camera": [
+            0.39195558587611795,
+            -0.07667538103884902,
+            0.9571408773795528,
+            0.032617220438989104
+          ],
+          "maximum_constraint_violation": 1.734723475976807e-17
+        }
+      }
+    },
+    {
+      "slot": 8,
+      "tolerance_pixels": 1,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 23.529908299037437,
+        "maximum_normalized_constraint_violation": 7.761152831520235e-15,
+        "maximum_box_violation_pixels": 2.2737367544323206e-13,
+        "point_world": [
+          0.24129159597764893,
+          1.2041865019691098,
+          -0.06745319581948372
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 486.33265914961567,
+          "homogeneous_point_first_camera": [
+            -0.8746786071307977,
+            0.7492468152328509,
+            1.892465550288078,
+            0.08008300554151813
+          ],
+          "maximum_constraint_violation": 9.020562075079397e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 615.2772905611957,
+          "homogeneous_point_first_camera": [
+            -0.8684814304847822,
+            0.738828938211174,
+            1.8704081741870808,
+            0.0894245820979278
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 819.3810820989737,
+          "homogeneous_point_first_camera": [
+            -0.8684814304847822,
+            0.738828938211174,
+            1.8704081741870808,
+            0.0894245820979278
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 835.6356041886571,
+          "homogeneous_point_first_camera": [
+            -0.8746786071307977,
+            0.7492468152328509,
+            1.892465550288078,
+            0.08008300554151813
+          ],
+          "maximum_constraint_violation": 9.020562075079397e-17
+        }
+      }
+    },
+    {
+      "slot": 9,
+      "tolerance_pixels": 1,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 22.86270130985738,
+        "maximum_normalized_constraint_violation": 4.128725087536099e-15,
+        "maximum_box_violation_pixels": 1.7053025658242404e-13,
+        "point_world": [
+          -0.2854540783278976,
+          1.0583448833391658,
+          0.3682637296830278
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 558.3694723361668,
+          "homogeneous_point_first_camera": [
+            -0.3289804294149486,
+            0.2905893022348734,
+            1.4952855959382614,
+            0.06538724627414924
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 677.9061694652291,
+          "homogeneous_point_first_camera": [
+            -0.32953404444801393,
+            0.2848744637075698,
+            1.4794821521063384,
+            0.07430060931214127
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 484.74221203703127,
+          "homogeneous_point_first_camera": [
+            -0.32953404444801393,
+            0.2848744637075698,
+            1.4794821521063384,
+            0.07430060931214127
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 496.6549277299905,
+          "homogeneous_point_first_camera": [
+            -0.3289804294149486,
+            0.2905893022348734,
+            1.4952855959382614,
+            0.06538724627414924
+          ],
+          "maximum_constraint_violation": 0.0
+        }
+      }
+    },
+    {
+      "slot": 10,
+      "tolerance_pixels": 1,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 26.834303116701257,
+        "maximum_normalized_constraint_violation": 5.964801090608308e-15,
+        "maximum_box_violation_pixels": 1.1368683772161603e-13,
+        "point_world": [
+          -1.436357242386995,
+          0.7876966610776803,
+          0.17453645245051064
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 576.5680685884884,
+          "homogeneous_point_first_camera": [
+            0.28158042257615384,
+            0.18957343541989297,
+            1.0053073790430573,
+            0.03746351729989083
+          ],
+          "maximum_constraint_violation": 3.469446951953614e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 671.2507388287986,
+          "homogeneous_point_first_camera": [
+            0.27635486071254,
+            0.18602819746538776,
+            0.996586083800952,
+            0.04474987585072368
+          ],
+          "maximum_constraint_violation": 4.440892098500626e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 325.651847019838,
+          "homogeneous_point_first_camera": [
+            0.27635486071254,
+            0.18602819746538776,
+            0.996586083800952,
+            0.04474987585072368
+          ],
+          "maximum_constraint_violation": 4.440892098500626e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 333.7238420910776,
+          "homogeneous_point_first_camera": [
+            0.28158042257615384,
+            0.18957343541989297,
+            1.0053073790430573,
+            0.03746351729989083
+          ],
+          "maximum_constraint_violation": 3.469446951953614e-17
+        }
+      }
+    },
+    {
+      "slot": 11,
+      "tolerance_pixels": 1,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 29.618162540379007,
+        "maximum_normalized_constraint_violation": 3.4344356857163408e-15,
+        "maximum_box_violation_pixels": 1.1368683772161603e-13,
+        "point_world": [
+          -1.6373613359132122,
+          0.6869637112849016,
+          -0.1565095509256389
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 551.7458042194132,
+          "homogeneous_point_first_camera": [
+            0.31563319144098617,
+            0.25428277810465627,
+            0.9723606979787354,
+            0.032829879188254724
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 641.7061485444561,
+          "homogeneous_point_first_camera": [
+            0.3105200915167975,
+            0.2505437885169233,
+            0.9642448674571336,
+            0.03976653669484787
+          ],
+          "maximum_constraint_violation": 7.771561172376096e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 354.88015677503597,
+          "homogeneous_point_first_camera": [
+            0.3105200915167975,
+            0.2505437885169233,
+            0.9642448674571336,
+            0.03976653669484787
+          ],
+          "maximum_constraint_violation": 7.771561172376096e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 362.7131925576425,
+          "homogeneous_point_first_camera": [
+            0.31563319144098617,
+            0.25428277810465627,
+            0.9723606979787354,
+            0.032829879188254724
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "tolerance_pixels": 2,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 37.02406438079954,
+        "maximum_normalized_constraint_violation": 1.1815660994152572e-14,
+        "maximum_box_violation_pixels": 1.7053025658242404e-13,
+        "point_world": [
+          0.8589961314749452,
+          -0.6983272377177845,
+          0.7935405983049993
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -218.86623864472244,
+          "homogeneous_point_first_camera": [
+            -1.1450358695556213,
+            -0.6011194220855938,
+            2.3930193591344833,
+            0.06451687896287232
+          ],
+          "maximum_constraint_violation": 2.6645352591003757e-15
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 187.85341434875397,
+          "homogeneous_point_first_camera": [
+            -1.123064520462171,
+            -0.5791431248403898,
+            2.3142104383127577,
+            0.09294230930004947
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-15
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 220.92980006923915,
+          "homogeneous_point_first_camera": [
+            -1.123064520462171,
+            -0.5791431248403898,
+            2.3142104383127577,
+            0.09294230930004947
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-15
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 250.4947112253402,
+          "homogeneous_point_first_camera": [
+            -1.1436451712643958,
+            -0.5888781453113074,
+            2.39021865057095,
+            0.06426355960691292
+          ],
+          "maximum_constraint_violation": 1.3877787807814457e-16
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "tolerance_pixels": 2,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 32.47563488442941,
+        "maximum_normalized_constraint_violation": 1.0138272446455451e-14,
+        "maximum_box_violation_pixels": 1.7053025658242404e-13,
+        "point_world": [
+          0.06279979618286213,
+          -0.4681845397149491,
+          1.306560640849861
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 89.41534691125923,
+          "homogeneous_point_first_camera": [
+            -0.5009218390060965,
+            -0.7208910457390475,
+            1.836716670636532,
+            0.05653616702146797
+          ],
+          "maximum_constraint_violation": 7.632783294297951e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 413.73453673320824,
+          "homogeneous_point_first_camera": [
+            -0.4997004246821399,
+            -0.7078914356142253,
+            1.7878391119294401,
+            0.08010456101578221
+          ],
+          "maximum_constraint_violation": 1.734723475976807e-18
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 25.688380064757666,
+          "homogeneous_point_first_camera": [
+            -0.4997004246821399,
+            -0.7078914356142253,
+            1.7878391119294401,
+            0.08010456101578221
+          ],
+          "maximum_constraint_violation": 1.734723475976807e-18
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 43.86410136589052,
+          "homogeneous_point_first_camera": [
+            -0.5009218390060965,
+            -0.7208910457390475,
+            1.836716670636532,
+            0.05653616702146797
+          ],
+          "maximum_constraint_violation": 7.632783294297951e-17
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "tolerance_pixels": 2,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 242.05747669139487,
+        "maximum_normalized_constraint_violation": 1.0436096431476471e-14,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          -2.6590625483937163,
+          -21.211263345210302,
+          -0.4045800780437696
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -163.45509373553688,
+          "homogeneous_point_first_camera": [
+            0.0957432610552637,
+            -0.5984789334070166,
+            1.3671862891494495,
+            0.005648188636174607
+          ],
+          "maximum_constraint_violation": 2.0599841277224584e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 107.98759468270335,
+          "homogeneous_point_first_camera": [
+            0.08454561979637912,
+            -0.5895135415380136,
+            1.3365526032373496,
+            0.026025516195010256
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 4.723584345311792,
+          "homogeneous_point_first_camera": [
+            0.08454561979637912,
+            -0.5895135415380136,
+            1.3365526032373496,
+            0.026025516195010256
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 18.723703433019978,
+          "homogeneous_point_first_camera": [
+            0.0957432610552637,
+            -0.5984789334070166,
+            1.3671862891494495,
+            0.005648188636174607
+          ],
+          "maximum_constraint_violation": 2.0599841277224584e-17
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "tolerance_pixels": 2,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 334.1299932098792,
+        "maximum_normalized_constraint_violation": 1.432187701766452e-14,
+        "maximum_box_violation_pixels": 0.0,
+        "point_world": [
+          -15.926744316966507,
+          -29.95089437782889,
+          -1.1762274363382887
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 103.52301250202933,
+          "homogeneous_point_first_camera": [
+            0.47827913021881735,
+            -0.42402809372846395,
+            0.9924059828521733,
+            0.002970119423636317
+          ],
+          "maximum_constraint_violation": 5.941427905220564e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 315.25281693752186,
+          "homogeneous_point_first_camera": [
+            0.4633670926793035,
+            -0.418955389799449,
+            0.9738314991363736,
+            0.019210056834815765
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-15
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 8.49221401716136,
+          "homogeneous_point_first_camera": [
+            0.4633670926793035,
+            -0.418955389799449,
+            0.9738314991363736,
+            0.019210056834815765
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-15
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 19.288676439769546,
+          "homogeneous_point_first_camera": [
+            0.47827913021881735,
+            -0.42402809372846395,
+            0.9924059828521733,
+            0.002970119423636317
+          ],
+          "maximum_constraint_violation": 5.941427905220564e-17
+        }
+      }
+    },
+    {
+      "slot": 4,
+      "tolerance_pixels": 2,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 34.16669243516359,
+        "maximum_normalized_constraint_violation": 1.4013569302879392e-14,
+        "maximum_box_violation_pixels": 1.7053025658242404e-13,
+        "point_world": [
+          0.4982882116982743,
+          -0.18438939222280926,
+          0.4333747716162677
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 31.604485956937765,
+          "homogeneous_point_first_camera": [
+            -0.8229379066781718,
+            -0.17289236761826265,
+            2.0366168812237953,
+            0.05944472434652401
+          ],
+          "maximum_constraint_violation": 2.42861286636753e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 387.03904976714284,
+          "homogeneous_point_first_camera": [
+            -0.813784067147579,
+            -0.1771702859317852,
+            1.9790886568592139,
+            0.08518790519725568
+          ],
+          "maximum_constraint_violation": 3.3306690738754696e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 356.61354500975335,
+          "homogeneous_point_first_camera": [
+            -0.813784067147579,
+            -0.1771702859317852,
+            1.9790886568592139,
+            0.08518790519725568
+          ],
+          "maximum_constraint_violation": 3.3306690738754696e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 387.44766854980537,
+          "homogeneous_point_first_camera": [
+            -0.8229379066781718,
+            -0.17289236761826265,
+            2.0366168812237953,
+            0.05944472434652401
+          ],
+          "maximum_constraint_violation": 2.42861286636753e-16
+        }
+      }
+    },
+    {
+      "slot": 5,
+      "tolerance_pixels": 2,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 33.18663983477394,
+        "maximum_normalized_constraint_violation": 2.220446049250313e-16,
+        "maximum_box_violation_pixels": 0.0,
+        "point_world": [
+          -0.7001414919919852,
+          -0.0392818776778201,
+          0.4378337201317337
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 337.48351897170244,
+          "homogeneous_point_first_camera": [
+            -0.02578730438678122,
+            -0.07137936524020295,
+            1.3259021639531707,
+            0.03982876130387068
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 595.0601362990038,
+          "homogeneous_point_first_camera": [
+            -0.03469346018475116,
+            -0.07512298832310305,
+            1.2970422058282691,
+            0.05928287255715333
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 253.24281784653832,
+          "homogeneous_point_first_camera": [
+            -0.03469346018475116,
+            -0.07512298832310305,
+            1.2970422058282691,
+            0.05928287255715333
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 273.12636584782825,
+          "homogeneous_point_first_camera": [
+            -0.02578730438678122,
+            -0.07137936524020295,
+            1.3259021639531707,
+            0.03982876130387068
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        }
+      }
+    },
+    {
+      "slot": 6,
+      "tolerance_pixels": 2,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 33.49972133746481,
+        "maximum_normalized_constraint_violation": 8.494945474555458e-15,
+        "maximum_box_violation_pixels": 1.4210854715202004e-13,
+        "point_world": [
+          -1.2742667194203041,
+          -0.06259713063373518,
+          0.4524367871680588
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 407.47949227368423,
+          "homogeneous_point_first_camera": [
+            0.19231591632550632,
+            -0.07319958406345144,
+            1.1373081451308988,
+            0.03394977927350626
+          ],
+          "maximum_constraint_violation": 9.107298248878237e-18
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 639.3426887619294,
+          "homogeneous_point_first_camera": [
+            0.1804291735081985,
+            -0.07641972445251033,
+            1.1144830611648027,
+            0.051655482125359704
+          ],
+          "maximum_constraint_violation": 4.440892098500626e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 210.56722367791605,
+          "homogeneous_point_first_camera": [
+            0.1804291735081985,
+            -0.07641972445251033,
+            1.1144830611648027,
+            0.051655482125359704
+          ],
+          "maximum_constraint_violation": 4.440892098500626e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 227.69375586539172,
+          "homogeneous_point_first_camera": [
+            0.19231591632550632,
+            -0.07319958406345144,
+            1.1373081451308988,
+            0.03394977927350626
+          ],
+          "maximum_constraint_violation": 9.107298248878237e-18
+        }
+      }
+    },
+    {
+      "slot": 7,
+      "tolerance_pixels": 2,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 34.33346925693361,
+        "maximum_normalized_constraint_violation": 6.847230063476199e-15,
+        "maximum_box_violation_pixels": 1.1368683772161603e-13,
+        "point_world": [
+          -2.045554667620028,
+          -0.1400574400736314,
+          0.4779091584462076
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 466.83779851119857,
+          "homogeneous_point_first_camera": [
+            0.39607673996922327,
+            -0.07528250434421238,
+            0.9620254246460833,
+            0.028020047069720434
+          ],
+          "maximum_constraint_violation": 7.047314121155779e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 677.5414036425849,
+          "homogeneous_point_first_camera": [
+            0.38189636293559376,
+            -0.07747193785486957,
+            0.9439566807270836,
+            0.044268885500924816
+          ],
+          "maximum_constraint_violation": 6.661338147750939e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 170.93240591882693,
+          "homogeneous_point_first_camera": [
+            0.38189636293559376,
+            -0.07747193785486957,
+            0.9439566807270836,
+            0.044268885500924816
+          ],
+          "maximum_constraint_violation": 6.661338147750939e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 185.51076319132494,
+          "homogeneous_point_first_camera": [
+            0.39607673996922327,
+            -0.07528250434421238,
+            0.9620254246460833,
+            0.028020047069720434
+          ],
+          "maximum_constraint_violation": 7.047314121155779e-17
+        }
+      }
+    },
+    {
+      "slot": 8,
+      "tolerance_pixels": 2,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 25.707479611905114,
+        "maximum_normalized_constraint_violation": 2.491062911502695e-15,
+        "maximum_box_violation_pixels": 4.263256414560601e-14,
+        "point_world": [
+          0.32286763714256117,
+          1.0631064610010965,
+          -0.23190733648492423
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 399.21763654561676,
+          "homogeneous_point_first_camera": [
+            -0.8769632500834579,
+            0.7563247913243004,
+            1.9058022538659234,
+            0.07367474404182907
+          ],
+          "maximum_constraint_violation": 4.440892098500626e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 708.8884672453761,
+          "homogeneous_point_first_camera": [
+            -0.8667523188078415,
+            0.7302212577669155,
+            1.8568046914357337,
+            0.09636426009789617
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 807.5419912819323,
+          "homogeneous_point_first_camera": [
+            -0.8667523188078415,
+            0.7302212577669155,
+            1.8568046914357337,
+            0.09636426009789617
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 846.2957970291811,
+          "homogeneous_point_first_camera": [
+            -0.8769632500834579,
+            0.7563247913243004,
+            1.9058022538659234,
+            0.07367474404182907
+          ],
+          "maximum_constraint_violation": 4.440892098500626e-16
+        }
+      }
+    },
+    {
+      "slot": 9,
+      "tolerance_pixels": 2,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 25.112757480690025,
+        "maximum_normalized_constraint_violation": 5.6343818499726694e-15,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          -0.25105549350084416,
+          0.8991106354552316,
+          0.2303961181950367
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 485.11339557498366,
+          "homogeneous_point_first_camera": [
+            -0.32789740332685485,
+            0.29462969808726075,
+            1.504289380750118,
+            0.059878136975506494
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 756.9196142923822,
+          "homogeneous_point_first_camera": [
+            -0.3310582656014495,
+            0.2811018396661406,
+            1.4699854139859374,
+            0.08025095460185168
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 477.07852375892287,
+          "homogeneous_point_first_camera": [
+            -0.3310582656014495,
+            0.2811018396661406,
+            1.4699854139859374,
+            0.08025095460185168
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 504.0981098055465,
+          "homogeneous_point_first_camera": [
+            -0.32789740332685485,
+            0.29462969808726075,
+            1.504289380750118,
+            0.059878136975506494
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        }
+      }
+    },
+    {
+      "slot": 10,
+      "tolerance_pixels": 2,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 30.566492842540494,
+        "maximum_normalized_constraint_violation": 4.926614671774132e-16,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          -1.5469685118851224,
+          0.5249213123758132,
+          -0.04610287332963359
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 519.4929583178509,
+          "homogeneous_point_first_camera": [
+            0.2850292700144214,
+            0.19194833815344403,
+            1.0102880820044964,
+            0.03305214265859255
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 733.2314224953844,
+          "homogeneous_point_first_camera": [
+            0.2724150909258328,
+            0.18407273813846559,
+            0.9912543951413274,
+            0.04953983698349608
+          ],
+          "maximum_constraint_violation": 4.440892098500626e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 320.64859297348625,
+          "homogeneous_point_first_camera": [
+            0.2724150909258328,
+            0.18407273813846559,
+            0.9912543951413274,
+            0.04953983698349608
+          ],
+          "maximum_constraint_violation": 4.440892098500626e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 338.65808098572535,
+          "homogeneous_point_first_camera": [
+            0.2850292700144214,
+            0.19194833815344403,
+            1.0102880820044964,
+            0.03305214265859255
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        }
+      }
+    },
+    {
+      "slot": 11,
+      "tolerance_pixels": 2,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 34.30197769638943,
+        "maximum_normalized_constraint_violation": 1.214306433183765e-15,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          -1.794828747466025,
+          0.3722312791503013,
+          -0.45969807127985374
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 495.6891345579629,
+          "homogeneous_point_first_camera": [
+            0.319157351719345,
+            0.25691601492944516,
+            0.9771005472383897,
+            0.028485253995755373
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 702.6106651738199,
+          "homogeneous_point_first_camera": [
+            0.30650081027954507,
+            0.24840264024971592,
+            0.9591560910717596,
+            0.04448450161200378
+          ],
+          "maximum_constraint_violation": 1.2212453270876722e-15
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 349.8775832643437,
+          "homogeneous_point_first_camera": [
+            0.30650081027954507,
+            0.24840264024971592,
+            0.9591560910717596,
+            0.04448450161200378
+          ],
+          "maximum_constraint_violation": 1.2212453270876722e-15
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 367.68918527946005,
+          "homogeneous_point_first_camera": [
+            0.319157351719345,
+            0.25691601492944516,
+            0.9771005472383897,
+            0.028485253995755373
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "tolerance_pixels": 4,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 50.08067036718667,
+        "maximum_normalized_constraint_violation": 6.45846146872314e-15,
+        "maximum_box_violation_pixels": 8.526512829121202e-14,
+        "point_world": [
+          1.3886303007396659,
+          -1.8941563717469672,
+          0.443872903719994
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -447.0338648998711,
+          "homogeneous_point_first_camera": [
+            -1.157322870061169,
+            -0.6227342392244092,
+            2.4384261677429673,
+            0.04872369111217858
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 405.1466920323627,
+          "homogeneous_point_first_camera": [
+            -1.111215501796085,
+            -0.5507965208222589,
+            2.269820838667418,
+            0.10784551158182772
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 204.06424564915352,
+          "homogeneous_point_first_camera": [
+            -1.1140554871163797,
+            -0.5767429129513705,
+            2.275621925721275,
+            0.10840121647170492
+          ],
+          "maximum_constraint_violation": 7.226422237122153e-17
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 268.9165428963228,
+          "homogeneous_point_first_camera": [
+            -1.1535892871930216,
+            -0.5898015352542488,
+            2.430559680005931,
+            0.04821728889784819
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "tolerance_pixels": 4,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 43.08894649602421,
+        "maximum_normalized_constraint_violation": 1.0116145013968236e-14,
+        "maximum_box_violation_pixels": 1.3500311979441904e-13,
+        "point_world": [
+          0.29075377620054654,
+          -1.494713910646368,
+          1.1533553116583048
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -93.36782003860668,
+          "homogeneous_point_first_camera": [
+            -0.5017465510752259,
+            -0.7474093685907355,
+            1.8669117477238732,
+            0.04358111640092889
+          ],
+          "maximum_constraint_violation": 3.0933937657566496e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 587.5033575969564,
+          "homogeneous_point_first_camera": [
+            -0.5001638852649035,
+            -0.704237972811899,
+            1.7630052009109045,
+            0.09284445719505068
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 14.450521430308811,
+          "homogeneous_point_first_camera": [
+            -0.5001638852649035,
+            -0.704237972811899,
+            1.7630052009109045,
+            0.09284445719505068
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 55.91574188921038,
+          "homogeneous_point_first_camera": [
+            -0.5006462779854395,
+            -0.7242258985379108,
+            1.862817822708096,
+            0.04320360344298774
+          ],
+          "maximum_constraint_violation": 3.8163916471489756e-17
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "tolerance_pixels": 4,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 35.63955618641913,
+        "maximum_normalized_constraint_violation": 9.487678757080807e-15,
+        "maximum_box_violation_pixels": 1.5276668818842154e-13,
+        "point_world": [
+          -0.937317824613403,
+          -0.8226984158895774,
+          1.4103147443462123
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -243.02237647191748,
+          "homogeneous_point_first_camera": [
+            0.09692870317000903,
+            -0.614182195679584,
+            1.3796135725779597,
+            0.0
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 256.96052451876403,
+          "homogeneous_point_first_camera": [
+            0.0777890129359219,
+            -0.5872192596360403,
+            1.3205885121133578,
+            0.037283880444318136
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -4.198398717734676,
+          "homogeneous_point_first_camera": [
+            0.0777890129359219,
+            -0.5872192596360403,
+            1.3205885121133578,
+            0.037283880444318136
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 24.71649706443236,
+          "homogeneous_point_first_camera": [
+            0.09653130813279118,
+            -0.5977894232409267,
+            1.377281437510613,
+            0.0
+          ],
+          "maximum_constraint_violation": 3.469446951953614e-18
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "tolerance_pixels": 4,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 33.66394488169451,
+        "maximum_normalized_constraint_violation": 1.3237757455089925e-14,
+        "maximum_box_violation_pixels": 2.2737367544323206e-13,
+        "point_world": [
+          -2.1856452801112125,
+          -0.5923789915300817,
+          1.432799796145014
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 62.03808507950224,
+          "homogeneous_point_first_camera": [
+            0.4798794950393425,
+            -0.43368279253932784,
+            0.9982736469655991,
+            0.0
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 439.97481193716516,
+          "homogeneous_point_first_camera": [
+            0.4541202781385759,
+            -0.41797789610859143,
+            0.9635351690688588,
+            0.028833468764075696
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 1.1832857372778847,
+          "homogeneous_point_first_camera": [
+            0.4541202781385759,
+            -0.41797789610859143,
+            0.9635351690688588,
+            0.028833468764075696
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 23.00000361106666,
+          "homogeneous_point_first_camera": [
+            0.4791242104879692,
+            -0.4223353775762892,
+            0.9971002362897045,
+            0.0
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        }
+      }
+    },
+    {
+      "slot": 4,
+      "tolerance_pixels": 4,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 45.236705413014356,
+        "maximum_normalized_constraint_violation": 1.0426862876256996e-14,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          0.8677589140936746,
+          -1.1160429653836026,
+          -0.005473018299404275
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -161.97806178937094,
+          "homogeneous_point_first_camera": [
+            -0.8295679987416643,
+            -0.1963095432611129,
+            2.0727002672660197,
+            0.04593800844313541
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 567.625159796904,
+          "homogeneous_point_first_camera": [
+            -0.8098210737664083,
+            -0.18023330416148442,
+            1.9505418658946174,
+            0.09831702065360601
+          ],
+          "maximum_constraint_violation": 4.985860256816519e-17
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 340.61449059404015,
+          "homogeneous_point_first_camera": [
+            -0.8098210737664083,
+            -0.18023330416148442,
+            1.9505418658946174,
+            0.09831702065360601
+          ],
+          "maximum_constraint_violation": 4.985860256816519e-17
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 405.3976418882524,
+          "homogeneous_point_first_camera": [
+            -0.827169820086728,
+            -0.167781058495665,
+            2.066708346716314,
+            0.04547101263290209
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        }
+      }
+    },
+    {
+      "slot": 5,
+      "tolerance_pixels": 4,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 45.21890932420257,
+        "maximum_normalized_constraint_violation": 6.585182432680261e-15,
+        "maximum_box_violation_pixels": 1.1368683772161603e-13,
+        "point_world": [
+          -0.7226295715990757,
+          -1.0098226573362852,
+          -0.06776792259491793
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 203.21659469897347,
+          "homogeneous_point_first_camera": [
+            -0.021065093635486407,
+            -0.06719735509583938,
+            1.3405858392126302,
+            0.02964657616133828
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 724.4259506708399,
+          "homogeneous_point_first_camera": [
+            -0.03932446872998085,
+            -0.07784923007854398,
+            1.2827888799082205,
+            0.06907570214554995
+          ],
+          "maximum_constraint_violation": 6.938893903907228e-18
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 242.85048562086013,
+          "homogeneous_point_first_camera": [
+            -0.03932446872998085,
+            -0.07784923007854398,
+            1.2827888799082205,
+            0.06907570214554995
+          ],
+          "maximum_constraint_violation": 6.938893903907228e-18
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 284.62191904443404,
+          "homogeneous_point_first_camera": [
+            -0.021065093635486407,
+            -0.06719735509583938,
+            1.3405858392126302,
+            0.02964657616133828
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        }
+      }
+    },
+    {
+      "slot": 6,
+      "tolerance_pixels": 4,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 46.88419991326936,
+        "maximum_normalized_constraint_violation": 3.1312682393157685e-15,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          -1.5274954732406758,
+          -1.1550325823947363,
+          -0.07426369535901012
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 284.3171864272958,
+          "homogeneous_point_first_camera": [
+            0.19873350339637477,
+            -0.06969694433050924,
+            1.1491107435831376,
+            0.02450955216701711
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 756.6271433508157,
+          "homogeneous_point_first_camera": [
+            0.174296636317058,
+            -0.07868493881226574,
+            1.1031196998009678,
+            0.06062835705194529
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 201.5988476233424,
+          "homogeneous_point_first_camera": [
+            0.174296636317058,
+            -0.07868493881226574,
+            1.1031196998009678,
+            0.06062835705194529
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 237.6926089308223,
+          "homogeneous_point_first_camera": [
+            0.19873350339637477,
+            -0.06969694433050924,
+            1.1491107435831376,
+            0.02450955216701711
+          ],
+          "maximum_constraint_violation": 0.0
+        }
+      }
+    },
+    {
+      "slot": 7,
+      "tolerance_pixels": 4,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 50.12668173253684,
+        "maximum_normalized_constraint_violation": 6.813034676667944e-15,
+        "maximum_box_violation_pixels": 1.7053025658242404e-13,
+        "point_world": [
+          -2.690359832192697,
+          -1.4340726299961428,
+          -0.11567074678958833
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 355.1629362524134,
+          "homogeneous_point_first_camera": [
+            0.4036202919484918,
+            -0.0724094754015817,
+            0.9713528759591504,
+            0.019377960846122415
+          ],
+          "maximum_constraint_violation": 1.0619650536750892e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 786.1241906575891,
+          "homogeneous_point_first_camera": [
+            0.3744748336169148,
+            -0.07927241008496497,
+            0.934827480278936,
+            0.05265948370354734
+          ],
+          "maximum_constraint_violation": 3.8163916471489756e-17
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 163.09504146057344,
+          "homogeneous_point_first_camera": [
+            0.3744748336169148,
+            -0.07927241008496497,
+            0.934827480278936,
+            0.05265948370354734
+          ],
+          "maximum_constraint_violation": 3.8163916471489756e-17
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 194.11168411176817,
+          "homogeneous_point_first_camera": [
+            0.4036202919484918,
+            -0.0724094754015817,
+            0.9713528759591504,
+            0.019377960846122415
+          ],
+          "maximum_constraint_violation": 1.0619650536750892e-17
+        }
+      }
+    },
+    {
+      "slot": 8,
+      "tolerance_pixels": 4,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 31.315416520377944,
+        "maximum_normalized_constraint_violation": 1.1102230246251565e-16,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          0.5332907825572553,
+          0.6995956244572288,
+          -0.6551210827171208
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 227.5099262853886,
+          "homogeneous_point_first_camera": [
+            -0.8835626480265228,
+            0.7531419354678223,
+            1.9360730777448394,
+            0.061436572932837774
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 883.2825973132755,
+          "homogeneous_point_first_camera": [
+            -0.862821368868682,
+            0.7156563042837784,
+            1.830685501117636,
+            0.10923204776733118
+          ],
+          "maximum_constraint_violation": 4.163336342344337e-17
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 786.1138398865843,
+          "homogeneous_point_first_camera": [
+            -0.862821368868682,
+            0.7156563042837784,
+            1.830685501117636,
+            0.10923204776733118
+          ],
+          "maximum_constraint_violation": 4.163336342344337e-17
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 867.4872631858179,
+          "homogeneous_point_first_camera": [
+            -0.8818265931911806,
+            0.7705787193136631,
+            1.9322690135557274,
+            0.06109616405776342
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        }
+      }
+    },
+    {
+      "slot": 9,
+      "tolerance_pixels": 4,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 24.37281163139192,
+        "maximum_normalized_constraint_violation": 4.071085364673949e-15,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          -0.27210456283055856,
+          0.9565058929879724,
+          0.26726493072130775
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 341.52555398431775,
+          "homogeneous_point_first_camera": [
+            -0.32604670655342916,
+            0.3016053641230572,
+            1.5222854378118775,
+            0.04910941580964316
+          ],
+          "maximum_constraint_violation": 2.0816681711721685e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 893.8148290494075,
+          "homogeneous_point_first_camera": [
+            -0.3328890978071822,
+            0.27451279867959766,
+            1.452874480105053,
+            0.09052008337497704
+          ],
+          "maximum_constraint_violation": 2.1276612331238645e-17
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 463.6281579893664,
+          "homogeneous_point_first_camera": [
+            -0.3328890978071822,
+            0.27451279867959766,
+            1.452874480105053,
+            0.09052008337497704
+          ],
+          "maximum_constraint_violation": 2.1276612331238645e-17
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 518.2516695620207,
+          "homogeneous_point_first_camera": [
+            -0.32604670655342916,
+            0.3016053641230572,
+            1.5222854378118775,
+            0.04910941580964316
+          ],
+          "maximum_constraint_violation": 2.0816681711721685e-17
+        }
+      }
+    },
+    {
+      "slot": 10,
+      "tolerance_pixels": 4,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 41.640493669076,
+        "maximum_normalized_constraint_violation": 0.0,
+        "maximum_box_violation_pixels": 0.0,
+        "point_world": [
+          -1.8745889863255851,
+          -0.2558942293103392,
+          -0.6987749195117059
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 408.6267638341201,
+          "homogeneous_point_first_camera": [
+            0.29162322183616757,
+            0.1959700585145009,
+            1.020127427769566,
+            0.024498447013541338
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 840.7303815930594,
+          "homogeneous_point_first_camera": [
+            0.2659803895357996,
+            0.18022415116364068,
+            0.9817407954352166,
+            0.05783496606725525
+          ],
+          "maximum_constraint_violation": 2.0816681711721685e-17
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 311.6647521052569,
+          "homogeneous_point_first_camera": [
+            0.2659803895357996,
+            0.18022415116364068,
+            0.9817407954352166,
+            0.05783496606725525
+          ],
+          "maximum_constraint_violation": 2.0816681711721685e-17
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 347.9579227387086,
+          "homogeneous_point_first_camera": [
+            0.29162322183616757,
+            0.1959700585145009,
+            1.020127427769566,
+            0.024498447013541338
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        }
+      }
+    },
+    {
+      "slot": 11,
+      "tolerance_pixels": 4,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 49.1699688190324,
+        "maximum_normalized_constraint_violation": 1.2212453270876722e-15,
+        "maximum_box_violation_pixels": 0.0,
+        "point_world": [
+          -2.293999658661476,
+          -0.6286048159848545,
+          -1.4189432648167488
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 386.79449561331614,
+          "homogeneous_point_first_camera": [
+            0.32591555483311907,
+            0.26126861603789303,
+            0.9864808613093862,
+            0.020062670060663694
+          ],
+          "maximum_constraint_violation": 8.326672684688674e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 811.2872060503922,
+          "homogeneous_point_first_camera": [
+            0.2996290778428694,
+            0.24422500655815982,
+            0.9498768025956548,
+            0.052893877514213816
+          ],
+          "maximum_constraint_violation": 2.7755575615628914e-17
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 340.7138912934613,
+          "homogeneous_point_first_camera": [
+            0.2996290778428694,
+            0.24422500655815982,
+            0.9498768025956548,
+            0.052893877514213816
+          ],
+          "maximum_constraint_violation": 2.7755575615628914e-17
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 376.9796645842166,
+          "homogeneous_point_first_camera": [
+            0.32591555483311907,
+            0.26126861603789303,
+            0.9864808613093862,
+            0.020062670060663694
+          ],
+          "maximum_constraint_violation": 8.326672684688674e-17
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "tolerance_pixels": 8,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 165.10024620348932,
+        "maximum_normalized_constraint_violation": 0.0,
+        "maximum_box_violation_pixels": 1.4210854715202004e-14,
+        "point_world": [
+          6.055708880262618,
+          -12.42767249665194,
+          -2.638272563397318
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -920.2086164817978,
+          "homogeneous_point_first_camera": [
+            -1.1832104965607413,
+            -0.6669194293252736,
+            2.5328400458744604,
+            0.015981652116831915
+          ],
+          "maximum_constraint_violation": 4.440892098500626e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 792.0727484739427,
+          "homogeneous_point_first_camera": [
+            -1.096125135952347,
+            -0.5732308389999544,
+            2.205341460639997,
+            0.13590701221829787
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 173.23828866302546,
+          "homogeneous_point_first_camera": [
+            -1.096125135952347,
+            -0.5732308389999544,
+            2.205341460639997,
+            0.13590701221829787
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 307.1864643303586,
+          "homogeneous_point_first_camera": [
+            -1.1744932242192805,
+            -0.5914415832841424,
+            2.5141794131794124,
+            0.01507127640639164
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "tolerance_pixels": 8,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 27.74570758535873,
+        "maximum_normalized_constraint_violation": 1.0071435611633816e-14,
+        "maximum_box_violation_pixels": 2.0605739337042905e-13,
+        "point_world": [
+          -0.004098015290497914,
+          0.005077950480422366,
+          1.3436193875080131
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -463.6141666407159,
+          "homogeneous_point_first_camera": [
+            -0.5032214931904002,
+            -0.7861677109757772,
+            1.9259378930821418,
+            0.017079256223355484
+          ],
+          "maximum_constraint_violation": 3.2959746043559335e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 902.9068706192671,
+          "homogeneous_point_first_camera": [
+            -0.49998562148652054,
+            -0.6980828993920625,
+            1.7171566140078423,
+            0.1159246131956495
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -6.374689554581721,
+          "homogeneous_point_first_camera": [
+            -0.49998562148652054,
+            -0.6980828993920625,
+            1.7171566140078423,
+            0.1159246131956495
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 80.48942796864378,
+          "homogeneous_point_first_camera": [
+            -0.5005853684316621,
+            -0.7306307691204945,
+            1.9158488713840471,
+            0.016320354006985775
+          ],
+          "maximum_constraint_violation": 0.0
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "tolerance_pixels": 8,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 22.688619390175866,
+        "maximum_normalized_constraint_violation": 9.446629307182739e-15,
+        "maximum_box_violation_pixels": 2.4158453015843406e-13,
+        "point_world": [
+          -0.8293936504538869,
+          0.4614237804137553,
+          1.515265373790919
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -253.0779019319695,
+          "homogeneous_point_first_camera": [
+            0.08743135380632754,
+            -0.6296063860229854,
+            1.390872159973263,
+            0.0
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 524.2748617632529,
+          "homogeneous_point_first_camera": [
+            0.06642106220954154,
+            -0.5836137531621618,
+            1.291390405901593,
+            0.05745591394801133
+          ],
+          "maximum_constraint_violation": 6.938893903907228e-18
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -20.606164295819042,
+          "homogeneous_point_first_camera": [
+            0.06642106220954154,
+            -0.5836137531621618,
+            1.291390405901593,
+            0.05745591394801133
+          ],
+          "maximum_constraint_violation": 6.938893903907228e-18
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 30.397907889374494,
+          "homogeneous_point_first_camera": [
+            0.08653649358464455,
+            -0.5910118514777886,
+            1.3853440475310606,
+            0.0
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "tolerance_pixels": 8,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 20.840737214527707,
+        "maximum_normalized_constraint_violation": 9.646655467819978e-15,
+        "maximum_box_violation_pixels": 3.410605131648481e-13,
+        "point_world": [
+          -1.598972609081367,
+          0.6650359837395587,
+          1.5360383609060237
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 56.477121338604775,
+          "homogeneous_point_first_camera": [
+            0.4751808880963982,
+            -0.4438910698103797,
+            1.0042676536568051,
+            0.0
+          ],
+          "maximum_constraint_violation": 2.0816681711721685e-17
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 660.7277176590147,
+          "homogeneous_point_first_camera": [
+            0.43829488095046526,
+            -0.4167703283504767,
+            0.9449363746321775,
+            0.045847829509689776
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -12.11871105885939,
+          "homogeneous_point_first_camera": [
+            0.43829488095046526,
+            -0.4167703283504767,
+            0.9449363746321775,
+            0.045847829509689776
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 27.102901850725885,
+          "homogeneous_point_first_camera": [
+            0.4733901097746309,
+            -0.41674700945845106,
+            1.0014461180774192,
+            0.0
+          ],
+          "maximum_constraint_violation": 0.0
+        }
+      }
+    },
+    {
+      "slot": 4,
+      "tolerance_pixels": 8,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 125.86319189682357,
+        "maximum_normalized_constraint_violation": 0.0,
+        "maximum_box_violation_pixels": 1.4210854715202004e-14,
+        "point_world": [
+          3.5597128261120767,
+          -7.908576550459668,
+          -3.188969022098802
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -561.1411041020577,
+          "homogeneous_point_first_camera": [
+            -0.8413604240768809,
+            -0.21877809681805613,
+            2.1421507474776638,
+            0.01756045845410671
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 903.6011573908584,
+          "homogeneous_point_first_camera": [
+            -0.8017183711040435,
+            -0.18637481791234148,
+            1.8968913837959482,
+            0.12271383332960228
+          ],
+          "maximum_constraint_violation": 6.234832539032277e-17
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 310.49020658001643,
+          "homogeneous_point_first_camera": [
+            -0.8017183711040435,
+            -0.18637481791234148,
+            1.8968913837959482,
+            0.12271383332960228
+          ],
+          "maximum_constraint_violation": 6.234832539032277e-17
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 441.01128065552524,
+          "homogeneous_point_first_camera": [
+            -0.8363594996077856,
+            -0.160037198162094,
+            2.1294181137775396,
+            0.016773144880646795
+          ],
+          "maximum_constraint_violation": 0.0
+        }
+      }
+    },
+    {
+      "slot": 5,
+      "tolerance_pixels": 8,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 157.7342904700604,
+        "maximum_normalized_constraint_violation": 5.440092820663267e-15,
+        "maximum_box_violation_pixels": 2.842170943040401e-14,
+        "point_world": [
+          -0.9318697766243046,
+          -10.176314016033203,
+          -4.630900480261138
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -73.76872090644297,
+          "homogeneous_point_first_camera": [
+            -0.011342155660609173,
+            -0.09790459208074886,
+            1.3760911526618698,
+            0.009300050180863014
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 970.1319119584226,
+          "homogeneous_point_first_camera": [
+            -0.04786940723019208,
+            -0.08325395924435172,
+            1.2555416634794145,
+            0.0876664134330399
+          ],
+          "maximum_constraint_violation": 4.253472004818444e-18
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 222.95074452196155,
+          "homogeneous_point_first_camera": [
+            -0.04786940723019208,
+            -0.08325395924435172,
+            1.2555416634794145,
+            0.0876664134330399
+          ],
+          "maximum_constraint_violation": 4.253472004818444e-18
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 307.2989150578412,
+          "homogeneous_point_first_camera": [
+            -0.011300875237379023,
+            -0.06054482895352741,
+            1.3710827903289111,
+            0.00869235716750601
+          ],
+          "maximum_constraint_violation": 1.734723475976807e-18
+        }
+      }
+    },
+    {
+      "slot": 6,
+      "tolerance_pixels": 8,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 216.40919267513237,
+        "maximum_normalized_constraint_violation": 1.2212453270876722e-15,
+        "maximum_box_violation_pixels": 1.1368683772161603e-13,
+        "point_world": [
+          -4.732954911408361,
+          -15.005809672667645,
+          -6.719634189542378
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 34.86403173215717,
+          "homogeneous_point_first_camera": [
+            0.21168134287731943,
+            -0.06438380986487453,
+            1.1732924311099584,
+            0.005421638594027962
+          ],
+          "maximum_constraint_violation": 1.8097072532370942e-18
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 980.4256804203094,
+          "homogeneous_point_first_camera": [
+            0.16277277481451166,
+            -0.0831886485054702,
+            1.081314420446755,
+            0.07774412285599136
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 184.36060600775465,
+          "homogeneous_point_first_camera": [
+            0.16277277481451166,
+            -0.0831886485054702,
+            1.081314420446755,
+            0.07774412285599136
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 257.03892239155664,
+          "homogeneous_point_first_camera": [
+            0.21168134287731943,
+            -0.06438380986487453,
+            1.1732924311099584,
+            0.005421638594027962
+          ],
+          "maximum_constraint_violation": 1.8097072532370942e-18
+        }
+      }
+    },
+    {
+      "slot": 7,
+      "tolerance_pixels": 8,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 533.4390947499642,
+        "maximum_normalized_constraint_violation": 2.7644553313166398e-14,
+        "maximum_box_violation_pixels": 0.0,
+        "point_world": [
+          -22.420285460072257,
+          -41.063194442620755,
+          -18.228288131603005
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 128.4924440436218,
+          "homogeneous_point_first_camera": [
+            0.4189489903622898,
+            -0.06781973090658798,
+            0.990435074637603,
+            0.0018566975768843695
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 991.2394948815382,
+          "homogeneous_point_first_camera": [
+            0.36065818813947065,
+            -0.08290787113248935,
+            0.9174468726848177,
+            0.06850314950318823
+          ],
+          "maximum_constraint_violation": 1.3877787807814457e-17
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 148.13334970539654,
+          "homogeneous_point_first_camera": [
+            0.36065818813947065,
+            -0.08290787113248935,
+            0.9174468726848177,
+            0.06850314950318823
+          ],
+          "maximum_constraint_violation": 1.3877787807814457e-17
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 210.9286658801584,
+          "homogeneous_point_first_camera": [
+            0.4189489903622898,
+            -0.06781973090658798,
+            0.990435074637603,
+            0.0018566975768843695
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        }
+      }
+    },
+    {
+      "slot": 8,
+      "tolerance_pixels": 8,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 55.24872645553981,
+        "maximum_normalized_constraint_violation": 3.9968028886505635e-15,
+        "maximum_box_violation_pixels": 0.0,
+        "point_world": [
+          1.4324629062672412,
+          -0.8535737297213744,
+          -2.462841345032663
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": -128.29842551516094,
+          "homogeneous_point_first_camera": [
+            -0.8959219883899959,
+            0.7608657469400019,
+            1.9958280221093696,
+            0.03577077594988032
+          ],
+          "maximum_constraint_violation": 1.1102230246251565e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 1187.4106824036564,
+          "homogeneous_point_first_camera": [
+            -0.8538858966242189,
+            0.6900584769853356,
+            1.7834560020161363,
+            0.13157019661118546
+          ],
+          "maximum_constraint_violation": 5.2819215856540235e-17
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 748.2697423478585,
+          "homogeneous_point_first_camera": [
+            -0.8538858966242189,
+            0.6900584769853356,
+            1.7834560020161363,
+            0.13157019661118546
+          ],
+          "maximum_constraint_violation": 5.2819215856540235e-17
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 911.3092348368539,
+          "homogeneous_point_first_camera": [
+            -0.8919545283717061,
+            0.8000950249837897,
+            1.9869897884420267,
+            0.035120246150938485
+          ],
+          "maximum_constraint_violation": 6.306783225521979e-19
+        }
+      }
+    },
+    {
+      "slot": 9,
+      "tolerance_pixels": 8,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 57.554672837470726,
+        "maximum_normalized_constraint_violation": 0.0,
+        "maximum_box_violation_pixels": 0.0,
+        "point_world": [
+          0.24829118569775943,
+          -1.4068957810698794,
+          -1.7530663032284612
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 46.28044918340976,
+          "homogeneous_point_first_camera": [
+            -0.3235238766408706,
+            0.27993741818976536,
+            1.5650999295752612,
+            0.027634044563071638
+          ],
+          "maximum_constraint_violation": 2.220446049250313e-16
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 1153.043092299537,
+          "homogeneous_point_first_camera": [
+            -0.3360226014729272,
+            0.26172229306490874,
+            1.4202407526785337,
+            0.10995430558562251
+          ],
+          "maximum_constraint_violation": 5.551115123125783e-17
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 437.93744262341806,
+          "homogeneous_point_first_camera": [
+            -0.3360226014729272,
+            0.26172229306490874,
+            1.4202407526785337,
+            0.10995430558562251
+          ],
+          "maximum_constraint_violation": 5.551115123125783e-17
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 547.3242374303774,
+          "homogeneous_point_first_camera": [
+            -0.32231283701044733,
+            0.31597248923421567,
+            1.5592413263093503,
+            0.027023283050958625
+          ],
+          "maximum_constraint_violation": 0.0
+        }
+      }
+    },
+    {
+      "slot": 10,
+      "tolerance_pixels": 8,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 149.4067645911406,
+        "maximum_normalized_constraint_violation": 1.3516965324811281e-14,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          -5.063080235028998,
+          -7.854492897137603,
+          -7.050002359838474
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 181.35015475660845,
+          "homogeneous_point_first_camera": [
+            0.30515820477485167,
+            0.20419308194427527,
+            1.040286802750063,
+            0.006962782479072289
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 1046.2609777201803,
+          "homogeneous_point_first_camera": [
+            0.2538277310558629,
+            0.17267942585234747,
+            0.9634530376215379,
+            0.07369019328632742
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 294.3655666550955,
+          "homogeneous_point_first_camera": [
+            0.2538277310558629,
+            0.17267942585234747,
+            0.9634530376215379,
+            0.07369019328632742
+          ],
+          "maximum_constraint_violation": 0.0
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 367.00850503049224,
+          "homogeneous_point_first_camera": [
+            0.30515820477485167,
+            0.20419308194427527,
+            1.040286802750063,
+            0.006962782479072289
+          ],
+          "maximum_constraint_violation": 0.0
+        }
+      }
+    },
+    {
+      "slot": 11,
+      "tolerance_pixels": 8,
+      "query_frame": 89,
+      "status": "checked",
+      "scope": "query-positive closure bounds; not a visibility certificate",
+      "coordinate_scale": 0.09094355392219935,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.09094355392219935,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 358.021733926696,
+        "maximum_normalized_constraint_violation": 4.424238753131249e-14,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          -12.663814773793117,
+          -21.41916016861574,
+          -21.344783380081303
+        ]
+      },
+      "bounds": {
+        "x_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 163.72938829278573,
+          "homogeneous_point_first_camera": [
+            0.33977423496110964,
+            0.27016527266320406,
+            1.0056863470338437,
+            0.002809009207356665
+          ],
+          "maximum_constraint_violation": 1.734723475976807e-18
+        },
+        "x_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 1013.380584805666,
+          "homogeneous_point_first_camera": [
+            0.28715717510907285,
+            0.23605508809687836,
+            0.9324226824304706,
+            0.06852299960245493
+          ],
+          "maximum_constraint_violation": 5.551115123125783e-17
+        },
+        "y_lower": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 323.4121217785726,
+          "homogeneous_point_first_camera": [
+            0.28715717510907285,
+            0.23605508809687836,
+            0.9324226824304706,
+            0.06852299960245493
+          ],
+          "maximum_constraint_violation": 5.551115123125783e-17
+        },
+        "y_upper": {
+          "solver_status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "status": "finite",
+          "pixel": 395.9980973767009,
+          "homogeneous_point_first_camera": [
+            0.33977423496110964,
+            0.27016527266320406,
+            1.0056863470338437,
+            0.002809009207356665
+          ],
+          "maximum_constraint_violation": 1.734723475976807e-18
+        }
+      }
+    }
+  ]
+}
