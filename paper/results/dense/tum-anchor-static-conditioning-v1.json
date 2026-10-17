@@ -1,0 +1,333 @@
+{
+  "status": "complete",
+  "sequence": "rgbd_dataset_freiburg3_walking_static",
+  "scope": "descriptive fitting geometry, not uncertainty calibration or camera failure",
+  "probe_sha256": "8a4fc7fb29c14285703bb8c47231f1544b69d3dfd84e846a7a7942100ddc768c",
+  "script_sha256": "a79c5ec67bf57292e83778122a5db4bcdeda309afb9e9ba6d60fe8d18b90b486",
+  "methods": {
+    "reference": {
+      "maximum_camera_center_displacement": 0.0790724903345108,
+      "translation_units": "reference dataset meters",
+      "anchors": [
+        {
+          "slot": 0,
+          "fit_status": "nonpositive_fit_depth",
+          "geometry": {
+            "eigenvalues": [
+              7.143547785837256e-05,
+              10.999952176376514,
+              10.999976388145626
+            ],
+            "smallest_to_largest_eigenvalue": 6.494148290659662e-06,
+            "maximum_world_ray_angle_from_first_degrees": 0.44219122762560437
+          }
+        },
+        {
+          "slot": 1,
+          "fit_status": "nonpositive_fit_depth",
+          "geometry": {
+            "eigenvalues": [
+              7.127035641829593e-05,
+              10.99995322220808,
+              10.9999755074355
+            ],
+            "smallest_to_largest_eigenvalue": 6.479137737181351e-06,
+            "maximum_world_ray_angle_from_first_degrees": 0.43715799438084246
+          }
+        },
+        {
+          "slot": 2,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              7.879406908806175e-05,
+              10.99994736229366,
+              10.999973843637248
+            ],
+            "smallest_to_largest_eigenvalue": 7.163114222643254e-06,
+            "maximum_world_ray_angle_from_first_degrees": 0.4133420170608825
+          }
+        },
+        {
+          "slot": 3,
+          "fit_status": "nonpositive_fit_depth",
+          "geometry": {
+            "eigenvalues": [
+              0.00012753750165828137,
+              10.99992561310453,
+              10.999946849393814
+            ],
+            "smallest_to_largest_eigenvalue": 1.1594374355118791e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.4755494741454629
+          }
+        },
+        {
+          "slot": 4,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00015729245451723273,
+              10.999859260110616,
+              10.999983447434872
+            ],
+            "smallest_to_largest_eigenvalue": 1.4299335564355996e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.640406157150292
+          }
+        },
+        {
+          "slot": 5,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00010399890341972196,
+              10.999919315109317,
+              10.999976685987257
+            ],
+            "smallest_to_largest_eigenvalue": 9.454465803750744e-06,
+            "maximum_world_ray_angle_from_first_degrees": 0.37599131980162565
+          }
+        },
+        {
+          "slot": 6,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00012820389414613942,
+              10.999903038655264,
+              10.999968757450597
+            ],
+            "smallest_to_largest_eigenvalue": 1.165493257054055e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.4591200297986334
+          }
+        },
+        {
+          "slot": 7,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00011613212148731122,
+              10.999926770663027,
+              10.999957097215484
+            ],
+            "smallest_to_largest_eigenvalue": 1.055750676670446e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.40870047228657386
+          }
+        },
+        {
+          "slot": 8,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00014367231603351627,
+              10.999866249567114,
+              10.99999007811686
+            ],
+            "smallest_to_largest_eigenvalue": 1.3061131420412355e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.48468384664275177
+          }
+        },
+        {
+          "slot": 9,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00011917944092232345,
+              10.999890005238207,
+              10.999990815320867
+            ],
+            "smallest_to_largest_eigenvalue": 1.083450367579666e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.42932911177473143
+          }
+        },
+        {
+          "slot": 10,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.0002060989277303804,
+              10.999823931495444,
+              10.99996996957683
+            ],
+            "smallest_to_largest_eigenvalue": 1.873631730817435e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.6712013916541852
+          }
+        },
+        {
+          "slot": 11,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00019505768349503683,
+              10.999836834300734,
+              10.999968108015779
+            ],
+            "smallest_to_largest_eigenvalue": 1.7732568092892605e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.6334231843956998
+          }
+        }
+      ]
+    },
+    "dage": {
+      "maximum_camera_center_displacement": 0.07868267595767975,
+      "translation_units": "unscaled model units; do not compare to reference meters",
+      "anchors": [
+        {
+          "slot": 0,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              1.4417172952917639e-05,
+              10.99998852453515,
+              10.999997058291896
+            ],
+            "smallest_to_largest_eigenvalue": 1.3106524371340486e-06,
+            "maximum_world_ray_angle_from_first_degrees": 0.18522944418420348
+          }
+        },
+        {
+          "slot": 1,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              1.822315858390766e-05,
+              10.999984838409514,
+              10.999996938431899
+            ],
+            "smallest_to_largest_eigenvalue": 1.6566512414416597e-06,
+            "maximum_world_ray_angle_from_first_degrees": 0.2387670631057017
+          }
+        },
+        {
+          "slot": 2,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              2.372146209772552e-05,
+              10.999980030277635,
+              10.999996248260267
+            ],
+            "smallest_to_largest_eigenvalue": 2.156497289849281e-06,
+            "maximum_world_ray_angle_from_first_degrees": 0.26119428416195833
+          }
+        },
+        {
+          "slot": 3,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              1.7390356775948135e-05,
+              10.999986325553246,
+              10.999996284089976
+            ],
+            "smallest_to_largest_eigenvalue": 1.5809420591442344e-06,
+            "maximum_world_ray_angle_from_first_degrees": 0.2325266707036695
+          }
+        },
+        {
+          "slot": 4,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.0002664560201086602,
+              10.999742648728574,
+              10.999990895251313
+            ],
+            "smallest_to_largest_eigenvalue": 2.4223294605060906e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.8798067720909888
+          }
+        },
+        {
+          "slot": 5,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00012069588612817483,
+              10.999887892581604,
+              10.999991411532264
+            ],
+            "smallest_to_largest_eigenvalue": 1.0972361851268234e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.5376526627180922
+          }
+        },
+        {
+          "slot": 6,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00014861331236026837,
+              10.999860063103927,
+              10.999991323583716
+            ],
+            "smallest_to_largest_eigenvalue": 1.351031178012341e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.5972204927243542
+          }
+        },
+        {
+          "slot": 7,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00012287233652763494,
+              10.999884449093072,
+              10.999992678570402
+            ],
+            "smallest_to_largest_eigenvalue": 1.1170219846328467e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.551417726596521
+          }
+        },
+        {
+          "slot": 8,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00021043890491512202,
+              10.999807030566496,
+              10.999982530528587
+            ],
+            "smallest_to_largest_eigenvalue": 1.9130839920071192e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.7197470066475109
+          }
+        },
+        {
+          "slot": 9,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00016777919543642383,
+              10.999852869110704,
+              10.999979351693858
+            ],
+            "smallest_to_largest_eigenvalue": 1.5252682761680635e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.7164304794532642
+          }
+        },
+        {
+          "slot": 10,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.0002642384271833713,
+              10.999753265673604,
+              10.999982495899213
+            ],
+            "smallest_to_largest_eigenvalue": 2.402171342380583e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.7989331469686294
+          }
+        },
+        {
+          "slot": 11,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.0002415277208083201,
+              10.999772075161466,
+              10.999986397117722
+            ],
+            "smallest_to_largest_eigenvalue": 2.1957092680733364e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.7496897992090455
+          }
+        }
+      ]
+    }
+  }
+}

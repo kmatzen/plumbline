@@ -302,6 +302,28 @@ compare small missing-data cases against exhaustive binary completions.
 
 #### Early-fit image anchors with a reference-camera control
 
+The same unmodified probe was also run on the retained 90-frame TUM
+walking-static clip (`tum-anchor-static-v1.json`). Reference cameras support nine
+fits and 302 later measurements; three fits have nonpositive depth. DAGE supports
+12 fits and 392 later measurements. On the 302 common observations, reference,
+DAGE, and the later five-degree reference-yaw control have medians of 10.683,
+1.191, and 59.119 pixels. These are not evidence that DAGE is more accurate than
+the reference. All 90 source-image hashes were verified; no image regions were
+certified static. The source clip's name is not a zero-motion ground-truth label.
+
+`analyze_anchor_conditioning.py` records the fitting-ray normal-matrix eigenvalues
+and angles for every available early track. In walking-static, the median maximum
+angle from each first ray over the 11 fitting frames is 0.451 degrees using
+reference cameras, versus 3.128 degrees in walking-XYZ. Full-clip maximum reference
+center displacement from the first frame is 0.0791 m and 0.5771 m, respectively.
+Model translations are recorded in unscaled model units, not compared to meters.
+These descriptive measurements are consistent with weaker point-depth constraints
+in the stationary-camera case, but do not isolate conditioning from image-track
+error, independently moving features, calibration, or reference timing. No
+observability threshold or DNF decision is inferred from them. Per-slot geometry
+is retained in `tum-anchor-static-conditioning-v1.json` and
+`tum-anchor-xyz-conditioning-v1.json` in the dense results directory.
+
 `probe_tum_anchors.py` applies the fixed 4-by-3 first-frame feature grid and
 11-frame point fit to the retained 90-frame walking-XYZ run. All 90 source image
 hashes are verified. Dataset calibration is used for every camera variant;

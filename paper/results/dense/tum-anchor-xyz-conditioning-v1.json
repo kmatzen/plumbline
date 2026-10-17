@@ -1,0 +1,205 @@
+{
+  "status": "complete",
+  "sequence": "rgbd_dataset_freiburg3_walking_xyz",
+  "scope": "descriptive fitting geometry, not uncertainty calibration or camera failure",
+  "probe_sha256": "a504e6590fa4c64a59f53a3fa4b38d4759e11902fc52623150e30cf6da3e5e46",
+  "script_sha256": "a79c5ec67bf57292e83778122a5db4bcdeda309afb9e9ba6d60fe8d18b90b486",
+  "methods": {
+    "reference": {
+      "maximum_camera_center_displacement": 0.5770726799964905,
+      "translation_units": "reference dataset meters",
+      "anchors": [
+        {
+          "slot": 0,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 1,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.00013894684527571144,
+              10.999884690391573,
+              10.999976362763153
+            ],
+            "smallest_to_largest_eigenvalue": 1.2631558531895655e-05,
+            "maximum_world_ray_angle_from_first_degrees": 0.48484190209391087
+          }
+        },
+        {
+          "slot": 2,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 3,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 4,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 5,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 6,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.004483932776591609,
+              10.995559289526549,
+              10.999956777696855
+            ],
+            "smallest_to_largest_eigenvalue": 0.00040763185412537995,
+            "maximum_world_ray_angle_from_first_degrees": 3.559698450680286
+          }
+        },
+        {
+          "slot": 7,
+          "fit_status": "nonpositive_fit_depth",
+          "geometry": {
+            "eigenvalues": [
+              0.0036184928812366844,
+              10.997588674609002,
+              10.998792832509762
+            ],
+            "smallest_to_largest_eigenvalue": 0.00032899000247929913,
+            "maximum_world_ray_angle_from_first_degrees": 2.6968030489472885
+          }
+        },
+        {
+          "slot": 8,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 9,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 10,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.009114897700316425,
+              10.990923825166076,
+              10.999961277133604
+            ],
+            "smallest_to_largest_eigenvalue": 0.0008286299806585871,
+            "maximum_world_ray_angle_from_first_degrees": 5.097021521469634
+          }
+        },
+        {
+          "slot": 11,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        }
+      ]
+    },
+    "dage": {
+      "maximum_camera_center_displacement": 0.45664626359939575,
+      "translation_units": "unscaled model units; do not compare to reference meters",
+      "anchors": [
+        {
+          "slot": 0,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 1,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              4.4255870987441874e-05,
+              10.999958173553416,
+              10.999997570575596
+            ],
+            "smallest_to_largest_eigenvalue": 4.023261887422954e-06,
+            "maximum_world_ray_angle_from_first_degrees": 0.290881662352199
+          }
+        },
+        {
+          "slot": 2,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 3,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 4,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 5,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 6,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.004154033907256688,
+              10.995884347634806,
+              10.999961618457935
+            ],
+            "smallest_to_largest_eigenvalue": 0.00037764076379014083,
+            "maximum_world_ray_angle_from_first_degrees": 3.4728853162704247
+          }
+        },
+        {
+          "slot": 7,
+          "fit_status": "nonpositive_fit_depth",
+          "geometry": {
+            "eigenvalues": [
+              0.003853459348525588,
+              10.997548393988549,
+              10.998598146662927
+            ],
+            "smallest_to_largest_eigenvalue": 0.0003503591364227415,
+            "maximum_world_ray_angle_from_first_degrees": 2.606339821764914
+          }
+        },
+        {
+          "slot": 8,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 9,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        },
+        {
+          "slot": 10,
+          "fit_status": "fit",
+          "geometry": {
+            "eigenvalues": [
+              0.008693783003442628,
+              10.991338180740996,
+              10.99996803625556
+            ],
+            "smallest_to_largest_eigenvalue": 0.0007903462059878887,
+            "maximum_world_ray_angle_from_first_degrees": 5.043937519703902
+          }
+        },
+        {
+          "slot": 11,
+          "fit_status": "insufficient_early_background_track",
+          "geometry": null
+        }
+      ]
+    }
+  }
+}
