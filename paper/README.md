@@ -452,3 +452,24 @@ pdflatex main.tex
 
 The release PDF is built separately into `output/pdf/` so generated files do not
 need to be committed.
+
+## Direct reference-free baseline: ORE
+
+Chen et al., [Object Reprojection Error (NeurIPS 2023)](https://papers.nips.cc/paper_files/paper/2023/file/eb206443c93d07da8b1974b768d8a0d4-Paper-Datasets_and_Benchmarks.pdf)
+already evaluate trajectories without reference camera poses. This is a required
+comparison, not a novelty claim for this project.
+
+`src/plumbline/object_reprojection.py` is a development ORE-style kernel, not a
+verified reproduction. It uses a fixed first-box center, a supplied finite depth
+grid, normalized L1 distance outside boxes, and rejects depth hypotheses behind
+any observed camera. It reports depth-boundary solutions and unavailable cases.
+Synthetic tests check projection direction, depth recovery, coordinate/scale
+changes, and input rejection; they do not validate real-data ranking quality.
+The upstream implementation and its sampling, depth range, visibility, and
+aggregation rules must be checked before reporting published ORE reproduction.
+
+DAVIS segmentation objects cannot be assumed static. Intrinsics are also absent
+from our DAVIS inventory. Do not use arbitrary focal lengths or moving masks as
+ORE ground truth. An annotated static-track subset and an explicit calibration
+policy are needed. Predicted calibration would define an estimated-intrinsics
+variant and must be reported separately from known-intrinsics evaluation.

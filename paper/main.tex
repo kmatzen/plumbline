@@ -34,6 +34,8 @@ The contributions are:
 \end{enumerate}
 
 \section{Related Work}
+\paragraph{Evaluation without reference poses.} Object Reprojection Error (ORE) evaluates camera trajectories using static-object tracklets and camera intrinsics rather than reference camera poses \cite{chen2023ore}. Its EgoStatic benchmark applies this approach to existing egocentric videos. Thus, evaluation without pose ground truth is not itself our contribution. Our proposed extension concerns human-validated functional failure judgments with localized evidence and abstention. Demonstrating value beyond ORE remains necessary; the current experiments do not establish that result.
+
 \paragraph{Camera metrics.} Trajectory benchmarks commonly use global alignment followed by ATE, local relative errors, or pairwise rotation and translation thresholds. Recent geometric models report several of these measures, including DUSt3R \cite{wang2023dustr}, MASt3R \cite{leroy2024mastr}, MonST3R \cite{zhang2024monstr}, CUT3R \cite{wang2025cut3r}, VGGT \cite{wang2025vggt}, and Depth Anything 3 \cite{yang2025depthanything3}. Multiple metrics help, but researchers still inspect outputs when the numbers disagree.
 
 \paragraph{Reproducible evaluation.} Clear protocols, reusable code, and retained artifacts improve reproducibility \cite{pineau2021improving}. Evaluation harnesses in language modeling have shown that small implementation choices can alter conclusions \cite{biderman2024lessons}. Our work applies the same principle to camera review: the render, gate, pairing, rubric, and aggregation rule are part of the measurement.
