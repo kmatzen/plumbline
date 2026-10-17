@@ -555,6 +555,19 @@ same training setup can fit a small class-balanced training-only subset before
 expanding the corpus or spending a larger training budget. Calibration remains
 unopened; the manuscript remains unchanged.
 
+**Fixed small-set learning diagnostic.** A separate run starts from the original
+base checkpoint at `/data3/kmatzen/plumbline/research/tapvid-memorization-v1/run`.
+The first three opaque IDs in each training class define nine examples, without
+using model predictions to select them. Each is presented twenty times in
+twenty balanced passes, shuffled with the pass index as seed: 180 updates total.
+Optimizer, adapter, image processing, loss masking, and fp32 quantized compute
+are unchanged. The final adapter generates labels for the nine examples with
+the same greedy decoding, without further updates. This tests small-set fit,
+not generalization; no validation or calibration export is read. The budget is
+fixed before execution, with no intermediate model selection. Completion and
+final generated labels are pending. A success would justify only that this
+setup can fit these examples, not a camera-quality metric.
+
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,
 collect verified data, then compare model training with the workflow held fixed.

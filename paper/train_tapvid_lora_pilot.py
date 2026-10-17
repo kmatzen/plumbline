@@ -54,12 +54,38 @@ def mask_prompt(full_ids, prompt_ids):
     return labels
 
 
-def run(corpus, checkpoint, output, steps, order="class_smoke", probe_index=None, compute_dtype="float16"):
+def memorization_schedule(rows, repeats):
+    if repeats != 20:
+        raise ValueError("memorization diagnostic has a fixed 20-pass budget")
+    selected = []
+    for label in ("close", "far", "occluded"):
+        candidates = sorted((r for r in rows if r["target"] == label), key=lambda r: r["id"])
+        if len(candidates) < 3:
+            raise ValueError("three training examples per class required")
+        selected.extend(candidates[:3])
+    schedule = []
+    for epoch in range(repeats):
+        block = selected.copy()
+        random.Random(epoch).shuffle(block)
+        schedule.extend(block)
+    return selected, schedule
+
+
+def run(corpus, checkpoint, output, steps, order="class_smoke", probe_index=None, compute_dtype="float16", memorization=False):
     if compute_dtype not in {"float16", "float32"}:
         raise ValueError("unsupported quantized compute dtype")
     if output.exists():
         raise ValueError("preserve prior training runs")
     rows = select_training(corpus, steps, order)
+    diagnostic_rows = None
+    if memorization:
+        if probe_index is not None:
+            raise ValueError("cannot combine memorization and arithmetic probe")
+        full_count = sum(r["partition"] == "train" and r["status"] == "labeled"
+                         for r in json.loads((corpus / "manifest.json").read_text())["records"])
+        if len(rows) != full_count:
+            raise ValueError("memorization selection requires the complete training pool")
+        diagnostic_rows, rows = memorization_schedule(rows, 20)
     if probe_index is not None:
         if not 0 <= probe_index < len(rows):
             raise ValueError("probe index outside selected training order")
@@ -76,6 +102,11 @@ def run(corpus, checkpoint, output, steps, order="class_smoke", probe_index=None
                                 "quantized_compute_dtype": compute_dtype,
                                 "target_modules": ["q_proj", "v_proj"], "visual_min_tokens": 576,
                                 "visual_max_tokens": 768, "batch_size": 1, "gradient_clip": 1.}}
+    if memorization:
+        report.update(scope="nine-example training-only memorization diagnostic; not generalization or camera evaluation",
+                      memorization_ids=[r["id"] for r in diagnostic_rows],
+                      policy="first three IDs per training class; 20 passes; each pass shuffled with its zero-based index as seed; no held-out examples or weight selection",
+                      memorization_predictions=[])
 
     def save():
         (output / "manifest.json").write_text(json.dumps(report, indent=2, allow_nan=False)+"\n")
@@ -162,7 +193,34 @@ def run(corpus, checkpoint, output, steps, order="class_smoke", probe_index=None
             print(json.dumps(item), flush=True)
         adapter = output / "adapter"
         model.save_pretrained(adapter)
-        report.update(status="complete", adapter_files={str(p.relative_to(adapter)): digest(p) for p in adapter.rglob("*") if p.is_file()})
+        report.update(adapter_files={str(p.relative_to(adapter)): digest(p) for p in adapter.rglob("*") if p.is_file()})
+        if diagnostic_rows is not None:
+            report["status"] = "checking_training_fit"
+            save()
+            model.gradient_checkpointing_disable()
+            model.eval()
+            with torch.inference_mode():
+                for row in diagnostic_rows:
+                    user = {"role": "user", "content": [{"type": "image"}, {"type": "text", "text": row["prompt"]}]}
+                    prompt = processor.apply_chat_template([user], tokenize=False, add_generation_prompt=True)
+                    with Image.open(corpus / row["image"]) as im:
+                        inputs = processor(text=[prompt], images=[im.convert("RGB")], return_tensors="pt")
+                    pixel_sha = hashlib.sha256(inputs["pixel_values"].numpy().tobytes()).hexdigest()
+                    inputs = inputs.to("cuda")
+                    generated = model.generate(**inputs, max_new_tokens=8, do_sample=False, use_cache=True,
+                                               return_dict_in_generate=True, output_scores=True)
+                    if any(torch.isnan(s).any() or torch.isposinf(s).any() for s in generated.scores):
+                        raise FloatingPointError("nonfinite diagnostic generation scores")
+                    raw = processor.batch_decode(generated.sequences[:, inputs["input_ids"].shape[1]:], skip_special_tokens=True)[0]
+                    parsed = raw.strip().lower()
+                    if parsed not in {"close", "far", "occluded", "uncertain"}:
+                        parsed = "invalid"
+                    item = dict(id=row["id"], target_for_scoring_only=row["target"], raw_response=raw,
+                                parsed=parsed, processed_pixel_sha256=pixel_sha)
+                    report["memorization_predictions"].append(item)
+                    save()
+                    print(json.dumps(item), flush=True)
+        report["status"] = "complete"
         save()
     except Exception as exc:
         report.update(status="failed", error=repr(exc), traceback=traceback.format_exc())
@@ -176,8 +234,9 @@ if __name__ == "__main__":
     for name in ("corpus", "checkpoint", "output"):
         parser.add_argument(name, type=Path)
     parser.add_argument("--steps", type=int, default=3)
+    parser.add_argument("--memorization", action="store_true", help="fixed nine-example, twenty-pass training-only diagnostic")
     parser.add_argument("--order", choices=("class_smoke", "seeded"), default="class_smoke")
     parser.add_argument("--probe-index", type=int, help="diagnose one indexed training example from the unchanged base")
     parser.add_argument("--compute-dtype", choices=("float16", "float32"), default="float16")
     args = parser.parse_args()
-    run(args.corpus, args.checkpoint, args.output, args.steps, args.order, args.probe_index, args.compute_dtype)
+    run(args.corpus, args.checkpoint, args.output, args.steps, args.order, args.probe_index, args.compute_dtype, args.memorization)

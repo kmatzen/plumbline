@@ -2,8 +2,24 @@ import pytest
 import torch
 import json
 
-from paper.train_tapvid_lora_pilot import digest, mask_prompt, select_training
+from paper.train_tapvid_lora_pilot import digest, mask_prompt, select_training, memorization_schedule
 from paper.evaluate_tapvid_lora import parse_label, select_evaluation
+
+
+def test_memorization_is_balanced_fixed_and_independent_of_input_order():
+    from collections import Counter
+    rows = [dict(id=f"{label}-{i}", target=label) for label in ("close", "far", "occluded") for i in range(5)]
+    selected, schedule = memorization_schedule(rows, 20)
+    assert len(selected) == 9 and len(schedule) == 180
+    assert Counter(r["target"] for r in selected) == dict(close=3, far=3, occluded=3)
+    assert all(n == 20 for n in Counter(r["id"] for r in schedule).values())
+    assert memorization_schedule(list(reversed(rows)), 20) == (selected, schedule)
+    for offset in range(0, 180, 9):
+        assert {r["id"] for r in schedule[offset:offset+9]} == {r["id"] for r in selected}
+    with pytest.raises(ValueError, match="fixed"):
+        memorization_schedule(rows, 21)
+    with pytest.raises(ValueError, match="three training"):
+        memorization_schedule(rows[:2], 20)
 
 
 def test_training_fit_reads_only_exact_training_partition(tmp_path):
