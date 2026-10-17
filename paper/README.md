@@ -100,6 +100,14 @@ The archive is being staged on Anima under `/data3/kmatzen/data/davis-downloads/
 Do not infer camera intrinsics, frame rate, or capture timestamps from filenames.
 Record ordered frame indices and mark unavailable calibration/timing explicitly.
 
+After the archive download completes, `stage_davis.py ARCHIVE NEW_OUTPUT`
+extracts only the official split lists and their JPEG frames. It refuses an
+existing output directory, overlapping splits, duplicate archive entries,
+unsafe paths, missing sequences, and ambiguous numeric frame order. Each frame
+and the complete archive receive a SHA-256 hash; unavailable camera poses,
+intrinsics, and capture timestamps remain null. The three unit tests use a
+synthetic archive and do not establish successful staging of the real release.
+
 Use DAVIS training sequences for evidence-design development. Reserve validation
 sequences for a frozen-protocol assessment; all windows, candidate methods, and
 variants of an original sequence must stay in the same partition. Do not choose
