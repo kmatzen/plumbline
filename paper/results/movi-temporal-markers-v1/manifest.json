@@ -1,0 +1,50 @@
+{
+  "status": "complete",
+  "scope": "development proposal-initialization comparison; not camera quality or DNF",
+  "policy": "same 64 fixed pixels and three query frames per method; CoTracker sees only frames 0..9; visibility-false prefix positions unavailable; no query frames or reference arrays enter fitting; all original IDs retained for pairing",
+  "script_sha256": "c7a5733c9bed1d0a963ac1ba662c6b12ab802b13361c3fa79368a4b5d266a907",
+  "checkpoint_sha256": "2670d4562ed69326dda775a26e54883925cd11b6fc9b24cb7aa9f8078bce7834",
+  "prior_sha256": "9248e1789eb5758a513364e510a25c7d38647b150e4fb9062e06a1beeda4063e",
+  "scenes": [
+    {
+      "sequence": "3835",
+      "file": "marker-geometry-3835-v1.json",
+      "sha256": "e9d537a1413aa5c2d6e1ed3315991ad7a6c92f331f4f5cd7bd67ea540ba844b1",
+      "counts": {
+        "renderable": 302,
+        "missing_prefix_observations": 66,
+        "query_outside_image": 16
+      }
+    },
+    {
+      "sequence": "5397",
+      "file": "marker-geometry-5397-v1.json",
+      "sha256": "a6249a8e3ae66b7aacfbe4e86c7ea4d32b4d0f6b77f454ded7cb17b268119da5",
+      "counts": {
+        "renderable": 318,
+        "missing_prefix_observations": 48,
+        "query_outside_image": 18
+      }
+    },
+    {
+      "sequence": "4385",
+      "file": "marker-geometry-4385-v1.json",
+      "sha256": "d225eeefb123f91e354b303c254f1a3813db6c34e408aedde8a40cce59f52189",
+      "counts": {
+        "renderable": 324,
+        "missing_prefix_observations": 60
+      }
+    },
+    {
+      "sequence": "4970",
+      "file": "marker-geometry-4970-v1.json",
+      "sha256": "50eeff83e9f0461530f125c2c489cfbab79b4ad550118d9de30d974ced3430a1",
+      "counts": {
+        "query_outside_image": 17,
+        "renderable": 199,
+        "missing_prefix_observations": 150,
+        "nonpositive_prefix_depth": 18
+      }
+    }
+  ]
+}

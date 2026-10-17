@@ -4449,3 +4449,29 @@ training is not justified as the main contribution without evidence of an
 advantage over this baseline. The remaining research target is task-level
 camera failure with staticness and evidence sufficiency handled explicitly;
 accurate tracking of a moving object is not evidence of a correct camera.
+
+### Prefix-only temporal marker initialization
+
+`build_movi_temporal_markers.py` replaces the early LK observations with an
+independent CoTracker run on frames 0..9 only. The fixed 64 source pixels,
+predicted cameras/intrinsics, fitting helper, and query frames are unchanged.
+Visibility-false prefix observations remain missing. All 1,536 original IDs
+are retained for pairing, but these are new proposals and must never be joined
+to old VLM answers as if their image inputs were unchanged.
+
+The alternative produces 1,143 renderable proposals versus the original 944.
+Per-scene renderable counts are 302, 318, 324, and 199. This does not establish
+better accuracy or coverage of the needed motion cases. Repeating the separate
+reference-motion audit shows that of the same 26 supported foreground cases
+with at least 8 pixels of counterfactual static displacement, only eight are
+renderable, unchanged from before. Twelve project outside the image, four have
+nonpositive fitted depth, and two lack prefix observations. Thus the coverage
+increase does not solve this pilot's weak support for the motion-attribution
+test. Off-image and fitting failures remain explicit, not camera-DNF labels.
+
+All proposals and the new motion audit are under `results/movi-temporal-markers-v1`.
+The replay test checks all 1,536 projections against local fitting code and
+camera arrays, source hashes, original IDs, and the ten-frame observation limit.
+Anima uses the existing private geometry helper via explicit import; the
+shared repository is unchanged. This is a development harness comparison,
+not a claimed contribution or a manuscript experiment.
