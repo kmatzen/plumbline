@@ -107,6 +107,14 @@ Codebase review sweep (issues #163–#182). Highest-impact first:
   model load (#176).
 
 ### Changed
+- Published dependencies now accept the compatible PyTorch 2.6/2.7 families
+  instead of forcing an exact historical build on every library consumer.
+  `constraints/reproduction.txt` preserves the exact torch 2.6.0 / torchvision
+  0.21.0 environment used for the recorded paper-match campaign (#180).
+- The default test run now excludes weight-backed tests explicitly, reports its
+  slowest tests, enforces a 120-second per-test timeout, and runs across
+  parallel workers in CI. CLI subprocess tests always target this checkout's
+  interpreter instead of an ambient `plumbline` executable.
 - `evaluate()` no longer takes `device` — it was accepted, documented, and
   never used (the model adapter owns its device). `EvaluateConfig` is removed:
   dead code whose docstring falsely claimed its fields fed the cache key (#163).

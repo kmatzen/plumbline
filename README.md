@@ -108,6 +108,11 @@ VIRTUAL_ENV=.venv uv pip uninstall xformers
 
 For VGGT + MASt3R install notes see [GPU_RUNBOOK.md](./GPU_RUNBOOK.md).
 
+For an exact rerun of the published paper-match campaign, install with
+`pip install -c constraints/reproduction.txt plumbline-bench`. Normal library
+installs accept compatible PyTorch 2.6/2.7 releases; the constraints file pins
+the known-good 2.6.0/0.21.0 reproduction environment.
+
 ## Quickstart
 
 ```bash

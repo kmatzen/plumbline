@@ -1,0 +1,9 @@
+# Exact environment used by the published paper-match campaign.
+#
+# Install plumbline with this constraints file when reproducing recorded cells:
+#   pip install -c constraints/reproduction.txt plumbline-bench
+#
+# Ordinary library consumers intentionally receive the compatible range from
+# pyproject.toml instead. CUDA wheel/index selection remains environment-owned.
+torch==2.6.0
+torchvision==0.21.0

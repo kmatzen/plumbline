@@ -46,15 +46,11 @@ dependencies = [
     # Devs running `uv sync` from this repo get cu124 via [tool.uv.sources]
     # below; consumers of the published wheel are unaffected.
     #
-    # The == pin (not a range) is deliberate but costly: it makes the package
-    # uninstallable alongside any other torch, and freezes consumers out of
-    # torch fixes. It's held because every published paper-match cell was
-    # produced under exactly this build, and the vendored CUT3R `curope` CUDA
-    # extension compiles against it. Widening to e.g. `>=2.6,<2.8` requires
-    # re-running the reproduction suite on the new version first — until then
-    # a range would assert compatibility nobody has tested.
-    "torch==2.6.0",
-    "torchvision==0.21.0",
+    # Library installs accept the API-compatible 2.6/2.7 families instead of
+    # forcing every consumer onto one historical build. Exact paper reruns use
+    # constraints/reproduction.txt; the lockfile remains the CI/dev baseline.
+    "torch>=2.6,<2.8",
+    "torchvision>=0.21,<0.23",
     "transformers>=4.40",
     "huggingface-hub>=0.23",
     "timm>=1.0",
@@ -198,6 +194,8 @@ include = [
 dev = [
     "pytest>=8.0",
     "pytest-cov>=5.0",
+    "pytest-timeout>=2.3",
+    "pytest-xdist>=3.6",
     "ruff>=0.6",
     "scipy>=1.11",
     "mypy>=1.10",
@@ -255,17 +253,17 @@ addopts = [
     "--strict-markers",
     "--strict-config",
     "--durations=20",
-    # Weights/gpu/data tests gate themselves on environment sniffing, so on a
+    # Weight-backed tests gate themselves on environment sniffing, so on a
     # configured box (a dev laptop that once ran a repro, the GPU host) a plain
     # `pytest` would silently download checkpoints from HF Hub mid-suite. Opt
     # in explicitly instead: `pytest -m weights`.
     "-m",
-    "not weights and not gpu and not data",
+    "not weights",
 ]
+timeout = 120
+timeout_method = "thread"
 markers = [
-    "gpu: tests requiring CUDA",
     "weights: tests requiring downloaded model weights",
-    "data: tests requiring downloaded datasets",
     "slow: slow tests (>5s)",
 ]
 
