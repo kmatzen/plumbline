@@ -273,7 +273,7 @@ related-work coverage and actual camera experiments remain outstanding.
 
 ### Fresh dense development runs
 
-#### RGB-D evidence validation (in preparation)
+#### RGB-D evidence validation
 
 The existing TUM development subset contains only RGB and associated reference
 poses. `stage_rgbd_validation.py` stages depth from an official sequence archive
@@ -299,8 +299,8 @@ reference-free evaluator. Scene motion, incorrect tracks, occlusion, sensor
 noise, and calibration/time association can all produce change. Therefore
 these measurements are additional validation evidence, not automatic
 staticness, tracking-correctness, or camera-DNF ground truth. RGB-depth and
-RGB-reference timing offsets must both be reported. No real-data result from
-this audit is available yet, and it is not included in the paper's claims.
+RGB-reference timing offsets must both be reported. The development results
+below are retained here, not included in the paper's claims.
 
 The audit command now consumes the existing anchor-track record and a staged
 depth manifest, verifies both against the source experiment, and checks depth
@@ -313,7 +313,7 @@ The per-track median/max summaries exclude frame zero and explicitly report
 their number of comparable observations. An end-to-end synthetic fixture
 checks this missing-origin behavior and detects changed depth bytes.
 
-After staging, the development command is:
+The development command is:
 
 ```sh
 uv run python -m paper.rgbd_track_audit \
@@ -322,6 +322,52 @@ uv run python -m paper.rgbd_track_audit \
   /path/to/staged-depth \
   /path/to/new-audit.json
 ```
+
+The walking-XYZ archive was downloaded and its gzip integrity checked on Anima.
+The separate staging directory is
+`/data3/kmatzen/plumbline/research/rgbd-validation-v1/selected-depth`;
+the local copy is `tmp/rgbd-validation-v1/selected-depth`.
+`results/dense/tum-depth-manifest-xyz-v1.json` retains archive, source,
+staging-script, index, and depth-image hashes. Of 90 RGB frames, 88 have a
+depth association within 20 ms. Frames 0 and 64 do not; their nearest depth
+offsets are -30.015 and -25.973 ms. Among the 88 associated frames, absolute
+RGB-depth offsets have median 0.018 ms and maximum 6.168 ms; absolute
+RGB-reference offsets have median 2.120 ms and maximum 4.868 ms.
+
+The initial audit, `results/dense/tum-rgbd-track-audit-xyz-v1.json`, therefore
+cannot measure displacement from frame zero for any slot. Its executed source
+is retained as `tum-rgbd-track-audit-v1-executed.py` in the same directory.
+The v2 audit preserves every original measurement and adds two summaries that
+do not require an origin: the largest separation between any two measured 3D
+observations, with the two frame indices, and distances between measured
+observations in consecutive original frames. Missing frames are not bridged,
+interpolated, or replaced. This addition was made after observing the missing
+frame-zero depth; it is exploratory, not a predeclared validation endpoint.
+
+Across all 12 slots and 90 frames, there are 136 measured observations, 859
+missing image tracks, 73 zero-depth samples, and 12 observations without a
+depth association. These mutually exclusive counts retain all 1,080 planned
+observations. Seven slots have measured 3D observations:
+
+| Slot (zero-based) | Measured / 90 | Measured frame range | Largest separation (m) | Adjacent pairs / 89 | Median adjacent distance (m) |
+| --- | ---: | --- | ---: | ---: | ---: |
+| 4 | 3 | 1–5 | 1.216 | 1 | 1.216 |
+| 5 | 6 | 1–7 | 0.075 | 4 | 0.039 |
+| 6 | 46 | 1–53 | 0.314 | 40 | 0.031 |
+| 7 | 25 | 1–25 | 1.138 | 24 | 0.048 |
+| 8 | 2 | 1–2 | 0.015 | 1 | 0.015 |
+| 9 | 3 | 1–3 | 0.031 | 2 | 0.024 |
+| 10 | 51 | 1–51 | 1.250 | 50 | 0.013 |
+
+Slots 0, 1, 2, 3, and 11 have no measured observations. Smaller spread over a
+shorter observed interval is not evidence of a better track. Large spread also
+does not identify its cause: slot 10's diameter witness includes frame 12,
+whose 3x3 depth neighborhood ranges from 2.365 to 3.208 m. Slot 4 samples
+depths above 8 m with broad local variation. No depth-range cutoff was applied.
+Slot 7 has narrow local depth ranges at both diameter endpoints, but that alone
+does not distinguish scene motion from a track following different surfaces.
+The next useful check is source-image inspection of these recorded witnesses,
+not conversion of the distances into automatic failure labels.
 
 #### Reference timing sensitivity
 

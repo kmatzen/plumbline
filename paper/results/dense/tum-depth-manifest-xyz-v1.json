@@ -1,0 +1,1273 @@
+{
+  "scope": "reference-assisted validation evidence only; not evaluator input or staticness labels",
+  "sequence": "rgbd_dataset_freiburg3_walking_xyz",
+  "archive_sha256": "1459e9488ac0e61a2ec80dfbc35cfb77942f6d8eabded1c8d26a70be650d0e1d",
+  "source_manifest_sha256": "1348932a8cb0844affc5d9d5860aa24f5422f3b78999e9bbdea26ff3b26af6b8",
+  "script_sha256": "f72aba4b0642019a848d5128ff47eb4a35b4e24dc941b6fd00a05c2484909d71",
+  "depth_index_sha256": "01c02c0da8cccecbc66d36b91c549bc2a30284bf41a4706eb90477d8ccba37cf",
+  "policy": "nearest timestamp within 20 ms, earlier timestamp on ties; missing RGB-depth matches retained",
+  "depth_scale_divisor": 5000,
+  "zero_depth": "missing",
+  "format_source": "https://cvg.cit.tum.de/data/datasets/rgbd-dataset/file_formats",
+  "reused_depth_frames": {},
+  "rows": [
+    {
+      "frame": 0,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846313.622103.png",
+      "rgb_timestamp": "1341846313.622103",
+      "rgb_sha256": "a6bd658d06a98d1567816d5722290610b0345044713f2337144a8d61fcbc65f6",
+      "nearest_depth": {
+        "timestamp": 1341846313.592088,
+        "path": "depth/1341846313.592088.png",
+        "delta_seconds": -0.030014991760253906,
+        "within_tolerance": false
+      },
+      "status": "no_depth_within_20ms"
+    },
+    {
+      "frame": 1,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846313.721918.png",
+      "rgb_timestamp": "1341846313.721918",
+      "rgb_sha256": "4efbdcd4bdd2cd689f733c4e78fc408013793b3a90213bcff1703e776eda7d03",
+      "nearest_depth": {
+        "timestamp": 1341846313.721932,
+        "path": "depth/1341846313.721932.png",
+        "delta_seconds": 1.3828277587890625e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "acd27a9d3d9d36440ee9969d2aa0178ab6356a378e2da8ebd5cc289cf53266f9"
+    },
+    {
+      "frame": 2,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846313.822075.png",
+      "rgb_timestamp": "1341846313.822075",
+      "rgb_sha256": "3b94dc0f55f178d65081c8c5f6d3d25e0dbbaa8b487164dceae62baf2020a74b",
+      "nearest_depth": {
+        "timestamp": 1341846313.822093,
+        "path": "depth/1341846313.822093.png",
+        "delta_seconds": 1.811981201171875e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "385f0f7a6b1954afb1695b2bf0068ea58693942bd3fb8580b5e133b05b4955ec"
+    },
+    {
+      "frame": 3,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846313.922055.png",
+      "rgb_timestamp": "1341846313.922055",
+      "rgb_sha256": "837d85c274581187df9f7e2ba57807dcffd113b35ce54dab553323c2f08299fa",
+      "nearest_depth": {
+        "timestamp": 1341846313.922606,
+        "path": "depth/1341846313.922606.png",
+        "delta_seconds": 0.0005509853363037109,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "f19353aaf1e5ab80da6e21b286a7ab48827d305cc16a535c400150edade11353"
+    },
+    {
+      "frame": 4,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846314.022042.png",
+      "rgb_timestamp": "1341846314.022042",
+      "rgb_sha256": "f28eacb8d8263ed22b28a8ebdaa7a81eeae6c3a138928be2abd33fb0600246c2",
+      "nearest_depth": {
+        "timestamp": 1341846314.022058,
+        "path": "depth/1341846314.022058.png",
+        "delta_seconds": 1.5974044799804688e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "6be86e370116ec480de4f56e263f90d1bf9cf859e119fd56dc5b7c0e353cd16b"
+    },
+    {
+      "frame": 5,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846314.122037.png",
+      "rgb_timestamp": "1341846314.122037",
+      "rgb_sha256": "246eabdb67f226f926d87522428fdf57d3df145a72d29a80c2cfff091f0c9477",
+      "nearest_depth": {
+        "timestamp": 1341846314.122046,
+        "path": "depth/1341846314.122046.png",
+        "delta_seconds": 9.059906005859375e-06,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "24dc88e971336a29c11263a55babf8436ef55ea6cac3868f80e25c5af8dbf404"
+    },
+    {
+      "frame": 6,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846314.225969.png",
+      "rgb_timestamp": "1341846314.225969",
+      "rgb_sha256": "b010df881ddc7a7cc79a8dd566c7f14db4e3139f6956a7af21921a71640d6093",
+      "nearest_depth": {
+        "timestamp": 1341846314.226054,
+        "path": "depth/1341846314.226054.png",
+        "delta_seconds": 8.487701416015625e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "a78d20c92a240e777b2e40ae4dd431eeaed48040359ca2c9c16890375d80e86c"
+    },
+    {
+      "frame": 7,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846314.325981.png",
+      "rgb_timestamp": "1341846314.325981",
+      "rgb_sha256": "12f0f3ed2c3a7024fc1b3f30024dfa910715f7bff56c61a3acbf6a57acd2473a",
+      "nearest_depth": {
+        "timestamp": 1341846314.326013,
+        "path": "depth/1341846314.326013.png",
+        "delta_seconds": 3.218650817871094e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "2ebd9d992d801d2e5b0477fd6cc9178f555233d24d9d8ea6f190fb6a4ecd540e"
+    },
+    {
+      "frame": 8,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846314.427905.png",
+      "rgb_timestamp": "1341846314.427905",
+      "rgb_sha256": "b1d8b6748e09a7daf8ac201f659ebde979f5bde5e477ec1f8087ab50c77f8bd0",
+      "nearest_depth": {
+        "timestamp": 1341846314.427105,
+        "path": "depth/1341846314.427105.png",
+        "delta_seconds": -0.0008001327514648438,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "6de78864431172c0822f36d493dd11bae74f75f49d55d6729673792151f9fab9"
+    },
+    {
+      "frame": 9,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846314.526085.png",
+      "rgb_timestamp": "1341846314.526085",
+      "rgb_sha256": "f484561eb9a57dfed5f901448d2f24982073b9c1fd3278134a459dc72ada07bd",
+      "nearest_depth": {
+        "timestamp": 1341846314.526098,
+        "path": "depth/1341846314.526098.png",
+        "delta_seconds": 1.3113021850585938e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "2e40880926619ff78209c8b027139cb5cf22b3030dce88c8642c45e352cb334e"
+    },
+    {
+      "frame": 10,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846314.626096.png",
+      "rgb_timestamp": "1341846314.626096",
+      "rgb_sha256": "0fcaf96c84c484cb2638681525e907e4a5fa7f6ccc9be17c4e5474ccef7452e1",
+      "nearest_depth": {
+        "timestamp": 1341846314.626112,
+        "path": "depth/1341846314.626112.png",
+        "delta_seconds": 1.5974044799804688e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "1bddf16078fc6634c320b903db162209f8e01c5a211615ecc739eae961115804"
+    },
+    {
+      "frame": 11,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846314.725910.png",
+      "rgb_timestamp": "1341846314.725910",
+      "rgb_sha256": "e48886740d6ec293a75384488775c51cd68e229be8ff4649a01ee707ef441339",
+      "nearest_depth": {
+        "timestamp": 1341846314.725925,
+        "path": "depth/1341846314.725925.png",
+        "delta_seconds": 1.5020370483398438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "fa10188fee4e92026726feb32530b240c85bfd4eec43e37a989766046c3f018a"
+    },
+    {
+      "frame": 12,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846314.826092.png",
+      "rgb_timestamp": "1341846314.826092",
+      "rgb_sha256": "15d6a28263bbeb3deef75588242591f482cc5f09c1b7f1742945c46d286103ad",
+      "nearest_depth": {
+        "timestamp": 1341846314.826834,
+        "path": "depth/1341846314.826834.png",
+        "delta_seconds": 0.0007419586181640625,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "734765a7a5e033c5cf20f5ff5de1ef231bc9ea9b53f4d3bc4a9a86c7e53dd07f"
+    },
+    {
+      "frame": 13,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846314.925969.png",
+      "rgb_timestamp": "1341846314.925969",
+      "rgb_sha256": "e9ca249510e6c8df26ad3e3a489a2a4b56c40eda0876a297d44918fe721f1509",
+      "nearest_depth": {
+        "timestamp": 1341846314.92618,
+        "path": "depth/1341846314.926180.png",
+        "delta_seconds": 0.0002110004425048828,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "dd0851f896ddd645c7d143eac460aaa885a1639ec8cce13b1554b1a419f25b30"
+    },
+    {
+      "frame": 14,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846315.029900.png",
+      "rgb_timestamp": "1341846315.029900",
+      "rgb_sha256": "6cfa11d428a35ac0a5af763129b21e79bfec63b14ce464f24b363ed6d5b81713",
+      "nearest_depth": {
+        "timestamp": 1341846315.029915,
+        "path": "depth/1341846315.029915.png",
+        "delta_seconds": 1.5020370483398438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "84a9a783c1d9dabee1016521388284033189500c124d96a10de6725fc6c9d8ff"
+    },
+    {
+      "frame": 15,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846315.129851.png",
+      "rgb_timestamp": "1341846315.129851",
+      "rgb_sha256": "da23bdcbb22da9408be62d8b68a2c42da355937a90d621ac051953a8c5ec4ab2",
+      "nearest_depth": {
+        "timestamp": 1341846315.12987,
+        "path": "depth/1341846315.129870.png",
+        "delta_seconds": 1.8835067749023438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "a8a8fcc48de7b42810ee6666d88c48497fc93a4abc72f62c79b1ef8e34540478"
+    },
+    {
+      "frame": 16,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846315.230076.png",
+      "rgb_timestamp": "1341846315.230076",
+      "rgb_sha256": "8abbd9a40668ab0835bd24950058327d06913bfe67fba669d54f56118a2efe07",
+      "nearest_depth": {
+        "timestamp": 1341846315.230133,
+        "path": "depth/1341846315.230133.png",
+        "delta_seconds": 5.698204040527344e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "349cb953fe84370434470d700fa729444826be679481c9a1f0ab91b2ec86c614"
+    },
+    {
+      "frame": 17,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846315.329931.png",
+      "rgb_timestamp": "1341846315.329931",
+      "rgb_sha256": "721b0477c5fccc19233236d47380ae21027d6604f19e69a343a9db8c1d02e542",
+      "nearest_depth": {
+        "timestamp": 1341846315.329946,
+        "path": "depth/1341846315.329946.png",
+        "delta_seconds": 1.5020370483398438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "d998259c1b256e61fb08ab9f1a9eeb7dc01d68a865f6d352e6ec599030da280c"
+    },
+    {
+      "frame": 18,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846315.429923.png",
+      "rgb_timestamp": "1341846315.429923",
+      "rgb_sha256": "228464314c5b76c01b762b4a84adeac398fdff001b2fdc132831913d0cf7810e",
+      "nearest_depth": {
+        "timestamp": 1341846315.429935,
+        "path": "depth/1341846315.429935.png",
+        "delta_seconds": 1.1920928955078125e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "e7f893f63417a8dc1cce9b47c00675ee4b175950ca8a9300a9909972acb0795d"
+    },
+    {
+      "frame": 19,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846315.530008.png",
+      "rgb_timestamp": "1341846315.530008",
+      "rgb_sha256": "acac324c9a279030aa5466fa9e44ced6f3a4a59f9611092fc440f0fe3d06a20d",
+      "nearest_depth": {
+        "timestamp": 1341846315.530017,
+        "path": "depth/1341846315.530017.png",
+        "delta_seconds": 8.821487426757812e-06,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "3c185585904f19e913ac6a4b6746d15f7640a7d1faa7231b7626393adee6c987"
+    },
+    {
+      "frame": 20,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846315.630109.png",
+      "rgb_timestamp": "1341846315.630109",
+      "rgb_sha256": "a64b0f6ec8456337f72e6f48e4b41cdb0b8b945a8aa99f243abe12c78f2f73a5",
+      "nearest_depth": {
+        "timestamp": 1341846315.630136,
+        "path": "depth/1341846315.630136.png",
+        "delta_seconds": 2.6941299438476562e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "1301fbd074a579670cc07cddb1f30778b61eb6453ba615ec18d2887cb5b062b3"
+    },
+    {
+      "frame": 21,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846315.733985.png",
+      "rgb_timestamp": "1341846315.733985",
+      "rgb_sha256": "7d6c95014cbde85eff8a0a5120b4d9b4109dd72b072386b5b5f2aee96e08bbf0",
+      "nearest_depth": {
+        "timestamp": 1341846315.734001,
+        "path": "depth/1341846315.734001.png",
+        "delta_seconds": 1.5974044799804688e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "23eef67f059a2af4ddaaf37873b38211a4ae98d8e5d953eb52d771c98155d883"
+    },
+    {
+      "frame": 22,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846315.834140.png",
+      "rgb_timestamp": "1341846315.834140",
+      "rgb_sha256": "50f084c66b6206a6df61b42f43b4f71aa8e2b4340b6c11ffc386122bdccc324b",
+      "nearest_depth": {
+        "timestamp": 1341846315.834162,
+        "path": "depth/1341846315.834162.png",
+        "delta_seconds": 2.193450927734375e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "0c08488c5d4a5749a91e64bcdd78114b15bbe2ce0d1f2627d7bbfe6c8b4e4188"
+    },
+    {
+      "frame": 23,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846315.936901.png",
+      "rgb_timestamp": "1341846315.936901",
+      "rgb_sha256": "37416b5a0f4384532b772af11d6cad451ac60292405f5268201f20817104a279",
+      "nearest_depth": {
+        "timestamp": 1341846315.937892,
+        "path": "depth/1341846315.937892.png",
+        "delta_seconds": 0.0009908676147460938,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "eedb7af6310179719a28f7d469a920f1b6589c84988e5830c9a5ba883f0bdb66"
+    },
+    {
+      "frame": 24,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846316.034204.png",
+      "rgb_timestamp": "1341846316.034204",
+      "rgb_sha256": "cf11f80691815141e60743bbac80fd86c33dd36e6e898ee7273e71adf8c28138",
+      "nearest_depth": {
+        "timestamp": 1341846316.037619,
+        "path": "depth/1341846316.037619.png",
+        "delta_seconds": 0.0034151077270507812,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "9e9ac43c7bbb78d97e85d8d2761af29859ae91a009a5f186479a31c56edbfa35"
+    },
+    {
+      "frame": 25,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846316.134066.png",
+      "rgb_timestamp": "1341846316.134066",
+      "rgb_sha256": "8dfc9ca19cd094d64ba386441cb7cf0a85116c0a3f0c9b6f7a1ef26ac8dfaa27",
+      "nearest_depth": {
+        "timestamp": 1341846316.134082,
+        "path": "depth/1341846316.134082.png",
+        "delta_seconds": 1.5974044799804688e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "249bded1cc7ebae831008b860ed9cd8cafbf7623e46b3f8af56de8ed480a0f95"
+    },
+    {
+      "frame": 26,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846316.233979.png",
+      "rgb_timestamp": "1341846316.233979",
+      "rgb_sha256": "e666b287fdbbb9c50e7fb43d8a0ca2e9c87e3a2043608c8e4e1a47c422c3791e",
+      "nearest_depth": {
+        "timestamp": 1341846316.233992,
+        "path": "depth/1341846316.233992.png",
+        "delta_seconds": 1.3113021850585938e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "08a55d3072877b4a7232d97c2f0fb24ad7036258b256bbabce67801b223f4b21"
+    },
+    {
+      "frame": 27,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846316.334208.png",
+      "rgb_timestamp": "1341846316.334208",
+      "rgb_sha256": "e41f26aa6fb0627018c84f063bb90ee4030c34be8cbe4f90c570eb4076e50478",
+      "nearest_depth": {
+        "timestamp": 1341846316.334244,
+        "path": "depth/1341846316.334244.png",
+        "delta_seconds": 3.600120544433594e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "68eed84cee7c23cddcbd134aa7e4add283b5b19590c5179583d057a5fe911f76"
+    },
+    {
+      "frame": 28,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846316.438069.png",
+      "rgb_timestamp": "1341846316.438069",
+      "rgb_sha256": "4d3825cab287db65b4e032bcc391e01771c717938aea97ecde807a1ba4459bc1",
+      "nearest_depth": {
+        "timestamp": 1341846316.438088,
+        "path": "depth/1341846316.438088.png",
+        "delta_seconds": 1.8835067749023438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "5351edf923e2a5a93c10c98821c2b69cebe5c2f09f3b0835ccd0c08aa43904e8"
+    },
+    {
+      "frame": 29,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846316.537975.png",
+      "rgb_timestamp": "1341846316.537975",
+      "rgb_sha256": "d711235f99b03feaf2044009371c8a3c3501705f935c5b1e9007dd3634b1d6fd",
+      "nearest_depth": {
+        "timestamp": 1341846316.537989,
+        "path": "depth/1341846316.537989.png",
+        "delta_seconds": 1.3828277587890625e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "6464b1ccd7b99f92e916827215986b728b012462cb18e246b64a4a090410b507"
+    },
+    {
+      "frame": 30,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846316.638009.png",
+      "rgb_timestamp": "1341846316.638009",
+      "rgb_sha256": "5c6e6775977e57aafcd6ef9d9638d7e471d8c8a9230f46271351ad44eddca4c4",
+      "nearest_depth": {
+        "timestamp": 1341846316.638027,
+        "path": "depth/1341846316.638027.png",
+        "delta_seconds": 1.7881393432617188e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "2744032b7ed5ff5e4a15263f75ad943fa99300faccc9d78fe4222d1e1b0101cb"
+    },
+    {
+      "frame": 31,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846316.738062.png",
+      "rgb_timestamp": "1341846316.738062",
+      "rgb_sha256": "6697a1f125040b84318d51ebfa092666d2e8f0fe0e2f58447a523a8c1ca9d6d4",
+      "nearest_depth": {
+        "timestamp": 1341846316.738074,
+        "path": "depth/1341846316.738074.png",
+        "delta_seconds": 1.2159347534179688e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "ffb93ddc675786e384b52df985fa358028fd6edc84f99830e3e3696785ef77d1"
+    },
+    {
+      "frame": 32,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846316.838029.png",
+      "rgb_timestamp": "1341846316.838029",
+      "rgb_sha256": "182e6d06e285144f11c17d5d6041f8d833e4e055b98e7a9bb614ca4bb3cc003d",
+      "nearest_depth": {
+        "timestamp": 1341846316.838046,
+        "path": "depth/1341846316.838046.png",
+        "delta_seconds": 1.71661376953125e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "b988509789d8df03a5236c1bfff7561a3186d2a7605912f28fbf8a3c8a075ead"
+    },
+    {
+      "frame": 33,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846316.937940.png",
+      "rgb_timestamp": "1341846316.937940",
+      "rgb_sha256": "911a24058d2b9af6a6dd83eab489717e6c78fffaf53781ade5f91978124d1c47",
+      "nearest_depth": {
+        "timestamp": 1341846316.938077,
+        "path": "depth/1341846316.938077.png",
+        "delta_seconds": 0.00013709068298339844,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "644a7a89d4aea1802ffdf5d25e309b37b4d9b75efa19e88f0c4ddef6b489a405"
+    },
+    {
+      "frame": 34,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846317.037936.png",
+      "rgb_timestamp": "1341846317.037936",
+      "rgb_sha256": "90f77ea942f1a04491b8c358f731f49fc543f70d4c07241cca2e45ea7e581968",
+      "nearest_depth": {
+        "timestamp": 1341846317.037951,
+        "path": "depth/1341846317.037951.png",
+        "delta_seconds": 1.5020370483398438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "ad9a2ce9596a6ccfc9b2c3183c2f56d598c85557b296ae8463f58dadb3250389"
+    },
+    {
+      "frame": 35,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846317.137887.png",
+      "rgb_timestamp": "1341846317.137887",
+      "rgb_sha256": "d8b5cb5e63b0eb37670f7819460ff6a6940ec88791ce86a59923b54c9134a43a",
+      "nearest_depth": {
+        "timestamp": 1341846317.137926,
+        "path": "depth/1341846317.137926.png",
+        "delta_seconds": 3.910064697265625e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "7067b73f31ef71773e4323041e38911e6308bcfff321cd235b2c327c3b48eff5"
+    },
+    {
+      "frame": 36,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846317.248131.png",
+      "rgb_timestamp": "1341846317.248131",
+      "rgb_sha256": "4f5d8b621d04f29699a1ec24a40d4a3586eb3b4d097e3826c00a8901bcb7bd0c",
+      "nearest_depth": {
+        "timestamp": 1341846317.241963,
+        "path": "depth/1341846317.241963.png",
+        "delta_seconds": -0.0061681270599365234,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "73ac16c2ff54cbf2fc2192dbe13135878204a2800973baa2cc9ad3778a0f3596"
+    },
+    {
+      "frame": 37,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846317.348137.png",
+      "rgb_timestamp": "1341846317.348137",
+      "rgb_sha256": "2c74b693e318762724aa242b3ef4ab7926dc2285e4269aa241d106aed5bd1964",
+      "nearest_depth": {
+        "timestamp": 1341846317.348169,
+        "path": "depth/1341846317.348169.png",
+        "delta_seconds": 3.218650817871094e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "6e6afc4cdce8409423a83abfcc2432a9ddb62f6bcf1419b5a949f8ae9129285c"
+    },
+    {
+      "frame": 38,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846317.442569.png",
+      "rgb_timestamp": "1341846317.442569",
+      "rgb_sha256": "40655a1223687ddb3ccbbee1ed221cee7f55d455a8357dc9f6494476750a6607",
+      "nearest_depth": {
+        "timestamp": 1341846317.442587,
+        "path": "depth/1341846317.442587.png",
+        "delta_seconds": 1.7881393432617188e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "d2dc260c8c5241376de9a96ff5526df0704f1ff3ff9bb005a9584ba3f59cdf84"
+    },
+    {
+      "frame": 39,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846317.542282.png",
+      "rgb_timestamp": "1341846317.542282",
+      "rgb_sha256": "17ad067204595271374134e62c940305839b6709d94dad9cfdcfa4059e2dfb91",
+      "nearest_depth": {
+        "timestamp": 1341846317.542295,
+        "path": "depth/1341846317.542295.png",
+        "delta_seconds": 1.2874603271484375e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "2469f46161392daeb38703ff8cf333a61861e42625bf331f69b8d3d6efe53467"
+    },
+    {
+      "frame": 40,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846317.643553.png",
+      "rgb_timestamp": "1341846317.643553",
+      "rgb_sha256": "89dd3af1d5e23d87c619c2f297471d96f65e6a497b5f2779169881606d25f0ef",
+      "nearest_depth": {
+        "timestamp": 1341846317.643574,
+        "path": "depth/1341846317.643574.png",
+        "delta_seconds": 2.09808349609375e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "c6dfc929b0deea67330b6172addc8436fa32af97857c7f6003903a418b476ffa"
+    },
+    {
+      "frame": 41,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846317.741834.png",
+      "rgb_timestamp": "1341846317.741834",
+      "rgb_sha256": "e1c536ad6aef4699150dc38ef1bc1361d775d649674e6b9e1bd538105ebd221b",
+      "nearest_depth": {
+        "timestamp": 1341846317.741911,
+        "path": "depth/1341846317.741911.png",
+        "delta_seconds": 7.700920104980469e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "b74649c02d3bc8809a70a3fdc3cbf0a2c6036f3c6bcc145d6f83d7819c4c68fb"
+    },
+    {
+      "frame": 42,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846317.841886.png",
+      "rgb_timestamp": "1341846317.841886",
+      "rgb_sha256": "81b69a3f7ba848879fa1c6b94c832107ea97185e2ed9f1f7b2dd5500922644fe",
+      "nearest_depth": {
+        "timestamp": 1341846317.842466,
+        "path": "depth/1341846317.842466.png",
+        "delta_seconds": 0.0005800724029541016,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "0c5b3fb2edd8526e24294c10007e586740254ab90cd6546c7594aeaa3ee90a21"
+    },
+    {
+      "frame": 43,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846317.946031.png",
+      "rgb_timestamp": "1341846317.946031",
+      "rgb_sha256": "a4163a6ba9ee650d4428bff8930998eac161eb8460865bb7bb0da89e04464a5a",
+      "nearest_depth": {
+        "timestamp": 1341846317.94604,
+        "path": "depth/1341846317.946040.png",
+        "delta_seconds": 8.821487426757812e-06,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "016ab94db0e1b128ec4fbdd3b774ee768d4c61acd287f66fa7f9c356279a0c5f"
+    },
+    {
+      "frame": 44,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846318.045949.png",
+      "rgb_timestamp": "1341846318.045949",
+      "rgb_sha256": "b73b032f156059f67a121d0f756cc4752f4c46ac9fca52f8f8dab7779050e244",
+      "nearest_depth": {
+        "timestamp": 1341846318.045964,
+        "path": "depth/1341846318.045964.png",
+        "delta_seconds": 1.5020370483398438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "298e545ceff4a22b958e040a1494a043d3728356e2d9ce595f0108cd1b96e508"
+    },
+    {
+      "frame": 45,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846318.145957.png",
+      "rgb_timestamp": "1341846318.145957",
+      "rgb_sha256": "f5e3c6a2fbd631f4e582c05565158440d2efdc40484e2acdeb7504ac0f9ee038",
+      "nearest_depth": {
+        "timestamp": 1341846318.145969,
+        "path": "depth/1341846318.145969.png",
+        "delta_seconds": 1.1920928955078125e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "c64d62b0b1a1960b3c5561e86246cf2309c9f7b7213c0ab2ddb38953a9b65f85"
+    },
+    {
+      "frame": 46,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846318.245970.png",
+      "rgb_timestamp": "1341846318.245970",
+      "rgb_sha256": "7b698d78c1996ecd3f138bd6428796851c4350eff6ca413e9451c0e1d04b0457",
+      "nearest_depth": {
+        "timestamp": 1341846318.246086,
+        "path": "depth/1341846318.246086.png",
+        "delta_seconds": 0.00011587142944335938,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "8bbef86de2fc31fba188ec22bbe58150a3e4ed57806f0642365d606f6267303a"
+    },
+    {
+      "frame": 47,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846318.345989.png",
+      "rgb_timestamp": "1341846318.345989",
+      "rgb_sha256": "2363db44dd0b6e9f02fd6cbaa2f44e2aa3ef02cda86da1d86c59163336a0550d",
+      "nearest_depth": {
+        "timestamp": 1341846318.34602,
+        "path": "depth/1341846318.346020.png",
+        "delta_seconds": 3.0994415283203125e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "20eb1a09e131120162ff93abab331a10db8739e530bdc12d02f90cd179395649"
+    },
+    {
+      "frame": 48,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846318.446035.png",
+      "rgb_timestamp": "1341846318.446035",
+      "rgb_sha256": "880d0ec88eef5c1ca76cd0e87451b319fbfef278d287b55bbdbfa955520163b8",
+      "nearest_depth": {
+        "timestamp": 1341846318.446055,
+        "path": "depth/1341846318.446055.png",
+        "delta_seconds": 2.002716064453125e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "9067521363373cc9e9bb7f180910e325c730f133e2854dbe65cee321fa80beb5"
+    },
+    {
+      "frame": 49,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846318.546259.png",
+      "rgb_timestamp": "1341846318.546259",
+      "rgb_sha256": "48d9b46560e62f5406b332ef922a81d05fabf830087ac4701f7d89a111cc9f3c",
+      "nearest_depth": {
+        "timestamp": 1341846318.546277,
+        "path": "depth/1341846318.546277.png",
+        "delta_seconds": 1.811981201171875e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "63a153ae414d648658f02c79dc4cee611214f42b97e5d98ead82f4056236774c"
+    },
+    {
+      "frame": 50,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846318.650038.png",
+      "rgb_timestamp": "1341846318.650038",
+      "rgb_sha256": "5c57b926cb5180da103bccc864bb38b882fca6e1618911e070353b014dea24e6",
+      "nearest_depth": {
+        "timestamp": 1341846318.65005,
+        "path": "depth/1341846318.650050.png",
+        "delta_seconds": 1.1920928955078125e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "bdc01e2d9d65a09ab42c440ec6fe28b162e814fcd28c5dd1965f3135a485b9ca"
+    },
+    {
+      "frame": 51,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846318.749905.png",
+      "rgb_timestamp": "1341846318.749905",
+      "rgb_sha256": "df4aa9b9179b6975bbb8d16bd24930f545e2b58c21033f8e5826891e8f57c866",
+      "nearest_depth": {
+        "timestamp": 1341846318.749942,
+        "path": "depth/1341846318.749942.png",
+        "delta_seconds": 3.695487976074219e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "e7d6aefe9bcfc1c29bc376d2f3375a8fdb083d436bdf8f1af2ffda1c08ab909c"
+    },
+    {
+      "frame": 52,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846318.850072.png",
+      "rgb_timestamp": "1341846318.850072",
+      "rgb_sha256": "ad32f69d65f793841f88e861a401349330c0ba47d5017eebecabda041023a541",
+      "nearest_depth": {
+        "timestamp": 1341846318.850088,
+        "path": "depth/1341846318.850088.png",
+        "delta_seconds": 1.5974044799804688e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "889f312026b9da5f2547504c54ec0cdf20c57b40fd9a92d6a73b92fe875c0d2a"
+    },
+    {
+      "frame": 53,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846318.950044.png",
+      "rgb_timestamp": "1341846318.950044",
+      "rgb_sha256": "4a7978ccc64918064a724a47227ddc4774efdcefcb2d49970acfa7518a11c09f",
+      "nearest_depth": {
+        "timestamp": 1341846318.950055,
+        "path": "depth/1341846318.950055.png",
+        "delta_seconds": 1.0967254638671875e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "868744eaf2a5eb11c885a551dd090652bd9ce08fbd534d274d5ffd764942597b"
+    },
+    {
+      "frame": 54,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846319.050745.png",
+      "rgb_timestamp": "1341846319.050745",
+      "rgb_sha256": "f3d65687dd0f4fe5073d8774de0e801813cd15c61d2b3d8599ec542659fdbc3b",
+      "nearest_depth": {
+        "timestamp": 1341846319.050774,
+        "path": "depth/1341846319.050774.png",
+        "delta_seconds": 2.9087066650390625e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "88542f89dd59ba6f653f605910e4648e8e20dd440ff456b9666b5d77d2754f33"
+    },
+    {
+      "frame": 55,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846319.150093.png",
+      "rgb_timestamp": "1341846319.150093",
+      "rgb_sha256": "220a76d03b7e00db4afd9ea1b2ef61032ba0ea2a76d91e416e1b321aa76bab10",
+      "nearest_depth": {
+        "timestamp": 1341846319.150113,
+        "path": "depth/1341846319.150113.png",
+        "delta_seconds": 2.002716064453125e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "5f1c42c2faff1d6ae0093446e090f9dda0a2371672c801de00b6a19172b5311a"
+    },
+    {
+      "frame": 56,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846319.250034.png",
+      "rgb_timestamp": "1341846319.250034",
+      "rgb_sha256": "80e8fa973d29ddd91464c08923194171aa8239805a49d50791a9c005995ca31b",
+      "nearest_depth": {
+        "timestamp": 1341846319.250056,
+        "path": "depth/1341846319.250056.png",
+        "delta_seconds": 2.193450927734375e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "63026f6200331d0f7eba10c594c188394faaec5ff09128eeba4119886f9b2277"
+    },
+    {
+      "frame": 57,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846319.350268.png",
+      "rgb_timestamp": "1341846319.350268",
+      "rgb_sha256": "634ca3490a2722f1aa107db35fea5ab9c2f7002689bf1a1b8fafedb9cad64f5e",
+      "nearest_depth": {
+        "timestamp": 1341846319.350278,
+        "path": "depth/1341846319.350278.png",
+        "delta_seconds": 1.0013580322265625e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "4e980a6551ef3e6b3ee2d0124105909b1504a571da0d5f29924ef5fa2dda1fd6"
+    },
+    {
+      "frame": 58,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846319.453961.png",
+      "rgb_timestamp": "1341846319.453961",
+      "rgb_sha256": "106846756b9cf765aafe89f0c0438d57461be715435e49faf346b60b2570e413",
+      "nearest_depth": {
+        "timestamp": 1341846319.453974,
+        "path": "depth/1341846319.453974.png",
+        "delta_seconds": 1.3113021850585938e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "fe6dbbad924c094b2a9aaf0f182a725e860a2974a54ec4f75b585576213e8821"
+    },
+    {
+      "frame": 59,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846319.554083.png",
+      "rgb_timestamp": "1341846319.554083",
+      "rgb_sha256": "155cea0fca6a64a7058b7fe7aa6c135072c84cb228ddb13d5a26b3fd58f6da01",
+      "nearest_depth": {
+        "timestamp": 1341846319.554098,
+        "path": "depth/1341846319.554098.png",
+        "delta_seconds": 1.4781951904296875e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "cc2a88db1c42010f9dcc11870b1caab23c150086ab3e040172059ad47665c096"
+    },
+    {
+      "frame": 60,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846319.653962.png",
+      "rgb_timestamp": "1341846319.653962",
+      "rgb_sha256": "05efa5d3869df3d368b658d4a1111af5cd2fbba4e94c6bf8d4a3dca895f07510",
+      "nearest_depth": {
+        "timestamp": 1341846319.653978,
+        "path": "depth/1341846319.653978.png",
+        "delta_seconds": 1.621246337890625e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "0c5c6e315b4d428b81e3bba2878069a5c49167309eaab06b3554f7283625d85f"
+    },
+    {
+      "frame": 61,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846319.754063.png",
+      "rgb_timestamp": "1341846319.754063",
+      "rgb_sha256": "4fd532193fe9318a60b69bf6abf3b6e69bfbd3bf98842baeea2f25d94de1293f",
+      "nearest_depth": {
+        "timestamp": 1341846319.754076,
+        "path": "depth/1341846319.754076.png",
+        "delta_seconds": 1.3113021850585938e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "89f36254a8220e10e8115f71e1e0aff3900a880b379ad14e4e165b164cded9df"
+    },
+    {
+      "frame": 62,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846319.853917.png",
+      "rgb_timestamp": "1341846319.853917",
+      "rgb_sha256": "e66986520dcbddd1f1bddd1cd0d8dcc18ed5965511b15ebdd0600301d0735f2c",
+      "nearest_depth": {
+        "timestamp": 1341846319.853952,
+        "path": "depth/1341846319.853952.png",
+        "delta_seconds": 3.504753112792969e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "6a0a16cc7ea412181a4c9f3c8fda4c1a8ba5f2c779d332c2b588a350814014e7"
+    },
+    {
+      "frame": 63,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846319.953946.png",
+      "rgb_timestamp": "1341846319.953946",
+      "rgb_sha256": "d36bd585f22a0a86d56eb1851b64ec5334fbbe52701bdfcc1528c7549354cfa7",
+      "nearest_depth": {
+        "timestamp": 1341846319.953956,
+        "path": "depth/1341846319.953956.png",
+        "delta_seconds": 9.775161743164062e-06,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "3a7907c0f29cfa41b7a51468ea90d0c3427ad260c146141ae56769d31f231c39"
+    },
+    {
+      "frame": 64,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846320.054177.png",
+      "rgb_timestamp": "1341846320.054177",
+      "rgb_sha256": "a631f591c526d0651c050d40e1fc458bb5f6047acdbeac99316850b9a0444903",
+      "nearest_depth": {
+        "timestamp": 1341846320.028204,
+        "path": "depth/1341846320.028204.png",
+        "delta_seconds": -0.025973081588745117,
+        "within_tolerance": false
+      },
+      "status": "no_depth_within_20ms"
+    },
+    {
+      "frame": 65,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846320.157952.png",
+      "rgb_timestamp": "1341846320.157952",
+      "rgb_sha256": "25d993ce33f3fc9c17fe1d036c1b4daa1fa4271b370aad3a03ddd0c70a6b0e09",
+      "nearest_depth": {
+        "timestamp": 1341846320.157961,
+        "path": "depth/1341846320.157961.png",
+        "delta_seconds": 8.821487426757812e-06,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "8f57b183a08877840b10805ed6c71743008f6c8dfbc78802b57263bd397d1089"
+    },
+    {
+      "frame": 66,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846320.258015.png",
+      "rgb_timestamp": "1341846320.258015",
+      "rgb_sha256": "6b540870833b3b568a35a81f4827c5a0aafe761fcc8950c6a87b4f79e80201a3",
+      "nearest_depth": {
+        "timestamp": 1341846320.258029,
+        "path": "depth/1341846320.258029.png",
+        "delta_seconds": 1.4066696166992188e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "be06ca6d856c6f965d8bccaeca163dd468fb770a508ff456baefaac38ee314ab"
+    },
+    {
+      "frame": 67,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846320.357890.png",
+      "rgb_timestamp": "1341846320.357890",
+      "rgb_sha256": "13129a2e20ea8857a5d15ee6b9f374622c6865d40d05fff48eea094488ce6567",
+      "nearest_depth": {
+        "timestamp": 1341846320.35795,
+        "path": "depth/1341846320.357950.png",
+        "delta_seconds": 6.008148193359375e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "81cc815825563a9de21177866eee5ac518e69f89d1361ecff5a090fde3e44184"
+    },
+    {
+      "frame": 68,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846320.458122.png",
+      "rgb_timestamp": "1341846320.458122",
+      "rgb_sha256": "2990d22e6353aae47cf6e8480e50027f1d9a99006f2d97a09abb445eec06001d",
+      "nearest_depth": {
+        "timestamp": 1341846320.458141,
+        "path": "depth/1341846320.458141.png",
+        "delta_seconds": 1.9073486328125e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "9ebd58fdcd3929d8da0f1e077ef74f4430c1f121d66985be6796672c7f2432bc"
+    },
+    {
+      "frame": 69,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846320.558091.png",
+      "rgb_timestamp": "1341846320.558091",
+      "rgb_sha256": "b1c62279101ede0c27ed61b608228cb968fc11598e1a2605fe014818e491b251",
+      "nearest_depth": {
+        "timestamp": 1341846320.55818,
+        "path": "depth/1341846320.558180.png",
+        "delta_seconds": 8.916854858398438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "9fdbd560e25eaec807c347a45d2d79e3d751a10a582780b9f0f51d5354eb6b27"
+    },
+    {
+      "frame": 70,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846320.664916.png",
+      "rgb_timestamp": "1341846320.664916",
+      "rgb_sha256": "fd93220749c4b3b859b484b7be7c9861f0456fcc9f83200f355689d160323495",
+      "nearest_depth": {
+        "timestamp": 1341846320.664936,
+        "path": "depth/1341846320.664936.png",
+        "delta_seconds": 2.002716064453125e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "80dd945b01e961dd08bccde145b540dc7da09ca98b33d7d36958523c685ec5d4"
+    },
+    {
+      "frame": 71,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846320.763877.png",
+      "rgb_timestamp": "1341846320.763877",
+      "rgb_sha256": "9f24d5241f56830ea24afde804a96359be404522c0d676fdcd4fffba5c0ca0e8",
+      "nearest_depth": {
+        "timestamp": 1341846320.763892,
+        "path": "depth/1341846320.763892.png",
+        "delta_seconds": 1.5020370483398438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "9916d227ec2d4b1d68316db65a456b5df33a2528fe6e5e325c2664a79d1da7a5"
+    },
+    {
+      "frame": 72,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846320.863887.png",
+      "rgb_timestamp": "1341846320.863887",
+      "rgb_sha256": "b0d30f012a964fd50e924e14a94be590e944a6d1b6688f0adfa993b0998fbbff",
+      "nearest_depth": {
+        "timestamp": 1341846320.864567,
+        "path": "depth/1341846320.864567.png",
+        "delta_seconds": 0.0006799697875976562,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "bc652be67360f077530f0e9b7674d9673e39773c4fcab447ddc9be5a4d162dfa"
+    },
+    {
+      "frame": 73,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846320.967866.png",
+      "rgb_timestamp": "1341846320.967866",
+      "rgb_sha256": "13443a09189f47fd4865a95558b5f733591ed61c80a7177599e11efcd371a611",
+      "nearest_depth": {
+        "timestamp": 1341846320.967883,
+        "path": "depth/1341846320.967883.png",
+        "delta_seconds": 1.71661376953125e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "94f19d81b20be8a27e104ecdf59aa275369dfca16b883f37cbc5ebad8737382c"
+    },
+    {
+      "frame": 74,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846321.068047.png",
+      "rgb_timestamp": "1341846321.068047",
+      "rgb_sha256": "b1b018c4d9bcba61f32b4ca640c9229bcd8f27e1035fb5bc6f52a73da426ad68",
+      "nearest_depth": {
+        "timestamp": 1341846321.068115,
+        "path": "depth/1341846321.068115.png",
+        "delta_seconds": 6.794929504394531e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "172eb1fe12c28f6ce8c02dae0d7efd17a240b71b2274bbdbc4581a17ca97fcea"
+    },
+    {
+      "frame": 75,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846321.167887.png",
+      "rgb_timestamp": "1341846321.167887",
+      "rgb_sha256": "6165798b42683833bf1cf4fb5b2c7ff71bd9a609ec35fd16412927428987e1f8",
+      "nearest_depth": {
+        "timestamp": 1341846321.167898,
+        "path": "depth/1341846321.167898.png",
+        "delta_seconds": 1.0967254638671875e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "af18b71ef45108a31042c71dd10bb160507ce75e576d77088678ac9244c5752c"
+    },
+    {
+      "frame": 76,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846321.267939.png",
+      "rgb_timestamp": "1341846321.267939",
+      "rgb_sha256": "1bf93104af8f405abda474dea59351639aceea7c64cfac3ad876830191e0e8e7",
+      "nearest_depth": {
+        "timestamp": 1341846321.267953,
+        "path": "depth/1341846321.267953.png",
+        "delta_seconds": 1.3828277587890625e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "6911232f3462225bd7f938f35f8bcf88ded384770fc842f2297edd2767cfb051"
+    },
+    {
+      "frame": 77,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846321.367913.png",
+      "rgb_timestamp": "1341846321.367913",
+      "rgb_sha256": "ee7e8a11c9790fba4b544c7c52f23256b7a7145cfed1e524bec4397cb9792ac5",
+      "nearest_depth": {
+        "timestamp": 1341846321.367935,
+        "path": "depth/1341846321.367935.png",
+        "delta_seconds": 2.193450927734375e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "6deb6669e1bf6341bb435ac9df2bdab553c19b185e1bcfc8d9b4db175803526d"
+    },
+    {
+      "frame": 78,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846321.467946.png",
+      "rgb_timestamp": "1341846321.467946",
+      "rgb_sha256": "5c7a015e9ee1644b8e38d2b09634dca1851481d126a0051433a506bfa8153684",
+      "nearest_depth": {
+        "timestamp": 1341846321.467961,
+        "path": "depth/1341846321.467961.png",
+        "delta_seconds": 1.5020370483398438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "e21098353d7d291cf28d8953194f1576f7481d1b8de172454516e3bb62386355"
+    },
+    {
+      "frame": 79,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846321.568960.png",
+      "rgb_timestamp": "1341846321.568960",
+      "rgb_sha256": "716848ea85404611735ab9cc54938a86bf2f995584f1f3bf676a6180d8b55862",
+      "nearest_depth": {
+        "timestamp": 1341846321.569836,
+        "path": "depth/1341846321.569836.png",
+        "delta_seconds": 0.0008759498596191406,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "b847d39cf1aae1765e628a241be207f0eb7b566084b48f858607f33a86b2e325"
+    },
+    {
+      "frame": 80,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846321.668306.png",
+      "rgb_timestamp": "1341846321.668306",
+      "rgb_sha256": "03c29310653db4c38e018afe567929e3e751cb51aa65754db3270b01e63faa59",
+      "nearest_depth": {
+        "timestamp": 1341846321.668324,
+        "path": "depth/1341846321.668324.png",
+        "delta_seconds": 1.7881393432617188e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "bfe8635c882636194c76011411bf693bdc7fcc558ae3092937d4ad471af1a220"
+    },
+    {
+      "frame": 81,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846321.771881.png",
+      "rgb_timestamp": "1341846321.771881",
+      "rgb_sha256": "b2cc548ad608561f1a567337751ce398590a7c591db9288da37df920342ff2fb",
+      "nearest_depth": {
+        "timestamp": 1341846321.7719,
+        "path": "depth/1341846321.771900.png",
+        "delta_seconds": 1.8835067749023438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "52d4c12b07389103096c0359a6de05a898e230be40cc6430860788b608663aeb"
+    },
+    {
+      "frame": 82,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846321.871882.png",
+      "rgb_timestamp": "1341846321.871882",
+      "rgb_sha256": "c0694bacb2ff228044ad07f0c6e109f4edf081935b55f73975890382e77dafec",
+      "nearest_depth": {
+        "timestamp": 1341846321.871897,
+        "path": "depth/1341846321.871897.png",
+        "delta_seconds": 1.5020370483398438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "010b613342d4599071092ffc8c2b707a2b34d59c05c44d7761377eacb4c347bd"
+    },
+    {
+      "frame": 83,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846322.004094.png",
+      "rgb_timestamp": "1341846322.004094",
+      "rgb_sha256": "bd3f7b21591eb2d88c91a8d2289e4a7296647b8a95e29daa082f3920e9f944a9",
+      "nearest_depth": {
+        "timestamp": 1341846322.004154,
+        "path": "depth/1341846322.004154.png",
+        "delta_seconds": 6.008148193359375e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "7b98635073b655f326d57071d3477d329e186193a988334b0d12c83a7033e809"
+    },
+    {
+      "frame": 84,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846322.107979.png",
+      "rgb_timestamp": "1341846322.107979",
+      "rgb_sha256": "0cb8d2f3e694d91c72a3e52c7acb8002d80d9dd61774ce322bc6dc2dbb2fb42c",
+      "nearest_depth": {
+        "timestamp": 1341846322.108029,
+        "path": "depth/1341846322.108029.png",
+        "delta_seconds": 4.982948303222656e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "cd882f8c1ad359670ad61bfe353eff46e82e37894885c010257e4becb6280027"
+    },
+    {
+      "frame": 85,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846322.202932.png",
+      "rgb_timestamp": "1341846322.202932",
+      "rgb_sha256": "e55586813479f1908f89778b9825dadf1767b6f4d2c798a8a9296cfb47a918b4",
+      "nearest_depth": {
+        "timestamp": 1341846322.202945,
+        "path": "depth/1341846322.202945.png",
+        "delta_seconds": 1.3113021850585938e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "bbe14ed908279c3b9078131159d8b21185884e32970bf1b4e5a021a2f92091ed"
+    },
+    {
+      "frame": 86,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846322.301996.png",
+      "rgb_timestamp": "1341846322.301996",
+      "rgb_sha256": "75269ca1b9c2e21741610ec60691dd5d7b72e0695075a1a3c621549cc9ed9b01",
+      "nearest_depth": {
+        "timestamp": 1341846322.302026,
+        "path": "depth/1341846322.302026.png",
+        "delta_seconds": 3.0040740966796875e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "a3fadb8f13e412c2c8a0d0da350f2a6a7c2de20d843719f133afe789961d7fcb"
+    },
+    {
+      "frame": 87,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846322.402292.png",
+      "rgb_timestamp": "1341846322.402292",
+      "rgb_sha256": "0e2d364c152f526d9b337cc6d1c2c58a2ed7f244a3a8d86b0c802e6343028ada",
+      "nearest_depth": {
+        "timestamp": 1341846322.402333,
+        "path": "depth/1341846322.402333.png",
+        "delta_seconds": 4.100799560546875e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "6b3694c1f9d353000220ac40df59c255b152a48437ce77d49807b7f4633b01a4"
+    },
+    {
+      "frame": 88,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846322.502433.png",
+      "rgb_timestamp": "1341846322.502433",
+      "rgb_sha256": "8bbdf1e45b7f34829edabc96a96609defa85c20f9acbd432ea092af26b76d204",
+      "nearest_depth": {
+        "timestamp": 1341846322.502488,
+        "path": "depth/1341846322.502488.png",
+        "delta_seconds": 5.4836273193359375e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "8f7c9736730eedf4e8d130619f8af45f3a8941c6730185ee74502123872287fb"
+    },
+    {
+      "frame": 89,
+      "rgb_path": "rgbd_dataset_freiburg3_walking_xyz/rgb/1341846322.601920.png",
+      "rgb_timestamp": "1341846322.601920",
+      "rgb_sha256": "8a3576757c2899c7ec6eefdec076d9c0b804383719b604968029c6a17d7219b8",
+      "nearest_depth": {
+        "timestamp": 1341846322.601935,
+        "path": "depth/1341846322.601935.png",
+        "delta_seconds": 1.5020370483398438e-05,
+        "within_tolerance": true
+      },
+      "status": "staged",
+      "depth_sha256": "2fa89dddc3b8b8400ca6c152762b82106445841552cd79e602fe5014f7888d41"
+    }
+  ]
+}

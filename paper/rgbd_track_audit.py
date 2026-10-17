@@ -11,6 +11,41 @@ from paper.analyze_dense_run import load_verified
 from paper.stage_rgbd_validation import sha
 
 
+def observed_spread(rows):
+    """Describe measured support without selecting a replacement origin.
+
+    Only originally adjacent frames enter the step summary. The diameter uses
+    all measured pairs and records its witness; neither statistic certifies a
+    static point. Missing observations are never interpolated.
+    """
+    measured = [r for r in rows if r.get("world_point_m") is not None]
+    steps = []
+    for a, b in zip(rows, rows[1:]):
+        if b["frame"] != a["frame"] + 1:
+            raise ValueError("expected consecutive original frames")
+        if a.get("world_point_m") is not None and b.get("world_point_m") is not None:
+            steps.append({
+                "frames": [a["frame"], b["frame"]],
+                "distance_m": float(np.linalg.norm(np.array(a["world_point_m"]) - b["world_point_m"])),
+            })
+    diameter = None
+    for i, a in enumerate(measured):
+        for b in measured[i + 1:]:
+            distance = float(np.linalg.norm(np.array(a["world_point_m"]) - b["world_point_m"]))
+            if diameter is None or distance > diameter["distance_m"]:
+                diameter = {"frames": [a["frame"], b["frame"]], "distance_m": distance}
+    return {
+        "measured_count": len(measured),
+        "measured_frame_range": [measured[0]["frame"], measured[-1]["frame"]] if measured else None,
+        "available_pair_count": len(measured) * (len(measured) - 1) // 2,
+        "diameter": diameter,
+        "adjacent_pair_count": len(steps),
+        "planned_adjacent_pair_count": max(0, len(rows) - 1),
+        "median_adjacent_distance_m": float(np.median([s["distance_m"] for s in steps])) if steps else None,
+        "adjacent_pairs": steps,
+    }
+
+
 def world_observation(xy, depth, intrinsics, camera_to_world):
     """Backproject nearest pixel with axial depth, retaining local discontinuities.
 
@@ -151,6 +186,7 @@ def audit(run_path, tracks_path, depth_root, output):
                 "later_comparable_count": len(distances),
                 "median_later_distance_m": float(np.median(distances)) if distances else None,
                 "max_later_distance_m": max(distances) if distances else None,
+                "observed_spread": observed_spread(rows),
                 "rows": rows,
             }
         )
@@ -165,6 +201,7 @@ def audit(run_path, tracks_path, depth_root, output):
         "opencv_version": cv2.__version__,
         "policy": "all original slots and frames retained; nearest depth pixel; fixed frame-zero origin, never re-anchor; no threshold labels",
         "pose_timing": "existing nearest-reference RGB association; no interpolation or depth-time correction",
+        "spread_policy": "all measured pairs for diameter; only consecutive original frames for adjacent distances; no origin, interpolation, or threshold labels",
         "frames": timing,
         "tracks": result_tracks,
     }

@@ -4,7 +4,7 @@ import json
 import cv2
 import numpy as np
 import pytest
-from paper.rgbd_track_audit import audit, world_observation
+from paper.rgbd_track_audit import audit, observed_spread, world_observation
 from paper.stage_rgbd_validation import sha
 
 
@@ -96,6 +96,30 @@ def test_static_point_is_fixed_when_camera_translates():
     np.testing.assert_allclose(
         np.array(wrong["world_point_m"]) - start["world_point_m"], [0.4, 0, 0]
     )
+
+
+def test_spread_retains_missing_origin_and_never_bridges_gaps():
+    rows = [
+        {"frame": 0},
+        {"frame": 1, "world_point_m": [0, 0, 0]},
+        {"frame": 2, "world_point_m": [0, 0, 2]},
+        {"frame": 3},
+        {"frame": 4, "world_point_m": [0, 0, 5]},
+    ]
+    result = observed_spread(rows)
+    assert result["measured_count"] == 3
+    assert result["available_pair_count"] == 3
+    assert result["diameter"] == {"frames": [1, 4], "distance_m": 5}
+    assert result["adjacent_pairs"] == [{"frames": [1, 2], "distance_m": 2}]
+    assert result["planned_adjacent_pair_count"] == 4
+    assert result["median_adjacent_distance_m"] == 2
+    assert "world_point_m" not in rows[0]
+    for subset in ([], rows[:1], rows[:2]):
+        result = observed_spread(subset)
+        assert result["diameter"] is None
+        assert result["median_adjacent_distance_m"] is None
+    with pytest.raises(ValueError, match="consecutive"):
+        observed_spread([rows[1], rows[4]])
 
 
 def test_axial_depth_is_not_euclidean_range_and_holes_are_missing():
