@@ -2880,3 +2880,41 @@ all are compatible at zero/one degree, and all contradict the five-degree
 perturbation. This oracle result motivates testing explicit track recovery with
 independent identity checks; it does not justify treating restarted tracks as
 correct or adding any new DNF claims to the manuscript.
+
+### Direct matching after occlusion
+
+`probe_rendered_recovery.py` uses direct first-to-target LK for every original
+query independently of earlier track survival. Its fixed acceptance rule is
+forward/backward error at most one pixel and 17×17 source-patch NCC at least
+0.8, reused from the TAPvid baseline without tuning on this control. The matcher
+receives only the two grayscale images and original query coordinates. Later
+visibility and coordinates are read only after predictions are complete.
+All rendered RGB hashes are checked against the preceding sequential experiment.
+
+`results/rendered-recovery-control-v1.json` retains 2,760 observations per
+condition. Without the occluder, 1,655 are accepted and correct; 1,105 previously
+correct observations are rejected. With the occluder, 1,129 are accepted and
+correct, including 200 observations rejected by the sequential tracker.
+There are no accepted occluded or over-two-pixel observations in these controls.
+This is not a claim of zero error on other scenes or independent observations.
+The net increase over sequential accepted-correct observations is 150, not 200:
+the new rule also rejects 50 previously correct occluded-condition observations.
+It changes both matching and admission, so this comparison does not isolate
+the effect of either change. Geometric sensitivity must also be checked before
+calling it an improved camera evaluator. Results remain outside the manuscript.
+
+Camera consistency is retained separately as
+`results/rendered-recovery-consistency-v1.json.gz` (complete-prefix rule) and
+`results/rendered-recovery-available-fit-v1.json.gz` (available-prefix rule), using
+the unchanged comparison scripts and original 0/1/5-degree perturbations.
+With available-prefix fitting, occluded direct matches yield 82 compatible
+tracks and 38 missing-query tracks for correct cameras, with no contradictions.
+At five degrees they yield 49 contradictions, 33 compatible, and 38 missing
+queries. The sequential arm had five contradictions under correct cameras and
+11 under the five-degree perturbation. However, unobstructed direct matches
+yield only 61 contradictions at five degrees, compared with 120 for sequential
+tracks; 50 remain compatible and nine lack query observations. Thus the stricter
+matching check improves this occluded control while discarding useful evidence
+in the clean one. Neither precision alone nor contradiction count alone is an
+adequate evaluator objective. These are track-level counts with shared scene
+geometry, not independent sequence-level failure rates or a novel method claim.
