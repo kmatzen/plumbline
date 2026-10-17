@@ -108,6 +108,14 @@ and the complete archive receive a SHA-256 hash; unavailable camera poses,
 intrinsics, and capture timestamps remain null. The three unit tests use a
 synthetic archive and do not establish successful staging of the real release.
 
+`run_davis_dage.py ROOT CHECKPOINT_FILE SEQUENCE NEW_OUTPUT --limit 60` is the
+initial pose-only development runner. It reads a staged inventory, verifies frame
+hashes, and calls DAGE with `intrinsics=None`. It records the exact prefix,
+decoded-image hash, checkpoint and source hashes, settings, runtime, prediction
+hash, and failures. It does not create dummy reference poses, timestamps, or
+intrinsics. It currently refuses validation sequences. Its six selection tests
+do not substitute for a successful real-data run; no DAVIS result exists yet.
+
 Use DAVIS training sequences for evidence-design development. Reserve validation
 sequences for a frozen-protocol assessment; all windows, candidate methods, and
 variants of an original sequence must stay in the same partition. Do not choose
@@ -136,6 +144,39 @@ and failed plot-only VLM pilot are supporting diagnostics, not this primary
 reference-free method. The DAVIS arm has no tracking or judging results yet.
 
 ### Failure definition and validation
+
+### Harness first, then evaluator training
+
+The development order follows the useful separation in
+[3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,
+collect verified data, then compare model training with the workflow held fixed.
+Their published recipe trains code generators; our proposed adaptation trains a
+camera evaluator. This is an experimental plan, not an achieved result.
+
+First establish that the reference-free evidence supports reproducible human
+judgments and that at least one base-model configuration passes basic controls.
+Keep every attempt and evidence version, including failures and abstentions.
+Only then build supervised examples from independently verified decisions,
+supporting frames, and concise evidence-grounded explanations. Do not use the
+current Qwen pilot's unsupported answers as positive training targets. Maintain
+label provenance and distinguish human labels, adjudications, teacher proposals,
+and controlled-corruption metadata. Human disagreement must not be erased.
+
+Evaluate the base and fine-tuned model on the identical frozen evidence pipeline,
+alongside conventional metric and learned multi-metric baselines where available.
+Split original scenes before constructing windows or examples, and keep all
+methods, transformations, and repeats of a scene together. Reserve tracking
+methods as an additional generalization test. For DAVIS, human review measures
+visible consistency/usability, not unavailable pose accuracy. Report false DNF
+decisions, missed failures, abstention, cost, and scene-grouped uncertainty.
+
+Preference optimization is a later experiment requiring verified better/worse
+judgments; RL could study which frames or geometric checks to request under a
+budget. Neither should optimize against the evaluator's own unchecked scores.
+Any Bayesian optimization of the harness uses development scenes only, and all
+ablation choices and model settings must be frozen before held-out evaluation.
+No fine-tuning or RL has begun, and the currently available labels are
+insufficient for a defensible training experiment.
 
 Status: protocol under development, not a preregistration or a validated metric.
 The research question is whether a VLM can identify task-failing camera estimates
