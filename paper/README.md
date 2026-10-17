@@ -290,10 +290,23 @@ The official archive URL is
 `https://cvg.cit.tum.de/rgbd/dataset/freiburg3/rgbd_dataset_freiburg3_structure_texture_near.tgz`.
 Its verified redirect uses `/g/rgbd/dataset/freiburg3/` on the official webshare
 host; the catalog's relative archive link without `/g/` returned 404. A HEAD
-request reports 567,005,874 bytes. Download and gzip integrity verification are
-running in `/data3/kmatzen/plumbline/research/static-rgbd-validation-v1` on
-Anima. No extraction, prediction, or result is yet claimed. Existing dynamic
+request reports 567,005,874 bytes. Download and gzip integrity verification
+completed successfully in `/data3/kmatzen/plumbline/research/static-rgbd-validation-v1`
+on Anima. Selective extraction is running; no completed staging, prediction,
+or result is yet claimed. Existing dynamic
 sequence folders are untouched; the pruning staging script is not used.
+
+`stage_static_rgbd_control.py` implements the fixed RGB selection independently
+of depth/reference coverage. Its staging manifest records all selected RGB
+hashes and timestamp-index line numbers, nearest depth/reference candidates,
+offsets, explicit missing/ambiguous statuses, source archive and index hashes,
+and executed-script hash. Reused depth observations remain associated with
+their original RGB rows; duplicates at the selected reference/depth timestamp
+are not silently resolved. It does not interpolate poses or certify depth
+accuracy. Five synthetic tests cover sample independence from missing data,
+local timestamp ambiguity, unsafe paths, duplicate archive names, symlinks,
+and nonfinite timestamps. The extraction uses only ordinary archive files and
+refuses an existing destination.
 
 The development protocol is fixed before camera predictions are inspected:
 
