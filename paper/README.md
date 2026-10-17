@@ -312,6 +312,32 @@ image-processing path. A generic image-description and processed-input audit
 is needed before assigning this configuration any camera-failure judgments.
 No accepted labels or training examples were produced.
 
+The follow-up in `results/description-controls-v1/` audits the processed input
+and asks the same 7B configuration to describe the triangle-target image, using
+only “Describe the visible shapes, colors, and layout in this image.” The
+payload is finite and nonconstant, with grid `[1, 40, 68]`, merge size 2, and
+680 image placeholders matching the grid. This verifies payload presence and
+token accounting, not the correctness of every downstream operation.
+
+The description names the orange triangle, blue rectangle, purple circle,
+left-to-right layout, cyan ring in the triangle, and orange crop. It also
+incorrectly claims there is a second cyan ring inside the purple circle.
+Thus this configuration demonstrates some image-conditioned description but
+not reliable factual reporting. A nonempty description is stored verbatim;
+the description task's parser does not certify its visual correctness or
+convert it to a camera label. The exact executed runner and attention helper
+are archived alongside the output. This is a development diagnostic, not a
+held-out accuracy result or a revised camera-evaluation prompt.
+
+An original-identity-prompt repeat using this same instrumented runner again
+returns the same fenced abstention about a small, blurry target. Its processed
+pixel hash, grid, image tokens, source image, checkpoint-file hashes, generation
+settings, runner, and attention implementation match the description trial.
+This matched pair shows prompt-dependent behavior on this one image; it does
+not identify which instruction causes abstention or establish a generally
+better prompt. In particular, the description's invented extra ring prevents
+treating its greater willingness to answer as sufficient evaluator reliability.
+
 The larger-model follow-up is Qwen2.5-VL-7B-Instruct at pinned revision
 `cc594898137f460bfe9f0759e9844b3ce807cfb5`, staged in Anima's `/data3` HF cache.
 `bitsandbytes==0.48.2` is installed without dependencies in the isolated directory
