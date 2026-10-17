@@ -11,15 +11,19 @@ from plumbline.datasets.tum_dynamics import tum_pose_to_matrix
 from plumbline.frustum_projection_range import projection_range
 
 
-def run(source, control_path, output):
+def run(source, control_path, output, *, fit_end=10, query_frames=(11, 45, 89)):
     if output.exists():
         raise ValueError("preserve previous analyses")
+    if (type(fit_end) is not int or not 2 <= fit_end < 89 or not query_frames
+            or any(type(i) is not int or not fit_end < i <= 89 for i in query_frames)
+            or len(set(query_frames)) != len(query_frames)):
+        raise ValueError("query frames must be distinct and strictly after the fitting window")
     manifest = json.loads(source.read_text())
     control = json.loads(control_path.read_text())
     if control["source_manifest_sha256"] != digest(source):
         raise ValueError("source mismatch")
-    fit = list(range(1, 11))
-    queries = (11, 45, 89)
+    fit = list(range(1, fit_end + 1))
+    queries = tuple(query_frames)
     cameras = {i: np.linalg.inv(tum_pose_to_matrix(*map(float,
                     manifest["frames"][i]["reference"]["matches"][0]["values"])))
                for i in (*fit, *queries)}
@@ -52,5 +56,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("source", "control", "output"):
         parser.add_argument(name, type=Path)
+    parser.add_argument("--fit-end", type=int, default=10)
+    parser.add_argument("--query-frames", nargs="+", type=int, default=[11, 45, 89])
     args = parser.parse_args()
-    print("Evaluated", len(run(args.source, args.control, args.output)["rows"]), "queries")
+    print("Evaluated", len(run(args.source, args.control, args.output,
+                              fit_end=args.fit_end, query_frames=args.query_frames)["rows"]), "queries")

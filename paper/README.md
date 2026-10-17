@@ -620,6 +620,33 @@ test replaces all later image coordinates and sensor data and verifies that
 every predicted bound remains unchanged. These classical geometric bounds are
 an observability diagnostic, not the paper's claimed novel contribution.
 
+#### Fitting-window sensitivity
+
+The projection-range runner also tests fixed prefixes ending at frames 10, 30,
+and 60, with the same query at frame 89. Every original slot and the full
+1/2/4/8-pixel tolerance grid remain in the records
+`projection-prefix-{10,30,60}-v1.json`. Every frame in a fitting window must
+have an observation; missing tracks are not replaced or silently dropped.
+The original ten-frame runner is archived as `executed-projection-range-v1.py`.
+The new ten-frame final-query results reproduce its archived output exactly.
+
+At eight pixels, feasible counts out of the original twelve slots are 11, 10,
+and five. Median final-query horizontal ranges are respectively 1581.33,
+132.35, and 26.25 pixels; vertical ranges are 223.16, 28.24, and 11.00 pixels.
+At four pixels, feasible counts are 11, nine, and three, with horizontal
+medians 1282.10, 56.52, and 7.97 pixels. The other slots are explicitly
+insufficient or geometrically infeasible; these are not camera-failure labels.
+Medians use different surviving sets and must not be interpreted as an
+unconditional improvement. For every common feasible slot/tolerance pair,
+longer-window intervals were checked to lie within the shorter-window intervals.
+
+This development comparison supports testing longer prefixes while retaining
+the precision/coverage tradeoff. It does not select a fitting duration or pixel
+tolerance for evaluation. Tests reject queries inside the fitting window and
+verify that arbitrary changes to later image coordinates and sensor depth do
+not change any bounds for all three prefix lengths. No manuscript claim or
+human validation result follows from this sensitivity study alone.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is
