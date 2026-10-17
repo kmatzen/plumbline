@@ -13,6 +13,47 @@ The synthetic search experiment tests the optimizer, not tracking improvements.
 
 ## Real-data pilot
 
+### Camera-versus-track intervention control
+
+`probe_consistency_attribution.py` tests whether counts of contradictory tracks
+identify the source of an error. It constructs ten seeded ideal pinhole scenes,
+each with 24 frames and 12 static points at depths 3–6. The camera translates
+0.8 units horizontally. Coordinates have independently sampled bounded noise of
+0.25 pixels per axis. The first 12 frames fit the point; all remaining frames
+are jointly checked at 1- and 2-pixel tolerances. The evaluator receives only
+candidate cameras, tracks, and calibration, never the intervention label or
+generating 3D points. This is an analytic control, not a rendered video benchmark.
+
+All seven conditions and ten seeds are retained in
+`results/consistency-attribution-v1.json.gz` (70 input cases, 140 evaluations):
+
+| Intervention | Contradictory tracks at 1 px | Contradictory tracks at 2 px |
+|---|---:|---:|
+| Clean inputs | 0/120 | 0/120 |
+| Camera yaw ramp ending at 1° | 120/120 | 114/120 |
+| Camera yaw ramp ending at 5° | 120/120 | 120/120 |
+| One track jumps vertically by 16 px after fitting | 10/120 | 10/120 |
+| Three tracks jump vertically by 16 px after fitting | 30/120 | 30/120 |
+| All query tracks share a 5° erroneous coordinate warp; cameras correct | 120/120 | 120/120 |
+
+The seventh condition removes every query observation: all 120 slots remain
+unresolved at both tolerances, not compatible. All 646 reported compatible joint
+witnesses were independently reprojected and satisfied positive depth and pixel
+bounds. Tests check unchanged fitting inputs, unchanged unaffected tracks,
+missing-data accounting, and deterministic generation. A batched Euler-angle
+shape error was corrected before the completed experiment; no partial results
+were used.
+
+The six rows above are repeated measurements on ten synthetic scenes, not 120
+independent clips per condition. Broad contradiction can result from a shared
+track error even with correct cameras. A threshold on contradiction counts
+therefore cannot by itself attribute failure to the camera estimator. The next
+required evidence is independent image-based track identity/staticness evidence,
+with measured error rates under shared as well as isolated tracking errors.
+No vote threshold was selected, no DNF labels were assigned, and these controls
+have not been added to the manuscript. They do not validate real tracking,
+human judgments, or a learned evaluator.
+
 ### Joint later-frame consistency (development)
 
 `probe_joint_query_consistency.py` extends the final-frame check to every later
