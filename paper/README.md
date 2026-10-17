@@ -4585,6 +4585,42 @@ validation has occurred. The artifact is
 reference deduplication, exact replay, and full accounting. It remains outside
 the manuscript.
 
+### Reverse-prefix image-tracking consistency
+
+`probe_movi_reverse_tracking.py` ran the same pinned CoTracker3 checkpoint on
+Anima, starting from the frozen forward predictions at frames 12, 18, and 23.
+For each endpoint it reverses the RGB prefix back to frame zero. It retains
+all 768 original unique point/frame slots, attempting reverse inference only
+for forward-visible, in-image endpoints (624 slots). Endpoints are not clipped.
+The source query and reverse endpoint must agree within the existing 1-pixel
+cycle tolerance, and reverse visibility is required. No camera estimates or
+reference labels enter reverse inference. The forward pass had all 24 frames;
+the reverse pass uses only the corresponding prefix. This is a standard
+consistency baseline, not a novel evaluator or independent second model.
+
+There are 568 consistent, 39 inconsistent, and 161 unresolved results. Among
+526 reference-close correspondences (at most 2 pixels), 501 are consistent,
+eight inconsistent, and 17 unresolved. Among 29 reference-far correspondences
+(at least 8 pixels), ten are consistent, 16 inconsistent, and three unresolved.
+The remaining 18 borderline and 195 reference-unresolved observations stay
+separate. Cycle consistency therefore cannot certify correspondence accuracy.
+
+Combining cycle consistency with the unchanged crossfit epipolar gate retains
+463/513 supported static-background observations, compared with 485/513 before
+the cycle check. None of the 13 supported moving observations passes both
+checks, compared with one before. This includes the earlier 4970/frame 12/slot
+25 case. However, this is four-scene development evidence, not a calibrated
+staticness guarantee, independent validation, or camera-DNF accuracy. The 83
+retained observations with unresolved motion references cannot be counted as
+correct static decisions. A conjunction can reduce false acceptance by losing
+coverage; both effects must be reported.
+
+`results/movi-reverse-tracking-v1/manifest.json` retains all reverse endpoints,
+visibility flags, cycle distances, and model/source provenance. The analysis
+in `diagnostic.json` retains every joined decision. Tests verify eligibility,
+the fixed threshold, source-script identity, full accounting, and exact
+diagnostic replay. These development results remain outside the manuscript.
+
 ### Frozen-matrix correspondence intervention
 
 `audit_movi_motion_track_error.py` tests whether correspondence error explains
