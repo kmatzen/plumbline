@@ -460,8 +460,9 @@ seeded order, with finite losses and positive finite gradient norms at every
 step. Peak allocated GPU memory was 5,122,803,200 bytes. The completed manifest
 and exact executed training/evaluation sources are retained in
 `results/tapvid-lora-epoch-fp32-v1/`. The saved adapter is retained on Anima, with
-its file hashes recorded in that manifest. Validation has started; its results
-remain pending. Successful training is not evidence of improved recognition.
+its file hashes recorded in that manifest. The paired validation run completed
+successfully; the results and limitations are recorded below. Successful
+training alone is not evidence of improved recognition.
 
 `evaluate_tapvid_lora.py` freezes the next comparison: all 128 validation panels
 under the same prepared quantized model, once with adapters disabled and once
@@ -472,9 +473,11 @@ overall and class-balanced correctness, per-video results, invalids and
 abstentions. Do not condition accuracy on answered examples alone. There are
 only two validation videos, so these observations are not 128 independent scenes.
 The 119 calibration examples remain unused. The evaluator verifies identical
-processed image hashes and the saved base/adapter file hashes. GPU evaluation is
-now running from the completed fp32-compute training pass; parser and
-training-mask tests are not end-to-end evaluation evidence.
+processed image hashes and the saved base/adapter file hashes. GPU evaluation
+completed from the fp32-compute training pass. Both arms contain all 128 selected
+examples, with matching processed-image hashes and 609 image tokens per example.
+The completed report's training-manifest, validation-export, and executed-source
+hashes match the retained files.
 
 `analyze_tapvid_lora.py` rejects incomplete or mismatched paired generation records
 and includes abstentions/invalids in all-example accuracy. Its frozen baselines
@@ -485,7 +488,7 @@ are retained. Answer coverage and answered-only accuracy are also reported to
 separate response-format compliance from recognition. Answered-only accuracy
 uses a model-selected subset and cannot replace all-example accuracy. Tests
 cover fully formatted but entirely wrong answers and zero-answer cases. This
-reporting code has unit tests, not yet measured VLM results.
+reporting code has unit tests and has now analyzed the complete paired results.
 
 Before obtaining validation predictions, the report also adds a descriptive
 within-video label-association check. For each video, the expected accuracy
@@ -496,6 +499,35 @@ video have zero excess, even if its dominant label makes accuracy high. This is
 not a significance test, a deployable baseline, or proof of causal image reliance;
 it only checks whether answers distinguish cases within the same video. The
 implementation is checked against exhaustive permutations on a small example.
+
+**Completed development validation (not a manuscript result).** Raw generations
+and the complete analysis are retained in
+`results/tapvid-lora-epoch-fp32-v1/validation-v1.json` and
+`validation-summary-v1.json` in that directory. All-example accuracy was 37/128
+(28.9%) for the base and 54/128 (42.2%) for the trained model. Both produced a
+valid class label on every example, so the difference is not format compliance.
+The base always answered `far`, matching the training-majority baseline.
+The trained model's recalls were 41/46 for `close`, 13/37 for `far`, and 0/45
+for `occluded`; balanced accuracy was 41.4%. It predicted `close` 101 times,
+of which only 41 were correct. This is unsuitable as a reliable correspondence
+admission rule, despite higher aggregate classification accuracy.
+
+The frozen NCC/forward-backward check admitted 30 cases, 29 correctly, and
+abstained on 98. Its 96.7% close precision comes with only 23.4% coverage; it
+does not attempt a three-class decision. Its 22.7% all-example accuracy must
+not be interpreted as worse evidence reliability than the trained classifier.
+These comparisons use the preselected labeled panels, not all video points.
+
+Trained accuracy was 25/78 (32.1%) on breakdance and 29/50 (58.0%) on judo.
+Within-video accuracy above the shuffled-answer expectation was -1.9 and +22.4
+percentage points, respectively. Thus the aggregate change does not demonstrate
+consistent discrimination across scenes. There are only two validation videos;
+we make no significance or camera-DNF claim. The reserved calibration partition
+remains unused. Neither low-confidence output filtering nor another training
+budget has been selected from these results. Before any larger training study,
+the next diagnostic should distinguish failure to fit the training task from
+failure to transfer to new videos, using training-only examples and the same
+saved adapter. These development findings are not added to the manuscript.
 
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,

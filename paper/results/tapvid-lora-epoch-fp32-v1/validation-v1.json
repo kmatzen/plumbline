@@ -1,0 +1,2575 @@
+{
+  "status": "complete",
+  "scope": "development validation comparison, not camera DNF or an external test",
+  "training_manifest_sha256": "03de4fdda23cacfb983fa0dd25abe8447113c98a9b7b7d4c68e043e7f7b0efcc",
+  "validation_export_sha256": "20b0c534fac218a7aa1af73042959dd823108df8f1a35412d8d749f4005f422c",
+  "script_sha256": "bedd3ee50611e97c4a67107eabe6606f35bbc85e8c976a6252dc8341eb9bd262",
+  "protocol": "base with adapters disabled versus adapted; identical prepared quantized model, panels and prompts; greedy max 8 new tokens; exact four-label parser; invalid and uncertain retained; no calibration examples read",
+  "results": {
+    "base": [
+      {
+        "id": "f2ab662d01a8e31b1dea",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "763660ed9747df1e3d318368428412c1821c6aeb189ceaedba06773a73c5b1ff",
+        "image_tokens": 609,
+        "elapsed_seconds": 2.614477898001496
+      },
+      {
+        "id": "01b47f9b68dc48073f14",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "07067b06114df7b363798567c8fa80838d2125adbc3a31505428f6a41c589f67",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8543235739998636
+      },
+      {
+        "id": "725650956b86b9f0e351",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "df423a9a1a7881db8909a537d04a9f02748f79c65d8c4ccc428649e692c4b1a8",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8532581940016826
+      },
+      {
+        "id": "11552438faf0b9139f56",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "451724416575bacf193845ce1fbe3e349314cb440bbcd46c5b4139ce96170ba9",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8516539679985726
+      },
+      {
+        "id": "2e83aed31495effd8a37",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "7250f74a1fc4ced29c1856f46684ca3927eb05d06c33bda0b62c37b5c5bd3044",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8469400920002954
+      },
+      {
+        "id": "72c1207638caddd9c16d",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "5d5137390707ffcdd362d15efbdc0d9720be72602daf1e6a8cb0ed8e1566817c",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8608382620004704
+      },
+      {
+        "id": "67f3c2980c3319e3def1",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "791abacff2789e3a3dc90243355784bfe5972a1219bb5610e371f36adbd510cf",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.866407158999209
+      },
+      {
+        "id": "6a8b48fa6b3d9cf65b76",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "251d0bd04f958de1114c97b8559e7a56f3edb70542f674961943015f7fe7bc6b",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8585803489986574
+      },
+      {
+        "id": "c40b2690363ccc2119de",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "4c8a740164730b3e13ad1a7cc2af4280594a96de1458fc896c0b5f41ea477d71",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8556653649975487
+      },
+      {
+        "id": "1e1e6d4ea025977f0db9",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "5d5ff1a7560d0b3e062cd0caa688a280cdf796f71608a646eb399ca7cbbfa05c",
+        "image_tokens": 609,
+        "elapsed_seconds": 5.145869670999673
+      },
+      {
+        "id": "ded2961089ad99d6d915",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "69b56fe2c05ba4268b5d25b61aeee8f4c27a508c3306fe7cd5fe31d4091c935c",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9134336460010672
+      },
+      {
+        "id": "7c490fa24ea30bc6a14b",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "1683ca91dc1bf3dbe2aeee5d7f61b7e1547a033c9204a1ad9c91526810246d6c",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9259632819994295
+      },
+      {
+        "id": "20dfb00126231d7f05d2",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "c39d6619160c34f441ea718f79620f3f60ad2ab7a5d42e5449c6903e6a928eed",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9426852220021829
+      },
+      {
+        "id": "ca46414c8adb1531ecf8",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "d5317ef42d97c1a72bc84e9359d87604b4b7278ac1ed892e43f01a0b11169cc2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.89528140299808
+      },
+      {
+        "id": "e8fe9f4413af46ad0df5",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "eec9d4766340dfe5d66c775d56841ded1d47346755554663d1c216ea71d520b3",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.892571657001099
+      },
+      {
+        "id": "a3624e53bce3e09a31f3",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a9a9920c855320804453201a37f5528550833922fe45ffa2072262cf9cbaf652",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9025981489976402
+      },
+      {
+        "id": "4d9cdef228c38c90faef",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "053e67c794bcc7f1a6c23ab329f120c68d8ea2fcac47fefc89f46be239028064",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9270338150017778
+      },
+      {
+        "id": "48f0201dd2a7b808f202",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "4c0779e5d9132f6b8100e101b5b437631a5f840b853daf61618a7fdbe4626ca9",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9204833080002572
+      },
+      {
+        "id": "33c2caae408df20185ff",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a0451f70c6937ff4a7267f695a34d3f16f79a254f619fcfb7dbb0c8869178cd2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9075580649987387
+      },
+      {
+        "id": "3f834da9552a6b9208b1",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "7337d2cd1b77e6e376292cb28184a541f010453dbe8264b94891ac0835cbde7c",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9141220150013396
+      },
+      {
+        "id": "c7ac111e50c707edd1ac",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "ab9dec25dd6602743efde94ec9670b85ce434a4fa9c3fdaf54c6eecdb2a9f52f",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9112106669999775
+      },
+      {
+        "id": "3e03deee02fd42622275",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a62ec01336f0cd1609ca85c7de1127a115a5399d4b4ecc00187115d2b6ba01c3",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.903815585999837
+      },
+      {
+        "id": "a1d0b1d986d8db0614fd",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "d7ceb88f6bb782e6a62adeb940896c7dee79ac59862abc66682a13eec563d096",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8788459889983642
+      },
+      {
+        "id": "64c906da40b9f54e4c08",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "74672a4877f00892133ad8fcca948b54118865c4d080007c8b9e33139dd5f964",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9458697509980993
+      },
+      {
+        "id": "ac333d4e5a3232c39916",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a62ecc3bd4b13397a0b2dc08943c36ccad11667bbb7123f84ccb93948f37f754",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.87778236700251
+      },
+      {
+        "id": "bcb6f6e637fb0119e615",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a530335b82ae280629ca795839e4b2e8f262a333045c1e69996bb7607c84c170",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8921878780020052
+      },
+      {
+        "id": "7d91598d6fac540a6c76",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "c01120b24c519a3ff091b9d83c2c30700d0453a2f1784980edb32b9dc707018e",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9589482020019204
+      },
+      {
+        "id": "b346d7f9421e09f1fed6",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "8474773d347518fb8d581274cc2727e9b2d0ef48cac81ae3a100ec16f8aebfd2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8939777499981574
+      },
+      {
+        "id": "9cd502a2b279778641c2",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "cd9c4269590f5a93f57cc29fb7d4a73a966d9a6e88f5f806212e14b728fec6e2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8802933619990654
+      },
+      {
+        "id": "0bc0759230710295b509",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "12be40aed5e07001bf799c62fd7d37d935ebd37a338907bac485f45b6f05b768",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9483640420003212
+      },
+      {
+        "id": "b097b88868ed1fea1062",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "cc275b5e4929db7884ba8759fbec3ad4b8d890ede133cbbdb9e97c719ff9bf7a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9202153490005003
+      },
+      {
+        "id": "9b3e8cb2b2a4c86e48c1",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "e8810ce7d49a3d33c918ae44a0cb341e60f237dd0a68658504cc2757643a1a5e",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.875005770001735
+      },
+      {
+        "id": "213ab401b43075f407a9",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "bf5f686fc83303a6491f8841bfd1faa39ef06b25308a926c7aad8f58cedac5b2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9496519589993113
+      },
+      {
+        "id": "26c6e464b8e4ccde7b4a",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "39f5c4ba2464e5936f71a3406ae3d539dd9790f4b537be1cb986979daee9aaef",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8746329360001255
+      },
+      {
+        "id": "905953814a73a7cb1241",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "8e185e65a49e58ce922e487ce619d462773c25564e9dd7cf7292104d0c15abec",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8753936979992432
+      },
+      {
+        "id": "3d70a8e9b0b88cf67aa8",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "286e7a08af4742df7f6cfba498e263e7e2e6c2323f7d77e405b3805ca22e559a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.903798363997339
+      },
+      {
+        "id": "9dab7211ef9e31ed0055",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "519c820407f5367bcb6a15d5ba33773c47074e000ab9fc3ef2afce92b68d99b8",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9408693089972076
+      },
+      {
+        "id": "ef89e33d7f61f00aa89b",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "9535917ba6afc3c49a856745f6733d961acb9c763c87cb893c9a8f10914d3d90",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9051395540009253
+      },
+      {
+        "id": "4b002ebf1374f31e06d7",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "4c34a62bcb73e687c1988d563d0f5612fd4e25b4eaf4f68dae9e54cddd1febf7",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9486357799978578
+      },
+      {
+        "id": "6affc4245777f22945ca",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "bba15dbb4e3c91c4f37406b3ccf9fc69c0531b36fd538c06850a676e9a54ec41",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9077445459988667
+      },
+      {
+        "id": "3f52bc3efbeb0b66e197",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "b7213bbfc9ce7dc24fb099c3d5a1c71fb88ca594404f248a41f9d72a79fdd883",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8854868299968075
+      },
+      {
+        "id": "ae3900cdf857b2d49a8b",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a5d3fcc2ca66aedafba2f918dd3e575b1185355789bc2906c2fa00f95344a83f",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9302023830023245
+      },
+      {
+        "id": "649ae9122b13dd8b5068",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a7f8f4c2b09e51ba352c1cab9d9b7a09b773ecddab89812fad3ec60e0178d63b",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8915896289981902
+      },
+      {
+        "id": "21afac03c4f5e732656d",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "05e4923390eff75cf934e8c64fc32e3436cee1b7736247d04039864cf80d95a2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8984104240007582
+      },
+      {
+        "id": "c7b312cd2b34ea460d23",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "b46c480a46ae10e159a9145e04b9d239d5ce07b28d637a1f4ec1217c6d0a9dd2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9596043920028023
+      },
+      {
+        "id": "81255e29c13d58dd10fb",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "44a544a36cc2696993ca84fd2e703d9257f3c654bc54204377e4315a35fc98a6",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9094306790029805
+      },
+      {
+        "id": "ef8b4b8da3f6a92a3f80",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "e5ce7d111c9b85e041cb54190c23dacebe6a33dfd48d2ec5bd442870eb855519",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9414060880008037
+      },
+      {
+        "id": "c6ccb85eb919945b7f12",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "f182630b529f3fbfb0ebcfe1c51588e0a0a119919dd968248625bd8e863bb78b",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9313975269978982
+      },
+      {
+        "id": "30db20736cdcb4c238f3",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "0d2814042aadf05f1a6c01a537b236aaabac9579f6109b5636c327da09e13bd7",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.93286854300095
+      },
+      {
+        "id": "f8736f795ad695a87611",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "1e7dfa3bd795b5cca5f025067990bc46600c7128ac138d4a5346b26ea6a7ffe2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8849278160014364
+      },
+      {
+        "id": "dead18919ba43139ea5e",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "e5ebcbeea0dda71a09576683293a021bf81a4f8c589ad930b314867c04d398f4",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8901370460007456
+      },
+      {
+        "id": "940281a0a1998c5dc686",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "c160d7ad4d10ffbc0b396b9cdfd89b66511ba5adfccd8f06702f4f6de952b1d1",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9020009910018416
+      },
+      {
+        "id": "70fbcb07734ba5d438da",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "e52ec7e3bbbeb0e1e6757599175bfe8233b48665ac28c77d81012fa540aaa60b",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9598706629985827
+      },
+      {
+        "id": "4b3a9a976f232f113765",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "9cbc5d251e292f08168d4eb32dbcc0a6d6f7292a605687c2ed9b851e943e0341",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9251458190010453
+      },
+      {
+        "id": "956e11ce0ad2fef8ed80",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "2e3899e0e6cf91d8ec0b50885d548b2bb65870ab762dba11a0611f84155419d8",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.901393845997518
+      },
+      {
+        "id": "5167dd86749bafda96ae",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "22b855c4579503b36959e0e70b9c831e4eabbb3ec78127ff873127318f29aa37",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9585436749985092
+      },
+      {
+        "id": "22ee0ae304b177aab228",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "aa73ed961ad7d1d44f0625994f4f56a056a04618b814efd14295bb83ff69286a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8950937349982269
+      },
+      {
+        "id": "25d83a87473744fd5c23",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "ebd2f5c8d22635c43c1fcbf9bc15045966328d7992c8ccfa996105dc6cbb550a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.905387762002647
+      },
+      {
+        "id": "e3431a683d0b6a17301d",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "582a62068023802cc5ec5942749f4b1922f8689379d8d757862493f64d3329fe",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8856140060015605
+      },
+      {
+        "id": "e9de4f63a4baf81f5078",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "36cd8759ff3586f5d8f859feb8333aabc0f2019d8a8415c8164c5d5801475d72",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8837414710033045
+      },
+      {
+        "id": "84efff7504ef374c7878",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a5811adf11345992944ad7b6adf74b0956447f7dfbb50108d12278430ac8f541",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8790990200031956
+      },
+      {
+        "id": "07e0f28445e2efc216d7",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "0d1463e104286f7214e918f3d90e00d7e712061639c43215bb39ede555b4c07a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.916283171998657
+      },
+      {
+        "id": "02b68ed481e145aaac18",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "82a43124487a3d5362ebf3b786679473e602592ddaea3e5d7bba0a633e887496",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9765502650006965
+      },
+      {
+        "id": "84745b00098010703441",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "b58beb995c28ad758b4def9263a75031b6674f645eaae28b14f9ecb021c962d1",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9453795519984851
+      },
+      {
+        "id": "c53f4b37f27841bb8cfe",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "0a8b4d0319c884cf03270aaffa92a597f7749db89dc0b1269386b8b9cf7b1b85",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.926425776000542
+      },
+      {
+        "id": "09833df77b6cf04a4d81",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "c1f7542a12852cf5efcc701e2ab80ecbd42760ad0d187361c155b5b2b06ca266",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9451507259982463
+      },
+      {
+        "id": "51282d234e646b17e9c4",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "7608e1d920a1ca71ff19d63959bae64614248ea278291e2be1858e0aeca518f0",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8877475120025338
+      },
+      {
+        "id": "d63a1257ad6ed4b29ba1",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "1ce6fcf1620a7af797474957d7c231e8a8160cfc99cfeb3dc41051ee01c90fbd",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.935225942001125
+      },
+      {
+        "id": "00b4589db43d202e55d3",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "ae3b08a3aa8c4fc60362423461dd00b22dfe2921d1f569c92eb2275f81feed2e",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9194910749974952
+      },
+      {
+        "id": "e070816e823321cc451b",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "9d773ac5b32c4f91169fe6a00a9bb9a6aaf758b49af855681bca5c8f3ebc37ce",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9321581780022825
+      },
+      {
+        "id": "f9173b68a781b3ee11ee",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "4817ead79f35572401bb3791862fa07be1d9c0288dea2f54230d03f30da52737",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9557842350004648
+      },
+      {
+        "id": "dfd9e7b61bef5db23453",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "99f239836d4d72222727996501da9b12966e9a1367554b39127f50dfab430214",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9140284679997421
+      },
+      {
+        "id": "c293446682f6c94dc41c",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "f66bceb745bb5ec15a36787faed345632ee1f52a81ea6f2a7dae2be9dbc29d6d",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8836797579970153
+      },
+      {
+        "id": "e6940db209a27400fc28",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "79c3ea4c8fc3553cd376d1c44150a760f192724fdd0c063697a918ecdab5d0f7",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8939983189993654
+      },
+      {
+        "id": "005b97a86dec7275b731",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "440a0d5286a3bbb81dc15d3c3cd26a63b9861ff6f55aaa5d6a3e00095f4a5963",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9569944279974152
+      },
+      {
+        "id": "7ddbd828336d065959c4",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "66585f1096c169d257763f96839bead4cef942f0652bd5031347820c7ccbd778",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.906513593999989
+      },
+      {
+        "id": "dfb4bf7a426db0d78cea",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a7d5a4496d28741b9d91b7de625960a12194b4fe8ec32cdb91bbfaab4ebc4767",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9190393130011216
+      },
+      {
+        "id": "b01b54eb1e7437d86596",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a158e0fa7bea1a5a6e9ac2add38eb2d2b008b4072c9e51a9ae0ad7594869ce7b",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9173630609984684
+      },
+      {
+        "id": "421eceda0b7eb85559e9",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "ff54cebd98cb6ad58dc6f2d75e92a10a0e6cc264d6b22afb30d6938ba87787db",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9036685629980639
+      },
+      {
+        "id": "c4a92f5e80d99abf07ef",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "0e16782fce31edbc77781acd917dc7ffbaa23ea31994da0ac29c3c37f582a572",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9443506179995893
+      },
+      {
+        "id": "1b725543df93745ac28a",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "10af7e02f33d0f03427f7f56321ff073f56cde8d291b815a6538ced9920f7e81",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9049630869994871
+      },
+      {
+        "id": "d733fa216e1f2ec2dc1e",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "65460c361a02419d94a098278bba98a2778764eee9a31847d37be148932fdbc7",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8963257940013136
+      },
+      {
+        "id": "c8a8cc19942d5e3d098a",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "291aecc09eca931c941f58cd0cb4fe03a810304bcbdf9d9bc4b5c5deb416d674",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9505978970009892
+      },
+      {
+        "id": "8e9ee6a8eb7578b5f5c4",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "48bfba74b5722be9e6e3b8027bc746ec4125d2807c100b11f65b00ad464f4636",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8887167579996458
+      },
+      {
+        "id": "e4bb4c36199211022a5f",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "cb52b3c6dd780292f3f08dab1132ee706e476318d1fd2b98eb2e89edaa132129",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9011662670018268
+      },
+      {
+        "id": "82b1e7332f340b5bb882",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "fde32c693756209ff1b010989ab8b945af1b334c86dfdafac3795ca5935d4c63",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.943358658998477
+      },
+      {
+        "id": "d6eb14cf9f5c5d37a6a3",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "84cbd1536945ee026c1fdfcef0aef87a6bc06dd6a3bc9df89fcdf395414451dd",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8795540969986178
+      },
+      {
+        "id": "72c713b07c7f4e2e0875",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "62b7dbe951f47c01954160764aa7224ad140d553f4fb53ef948616a1f38d80f8",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9411756609988515
+      },
+      {
+        "id": "1fc70205f789aa43af46",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "4579a54a38b904235877ff20298aa07caffedb66f88bc4c08c8dfc6140f6f2a6",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9405284360000223
+      },
+      {
+        "id": "7a30ddd1acde37f7f724",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "95c8df2c04be5d0ebee0face97cb24246082e14f4506820eb85b5452bac24484",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9192500520002795
+      },
+      {
+        "id": "236fefb8817bf31a5515",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "ce6702e5d32679efcbb2a684410c2bd1df1c5807748cd4f21d6634eee06a218a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9163458069997432
+      },
+      {
+        "id": "60aca026b8ffbdf7117c",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "d532496eafe75d45eed8f78001f581930bcb955f1450c8b078f23c24d8a36050",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.912146582002606
+      },
+      {
+        "id": "8ea46d374b97ee4ae365",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "dc6565b11378f770d8bcbaa84cdcae7e6566ba2a29222bd23aa1180dff25c1f2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9092991719990096
+      },
+      {
+        "id": "68ff3d819d4036f7ed17",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "de0611a11cc459b746875da3af59272aeec97a76cf27a2df44a9a7d3bee1ac54",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9839018569982727
+      },
+      {
+        "id": "add254d56d056af5f7ff",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "cfb389066911c12710dcea591897ecb8155cb56185fd7ddec089884c80e9a893",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8898594659985974
+      },
+      {
+        "id": "41423f7120131f948ef3",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "3a1bae9ac59d4b468beeb91bbb380b0515481fe259d1aca41787ceecaca89565",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9617091020008957
+      },
+      {
+        "id": "52c35b599db531cd835b",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "dbfd7a31f95388566fb9dab3e78e4b93c5083155a5249701681ee077210a9a01",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9141368630007491
+      },
+      {
+        "id": "ce11f1b29c2cdfa6031e",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "b5faf87a8940c32d35ba9b1ae8c59340c03da5dcc574c5c87342f1fdf97c8cb1",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8829715179999766
+      },
+      {
+        "id": "37e154d638e5340b39d3",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "05110080ddd4e500c8503c76eec669362f5176c15b9480567ee1504ececa2062",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9013354599992454
+      },
+      {
+        "id": "cedeab62a7c95897600b",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "025bd43a0ff87255923d68fdbb70900bd8f13d5e4a07e0835fec0fe0c9f5d8f8",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8832977979982388
+      },
+      {
+        "id": "eb40dc180ceea211f9ad",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "3b85dc707e1bddf741d6a051575995f318aba47e0ce3876b94d1181f1a049c90",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.938160985999275
+      },
+      {
+        "id": "22f35e3ab7a9a0a67a2c",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "3949a054832dea0d1f054c883292170bc9249ffa3eca58cec2084096208fa15f",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8925369629978377
+      },
+      {
+        "id": "fe6ccebb6c0aa980fd10",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "10e888e82656523010ac53a4138ecdfc480cc34e9c6f14b4c3ff57f169e8c1dd",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9025874720027787
+      },
+      {
+        "id": "983b82472ca16bc03783",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "e98ed5929530583d1c9e5d8b5f0f95c30d7ac7537a348be7c166c140bc69dbf4",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.882435022998834
+      },
+      {
+        "id": "1b55eee75fa24fbb4952",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "2d825554fa56e286749bb055a781ae2c02c98486fc95abc97c25f957ea073554",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.927293610999186
+      },
+      {
+        "id": "82593710f55c5ac3606c",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "082e32bf28f4ca9793acb04ea3ce6567ee5f5bc7f52c3b0ea87669e3f0f63b63",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9312969780003186
+      },
+      {
+        "id": "9d1cf2948610c7140704",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "fc1142f9d0fcc9cd3f84c65a24789e3e19c0b07c5ab045ac09e38488ffcd31ec",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9051927459986473
+      },
+      {
+        "id": "7450b4343253034af6cc",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "73155f5552ab9ad3e25ba4dd2007bb0c8a3d38cb9a1cfcf84603cd65d520875e",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.893235313000332
+      },
+      {
+        "id": "764fd6dd01a2ab1ad9e8",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "7699bbf25ca1559476e070a61685d0c4ec851894dbb781ff088a777c1b347528",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9201722030011297
+      },
+      {
+        "id": "a6297fe2d3416855265a",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "41a8a55515f2d528242640a8bf2e84d90934c932069693bb8c93905a5b5b8a4b",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9362398230005056
+      },
+      {
+        "id": "14590c1bfd68c4b75191",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "9ab8f930501a560eab1d571fbd59266580a0d98c28d274f35740ef7fb283ea76",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8927255669987062
+      },
+      {
+        "id": "56a05011dc54e8f2797a",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "181d2a90713e89414eff7c2b05ce691939e85fb6633a68b16c89e55641912d21",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8793946810001216
+      },
+      {
+        "id": "5c63c021c2dabe2934c6",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "ca1a1ea2b7f2d52547a060e427434e9558b8f36946aa7d978f25d08a3e21bd28",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8718508219972136
+      },
+      {
+        "id": "212f9bc335f15b8237f7",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a74a335d3e9564b458fbebc68c727f8b3cb615aa9e56c408b7bde9d9241b2b3a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8833012909999525
+      },
+      {
+        "id": "8e778cb336ad0769770e",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "f5464e98329239e3d96f4f34db4c985a9d6c80af5b0abe0b06dd319a78eabcd5",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.966122539000935
+      },
+      {
+        "id": "9953734d3c29d13b2996",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "fc76f4227dd2408dd7d92ad19db45ea6c363215aeb9a42ce5df50f547b39839e",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.914112608999858
+      },
+      {
+        "id": "2f7ae30315e170550434",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "10d1674a08837d4b367854578516720ef4c3971a217ade43347e428c5fc690c7",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9717630810009723
+      },
+      {
+        "id": "56611a404612bf03abef",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "37d61bc290c7c407431fa762ba04ca121a393b3b815a9b1cd8a1cc320e7017cd",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.897787841000536
+      },
+      {
+        "id": "df3ab4e877425c121a70",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "da0a89b7ff994e918213f65fda1811b8d071cb4773f960f13aea147cc4905345",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9041181770007825
+      },
+      {
+        "id": "412169b799ff1087eb5a",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "339d0b8ff7a11fc47a0bdb2cb7daf889dc6d3d7cc82e3fdb3e5ffe80a878817d",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.945157766000193
+      },
+      {
+        "id": "3a4b2ccf13aea6a06e40",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "0180d70d188a139d9bc95d74d62051614610a7675ed98c67e5277b0470b6ff5d",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.88922799500142
+      },
+      {
+        "id": "1d6ca2e82b452ce131f3",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a19cbbf4250144f6742f89b8770cc44ff09270d6974dcca9363a9a023687f194",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8804321469979186
+      },
+      {
+        "id": "169208ca48617d3d48e4",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "5e767dff4562343a234baf60c167544abb531e4bc7fa3429a1470bcba2b52ab6",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9678958340009558
+      },
+      {
+        "id": "03ccbc8ae4c2f6cb39c9",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "765cf7a3289b60980fc59fb0b06cfacad6407c8f216a93c76f49ee904f661771",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8909157380003307
+      },
+      {
+        "id": "7df6356e76f691cf7ddb",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "db12a1055a055cf5e345969ed66abad92636ff4533d120a743660498abc1502f",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8906149190006545
+      },
+      {
+        "id": "933ddb1add9ca1bcd9a5",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "e8ff89079534903beeecf9960a57e64472ec0600bed253d890806ab9337dc183",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.94267361999664
+      },
+      {
+        "id": "848ba44d263dded38795",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "3c53a5588c0f6c851d0bc07ea4c9c4d64ad852cbb0c82c4102b791641665f0fc",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.88289467100185
+      },
+      {
+        "id": "bf9acc61d429eaf58dc0",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "b31220e15418ad885c42bc3582036112493ff92843521e4151a4d8a42bd1b4fb",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8941290489965468
+      }
+    ],
+    "adapted": [
+      {
+        "id": "f2ab662d01a8e31b1dea",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "763660ed9747df1e3d318368428412c1821c6aeb189ceaedba06773a73c5b1ff",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.98235147199739
+      },
+      {
+        "id": "01b47f9b68dc48073f14",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "07067b06114df7b363798567c8fa80838d2125adbc3a31505428f6a41c589f67",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9701083410000138
+      },
+      {
+        "id": "725650956b86b9f0e351",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "df423a9a1a7881db8909a537d04a9f02748f79c65d8c4ccc428649e692c4b1a8",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9068178269990312
+      },
+      {
+        "id": "11552438faf0b9139f56",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "451724416575bacf193845ce1fbe3e349314cb440bbcd46c5b4139ce96170ba9",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8916796330013312
+      },
+      {
+        "id": "2e83aed31495effd8a37",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "7250f74a1fc4ced29c1856f46684ca3927eb05d06c33bda0b62c37b5c5bd3044",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.92476022199844
+      },
+      {
+        "id": "72c1207638caddd9c16d",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "5d5137390707ffcdd362d15efbdc0d9720be72602daf1e6a8cb0ed8e1566817c",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.917324694000854
+      },
+      {
+        "id": "67f3c2980c3319e3def1",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "791abacff2789e3a3dc90243355784bfe5972a1219bb5610e371f36adbd510cf",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8995177270007844
+      },
+      {
+        "id": "6a8b48fa6b3d9cf65b76",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "251d0bd04f958de1114c97b8559e7a56f3edb70542f674961943015f7fe7bc6b",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9760614609986078
+      },
+      {
+        "id": "c40b2690363ccc2119de",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "4c8a740164730b3e13ad1a7cc2af4280594a96de1458fc896c0b5f41ea477d71",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.970122023998556
+      },
+      {
+        "id": "1e1e6d4ea025977f0db9",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "5d5ff1a7560d0b3e062cd0caa688a280cdf796f71608a646eb399ca7cbbfa05c",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8980348570003116
+      },
+      {
+        "id": "ded2961089ad99d6d915",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "69b56fe2c05ba4268b5d25b61aeee8f4c27a508c3306fe7cd5fe31d4091c935c",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8943375720009499
+      },
+      {
+        "id": "7c490fa24ea30bc6a14b",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "1683ca91dc1bf3dbe2aeee5d7f61b7e1547a033c9204a1ad9c91526810246d6c",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9331830379996973
+      },
+      {
+        "id": "20dfb00126231d7f05d2",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "c39d6619160c34f441ea718f79620f3f60ad2ab7a5d42e5449c6903e6a928eed",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.898416181000357
+      },
+      {
+        "id": "ca46414c8adb1531ecf8",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "d5317ef42d97c1a72bc84e9359d87604b4b7278ac1ed892e43f01a0b11169cc2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8923057459978736
+      },
+      {
+        "id": "e8fe9f4413af46ad0df5",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "eec9d4766340dfe5d66c775d56841ded1d47346755554663d1c216ea71d520b3",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8957090320000134
+      },
+      {
+        "id": "a3624e53bce3e09a31f3",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "a9a9920c855320804453201a37f5528550833922fe45ffa2072262cf9cbaf652",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.962857365997479
+      },
+      {
+        "id": "4d9cdef228c38c90faef",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "053e67c794bcc7f1a6c23ab329f120c68d8ea2fcac47fefc89f46be239028064",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.89277797899922
+      },
+      {
+        "id": "48f0201dd2a7b808f202",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "4c0779e5d9132f6b8100e101b5b437631a5f840b853daf61618a7fdbe4626ca9",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9460926789979567
+      },
+      {
+        "id": "33c2caae408df20185ff",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "a0451f70c6937ff4a7267f695a34d3f16f79a254f619fcfb7dbb0c8869178cd2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.886624506998487
+      },
+      {
+        "id": "3f834da9552a6b9208b1",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "7337d2cd1b77e6e376292cb28184a541f010453dbe8264b94891ac0835cbde7c",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8958563069973025
+      },
+      {
+        "id": "c7ac111e50c707edd1ac",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "ab9dec25dd6602743efde94ec9670b85ce434a4fa9c3fdaf54c6eecdb2a9f52f",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9325181880012678
+      },
+      {
+        "id": "3e03deee02fd42622275",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "a62ec01336f0cd1609ca85c7de1127a115a5399d4b4ecc00187115d2b6ba01c3",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9596449299970118
+      },
+      {
+        "id": "a1d0b1d986d8db0614fd",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "d7ceb88f6bb782e6a62adeb940896c7dee79ac59862abc66682a13eec563d096",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9026564970008621
+      },
+      {
+        "id": "64c906da40b9f54e4c08",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "74672a4877f00892133ad8fcca948b54118865c4d080007c8b9e33139dd5f964",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9418761269989773
+      },
+      {
+        "id": "ac333d4e5a3232c39916",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "a62ecc3bd4b13397a0b2dc08943c36ccad11667bbb7123f84ccb93948f37f754",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.917038497998874
+      },
+      {
+        "id": "bcb6f6e637fb0119e615",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "a530335b82ae280629ca795839e4b2e8f262a333045c1e69996bb7607c84c170",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.939455709001777
+      },
+      {
+        "id": "7d91598d6fac540a6c76",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "c01120b24c519a3ff091b9d83c2c30700d0453a2f1784980edb32b9dc707018e",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9403552779986057
+      },
+      {
+        "id": "b346d7f9421e09f1fed6",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "8474773d347518fb8d581274cc2727e9b2d0ef48cac81ae3a100ec16f8aebfd2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9153656070011493
+      },
+      {
+        "id": "9cd502a2b279778641c2",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "cd9c4269590f5a93f57cc29fb7d4a73a966d9a6e88f5f806212e14b728fec6e2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.884682652002084
+      },
+      {
+        "id": "0bc0759230710295b509",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "12be40aed5e07001bf799c62fd7d37d935ebd37a338907bac485f45b6f05b768",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.885210452001047
+      },
+      {
+        "id": "b097b88868ed1fea1062",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "cc275b5e4929db7884ba8759fbec3ad4b8d890ede133cbbdb9e97c719ff9bf7a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8976080259999435
+      },
+      {
+        "id": "9b3e8cb2b2a4c86e48c1",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "e8810ce7d49a3d33c918ae44a0cb341e60f237dd0a68658504cc2757643a1a5e",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9838949769982719
+      },
+      {
+        "id": "213ab401b43075f407a9",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "bf5f686fc83303a6491f8841bfd1faa39ef06b25308a926c7aad8f58cedac5b2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9379031690004922
+      },
+      {
+        "id": "26c6e464b8e4ccde7b4a",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "39f5c4ba2464e5936f71a3406ae3d539dd9790f4b537be1cb986979daee9aaef",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9452261440019356
+      },
+      {
+        "id": "905953814a73a7cb1241",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "8e185e65a49e58ce922e487ce619d462773c25564e9dd7cf7292104d0c15abec",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9076200279996556
+      },
+      {
+        "id": "3d70a8e9b0b88cf67aa8",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "286e7a08af4742df7f6cfba498e263e7e2e6c2323f7d77e405b3805ca22e559a",
+        "image_tokens": 609,
+        "elapsed_seconds": 2.005390618000092
+      },
+      {
+        "id": "9dab7211ef9e31ed0055",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "519c820407f5367bcb6a15d5ba33773c47074e000ab9fc3ef2afce92b68d99b8",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9572619009995833
+      },
+      {
+        "id": "ef89e33d7f61f00aa89b",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "9535917ba6afc3c49a856745f6733d961acb9c763c87cb893c9a8f10914d3d90",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9005149350014108
+      },
+      {
+        "id": "4b002ebf1374f31e06d7",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "4c34a62bcb73e687c1988d563d0f5612fd4e25b4eaf4f68dae9e54cddd1febf7",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9032300649996614
+      },
+      {
+        "id": "6affc4245777f22945ca",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "bba15dbb4e3c91c4f37406b3ccf9fc69c0531b36fd538c06850a676e9a54ec41",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9441062859987142
+      },
+      {
+        "id": "3f52bc3efbeb0b66e197",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "b7213bbfc9ce7dc24fb099c3d5a1c71fb88ca594404f248a41f9d72a79fdd883",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.885508198000025
+      },
+      {
+        "id": "ae3900cdf857b2d49a8b",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "a5d3fcc2ca66aedafba2f918dd3e575b1185355789bc2906c2fa00f95344a83f",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.903477150000981
+      },
+      {
+        "id": "649ae9122b13dd8b5068",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a7f8f4c2b09e51ba352c1cab9d9b7a09b773ecddab89812fad3ec60e0178d63b",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9514953249999962
+      },
+      {
+        "id": "21afac03c4f5e732656d",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "05e4923390eff75cf934e8c64fc32e3436cee1b7736247d04039864cf80d95a2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9157466780015966
+      },
+      {
+        "id": "c7b312cd2b34ea460d23",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "b46c480a46ae10e159a9145e04b9d239d5ce07b28d637a1f4ec1217c6d0a9dd2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9071405600006983
+      },
+      {
+        "id": "81255e29c13d58dd10fb",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "44a544a36cc2696993ca84fd2e703d9257f3c654bc54204377e4315a35fc98a6",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9466589839976223
+      },
+      {
+        "id": "ef8b4b8da3f6a92a3f80",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "e5ce7d111c9b85e041cb54190c23dacebe6a33dfd48d2ec5bd442870eb855519",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.936820325001463
+      },
+      {
+        "id": "c6ccb85eb919945b7f12",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "f182630b529f3fbfb0ebcfe1c51588e0a0a119919dd968248625bd8e863bb78b",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9122519439988537
+      },
+      {
+        "id": "30db20736cdcb4c238f3",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "0d2814042aadf05f1a6c01a537b236aaabac9579f6109b5636c327da09e13bd7",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9183377179979288
+      },
+      {
+        "id": "f8736f795ad695a87611",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "1e7dfa3bd795b5cca5f025067990bc46600c7128ac138d4a5346b26ea6a7ffe2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9434049560004496
+      },
+      {
+        "id": "dead18919ba43139ea5e",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "e5ebcbeea0dda71a09576683293a021bf81a4f8c589ad930b314867c04d398f4",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9155194619997928
+      },
+      {
+        "id": "940281a0a1998c5dc686",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "c160d7ad4d10ffbc0b396b9cdfd89b66511ba5adfccd8f06702f4f6de952b1d1",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8917721719990368
+      },
+      {
+        "id": "70fbcb07734ba5d438da",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "e52ec7e3bbbeb0e1e6757599175bfe8233b48665ac28c77d81012fa540aaa60b",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9302838210023765
+      },
+      {
+        "id": "4b3a9a976f232f113765",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "9cbc5d251e292f08168d4eb32dbcc0a6d6f7292a605687c2ed9b851e943e0341",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.894142204997479
+      },
+      {
+        "id": "956e11ce0ad2fef8ed80",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "2e3899e0e6cf91d8ec0b50885d548b2bb65870ab762dba11a0611f84155419d8",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9007060939984513
+      },
+      {
+        "id": "5167dd86749bafda96ae",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "22b855c4579503b36959e0e70b9c831e4eabbb3ec78127ff873127318f29aa37",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9058415369981958
+      },
+      {
+        "id": "22ee0ae304b177aab228",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "aa73ed961ad7d1d44f0625994f4f56a056a04618b814efd14295bb83ff69286a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9570979509990138
+      },
+      {
+        "id": "25d83a87473744fd5c23",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "ebd2f5c8d22635c43c1fcbf9bc15045966328d7992c8ccfa996105dc6cbb550a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9053570450014377
+      },
+      {
+        "id": "e3431a683d0b6a17301d",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "582a62068023802cc5ec5942749f4b1922f8689379d8d757862493f64d3329fe",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9331528260008781
+      },
+      {
+        "id": "e9de4f63a4baf81f5078",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "36cd8759ff3586f5d8f859feb8333aabc0f2019d8a8415c8164c5d5801475d72",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9130748030001996
+      },
+      {
+        "id": "84efff7504ef374c7878",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "a5811adf11345992944ad7b6adf74b0956447f7dfbb50108d12278430ac8f541",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9461624260002282
+      },
+      {
+        "id": "07e0f28445e2efc216d7",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "0d1463e104286f7214e918f3d90e00d7e712061639c43215bb39ede555b4c07a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9303159289993346
+      },
+      {
+        "id": "02b68ed481e145aaac18",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "82a43124487a3d5362ebf3b786679473e602592ddaea3e5d7bba0a633e887496",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9001861569995526
+      },
+      {
+        "id": "84745b00098010703441",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "b58beb995c28ad758b4def9263a75031b6674f645eaae28b14f9ecb021c962d1",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9319559600007778
+      },
+      {
+        "id": "c53f4b37f27841bb8cfe",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "0a8b4d0319c884cf03270aaffa92a597f7749db89dc0b1269386b8b9cf7b1b85",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9044094429991674
+      },
+      {
+        "id": "09833df77b6cf04a4d81",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "c1f7542a12852cf5efcc701e2ab80ecbd42760ad0d187361c155b5b2b06ca266",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9540657340003236
+      },
+      {
+        "id": "51282d234e646b17e9c4",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "7608e1d920a1ca71ff19d63959bae64614248ea278291e2be1858e0aeca518f0",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9051448190002702
+      },
+      {
+        "id": "d63a1257ad6ed4b29ba1",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "1ce6fcf1620a7af797474957d7c231e8a8160cfc99cfeb3dc41051ee01c90fbd",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9060023999991245
+      },
+      {
+        "id": "00b4589db43d202e55d3",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "ae3b08a3aa8c4fc60362423461dd00b22dfe2921d1f569c92eb2275f81feed2e",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9862155350019748
+      },
+      {
+        "id": "e070816e823321cc451b",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "9d773ac5b32c4f91169fe6a00a9bb9a6aaf758b49af855681bca5c8f3ebc37ce",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.900082989999646
+      },
+      {
+        "id": "f9173b68a781b3ee11ee",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "4817ead79f35572401bb3791862fa07be1d9c0288dea2f54230d03f30da52737",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9589030829993135
+      },
+      {
+        "id": "dfd9e7b61bef5db23453",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "99f239836d4d72222727996501da9b12966e9a1367554b39127f50dfab430214",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9025375400015037
+      },
+      {
+        "id": "c293446682f6c94dc41c",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "f66bceb745bb5ec15a36787faed345632ee1f52a81ea6f2a7dae2be9dbc29d6d",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9384767039991857
+      },
+      {
+        "id": "e6940db209a27400fc28",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "79c3ea4c8fc3553cd376d1c44150a760f192724fdd0c063697a918ecdab5d0f7",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.901325168000767
+      },
+      {
+        "id": "005b97a86dec7275b731",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "440a0d5286a3bbb81dc15d3c3cd26a63b9861ff6f55aaa5d6a3e00095f4a5963",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9025173480004014
+      },
+      {
+        "id": "7ddbd828336d065959c4",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "66585f1096c169d257763f96839bead4cef942f0652bd5031347820c7ccbd778",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9850393800006714
+      },
+      {
+        "id": "dfb4bf7a426db0d78cea",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a7d5a4496d28741b9d91b7de625960a12194b4fe8ec32cdb91bbfaab4ebc4767",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9035358580003958
+      },
+      {
+        "id": "b01b54eb1e7437d86596",
+        "sequence": "breakdance",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "a158e0fa7bea1a5a6e9ac2add38eb2d2b008b4072c9e51a9ae0ad7594869ce7b",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.995081092001783
+      },
+      {
+        "id": "421eceda0b7eb85559e9",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "ff54cebd98cb6ad58dc6f2d75e92a10a0e6cc264d6b22afb30d6938ba87787db",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.968532573999255
+      },
+      {
+        "id": "c4a92f5e80d99abf07ef",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "0e16782fce31edbc77781acd917dc7ffbaa23ea31994da0ac29c3c37f582a572",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8920862279992434
+      },
+      {
+        "id": "1b725543df93745ac28a",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "10af7e02f33d0f03427f7f56321ff073f56cde8d291b815a6538ced9920f7e81",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9086439570019138
+      },
+      {
+        "id": "d733fa216e1f2ec2dc1e",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "65460c361a02419d94a098278bba98a2778764eee9a31847d37be148932fdbc7",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9157215439990978
+      },
+      {
+        "id": "c8a8cc19942d5e3d098a",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "291aecc09eca931c941f58cd0cb4fe03a810304bcbdf9d9bc4b5c5deb416d674",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.967636337998556
+      },
+      {
+        "id": "8e9ee6a8eb7578b5f5c4",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "48bfba74b5722be9e6e3b8027bc746ec4125d2807c100b11f65b00ad464f4636",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9058855929979472
+      },
+      {
+        "id": "e4bb4c36199211022a5f",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "cb52b3c6dd780292f3f08dab1132ee706e476318d1fd2b98eb2e89edaa132129",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.997796154999378
+      },
+      {
+        "id": "82b1e7332f340b5bb882",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "fde32c693756209ff1b010989ab8b945af1b334c86dfdafac3795ca5935d4c63",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9130449160002172
+      },
+      {
+        "id": "d6eb14cf9f5c5d37a6a3",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "84cbd1536945ee026c1fdfcef0aef87a6bc06dd6a3bc9df89fcdf395414451dd",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8966317900012655
+      },
+      {
+        "id": "72c713b07c7f4e2e0875",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "62b7dbe951f47c01954160764aa7224ad140d553f4fb53ef948616a1f38d80f8",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8997632409991638
+      },
+      {
+        "id": "1fc70205f789aa43af46",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "4579a54a38b904235877ff20298aa07caffedb66f88bc4c08c8dfc6140f6f2a6",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9582283579984505
+      },
+      {
+        "id": "7a30ddd1acde37f7f724",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "95c8df2c04be5d0ebee0face97cb24246082e14f4506820eb85b5452bac24484",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9007428689983499
+      },
+      {
+        "id": "236fefb8817bf31a5515",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "ce6702e5d32679efcbb2a684410c2bd1df1c5807748cd4f21d6634eee06a218a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9015540339969448
+      },
+      {
+        "id": "60aca026b8ffbdf7117c",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "d532496eafe75d45eed8f78001f581930bcb955f1450c8b078f23c24d8a36050",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9917344499990577
+      },
+      {
+        "id": "8ea46d374b97ee4ae365",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "dc6565b11378f770d8bcbaa84cdcae7e6566ba2a29222bd23aa1180dff25c1f2",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9852841360007005
+      },
+      {
+        "id": "68ff3d819d4036f7ed17",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "de0611a11cc459b746875da3af59272aeec97a76cf27a2df44a9a7d3bee1ac54",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8867360040021595
+      },
+      {
+        "id": "add254d56d056af5f7ff",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "cfb389066911c12710dcea591897ecb8155cb56185fd7ddec089884c80e9a893",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9134494019999693
+      },
+      {
+        "id": "41423f7120131f948ef3",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "3a1bae9ac59d4b468beeb91bbb380b0515481fe259d1aca41787ceecaca89565",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9806122879999748
+      },
+      {
+        "id": "52c35b599db531cd835b",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "dbfd7a31f95388566fb9dab3e78e4b93c5083155a5249701681ee077210a9a01",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9274774779987638
+      },
+      {
+        "id": "ce11f1b29c2cdfa6031e",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "b5faf87a8940c32d35ba9b1ae8c59340c03da5dcc574c5c87342f1fdf97c8cb1",
+        "image_tokens": 609,
+        "elapsed_seconds": 2.0006633080010943
+      },
+      {
+        "id": "37e154d638e5340b39d3",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "05110080ddd4e500c8503c76eec669362f5176c15b9480567ee1504ececa2062",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9607078780027223
+      },
+      {
+        "id": "cedeab62a7c95897600b",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "025bd43a0ff87255923d68fdbb70900bd8f13d5e4a07e0835fec0fe0c9f5d8f8",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9243581449991325
+      },
+      {
+        "id": "eb40dc180ceea211f9ad",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "3b85dc707e1bddf741d6a051575995f318aba47e0ce3876b94d1181f1a049c90",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9985664800005907
+      },
+      {
+        "id": "22f35e3ab7a9a0a67a2c",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "3949a054832dea0d1f054c883292170bc9249ffa3eca58cec2084096208fa15f",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.916402853999898
+      },
+      {
+        "id": "fe6ccebb6c0aa980fd10",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "10e888e82656523010ac53a4138ecdfc480cc34e9c6f14b4c3ff57f169e8c1dd",
+        "image_tokens": 609,
+        "elapsed_seconds": 2.0374670439996407
+      },
+      {
+        "id": "983b82472ca16bc03783",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "e98ed5929530583d1c9e5d8b5f0f95c30d7ac7537a348be7c166c140bc69dbf4",
+        "image_tokens": 609,
+        "elapsed_seconds": 2.015109535997908
+      },
+      {
+        "id": "1b55eee75fa24fbb4952",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "2d825554fa56e286749bb055a781ae2c02c98486fc95abc97c25f957ea073554",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9312618199983262
+      },
+      {
+        "id": "82593710f55c5ac3606c",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "082e32bf28f4ca9793acb04ea3ce6567ee5f5bc7f52c3b0ea87669e3f0f63b63",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9312335789982171
+      },
+      {
+        "id": "9d1cf2948610c7140704",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "fc1142f9d0fcc9cd3f84c65a24789e3e19c0b07c5ab045ac09e38488ffcd31ec",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9380515400007425
+      },
+      {
+        "id": "7450b4343253034af6cc",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "73155f5552ab9ad3e25ba4dd2007bb0c8a3d38cb9a1cfcf84603cd65d520875e",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9992661400028737
+      },
+      {
+        "id": "764fd6dd01a2ab1ad9e8",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "7699bbf25ca1559476e070a61685d0c4ec851894dbb781ff088a777c1b347528",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.92525252699852
+      },
+      {
+        "id": "a6297fe2d3416855265a",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "41a8a55515f2d528242640a8bf2e84d90934c932069693bb8c93905a5b5b8a4b",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8849249859995325
+      },
+      {
+        "id": "14590c1bfd68c4b75191",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "9ab8f930501a560eab1d571fbd59266580a0d98c28d274f35740ef7fb283ea76",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8875378779994207
+      },
+      {
+        "id": "56a05011dc54e8f2797a",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "181d2a90713e89414eff7c2b05ce691939e85fb6633a68b16c89e55641912d21",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9131404799991287
+      },
+      {
+        "id": "5c63c021c2dabe2934c6",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "ca1a1ea2b7f2d52547a060e427434e9558b8f36946aa7d978f25d08a3e21bd28",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.960482825001236
+      },
+      {
+        "id": "212f9bc335f15b8237f7",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "a74a335d3e9564b458fbebc68c727f8b3cb615aa9e56c408b7bde9d9241b2b3a",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9215854630019749
+      },
+      {
+        "id": "8e778cb336ad0769770e",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "f5464e98329239e3d96f4f34db4c985a9d6c80af5b0abe0b06dd319a78eabcd5",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.906038028999319
+      },
+      {
+        "id": "9953734d3c29d13b2996",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "fc76f4227dd2408dd7d92ad19db45ea6c363215aeb9a42ce5df50f547b39839e",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8984021280011802
+      },
+      {
+        "id": "2f7ae30315e170550434",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "10d1674a08837d4b367854578516720ef4c3971a217ade43347e428c5fc690c7",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9129217330009851
+      },
+      {
+        "id": "56611a404612bf03abef",
+        "sequence": "judo",
+        "target_for_scoring_only": "occluded",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "37d61bc290c7c407431fa762ba04ca121a393b3b815a9b1cd8a1cc320e7017cd",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9914262860002054
+      },
+      {
+        "id": "df3ab4e877425c121a70",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "da0a89b7ff994e918213f65fda1811b8d071cb4773f960f13aea147cc4905345",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9157601419974526
+      },
+      {
+        "id": "412169b799ff1087eb5a",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "339d0b8ff7a11fc47a0bdb2cb7daf889dc6d3d7cc82e3fdb3e5ffe80a878817d",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9152827600009914
+      },
+      {
+        "id": "3a4b2ccf13aea6a06e40",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "0180d70d188a139d9bc95d74d62051614610a7675ed98c67e5277b0470b6ff5d",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.88850496500163
+      },
+      {
+        "id": "1d6ca2e82b452ce131f3",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "a19cbbf4250144f6742f89b8770cc44ff09270d6974dcca9363a9a023687f194",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.8945650699970429
+      },
+      {
+        "id": "169208ca48617d3d48e4",
+        "sequence": "judo",
+        "target_for_scoring_only": "close",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "5e767dff4562343a234baf60c167544abb531e4bc7fa3429a1470bcba2b52ab6",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9901757179977722
+      },
+      {
+        "id": "03ccbc8ae4c2f6cb39c9",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "765cf7a3289b60980fc59fb0b06cfacad6407c8f216a93c76f49ee904f661771",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9166995910018159
+      },
+      {
+        "id": "7df6356e76f691cf7ddb",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "db12a1055a055cf5e345969ed66abad92636ff4533d120a743660498abc1502f",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9031964779969712
+      },
+      {
+        "id": "933ddb1add9ca1bcd9a5",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "e8ff89079534903beeecf9960a57e64472ec0600bed253d890806ab9337dc183",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9025726380023116
+      },
+      {
+        "id": "848ba44d263dded38795",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "close",
+        "parsed": "close",
+        "processed_pixel_sha256": "3c53a5588c0f6c851d0bc07ea4c9c4d64ad852cbb0c82c4102b791641665f0fc",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9048034920015198
+      },
+      {
+        "id": "bf9acc61d429eaf58dc0",
+        "sequence": "judo",
+        "target_for_scoring_only": "far",
+        "raw_response": "far",
+        "parsed": "far",
+        "processed_pixel_sha256": "b31220e15418ad885c42bc3582036112493ff92843521e4151a4d8a42bd1b4fb",
+        "image_tokens": 609,
+        "elapsed_seconds": 1.9797722669973155
+      }
+    ]
+  },
+  "quantized_compute_dtype": "float32"
+}
