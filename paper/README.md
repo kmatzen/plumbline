@@ -537,7 +537,23 @@ export only; validation and calibration exports are not used. The report is
 explicitly marked `partition: train`, and the validation analyzer rejects it.
 Comparing fit on the training set with development validation can help separate
 poor task fit from poor transfer; it does not identify a unique cause or
-establish generalization. Results are pending.
+establish generalization. The run completed all 188 examples. Its executed
+scripts, raw predictions, and reproducible summary are retained in
+`results/tapvid-training-fit-v1/`; `analyze_tapvid_training_fit.py` verifies the
+training/corpus hashes, full membership, targets, and response parsing.
+
+Training-fit accuracy is 98/188 (52.1%), versus 84/188 (44.7%) for the training
+majority label. Class recalls are 56/69 close, 42/84 far, and 0/35 occluded;
+balanced accuracy is 43.7%. Every response is a valid label, with no abstention.
+The model gives a constant close answer on camel, drift-straight, and goat.
+Equal-video excess accuracy over the within-video shuffled expectation is 4.0
+percentage points. The low fit and absent occlusion predictions occur on seen
+data as well as validation data, so a transfer-only explanation is insufficient.
+This does not isolate optimization, representation, arithmetic, or annotation
+ambiguity as the cause. The next bounded diagnostic should test whether the
+same training setup can fit a small class-balanced training-only subset before
+expanding the corpus or spending a larger training budget. Calibration remains
+unopened; the manuscript remains unchanged.
 
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,
