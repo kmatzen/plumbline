@@ -571,6 +571,31 @@ coordinates, and projections are retained in `drift-review-v1.json` under the
 static-control results directory. These sensor-depth illustrations explain the
 desired visual task but do not solve reference-free initialization on DAVIS.
 
+#### Early depth observability
+
+`probe_static_early_depth_range.py` uses only reference cameras and tracked
+coordinates from frames 1–10. It does not use sensor depth or later image
+coordinates. The classical linear bound calculation in `frustum_depth_range.py`
+first requires a positive-depth witness, then minimizes and maximizes first-
+camera axial depth over the closure of the box intersection. Boundary endpoints
+are not necessarily positive-depth witnesses. Bounds are numerical solver
+results, not calibrated statistical intervals or a novel triangulation method.
+
+All 48 slot/tolerance pairs are in `early-depth-range-v1.json`. At one pixel,
+all 11 trackable slots are infeasible. At two pixels, nine are feasible; five
+have unbounded upper depth and four have finite intervals. At four and eight
+pixels, all 11 are feasible with unbounded upper depth. The twelfth slot is
+insufficient throughout. No tolerance was selected as an admission threshold.
+Tests check analytically known disparity bounds, world-coordinate and scale
+changes, zero-baseline unbounded depth, and inconsistent observations.
+
+These results explain why a single early fitted point is a poor initialization
+on this short-baseline control. They do not imply that all later projections
+are uncertain: pure rotation can constrain image position without constraining
+depth. A usable abstention criterion must measure uncertainty in the projected
+position, not reject every point with unbounded depth. The diagnostic remains
+outside the manuscript and does not establish a reference-free DNF decision.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is

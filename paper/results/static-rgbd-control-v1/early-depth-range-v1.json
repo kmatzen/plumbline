@@ -1,0 +1,1336 @@
+{
+  "scope": "reference-camera development diagnostic; no sensor depth or later image coordinates used",
+  "fit_original_frames": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "policy": "all slots and tolerances retained; no admission threshold selected",
+  "source_sha256": "d629324675f798ca74a7d7516a6574db209a7408598f2cf135e6ac05cf37be14",
+  "control_sha256": "1610d345a7ebe4fc67ffb78a10edef27ec2142a19cda14aa9aff321b6772bfeb",
+  "script_sha256": "a171c263f59955999cb2e12e9cd0faf1ea13350ba0607b6250c5ccdbe33fe0e5",
+  "range_kernel_sha256": "c4f70898302b00479511e94dd81444aac302d8f9292aa8dbc810fbaf49c7b50f",
+  "support_kernel_sha256": "bf7a93ea5c55eaecc1d7c141d3feb4d041e7ee7fbe4f54af0a858f269b9d1dcd",
+  "rows": [
+    {
+      "slot": 0,
+      "tolerance_pixels": 1,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 1,
+      "tolerance_pixels": 1,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 2,
+      "tolerance_pixels": 1,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 3,
+      "tolerance_pixels": 1,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 4,
+      "tolerance_pixels": 1,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 5,
+      "tolerance_pixels": 1,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 6,
+      "tolerance_pixels": 1,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 7,
+      "tolerance_pixels": 1,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 8,
+      "tolerance_pixels": 1,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 9,
+      "tolerance_pixels": 1,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 10,
+      "tolerance_pixels": 1,
+      "status": "insufficient_early_observations"
+    },
+    {
+      "slot": 11,
+      "tolerance_pixels": 1,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 0,
+      "tolerance_pixels": 2,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 1833.0777403257343,
+        "maximum_normalized_constraint_violation": 6.405986852087153e-14,
+        "maximum_box_violation_pixels": 1.4210854715202004e-14,
+        "point_world": [
+          -5.344748509793885,
+          -6.48662197516223,
+          -1.621735105342207
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.5563611645186256,
+        "maximum_normalized_violation": 2.507824260591761e-14
+      },
+      "upper": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 8.697807335129115,
+        "maximum_normalized_violation": 2.580531897963259e-14
+      }
+    },
+    {
+      "slot": 1,
+      "tolerance_pixels": 2,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 257.18701737997037,
+        "maximum_normalized_constraint_violation": 6.938893903907228e-15,
+        "maximum_box_violation_pixels": 4.263256414560601e-14,
+        "point_world": [
+          -2.6360497497569386,
+          1.1018041649244052,
+          0.5781156596205562
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.5364482461664626,
+        "maximum_normalized_violation": 2.4021811257116853e-14
+      },
+      "upper": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 1.2201028987999492,
+        "maximum_normalized_violation": 9.632840778743791e-15
+      }
+    },
+    {
+      "slot": 2,
+      "tolerance_pixels": 2,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 3,
+      "tolerance_pixels": 2,
+      "status": "solver_infeasible",
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 2,
+        "solver_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "solver_infeasible"
+      }
+    },
+    {
+      "slot": 4,
+      "tolerance_pixels": 2,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 140.4247868699443,
+        "maximum_normalized_constraint_violation": 1.0325074129013956e-14,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          -2.1434116946523685,
+          1.5179718740655819,
+          0.5928093623465831
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.6664577782377765,
+        "maximum_normalized_violation": 3.732944120029273e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 5,
+      "tolerance_pixels": 2,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 119.07218165249981,
+        "maximum_normalized_constraint_violation": 8.593364804563173e-15,
+        "maximum_box_violation_pixels": 2.842170943040401e-14,
+        "point_world": [
+          -2.1895780419743884,
+          1.709239429116127,
+          0.6104695384714112
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.5637942921020621,
+        "maximum_normalized_violation": 1.4432899320127035e-15
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 6,
+      "tolerance_pixels": 2,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 1658.0675562282158,
+        "maximum_normalized_constraint_violation": 4.340972026284362e-14,
+        "maximum_box_violation_pixels": 2.842170943040401e-14,
+        "point_world": [
+          -6.705372452952125,
+          -3.0754718932623937,
+          -2.5389174288782645
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.5927879419347019,
+        "maximum_normalized_violation": 4.0269080453236925e-14
+      },
+      "upper": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 7.819600236840104,
+        "maximum_normalized_violation": 2.2037927038809357e-14
+      }
+    },
+    {
+      "slot": 7,
+      "tolerance_pixels": 2,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 662.9250181603684,
+        "maximum_normalized_constraint_violation": 8.64991041121881e-14,
+        "maximum_box_violation_pixels": 1.1368683772161603e-13,
+        "point_world": [
+          -4.57284290159727,
+          0.8488826758252952,
+          -0.6232535214222269
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.7055126586329834,
+        "maximum_normalized_violation": 3.606015232737407e-15
+      },
+      "upper": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 3.1241773587439403,
+        "maximum_normalized_violation": 1.4099832412739488e-14
+      }
+    },
+    {
+      "slot": 8,
+      "tolerance_pixels": 2,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 130.57655884587678,
+        "maximum_normalized_constraint_violation": 1.27675647831893e-14,
+        "maximum_box_violation_pixels": 0.0,
+        "point_world": [
+          -2.056323938399028,
+          1.5968992792685301,
+          0.4936058355047799
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.6182916417511405,
+        "maximum_normalized_violation": 3.8070675084656e-15
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 9,
+      "tolerance_pixels": 2,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 124.38488673958224,
+        "maximum_normalized_constraint_violation": 9.197965024105656e-14,
+        "maximum_box_violation_pixels": 3.979039320256561e-13,
+        "point_world": [
+          -2.1129109438683886,
+          1.6825708754766184,
+          0.5105669763980138
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.5883336011634052,
+        "maximum_normalized_violation": 0.0
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 10,
+      "tolerance_pixels": 2,
+      "status": "insufficient_early_observations"
+    },
+    {
+      "slot": 11,
+      "tolerance_pixels": 2,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 96.02431548108828,
+        "maximum_normalized_constraint_violation": 1.0436096431476471e-14,
+        "maximum_box_violation_pixels": 1.7053025658242404e-13,
+        "point_world": [
+          -2.2071341256803776,
+          1.994519565246516,
+          0.4991350437072879
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.4528046075643584,
+        "maximum_normalized_violation": 6.841931024978565e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 0,
+      "tolerance_pixels": 4,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 59.00279038551617,
+        "maximum_normalized_constraint_violation": 2.26524949175451e-15,
+        "maximum_box_violation_pixels": 4.263256414560601e-14,
+        "point_world": [
+          -2.014237976896959,
+          1.84104867613345,
+          0.7978265647332139
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.2820388517883596,
+        "maximum_normalized_violation": 2.713424524335801e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 1,
+      "tolerance_pixels": 4,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 58.74019586143709,
+        "maximum_normalized_constraint_violation": 1.1102230246251565e-15,
+        "maximum_box_violation_pixels": 2.842170943040401e-14,
+        "point_world": [
+          -2.071286458335282,
+          1.8861607862258487,
+          0.8099960877427173
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.28031928296611747,
+        "maximum_normalized_violation": 2.4297827530610155e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 2,
+      "tolerance_pixels": 4,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 61.39871740348523,
+        "maximum_normalized_constraint_violation": 1.985760858476683e-14,
+        "maximum_box_violation_pixels": 1.7763568394002505e-13,
+        "point_world": [
+          -2.1315481751614893,
+          1.9118535939011987,
+          0.822305613372363
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.2909468878809492,
+        "maximum_normalized_violation": 1.89694301650667e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 3,
+      "tolerance_pixels": 4,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 62.34641742284967,
+        "maximum_normalized_constraint_violation": 1.1102230246251565e-14,
+        "maximum_box_violation_pixels": 2.2737367544323206e-13,
+        "point_world": [
+          -2.190953504143028,
+          1.9610259778079338,
+          0.821669932167114
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.2963471965063151,
+        "maximum_normalized_violation": 1.8001367295757357e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 4,
+      "tolerance_pixels": 4,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 61.97687603922757,
+        "maximum_normalized_constraint_violation": 2.0766175786382137e-15,
+        "maximum_box_violation_pixels": 2.842170943040401e-14,
+        "point_world": [
+          -2.0096482468320946,
+          1.8533852046916928,
+          0.7523659680663922
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.2953389411255074,
+        "maximum_normalized_violation": 4.026828962574359e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 5,
+      "tolerance_pixels": 4,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 56.86515590311406,
+        "maximum_normalized_constraint_violation": 0.0,
+        "maximum_box_violation_pixels": 0.0,
+        "point_world": [
+          -2.0402565518588904,
+          1.9228959224715956,
+          0.750437990925515
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.2703699569604337,
+        "maximum_normalized_violation": 0.0
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 6,
+      "tolerance_pixels": 4,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 59.01510902968984,
+        "maximum_normalized_constraint_violation": 1.199040866595169e-14,
+        "maximum_box_violation_pixels": 1.1368683772161603e-13,
+        "point_world": [
+          -2.074731353701672,
+          1.933444009144378,
+          0.7567226147627687
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.2803854740518245,
+        "maximum_normalized_violation": 4.054422200858592e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 7,
+      "tolerance_pixels": 4,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 60.010232620958945,
+        "maximum_normalized_constraint_violation": 1.8088380358126364e-14,
+        "maximum_box_violation_pixels": 1.7053025658242404e-13,
+        "point_world": [
+          -2.144859406233028,
+          2.003573971377857,
+          0.7429128584801094
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.2840530987371871,
+        "maximum_normalized_violation": 1.2129903838239653e-15
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 8,
+      "tolerance_pixels": 4,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 56.335362428840504,
+        "maximum_normalized_constraint_violation": 8.881784197001252e-15,
+        "maximum_box_violation_pixels": 1.1368683772161603e-13,
+        "point_world": [
+          -1.9695191376583117,
+          1.8933129787075211,
+          0.7122607997872284
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.26798636349461685,
+        "maximum_normalized_violation": 5.514694398050811e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 9,
+      "tolerance_pixels": 4,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 55.24506303707213,
+        "maximum_normalized_constraint_violation": 1.1435297153639112e-14,
+        "maximum_box_violation_pixels": 1.9895196601282805e-13,
+        "point_world": [
+          -1.9965176582513102,
+          1.9246615134119935,
+          0.7149121472486591
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.2625128460693076,
+        "maximum_normalized_violation": 0.0
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 10,
+      "tolerance_pixels": 4,
+      "status": "insufficient_early_observations"
+    },
+    {
+      "slot": 11,
+      "tolerance_pixels": 4,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 45.85622950671872,
+        "maximum_normalized_constraint_violation": 7.327471962526033e-15,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          -2.0483644755159256,
+          2.059116226890521,
+          0.6971142369802125
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.21729826319904616,
+        "maximum_normalized_violation": 6.858437942839235e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 0,
+      "tolerance_pixels": 8,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 29.586590233827298,
+        "maximum_normalized_constraint_violation": 2.6922908347160046e-15,
+        "maximum_box_violation_pixels": 7.105427357601002e-14,
+        "point_world": [
+          -1.9590365734446962,
+          1.9790190728598318,
+          0.8380991133937892
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.1424989389066339,
+        "maximum_normalized_violation": 2.858208664135998e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 1,
+      "tolerance_pixels": 8,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 29.93602907701074,
+        "maximum_normalized_constraint_violation": 4.163336342344337e-15,
+        "maximum_box_violation_pixels": 2.842170943040401e-14,
+        "point_world": [
+          -1.9889898888671367,
+          1.99968805197886,
+          0.8436732704357655
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.14391614829661187,
+        "maximum_normalized_violation": 2.4850739518428354e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 2,
+      "tolerance_pixels": 8,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 31.193589013161727,
+        "maximum_normalized_constraint_violation": 3.549493850331906e-14,
+        "maximum_box_violation_pixels": 6.323830348264892e-13,
+        "point_world": [
+          -2.0185206879634885,
+          2.0122691907132215,
+          0.8501153176366557
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.14894034840201342,
+        "maximum_normalized_violation": 1.9507726948716808e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 3,
+      "tolerance_pixels": 8,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 31.556921652211425,
+        "maximum_normalized_constraint_violation": 7.771561172376096e-16,
+        "maximum_box_violation_pixels": 1.7053025658242404e-13,
+        "point_world": [
+          -2.0490350336210126,
+          2.0384109560051558,
+          0.8498576817213814
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.15106081415876557,
+        "maximum_normalized_violation": 1.8536278726517212e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 4,
+      "tolerance_pixels": 8,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 29.199089220906345,
+        "maximum_normalized_constraint_violation": 7.688294445529209e-15,
+        "maximum_box_violation_pixels": 1.1368683772161603e-13,
+        "point_world": [
+          -1.953378346199711,
+          1.993161664722502,
+          0.8190469092369569
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.1402800525166653,
+        "maximum_normalized_violation": 4.125982035010312e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 5,
+      "tolerance_pixels": 8,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 27.736806929913858,
+        "maximum_normalized_constraint_violation": 1.4432899320127035e-15,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          -1.9699960268754355,
+          2.0226094302085653,
+          0.8159898010969457
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.13297910373321425,
+        "maximum_normalized_violation": 1.1102230246251565e-16
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 6,
+      "tolerance_pixels": 8,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 28.61576283496112,
+        "maximum_normalized_constraint_violation": 1.5543122344752192e-15,
+        "maximum_box_violation_pixels": 2.842170943040401e-14,
+        "point_world": [
+          -1.9863521778582032,
+          2.028292544283635,
+          0.8194322631099442
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.13706435084516214,
+        "maximum_normalized_violation": 4.109340090882722e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 7,
+      "tolerance_pixels": 8,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 28.65132096664008,
+        "maximum_normalized_constraint_violation": 7.882583474838611e-15,
+        "maximum_box_violation_pixels": 2.2737367544323206e-13,
+        "point_world": [
+          -2.018543790553655,
+          2.063183603218364,
+          0.8137415396634222
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.13671498313511343,
+        "maximum_normalized_violation": 6.443673265138836e-16
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 8,
+      "tolerance_pixels": 8,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 26.27796316454861,
+        "maximum_normalized_constraint_violation": 2.3592239273284576e-15,
+        "maximum_box_violation_pixels": 7.105427357601002e-14,
+        "point_world": [
+          -1.9339684524600798,
+          2.012925424530722,
+          0.8008004575175387
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.12616608248281158,
+        "maximum_normalized_violation": 5.649191820149237e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 9,
+      "tolerance_pixels": 8,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 26.07514598927139,
+        "maximum_normalized_constraint_violation": 4.773959005888173e-15,
+        "maximum_box_violation_pixels": 2.2737367544323206e-13,
+        "point_world": [
+          -1.9470849006641222,
+          2.0264831908435057,
+          0.8011357795431743
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.12505375606331268,
+        "maximum_normalized_violation": 0.0
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    },
+    {
+      "slot": 10,
+      "tolerance_pixels": 8,
+      "status": "insufficient_early_observations"
+    },
+    {
+      "slot": 11,
+      "tolerance_pixels": 8,
+      "status": "checked",
+      "scope": "closure bounds, not calibrated uncertainty",
+      "coordinate_scale": 0.004707440918376514,
+      "support": {
+        "scope": "all boxes plus all depth constraints",
+        "solver_status": 0,
+        "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "coordinate_scale": 0.004707440918376514,
+        "numerical_margin_threshold": 1e-07,
+        "status": "positive_witness",
+        "margin": 1.0,
+        "minimum_normalized_z": 22.375940061769235,
+        "maximum_normalized_constraint_violation": 0.0,
+        "maximum_box_violation_pixels": 5.684341886080802e-14,
+        "point_world": [
+          -1.9732363448686827,
+          2.0885563768334623,
+          0.789811419604781
+        ]
+      },
+      "lower": {
+        "solver_status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "status": "finite",
+        "depth": 0.10695803346791949,
+        "maximum_normalized_violation": 6.802295744631527e-14
+      },
+      "upper": {
+        "solver_status": 3,
+        "message": "The problem is unbounded. (HiGHS Status 10: model_status is Unbounded; primal_status is None)",
+        "status": "unbounded"
+      }
+    }
+  ]
+}
