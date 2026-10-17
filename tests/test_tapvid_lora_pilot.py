@@ -2,8 +2,24 @@ import pytest
 import torch
 import json
 
-from paper.train_tapvid_lora_pilot import digest, mask_prompt, select_training, memorization_schedule
+from paper.train_tapvid_lora_pilot import digest, mask_prompt, select_training, memorization_schedule, repeat_schedule
 from paper.evaluate_tapvid_lora import parse_label, select_evaluation
+
+
+def test_repeated_full_study_preserves_first_pass_and_every_example():
+    from collections import Counter
+    rows = [dict(id=str(i)) for i in range(188)]
+    result = repeat_schedule(rows, 20)
+    assert len(result) == 3760
+    assert result[:188] == rows
+    assert result == repeat_schedule(rows, 20)
+    assert result[188:376] != rows
+    assert Counter(r["id"] for r in result) == {str(i): 20 for i in range(188)}
+    for offset in range(0, len(result), 188):
+        assert {r["id"] for r in result[offset:offset+188]} == {str(i) for i in range(188)}
+    assert repeat_schedule(rows, 1) == rows
+    with pytest.raises(ValueError, match="fixed"):
+        repeat_schedule(rows, 2)
 
 
 def test_memorization_is_balanced_fixed_and_independent_of_input_order():

@@ -71,12 +71,32 @@ def memorization_schedule(rows, repeats):
     return selected, schedule
 
 
-def run(corpus, checkpoint, output, steps, order="class_smoke", probe_index=None, compute_dtype="float16", memorization=False):
+def repeat_schedule(rows, epochs):
+    if epochs not in {1, 20}:
+        raise ValueError("only the fixed one-pass or twenty-pass study is supported")
+    schedule = rows.copy()
+    for epoch in range(1, epochs):
+        block = rows.copy()
+        random.Random(epoch).shuffle(block)
+        schedule.extend(block)
+    return schedule
+
+
+def run(corpus, checkpoint, output, steps, order="class_smoke", probe_index=None, compute_dtype="float16", memorization=False, epochs=1):
     if compute_dtype not in {"float16", "float32"}:
         raise ValueError("unsupported quantized compute dtype")
     if output.exists():
         raise ValueError("preserve prior training runs")
     rows = select_training(corpus, steps, order)
+    training_ids = [r["id"] for r in rows]
+    if epochs != 1:
+        if memorization or probe_index is not None or order != "seeded":
+            raise ValueError("full repeated study requires seeded order and no diagnostic subset")
+        full_count = sum(r["partition"] == "train" and r["status"] == "labeled"
+                         for r in json.loads((corpus / "manifest.json").read_text())["records"])
+        if len(rows) != full_count:
+            raise ValueError("repeated study requires the complete training pool")
+        rows = repeat_schedule(rows, epochs)
     diagnostic_rows = None
     if memorization:
         if probe_index is not None:
@@ -107,6 +127,10 @@ def run(corpus, checkpoint, output, steps, order="class_smoke", probe_index=None
                       memorization_ids=[r["id"] for r in diagnostic_rows],
                       policy="first three IDs per training class; 20 passes; each pass shuffled with its zero-based index as seed; no held-out examples or weight selection",
                       memorization_predictions=[])
+    elif epochs != 1:
+        report.update(training_ids=training_ids, update_ids=[r["id"] for r in rows],
+                      epochs=epochs,
+                      policy="twenty full passes; first pass identical to seed-0 one-pass run; later passes shuffle that order with pass index as seed; no resampling, held-out reads, early stopping, or checkpoint selection")
 
     def save():
         (output / "manifest.json").write_text(json.dumps(report, indent=2, allow_nan=False)+"\n")
@@ -235,8 +259,9 @@ if __name__ == "__main__":
         parser.add_argument(name, type=Path)
     parser.add_argument("--steps", type=int, default=3)
     parser.add_argument("--memorization", action="store_true", help="fixed nine-example, twenty-pass training-only diagnostic")
+    parser.add_argument("--epochs", type=int, choices=(1, 20), default=1)
     parser.add_argument("--order", choices=("class_smoke", "seeded"), default="class_smoke")
     parser.add_argument("--probe-index", type=int, help="diagnose one indexed training example from the unchanged base")
     parser.add_argument("--compute-dtype", choices=("float16", "float32"), default="float16")
     args = parser.parse_args()
-    run(args.corpus, args.checkpoint, args.output, args.steps, args.order, args.probe_index, args.compute_dtype, args.memorization)
+    run(args.corpus, args.checkpoint, args.output, args.steps, args.order, args.probe_index, args.compute_dtype, args.memorization, args.epochs)

@@ -584,6 +584,24 @@ and decision rule are fixed. The nine-example adapter is not a candidate for
 held-out performance claims. This implementation diagnostic remains outside
 the manuscript's reported experiments.
 
+**Fixed twenty-pass full-training study.** The next study starts from the
+original pinned base, not either learned adapter, under
+`/data3/kmatzen/plumbline/research/tapvid-lora-twenty-pass-v1/`. All 188 training
+examples receive exactly twenty updates each (3,760 total). The first pass
+matches the original seed-0 one-pass order; later passes shuffle that order
+with their zero-based pass index as seed. Class frequencies, optimizer, learning
+rate, adapter rank, masking, and arithmetic are unchanged. The schedule is
+fixed before execution, with no validation reads, early stopping, or intermediate
+checkpoint selection. This tests increased exposure, not class resampling.
+
+After successful training, the queued command measures full training fit and
+then repeats the paired base/adapted development-validation comparison using
+the final adapter. Calibration remains unopened. The validation videos have
+already informed development and are not a fresh test set; no cross-scene
+significance or camera-DNF claim can follow from this comparison alone. The
+training manifest records unique training membership separately from the
+repeated update schedule. Results remain pending.
+
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,
 collect verified data, then compare model training with the workflow held fixed.
