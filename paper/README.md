@@ -4089,3 +4089,37 @@ Records and hashes are under
 `results/movi-geometry-pilot-v1/background-flow-audit-v1`. Two new tests check
 fractional-pixel interpolation, no extrapolation, temporal indexing, channel
 order, and retention of rejected cases; all 37 MOVi and analysis tests pass.
+
+### Reference-registered virtual-anchor task outcome
+
+`evaluate_movi_anchor_task.py` adds a separate camera-level development target.
+It registers each predicted trajectory to the reference using frame-zero
+orientation and origin, then a positive least-squares scale from frames 0..9.
+Later reference poses cannot change registration. It projects the 195 known
+static background points through the candidate cameras over frames 10..23.
+This differs from the RGB marker test: the world points are known, so errors
+from fitting points to image tracks do not enter this outcome.
+
+The primary arm uses predicted intrinsics; a reference-intrinsics ablation
+helps identify calibration effects. All eight attempts and 5,460 planned
+later point-frames per calibration arm remain recorded. There are 4,804
+reference-eligible point-frames. Behind-camera candidates, off-image
+projections, and unresolved registration have separate counts; positive-depth
+off-image errors remain in summaries. A stationary prefix can leave scale
+unresolved, which is not automatically a DNF.
+
+On these four development scenes, mean anchor drift with predicted intrinsics
+favors DAGE in all four, unlike ATE's two/two split. On scene 5397, DAGE/DA3
+mean drift is 3.45/17.59 pixels with predicted intrinsics and 3.96/1.89 with
+reference intrinsics. This shows that the chosen application outcome and
+calibration can change the comparison; it does not validate the proposed
+RGB-only evaluator. The result is specific to this registration protocol and
+four scenes, defined after earlier audits, not a held-out claim.
+
+An oracle check through the same registration/projection functions, using
+reference cameras and reference intrinsics, gives maximum residual below
+2.35e-13 pixels on every scene. Four tests cover gauge invariance, exclusion of
+later reference poses from registration, unresolved scale, complete candidate
+accounting, and replay of the saved array summaries and hashes. Artifacts are
+in `results/movi-camera-pilot-v1/anchor-task-v1`. No binary DNF threshold is
+chosen and the manuscript is unchanged.

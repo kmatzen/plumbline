@@ -1,0 +1,591 @@
+{
+  "status": "complete",
+  "scope": "reference-based virtual-anchor development outcome, not reference-free evaluator or human DNF",
+  "protocol": "all eight methods/scenes and all 195 fixed background points; first-frame orientation/origin registration and least-squares positive scale on frames 0..9 only; score frames 10..23; predicted intrinsics primary and reference-intrinsics ablation; retain off-image/behind-camera and unresolved registration",
+  "reference_policy": "background depth/mask non-rejection; no independent visibility certification; no marker fitting or later reference poses in registration",
+  "timing": "new development outcome defined after conventional pose and marker audits; no held-out claim",
+  "claim_policy": "continuous application outcome; no functional DNF threshold or new-method advantage asserted",
+  "source_sha256": {
+    "decoded": "1e8af9575c9e881a8a83ae396bacff1d3be1ecd1bbc5b5cd6585f70ba28491ed",
+    "background": "9e6850a0bf4ced9cc2e6d3f69004e828cbd8748119623f028b0134353d4c359b"
+  },
+  "script_sha256": "733cb704943077f13fe20a8cb3b685dc2ecc022fb9a885d90a1c395ba9538b71",
+  "attempts": [
+    {
+      "sequence": "3835",
+      "method": "dage",
+      "camera_manifest_sha256": "a2e52eae308f1ea05f08f160ae9d54b5036cac45c8b3dd6a8275493a136642cf",
+      "reference_sha256": "34e4dc87c1ab1379e27f7e5fb748b9b4c62ea68f687d86146c952d0db90a3d50",
+      "background_sha256": "d61394d81895cb8684d4d0631df6ed37674365e9d8d0b937ed3919563827cfdf",
+      "registration": {
+        "status": "registered",
+        "scale": 2.4421837735172076,
+        "rotation": [
+          [
+            0.769878505763699,
+            0.3020209749046976,
+            -0.562201402595787
+          ],
+          [
+            0.6381904781200156,
+            -0.3643417694373222,
+            0.6782093988439168
+          ],
+          [
+            1.002647525916124e-08,
+            -0.8809304204992,
+            -0.4732458074184099
+          ]
+        ],
+        "translation": [
+          6.2376861572265625,
+          -7.524807453155518,
+          5.25071382522583
+        ],
+        "prefix_center_rmse_scene_units": 0.019105876985448866
+      },
+      "prediction_sha256": "6d9627b1482d7d60360893b5d0349366efe0e329f04fc497e5c7bf5aa8fd7f18",
+      "status": "evaluated",
+      "calibration_arms": {
+        "predicted_intrinsics": {
+          "file": "3835-dage-predicted_intrinsics.npz",
+          "sha256": "859816d61ff6437463825a98d8efd3e8640c6caba1bee3e288bfbaa0e278872e",
+          "planned_later_point_frames": 658,
+          "reference_eligible": 598,
+          "unavailable_reference": 60,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 0,
+          "measured": 598,
+          "pixel_error_quantiles_0_50_95_100": [
+            0.28594491249392295,
+            5.7105011190441175,
+            8.756712780493777,
+            11.250422269751336
+          ],
+          "mean_pixel_error": 5.382157578545742
+        },
+        "reference_intrinsics": {
+          "file": "3835-dage-reference_intrinsics.npz",
+          "sha256": "18098033c6a54c4d2cecbafd5bb11a8b2ae3e68451e240a13683d8b2cb29b312",
+          "planned_later_point_frames": 658,
+          "reference_eligible": 598,
+          "unavailable_reference": 60,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 2,
+          "measured": 598,
+          "pixel_error_quantiles_0_50_95_100": [
+            0.542986240153669,
+            1.4920872659174709,
+            4.106909443081422,
+            5.228710310646439
+          ],
+          "mean_pixel_error": 1.9004409379509828
+        }
+      }
+    },
+    {
+      "sequence": "3835",
+      "method": "da3",
+      "camera_manifest_sha256": "7179d53006ce76fa74c681b6e480aefcccc5b969d6a74dc6d8d848a1b58100a7",
+      "reference_sha256": "34e4dc87c1ab1379e27f7e5fb748b9b4c62ea68f687d86146c952d0db90a3d50",
+      "background_sha256": "d61394d81895cb8684d4d0631df6ed37674365e9d8d0b937ed3919563827cfdf",
+      "registration": {
+        "status": "registered",
+        "scale": 15.928615903100654,
+        "rotation": [
+          [
+            0.7698785057636991,
+            0.3020209749046977,
+            -0.5622014025957869
+          ],
+          [
+            0.6381904781200155,
+            -0.3643417694373223,
+            0.6782093988439168
+          ],
+          [
+            1.0026475275770441e-08,
+            -0.8809304204992,
+            -0.47324580741841005
+          ]
+        ],
+        "translation": [
+          6.2376861572265625,
+          -7.524807453155518,
+          5.25071382522583
+        ],
+        "prefix_center_rmse_scene_units": 0.045521938028664916
+      },
+      "prediction_sha256": "0c501cc351adf5dfef3012d6e5f1d514160d024610a4f4362aa034474e13f958",
+      "status": "evaluated",
+      "calibration_arms": {
+        "predicted_intrinsics": {
+          "file": "3835-da3-predicted_intrinsics.npz",
+          "sha256": "305d21b31355063648e8b5381d5f51ff673001386932a53921afcb27ac707263",
+          "planned_later_point_frames": 658,
+          "reference_eligible": 598,
+          "unavailable_reference": 60,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 0,
+          "measured": 598,
+          "pixel_error_quantiles_0_50_95_100": [
+            1.4061028958477244,
+            8.47871275950167,
+            15.983655170449044,
+            19.942730355720926
+          ],
+          "mean_pixel_error": 8.84171236690121
+        },
+        "reference_intrinsics": {
+          "file": "3835-da3-reference_intrinsics.npz",
+          "sha256": "be135b158b5f103f0c4e21608c13ea4b7d29bd39e3d9ca1259cc8e4c30d2a5f9",
+          "planned_later_point_frames": 658,
+          "reference_eligible": 598,
+          "unavailable_reference": 60,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 4,
+          "measured": 598,
+          "pixel_error_quantiles_0_50_95_100": [
+            0.7848648419474419,
+            2.6048779172373173,
+            3.83778289434359,
+            4.417838972851522
+          ],
+          "mean_pixel_error": 2.5098721145662095
+        }
+      }
+    },
+    {
+      "sequence": "5397",
+      "method": "dage",
+      "camera_manifest_sha256": "bac785181d01ee2b95f3888222e56afa2a51ef8cde2f44fa62c1944cc0dc9398",
+      "reference_sha256": "d08d6768651f608c3ff8390c9d1b55e795ceeb25d64ca7c2d6f329e91ffc74c0",
+      "background_sha256": "79838b8f6035d28ba388cd8ccb266189dacf4bd7013960571eb439a6efe53ed1",
+      "registration": {
+        "status": "registered",
+        "scale": 3.2266254514492805,
+        "rotation": [
+          [
+            0.5819678648971679,
+            -0.16343846561325467,
+            0.7966186491571843
+          ],
+          [
+            -0.8132117831334168,
+            -0.11696333532831929,
+            0.5700931274465989
+          ],
+          [
+            2.8183630709855317e-08,
+            -0.9795955523310936,
+            -0.2009789885862178
+          ]
+        ],
+        "translation": [
+          -7.682134628295898,
+          -5.497652053833008,
+          1.9381258487701416
+        ],
+        "prefix_center_rmse_scene_units": 0.04934514375023115
+      },
+      "prediction_sha256": "9d6c45e59f1b031953423e73899217053544e05527eaeef10684e010810b0463",
+      "status": "evaluated",
+      "calibration_arms": {
+        "predicted_intrinsics": {
+          "file": "5397-dage-predicted_intrinsics.npz",
+          "sha256": "e58f39abb08370c98106e7cfef7daa023330e66150226d2d28d148750bb565e7",
+          "planned_later_point_frames": 630,
+          "reference_eligible": 581,
+          "unavailable_reference": 49,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 4,
+          "measured": 581,
+          "pixel_error_quantiles_0_50_95_100": [
+            0.17250794683166853,
+            3.414392315033926,
+            6.048102689663487,
+            7.573764539827586
+          ],
+          "mean_pixel_error": 3.446189949331513
+        },
+        "reference_intrinsics": {
+          "file": "5397-dage-reference_intrinsics.npz",
+          "sha256": "dcd068fa510a1c8d5e5353662487768b98aa18c9814cdacea4c2029396aab94c",
+          "planned_later_point_frames": 630,
+          "reference_eligible": 581,
+          "unavailable_reference": 49,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 17,
+          "measured": 581,
+          "pixel_error_quantiles_0_50_95_100": [
+            1.1188464635300723,
+            3.3216946658630033,
+            7.7759677576897275,
+            9.835802859002284
+          ],
+          "mean_pixel_error": 3.9643905865228954
+        }
+      }
+    },
+    {
+      "sequence": "5397",
+      "method": "da3",
+      "camera_manifest_sha256": "2b4e76ea320bc9f118df18e844792f5f238b950c2e1c314a3590ff0a0234446d",
+      "reference_sha256": "d08d6768651f608c3ff8390c9d1b55e795ceeb25d64ca7c2d6f329e91ffc74c0",
+      "background_sha256": "79838b8f6035d28ba388cd8ccb266189dacf4bd7013960571eb439a6efe53ed1",
+      "registration": {
+        "status": "registered",
+        "scale": 5.269759163688206,
+        "rotation": [
+          [
+            0.5819678648971679,
+            -0.16343846561325473,
+            0.7966186491571843
+          ],
+          [
+            -0.8132117831334168,
+            -0.11696333532831947,
+            0.5700931274465989
+          ],
+          [
+            2.8183630827189494e-08,
+            -0.9795955523310936,
+            -0.20097898858621796
+          ]
+        ],
+        "translation": [
+          -7.682134628295898,
+          -5.497652053833008,
+          1.9381258487701416
+        ],
+        "prefix_center_rmse_scene_units": 0.014420128565563609
+      },
+      "prediction_sha256": "5a0919be28d9feaefc47557cfc1da0a6e959553679308af47241c14820d7932c",
+      "status": "evaluated",
+      "calibration_arms": {
+        "predicted_intrinsics": {
+          "file": "5397-da3-predicted_intrinsics.npz",
+          "sha256": "08853aee0da664ea106abac00f5e498fcab1da0a30ba2bda9920b42b8a3eb6d8",
+          "planned_later_point_frames": 630,
+          "reference_eligible": 581,
+          "unavailable_reference": 49,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 0,
+          "measured": 581,
+          "pixel_error_quantiles_0_50_95_100": [
+            2.8456260314354442,
+            16.784123205731955,
+            31.22287686921109,
+            33.77436263999262
+          ],
+          "mean_pixel_error": 17.59471629939679
+        },
+        "reference_intrinsics": {
+          "file": "5397-da3-reference_intrinsics.npz",
+          "sha256": "257e4e6d553bab605a7d2de490f591306a741221cd3aa31815897308226060fa",
+          "planned_later_point_frames": 630,
+          "reference_eligible": 581,
+          "unavailable_reference": 49,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 3,
+          "measured": 581,
+          "pixel_error_quantiles_0_50_95_100": [
+            0.17306889712341467,
+            1.805826859569356,
+            3.4865606681675927,
+            4.1316019364035785
+          ],
+          "mean_pixel_error": 1.8858844232352778
+        }
+      }
+    },
+    {
+      "sequence": "4385",
+      "method": "dage",
+      "camera_manifest_sha256": "4167ec1544f53bfe9d221871c082c5efbde0fb4f41a5febef7c24bd2d59ca033",
+      "reference_sha256": "cda00dc47b7bf4f29034c6b38e933f8c2caf5e7c66977ee30e026021eda868ae",
+      "background_sha256": "b99952e970d48371bbe647b77c16eb57df03ad1ca65f613cbc7756022d1d178c",
+      "registration": {
+        "status": "registered",
+        "scale": 3.791155057593553,
+        "rotation": [
+          [
+            0.840200735306934,
+            -0.5384716548849651,
+            0.06411709035143986
+          ],
+          [
+            -0.5422755059835247,
+            -0.8343070552976933,
+            0.09934290659531013
+          ],
+          [
+            1.5299067638632842e-09,
+            -0.11823711078142604,
+            -0.9929853904434149
+          ]
+        ],
+        "translation": [
+          -0.5444388389587402,
+          -0.8435525298118591,
+          8.431757926940918
+        ],
+        "prefix_center_rmse_scene_units": 0.07464963962528506
+      },
+      "prediction_sha256": "403632f53c3704a0e09aa27d3c19f08535d8710f9531f8028c6455f64a920e3e",
+      "status": "evaluated",
+      "calibration_arms": {
+        "predicted_intrinsics": {
+          "file": "4385-dage-predicted_intrinsics.npz",
+          "sha256": "aaaefd1a7d6516875a5fff6e8bcd9b9ae9a66e857e57f72bc8352a8e656dfdbf",
+          "planned_later_point_frames": 798,
+          "reference_eligible": 715,
+          "unavailable_reference": 83,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 0,
+          "measured": 715,
+          "pixel_error_quantiles_0_50_95_100": [
+            0.4085788955829247,
+            7.796751771844366,
+            13.104762870726473,
+            18.80253985336915
+          ],
+          "mean_pixel_error": 7.743925361888707
+        },
+        "reference_intrinsics": {
+          "file": "4385-dage-reference_intrinsics.npz",
+          "sha256": "5bfe2635f09c11508f9537b3962d9d11d18b096f5a877c36e00da42a7b2b5111",
+          "planned_later_point_frames": 798,
+          "reference_eligible": 715,
+          "unavailable_reference": 83,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 0,
+          "measured": 715,
+          "pixel_error_quantiles_0_50_95_100": [
+            0.11012289160643567,
+            2.0732140474496132,
+            5.271367217156824,
+            6.450582850392983
+          ],
+          "mean_pixel_error": 2.407006756885633
+        }
+      }
+    },
+    {
+      "sequence": "4385",
+      "method": "da3",
+      "camera_manifest_sha256": "2d5cba48ca4dc7da56afc0a96ba58d89bc638c733ad7865fb1df807b6a146c8e",
+      "reference_sha256": "cda00dc47b7bf4f29034c6b38e933f8c2caf5e7c66977ee30e026021eda868ae",
+      "background_sha256": "b99952e970d48371bbe647b77c16eb57df03ad1ca65f613cbc7756022d1d178c",
+      "registration": {
+        "status": "registered",
+        "scale": 10.909293938360511,
+        "rotation": [
+          [
+            0.8402007353069342,
+            -0.5384716548849648,
+            0.06411709035143986
+          ],
+          [
+            -0.5422755059835245,
+            -0.8343070552976936,
+            0.09934290659530993
+          ],
+          [
+            1.5299069035446749e-09,
+            -0.11823711078142589,
+            -0.9929853904434149
+          ]
+        ],
+        "translation": [
+          -0.5444388389587402,
+          -0.8435525298118591,
+          8.431757926940918
+        ],
+        "prefix_center_rmse_scene_units": 0.07839617347452288
+      },
+      "prediction_sha256": "7719892641d3cfd098c2eeffb89b9896d635088bf7cd0a693e68358aae27d2bc",
+      "status": "evaluated",
+      "calibration_arms": {
+        "predicted_intrinsics": {
+          "file": "4385-da3-predicted_intrinsics.npz",
+          "sha256": "d49c80628d7c3816c2f80ce407cb4857c164f5aa4f811c1ddd434d306f9abfcb",
+          "planned_later_point_frames": 798,
+          "reference_eligible": 715,
+          "unavailable_reference": 83,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 0,
+          "measured": 715,
+          "pixel_error_quantiles_0_50_95_100": [
+            0.1780644101239049,
+            10.71075253735485,
+            19.18472648091241,
+            20.12883078414871
+          ],
+          "mean_pixel_error": 10.719966800213466
+        },
+        "reference_intrinsics": {
+          "file": "4385-da3-reference_intrinsics.npz",
+          "sha256": "c6ef71231e8ad470414e1a164a5d26149ba421f07e029dd4443bbef16650d39e",
+          "planned_later_point_frames": 798,
+          "reference_eligible": 715,
+          "unavailable_reference": 83,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 0,
+          "measured": 715,
+          "pixel_error_quantiles_0_50_95_100": [
+            0.09945243879069483,
+            2.939703782528271,
+            5.808352325520421,
+            6.690860595761756
+          ],
+          "mean_pixel_error": 3.189950850947289
+        }
+      }
+    },
+    {
+      "sequence": "4970",
+      "method": "dage",
+      "camera_manifest_sha256": "21652d8885fe85a8db981425f02ecb3b57b92b811e40c70a5fbc087509947751",
+      "reference_sha256": "26147ecc5020d2424e4131188305d11cba03d223b19f6a2f7ea8bd7852ee33ea",
+      "background_sha256": "952690fcfce5bfa1a9f6f270a94c1d2814f4ce5ba6cf3d2b6fd9fb5b5f3e828b",
+      "registration": {
+        "status": "registered",
+        "scale": 13.472165125328797,
+        "rotation": [
+          [
+            -0.7873969234580157,
+            -0.5530483282487374,
+            0.2722932822346688
+          ],
+          [
+            -0.616446335806169,
+            0.7064176136757666,
+            -0.34780464367196656
+          ],
+          [
+            6.083772082963374e-09,
+            -0.4417145024899144,
+            -0.8971556711575133
+          ]
+        ],
+        "translation": [
+          -2.797595500946045,
+          3.5734143257141113,
+          9.217556953430176
+        ],
+        "prefix_center_rmse_scene_units": 0.07421272493654482
+      },
+      "prediction_sha256": "32543d15860a3ea6a89cf74be24383b7dbe6bb8a7b8051856268894e55104ce1",
+      "status": "evaluated",
+      "calibration_arms": {
+        "predicted_intrinsics": {
+          "file": "4970-dage-predicted_intrinsics.npz",
+          "sha256": "99e45f08addc1aa22bac24bad64c7ef3d3d6aaa9201e48eb48cacc678ae4231e",
+          "planned_later_point_frames": 644,
+          "reference_eligible": 508,
+          "unavailable_reference": 136,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 0,
+          "measured": 508,
+          "pixel_error_quantiles_0_50_95_100": [
+            0.24890383244859243,
+            5.562642315808158,
+            10.06404290169138,
+            13.534912209056142
+          ],
+          "mean_pixel_error": 5.406272134293188
+        },
+        "reference_intrinsics": {
+          "file": "4970-dage-reference_intrinsics.npz",
+          "sha256": "6d926a235838d711ec21884112b3104852eb9883a91a5d9bbc950accd01b316d",
+          "planned_later_point_frames": 644,
+          "reference_eligible": 508,
+          "unavailable_reference": 136,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 0,
+          "measured": 508,
+          "pixel_error_quantiles_0_50_95_100": [
+            1.0512365100788836,
+            4.278318470454938,
+            6.886502042350919,
+            8.557586477170204
+          ],
+          "mean_pixel_error": 4.402504981469627
+        }
+      }
+    },
+    {
+      "sequence": "4970",
+      "method": "da3",
+      "camera_manifest_sha256": "7c3bc37b48c0fa267cd2820b1a63bebea540fd4f454c00a11a9ab4725ad92ba2",
+      "reference_sha256": "26147ecc5020d2424e4131188305d11cba03d223b19f6a2f7ea8bd7852ee33ea",
+      "background_sha256": "952690fcfce5bfa1a9f6f270a94c1d2814f4ce5ba6cf3d2b6fd9fb5b5f3e828b",
+      "registration": {
+        "status": "registered",
+        "scale": 14.798840532707123,
+        "rotation": [
+          [
+            -0.7873969234580158,
+            -0.5530483282487373,
+            0.2722932822346688
+          ],
+          [
+            -0.6164463358061689,
+            0.7064176136757667,
+            -0.34780464367196645
+          ],
+          [
+            6.083771984894384e-09,
+            -0.4417145024899143,
+            -0.8971556711575133
+          ]
+        ],
+        "translation": [
+          -2.797595500946045,
+          3.5734143257141113,
+          9.217556953430176
+        ],
+        "prefix_center_rmse_scene_units": 0.08136233217276401
+      },
+      "prediction_sha256": "7caa930dff60a91e7f02bc6ba824453c7b56b0f3980089b3bf11e7557cdfc669",
+      "status": "evaluated",
+      "calibration_arms": {
+        "predicted_intrinsics": {
+          "file": "4970-da3-predicted_intrinsics.npz",
+          "sha256": "972c597a6cb1c0d6ec3e0d1f09d6e490c875a2a697ed1872c733969b3f0e45fd",
+          "planned_later_point_frames": 644,
+          "reference_eligible": 508,
+          "unavailable_reference": 136,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 142,
+          "measured": 508,
+          "pixel_error_quantiles_0_50_95_100": [
+            1.3504841593308747,
+            18.251722394191702,
+            38.99755145946076,
+            42.518774015594026
+          ],
+          "mean_pixel_error": 19.78376330235447
+        },
+        "reference_intrinsics": {
+          "file": "4970-da3-reference_intrinsics.npz",
+          "sha256": "b7da49926c9e4e3ba3ca4dbb399a32d3c1fb7ebe48b307beb2f42cf45c79e429",
+          "planned_later_point_frames": 644,
+          "reference_eligible": 508,
+          "unavailable_reference": 136,
+          "nonpositive_or_undefined_candidate": 0,
+          "outside_candidate_image": 3,
+          "measured": 508,
+          "pixel_error_quantiles_0_50_95_100": [
+            5.62114232581461,
+            11.029074445661061,
+            14.540833288799256,
+            16.280342774297335
+          ],
+          "mean_pixel_error": 10.703162967762797
+        }
+      }
+    }
+  ]
+}
