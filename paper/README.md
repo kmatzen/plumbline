@@ -2996,3 +2996,14 @@ trajectories a change can improve or worsen accuracy, so these are response
 profiles, not detection rates for known failures. They establish neither a
 method ranking nor functional DNF. Independent track validity and usability
 validation remain necessary before using the profile as a decision rule.
+
+Numerical audit after the pilot: all 6,980 recorded positive fitting/combined
+witnesses were reprojected directly with the saved camera matrices and published
+calibration. Every used camera depth was positive; the largest excess beyond
+the recorded pixel-box tolerance was 3.40e-11 pixels (audit allowance 1e-5).
+All recorded implementation hashes matched. This checks positive witnesses,
+not solver infeasibility certificates, correspondence identity, or staticness.
+Repeated witnesses across configurations are not independent observations.
+The broad local command `uv run pytest -q -m 'not weights'` completed with
+1,936 passed, one skipped (unstaged KITTI MoGe-eval bundle), and six weight-backed
+tests deselected. These are software checks, not publication-readiness evidence.
