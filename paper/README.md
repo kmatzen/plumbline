@@ -262,6 +262,26 @@ the model claims to use; it cannot measure correctness without independent label
 Any diagnostic-only judgments must remain distinct from full-evidence judgments.
 The six response-parser tests use synthetic strings, not model or human outcomes.
 
+Three actual pilot calls are retained in `results/vlm-dnf/`: walking-XYZ,
+walking-static, and a reference-against-itself control. All calls completed on
+the GTX 1080 Ti, taking 7.2–7.8 s for generation and approximately 10.32 GB peak
+allocated CUDA memory. All returned fenced JSON and therefore failed the strict
+response parser. Their raw text claimed `unusable`; none is an accepted DNF
+label. The image and executed-runner hashes for both real cases were verified
+against the committed evidence and script.
+
+More importantly, the identical-trajectory control received a reason claiming
+large path deviations and high errors. That contradicts the construction:
+candidate and reference are the same stored trajectory, with maximum normalized
+position residual 7.97e-16 and maximum reported rotation residual 0.01876 degrees
+from floating-point rotation matrices. The control image is retained alongside
+the response. It is not a real tracker output or a human usability label.
+These three selected probes do not estimate general accuracy, but the control
+failure prevents this pipeline from serving as the proposed DNF gate. Audit
+image preprocessing and plot readability, and compare evidence presentations
+and model choices before any deployment or superiority claim. Do not silently
+repair the recorded responses or tune on held-out labels.
+
 ### Pairwise review interface
 
 `build_review_study.py` creates 150 native-input comparisons and 15 hidden
