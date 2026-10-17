@@ -4657,6 +4657,32 @@ that additional gates already improve method selection. The artifact is
 replay, common support, nested coverage, and missing-score handling. No new
 claim is added to the manuscript.
 
+### Prospective replication on the next validation shard
+
+Before acquiring new examples, commit `df6853d` froze
+`results/movi-replication-shard01-v1/protocol.json`: select validation shard
+00001 by order, retain every scene, use the same two camera models and all
+current placement, motion, and cycle settings, and report all three evidence
+variants without choosing an aggregation after seeing results. The original
+four-scene baseline is commit `68a0761`. MOVi test shards and TAPVid calibration
+images/exports remain unopened. This is a prospective replication, not a claim
+that the current baseline is novel or publication-ready.
+
+The 113,477,000-byte shard passed the publisher size and MD5 checks. Its SHA-256
+is `cf379118ed7a8455b8c4be18f475e2dfe15b15155767a3c119e280c8f7890fb6`.
+All four records decoded successfully in publisher order: 7097, 4852, 2373,
+and 4866, each with 24 native 256x256 frames. Their names, record hashes, and
+decoded RGB hashes are disjoint from the original pilot. RGB and reference
+archives are separate under Anima's private
+`/data3/kmatzen/plumbline/research/movi-replication-shard01-v1/decoded-v1`.
+The local staging and decoded manifests retain the source and artifact hashes.
+
+At this stage only acquisition and decoding are complete; camera inference
+and the fixed evaluator comparison on this batch remain to run. No new
+accuracy, ranking, or DNF result follows from successful decoding. If settings
+are revised after inspecting these results, the batch becomes development
+data for that revision and another independently selected batch is required.
+
 ### Frozen-matrix correspondence intervention
 
 `audit_movi_motion_track_error.py` tests whether correspondence error explains

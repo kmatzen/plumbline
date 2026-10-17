@@ -1,0 +1,65 @@
+{
+  "status": "complete",
+  "scope": "prospective validation-shard replication; references separated from RGB; no validated DNF labels",
+  "source_manifest_sha256": "4b14a47f663e8d7d59c5585a94349504a083bfb3a5e7cb29f6465e36ac686eff",
+  "shard_sha256": "cf379118ed7a8455b8c4be18f475e2dfe15b15155767a3c119e280c8f7890fb6",
+  "expected_scenes": 4,
+  "scenes": [
+    {
+      "index": 0,
+      "name": "7097",
+      "frames": 24,
+      "instances": 12,
+      "rgb_file": "scene-00-rgb.npz",
+      "rgb_sha256": "e3122b4f36ba814c8df146fe2bf25dfe6d719dbde48758e4f3d3a8b073341636",
+      "decoded_rgb_sha256": "068553adf745e9ce2c9d9952cbd6c4ccf36ff2d535e343e060215e2a3c4db3c6",
+      "reference_file": "scene-00-references.npz",
+      "reference_sha256": "2912bcffe1a6bff5594d9b4323c5414a614e521e126080ef1ac5a73c347bcac6",
+      "record_sha256": "f8f3b2d8ccd7fd0d0995090b8363dde7a2cf3c3a24bbbd551b784d44324f6f3f"
+    },
+    {
+      "index": 1,
+      "name": "4852",
+      "frames": 24,
+      "instances": 12,
+      "rgb_file": "scene-01-rgb.npz",
+      "rgb_sha256": "c324ac38cc5efb127cc247bdc1fb806d973aa5029d348b5da11e71937484cc43",
+      "decoded_rgb_sha256": "3d1ef7d6e4b7ff09a505e781a9da1adfaba07dcb2a5fa5d12af50920a7b5d694",
+      "reference_file": "scene-01-references.npz",
+      "reference_sha256": "cd74178fc82b31fbaa4a6e07ffed7e9978c305d0cf865b60c10fdfd8b87f51f7",
+      "record_sha256": "5aa7d279943f203157e29e455619369ecf20e69b04355be6062221012b50183e"
+    },
+    {
+      "index": 2,
+      "name": "2373",
+      "frames": 24,
+      "instances": 10,
+      "rgb_file": "scene-02-rgb.npz",
+      "rgb_sha256": "827d5ad78fa328b1ff9b55be210490859dbd82957e9e24831760a2a8a2ec3168",
+      "decoded_rgb_sha256": "ef4727b1099e6925777e7ec91518734875fa5b44213650fb319cc28b2c1d4f89",
+      "reference_file": "scene-02-references.npz",
+      "reference_sha256": "a3c5d41686d6fb12c5eac27da93ca5186e6b8459cc7622a09e3007428431c5c2",
+      "record_sha256": "96dcdc38569da1979912f495b44bab48dc6236d977e2087b7b8e081ed023139c"
+    },
+    {
+      "index": 3,
+      "name": "4866",
+      "frames": 24,
+      "instances": 15,
+      "rgb_file": "scene-03-rgb.npz",
+      "rgb_sha256": "41a6d9becd6a8adb25a843c2c735a7d124bcc348756073e605322b3c93424abb",
+      "decoded_rgb_sha256": "d342dc7a6816ca6be316b3685c9a0a5c7d900f69996d1949c75d575adcb2f8ef",
+      "reference_file": "scene-03-references.npz",
+      "reference_sha256": "ebc4241f4c0d6558b996312a5874b27d8c33a347c581c58484e7828c3af6f3f3",
+      "record_sha256": "f6dbeafd95c1a17f61835bcc262030cc5b95f78943c14cc13dd9d0c48a306665"
+    }
+  ],
+  "script_sha256": "00f6297aa8b0ed35fd473bb7501e09c02957972c41099e804cedb6e2142fc343",
+  "versions": {
+    "tfrecord": "1.14.6",
+    "protobuf": "3.20.3",
+    "crc32c": "2.7.1",
+    "numpy": "2.4.4"
+  },
+  "shard_index": 1
+}
