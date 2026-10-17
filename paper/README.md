@@ -4236,3 +4236,29 @@ influence this configuration on these examples; constant generated labels
 alone do not imply a disconnected image path. This does not establish correct
 visual reasoning, isolate the cause of transfer failure, or justify DNF labels.
 The controls are previously trained examples and cannot measure generalization.
+
+### Exact-prefix marker-placement ablation
+
+`audit_movi_prefix_tracking.py` refits background markers using exact reference
+coordinates for frames 0..9, keeping the saved predicted cameras, intrinsics,
+and fitting helper unchanged. Later coordinates are used only for scoring.
+All 1,536 original slots are retained, including foreground and unavailable
+cases; off-image projections remain measurable. The paired diagnostic requires
+reference depth/mask non-rejection throughout the prefix and at the query, plus
+finite original and oracle-fit projections. This is a reference-assisted
+development ablation, never an input to a reference-free evaluator.
+
+For scenes 3835, 5397, 4385, and 4970, the paired DAGE counts are 97, 83, 112,
+and 52; DA3 counts are 97, 81, 112, and 52. RGB-fit/oracle-fit median later
+errors in pixels are DAGE 2.208/1.639, 3.429/2.932, 2.489/2.333, 2.455/1.575;
+DA3 2.245/1.966, 1.745/1.389, 1.559/1.440, 3.166/2.736. These per-method
+subsets are not identical, so these summaries do not establish a paired method
+ranking. Differences are not an additive causal decomposition: refitting can
+compensate for camera error, and even the median paired improvement can be
+negative (DAGE scene 4385: -0.021 pixels).
+
+The result preserves a distinction between camera output, marker initialization,
+and later visual checking. It does not validate a new evaluation method or DNF
+threshold. The record is `results/movi-camera-pilot-v1/prefix-tracking-ablation-v1.json`.
+Tests check exact synthetic recovery, independence from later coordinates,
+full-roster accounting, and replay of the saved analysis.
