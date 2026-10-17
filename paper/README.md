@@ -3217,3 +3217,28 @@ calibration, and application usefulness remain separate unresolved questions.
 Full solver traces are preserved in `results/layered-minimum-error-v1.json.gz`.
 Three tests check bisection against a known monotone oracle and preserve both
 mocked numerical uncertainty and a real coincident-camera boundary case.
+
+`probe_layered_observed_error.py` repeats the continuous baseline with the saved
+RGB-derived tracks, without filtering observations using reference visibility
+or coordinates. It keeps every seed, track, and camera variant, and compares
+numerical error brackets rather than rounded point estimates. An overlap is
+not a win; an unresolved solve is not assigned an error score. All positive
+upper-bound witnesses are independently reprojected before saving.
+
+The full 1,680 track/variant fits are retained in
+`results/layered-observed-error-v1.json.gz`. All 120 rigid-gauge comparisons
+have overlapping brackets. Across the 1,440 nonidentity/nongauge comparisons,
+1,425 have higher error after the camera change, 11 have lower error, one has
+overlapping brackets, and three are unresolved. All 11 lower-error cases occur
+under the positive camera-local z translation; that direction has 108
+higher-error cases and one overlap. The three unresolved cases occur under
+positive x rotation. These are dependent track comparisons in one synthetic
+scene, not independent method-level ranking trials.
+
+This baseline can prefer a perturbed camera when supplied with imperfect RGB
+tracks, despite preferring the reference on every exact-track control. It gives
+a concrete requirement for an evidence-admission method: reduce these ranking
+errors while retaining enough evidence to distinguish the other camera changes.
+No admission rule or threshold has been fitted to these results. Five focused
+tests cover the continuous solver and observed-track comparison, including
+missing evidence, overlapping brackets, and unresolved solves.
