@@ -4366,3 +4366,27 @@ complete pairing, disjoint IDs, and prediction counts. This unsuccessful
 development experiment is not added to the manuscript. More training on this
 same small corpus is not justified by the result; visibility/ambiguity
 supervision and evidence representation need to be addressed first.
+
+### Crop evidence support audit
+
+`audit_correspondence_crop_support.py` checks source annotations only for the
+six training and two validation videos. It uses the renderer's rounded crop
+center and 161x161 native-pixel extent, and does not treat coordinates of
+occluded points as visible evidence. Calibration source files and exports
+remain unopened. The saved result is
+`results/visual-correspondence-probe-v1/crop-support-v1.json`.
+
+Among visible far examples, 29/84 training cases and 22/37 validation cases
+place the annotated source detail outside the candidate crop. Thus absence
+from that local crop does not distinguish a visible detail elsewhere from
+global occlusion. Containment is only a geometric check, not proof that a
+detail can be identified visually. This concerns the crop-only ResNet probe;
+the original VLM panels also contain reduced full-frame context.
+
+For the 22 outside-crop validation cases, frozen/adapted models correctly say
+far on 15/9. For the 15 inside-crop cases, they do so on 12/5. Hence missing
+crop context is not a complete explanation for the adapted model's errors.
+The next representation must separate local correspondence from full-frame
+visibility, with temporal evidence or abstention when visibility is unresolved.
+Do not relabel outside-crop visible points as occluded or claim that these
+counts validate a new metric.

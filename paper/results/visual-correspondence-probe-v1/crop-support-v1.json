@@ -1,0 +1,2569 @@
+{
+  "scope": "development evidence-support audit; not visual observability labels or camera evaluation",
+  "policy": "only train/validation source files; candidate crop is rounded center plus/minus 80 pixels; do not inspect occluded point coordinates for containment; no calibration images or exports opened",
+  "implication": "a visible detail outside the supplied crop cannot be located within that crop; its absence alone is not evidence of occlusion; geometric containment does not guarantee perceptual identifiability",
+  "script_sha256": "9b4c64fcb0d9314d6325a03f681f4a2206f687c959920bb8ea54934bebb7ffeb",
+  "corpus_sha256": "24cee1801f19d85f11a57cb6e85770bb6cb5659e7c3047f496a260d8c039a5fc",
+  "source_sha256": {
+    "breakdance": "8d2cf7bc0c45e9a8bdbd254dc159453fc8f3fd2ed076ec0f40d3df73cd70ebce",
+    "camel": "624cd5d4dbd9620ff459240765edc5e3abe400fb8e6e236652921306614dd24b",
+    "dogs-jump": "f65107cd21d58dc1935980a1b8e777aaad0fdce930a883b4492826e453eb5d64",
+    "drift-straight": "3916a76f36bf1a60b05d62fc35f738c6065a4aec54f6764772eaa568aba08924",
+    "goat": "6cffa179aa266d36ac69c858da952b2035d352c18a5d471dfb4dface25e842e1",
+    "judo": "a8729910d639fad5ff71ee0bafdf7df4d241991b48acb18203a6ba47226221f9",
+    "loading": "cc8959ecbebcf8b4cf8486ee18e19f948538636399cbf539353ca98fe4dc9afa",
+    "shooting": "6412431e40027906da6bbe994a7875b30487fbcd7daae6ab80fd90ee34e22196"
+  },
+  "summaries": {
+    "train": {
+      "total": 188,
+      "label_counts": {
+        "close": 69,
+        "occluded": 35,
+        "far": 84
+      },
+      "visible_far_outside_crop": 29,
+      "visible_far_inside_crop": 55
+    },
+    "validation": {
+      "total": 128,
+      "label_counts": {
+        "close": 46,
+        "far": 37,
+        "occluded": 45
+      },
+      "visible_far_outside_crop": 22,
+      "visible_far_inside_crop": 15
+    }
+  },
+  "records": [
+    {
+      "id": "f2ab662d01a8e31b1dea",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "01b47f9b68dc48073f14",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "725650956b86b9f0e351",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "11552438faf0b9139f56",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "2e83aed31495effd8a37",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "72c1207638caddd9c16d",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "67f3c2980c3319e3def1",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "6a8b48fa6b3d9cf65b76",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "c40b2690363ccc2119de",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "1e1e6d4ea025977f0db9",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "ded2961089ad99d6d915",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "7c490fa24ea30bc6a14b",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "20dfb00126231d7f05d2",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "ca46414c8adb1531ecf8",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "e8fe9f4413af46ad0df5",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "a3624e53bce3e09a31f3",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "4d9cdef228c38c90faef",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "48f0201dd2a7b808f202",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "33c2caae408df20185ff",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "3f834da9552a6b9208b1",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "c7ac111e50c707edd1ac",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "3e03deee02fd42622275",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "a1d0b1d986d8db0614fd",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "64c906da40b9f54e4c08",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "ac333d4e5a3232c39916",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "bcb6f6e637fb0119e615",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "7d91598d6fac540a6c76",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "b346d7f9421e09f1fed6",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "9cd502a2b279778641c2",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "0bc0759230710295b509",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "b097b88868ed1fea1062",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "9b3e8cb2b2a4c86e48c1",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "213ab401b43075f407a9",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "26c6e464b8e4ccde7b4a",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "905953814a73a7cb1241",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "3d70a8e9b0b88cf67aa8",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "9dab7211ef9e31ed0055",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "ef89e33d7f61f00aa89b",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "4b002ebf1374f31e06d7",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "6affc4245777f22945ca",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "3f52bc3efbeb0b66e197",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "ae3900cdf857b2d49a8b",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "649ae9122b13dd8b5068",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "21afac03c4f5e732656d",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "c7b312cd2b34ea460d23",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "81255e29c13d58dd10fb",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "ef8b4b8da3f6a92a3f80",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "c6ccb85eb919945b7f12",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "30db20736cdcb4c238f3",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "f8736f795ad695a87611",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "dead18919ba43139ea5e",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "940281a0a1998c5dc686",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "70fbcb07734ba5d438da",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "4b3a9a976f232f113765",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "956e11ce0ad2fef8ed80",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "5167dd86749bafda96ae",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "22ee0ae304b177aab228",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "25d83a87473744fd5c23",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "e3431a683d0b6a17301d",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "e9de4f63a4baf81f5078",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "84efff7504ef374c7878",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "07e0f28445e2efc216d7",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "02b68ed481e145aaac18",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "84745b00098010703441",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "c53f4b37f27841bb8cfe",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "09833df77b6cf04a4d81",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "51282d234e646b17e9c4",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "d63a1257ad6ed4b29ba1",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "00b4589db43d202e55d3",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "e070816e823321cc451b",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "f9173b68a781b3ee11ee",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "dfd9e7b61bef5db23453",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "c293446682f6c94dc41c",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "e6940db209a27400fc28",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "005b97a86dec7275b731",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "7ddbd828336d065959c4",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "dfb4bf7a426db0d78cea",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "b01b54eb1e7437d86596",
+      "sequence": "breakdance",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "bb9988581a50c4787f50",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "27bbd075ae6da8cdfa0b",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "fd9711745a524aae375e",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "0c8538ede1dd69ad2415",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "a5305584a3915ba5c92d",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "13b370f4fbf3e138986f",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "d5e23fd63c90eae17398",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "20d89fd5b14b393d1e51",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "43cbfcce97ea6f4e10a5",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "4425ef7f2e5efa678636",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "0422fe8dccaf7110e2b6",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "97d2e59063bc0fc90656",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "045bcb213374d5eca885",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "03579e7c15d323827dcc",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "70a250e43b59fc633e9d",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "f144e2fd2d9bc2e92a4d",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "fd4d23d550d013fedf1e",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "429f4a4f76472e731ed3",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "7d6909cd502499d9ffbd",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "6bd4f3e76395a0e83886",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "32cb1d59b5c4056522d6",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "21be14bd0fb252dd3a1d",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "1b0dd854df0b185348de",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "1a5385039ac887501842",
+      "sequence": "camel",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "00256bc35fca8eae6b0a",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "6e495b73716183a6771f",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "675683cc4184a79463ce",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "db4031e6672cb82cbe83",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "e47a0052ce0d3d552b68",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "13095a8b7ec796d99ea8",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "8ca5b1e125457d4670cc",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "93cf9abc12f1d2ff6309",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "2eae34bf93836eb79057",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "cd89beab911832bc53ae",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "b35b1465ccd0a1eee0c3",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "98342196fdf10b2160eb",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "c391df6d5f5e372a7ac7",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "b6291143f23609df59e4",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "e684d416767f11ffba98",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "78df9b8279f06e11d0b3",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "52c875327f129b252542",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "7950f9616be593baade5",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "4427f5f29eeef2172b0d",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "10aec526fd2e8b0a9bf9",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "a8ea42fab3bedd2fd7be",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "3f55012bffcf7780854c",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "81667b95192a00244823",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "f2ce3dc9493cde75f0d6",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "f491ff49d12f0fe26a29",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "409e50493431a6e9888a",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "4d0d3a6e877fa85dfa30",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "50ef9b098b8b278e76ec",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "27de2b2f33cc4edccf9f",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "16d117eac851f6d78425",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "56d085b77801df976662",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "c8b3a05a1a71b6f77885",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "799fa9c7bf1ff0d56754",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "f5abb2acc58005a79753",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "80aac60566226c55bd12",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "4829ac9eb995c0928889",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "58316e9c5d850b1f3eaa",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "5c544f14a649d59c5379",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "08bcb0585b7c2d0a2165",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "2713921725f4152ce0bb",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "118a5e8f37275f98004a",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "b1522aa3dcabab972907",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "1dc7dd8ebcb5954fe362",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "bc743ea896646b376263",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "4b6f078abb719b7216a3",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "b5c35ba0014db4d7407b",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "ef9810e962db965a95fd",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "148239c3103c1aecafdb",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "2208164a5cc19f25620b",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "cc8a5dc619f201b93754",
+      "sequence": "dogs-jump",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "e8b368540127a5a5d0df",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "590bd554e32e4481b161",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "694f6cdb85422e622d83",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "2ab2729b2bcabdad517c",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "206c59310127987e5ad8",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "85d4939f451a29fb8d77",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "82dc9c7168c255e29eb0",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "ddd638cef7cc7afe7e3a",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "7bc84068c187cb7c19bc",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "3c47ecca9c8fa1736311",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "e33fed555152c31af8fe",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "bef5f9f8ad0da9be19bd",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "d9986b9c62e996727971",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "bfbf2f7a637b9bd5b91c",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "6dd99158383642322c25",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "93717291543ee90bade6",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "dc130731af8b741898f4",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "e5e2a9987e9dfe202513",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "6a6191af0919734b9d1a",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "5347043b9f8306be1358",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "981576ede6594d510cf8",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "110312e489a56cac8728",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "17835743012cb284562a",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "4846ce5797373ab4496f",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "e23bea8154fe6f3d5953",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "caf119c08c96e993e949",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "6a99fb14d456a57bbc65",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "0c3f8bcb75db80729355",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "dee2a459dea67af4c48f",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "e90849c83ed8dcedff09",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "c8c717a4ffec7c39c8f5",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "8071e5d8d27669bd5ba8",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "67c16dbee69318a142eb",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "415fc4e7099944eb4307",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "0e70917360dc6d93e254",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "cc672b784cef087cd220",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "caa14c2b67076b6d3138",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "650bb3c747f5ef1b6fd2",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "d21d832f6904a86a028a",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "b2f73062108521d353ff",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "7c71e1eeb2d9351bcc11",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "7c6e80eaed14ebec688c",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "e18c3ebe133debbc39c3",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "353a0452687f6067440d",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "c1133747b24bb5f018c6",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "4da2010def14d1d30a16",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "7d6185be438a88e30523",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "dd407d5cff2994acbd2b",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "6d19992be3d152d84708",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "fdeb54a8fca128ada199",
+      "sequence": "drift-straight",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "df0e06cc4a6feab254b1",
+      "sequence": "goat",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "7d0f175b90bb53a21476",
+      "sequence": "goat",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "35ab2585e6e80cff5d5d",
+      "sequence": "goat",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "f4ad3121d3e7af709026",
+      "sequence": "goat",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "90938371e8920f72d579",
+      "sequence": "goat",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "a966c0916c6727af2eeb",
+      "sequence": "goat",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "1e60be834636eaff2464",
+      "sequence": "goat",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "3fa8a7174a51fb619b9d",
+      "sequence": "goat",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "421eceda0b7eb85559e9",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "c4a92f5e80d99abf07ef",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "1b725543df93745ac28a",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "d733fa216e1f2ec2dc1e",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "c8a8cc19942d5e3d098a",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "8e9ee6a8eb7578b5f5c4",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "e4bb4c36199211022a5f",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "82b1e7332f340b5bb882",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "d6eb14cf9f5c5d37a6a3",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "72c713b07c7f4e2e0875",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "1fc70205f789aa43af46",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "7a30ddd1acde37f7f724",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "236fefb8817bf31a5515",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "60aca026b8ffbdf7117c",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "8ea46d374b97ee4ae365",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "68ff3d819d4036f7ed17",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "add254d56d056af5f7ff",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "41423f7120131f948ef3",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "52c35b599db531cd835b",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "ce11f1b29c2cdfa6031e",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "37e154d638e5340b39d3",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "cedeab62a7c95897600b",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "eb40dc180ceea211f9ad",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "22f35e3ab7a9a0a67a2c",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "fe6ccebb6c0aa980fd10",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "983b82472ca16bc03783",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "1b55eee75fa24fbb4952",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "82593710f55c5ac3606c",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "9d1cf2948610c7140704",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "7450b4343253034af6cc",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "764fd6dd01a2ab1ad9e8",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "a6297fe2d3416855265a",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "14590c1bfd68c4b75191",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "56a05011dc54e8f2797a",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "5c63c021c2dabe2934c6",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "212f9bc335f15b8237f7",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "8e778cb336ad0769770e",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "9953734d3c29d13b2996",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "2f7ae30315e170550434",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "56611a404612bf03abef",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "df3ab4e877425c121a70",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "412169b799ff1087eb5a",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "3a4b2ccf13aea6a06e40",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "1d6ca2e82b452ce131f3",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "169208ca48617d3d48e4",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "03ccbc8ae4c2f6cb39c9",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "7df6356e76f691cf7ddb",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "933ddb1add9ca1bcd9a5",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "848ba44d263dded38795",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "bf9acc61d429eaf58dc0",
+      "sequence": "judo",
+      "partition": "validation",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "55f1651835c79d4e84f9",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "3bd082622f22449bf1f4",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "6eae1ab38849959654f1",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "eee523f6c19fb287ee7e",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "19c38e091715181a16df",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "c5d3c61e056b9fa98bdf",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "60e3b0eb3ef1cb410015",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "2cfe8c5396192ebde323",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "3300c16d73a962dcc522",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "92ed7cace4a4e68a937e",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "b9180bba60ddc8044190",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "74eb0a11145daf38714d",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "8e366218e3897dfc38eb",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "1d0ae2a53a7094f28d4b",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "e5735c9b38891920c27d",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "8bb5010d42428e054189",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "52b56c1e204d86c357fc",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "1cbcd8bff151af8dc1d5",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "3fbbce7be75a4082cf6d",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "61d6bb0e9c8f95112bcb",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "b0fba8305c2e96b163fc",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "a629355238ec426439aa",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "ff8edb8219e7a9de5f91",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "9c1082156b04db5d3143",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "1f12e92575bb5f59e5bb",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "69d472aece693a837368",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "35148e5951a5b281551e",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "4332d0c267d64bb3f9b3",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "d2a909c0ba414ffa85b3",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "2dc681d1bffef7298fa4",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "eee85aee9b8510f5e495",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "387d96e3f33175223b48",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "b3982271ba19d12c534f",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "96b81ced3e5584b69bc3",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "de83b2999d0aa6d2f626",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "fc989fb5e911e50f9684",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "fc880ddc37b47fdd8ccb",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "4ff1b05a8ec00dd3dd7c",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "f5bf962d119bc34bd202",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "145a0d63c67e23607f2c",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "e2b7e77d491defb563b8",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "ffcc0587b3a16ee32fdc",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "a455dd0a51dfb0128daf",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "2dc361ad9321b87f0e67",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "c7fbe039bbc0f2601e90",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "b120b5909debae27b42a",
+      "sequence": "loading",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "58da421473c4d779461d",
+      "sequence": "shooting",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "9f33e2ead0d4bfd5466a",
+      "sequence": "shooting",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "9398c323ebf7d23f5ed6",
+      "sequence": "shooting",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "af0e7c559c23b19edff3",
+      "sequence": "shooting",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": false,
+      "reference_visible": true
+    },
+    {
+      "id": "a5a76d267ab06056a16a",
+      "sequence": "shooting",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "f63fda9716a9e1b934a7",
+      "sequence": "shooting",
+      "partition": "train",
+      "label": "occluded",
+      "candidate_crop_contains_visible_reference": null,
+      "reference_visible": false
+    },
+    {
+      "id": "e5b55edd57a265311cc0",
+      "sequence": "shooting",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "8512b11b6bd217795a3b",
+      "sequence": "shooting",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "593e5915fe2d75605324",
+      "sequence": "shooting",
+      "partition": "train",
+      "label": "far",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    },
+    {
+      "id": "467cfb4a6bac25ce70e1",
+      "sequence": "shooting",
+      "partition": "train",
+      "label": "close",
+      "candidate_crop_contains_visible_reference": true,
+      "reference_visible": true
+    }
+  ]
+}
