@@ -748,6 +748,17 @@ completed and passed archive integrity checks. The unchanged DAGE/DA3 runners
 and query-chunk helper have been copied to the separate replication directory;
 16 targeted staging, input, runner, and geometry tests passed before inference.
 
+`audit_reference_availability.py` reconstructs every nearest-timestamp reference
+association from the hashed raw index and checks rigid poses without replacing
+missing frames. It reports availability separately for the fixed fitting windows
+and final query. Tests retain out-of-tolerance associations, duplicate timestamps,
+and invalid zero quaternions, reject altered associations, and confirm that a
+missing frame zero does not shift windows starting at frame one. On the original
+control it reproduces 89 available poses and one out-of-tolerance association;
+all three fixed windows remain available. That audit is retained as
+`reference-availability-v1.json`. Office staging is still running; no office
+reference availability or evaluation outcome is assumed in advance.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is
