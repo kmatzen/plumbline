@@ -54,3 +54,18 @@ def test_reference_roster_and_baseline_replay():
     background['records'][0]['candidate_xy'] = [100, 100]
     with pytest.raises(ValueError, match='geometry changed'):
         references(corpus, background, motion)
+
+
+def test_completed_movi_judge_replay():
+    root = Path(__file__).resolve().parents[1]/'paper/results/movi-camera-pilot-v1'
+    result = run(root, root/'judge-evaluation-v1.json')
+    assert result == json.loads((root/'judge-diagnostic-v1.json').read_text())
+    assert result['results']['base']['all']['correct'] == 37
+    adapted = result['results']['adapted']['all']
+    assert adapted['diagnostic_labeled'] == 389
+    assert adapted['confusion'] == {
+        'close': {'close': 133, 'far': 163, 'occluded': 56},
+        'far': {'close': 18, 'far': 10, 'occluded': 9},
+    }
+    assert adapted['correct'] == 143
+    assert result['results']['adapted']['rgb_abstained']['correct'] == 59

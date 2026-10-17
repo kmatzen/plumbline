@@ -4165,3 +4165,31 @@ balanced agreement is 38.29%. These are different aspects of its performance:
 high agreement among answered cases does not establish broad failure coverage.
 The expanded baseline report is `rgb-baseline-diagnostic-v2.json`; version 1
 remains unchanged. Tests check the absent-class case and replay all controls.
+
+### Completed MOVi judge comparison (development only)
+
+Both frozen arms completed all 944 renderable examples. The saved evaluation
+and analysis are `results/movi-camera-pilot-v1/judge-evaluation-v1.json` and
+`judge-diagnostic-v1.json`. Exact IDs, paired processed-pixel hashes and token
+counts, absent scoring targets, corpus/export hashes, evaluator hash, training
+manifest hash, and development manifest hash were checked. An independent
+recount matches the saved confusion matrices. The evaluator verifies checkpoint
+and adapter hashes before inference. No calibration exports were opened.
+
+Among the 389 diagnostic labels (352 close, 37 far), the base model answers
+far throughout: 37 agreements and 50% balanced agreement. The adapted model
+agrees on 143/389 (36.76%); close/far recalls are 37.78%/27.03%, averaging
+32.41%. Its 151 close predictions include 18 false-close cases. It also predicts
+occluded on 65 diagnostically visible cases; these are disagreements, not
+abstentions. By comparison, the RGB baseline agrees on 244/247 answered cases
+and abstains on 142. On those 142, the adapted model agrees on 59 (41.55%),
+below the image-free always-close control's 111/142 (78.17%). Its close
+precision on that subset is 51/66 (77.27%).
+
+This comparison does not establish a useful learned fallback or a camera-DNF
+metric. Reference visibility is still diagnostic, scenes are developmental,
+and repeated frames/methods are dependent. The unsuccessful experiment stays
+in the development record, not the manuscript. Do not adjust thresholds on
+these results and report them as held-out validation. The next method must
+address functional camera failure rather than equating point-match judgments
+with camera usability, and must be validated on fresh scenes after development.
