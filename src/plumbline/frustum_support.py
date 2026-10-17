@@ -2,6 +2,11 @@
 
 A common point is a stronger assumption than a static extended object with
 partial visibility. Infeasibility can arise from annotations or calibration.
+
+This reuses classical bounded-reprojection feasibility, not a novel triangulator.
+See Kahl, ICCV 2005, Multiple View Geometry and the L-infinity Norm.
+Unlike that paper's maximum Euclidean image residual, these axis-wise boxes use
+coordinate-wise bounds and therefore linear rather than second-order cones.
 """
 
 import numpy as np

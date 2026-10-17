@@ -238,6 +238,32 @@ leaderboard is filtered by this experimental code. A reduced conditional error
 after rejection is not, by itself, improved tracking or improved evaluation.
 
 Related work to distinguish explicitly:
+
+- [Kahl, Multiple View Geometry and the L-infinity Norm (ICCV 2005)](https://vision.ucsd.edu/publications/2005/multiple-view-geometry-and-l-infinity-norm)
+  formulates multiview triangulation with positive depth and bounded reprojection
+  error as convex feasibility, using second-order cones for Euclidean image
+  distances. Our coordinate-wise pixel boxes give linear constraints instead.
+  The point-support check is therefore an established geometric ingredient, not
+  a new triangulation contribution. The paper also notes sensitivity to outliers;
+  a contradictory track cannot by itself identify camera error.
+- [Thomas, Agnihotri, and Keuper, Failure or Drift? (NeuSLAM 2026)](https://arxiv.org/abs/2608.30690)
+  separates explicit tracking failure from drift in still-active systems, and
+  compares synthetic corruption conclusions with real adverse conditions.
+  Its abstract reports changes in tracker ordering with corruption design.
+  Separating failure from conditional trajectory error and testing corruption
+  validity are therefore not unique to this project. Bibliographic metadata and
+  the abstract were checked against the authors' page and arXiv; a full protocol
+  comparison and reproduction have not been completed.
+
+The proposed contribution must instead demonstrate that source-grounded,
+localized evidence with explicit abstention supports reliable functional-failure
+decisions when reference camera poses are absent. That claim is still unproven.
+Missing-observation bounds are basic partial-identification accounting, not a
+new statistical estimator. Neither the solver, accounting formula, nor combining
+them with an unvalidated VLM suffices as a novelty claim. The additional BibTeX
+records are staged for the next manuscript revision; the current PDF does not
+yet contain these two citations.
+
 [3D-DefectBench](https://arxiv.org/abs/2607.10826v2) studies how the model,
 rendering, evidence, and prompt affect human agreement for 3D-asset defects;
 [Spotlight](https://spotlight-video.github.io/) studies localized error detection
