@@ -1,0 +1,3054 @@
+{
+  "scope": "camera-projected correspondence validation; no staticness or camera-DNF labels",
+  "sequence": "lab-coat",
+  "prompt": "Compare the marked detail in A with the candidate marked in B. The top row shows context; the bottom row shows native-pixel crops. Is the candidate close to the same detail, far from it, or is the original detail occluded? Reply with one label: close, far, occluded, or uncertain. Close means within 2 native pixels; far means at least 8 native pixels. Use uncertain when the images do not support a decision. Do not judge camera accuracy or whether the object is moving.",
+  "planned_presentations": 150,
+  "geometry_sha256": "0a2680593eb468367da630a22a6912a837e36612801b3d5007b99edc2250edf6",
+  "source_manifest_sha256": "d8e1903df707408ef3b392c8c85c951b8cd6a36f899690d76ca520ae331bb41d",
+  "source_file_sha256": "8d4dc5c3d5703bab0f41d76db2ae5c3d4a9ca9468ad902631cb3f2d66da2d3d4",
+  "tracker_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "script_sha256": "49f222e81751905ebeb20100c2eceac7eb15c8b92cc7230141b9a7a104cfbbfb",
+  "export_sha256": "aa33babf0dca3136487aea7396fa1e5f3016d454fcc4c4b9a4572c2212ffd44c",
+  "geometry_dependencies_sha256": {
+    "plumbline.image_evidence": "9fc932d5f4cea4008a9dc43106fe4075e67dff17274000853cd511bff17414f4",
+    "plumbline.conventions": "506969710476aafde4ec4adf63cb86d4164762bd32e81d1a1b3bfd5f72e242ad"
+  },
+  "dependencies_sha256": {
+    "tapvid_camera_markers.py": "769bb4e2f7d34574e9352f748ae441926ee8e937c20597a27c107d4299edcc8b",
+    "build_anchor_preview.py": "7568d7a8cc409e7ac630b0a3753dced03691b0350e34547355ccfe862b3ae1c3",
+    "build_tapvid_judge_corpus.py": "5f66c715c674336018bfe6d331d7b67f81acfaa8896757c65e1f7817686852e0",
+    "run_tapvid_cameras.py": "56b8884bdf6c42ea41ae0b3313dc9dcdb554821c98cd96f31f8615cf134ddbec"
+  },
+  "counts": {
+    "borderline_unlabeled": 17,
+    "far": 36,
+    "query_beyond_video": 50,
+    "query_outside_image": 24,
+    "close": 2,
+    "nonpositive_query_depth": 19,
+    "occluded": 2
+  },
+  "records": [
+    {
+      "id": "a82096de4141aae00a7db019",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        389.470703125,
+        144.5833396911621
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        408.245174183909,
+        128.50785884388424
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 7.521229710634982,
+      "image": "images/a82096de4141aae00a7db019.png",
+      "image_sha256": "cfafe03751d07dd1d8a2452a6240e8a2c428300c5513fc2363e86f196c8952f9"
+    },
+    {
+      "id": "f13352f21bc215801477005e",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        389.470703125,
+        144.5833396911621
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        180.761142603069,
+        51.30848938737617
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 223.89047737745872,
+      "image": "images/f13352f21bc215801477005e.png",
+      "image_sha256": "a69f2d4c71438d76d883e28cc3136ecb1343b7c1cee2d0761bf68b21db63156c"
+    },
+    {
+      "id": "38872d7d25d4d50463126c29",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        389.470703125,
+        144.5833396911621
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4ae10e394a0de256994357e5",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        385.30078125,
+        153.75
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        401.9475613343122,
+        141.9564529013767
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 6.318068022987187,
+      "image": "images/4ae10e394a0de256994357e5.png",
+      "image_sha256": "511a25db4bdbbd54292983b73b1a5403e1793da986751c318578b03ef619c95d"
+    },
+    {
+      "id": "763f66a8e8b452b788bc3944",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        385.30078125,
+        153.75
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        18.546609324400382,
+        105.40595564528007
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 354.4244661163028,
+      "image": "images/763f66a8e8b452b788bc3944.png",
+      "image_sha256": "256a5642e00ec5c7c2caf2071ba2d43e4f0238c6d142d3856b81b01546cbed0b"
+    },
+    {
+      "id": "24cf654883bff189461ecf91",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        385.30078125,
+        153.75
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f8ff721fc5f3edf8e944ae7d",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        382.3818359375,
+        161.66666507720947
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        398.61054815654353,
+        155.90614406202542
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 9.650501453550039,
+      "image": "images/f8ff721fc5f3edf8e944ae7d.png",
+      "image_sha256": "e9bea5e177f7fb1eaa319efae2092d7e057c50ef4998149ecb3f34ec7962a23b"
+    },
+    {
+      "id": "270a8e7e34dc57fe0f01046a",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        382.3818359375,
+        161.66666507720947
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -4.711145462704499,
+        211.81764685863007
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cd28f3f53407883882c460fa",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        382.3818359375,
+        161.66666507720947
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "52f0b685be3964e3d101255e",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        398.64453125,
+        145.00000476837158
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        423.94018539675125,
+        128.92080943354887
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 6.882650912259273,
+      "image": "images/52f0b685be3964e3d101255e.png",
+      "image_sha256": "884890a38c75c511880d1f9ce4a540aabca941b9fedc392b19244637fa7c0062"
+    },
+    {
+      "id": "cfa091b119231135cac2d2a3",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        398.64453125,
+        145.00000476837158
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        306.86882433650976,
+        78.68821278828209
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 141.20422926594966,
+      "image": "images/cfa091b119231135cac2d2a3.png",
+      "image_sha256": "1edf774b2533048397b8beb8cdf48a000a487797020b9f0f53f7bf1aedd1b5ea"
+    },
+    {
+      "id": "7bd4c41e9d4b182c7cd07e3c",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        398.64453125,
+        145.00000476837158
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ca70c57118025829db42b125",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        393.640625,
+        163.3333396911621
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        421.3661705216355,
+        162.2593974158497
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 7.516101029804121,
+      "image": "images/ca70c57118025829db42b125.png",
+      "image_sha256": "e8ea55157e92ee51ddebee87a0e28ddff03f03b0dcfadfbee7ad134673e08a9b"
+    },
+    {
+      "id": "5dbb3107bbfbf9e123fc3a4a",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        393.640625,
+        163.3333396911621
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        339.6704094764035,
+        232.64258711168085
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 63.93662609805468,
+      "image": "images/5dbb3107bbfbf9e123fc3a4a.png",
+      "image_sha256": "bb65f083d48f53db600f6c065854804d054351b4fddc92eeef277650f5fcc1af"
+    },
+    {
+      "id": "3f30587bb4bd325a85c26285",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        393.640625,
+        163.3333396911621
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ab3cce2530123fa5a6d64cd3",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        393.5958309173584,
+        111.2408709526062
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        409.06915489638226,
+        79.16357237233025
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 6.991323394204886,
+      "image": "images/ab3cce2530123fa5a6d64cd3.png",
+      "image_sha256": "05881fefd017a8524af13a76313a6367eaecdefa5777acc51cfe056e8b133149"
+    },
+    {
+      "id": "4155b0d5739ab03f08d05969",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        393.5958309173584,
+        111.2408709526062
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        272.3357774172959,
+        -136.97028351551222
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3f95a3e2b6090b68c6b8acfc",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        393.5958309173584,
+        111.2408709526062
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "64520a0ef3c427ed49db75b1",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        390.0894213914871,
+        124.37956809997559
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        405.7301288568635,
+        99.75252552445873
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 6.708880965171369,
+      "image": "images/64520a0ef3c427ed49db75b1.png",
+      "image_sha256": "151459fa55de94198608102e93970fbd9885d5db8c728db8ba88faf33d570299"
+    },
+    {
+      "id": "684e8f1174071912b8306dda",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        390.0894213914871,
+        124.37956809997559
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        241.79774252460933,
+        -54.925197043689344
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "661575a55e4a69cc37b4c9e8",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        390.0894213914871,
+        124.37956809997559
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "adce921e62c7779bd1d185a4",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        389.0371676683426,
+        188.45070362091064
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        414.4698670191327,
+        195.57888971776435
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 11.692729984557243,
+      "image": "images/adce921e62c7779bd1d185a4.png",
+      "image_sha256": "fbd12e53fb5bb9048abd9ce108272a2ee4d58bd16539a299e259d9c1f26c0e6c"
+    },
+    {
+      "id": "13447ea03fe4b8ad42cfda08",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        389.0371676683426,
+        188.45070362091064
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -164.3222166765581,
+        730.7743341146436
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "28fd5f0d14bce77996526648",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        389.0371676683426,
+        188.45070362091064
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a014645c368acc157f0918d7",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        395.34906113147736,
+        266.277379989624
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        441.6038583415159,
+        322.1817159238975
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 3.176168355444256,
+      "image": "images/a014645c368acc157f0918d7.png",
+      "image_sha256": "2fc0e06cb4868bb5f537888a21159a4e246baf0f8da21f16746edf632470f642"
+    },
+    {
+      "id": "ac6f2228d526e26da6449d56",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        395.34906113147736,
+        266.277379989624
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        344.5406156730258,
+        1034.5716001293315
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a9f9138bf19cfcb82635c584",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        395.34906113147736,
+        266.277379989624
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9ec535b34e65466473e71f74",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        373.43391251564026,
+        265.4014492034912
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        406.2121788287146,
+        324.6616006646105
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 4.439834805819194,
+      "image": "images/9ec535b34e65466473e71f74.png",
+      "image_sha256": "5f788b3ef4935a0edd26269044c17e5b06d7233a3a661d245cc87437dff784f1"
+    },
+    {
+      "id": "edd4dea0cf1757347ad09390",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        373.43391251564026,
+        265.4014492034912
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        145.36089091066603,
+        1095.9621635554543
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "27aba991a2e30417ea68770f",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        373.43391251564026,
+        265.4014492034912
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2fde1b7b163b037a89d51fef",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        415.29563707113266,
+        143.48387718200684
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        450.9531729216727,
+        122.3400684373443
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 7.45658235371312,
+      "image": "images/2fde1b7b163b037a89d51fef.png",
+      "image_sha256": "acafebb19be69e256147e3cd33ba4790a1b896da8f285c216271c9b7c36668c0"
+    },
+    {
+      "id": "7d78186618e381ba9202f7fa",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        415.29563707113266,
+        143.48387718200684
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        443.1350752173029,
+        50.63901071358246
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 113.41603545278895,
+      "image": "images/7d78186618e381ba9202f7fa.png",
+      "image_sha256": "81dc218acbbff123b154f1a81200f9873c8e243677dd5f3bc23022c515b4e24a"
+    },
+    {
+      "id": "0f8d3111eb9ad0eddae9d604",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        415.29563707113266,
+        143.48387718200684
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fbe2b0fec234f255fe83dd99",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        423.04368990659714,
+        187.3548460006714
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        471.64506685471036,
+        193.9165016715477
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 3.218117561391304,
+      "image": "images/fbe2b0fec234f255fe83dd99.png",
+      "image_sha256": "e7202e0f3ea11f52aeb229b5633e2aeeb03dae7efcb63f4c2da9c95985ee63bf"
+    },
+    {
+      "id": "7013b82671c0fe73f6630c63",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        423.04368990659714,
+        187.3548460006714
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        522.0530280811093,
+        346.30450404429155
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 53.127133170023505,
+      "image": "images/7013b82671c0fe73f6630c63.png",
+      "image_sha256": "78f31d5be92d3693fc0b702d3fba991cf01c58aae0be896a3d7a79a24d46590c"
+    },
+    {
+      "id": "d24d8d6a8f979aa5db8a58ab",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        423.04368990659714,
+        187.3548460006714
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "515ba7e468d341bb451227cb",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        420.461005628109,
+        248.2580852508545
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        473.411669480667,
+        289.0588228870424
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 1.4778284208080998,
+      "image": "images/515ba7e468d341bb451227cb.png",
+      "image_sha256": "2f325b767569290ff024914f1d0e370008629d487135a58f96cc2208411a574b"
+    },
+    {
+      "id": "79de033f3a9637a8689bd7cd",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        420.461005628109,
+        248.2580852508545
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        509.8434272340454,
+        600.8666984703972
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "91ec0e31dc76e78815d2fd23",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        420.461005628109,
+        248.2580852508545
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a062d323fc69f96e6b24c32c",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        448.35400092601776,
+        204.38711643218994
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        507.4977009898117,
+        221.33315298963987
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 3.291424248069324,
+      "image": "images/a062d323fc69f96e6b24c32c.png",
+      "image_sha256": "0a026ee550235f27357f670bc2c97a3d9cdbda5a1167afc7a5265aa105ced1a1"
+    },
+    {
+      "id": "bc42e6bf62eceb09fdfac6bf",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        448.35400092601776,
+        204.38711643218994
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        582.5988453480065,
+        337.5963793910823
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 98.67107120414794,
+      "image": "images/bc42e6bf62eceb09fdfac6bf.png",
+      "image_sha256": "820fe06f6fdaab2120ec543c0716ac8d74c59b1f3dff5ea1e2252c5d54d3ec4e"
+    },
+    {
+      "id": "07cdae7e30742164d53b7db9",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        448.35400092601776,
+        204.38711643218994
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2a73d160016a6add67ad8ff2",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        439.57288455963135,
+        249.80647087097168
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        505.4803441441799,
+        287.0069172717407
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 2.5036180448199015,
+      "image": "images/2a73d160016a6add67ad8ff2.png",
+      "image_sha256": "7865498c6e4021f0ddcb9c4d5b138b0e4675d402313d7611c8234c4add890996"
+    },
+    {
+      "id": "adb08128cebeaf2968393604",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        439.57288455963135,
+        249.80647087097168
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        605.613514135268,
+        607.8998208000291
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cefdcbb17c11b7d2c590bb2c",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        439.57288455963135,
+        249.80647087097168
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "109130ae17b8bbe9c69f2d4e",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        431.7229251861572,
+        111.38461589813232
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        470.8725725269218,
+        79.22259076321065
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 5.301087782574473,
+      "image": "images/109130ae17b8bbe9c69f2d4e.png",
+      "image_sha256": "d9b14d48e10dc1fcfe7be4384a2e9bcbf9fb90309fc1ef2fa8301d8d0aa3292f"
+    },
+    {
+      "id": "2cfe6384d7870ef9320fb668",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        431.7229251861572,
+        111.38461589813232
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        539.4843559522395,
+        -31.458046971967185
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f691203189b4c1d0939a431a",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        431.7229251861572,
+        111.38461589813232
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e250a67da9f8b646500a1264",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        430.4780569076538,
+        121.69014930725098
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        471.0454076528787,
+        93.6272601566776
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 3.9961464869923042,
+      "image": "images/e250a67da9f8b646500a1264.png",
+      "image_sha256": "dce6b1c2215fe654094ea1768dcf73205922e2f5b58a9ff5f823a10cc3e5d2de"
+    },
+    {
+      "id": "1cda0297394f5f65259fb90b",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        430.4780569076538,
+        121.69014930725098
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        538.7930992850731,
+        6.579310040413405
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 56.00501376342024,
+      "image": "images/1cda0297394f5f65259fb90b.png",
+      "image_sha256": "054d8404f397f1c43a6efcfb088eff522bc4e4cbe9769a206d57b3117638fe78"
+    },
+    {
+      "id": "e52db2a35f5822ea8fb73163",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        430.4780569076538,
+        121.69014930725098
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2d0bd6871883b51d7a80cfe3",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        416.96615093946457,
+        186.24000549316406
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        461.0658415004361,
+        192.99071585285665
+      ],
+      "status": "renderable",
+      "label": "close",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 0.6080132800941189,
+      "image": "images/2d0bd6871883b51d7a80cfe3.png",
+      "image_sha256": "fef72641bc73ada10c0be6aa5c92668f00280e649a47d33396f87c27f5ce9d90"
+    },
+    {
+      "id": "74a1338190ea6a1828708c6c",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        416.96615093946457,
+        186.24000549316406
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        485.2591986445506,
+        346.24795460632765
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 49.60592104271019,
+      "image": "images/74a1338190ea6a1828708c6c.png",
+      "image_sha256": "dd8f473a30e3439588e0f4c11f3f49b1167c99fd79a4a1b8c5a885af9e999e7e"
+    },
+    {
+      "id": "4f26157e85be188afd4dab36",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        416.96615093946457,
+        186.24000549316406
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "45550a182671b8f99d8e421f",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        429.4559373855591,
+        293.75999450683594
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        498.3116203786865,
+        353.38606740578746
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 2.877276130346241,
+      "image": "images/45550a182671b8f99d8e421f.png",
+      "image_sha256": "950d31cec040d3fb51834bed0b2e05d2d5aa445466d90de19ae08623514d6732"
+    },
+    {
+      "id": "e1640648abccc24f4c5aac14",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        429.4559373855591,
+        293.75999450683594
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        573.9834425682068,
+        809.3459848918064
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "364a69f2387ed25cdd70ea02",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        429.4559373855591,
+        293.75999450683594
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e854edce6271ccd6d31e763b",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        269.75998878479004
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        510.1198897799891,
+        316.24706972506294
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 4.299485400312531,
+      "image": "images/e854edce6271ccd6d31e763b.png",
+      "image_sha256": "25f560a4afcc6208be3a25f84ef88c34e25cbc87cb2eaf8615bb5fe8727555f1"
+    },
+    {
+      "id": "07ee064beaf4080bb507e412",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        269.75998878479004
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        620.9625972577721,
+        725.238699936212
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e72e5db8730f321c3e411612",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        269.75998878479004
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2451622e92c9d3125b2fa09f",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        339.9846439361572,
+        186.7605686187744
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        317.63211329831273,
+        199.3464178890107
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 14.466022728758485,
+      "image": "images/2451622e92c9d3125b2fa09f.png",
+      "image_sha256": "fa5a9b37ea8fcdd4c21feb265b59fe4d2bcd15cbe6f917b6f8da42a2877cd0c4"
+    },
+    {
+      "id": "860b4229d62bf73a65073301",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        339.9846439361572,
+        186.7605686187744
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "21920113825bcb8ba305d646",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        339.9846439361572,
+        186.7605686187744
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7c9192380b6aee4895b0e9f6",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        359.3535543680191,
+        149.76744174957275
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        354.5964465638662,
+        135.76104198558798
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 15.101692564653984,
+      "image": "images/7c9192380b6aee4895b0e9f6.png",
+      "image_sha256": "28891634049af096de9ddf454eb176cbd6f2def604bbbdd7745d53cec921e9ff"
+    },
+    {
+      "id": "f217b2437733bf136131b0ae",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        359.3535543680191,
+        149.76744174957275
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -4930.767461931905,
+        -815.3989331527264
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2d5b8e58eadc87f40a658524",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        359.3535543680191,
+        149.76744174957275
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "599668aacfd19a782f62049b",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        338.872274518013,
+        160.93023777008057
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        313.24492622162126,
+        154.4217150134967
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 18.08226332291107,
+      "image": "images/599668aacfd19a782f62049b.png",
+      "image_sha256": "e73c2ab9508f146653e62b179fbc14efe6d2e971063473c6baa8747c8f49a7cb"
+    },
+    {
+      "id": "cc66e3837cda1d1f20978e83",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        338.872274518013,
+        160.93023777008057
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9b979e8e3a7ad54258cc6616",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        338.872274518013,
+        160.93023777008057
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "21ddc5d30b14b9245d8c7b44",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        326.76967692375183,
+        250.23256301879883
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        332.57696640319244,
+        308.2838360062205
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 5.953400022873191,
+      "image": "images/21ddc5d30b14b9245d8c7b44.png",
+      "image_sha256": "ef12935f3318776709ef36d89cfc935e840ee377bd5859ba575ee30636a41226"
+    },
+    {
+      "id": "81cedc8c8bb0d9bcc686d7c9",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        326.76967692375183,
+        250.23256301879883
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -353.1773926293972,
+        1109.5182252462541
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "01d8ba1e816f7decfb64d1e9",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        326.76967692375183,
+        250.23256301879883
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "22ecc416af52a0951255c158",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        309.08128267526627,
+        244.65116500854492
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        310.6238972347146,
+        302.3909707530905
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/22ecc416af52a0951255c158.png",
+      "image_sha256": "ac4fe92666efce42ae4846bb4993c8cb81566c2b9080e96a73cfbed786737091"
+    },
+    {
+      "id": "a4d2c5256a140bc59ad991cc",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        309.08128267526627,
+        244.65116500854492
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -216.82031077890517,
+        831.6119391197832
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "37a5a67764de350c7849bcf8",
+      "sequence": "lab-coat",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        309.08128267526627,
+        244.65116500854492
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "09633826a6834efb6fe9ce5a",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        389.470703125,
+        144.5833396911621
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        393.2608455664351,
+        117.89996985639782
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 22.137853270044324,
+      "image": "images/09633826a6834efb6fe9ce5a.png",
+      "image_sha256": "2ba50cd86763a84407f0d44e561449b91b5a002349b03ea3da7ef59838ee1080"
+    },
+    {
+      "id": "70700e4a26c7ad8f83206a6e",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        389.470703125,
+        144.5833396911621
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "841267416e110fb563dc9a86",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        389.470703125,
+        144.5833396911621
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "27d3f5d18dfd1f1b377b756e",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        385.30078125,
+        153.75
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        387.197550037296,
+        133.21074379569018
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 21.621705786728988,
+      "image": "images/27d3f5d18dfd1f1b377b756e.png",
+      "image_sha256": "816bbc4e5e819c4641dad6f6de43d4ac9ea25d591851b193743e2201eb0515b7"
+    },
+    {
+      "id": "bdc92028eb729d409bcdab83",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        385.30078125,
+        153.75
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2eaa9dc5536dce03decdb147",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        385.30078125,
+        153.75
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8ae4af3d914c22ddfbbd7f47",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        382.3818359375,
+        161.66666507720947
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        383.9543156708394,
+        147.87964435561665
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 23.05470782885457,
+      "image": "images/8ae4af3d914c22ddfbbd7f47.png",
+      "image_sha256": "36715f801ef55348b44a59fd2ceea3a2e27e96f465e056f981b14effe386fe3d"
+    },
+    {
+      "id": "3188669702775c249d83d6a0",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        382.3818359375,
+        161.66666507720947
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "13f35349e2212bee03a99858",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        382.3818359375,
+        161.66666507720947
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "67f4b9750744099af4e48cfc",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        398.64453125,
+        145.00000476837158
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        408.9890679339664,
+        116.06241357976845
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 22.94334400667303,
+      "image": "images/67f4b9750744099af4e48cfc.png",
+      "image_sha256": "976af15133bf544857513b7f8b785b2e0aad1d820e96b0faa19d41d443e25e43"
+    },
+    {
+      "id": "3d4eb47aa8af403a9d3191c3",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        398.64453125,
+        145.00000476837158
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "908a7ee952294d1554eab28f",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        398.64453125,
+        145.00000476837158
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "29af3663763f4b5604c72f6d",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        393.640625,
+        163.3333396911621
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        404.6189412726212,
+        148.75387539824573
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 23.68166839784312,
+      "image": "images/29af3663763f4b5604c72f6d.png",
+      "image_sha256": "bbfe6c03a6d7d5d28d39de656b85c935e5f3e084ef114cc30e46263927f2df3a"
+    },
+    {
+      "id": "b2dc57febf86ac2f21f86cb9",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        393.640625,
+        163.3333396911621
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d04acc3ad66a1cdbb826c2bf",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        393.640625,
+        163.3333396911621
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b104c53a4e1c47b50be87863",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        393.5958309173584,
+        111.2408709526062
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        394.66209586120937,
+        67.31897818700877
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 22.396725766407442,
+      "image": "images/b104c53a4e1c47b50be87863.png",
+      "image_sha256": "027292eac669ee7406f0266d747a70736d603a52e1930a2f766cecc3ea59df5a"
+    },
+    {
+      "id": "d1886b36291d79f78748c6c8",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        393.5958309173584,
+        111.2408709526062
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        98.95374739842147,
+        -1171.7063113916654
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c66651c1158d367f3c13cede",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        393.5958309173584,
+        111.2408709526062
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2294a07805810af2697e2030",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        390.0894213914871,
+        124.37956809997559
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        391.6384917891989,
+        89.13927510509899
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 21.55850667181813,
+      "image": "images/2294a07805810af2697e2030.png",
+      "image_sha256": "e49b91c7deab0727532ebbaaae2cbf66010dd6fbc8083615b3c92623bc925512"
+    },
+    {
+      "id": "34e563ca68af9f145f989167",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        390.0894213914871,
+        124.37956809997559
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -6.096726226718093,
+        -965.2150816102956
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fc85a0b62e2aca3c130c5e29",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        390.0894213914871,
+        124.37956809997559
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cac0e01411924c30d439ecae",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        389.0371676683426,
+        188.45070362091064
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        395.93584595765316,
+        187.3444306903179
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 29.0565745387944,
+      "image": "images/cac0e01411924c30d439ecae.png",
+      "image_sha256": "15bf2170cd8e913c7675a1fa856d7cc2b8edb0b08b617efec03cf3a61ca3d52b"
+    },
+    {
+      "id": "d7bcb475eccbc03a6e99d7dc",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        389.0371676683426,
+        188.45070362091064
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "09aa95e5f0a7b1c8a13b3a08",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        389.0371676683426,
+        188.45070362091064
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a483abed2dbb067235d9ef0c",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        395.34906113147736,
+        266.277379989624
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        410.55349691268265,
+        357.6803825876383
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 50.33838398327621,
+      "image": "images/a483abed2dbb067235d9ef0c.png",
+      "image_sha256": "6261d469df138070d4116ba55573ab2ab3f5876c718afb78bff2bcb07c95c9a3"
+    },
+    {
+      "id": "09e820885ab71c43c6f547d0",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        395.34906113147736,
+        266.277379989624
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fc4c2fe9fecc4e20f010ea7f",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        395.34906113147736,
+        266.277379989624
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6e62167417a2eee5d10fa897",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        373.43391251564026,
+        265.4014492034912
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        383.0682858407834,
+        337.54420623296795
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 30.898557960233276,
+      "image": "images/6e62167417a2eee5d10fa897.png",
+      "image_sha256": "b7cdf2731015d62a1e908786f3afac130f302a6c8a699abd7cde67e8b8b6f190"
+    },
+    {
+      "id": "2d1be43f0a49bce73b86567e",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        373.43391251564026,
+        265.4014492034912
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "57ffae31e0a3d62cea187c68",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        373.43391251564026,
+        265.4014492034912
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0c16bb74f676b18f3ede2dd1",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        415.29563707113266,
+        143.48387718200684
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        436.9830822126465,
+        105.34012426175609
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 26.988897538180424,
+      "image": "images/0c16bb74f676b18f3ede2dd1.png",
+      "image_sha256": "f841a1790e411fedae821445f2b2ee61a723b4dea9d80083ebfcafc1610fb866"
+    },
+    {
+      "id": "d4ebaed77033c7658ed03d03",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        415.29563707113266,
+        143.48387718200684
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9bdc17c600cc0666c76ca5d4",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        415.29563707113266,
+        143.48387718200684
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e789e01e8d6c900d002ff176",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        423.04368990659714,
+        187.3548460006714
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        458.8163964825925,
+        177.12040771265154
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 23.54550044125275,
+      "image": "images/e789e01e8d6c900d002ff176.png",
+      "image_sha256": "b5367c186f1f029de0b4686637e26e5c26f37c211bca731d2f409a943ac8eb03"
+    },
+    {
+      "id": "8e176f7ff4e164ba7246d46f",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        423.04368990659714,
+        187.3548460006714
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4d91323e12dbc2735a7faff3",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        423.04368990659714,
+        187.3548460006714
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "00f3cbbe7f62f6fcb83692e4",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        420.461005628109,
+        248.2580852508545
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        450.9245924017038,
+        324.12262306879285
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 40.78311551038042,
+      "image": "images/00f3cbbe7f62f6fcb83692e4.png",
+      "image_sha256": "009c5dcc0e232c0eea44bc2732bca4f8ce0c2829d4a7d559681c974a5dd139d5"
+    },
+    {
+      "id": "969f0b23c56019ba103c4a26",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        420.461005628109,
+        248.2580852508545
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "447c31d604cefee3d648fe99",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        420.461005628109,
+        248.2580852508545
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a6f01cdffd2f8e6f8ea6aaa9",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        448.35400092601776,
+        204.38711643218994
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        510.06347116560005,
+        206.31394404447707
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 13.467996931582787,
+      "image": "images/a6f01cdffd2f8e6f8ea6aaa9.png",
+      "image_sha256": "9ff602630258127e5a70407ee306e922d76d41feb3710774699829e57a28cd7d"
+    },
+    {
+      "id": "eac81573da285a009b9afbbf",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        448.35400092601776,
+        204.38711643218994
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f94b18a1ca64597bff166fb7",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        448.35400092601776,
+        204.38711643218994
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "422148bb3d16e939a234be78",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        439.57288455963135,
+        249.80647087097168
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        520.6560838194065,
+        368.95541346225787
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 84.72425591436057,
+      "image": "images/422148bb3d16e939a234be78.png",
+      "image_sha256": "dc9c29d550067cb97695f3ab02fc8f79aae7cb2c3e313092ae497a2f57470bfc"
+    },
+    {
+      "id": "2948ca9a984bbb95ceb2a292",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        439.57288455963135,
+        249.80647087097168
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eb8489a598fca1a829993312",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        439.57288455963135,
+        249.80647087097168
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "894dbf15d64ad2174ff6ee48",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        431.7229251861572,
+        111.38461589813232
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        459.6934017178661,
+        57.54949576935472
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 24.37029518997819,
+      "image": "images/894dbf15d64ad2174ff6ee48.png",
+      "image_sha256": "f2d556ded3b031d25ae3a3cfbdd3a37c35d50e648c95db930d6a950bade59239"
+    },
+    {
+      "id": "27385647c0e414a77135def4",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        431.7229251861572,
+        111.38461589813232
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        4074.9737562589576,
+        -9211.283073380157
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "697d6172437f021f635ec868",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        431.7229251861572,
+        111.38461589813232
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2d677d642f9138d62c50dbb4",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        430.4780569076538,
+        121.69014930725098
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        459.76623830684,
+        71.84301568525728
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 24.23166160196129,
+      "image": "images/2d677d642f9138d62c50dbb4.png",
+      "image_sha256": "79d5a9c289450e5b9c8d0e093a4330c86637b2b001820b15b3e50e0523bbcd76"
+    },
+    {
+      "id": "1a256617a808dfec1f5df0ab",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        430.4780569076538,
+        121.69014930725098
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8c00e2ac1290b0fa8d089230",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        430.4780569076538,
+        121.69014930725098
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "681df9114105b28e1d9196e9",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        416.96615093946457,
+        186.24000549316406
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        446.9361871185778,
+        178.3640180021318
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 19.939506342551564,
+      "image": "images/681df9114105b28e1d9196e9.png",
+      "image_sha256": "4f60c5b304bdb6fd6a10f56d227d5e383026d66eb4c091de0076d45311247ab7"
+    },
+    {
+      "id": "b8250a16efd2697d4de10f45",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        416.96615093946457,
+        186.24000549316406
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b8b3481e46323d0d955af2d1",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        416.96615093946457,
+        186.24000549316406
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fa33fcd379ac87964c746ce9",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        429.4559373855591,
+        293.75999450683594
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        501.87605141978173,
+        502.9488778192492
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f1c4b2e51e37acb02a6ca258",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        429.4559373855591,
+        293.75999450683594
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "848416a29d0d1cc2de10fb58",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        429.4559373855591,
+        293.75999450683594
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5462000fd998b6b29ad22175",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        269.75998878479004
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        555.2764385792327,
+        555.1299756026008
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3ff51d40ddc2f2e737715d4b",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        269.75998878479004
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "247a897465af40905a8b8bf2",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        440.0241849422455,
+        269.75998878479004
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "914ef5f3174156fa33b4f118",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        339.9846439361572,
+        186.7605686187744
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        319.9705485809109,
+        200.40851372376966
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 13.37681946434776,
+      "image": "images/914ef5f3174156fa33b4f118.png",
+      "image_sha256": "ebfb17fb5bcba8570a0d5aeda7794374376b17f691aa61b50ebec2555f0749fe"
+    },
+    {
+      "id": "667b6929611681a052ca548e",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        339.9846439361572,
+        186.7605686187744
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -1920.6062751093568,
+        829.9090735425992
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "635f5b48c4bec742036c52ad",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        339.9846439361572,
+        186.7605686187744
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2c031af0b27d7493ca2b7607",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        359.3535543680191,
+        149.76744174957275
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        345.77992728296607,
+        134.4562862520867
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 10.44307705116113,
+      "image": "images/2c031af0b27d7493ca2b7607.png",
+      "image_sha256": "c8b354d62ddfe3278ceb02875d455371c60cc55e3d919003db2436ed696fb90b"
+    },
+    {
+      "id": "1e7a25c8432626e1f7cdaf59",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        359.3535543680191,
+        149.76744174957275
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -1527.6024250474293,
+        -644.7801575411878
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b34027139ec64a92bc7b2b59",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        359.3535543680191,
+        149.76744174957275
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6c9694642c52a2945e79b226",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        338.872274518013,
+        160.93023777008057
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        313.96483544300423,
+        157.92173844216026
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 14.81723184326471,
+      "image": "images/6c9694642c52a2945e79b226.png",
+      "image_sha256": "2416df20fd767c31cfdcfbc0199bbef9e6113afde345489bbcf219682911540d"
+    },
+    {
+      "id": "5159043bef487c760d527922",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        338.872274518013,
+        160.93023777008057
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -1067.804958590924,
+        32.445725661942575
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e7f6b797f63ba250a2573ed9",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        338.872274518013,
+        160.93023777008057
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5709683aa64e01ea201ba119",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        326.76967692375183,
+        250.23256301879883
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        321.7298327699973,
+        305.6781007898024
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 15.26942030510129,
+      "image": "images/5709683aa64e01ea201ba119.png",
+      "image_sha256": "101058a62e561dd15c4c2a1dc485e7620ba21612563d40cc81e949459216d1c8"
+    },
+    {
+      "id": "87d134bc9ada18212cca51f0",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        326.76967692375183,
+        250.23256301879883
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -1175.779254270764,
+        2043.881739940192
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1fe1254ab91c32de31c54b43",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        326.76967692375183,
+        250.23256301879883
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "316382caf42ac2c6e3bc2da8",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        309.08128267526627,
+        244.65116500854492
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        296.2872253058135,
+        299.82295899534097
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/316382caf42ac2c6e3bc2da8.png",
+      "image_sha256": "fcd6c751de5183c6603b709ffcc386f3c8318173594df138835dd4d34bd8c28c"
+    },
+    {
+      "id": "e659be38a660f4517a86c285",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        309.08128267526627,
+        244.65116500854492
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -1022.8311718410472,
+        1508.6052956719723
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "117f5a7130facbdb9ac09c66",
+      "sequence": "lab-coat",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        309.08128267526627,
+        244.65116500854492
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    }
+  ]
+}

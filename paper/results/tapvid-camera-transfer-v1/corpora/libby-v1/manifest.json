@@ -1,0 +1,2602 @@
+{
+  "scope": "camera-projected correspondence validation; no staticness or camera-DNF labels",
+  "sequence": "libby",
+  "prompt": "Compare the marked detail in A with the candidate marked in B. The top row shows context; the bottom row shows native-pixel crops. Is the candidate close to the same detail, far from it, or is the original detail occluded? Reply with one label: close, far, occluded, or uncertain. Close means within 2 native pixels; far means at least 8 native pixels. Use uncertain when the images do not support a decision. Do not judge camera accuracy or whether the object is moving.",
+  "planned_presentations": 150,
+  "geometry_sha256": "4c4741257a8cbb6e8a23bb23992409bf73b69ab4eed1994dee12ff7190c72c20",
+  "source_manifest_sha256": "d8e1903df707408ef3b392c8c85c951b8cd6a36f899690d76ca520ae331bb41d",
+  "source_file_sha256": "f82c3e66339afc096b984b2e576598a07c4238879c7fa6304c01203b97afc3cb",
+  "tracker_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "script_sha256": "49f222e81751905ebeb20100c2eceac7eb15c8b92cc7230141b9a7a104cfbbfb",
+  "export_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "geometry_dependencies_sha256": {
+    "plumbline.image_evidence": "9fc932d5f4cea4008a9dc43106fe4075e67dff17274000853cd511bff17414f4",
+    "plumbline.conventions": "506969710476aafde4ec4adf63cb86d4164762bd32e81d1a1b3bfd5f72e242ad"
+  },
+  "dependencies_sha256": {
+    "tapvid_camera_markers.py": "769bb4e2f7d34574e9352f748ae441926ee8e937c20597a27c107d4299edcc8b",
+    "build_anchor_preview.py": "7568d7a8cc409e7ac630b0a3753dced03691b0350e34547355ccfe862b3ae1c3",
+    "build_tapvid_judge_corpus.py": "5f66c715c674336018bfe6d331d7b67f81acfaa8896757c65e1f7817686852e0",
+    "run_tapvid_cameras.py": "56b8884bdf6c42ea41ae0b3313dc9dcdb554821c98cd96f31f8615cf134ddbec"
+  },
+  "counts": {
+    "missing_prefix_observations": 12,
+    "query_beyond_video": 118,
+    "query_outside_image": 7,
+    "nonpositive_query_depth": 1,
+    "nonpositive_prefix_depth": 12
+  },
+  "records": [
+    {
+      "id": "b2fd9edc55e6d04db14c1302",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 33,
+      "source_xy": [
+        848.8677688837051,
+        113.84615421295166
+      ],
+      "lag": 15,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c6f478fa7b1f566633fd553f",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 33,
+      "source_xy": [
+        848.8677688837051,
+        113.84615421295166
+      ],
+      "lag": 30,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "60e16ecaa8b8bcaad72d505c",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 33,
+      "source_xy": [
+        848.8677688837051,
+        113.84615421295166
+      ],
+      "lag": 60,
+      "frame": 93,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "48edcb36a221e6c74369be6c",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 34,
+      "source_xy": [
+        830.3918386697769,
+        106.66666746139526
+      ],
+      "lag": 15,
+      "frame": 49,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4b7424a1cf978f73b41ce076",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 34,
+      "source_xy": [
+        830.3918386697769,
+        106.66666746139526
+      ],
+      "lag": 30,
+      "frame": 64,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3c29dfd83fd62c8d2c9d4cd6",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 34,
+      "source_xy": [
+        830.3918386697769,
+        106.66666746139526
+      ],
+      "lag": 60,
+      "frame": 94,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "93f819be5d839e07829f6502",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 41,
+      "source_xy": [
+        762.646642446518,
+        28.71794879436493
+      ],
+      "lag": 15,
+      "frame": 56,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e659090d158555885e8c8b41",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 41,
+      "source_xy": [
+        762.646642446518,
+        28.71794879436493
+      ],
+      "lag": 30,
+      "frame": 71,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "496e8c1bce94a10640d3ba84",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 41,
+      "source_xy": [
+        762.646642446518,
+        28.71794879436493
+      ],
+      "lag": 60,
+      "frame": 101,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7df8f6bb470f6e2c57c8fba4",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 42,
+      "source_xy": [
+        745.197107553482,
+        15.38461446762085
+      ],
+      "lag": 15,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c7013b7fb5be8a42f472b216",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 42,
+      "source_xy": [
+        745.197107553482,
+        15.38461446762085
+      ],
+      "lag": 30,
+      "frame": 72,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "28c5c154a7d69475cc32a563",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 42,
+      "source_xy": [
+        745.197107553482,
+        15.38461446762085
+      ],
+      "lag": 60,
+      "frame": 102,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6bccdbc6b23dba054dbf9626",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 40,
+      "source_xy": [
+        767.7788226604462,
+        35.89743375778198
+      ],
+      "lag": 15,
+      "frame": 55,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c0b0fbed26c71231a040ffbb",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 40,
+      "source_xy": [
+        767.7788226604462,
+        35.89743375778198
+      ],
+      "lag": 30,
+      "frame": 70,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "088ec96df2e60d97c1a8f313",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 40,
+      "source_xy": [
+        767.7788226604462,
+        35.89743375778198
+      ],
+      "lag": 60,
+      "frame": 100,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7d58d26f49096757dc9c78c2",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 37,
+      "source_xy": [
+        812.942303776741,
+        103.5897445678711
+      ],
+      "lag": 15,
+      "frame": 52,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6f9d438a3360a53bb0987da9",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 37,
+      "source_xy": [
+        812.942303776741,
+        103.5897445678711
+      ],
+      "lag": 30,
+      "frame": 67,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "503099a532824ca003fca65b",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 37,
+      "source_xy": [
+        812.942303776741,
+        103.5897445678711
+      ],
+      "lag": 60,
+      "frame": 97,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e07fb3bff45d59ec04b8e583",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 44,
+      "source_xy": [
+        660.0024273395538,
+        141.53845310211182
+      ],
+      "lag": 15,
+      "frame": 59,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5330924c6c0adc9fd2f90ec3",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 44,
+      "source_xy": [
+        660.0024273395538,
+        141.53845310211182
+      ],
+      "lag": 30,
+      "frame": 74,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "104e821eac45a2e3de007957",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 44,
+      "source_xy": [
+        660.0024273395538,
+        141.53845310211182
+      ],
+      "lag": 60,
+      "frame": 104,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eedd82391d19de2c9cf37e68",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 33,
+      "source_xy": [
+        846.854580283165,
+        126.66666984558105
+      ],
+      "lag": 15,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "22cbf7d9aba6cef98f69d6d0",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 33,
+      "source_xy": [
+        846.854580283165,
+        126.66666984558105
+      ],
+      "lag": 30,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "be78201444907a08305dc2b4",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 33,
+      "source_xy": [
+        846.854580283165,
+        126.66666984558105
+      ],
+      "lag": 60,
+      "frame": 93,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1233cd7ff4864d0a8e857aa5",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 40,
+      "source_xy": [
+        739.9893882274628,
+        120.58822631835938
+      ],
+      "lag": 15,
+      "frame": 55,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8ee89f158401bfc7fbdcb477",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 40,
+      "source_xy": [
+        739.9893882274628,
+        120.58822631835938
+      ],
+      "lag": 30,
+      "frame": 70,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3af65ea590f895f209b2cd1f",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 40,
+      "source_xy": [
+        739.9893882274628,
+        120.58822631835938
+      ],
+      "lag": 60,
+      "frame": 100,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "131a6ab1293f2a055098c55b",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 45,
+      "source_xy": [
+        652.817303776741,
+        139.48718547821045
+      ],
+      "lag": 15,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "dee6ce4779697cc3c5d8ca6e",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 45,
+      "source_xy": [
+        652.817303776741,
+        139.48718547821045
+      ],
+      "lag": 30,
+      "frame": 75,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4aeded17812301fbaebeee9a",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 45,
+      "source_xy": [
+        652.817303776741,
+        139.48718547821045
+      ],
+      "lag": 60,
+      "frame": 105,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "43df5e175e86b6a3601641a7",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 41,
+      "source_xy": [
+        747.8692272901535,
+        31.412394046783447
+      ],
+      "lag": 15,
+      "frame": 56,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c6e04a7f79fe70cc3f7ede86",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 41,
+      "source_xy": [
+        747.8692272901535,
+        31.412394046783447
+      ],
+      "lag": 30,
+      "frame": 71,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3699ca7d5dfb2633df16b5a5",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 41,
+      "source_xy": [
+        747.8692272901535,
+        31.412394046783447
+      ],
+      "lag": 60,
+      "frame": 101,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d3f3877863c393c96b3ae9f8",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 45,
+      "source_xy": [
+        689.9589791297913,
+        6.062040030956268
+      ],
+      "lag": 15,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "bb3dc42d5a2d4d1bc07e4cb5",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 45,
+      "source_xy": [
+        689.9589791297913,
+        6.062040030956268
+      ],
+      "lag": 30,
+      "frame": 75,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eb6c8fa6d5ac610778edf9cb",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 45,
+      "source_xy": [
+        689.9589791297913,
+        6.062040030956268
+      ],
+      "lag": 60,
+      "frame": 105,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2aacc3eb05b02a0723b90d6f",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 42,
+      "source_xy": [
+        735.184103012085,
+        42.98538565635681
+      ],
+      "lag": 15,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b25461eae115049a3f7088a6",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 42,
+      "source_xy": [
+        735.184103012085,
+        42.98538565635681
+      ],
+      "lag": 30,
+      "frame": 72,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b5d3e43e5e91aafc321b9a5b",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 42,
+      "source_xy": [
+        735.184103012085,
+        42.98538565635681
+      ],
+      "lag": 60,
+      "frame": 102,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9ea985008af63767069d6f3d",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 47,
+      "source_xy": [
+        667.8979443311691,
+        3.3065664768218994
+      ],
+      "lag": 15,
+      "frame": 62,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5f042271d78960b0dd04eecc",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 47,
+      "source_xy": [
+        667.8979443311691,
+        3.3065664768218994
+      ],
+      "lag": 30,
+      "frame": 77,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6268dbf34b5e0f24921d900f",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 47,
+      "source_xy": [
+        667.8979443311691,
+        3.3065664768218994
+      ],
+      "lag": 60,
+      "frame": 107,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "186b8433034d9d7ed6ade76b",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 43,
+      "source_xy": [
+        716.9837582111359,
+        4.408756792545319
+      ],
+      "lag": 15,
+      "frame": 58,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e3a743247d61474087f7c325",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 43,
+      "source_xy": [
+        716.9837582111359,
+        4.408756792545319
+      ],
+      "lag": 30,
+      "frame": 73,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6b0e361990d190d5c4713080",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 43,
+      "source_xy": [
+        716.9837582111359,
+        4.408756792545319
+      ],
+      "lag": 60,
+      "frame": 103,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "29c0258904029e45cb37ae47",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        561.3735436201096,
+        258.6046600341797
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        -395.85072384079746,
+        455.65769708460016
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4119bba3679df420ed685cd2",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        561.3735436201096,
+        258.6046600341797
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4c3cd633e196895dbe6d92e8",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        561.3735436201096,
+        258.6046600341797
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "71ee713ee80521e83beb6d0c",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        539.9613103866577,
+        247.44186401367188
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4ef701eb25e8b4c4fee1fc95",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        539.9613103866577,
+        247.44186401367188
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1ad1a71ecb4200db91ebda21",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        539.9613103866577,
+        247.44186401367188
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1e98fceacce58f3c161ae7fc",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        298.37768572568893,
+        172.12378978729248
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        -205.49161671743624,
+        328.18989405403386
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f345643fc91b05c1473a563a",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        298.37768572568893,
+        172.12378978729248
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -1420.3393077479186,
+        877.8754156743757
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "27811099ab6915169c941713",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        298.37768572568893,
+        172.12378978729248
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9e64094348a12fdb4dc824cc",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        515.7561151981354,
+        212.09302425384521
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "34880c40e575b2c557c168ba",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        515.7561151981354,
+        212.09302425384521
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b74692c555d2b52b0eea3cd5",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        515.7561151981354,
+        212.09302425384521
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e5b91a8a6164df04cbbacf64",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        517.6180728673935,
+        202.79069423675537
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d5a34f7dd9dbc133b09f4ef1",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        517.6180728673935,
+        202.79069423675537
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "96513db280a908be32cc5ad7",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        517.6180728673935,
+        202.79069423675537
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8bd1c4fdfb3d808e86ddda9b",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 33,
+      "source_xy": [
+        834.649821639061,
+        127.2969102859497
+      ],
+      "lag": 15,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6cfbdf240d0f9e2b9d67cc21",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 33,
+      "source_xy": [
+        834.649821639061,
+        127.2969102859497
+      ],
+      "lag": 30,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "352defa4258f157196b5f684",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 33,
+      "source_xy": [
+        834.649821639061,
+        127.2969102859497
+      ],
+      "lag": 60,
+      "frame": 93,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "68348e9f75c1578d0dde2dfc",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 33,
+      "source_xy": [
+        842.195486664772,
+        128.5920810699463
+      ],
+      "lag": 15,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cf3df534869ebc8c15948375",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 33,
+      "source_xy": [
+        842.195486664772,
+        128.5920810699463
+      ],
+      "lag": 30,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "095ba2fe317d7653460b33b4",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 33,
+      "source_xy": [
+        842.195486664772,
+        128.5920810699463
+      ],
+      "lag": 60,
+      "frame": 93,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4722610bba7b09afb5dcb0b4",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 33,
+      "source_xy": [
+        847.0098834037781,
+        128.26828479766846
+      ],
+      "lag": 15,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "036233b54bff0319dd5b0f51",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 33,
+      "source_xy": [
+        847.0098834037781,
+        128.26828479766846
+      ],
+      "lag": 30,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6d476966f9064e96c508d912",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 33,
+      "source_xy": [
+        847.0098834037781,
+        128.26828479766846
+      ],
+      "lag": 60,
+      "frame": 93,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "51498ae493a29734e6670c34",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 33,
+      "source_xy": [
+        852.1483246088028,
+        127.11188793182373
+      ],
+      "lag": 15,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fb7465a027f1e57db6fe8229",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 33,
+      "source_xy": [
+        852.1483246088028,
+        127.11188793182373
+      ],
+      "lag": 30,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0ce782eff6c7ec36025fba15",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 33,
+      "source_xy": [
+        852.1483246088028,
+        127.11188793182373
+      ],
+      "lag": 60,
+      "frame": 93,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "53c283668087db65bea6c8c8",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 34,
+      "source_xy": [
+        831.4093769788742,
+        129.14714813232422
+      ],
+      "lag": 15,
+      "frame": 49,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2d7e288f7ddda15a2abd4bad",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 34,
+      "source_xy": [
+        831.4093769788742,
+        129.14714813232422
+      ],
+      "lag": 30,
+      "frame": 64,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "126dc4fd9b1a534964bec967",
+      "sequence": "libby",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 34,
+      "source_xy": [
+        831.4093769788742,
+        129.14714813232422
+      ],
+      "lag": 60,
+      "frame": 94,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9d40f767187cdd8debafc332",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 33,
+      "source_xy": [
+        848.8677688837051,
+        113.84615421295166
+      ],
+      "lag": 15,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7cd508fe71740997af1d73df",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 33,
+      "source_xy": [
+        848.8677688837051,
+        113.84615421295166
+      ],
+      "lag": 30,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4451bf28aee98bdb6a5339ed",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 33,
+      "source_xy": [
+        848.8677688837051,
+        113.84615421295166
+      ],
+      "lag": 60,
+      "frame": 93,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2c421e9abcad2a9361b469b0",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 34,
+      "source_xy": [
+        830.3918386697769,
+        106.66666746139526
+      ],
+      "lag": 15,
+      "frame": 49,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "03807bd1805d974d3c90b4c5",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 34,
+      "source_xy": [
+        830.3918386697769,
+        106.66666746139526
+      ],
+      "lag": 30,
+      "frame": 64,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "94781ce8fc69c8c91baab310",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 34,
+      "source_xy": [
+        830.3918386697769,
+        106.66666746139526
+      ],
+      "lag": 60,
+      "frame": 94,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "df33a0793ccc0d2dee72a0df",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 41,
+      "source_xy": [
+        762.646642446518,
+        28.71794879436493
+      ],
+      "lag": 15,
+      "frame": 56,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d73a18ec5c6a02b5e892808d",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 41,
+      "source_xy": [
+        762.646642446518,
+        28.71794879436493
+      ],
+      "lag": 30,
+      "frame": 71,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a6495d635e995229792fd04e",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 41,
+      "source_xy": [
+        762.646642446518,
+        28.71794879436493
+      ],
+      "lag": 60,
+      "frame": 101,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4837c2e0e170f5bceb2482a7",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 42,
+      "source_xy": [
+        745.197107553482,
+        15.38461446762085
+      ],
+      "lag": 15,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "68e0a9366f1baa531b40073a",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 42,
+      "source_xy": [
+        745.197107553482,
+        15.38461446762085
+      ],
+      "lag": 30,
+      "frame": 72,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "62670618f7e71749cbc9ec31",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 42,
+      "source_xy": [
+        745.197107553482,
+        15.38461446762085
+      ],
+      "lag": 60,
+      "frame": 102,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "50d07ecf8c6279f27113df9d",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 40,
+      "source_xy": [
+        767.7788226604462,
+        35.89743375778198
+      ],
+      "lag": 15,
+      "frame": 55,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "586590f023f5784092dd9e5f",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 40,
+      "source_xy": [
+        767.7788226604462,
+        35.89743375778198
+      ],
+      "lag": 30,
+      "frame": 70,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e3932a2867fbfef0b8558ed2",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 40,
+      "source_xy": [
+        767.7788226604462,
+        35.89743375778198
+      ],
+      "lag": 60,
+      "frame": 100,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f2b938a8f9a25c2bdd912e46",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 37,
+      "source_xy": [
+        812.942303776741,
+        103.5897445678711
+      ],
+      "lag": 15,
+      "frame": 52,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a9e1613f8c2b32538202e6c1",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 37,
+      "source_xy": [
+        812.942303776741,
+        103.5897445678711
+      ],
+      "lag": 30,
+      "frame": 67,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9cf23f06350fa35f8403189a",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 37,
+      "source_xy": [
+        812.942303776741,
+        103.5897445678711
+      ],
+      "lag": 60,
+      "frame": 97,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d4dc08e862b46003ec615a24",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 44,
+      "source_xy": [
+        660.0024273395538,
+        141.53845310211182
+      ],
+      "lag": 15,
+      "frame": 59,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a0f257828619dd1b8c0284d2",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 44,
+      "source_xy": [
+        660.0024273395538,
+        141.53845310211182
+      ],
+      "lag": 30,
+      "frame": 74,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a55e1b1d3a05c4a49936b186",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 44,
+      "source_xy": [
+        660.0024273395538,
+        141.53845310211182
+      ],
+      "lag": 60,
+      "frame": 104,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "966881615f0b6bc566a2eeb8",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 33,
+      "source_xy": [
+        846.854580283165,
+        126.66666984558105
+      ],
+      "lag": 15,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "414d30f0da6f9765674c915c",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 33,
+      "source_xy": [
+        846.854580283165,
+        126.66666984558105
+      ],
+      "lag": 30,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5e83ec309112c2c75fb48284",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 33,
+      "source_xy": [
+        846.854580283165,
+        126.66666984558105
+      ],
+      "lag": 60,
+      "frame": 93,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7f2792d583f9b70e6b5d09b5",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 40,
+      "source_xy": [
+        739.9893882274628,
+        120.58822631835938
+      ],
+      "lag": 15,
+      "frame": 55,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "57be99bb95f03b86458e3813",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 40,
+      "source_xy": [
+        739.9893882274628,
+        120.58822631835938
+      ],
+      "lag": 30,
+      "frame": 70,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8ad94270720ab86049f1e4f9",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 40,
+      "source_xy": [
+        739.9893882274628,
+        120.58822631835938
+      ],
+      "lag": 60,
+      "frame": 100,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9dbca358a9f05d125d2522f6",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 45,
+      "source_xy": [
+        652.817303776741,
+        139.48718547821045
+      ],
+      "lag": 15,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "56264fef0fdd0b5ed532d166",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 45,
+      "source_xy": [
+        652.817303776741,
+        139.48718547821045
+      ],
+      "lag": 30,
+      "frame": 75,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8e0bc394600744d184513d95",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 45,
+      "source_xy": [
+        652.817303776741,
+        139.48718547821045
+      ],
+      "lag": 60,
+      "frame": 105,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1141fb1e6f86f578aa088445",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 41,
+      "source_xy": [
+        747.8692272901535,
+        31.412394046783447
+      ],
+      "lag": 15,
+      "frame": 56,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2146bdcdd7d85e697077116d",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 41,
+      "source_xy": [
+        747.8692272901535,
+        31.412394046783447
+      ],
+      "lag": 30,
+      "frame": 71,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2cd08f85663d9719dff9a714",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 41,
+      "source_xy": [
+        747.8692272901535,
+        31.412394046783447
+      ],
+      "lag": 60,
+      "frame": 101,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1058b0356ad1ac3e48a7e66e",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 45,
+      "source_xy": [
+        689.9589791297913,
+        6.062040030956268
+      ],
+      "lag": 15,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f2be51bce8b0e9113b87eb6a",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 45,
+      "source_xy": [
+        689.9589791297913,
+        6.062040030956268
+      ],
+      "lag": 30,
+      "frame": 75,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2a13c49a953edc6608d6dcef",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 45,
+      "source_xy": [
+        689.9589791297913,
+        6.062040030956268
+      ],
+      "lag": 60,
+      "frame": 105,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "baeeb7bb59631e5ba92c6f0b",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 42,
+      "source_xy": [
+        735.184103012085,
+        42.98538565635681
+      ],
+      "lag": 15,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d29a13b0f2d6e5c0e6b27806",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 42,
+      "source_xy": [
+        735.184103012085,
+        42.98538565635681
+      ],
+      "lag": 30,
+      "frame": 72,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "63ef6214314f063836d2a549",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 42,
+      "source_xy": [
+        735.184103012085,
+        42.98538565635681
+      ],
+      "lag": 60,
+      "frame": 102,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c2b5f0d2977e14693fa658ea",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 47,
+      "source_xy": [
+        667.8979443311691,
+        3.3065664768218994
+      ],
+      "lag": 15,
+      "frame": 62,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3404754181449ba245cf6c5b",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 47,
+      "source_xy": [
+        667.8979443311691,
+        3.3065664768218994
+      ],
+      "lag": 30,
+      "frame": 77,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3fce634bb0916e845ad69c5b",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 47,
+      "source_xy": [
+        667.8979443311691,
+        3.3065664768218994
+      ],
+      "lag": 60,
+      "frame": 107,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "99b8d4c35174126f68017b40",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 43,
+      "source_xy": [
+        716.9837582111359,
+        4.408756792545319
+      ],
+      "lag": 15,
+      "frame": 58,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "094e799a1741cf1f05b74762",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 43,
+      "source_xy": [
+        716.9837582111359,
+        4.408756792545319
+      ],
+      "lag": 30,
+      "frame": 73,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "37275134e81150b273b4d415",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 43,
+      "source_xy": [
+        716.9837582111359,
+        4.408756792545319
+      ],
+      "lag": 60,
+      "frame": 103,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "75db4f67921b7b0aeefb53a4",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        561.3735436201096,
+        258.6046600341797
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        -281.4749858557924,
+        407.769368207342
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "01750f2994070df4f40b2ebf",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        561.3735436201096,
+        258.6046600341797
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -5406.526897829204,
+        2156.570236300082
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1f59af01d7a72bad74413000",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        561.3735436201096,
+        258.6046600341797
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "390394677161e836ae9dec3c",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        539.9613103866577,
+        247.44186401367188
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f9602660b432c7a2db02acfa",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        539.9613103866577,
+        247.44186401367188
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "88544dcb61ffc8cc866f021f",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        539.9613103866577,
+        247.44186401367188
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e4efea2064780a247c000e7e",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        298.37768572568893,
+        172.12378978729248
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        -193.78640679242977,
+        311.16289136334194
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b0beea61f270156f4a524dcb",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        298.37768572568893,
+        172.12378978729248
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -1240.4076919144877,
+        691.9339287874725
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "111e317f80f6ad5122b910b8",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        298.37768572568893,
+        172.12378978729248
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "87768c76c50db0e82bb50ddc",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        515.7561151981354,
+        212.09302425384521
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "59e8e09cf8292468ae25f821",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        515.7561151981354,
+        212.09302425384521
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "145bb5774ec96ba9d0af2c8c",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        515.7561151981354,
+        212.09302425384521
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3cdbcac5ff70c0621723ef3d",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        517.6180728673935,
+        202.79069423675537
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fbed9f7b39af0b0bbcde7e01",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        517.6180728673935,
+        202.79069423675537
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "80c052921ffe6841240a52e1",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        517.6180728673935,
+        202.79069423675537
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d847b07a5e71b7a354b61375",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 33,
+      "source_xy": [
+        834.649821639061,
+        127.2969102859497
+      ],
+      "lag": 15,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fe57abb9d390a734d3b6b953",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 33,
+      "source_xy": [
+        834.649821639061,
+        127.2969102859497
+      ],
+      "lag": 30,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cbfab66387614cd1c5ae0bd0",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 33,
+      "source_xy": [
+        834.649821639061,
+        127.2969102859497
+      ],
+      "lag": 60,
+      "frame": 93,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e604abf4dd7b18a52e2b7b22",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 33,
+      "source_xy": [
+        842.195486664772,
+        128.5920810699463
+      ],
+      "lag": 15,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d4e4b4ddac9512dd3564cc8a",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 33,
+      "source_xy": [
+        842.195486664772,
+        128.5920810699463
+      ],
+      "lag": 30,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f9b4ce129f6544a1a6fd2ec2",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 33,
+      "source_xy": [
+        842.195486664772,
+        128.5920810699463
+      ],
+      "lag": 60,
+      "frame": 93,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c92fe73e3c0770d30b0a9f97",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 33,
+      "source_xy": [
+        847.0098834037781,
+        128.26828479766846
+      ],
+      "lag": 15,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "25fbf52f59534b0cf75aa824",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 33,
+      "source_xy": [
+        847.0098834037781,
+        128.26828479766846
+      ],
+      "lag": 30,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "dfc59cdc2475b37ebe49a764",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 33,
+      "source_xy": [
+        847.0098834037781,
+        128.26828479766846
+      ],
+      "lag": 60,
+      "frame": 93,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "dac13a4b67f58e0a73fd349c",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 33,
+      "source_xy": [
+        852.1483246088028,
+        127.11188793182373
+      ],
+      "lag": 15,
+      "frame": 48,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "45d53db31035a46c93e97ae0",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 33,
+      "source_xy": [
+        852.1483246088028,
+        127.11188793182373
+      ],
+      "lag": 30,
+      "frame": 63,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "70bcf51a5635d39d18ecc8c5",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 33,
+      "source_xy": [
+        852.1483246088028,
+        127.11188793182373
+      ],
+      "lag": 60,
+      "frame": 93,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e0e147957e12f0ad093c82bc",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 34,
+      "source_xy": [
+        831.4093769788742,
+        129.14714813232422
+      ],
+      "lag": 15,
+      "frame": 49,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "146d23da719167fffa7e295c",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 34,
+      "source_xy": [
+        831.4093769788742,
+        129.14714813232422
+      ],
+      "lag": 30,
+      "frame": 64,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c15ff095529b47cc4aae94f8",
+      "sequence": "libby",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 34,
+      "source_xy": [
+        831.4093769788742,
+        129.14714813232422
+      ],
+      "lag": 60,
+      "frame": 94,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    }
+  ]
+}

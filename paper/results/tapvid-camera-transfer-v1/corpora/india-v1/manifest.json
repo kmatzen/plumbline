@@ -1,0 +1,3379 @@
+{
+  "scope": "camera-projected correspondence validation; no staticness or camera-DNF labels",
+  "sequence": "india",
+  "prompt": "Compare the marked detail in A with the candidate marked in B. The top row shows context; the bottom row shows native-pixel crops. Is the candidate close to the same detail, far from it, or is the original detail occluded? Reply with one label: close, far, occluded, or uncertain. Close means within 2 native pixels; far means at least 8 native pixels. Use uncertain when the images do not support a decision. Do not judge camera accuracy or whether the object is moving.",
+  "planned_presentations": 150,
+  "geometry_sha256": "c1eb761aab5c2685159c91dafbac75886567ce1ec47b6efe1795c7856bf958df",
+  "source_manifest_sha256": "d8e1903df707408ef3b392c8c85c951b8cd6a36f899690d76ca520ae331bb41d",
+  "source_file_sha256": "133b08df8793166761d16b550e19d8959a0111f069274db15af42214cb988b80",
+  "tracker_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "script_sha256": "49f222e81751905ebeb20100c2eceac7eb15c8b92cc7230141b9a7a104cfbbfb",
+  "export_sha256": "240dc74a845bc9ed5a2e5886e415ab5ab6a7dec40f790ac25a0e97fff9c9bf66",
+  "geometry_dependencies_sha256": {
+    "plumbline.image_evidence": "9fc932d5f4cea4008a9dc43106fe4075e67dff17274000853cd511bff17414f4",
+    "plumbline.conventions": "506969710476aafde4ec4adf63cb86d4164762bd32e81d1a1b3bfd5f72e242ad"
+  },
+  "dependencies_sha256": {
+    "tapvid_camera_markers.py": "769bb4e2f7d34574e9352f748ae441926ee8e937c20597a27c107d4299edcc8b",
+    "build_anchor_preview.py": "7568d7a8cc409e7ac630b0a3753dced03691b0350e34547355ccfe862b3ae1c3",
+    "build_tapvid_judge_corpus.py": "5f66c715c674336018bfe6d331d7b67f81acfaa8896757c65e1f7817686852e0",
+    "run_tapvid_cameras.py": "56b8884bdf6c42ea41ae0b3313dc9dcdb554821c98cd96f31f8615cf134ddbec"
+  },
+  "counts": {
+    "far": 75,
+    "occluded": 24,
+    "borderline_unlabeled": 5,
+    "query_outside_image": 23,
+    "nonpositive_prefix_depth": 21,
+    "nonpositive_query_depth": 2
+  },
+  "records": [
+    {
+      "id": "2d29d8f3daecb811d85dde74",
+      "sequence": "india",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        303.59746891260147,
+        177.60000228881836
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        266.93734329159935,
+        207.2316874684451
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 10.652046663544883,
+      "image": "images/2d29d8f3daecb811d85dde74.png",
+      "image_sha256": "1dc7c60733586288ee040e93f553b830b2bffb1a97fff3b575e8f527c5b37095"
+    },
+    {
+      "id": "8050c7201d205010d7c6ad65",
+      "sequence": "india",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        303.59746891260147,
+        177.60000228881836
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        186.53484175770492,
+        176.79608898565456
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 34.99817308041241,
+      "image": "images/8050c7201d205010d7c6ad65.png",
+      "image_sha256": "308e0ba4d1a6d5fc78ef578fb58d8cbdc79e55787a698e501f00ce28dc0a2da1"
+    },
+    {
+      "id": "35dc6e5f5beed4155f1c110a",
+      "sequence": "india",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        303.59746891260147,
+        177.60000228881836
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        111.7322666597351,
+        252.82469923937356
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/35dc6e5f5beed4155f1c110a.png",
+      "image_sha256": "13626b1c2244807b72ac035b9d6525f70f02ffb30837333b1a3dfe13d8cdca9f"
+    },
+    {
+      "id": "b26d55d1eec0773f1cc6c0b8",
+      "sequence": "india",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        316.03879630565643,
+        189.47367668151855
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        279.834763038576,
+        219.63255227632408
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 10.1940790524469,
+      "image": "images/b26d55d1eec0773f1cc6c0b8.png",
+      "image_sha256": "6f0fc929369381a64bc3413f84ea67c7388e9dfbc1077959bc2f5b26ec016e85"
+    },
+    {
+      "id": "ab97686254dcf6c5878aa49b",
+      "sequence": "india",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        316.03879630565643,
+        189.47367668151855
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        204.4148253125679,
+        193.61872169442844
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 35.291669991027085,
+      "image": "images/ab97686254dcf6c5878aa49b.png",
+      "image_sha256": "432105dd2df593dd429762e3bfab353d0d230f3e4a15126307aea78fd25194c0"
+    },
+    {
+      "id": "ed2473a83f8435b4f85d2fc3",
+      "sequence": "india",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        316.03879630565643,
+        189.47367668151855
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        129.98278695121166,
+        270.3062461066368
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/ed2473a83f8435b4f85d2fc3.png",
+      "image_sha256": "8afcf9da2ca8be31e5e77fc106b507cd9bf616431297b69a41f9c8237793b3c1"
+    },
+    {
+      "id": "3cba024881481ef501f4ed34",
+      "sequence": "india",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        297.07646852731705,
+        264.63157653808594
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        258.81785287286675,
+        295.29539087634663
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 10.172000879205287,
+      "image": "images/3cba024881481ef501f4ed34.png",
+      "image_sha256": "26ee7d4c508927a8bbd8fd4bd42c4c385e99f8805f2f165ca2e9c495e9286c11"
+    },
+    {
+      "id": "b26173db5c8d88618e3c77ee",
+      "sequence": "india",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        297.07646852731705,
+        264.63157653808594
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        174.98787518782854,
+        299.7786388229969
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 47.179910117162336,
+      "image": "images/b26173db5c8d88618e3c77ee.png",
+      "image_sha256": "0b319b1461718c0104d02ca87bfd14f7659802c7e5b9e97c9d8c427219d72220"
+    },
+    {
+      "id": "996da448a48ca8eefdbbd6bb",
+      "sequence": "india",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        297.07646852731705,
+        264.63157653808594
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        96.39878269025957,
+        376.72319089319615
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/996da448a48ca8eefdbbd6bb.png",
+      "image_sha256": "19541f443d69c599f30428ac1dda9c12ca49c673cc757c5094bbd675fc0bc69d"
+    },
+    {
+      "id": "762c201d4e6e9274874941d8",
+      "sequence": "india",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        350.803051173687,
+        306.31579399108887
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        314.94691037510535,
+        341.22056807254177
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 10.590387890652016,
+      "image": "images/762c201d4e6e9274874941d8.png",
+      "image_sha256": "214ea5046e49238cf0b5073c24f01a9b0f8c70aad03ffe95e7fffeada8f9a883"
+    },
+    {
+      "id": "c08582bcdb891194f3e9ec54",
+      "sequence": "india",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        350.803051173687,
+        306.31579399108887
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        253.63365874929556,
+        356.8663350273188
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 43.016479738925156,
+      "image": "images/c08582bcdb891194f3e9ec54.png",
+      "image_sha256": "098438ea153847b2d23f0ea069923f30d40edde4e4d8d15b6dc4c0275fe18954"
+    },
+    {
+      "id": "156c351d0681c083da0ca86c",
+      "sequence": "india",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        350.803051173687,
+        306.31579399108887
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        180.61029012744834,
+        439.98424849711535
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/156c351d0681c083da0ca86c.png",
+      "image_sha256": "1f72e709ce8f7f06d86d4f8a4fda83113335c4ca47e6b4205bdd30ce0e4e0701"
+    },
+    {
+      "id": "18b48e99905993b579eb85ca",
+      "sequence": "india",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        305.92553955316544,
+        308.8421058654785
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        271.4780759775845,
+        341.4249677623759
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 12.818771136840963,
+      "image": "images/18b48e99905993b579eb85ca.png",
+      "image_sha256": "dc742ef71a42059bcff9b4b39e53205b47b83165036eeaada4e30943a7fdf828"
+    },
+    {
+      "id": "74a1e2a7076bb72c349f8a83",
+      "sequence": "india",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        305.92553955316544,
+        308.8421058654785
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        191.28451475178346,
+        368.67525716750094
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 52.1537196908068,
+      "image": "images/74a1e2a7076bb72c349f8a83.png",
+      "image_sha256": "aad4894095d0a58c07bb17bf5f653079b47d90fdcc4a03a19827f3d3a8fde70e"
+    },
+    {
+      "id": "c6691f5f52f1e3117039ccd9",
+      "sequence": "india",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        305.92553955316544,
+        308.8421058654785
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        108.53197522516955,
+        443.40597325928087
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/c6691f5f52f1e3117039ccd9.png",
+      "image_sha256": "48597d4eea69ebc4fd0c63cf0277c789fdd2fd9f93dde8adca30b6573add8ac9"
+    },
+    {
+      "id": "33d4fa45fb50b0659e032323",
+      "sequence": "india",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        587.125,
+        185.3333330154419
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        549.6561461935048,
+        219.4335230639708
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 6.764096648946961,
+      "image": "images/33d4fa45fb50b0659e032323.png",
+      "image_sha256": "f3f2f9ea45dd19c53e7c596db4b960a9b81e809147e8e9283e8c8f96be252268"
+    },
+    {
+      "id": "a0861ece177c1768415551b9",
+      "sequence": "india",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        587.125,
+        185.3333330154419
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        551.843741387755,
+        182.826063527179
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/a0861ece177c1768415551b9.png",
+      "image_sha256": "d566c38a58d45259db911efce31978e9e42ae47807e5858f4a34835a344374bf"
+    },
+    {
+      "id": "4a075176bf61f24bab5565db",
+      "sequence": "india",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        587.125,
+        185.3333330154419
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        516.5455016983836,
+        271.6189849800407
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 59.08248781270501,
+      "image": "images/4a075176bf61f24bab5565db.png",
+      "image_sha256": "6374223ef0fa8534517711c586abec5fa3462efbd6e1f4ce66a89b22bef939df"
+    },
+    {
+      "id": "a51d2fb4247934ac0c6f2f36",
+      "sequence": "india",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        573.1140726804733,
+        220.00000476837158
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        537.3185875396867,
+        254.96834132584564
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 6.888263721722527,
+      "image": "images/a51d2fb4247934ac0c6f2f36.png",
+      "image_sha256": "f5be04fda18d6fe7fd4b7d5536e4ea963f140ff938037e7eec4cc2b5c8c417d7"
+    },
+    {
+      "id": "22dc6549828b4d5c8e2c3d61",
+      "sequence": "india",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        573.1140726804733,
+        220.00000476837158
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        536.1793800616073,
+        227.70276663502418
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 27.219487699665205,
+      "image": "images/22dc6549828b4d5c8e2c3d61.png",
+      "image_sha256": "38c10531b994848124ba1697948db9c52557ab8c39f7b4728809f8777823d1f1"
+    },
+    {
+      "id": "4eb97d500683e08e9ce024ef",
+      "sequence": "india",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        573.1140726804733,
+        220.00000476837158
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        499.7429331606769,
+        319.31706249639296
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 60.298002641838245,
+      "image": "images/4eb97d500683e08e9ce024ef.png",
+      "image_sha256": "42395e7859623e8e2276767060dc50ce968c112b03d3e541db4499a537a93a76"
+    },
+    {
+      "id": "c88c8b04a7d07fe19f3a242c",
+      "sequence": "india",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        614.4796773195267,
+        222.00000286102295
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        580.3216374047078,
+        258.8275171813837
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 9.795718423929795,
+      "image": "images/c88c8b04a7d07fe19f3a242c.png",
+      "image_sha256": "550ab0fda6a6c3efe73f090cda3dd89da77ff24aebcfe81d2b1d562e7e9a65ae"
+    },
+    {
+      "id": "a425a29d15f5f5d879be5688",
+      "sequence": "india",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        614.4796773195267,
+        222.00000286102295
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        588.1691421924338,
+        231.15534588336345
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/a425a29d15f5f5d879be5688.png",
+      "image_sha256": "08df12652cb3ea9fadd53c50f337e2a0ecbecc15e9e1cf93f8750b3f951470ed"
+    },
+    {
+      "id": "493fe1785445017ab0890cb0",
+      "sequence": "india",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        614.4796773195267,
+        222.00000286102295
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        558.2650897897687,
+        324.60933609887525
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 60.06339911399666,
+      "image": "images/493fe1785445017ab0890cb0.png",
+      "image_sha256": "9f60e2465481ab758ee92a6793f5db0e8d4eb83db01ebc4e64a0e732f4276a2e"
+    },
+    {
+      "id": "b2ab675ab32c782185d08371",
+      "sequence": "india",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        563.1062601804733,
+        288.66665840148926
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        526.6541954934025,
+        326.36886397404123
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 7.868463034333486,
+      "image": "images/b2ab675ab32c782185d08371.png",
+      "image_sha256": "d4f489b3b90fdcc2d120097dbd5f54a07e6e4380d037b7fd3c3ee92a0112232d"
+    },
+    {
+      "id": "c12c18cef47a6abc8811800f",
+      "sequence": "india",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        563.1062601804733,
+        288.66665840148926
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        523.5770107841194,
+        318.5293400520306
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/c12c18cef47a6abc8811800f.png",
+      "image_sha256": "076f962ec9f159d7619731119478c1305fcdac6ecbef070cf62f870663145069"
+    },
+    {
+      "id": "6096da4a598b20f1a25d22eb",
+      "sequence": "india",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        563.1062601804733,
+        288.66665840148926
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        484.4446494360019,
+        415.6122854021364
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 71.75833125491607,
+      "image": "images/6096da4a598b20f1a25d22eb.png",
+      "image_sha256": "2e2702b7c005cbe300542a61c1c03023a1a74a32a99ed3306926541abc1fdf3d"
+    },
+    {
+      "id": "56f5c2024866b71e2f07993b",
+      "sequence": "india",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        624.4874898195267,
+        311.33334159851074
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        591.5898354225999,
+        348.0509767147851
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 5.811967186013893,
+      "image": "images/56f5c2024866b71e2f07993b.png",
+      "image_sha256": "dcd14422fb5482b14b57df1d61f03b4d43415e3ca5846afd961338068e66e92d"
+    },
+    {
+      "id": "8dbbc18f6c0c94ab59ab80da",
+      "sequence": "india",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        624.4874898195267,
+        311.33334159851074
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        617.8777999720288,
+        355.8265814327764
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/8dbbc18f6c0c94ab59ab80da.png",
+      "image_sha256": "56a56d662fc371fab140f2b4f2e5ee1154ee9d30a145d7e50db25caf12b02785"
+    },
+    {
+      "id": "dbe4855a780302f2efb66856",
+      "sequence": "india",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        624.4874898195267,
+        311.33334159851074
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        568.3684247672956,
+        448.9293452533919
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 69.11391119260331,
+      "image": "images/dbe4855a780302f2efb66856.png",
+      "image_sha256": "285c274e2e1fbaf2745a8adc27b414f204883bb9fefea0eebf4f07c00c122a31"
+    },
+    {
+      "id": "200398f9145cb2d35ffce1c7",
+      "sequence": "india",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        670.5855892896652,
+        179.62732315063477
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        639.3861713763688,
+        212.98352359744808
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 12.010585725459876,
+      "image": "images/200398f9145cb2d35ffce1c7.png",
+      "image_sha256": "0d1a2933ee911a787f43bc1803cd06085ea2df702bbad38c6bf7497828e8bbbd"
+    },
+    {
+      "id": "c5befd03d0971614ae65c4ab",
+      "sequence": "india",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        670.5855892896652,
+        179.62732315063477
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        667.672527654543,
+        174.92239325276208
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 53.72872099240649,
+      "image": "images/c5befd03d0971614ae65c4ab.png",
+      "image_sha256": "497cabcf91bfed890cf7fdd599dd1ec4b89644ef3f42703a4dffb70b5ffbbc1e"
+    },
+    {
+      "id": "4cdb532de5cf3a86753acb8c",
+      "sequence": "india",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        670.5855892896652,
+        179.62732315063477
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        636.7660417571379,
+        263.88273333050097
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 117.6840168926207,
+      "image": "images/4cdb532de5cf3a86753acb8c.png",
+      "image_sha256": "dce148453d7c7275ae3e4bec326c9e15fc3d4b0193cfe974d52d4ca38c4115a4"
+    },
+    {
+      "id": "438f0107b9483142bd7e28cc",
+      "sequence": "india",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        670.5855892896652,
+        197.5155258178711
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        639.1284123599994,
+        231.6515814925059
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 14.967450749385584,
+      "image": "images/438f0107b9483142bd7e28cc.png",
+      "image_sha256": "d10d81c0972e97069196e7ad73b7f0f3c0c73de2bbc71ff615a6f2eb428271cf"
+    },
+    {
+      "id": "f30bc1233217afff4d27f315",
+      "sequence": "india",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        670.5855892896652,
+        197.5155258178711
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        666.6847851132359,
+        198.44202480545934
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 57.98532903948378,
+      "image": "images/f30bc1233217afff4d27f315.png",
+      "image_sha256": "4a28f77968265888e448d2b57ae369f7d60dc5b78cb028c0d037978c16a4185d"
+    },
+    {
+      "id": "ceb8da90df7416568a794289",
+      "sequence": "india",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        670.5855892896652,
+        197.5155258178711
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        636.3884147411305,
+        289.0209671811966
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 115.178824701429,
+      "image": "images/ceb8da90df7416568a794289.png",
+      "image_sha256": "897428fe68e7fdadd56e778f29646be852f706ea678171e462162e45ca9bd32f"
+    },
+    {
+      "id": "eeca18cfa32c80bc1774827c",
+      "sequence": "india",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        628.0679113864899,
+        236.27328872680664
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        595.701983396648,
+        271.8758766364683
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 13.903013721762962,
+      "image": "images/eeca18cfa32c80bc1774827c.png",
+      "image_sha256": "b9c46f1c79bda7c574cc5b91d22bfba8f372221122eb3b6f98067143c54266c5"
+    },
+    {
+      "id": "199fc7b1d6b3798a9d0c91de",
+      "sequence": "india",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        628.0679113864899,
+        236.27328872680664
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        612.4060243003528,
+        250.1019983824301
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/199fc7b1d6b3798a9d0c91de.png",
+      "image_sha256": "86b3aad6d26f6c88853464177cc164d74029706c73c36722266a1468992829a8"
+    },
+    {
+      "id": "4256f7a1044a2e7cd152ce11",
+      "sequence": "india",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        628.0679113864899,
+        236.27328872680664
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        577.4230597857651,
+        342.96735353134966
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 126.2340615841812,
+      "image": "images/4256f7a1044a2e7cd152ce11.png",
+      "image_sha256": "cdbcd987ad3b85d721bbdf8d9d110cdd0d707a390c1f0d1afc8271eba95d9263"
+    },
+    {
+      "id": "62d97a0dc76b634d647998a0",
+      "sequence": "india",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        637.7649140357971,
+        223.60249042510986
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        606.6795227707315,
+        258.3002951484023
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 11.849509758613086,
+      "image": "images/62d97a0dc76b634d647998a0.png",
+      "image_sha256": "ec1681251f40ea2dfc4b867f429dc97005e72b8e2fda1fa7a90944a96b01dbe3"
+    },
+    {
+      "id": "637e370f7b717d40354a52d8",
+      "sequence": "india",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        637.7649140357971,
+        223.60249042510986
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        628.593036910195,
+        233.84239054802106
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/637e370f7b717d40354a52d8.png",
+      "image_sha256": "2ad9584a96b5a4ccfbe73d0a2f7cb4bead9746b5d1215789d5806492e45fd153"
+    },
+    {
+      "id": "00d0de438d7516510c42afa0",
+      "sequence": "india",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        637.7649140357971,
+        223.60249042510986
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        591.7962155859406,
+        324.9922993358998
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 121.31534546131157,
+      "image": "images/00d0de438d7516510c42afa0.png",
+      "image_sha256": "4748fe1c19e49ef85d6fe757e85b4c9cef0153197c45f354fb2cec1b6bdafc1f"
+    },
+    {
+      "id": "70684e51967410edee8df5d4",
+      "sequence": "india",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        649.6997374296188,
+        210.93167781829834
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        617.3155897812879,
+        245.79096825579103
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 13.15877265057778,
+      "image": "images/70684e51967410edee8df5d4.png",
+      "image_sha256": "57922ea7768e14f1eb23628e425f57019d635080cbbb3c416a2385af8c5c256e"
+    },
+    {
+      "id": "655c869c0f49cf1b2ca13444",
+      "sequence": "india",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        649.6997374296188,
+        210.93167781829834
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        638.336385626263,
+        216.2095269901737
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/655c869c0f49cf1b2ca13444.png",
+      "image_sha256": "69e832073fb3020ef0ae0517ef17b283323d154905627b7bcf3919d463b44cfe"
+    },
+    {
+      "id": "2fbe49a726d5a99eb463fb31",
+      "sequence": "india",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        649.6997374296188,
+        210.93167781829834
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        607.0722173285963,
+        307.8152501530589
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 119.3198158098647,
+      "image": "images/2fbe49a726d5a99eb463fb31.png",
+      "image_sha256": "c047bc1eed79f66318ceb8e40a57c1d8e761a3fef856b6f99c10ff64867cb4dd"
+    },
+    {
+      "id": "3a7ee675dd1606b64bea4720",
+      "sequence": "india",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        191.18954360485077,
+        167.03999519348145
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        152.66836004378587,
+        202.49423866124408
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 18.010648195651093,
+      "image": "images/3a7ee675dd1606b64bea4720.png",
+      "image_sha256": "0c637083e2418c529d73c19417803a474067fafab6a04931d6cb42fe40e549fa"
+    },
+    {
+      "id": "da78dcd4f984640e24d86be0",
+      "sequence": "india",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        191.18954360485077,
+        167.03999519348145
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        29.84314060972411,
+        170.68942561871296
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 68.57751364028506,
+      "image": "images/da78dcd4f984640e24d86be0.png",
+      "image_sha256": "ab123e730cb6d9488ba021b7833a512e989f9de66a2eb503107f0f7c6dcb6110"
+    },
+    {
+      "id": "0f64509b9cc674e0ed68ca22",
+      "sequence": "india",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        191.18954360485077,
+        167.03999519348145
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -48.09235173286498,
+        245.006411067944
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8609844b3018b92fe6828c6d",
+      "sequence": "india",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        147.95573303103447,
+        213.12000274658203
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        110.05534685119824,
+        250.9539906203645
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 11.226818292910421,
+      "image": "images/8609844b3018b92fe6828c6d.png",
+      "image_sha256": "adf9ff97f32b0319af42d8b507951f9b4159f06d3a0a72d9ce984c677196b277"
+    },
+    {
+      "id": "d75eba2a4370ba1e75b58438",
+      "sequence": "india",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        147.95573303103447,
+        213.12000274658203
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -34.23502881923957,
+        240.5399810187372
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "62f400dc162febc0562241ac",
+      "sequence": "india",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        147.95573303103447,
+        213.12000274658203
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -116.23175072700101,
+        313.10820146150735
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9078f1e9acfdf4e5997bc5b3",
+      "sequence": "india",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        182.54278403520584,
+        223.6799955368042
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        143.7815764445559,
+        261.41901113987734
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 12.55649850246076,
+      "image": "images/9078f1e9acfdf4e5997bc5b3.png",
+      "image_sha256": "fe36ca7ba2750f647e2beefbdc9624e5ef171b469630709ff3ef4e91788052bf"
+    },
+    {
+      "id": "9eccb336de480b7387de5680",
+      "sequence": "india",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        182.54278403520584,
+        223.6799955368042
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        18.11013625928008,
+        251.50313518885648
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 60.208584927174655,
+      "image": "images/9eccb336de480b7387de5680.png",
+      "image_sha256": "17d82141f0f12f6e67076c15030aec861e43d0b7f7af258a855abd0c4ef5429a"
+    },
+    {
+      "id": "fb9ed56675750c4b6cd09686",
+      "sequence": "india",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        182.54278403520584,
+        223.6799955368042
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -61.38878738601875,
+        327.4909383402857
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c11e4196b26a71d86b28ecd8",
+      "sequence": "india",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        203.67931732535362,
+        458.8799858093262
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        160.31663376352924,
+        500.86568659920476
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "28e0fd517bb18dd1dfe3c674",
+      "sequence": "india",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        203.67931732535362,
+        458.8799858093262
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        36.931022279140585,
+        591.1231391421687
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "11b35774f79bec92112b9045",
+      "sequence": "india",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        203.67931732535362,
+        458.8799858093262
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -50.14646499279033,
+        668.5649208210406
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9e23ba66da69f2c36d0ac880",
+      "sequence": "india",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        184.46428474783897,
+        198.72000217437744
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        145.37968373641246,
+        235.36210099444145
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 14.3924087773849,
+      "image": "images/9e23ba66da69f2c36d0ac880.png",
+      "image_sha256": "c30445849299d1f7f96a6046ed9e4c5c23c355f5123ebca507bbbb3aba1a6571"
+    },
+    {
+      "id": "26e60914a2b4835acd2e5ca2",
+      "sequence": "india",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        184.46428474783897,
+        198.72000217437744
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        21.13274617024144,
+        215.2113965539461
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 74.59177386299426,
+      "image": "images/26e60914a2b4835acd2e5ca2.png",
+      "image_sha256": "42cd974b28d71c448ffed03a4858f147a561ef2ca5b6de864066ab2bbb654e3d"
+    },
+    {
+      "id": "2f69a59fd2520707ada7982b",
+      "sequence": "india",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        184.46428474783897,
+        198.72000217437744
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -57.29482771117558,
+        290.89119200802804
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6e1132d31f1cdcded2517f28",
+      "sequence": "india",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        410.9089729189873,
+        169.99998092651367
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        380.8198789253442,
+        203.47901535025096
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 10.495052392822492,
+      "image": "images/6e1132d31f1cdcded2517f28.png",
+      "image_sha256": "2fc7c96cc6d4389b8bf5bfaa761b0bbac9a7ee17f9e233dc72e2e9c920a8f81d"
+    },
+    {
+      "id": "856695a11c319e6d6346fd7e",
+      "sequence": "india",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        410.9089729189873,
+        169.99998092651367
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        343.8703018144679,
+        172.75458540681225
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 39.27209421235871,
+      "image": "images/856695a11c319e6d6346fd7e.png",
+      "image_sha256": "77dc494f6e37131fbd58ef9fc83b67285bb151fe5f6581e2460064887e5663d6"
+    },
+    {
+      "id": "ce71ab12c1e32674089bf888",
+      "sequence": "india",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        410.9089729189873,
+        169.99998092651367
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        267.67745053609326,
+        248.80044196536383
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/ce71ab12c1e32674089bf888.png",
+      "image_sha256": "c8a2a25277036ef959520da85f5813c67fc13bbaad786d273e27fbe4da8ec33b"
+    },
+    {
+      "id": "41a334b3dff4d82c6233443f",
+      "sequence": "india",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        412.1623927950859,
+        182.39999771118164
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        382.3040118348837,
+        216.3152285535724
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 10.151795458059214,
+      "image": "images/41a334b3dff4d82c6233443f.png",
+      "image_sha256": "e4abf5cd306942b64ef6be49ce778a7578e668e5a11a71633c4d527fb66dd9dd"
+    },
+    {
+      "id": "4eba2a1478defe82ecf8db47",
+      "sequence": "india",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        412.1623927950859,
+        182.39999771118164
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        346.2827957827833,
+        191.14431631714368
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 38.87840911253444,
+      "image": "images/4eba2a1478defe82ecf8db47.png",
+      "image_sha256": "a98b156c38a60d8ca3d34a4f815614becfdb2983170ee78c43de3c4458c67228"
+    },
+    {
+      "id": "5b5c7cb2a50db582560236bc",
+      "sequence": "india",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        412.1623927950859,
+        182.39999771118164
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        268.7029554580217,
+        266.95182483531056
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/5b5c7cb2a50db582560236bc.png",
+      "image_sha256": "bceb2361ce6e28a2f74cdb4ea9e544ce9291e3c7593664e4a59bde87d62f3584"
+    },
+    {
+      "id": "12b793215c9fe32623c47d55",
+      "sequence": "india",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        415.0446375012398,
+        227.52000331878662
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        383.9398248670381,
+        263.1494213223548
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 9.579907784072493,
+      "image": "images/12b793215c9fe32623c47d55.png",
+      "image_sha256": "2963087fc51b010254bb9af1ffe916021a9a085d77f6fc4f920505a4fb6f1f44"
+    },
+    {
+      "id": "72a8f4700d9b53bf6fadc2fd",
+      "sequence": "india",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        415.0446375012398,
+        227.52000331878662
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        347.8949963453515,
+        254.07989532257238
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 35.7552041986786,
+      "image": "images/72a8f4700d9b53bf6fadc2fd.png",
+      "image_sha256": "f8e183812894b0f54d8b09b6d873af3b57ed6e58db2c505eaeb9f537ae6788e2"
+    },
+    {
+      "id": "14fe447446c2713c01ef69df",
+      "sequence": "india",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        415.0446375012398,
+        227.52000331878662
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        273.6302568205366,
+        332.53808113703764
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/14fe447446c2713c01ef69df.png",
+      "image_sha256": "7e396a9eecec81953654a7e05686fb95c3aa1c686aeda4751f4547992c94eb28"
+    },
+    {
+      "id": "7e2567938d39395e7c84bb1b",
+      "sequence": "india",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        421.76990908384323,
+        252.48001098632812
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        390.15996056958755,
+        290.650587249968
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 12.318704928305852,
+      "image": "images/7e2567938d39395e7c84bb1b.png",
+      "image_sha256": "f8ac1f903e27996e9aaed14e1768b79ad87844bbff035828bb3774e0e8cf5cc6"
+    },
+    {
+      "id": "def8133a2301eadc30245fc5",
+      "sequence": "india",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        421.76990908384323,
+        252.48001098632812
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        358.43922712317806,
+        297.27677131025064
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 36.39102522872469,
+      "image": "images/def8133a2301eadc30245fc5.png",
+      "image_sha256": "125305c02d6638d6a77d41bca56a1eed3cf70b900bd7c7c08c3d63f399989942"
+    },
+    {
+      "id": "875665ce7dbec3e6ca631879",
+      "sequence": "india",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        421.76990908384323,
+        252.48001098632812
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        276.89061935912406,
+        372.60833989363596
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/875665ce7dbec3e6ca631879.png",
+      "image_sha256": "01e831568bf4e3e1cfaffe3f7b87b8c66b42b68c45216b0cfc39c0150e95b8fd"
+    },
+    {
+      "id": "0768a6f170d7c1639f22a632",
+      "sequence": "india",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        419.84839564561844,
+        293.75999450683594
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        390.5433221981091,
+        331.8007358632018
+      ],
+      "status": "renderable",
+      "label": null,
+      "scoring_status": "borderline_unlabeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 5.4440327622079,
+      "image": "images/0768a6f170d7c1639f22a632.png",
+      "image_sha256": "5d102c0b06176c051eecc139f1bea7977d572feb5561f758198667bbdafc23f4"
+    },
+    {
+      "id": "cfe0e8ecceb43c71dc73f9d6",
+      "sequence": "india",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        419.84839564561844,
+        293.75999450683594
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        358.7712128795223,
+        353.73699630430474
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 27.768586025129206,
+      "image": "images/cfe0e8ecceb43c71dc73f9d6.png",
+      "image_sha256": "4f67a17bd02b7034b1d3f7800dfc5ddb9817698ac2d2740818aa0c4025195d63"
+    },
+    {
+      "id": "c4a9a03c359131c89da6d914",
+      "sequence": "india",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        419.84839564561844,
+        293.75999450683594
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        278.22506703380685,
+        430.56654745843053
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/c4a9a03c359131c89da6d914.png",
+      "image_sha256": "a7a29aa2428571658ae7e2a24e28aa02bbd669b08d2becb00f3103cd23abf9de"
+    },
+    {
+      "id": "c88700310da34321c07175ab",
+      "sequence": "india",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        303.59746891260147,
+        177.60000228881836
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2c5c0a4e80707b3a7d4f624a",
+      "sequence": "india",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        303.59746891260147,
+        177.60000228881836
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "719440e8f544cf4ccb9db7c4",
+      "sequence": "india",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        303.59746891260147,
+        177.60000228881836
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1e6a4d41cc4ccda3f7e2c52e",
+      "sequence": "india",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        316.03879630565643,
+        189.47367668151855
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "84948119fe3ca13cd7dc03bc",
+      "sequence": "india",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        316.03879630565643,
+        189.47367668151855
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "bf2adf0a3e23c67d6d988ee1",
+      "sequence": "india",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        316.03879630565643,
+        189.47367668151855
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5f94432f3a3f44e732be25d4",
+      "sequence": "india",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        297.07646852731705,
+        264.63157653808594
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1f9c89c541cb376cf2b9c59c",
+      "sequence": "india",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        297.07646852731705,
+        264.63157653808594
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4d1d30201d7d6db999c956dc",
+      "sequence": "india",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        297.07646852731705,
+        264.63157653808594
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4a8935efabccde6063ebff82",
+      "sequence": "india",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        350.803051173687,
+        306.31579399108887
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "381f8757ae07eeb1a0072d0b",
+      "sequence": "india",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        350.803051173687,
+        306.31579399108887
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b726efdeedbd787037adba53",
+      "sequence": "india",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 0,
+      "source_xy": [
+        350.803051173687,
+        306.31579399108887
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "177920be46b8117742968121",
+      "sequence": "india",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        305.92553955316544,
+        308.8421058654785
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "702b63a58f28e1da51a2f60b",
+      "sequence": "india",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        305.92553955316544,
+        308.8421058654785
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7a336639004f8ea5dab60e09",
+      "sequence": "india",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 0,
+      "source_xy": [
+        305.92553955316544,
+        308.8421058654785
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7e52d69501c29748bf1ea9b6",
+      "sequence": "india",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        587.125,
+        185.3333330154419
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        570.4890585066846,
+        195.79283592341662
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 24.746237039345974,
+      "image": "images/7e52d69501c29748bf1ea9b6.png",
+      "image_sha256": "6995dd513eff7c280096ca855019331679dc92a10ee91cf914cb457b867fb608"
+    },
+    {
+      "id": "d39863b546b940237399c545",
+      "sequence": "india",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        587.125,
+        185.3333330154419
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        587.6934776601665,
+        145.64472129698828
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/d39863b546b940237399c545.png",
+      "image_sha256": "1536767a5b72b1aafe117aa9b176405ad407fc8619c8afc7d65cf73820e32604"
+    },
+    {
+      "id": "468110f14701bcdbe53a2c6a",
+      "sequence": "india",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        587.125,
+        185.3333330154419
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        542.4014551636268,
+        203.53781642581941
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 63.31103842695755,
+      "image": "images/468110f14701bcdbe53a2c6a.png",
+      "image_sha256": "7bc1436bac67cd67898961c60ddfae17f4a10bdf6b9e80bb9b2c299868c65794"
+    },
+    {
+      "id": "42405b6f4d768238326c0bba",
+      "sequence": "india",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        573.1140726804733,
+        220.00000476837158
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        555.7411616434517,
+        233.41210190052178
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 23.71674947922257,
+      "image": "images/42405b6f4d768238326c0bba.png",
+      "image_sha256": "4cfe7b8fa26d58f357af203069623bacded508773cc788a561ad5ecbba80f182"
+    },
+    {
+      "id": "eda3604c5ba9d5d9ad6a24a9",
+      "sequence": "india",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        573.1140726804733,
+        220.00000476837158
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        565.6579008557457,
+        196.21553877040708
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 24.180563070990186,
+      "image": "images/eda3604c5ba9d5d9ad6a24a9.png",
+      "image_sha256": "882661a040d32a0fb21eca05cc07da34b6bac75903ba89582e2c707c315ddb07"
+    },
+    {
+      "id": "5c030a0ea731767dea9947b5",
+      "sequence": "india",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 0,
+      "source_xy": [
+        573.1140726804733,
+        220.00000476837158
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        522.1305016694715,
+        255.9643401142008
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 62.82561457975752,
+      "image": "images/5c030a0ea731767dea9947b5.png",
+      "image_sha256": "5f3a23df1c7050d828502c37304fb2ab32c8b6d27ce6d50089cd43e3d747b09f"
+    },
+    {
+      "id": "fe7d6cfa5531aac713190062",
+      "sequence": "india",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        614.4796773195267,
+        222.00000286102295
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        597.6384900729872,
+        238.7959649147296
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 21.590515985579874,
+      "image": "images/fe7d6cfa5531aac713190062.png",
+      "image_sha256": "e5cd0d2e8c2152b9333a2eec3399711aa1d0adce1e007851428d5f5d9ae548fb"
+    },
+    {
+      "id": "247b9443b20bf877c24b19fd",
+      "sequence": "india",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        614.4796773195267,
+        222.00000286102295
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        613.9332752937855,
+        206.20784465740664
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/247b9443b20bf877c24b19fd.png",
+      "image_sha256": "6936edacbf571e3f269a98a71984197909e6569a732ef22641e52c07258dc08d"
+    },
+    {
+      "id": "db886653a975560c11e53aad",
+      "sequence": "india",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 0,
+      "source_xy": [
+        614.4796773195267,
+        222.00000286102295
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        577.0530714618765,
+        265.42746703498403
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 56.12445684306189,
+      "image": "images/db886653a975560c11e53aad.png",
+      "image_sha256": "8bf7fe78a45307cadb788f8138f3c1523170d4f0c46a6023ecd4bb9ee351ae7d"
+    },
+    {
+      "id": "8676acf884e5da5f01e48a04",
+      "sequence": "india",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        563.1062601804733,
+        288.66665840148926
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        542.1633392868296,
+        307.9250508828067
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 16.88841771745228,
+      "image": "images/8676acf884e5da5f01e48a04.png",
+      "image_sha256": "767b8dad5934962acaad7d8b92c87ed4f8d89519c709e3581b39fcc606d6f6e3"
+    },
+    {
+      "id": "50f9a697cd9d2520bb55125b",
+      "sequence": "india",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        563.1062601804733,
+        288.66665840148926
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        545.041947051642,
+        291.25204930218126
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/50f9a697cd9d2520bb55125b.png",
+      "image_sha256": "85d598a5858c547a381d39499169bf5d3c7971f382df1020a532e65288eb1422"
+    },
+    {
+      "id": "7371d23e3c1cfc857a6318b3",
+      "sequence": "india",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 0,
+      "source_xy": [
+        563.1062601804733,
+        288.66665840148926
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        504.439482259335,
+        354.1227607523401
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 62.44244886725555,
+      "image": "images/7371d23e3c1cfc857a6318b3.png",
+      "image_sha256": "af550fa203a67e708a1decb3bf5b9203d90598fb5d97dc10b2205100f1ffbd57"
+    },
+    {
+      "id": "9f9864a3651196fa5556c751",
+      "sequence": "india",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        624.4874898195267,
+        311.33334159851074
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        628.8173891662773,
+        317.1987656779475
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 45.16856442218444,
+      "image": "images/9f9864a3651196fa5556c751.png",
+      "image_sha256": "2144c67f89e8fd6f86ab8489cd378a7959ed1c3f169c5982ce043838aa30aeb5"
+    },
+    {
+      "id": "2e770a82522f71b9e12f7837",
+      "sequence": "india",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        624.4874898195267,
+        311.33334159851074
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        699.2390693405422,
+        282.8731072010235
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/2e770a82522f71b9e12f7837.png",
+      "image_sha256": "56f23cced7a5aee185ea70b3725a6e58eee27c57e3d6cc58590c86fce0032fb6"
+    },
+    {
+      "id": "58bbd8eac8863c51cba23bb9",
+      "sequence": "india",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        624.4874898195267,
+        311.33334159851074
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        644.8380549099895,
+        358.30916544584784
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 65.26732347631284,
+      "image": "images/58bbd8eac8863c51cba23bb9.png",
+      "image_sha256": "527cdae42762cb6d87a0a56aad1a6fce16a73fc4f46da469448407130c30c77b"
+    },
+    {
+      "id": "629104de0814b0dea134b125",
+      "sequence": "india",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        670.5855892896652,
+        179.62732315063477
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        753.0382376758271,
+        133.3337706171401
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 126.78013831596564,
+      "image": "images/629104de0814b0dea134b125.png",
+      "image_sha256": "bdb5fa1d62463b455262a1d3c28256f9a878f3e4cbe0a510c575c94c2526c39f"
+    },
+    {
+      "id": "cef9135b05b5a0267c150286",
+      "sequence": "india",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        670.5855892896652,
+        179.62732315063477
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1340.7293643740766,
+        -317.13509156472725
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7545c22be84a1d11dc592810",
+      "sequence": "india",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        670.5855892896652,
+        179.62732315063477
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        1599.4702234158635,
+        -643.7103828799312
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4df80bba53fc98277c7616ef",
+      "sequence": "india",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        670.5855892896652,
+        197.5155258178711
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        702.8489087259397,
+        183.18384444628745
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 65.09577657932701,
+      "image": "images/4df80bba53fc98277c7616ef.png",
+      "image_sha256": "56ea437d5f39e0b5fc55a68b5511f541e5b4462995814b7dcb5fc8a49f9f2b7b"
+    },
+    {
+      "id": "b2b37bc8d80bf2c4c25c5c9b",
+      "sequence": "india",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        670.5855892896652,
+        197.5155258178711
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        888.285063376251,
+        36.68573536280228
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f83ce359f60119b5b9ab61bb",
+      "sequence": "india",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 0,
+      "source_xy": [
+        670.5855892896652,
+        197.5155258178711
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        835.7132297526142,
+        81.03938910299297
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 208.9074509055818,
+      "image": "images/f83ce359f60119b5b9ab61bb.png",
+      "image_sha256": "fecdefc9f50ccf58c491fe57ad69d36022e6ebb1edc089e9af50af5a669dae87"
+    },
+    {
+      "id": "1af38490dafd6f7cd4d429ba",
+      "sequence": "india",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        628.0679113864899,
+        236.27328872680664
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        629.649071225787,
+        241.8408355439934
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 32.09749855026735,
+      "image": "images/1af38490dafd6f7cd4d429ba.png",
+      "image_sha256": "93fc98654397e89e15cc66e52c6a66e01b25c07da92dced0a2a5c14594287fea"
+    },
+    {
+      "id": "5ee150cbc2e396690030b2bd",
+      "sequence": "india",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        628.0679113864899,
+        236.27328872680664
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        689.1584026754276,
+        185.77323624493664
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/5ee150cbc2e396690030b2bd.png",
+      "image_sha256": "d901354368a8f0f71daaa6973621b8c82d505bbf70db5859e4c7979ef7b28d02"
+    },
+    {
+      "id": "c84e7a11e933125460d12617",
+      "sequence": "india",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 0,
+      "source_xy": [
+        628.0679113864899,
+        236.27328872680664
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        638.3689522460921,
+        249.08757274084041
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 102.70311555924594,
+      "image": "images/c84e7a11e933125460d12617.png",
+      "image_sha256": "aa7941c08f10b92a7341448623739f9e3034bef33d84cf5fa55ff53fea9cc14d"
+    },
+    {
+      "id": "d8d27ed626acdd1953afef83",
+      "sequence": "india",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        637.7649140357971,
+        223.60249042510986
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        742.4541799712337,
+        165.90234228608344
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 152.3895557423727,
+      "image": "images/d8d27ed626acdd1953afef83.png",
+      "image_sha256": "c91fd4b2ab090e5ff2fab22693e8ee9b896329ef6c131291d0fb86fc15e05124"
+    },
+    {
+      "id": "ffdb017d5cb7dfb484bf91fe",
+      "sequence": "india",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        637.7649140357971,
+        223.60249042510986
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1673.03420078727,
+        -477.3744852184926
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "bf9906b0b310bab703c86dff",
+      "sequence": "india",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        637.7649140357971,
+        223.60249042510986
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        4235.4016518963035,
+        -2739.0327849210103
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b08efce89406cd1cfcecaab6",
+      "sequence": "india",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        649.6997374296188,
+        210.93167781829834
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        651.0729933129714,
+        215.6698108177523
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 32.2300541680719,
+      "image": "images/b08efce89406cd1cfcecaab6.png",
+      "image_sha256": "67db3f66588c71569d1aa4732edbef153689750b66a233342257f5a657f931b0"
+    },
+    {
+      "id": "b3374b54cfe2e1bc3b4e4fc8",
+      "sequence": "india",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        649.6997374296188,
+        210.93167781829834
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        716.1889469953052,
+        151.93431077200353
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/b3374b54cfe2e1bc3b4e4fc8.png",
+      "image_sha256": "16094282d9ad91f78f9509144e9d55f9327d71a0db02ffc3724ad81dc64f6dbf"
+    },
+    {
+      "id": "6deba771cf22f58b13dac98e",
+      "sequence": "india",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        649.6997374296188,
+        210.93167781829834
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        669.1211395175013,
+        212.05703742524216
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 95.03375274771528,
+      "image": "images/6deba771cf22f58b13dac98e.png",
+      "image_sha256": "69fe95cd7cb5d0ef0465b0c27f01d3cfaa13f44d362fd4a2c53087b8ed6a6743"
+    },
+    {
+      "id": "780aed9be39226840b00bd26",
+      "sequence": "india",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        191.18954360485077,
+        167.03999519348145
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        167.01295894620745,
+        173.92649482075078
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 28.149598539061525,
+      "image": "images/780aed9be39226840b00bd26.png",
+      "image_sha256": "115336d9745f8fdaa313dd2dd616df3c1191f69df3f53b76bf9a67b5ca77fb91"
+    },
+    {
+      "id": "dec4244a5439efc52edec001",
+      "sequence": "india",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        191.18954360485077,
+        167.03999519348145
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        62.2270676400334,
+        101.77563549344823
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 50.81724425349623,
+      "image": "images/dec4244a5439efc52edec001.png",
+      "image_sha256": "0ffb20c3d2db78aba03ca117738d25f4cae0833745d968a57cd35e36238783a3"
+    },
+    {
+      "id": "f47db2238feb8ca596ac4203",
+      "sequence": "india",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 0,
+      "source_xy": [
+        191.18954360485077,
+        167.03999519348145
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -52.69942800071532,
+        159.5971938195279
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ce743b109f1f17ecfdd57e77",
+      "sequence": "india",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        147.95573303103447,
+        213.12000274658203
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        135.96077057558213,
+        214.39480953486463
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 42.20709060341289,
+      "image": "images/ce743b109f1f17ecfdd57e77.png",
+      "image_sha256": "5178b6406e1764493cc20843fbe43318992a306902ec0baf52ad8e0f670ca446"
+    },
+    {
+      "id": "7782ca0b71456ef2b31c73a1",
+      "sequence": "india",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        147.95573303103447,
+        213.12000274658203
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        -6.697880846861831,
+        126.89765357368596
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fc1e4e5545142ba9e1541dc5",
+      "sequence": "india",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        147.95573303103447,
+        213.12000274658203
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -191.79867770660178,
+        189.3327446614005
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f7d6f0e8065c79b78d401714",
+      "sequence": "india",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        182.54278403520584,
+        223.6799955368042
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        158.11554708937908,
+        234.04076627132906
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 28.234943611175503,
+      "image": "images/f7d6f0e8065c79b78d401714.png",
+      "image_sha256": "dc56e14883e8b6caa17b1074eb0ffd23c4c52367e61cee8a63c3099d3f9b20d9"
+    },
+    {
+      "id": "541df79c8afb7166e4b75998",
+      "sequence": "india",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        182.54278403520584,
+        223.6799955368042
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        49.877988815981965,
+        180.90085934332407
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 45.49019018933501,
+      "image": "images/541df79c8afb7166e4b75998.png",
+      "image_sha256": "ddbb48e2bb6878bf1df19570240e8e817c9f6d77821cb899d88dec3517e13abb"
+    },
+    {
+      "id": "51e63550c0ab6154d250ecbb",
+      "sequence": "india",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        182.54278403520584,
+        223.6799955368042
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -68.52011428205581,
+        244.98284236700584
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9198034d3a85c6fc4f64dd39",
+      "sequence": "india",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        203.67931732535362,
+        458.8799858093262
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        164.96236836133997,
+        485.44549413948033
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c5ff3fc1bb652ae806be8c44",
+      "sequence": "india",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        203.67931732535362,
+        458.8799858093262
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        72.1468795945923,
+        511.2769847614681
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5021f6e771189b8d88271a8e",
+      "sequence": "india",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 0,
+      "source_xy": [
+        203.67931732535362,
+        458.8799858093262
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -18.12735909488034,
+        593.589511381751
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "71a38b1b0886b8ef1925f5af",
+      "sequence": "india",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        184.46428474783897,
+        198.72000217437744
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        157.326602038173,
+        209.11169418590552
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 17.528247635076305,
+      "image": "images/71a38b1b0886b8ef1925f5af.png",
+      "image_sha256": "17299afa936655100e5490f64ff4a45651b26cedadfb739752387dfe0c17844d"
+    },
+    {
+      "id": "b67713ee7c0c627f3a0d25b8",
+      "sequence": "india",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        184.46428474783897,
+        198.72000217437744
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        52.99300733241353,
+        152.8136428868866
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 43.79996220951292,
+      "image": "images/b67713ee7c0c627f3a0d25b8.png",
+      "image_sha256": "f3e9fc13f493c8c7dc3725a138291c16d8187052f3bce1245dd89b4abfb02edc"
+    },
+    {
+      "id": "65ea27da24e17e990195fbab",
+      "sequence": "india",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 0,
+      "source_xy": [
+        184.46428474783897,
+        198.72000217437744
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        -55.240366654806984,
+        213.98548128435806
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "74b59f56d6ec5cf676275b31",
+      "sequence": "india",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        410.9089729189873,
+        169.99998092651367
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2f17097d6e7a1d736fb96c08",
+      "sequence": "india",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        410.9089729189873,
+        169.99998092651367
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "47b5e75b449d314899d30ab0",
+      "sequence": "india",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 0,
+      "source_xy": [
+        410.9089729189873,
+        169.99998092651367
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "9eb3f6589d4f4c0ee0de7b64",
+      "sequence": "india",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        412.1623927950859,
+        182.39999771118164
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0ae656f21cc7cf9daa24dfcf",
+      "sequence": "india",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        412.1623927950859,
+        182.39999771118164
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fad11a06ea42d0c2bd42e0b4",
+      "sequence": "india",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 0,
+      "source_xy": [
+        412.1623927950859,
+        182.39999771118164
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6c82178ecc7148b60dd3ce3b",
+      "sequence": "india",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        415.0446375012398,
+        227.52000331878662
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        556.4419322436069,
+        139.6417790811451
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 205.6476866321134,
+      "image": "images/6c82178ecc7148b60dd3ce3b.png",
+      "image_sha256": "4f62174929243de01254ad1539acf162b88a6e9766bd38c64953391a24605ead"
+    },
+    {
+      "id": "4071b69b2fc3fcd8799a0b45",
+      "sequence": "india",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        415.0446375012398,
+        227.52000331878662
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        3774.3504371553986,
+        -4386.746765567375
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "955474d3a30d6f5004d8f4ad",
+      "sequence": "india",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        415.0446375012398,
+        227.52000331878662
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "535ceec4fdab6baf82b46799",
+      "sequence": "india",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        421.76990908384323,
+        252.48001098632812
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        435.92682794916936,
+        247.77052377521858
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 55.190707294852594,
+      "image": "images/535ceec4fdab6baf82b46799.png",
+      "image_sha256": "54362d4660836f5aaa5469dd61991c77df6a46b5a2175c0155843f84b0228e60"
+    },
+    {
+      "id": "8dba61a0ab2c002b40462dd9",
+      "sequence": "india",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        421.76990908384323,
+        252.48001098632812
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        444.971391104474,
+        152.82021847703416
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 132.0543266687262,
+      "image": "images/8dba61a0ab2c002b40462dd9.png",
+      "image_sha256": "946cb66b415cf67fee2c08a786c8dbcec2c2a60dd7fb477358e80f7bc38e1248"
+    },
+    {
+      "id": "c5f104b70423d846cd6a88b6",
+      "sequence": "india",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 0,
+      "source_xy": [
+        421.76990908384323,
+        252.48001098632812
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": [
+        301.13961913001964,
+        221.15204608847216
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/c5f104b70423d846cd6a88b6.png",
+      "image_sha256": "88501f39d4797742ffaaa409c5fff3e21206ec0db9b593a7c006e7072ecdc886"
+    },
+    {
+      "id": "5e2063f682194a8ec46851ba",
+      "sequence": "india",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        419.84839564561844,
+        293.75999450683594
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": [
+        524.7051445839332,
+        235.34297824446423
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 168.69127103070304,
+      "image": "images/5e2063f682194a8ec46851ba.png",
+      "image_sha256": "2d10f4502e0e31a153fba81907cc14e9019404d869d76984bc99b63f2b52ea14"
+    },
+    {
+      "id": "5af6fa5197ec458fa15ec0ab",
+      "sequence": "india",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        419.84839564561844,
+        293.75999450683594
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        1074.198220088096,
+        -408.6949125181711
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3dac91775a72640516e7b20b",
+      "sequence": "india",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 0,
+      "source_xy": [
+        419.84839564561844,
+        293.75999450683594
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    }
+  ]
+}

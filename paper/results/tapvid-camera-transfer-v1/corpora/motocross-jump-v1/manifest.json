@@ -1,0 +1,2691 @@
+{
+  "scope": "camera-projected correspondence validation; no staticness or camera-DNF labels",
+  "sequence": "motocross-jump",
+  "prompt": "Compare the marked detail in A with the candidate marked in B. The top row shows context; the bottom row shows native-pixel crops. Is the candidate close to the same detail, far from it, or is the original detail occluded? Reply with one label: close, far, occluded, or uncertain. Close means within 2 native pixels; far means at least 8 native pixels. Use uncertain when the images do not support a decision. Do not judge camera accuracy or whether the object is moving.",
+  "planned_presentations": 150,
+  "geometry_sha256": "92f73d61990f0b88fb3df6bdfba0558b0cbd9868c5599b2c88b0c9294461551a",
+  "source_manifest_sha256": "d8e1903df707408ef3b392c8c85c951b8cd6a36f899690d76ca520ae331bb41d",
+  "source_file_sha256": "b59f734e0742402b1db008270d54ba083d52d271ac8524a48eafc158a4edd1fa",
+  "tracker_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "script_sha256": "49f222e81751905ebeb20100c2eceac7eb15c8b92cc7230141b9a7a104cfbbfb",
+  "export_sha256": "203fea0f6387aa48c72aa401ade5fb5b2d904ceabfc170858a3bbddbf8e3659a",
+  "geometry_dependencies_sha256": {
+    "plumbline.image_evidence": "9fc932d5f4cea4008a9dc43106fe4075e67dff17274000853cd511bff17414f4",
+    "plumbline.conventions": "506969710476aafde4ec4adf63cb86d4164762bd32e81d1a1b3bfd5f72e242ad"
+  },
+  "dependencies_sha256": {
+    "tapvid_camera_markers.py": "769bb4e2f7d34574e9352f748ae441926ee8e937c20597a27c107d4299edcc8b",
+    "build_anchor_preview.py": "7568d7a8cc409e7ac630b0a3753dced03691b0350e34547355ccfe862b3ae1c3",
+    "build_tapvid_judge_corpus.py": "5f66c715c674336018bfe6d331d7b67f81acfaa8896757c65e1f7817686852e0",
+    "run_tapvid_cameras.py": "56b8884bdf6c42ea41ae0b3313dc9dcdb554821c98cd96f31f8615cf134ddbec"
+  },
+  "counts": {
+    "nonpositive_prefix_depth": 24,
+    "query_beyond_video": 92,
+    "missing_prefix_observations": 6,
+    "query_outside_image": 1,
+    "far": 4,
+    "nonpositive_query_depth": 12,
+    "occluded": 11
+  },
+  "records": [
+    {
+      "id": "55c41c4253f14a81dea16428",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        612.482319355011,
+        229.19999599456787
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "74aa0023c04329b2b33f6269",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        612.482319355011,
+        229.19999599456787
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "09aa8b758ceabfeca408b2e5",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        612.482319355011,
+        229.19999599456787
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5e0d4eefef789e382cd34b3f",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        590.3215668201447,
+        229.85916137695312
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "08a00944cbaf15d59813c457",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        590.3215668201447,
+        229.85916137695312
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5e790f1683020980564230de",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        590.3215668201447,
+        229.85916137695312
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e5ceabc9f8187aa6dbe60894",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        594.7051768302917,
+        221.76000595092773
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6e629d2b825d8c173b04f7c1",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        594.7051768302917,
+        221.76000595092773
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "91b802961b6b930a49ea6dea",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        594.7051768302917,
+        221.76000595092773
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "65946944f8999281cd9b6a3b",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 8,
+      "source_xy": [
+        654.5973086357117,
+        295.7746410369873
+      ],
+      "lag": 15,
+      "frame": 23,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0f943ac4d9308d5b855022c4",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 8,
+      "source_xy": [
+        654.5973086357117,
+        295.7746410369873
+      ],
+      "lag": 30,
+      "frame": 38,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5c85030b2bb4fdd70744c53f",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 3,
+      "source_frame": 8,
+      "source_xy": [
+        654.5973086357117,
+        295.7746410369873
+      ],
+      "lag": 60,
+      "frame": 68,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "09c7b30a19d49272c7b8648d",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 1,
+      "source_xy": [
+        594.7051768302917,
+        295.67999839782715
+      ],
+      "lag": 15,
+      "frame": 16,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "55c2c251533e953c874ffda1",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 1,
+      "source_xy": [
+        594.7051768302917,
+        295.67999839782715
+      ],
+      "lag": 30,
+      "frame": 31,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "749800a46ab31d99b7351952",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 4,
+      "source_frame": 1,
+      "source_xy": [
+        594.7051768302917,
+        295.67999839782715
+      ],
+      "lag": 60,
+      "frame": 61,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2dc2c4edfc6777232e81d33a",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        634.0959732532501,
+        239.0399980545044
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "69762eecb39442a24db8595c",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        634.0959732532501,
+        239.0399980545044
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b58b8b5feaf0a8c4a1c850aa",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        634.0959732532501,
+        239.0399980545044
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1ff5d2d2d09ccf7ffdf03d98",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 23,
+      "source_xy": [
+        461.1607309579849,
+        13.440000414848328
+      ],
+      "lag": 15,
+      "frame": 38,
+      "candidate_xy": [
+        690.045385692867,
+        -24.289059654437892
+      ],
+      "status": "query_outside_image",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "aa862bda8b661d00244e680f",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 23,
+      "source_xy": [
+        461.1607309579849,
+        13.440000414848328
+      ],
+      "lag": 30,
+      "frame": 53,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "19b4ff5b66aeb0bc4cb306e6",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 6,
+      "source_frame": 23,
+      "source_xy": [
+        461.1607309579849,
+        13.440000414848328
+      ],
+      "lag": 60,
+      "frame": 83,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ff544d13100733d0a63b74dc",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 24,
+      "source_xy": [
+        472.6897097826004,
+        5.760000050067902
+      ],
+      "lag": 15,
+      "frame": 39,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f18f287f0d8b65950fb46b1b",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 24,
+      "source_xy": [
+        472.6897097826004,
+        5.760000050067902
+      ],
+      "lag": 30,
+      "frame": 54,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "65b67a6aab050776bfd6d5ef",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 7,
+      "source_frame": 24,
+      "source_xy": [
+        472.6897097826004,
+        5.760000050067902
+      ],
+      "lag": 60,
+      "frame": 84,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fbdf86655f64bdadd4562560",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 25,
+      "source_xy": [
+        552.4320847988129,
+        26.880000829696655
+      ],
+      "lag": 15,
+      "frame": 40,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "99f35e0741106fdb65a2190d",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 25,
+      "source_xy": [
+        552.4320847988129,
+        26.880000829696655
+      ],
+      "lag": 30,
+      "frame": 55,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "fc61fb5ec946198e4514290b",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 8,
+      "source_frame": 25,
+      "source_xy": [
+        552.4320847988129,
+        26.880000829696655
+      ],
+      "lag": 60,
+      "frame": 85,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "58698273c2f2678ebca38cd9",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        635.0567554235458,
+        259.2000102996826
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8430782656f3cc29d799dac1",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        635.0567554235458,
+        259.2000102996826
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8acf3b1488e7d6fc529e2998",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        635.0567554235458,
+        259.2000102996826
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8eb04593d83bbaf22be7c23e",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        621.4320752620697,
+        151.9086456298828
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2206e6247f850db7124e4e11",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        621.4320752620697,
+        151.9086456298828
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eb41019a6d534dd54d0d380b",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        621.4320752620697,
+        151.9086456298828
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1db51171104dcf57f130e898",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 27,
+      "source_xy": [
+        425.40367633104324,
+        9.295775592327118
+      ],
+      "lag": 15,
+      "frame": 42,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "22b6bc9710dc0d1c7ff258e2",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 27,
+      "source_xy": [
+        425.40367633104324,
+        9.295775592327118
+      ],
+      "lag": 30,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7f584330ee603e6d3e16191b",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 11,
+      "source_frame": 27,
+      "source_xy": [
+        425.40367633104324,
+        9.295775592327118
+      ],
+      "lag": 60,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "14d0ff52766c4ffa13015c38",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 27,
+      "source_xy": [
+        413.1231495141983,
+        17.279999256134033
+      ],
+      "lag": 15,
+      "frame": 42,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1489f350f4a888211ef822eb",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 27,
+      "source_xy": [
+        413.1231495141983,
+        17.279999256134033
+      ],
+      "lag": 30,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ae0f8e0a8b58e2feadaf281c",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 12,
+      "source_frame": 27,
+      "source_xy": [
+        413.1231495141983,
+        17.279999256134033
+      ],
+      "lag": 60,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3bcfc43e99c6f83b3f92439c",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        614.8809406757355,
+        185.28000354766846
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "284eea87b39b1aaf6c8465a9",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        614.8809406757355,
+        185.28000354766846
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b7517411c0222835b553c9d9",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        614.8809406757355,
+        185.28000354766846
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f63d5f3785faa4f193fc50fa",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        613.9202094078064,
+        171.84000492095947
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "237e36a2b052e60a5fdef360",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        613.9202094078064,
+        171.84000492095947
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "40ad15faa17614b8a68b39d5",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        613.9202094078064,
+        171.84000492095947
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "53edeb862652dd7bf638cace",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 27,
+      "source_xy": [
+        425.973553776741,
+        33.84615182876587
+      ],
+      "lag": 15,
+      "frame": 42,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4902835de22bcdce36c54093",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 27,
+      "source_xy": [
+        425.973553776741,
+        33.84615182876587
+      ],
+      "lag": 30,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "53cc6ae49cf531771fda5d2c",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 15,
+      "source_frame": 27,
+      "source_xy": [
+        425.973553776741,
+        33.84615182876587
+      ],
+      "lag": 60,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cf9ab191ae71696b79e11ee9",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        638.447107553482,
+        187.69230365753174
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d3370b7f82c349a4b812cb2a",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        638.447107553482,
+        187.69230365753174
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8d1f8e3e985dcd033db7d033",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        638.447107553482,
+        187.69230365753174
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "da46949107e2715f03c3a93a",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        652.817303776741,
+        205.12820720672607
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "60b0543fb16950825a2f9db0",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        652.817303776741,
+        205.12820720672607
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "81a32684add8f34ec86e6835",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        652.817303776741,
+        205.12820720672607
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3700c8c77c0354cc3daf01b3",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 27,
+      "source_xy": [
+        466.004803776741,
+        34.871792793273926
+      ],
+      "lag": 15,
+      "frame": 42,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f51a673223f3160d3cbe36f8",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 27,
+      "source_xy": [
+        466.004803776741,
+        34.871792793273926
+      ],
+      "lag": 30,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b82cd0c546b417ec931d1f0c",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 18,
+      "source_frame": 27,
+      "source_xy": [
+        466.004803776741,
+        34.871792793273926
+      ],
+      "lag": 60,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3caeddfe11822a3585c493a6",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 27,
+      "source_xy": [
+        491.37082743644714,
+        27.04225480556488
+      ],
+      "lag": 15,
+      "frame": 42,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "5f63edf6842f8f2dba8dc402",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 27,
+      "source_xy": [
+        491.37082743644714,
+        27.04225480556488
+      ],
+      "lag": 30,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "51cc8055aa31fa0ba6e3a0c3",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 19,
+      "source_frame": 27,
+      "source_xy": [
+        491.37082743644714,
+        27.04225480556488
+      ],
+      "lag": 60,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a44a753e642d433e862ae718",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 26,
+      "source_xy": [
+        426.5736672282219,
+        17.279999256134033
+      ],
+      "lag": 15,
+      "frame": 41,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f1408fbbbe2bf89abe12dad7",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 26,
+      "source_xy": [
+        426.5736672282219,
+        17.279999256134033
+      ],
+      "lag": 30,
+      "frame": 56,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3d0d540848076ae7f471051f",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 20,
+      "source_frame": 26,
+      "source_xy": [
+        426.5736672282219,
+        17.279999256134033
+      ],
+      "lag": 60,
+      "frame": 86,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "accf710bed5dfd1f03b5733e",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 27,
+      "source_xy": [
+        458.2784353494644,
+        23.040000200271606
+      ],
+      "lag": 15,
+      "frame": 42,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2740db85b4ec5cd1c101eeea",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 27,
+      "source_xy": [
+        458.2784353494644,
+        23.040000200271606
+      ],
+      "lag": 30,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "30520a519df40c5fcd5a15d4",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 21,
+      "source_frame": 27,
+      "source_xy": [
+        458.2784353494644,
+        23.040000200271606
+      ],
+      "lag": 60,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "eb0b04d549de4c0e35fd61b2",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        615.8417228460312,
+        159.35999393463135
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cace7de590d1f1acc71e1c04",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        615.8417228460312,
+        159.35999393463135
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": null,
+      "status": "nonpositive_prefix_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "d5eb91f6eb2da352c25717fb",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        615.8417228460312,
+        159.35999393463135
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7b0bda16babe0ede3c395c58",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 25,
+      "source_xy": [
+        555.3143804073334,
+        24.00000035762787
+      ],
+      "lag": 15,
+      "frame": 40,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "43edf6c2fe018fc35f27711a",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 25,
+      "source_xy": [
+        555.3143804073334,
+        24.00000035762787
+      ],
+      "lag": 30,
+      "frame": 55,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "bca05cf1610928a5fd332e5a",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 23,
+      "source_frame": 25,
+      "source_xy": [
+        555.3143804073334,
+        24.00000035762787
+      ],
+      "lag": 60,
+      "frame": 85,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3a5a8ff8c870f0fd0e15c3e1",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 17,
+      "source_xy": [
+        661.957790851593,
+        96.00000143051147
+      ],
+      "lag": 15,
+      "frame": 32,
+      "candidate_xy": [
+        588.5995004581908,
+        126.30980605069063
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 156.4381722456606,
+      "image": "images/3a5a8ff8c870f0fd0e15c3e1.png",
+      "image_sha256": "9e4c04345f307478fe187803a870fa30eee34d942ab04a2bf2dfbf9754727dc7"
+    },
+    {
+      "id": "5aeae5b0bc33aab7d96d4c05",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 17,
+      "source_xy": [
+        661.957790851593,
+        96.00000143051147
+      ],
+      "lag": 30,
+      "frame": 47,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2db88445eef4646f02b635fb",
+      "sequence": "motocross-jump",
+      "model": "dage",
+      "track": 24,
+      "source_frame": 17,
+      "source_xy": [
+        661.957790851593,
+        96.00000143051147
+      ],
+      "lag": 60,
+      "frame": 77,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "aaaa68c7d03f7686bd83209b",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        612.482319355011,
+        229.19999599456787
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "95cdfbeecf9f6cb029f9f034",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        612.482319355011,
+        229.19999599456787
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        78.38217616324584,
+        263.5051598141634
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/95cdfbeecf9f6cb029f9f034.png",
+      "image_sha256": "9704da4118fcf0724520604200c66471304838f20d5acf56cad8e89c151f9a10"
+    },
+    {
+      "id": "ca7c01571ca3225b1759e247",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 0,
+      "source_frame": 0,
+      "source_xy": [
+        612.482319355011,
+        229.19999599456787
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0c666204b8ee7c92fbed3f29",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        590.3215668201447,
+        229.85916137695312
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "212b65d8e54c51122819dbf0",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        590.3215668201447,
+        229.85916137695312
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        86.87291267382443,
+        263.3683399768783
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/212b65d8e54c51122819dbf0.png",
+      "image_sha256": "873cbd2956b83979d3ff89260eb0d74c83747907470ebfe70629fbefea57083a"
+    },
+    {
+      "id": "64db1ed35d8b3dee59233efa",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 1,
+      "source_frame": 0,
+      "source_xy": [
+        590.3215668201447,
+        229.85916137695312
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "f1da06d3739388cd342b75d9",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        594.7051768302917,
+        221.76000595092773
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e755453a22e8ced6e207fbfa",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        594.7051768302917,
+        221.76000595092773
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        87.18068489762653,
+        261.70007092754986
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/e755453a22e8ced6e207fbfa.png",
+      "image_sha256": "4c12e5ee945ca07c9b37ba6115886df962cbf160cbb7d14217780555f59d412e"
+    },
+    {
+      "id": "c27b3aa00e7d88658a635aaa",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 2,
+      "source_frame": 0,
+      "source_xy": [
+        594.7051768302917,
+        221.76000595092773
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "283133ce2671e8406f865db3",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 8,
+      "source_xy": [
+        654.5973086357117,
+        295.7746410369873
+      ],
+      "lag": 15,
+      "frame": 23,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4913e3dc57ddb3897d781118",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 8,
+      "source_xy": [
+        654.5973086357117,
+        295.7746410369873
+      ],
+      "lag": 30,
+      "frame": 38,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ccfd6ac7d8dc3a3beb83d1b2",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 3,
+      "source_frame": 8,
+      "source_xy": [
+        654.5973086357117,
+        295.7746410369873
+      ],
+      "lag": 60,
+      "frame": 68,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "bc69822385e4d161379b631a",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 1,
+      "source_xy": [
+        594.7051768302917,
+        295.67999839782715
+      ],
+      "lag": 15,
+      "frame": 16,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6b5c41e7ddb5c9504b8b5341",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 1,
+      "source_xy": [
+        594.7051768302917,
+        295.67999839782715
+      ],
+      "lag": 30,
+      "frame": 31,
+      "candidate_xy": [
+        159.51780265272808,
+        271.54937718751563
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/6b5c41e7ddb5c9504b8b5341.png",
+      "image_sha256": "161f979954cdf8587c30d47e3e71a8c7b9b7fbb79ff3c1a87047db820dc6d308"
+    },
+    {
+      "id": "54c53a4a0548764ec6624676",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 4,
+      "source_frame": 1,
+      "source_xy": [
+        594.7051768302917,
+        295.67999839782715
+      ],
+      "lag": 60,
+      "frame": 61,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "441ea594412c8324d7daa58f",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        634.0959732532501,
+        239.0399980545044
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a5aec5a43e2ff15523910c17",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        634.0959732532501,
+        239.0399980545044
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        67.64689571639833,
+        266.37780544124996
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/a5aec5a43e2ff15523910c17.png",
+      "image_sha256": "413d6788f9407f07dab531ff262057e743d511adfc96680733f2e6a86c01be38"
+    },
+    {
+      "id": "b2d18152af673f346aecfc10",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 5,
+      "source_frame": 0,
+      "source_xy": [
+        634.0959732532501,
+        239.0399980545044
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "64dda9f78f99aa1a12a958b2",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 23,
+      "source_xy": [
+        461.1607309579849,
+        13.440000414848328
+      ],
+      "lag": 15,
+      "frame": 38,
+      "candidate_xy": [
+        789.2924443983605,
+        198.82814122838332
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 283.175488912668,
+      "image": "images/64dda9f78f99aa1a12a958b2.png",
+      "image_sha256": "b972ffae2217ee931531d90b234c425a9066af88dd3d2de3c6b994d0705bc427"
+    },
+    {
+      "id": "4e756c47193b2e9c1932aa6d",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 23,
+      "source_xy": [
+        461.1607309579849,
+        13.440000414848328
+      ],
+      "lag": 30,
+      "frame": 53,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "edfdea2474443cf93e30e7b5",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 6,
+      "source_frame": 23,
+      "source_xy": [
+        461.1607309579849,
+        13.440000414848328
+      ],
+      "lag": 60,
+      "frame": 83,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b5774114f3fa04cf98bf45b6",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 24,
+      "source_xy": [
+        472.6897097826004,
+        5.760000050067902
+      ],
+      "lag": 15,
+      "frame": 39,
+      "candidate_xy": null,
+      "status": "missing_prefix_observations",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "495bd8bb454b1589090a420b",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 24,
+      "source_xy": [
+        472.6897097826004,
+        5.760000050067902
+      ],
+      "lag": 30,
+      "frame": 54,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8872f87f644de73f3cfa9a0f",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 7,
+      "source_frame": 24,
+      "source_xy": [
+        472.6897097826004,
+        5.760000050067902
+      ],
+      "lag": 60,
+      "frame": 84,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "dba98e4e4915dc9d2e96b11a",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 25,
+      "source_xy": [
+        552.4320847988129,
+        26.880000829696655
+      ],
+      "lag": 15,
+      "frame": 40,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b20071699e8136f9e32a4c13",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 25,
+      "source_xy": [
+        552.4320847988129,
+        26.880000829696655
+      ],
+      "lag": 30,
+      "frame": 55,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "ef675245099ed76e754bb29d",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 8,
+      "source_frame": 25,
+      "source_xy": [
+        552.4320847988129,
+        26.880000829696655
+      ],
+      "lag": 60,
+      "frame": 85,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "94ee2f9ed1c44cae2811ab2a",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        635.0567554235458,
+        259.2000102996826
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e3a4b6e2a5f832a7a566e9d8",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        635.0567554235458,
+        259.2000102996826
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        62.66955715126636,
+        270.34651852878875
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 440.2667363890083,
+      "image": "images/e3a4b6e2a5f832a7a566e9d8.png",
+      "image_sha256": "43e5bed2c9430296e30dcffee5e1a3e8b6f6918e2808caaf65c1dc866fec73f2"
+    },
+    {
+      "id": "e010decd7c13d00663349a3c",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 9,
+      "source_frame": 0,
+      "source_xy": [
+        635.0567554235458,
+        259.2000102996826
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "cefa23c8b1ee50d5fb7048e6",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        621.4320752620697,
+        151.9086456298828
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e400b5fb9a56fc05506776a6",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        621.4320752620697,
+        151.9086456298828
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        84.80573822418158,
+        244.71018970531688
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/e400b5fb9a56fc05506776a6.png",
+      "image_sha256": "d6b2a7ed79b0a6d376595061367d3b1e8ebba52dc1202f9cb9ab798a9dbba76a"
+    },
+    {
+      "id": "0fd040880197476448bc1fde",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 10,
+      "source_frame": 0,
+      "source_xy": [
+        621.4320752620697,
+        151.9086456298828
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "7286437ead47fed780d08214",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 27,
+      "source_xy": [
+        425.40367633104324,
+        9.295775592327118
+      ],
+      "lag": 15,
+      "frame": 42,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b29e2e77cbf4631174082c35",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 27,
+      "source_xy": [
+        425.40367633104324,
+        9.295775592327118
+      ],
+      "lag": 30,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "01b5e88d230b41cdde9cb176",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 11,
+      "source_frame": 27,
+      "source_xy": [
+        425.40367633104324,
+        9.295775592327118
+      ],
+      "lag": 60,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "844ea783f0231f90a59ea7da",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 27,
+      "source_xy": [
+        413.1231495141983,
+        17.279999256134033
+      ],
+      "lag": 15,
+      "frame": 42,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e088bc7a62a8ac8286d7825b",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 27,
+      "source_xy": [
+        413.1231495141983,
+        17.279999256134033
+      ],
+      "lag": 30,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "251fcc20eb33418e9d338ef2",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 12,
+      "source_frame": 27,
+      "source_xy": [
+        413.1231495141983,
+        17.279999256134033
+      ],
+      "lag": 60,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "193e0c9cbd1e7bc72b3e5577",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        614.8809406757355,
+        185.28000354766846
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0e5275feffa2df0a17e8fca9",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        614.8809406757355,
+        185.28000354766846
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        85.39971241224343,
+        252.8097830189051
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/0e5275feffa2df0a17e8fca9.png",
+      "image_sha256": "e9df0f8d07104eaea82272f0565a9f27912e13f50d49da80ec502f7269e4f25e"
+    },
+    {
+      "id": "88b0e6c5a2fb3d345cc30f4e",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 13,
+      "source_frame": 0,
+      "source_xy": [
+        614.8809406757355,
+        185.28000354766846
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "0e00a7adfd2663eebcf02e1c",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        613.9202094078064,
+        171.84000492095947
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "11aa82873e3cebbbfa543835",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        613.9202094078064,
+        171.84000492095947
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        84.06021179732487,
+        249.83483107882765
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/11aa82873e3cebbbfa543835.png",
+      "image_sha256": "af8478fa211688cfbe71d202ae9116927268a35354e66a6f554a47f6067a299b"
+    },
+    {
+      "id": "fbe1fc3b2030b8ba78010a90",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 14,
+      "source_frame": 0,
+      "source_xy": [
+        613.9202094078064,
+        171.84000492095947
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6a987343bf532f2cca9d6ac4",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 27,
+      "source_xy": [
+        425.973553776741,
+        33.84615182876587
+      ],
+      "lag": 15,
+      "frame": 42,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c5d799a491173832cfa1dddb",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 27,
+      "source_xy": [
+        425.973553776741,
+        33.84615182876587
+      ],
+      "lag": 30,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "21f338832e05d0739bd87f3f",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 15,
+      "source_frame": 27,
+      "source_xy": [
+        425.973553776741,
+        33.84615182876587
+      ],
+      "lag": 60,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "319f247ad0441e4ee65a81a8",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        638.447107553482,
+        187.69230365753174
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8c536281cbdd31a96c5f01ef",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        638.447107553482,
+        187.69230365753174
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        76.36064813083141,
+        253.4697133144662
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/8c536281cbdd31a96c5f01ef.png",
+      "image_sha256": "c415d41c634a3b1ee92e04398e62cd8be96d6f8a0b7c029716b6375efc858760"
+    },
+    {
+      "id": "0358b59014860e0f802b00ed",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 16,
+      "source_frame": 0,
+      "source_xy": [
+        638.447107553482,
+        187.69230365753174
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "50188ab4a2e96345d2a81ee9",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        652.817303776741,
+        205.12820720672607
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1f9082b165bc7ac6bc5055b2",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        652.817303776741,
+        205.12820720672607
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        66.98885216193142,
+        257.67568194108077
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/1f9082b165bc7ac6bc5055b2.png",
+      "image_sha256": "7478859ea920a8b0be2626c3282ff07a63d11d8bce0bc3151a0aa731839e5187"
+    },
+    {
+      "id": "2a45657e7446584963ea53d9",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 17,
+      "source_frame": 0,
+      "source_xy": [
+        652.817303776741,
+        205.12820720672607
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "567e6215916b7132463fa389",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 27,
+      "source_xy": [
+        466.004803776741,
+        34.871792793273926
+      ],
+      "lag": 15,
+      "frame": 42,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "8bfb768ae4a36ea719e564cc",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 27,
+      "source_xy": [
+        466.004803776741,
+        34.871792793273926
+      ],
+      "lag": 30,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a698a059ef3f1cc238519759",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 18,
+      "source_frame": 27,
+      "source_xy": [
+        466.004803776741,
+        34.871792793273926
+      ],
+      "lag": 60,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "23c32e7f3863c1444f8c1b1f",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 27,
+      "source_xy": [
+        491.37082743644714,
+        27.04225480556488
+      ],
+      "lag": 15,
+      "frame": 42,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "2f751e9ade1980092ae0112d",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 27,
+      "source_xy": [
+        491.37082743644714,
+        27.04225480556488
+      ],
+      "lag": 30,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b8bcb6865773ad5602996935",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 19,
+      "source_frame": 27,
+      "source_xy": [
+        491.37082743644714,
+        27.04225480556488
+      ],
+      "lag": 60,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "1d3dd27bc88bd495a2b601c6",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 26,
+      "source_xy": [
+        426.5736672282219,
+        17.279999256134033
+      ],
+      "lag": 15,
+      "frame": 41,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "07b057cfad4eb923ad6436e7",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 26,
+      "source_xy": [
+        426.5736672282219,
+        17.279999256134033
+      ],
+      "lag": 30,
+      "frame": 56,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "72ad795c2e147605021c53a3",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 20,
+      "source_frame": 26,
+      "source_xy": [
+        426.5736672282219,
+        17.279999256134033
+      ],
+      "lag": 60,
+      "frame": 86,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "4d718cf673e482d2cec3495f",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 27,
+      "source_xy": [
+        458.2784353494644,
+        23.040000200271606
+      ],
+      "lag": 15,
+      "frame": 42,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "3884eb840136055ebae021f3",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 27,
+      "source_xy": [
+        458.2784353494644,
+        23.040000200271606
+      ],
+      "lag": 30,
+      "frame": 57,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "b2cf4b6016a8399766da27a2",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 21,
+      "source_frame": 27,
+      "source_xy": [
+        458.2784353494644,
+        23.040000200271606
+      ],
+      "lag": 60,
+      "frame": 87,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "a3c0ef4f9ccc7aa50511242b",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        615.8417228460312,
+        159.35999393463135
+      ],
+      "lag": 15,
+      "frame": 15,
+      "candidate_xy": null,
+      "status": "nonpositive_query_depth",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "54bf7bfb797c6f90dab93589",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        615.8417228460312,
+        159.35999393463135
+      ],
+      "lag": 30,
+      "frame": 30,
+      "candidate_xy": [
+        87.6144376329002,
+        245.89226369635284
+      ],
+      "status": "renderable",
+      "label": "occluded",
+      "scoring_status": "labeled",
+      "reference_visible": false,
+      "reference_distance_native_pixels": null,
+      "image": "images/54bf7bfb797c6f90dab93589.png",
+      "image_sha256": "5b5b4b527dabab676975b05aa2afc7242e1f09a46761690bff6c9cc6c9526113"
+    },
+    {
+      "id": "f45dbccce1b6fc338f9c0808",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 22,
+      "source_frame": 0,
+      "source_xy": [
+        615.8417228460312,
+        159.35999393463135
+      ],
+      "lag": 60,
+      "frame": 60,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "c4103f9576d5aa313109822c",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 25,
+      "source_xy": [
+        555.3143804073334,
+        24.00000035762787
+      ],
+      "lag": 15,
+      "frame": 40,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "705b9de968c90ea45b89bc52",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 25,
+      "source_xy": [
+        555.3143804073334,
+        24.00000035762787
+      ],
+      "lag": 30,
+      "frame": 55,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "becd770e3fb2629ec68780c7",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 23,
+      "source_frame": 25,
+      "source_xy": [
+        555.3143804073334,
+        24.00000035762787
+      ],
+      "lag": 60,
+      "frame": 85,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "6338d2b0a8552fb6b7105399",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 17,
+      "source_xy": [
+        661.957790851593,
+        96.00000143051147
+      ],
+      "lag": 15,
+      "frame": 32,
+      "candidate_xy": [
+        712.7474475768126,
+        119.25570488125607
+      ],
+      "status": "renderable",
+      "label": "far",
+      "scoring_status": "labeled",
+      "reference_visible": true,
+      "reference_distance_native_pixels": 231.32103458597382,
+      "image": "images/6338d2b0a8552fb6b7105399.png",
+      "image_sha256": "dce535034a1f013c17c4d4479572ebf26fcb0ec7a541fe0b15f4f27883137f6b"
+    },
+    {
+      "id": "8134793064eb1fdcecd4385e",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 17,
+      "source_xy": [
+        661.957790851593,
+        96.00000143051147
+      ],
+      "lag": 30,
+      "frame": 47,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    },
+    {
+      "id": "e5807c1cdd01214c5052a1d8",
+      "sequence": "motocross-jump",
+      "model": "da3",
+      "track": 24,
+      "source_frame": 17,
+      "source_xy": [
+        661.957790851593,
+        96.00000143051147
+      ],
+      "lag": 60,
+      "frame": 77,
+      "candidate_xy": null,
+      "status": "query_beyond_video",
+      "label": null,
+      "scoring_status": "unavailable"
+    }
+  ]
+}

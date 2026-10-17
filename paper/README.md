@@ -3672,3 +3672,19 @@ remain listed. Results grouped by candidate camera method describe judge
 classification, not camera quality. Seventeen targeted analysis/metric/input
 tests pass. The analysis is ready but has not been run on transfer judge
 responses; the full camera batch and subsequent judge inference remain pending.
+
+India, lab-coat, libby, and motocross-jump extend preparation to fifteen
+videos and 1,920 planned presentations. Totals are 20 close, 392 far, 155
+occluded, 38 borderline/unlabeled, 209 off-image queries, 564 nonpositive-prefix
+depth cases, 490 beyond-video queries, 34 nonpositive-query-depth cases, and
+18 missing-prefix cases. Libby has no evaluable candidates. Behind-camera
+prefix fits and behind-camera query projections remain separate unavailable
+outcomes, not DNF labels. All fifteen geometry/export hashes and frozen
+candidate bindings pass verification. The complete twenty-video judge
+comparison has not started.
+
+The full non-weight test suite passes at this stage: 2,009 tests, one skip for
+an unstaged KITTI bundle, and six weight tests deselected. This includes the
+transfer geometry, reference-label separation, combined-input selection, and
+accuracy-accounting tests; it is not evidence that the judge's answers or
+camera-quality assessments are correct.
