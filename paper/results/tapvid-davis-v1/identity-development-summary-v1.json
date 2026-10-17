@@ -1,0 +1,312 @@
+{
+  "videos": [
+    "breakdance",
+    "camel",
+    "dogs-jump",
+    "drift-straight",
+    "goat",
+    "judo",
+    "kite-surf",
+    "loading",
+    "mbike-trick",
+    "shooting"
+  ],
+  "video_count": 10,
+  "gates": {
+    "lk_available": {
+      "metrics": {
+        "accepted_precision": {
+          "per_video": {
+            "breakdance": 0.3579989577905159,
+            "camel": 0.7146596858638743,
+            "dogs-jump": 0.29608938547486036,
+            "drift-straight": 0.4854202401372213,
+            "goat": 0.6741573033707865,
+            "judo": 0.5507246376811594,
+            "kite-surf": 0.9605911330049262,
+            "loading": 0.4872021182700794,
+            "mbike-trick": 0.6554530656538253,
+            "shooting": 0.2905982905982906
+          },
+          "macro_mean": 0.5472894817845539,
+          "defined_videos": 10,
+          "clip_bootstrap_95_percentile": [
+            0.429833384916902,
+            0.6764354945142306
+          ]
+        },
+        "visible_correct_recall": {
+          "per_video": {
+            "breakdance": 0.5142215568862275,
+            "camel": 0.728,
+            "dogs-jump": 0.2417883211678832,
+            "drift-straight": 0.7447368421052631,
+            "goat": 0.6741573033707865,
+            "judo": 0.7655677655677655,
+            "kite-surf": 0.9605911330049262,
+            "loading": 0.557013118062563,
+            "mbike-trick": 0.7931713722915299,
+            "shooting": 0.07674943566591422
+          },
+          "macro_mean": 0.605599684812286,
+          "defined_videos": 10,
+          "clip_bootstrap_95_percentile": [
+            0.4388552149136439,
+            0.7535763299001221
+          ]
+        },
+        "acceptance_fraction": {
+          "per_video": {
+            "breakdance": 0.9800817160367722,
+            "camel": 1.0,
+            "dogs-jump": 0.608016304347826,
+            "drift-straight": 0.4886839899413244,
+            "goat": 1.0,
+            "judo": 0.9393564356435643,
+            "kite-surf": 1.0,
+            "loading": 0.9716981132075472,
+            "mbike-trick": 0.9451282051282052,
+            "shooting": 0.13250283125707815
+          },
+          "macro_mean": 0.8065467595562319,
+          "defined_videos": 10,
+          "clip_bootstrap_95_percentile": [
+            0.6195213468648001,
+            0.9686675454510765
+          ]
+        }
+      },
+      "pooled_counts_descriptive_only": {
+        "accepted_correct": 5463,
+        "accepted_wrong": 2422,
+        "accepted_occluded": 1791,
+        "rejected_visible": 843,
+        "accepted": 9676,
+        "planned": 11857,
+        "visible": 8728
+      }
+    },
+    "fb_1px": {
+      "metrics": {
+        "accepted_precision": {
+          "per_video": {
+            "breakdance": 0.4348109517601043,
+            "camel": 0.7286096256684492,
+            "dogs-jump": 0.4110738255033557,
+            "drift-straight": 0.6840796019900498,
+            "goat": 0.6847058823529412,
+            "judo": 0.6396825396825396,
+            "kite-surf": 0.9645214521452146,
+            "loading": 0.5527690700104493,
+            "mbike-trick": 0.6844520940906483,
+            "shooting": 0.45454545454545453
+          },
+          "macro_mean": 0.6239250497749207,
+          "defined_videos": 10,
+          "clip_bootstrap_95_percentile": [
+            0.5293778748254055,
+            0.7273272970325688
+          ]
+        },
+        "visible_correct_recall": {
+          "per_video": {
+            "breakdance": 0.49925149700598803,
+            "camel": 0.7266666666666667,
+            "dogs-jump": 0.22354014598540145,
+            "drift-straight": 0.7236842105263158,
+            "goat": 0.6539325842696629,
+            "judo": 0.7380952380952381,
+            "kite-surf": 0.9597701149425287,
+            "loading": 0.5338042381432896,
+            "mbike-trick": 0.783322390019698,
+            "shooting": 0.056433408577878104
+          },
+          "macro_mean": 0.5898500494232668,
+          "defined_videos": 10,
+          "clip_bootstrap_95_percentile": [
+            0.42163046831230117,
+            0.7405485270327012
+          ]
+        },
+        "acceptance_fraction": {
+          "per_video": {
+            "breakdance": 0.7834525025536262,
+            "camel": 0.9790575916230366,
+            "dogs-jump": 0.4048913043478261,
+            "drift-straight": 0.3369656328583403,
+            "goat": 0.9550561797752809,
+            "judo": 0.7797029702970297,
+            "kite-surf": 0.9950738916256158,
+            "loading": 0.8207547169811321,
+            "mbike-trick": 0.8938461538461538,
+            "shooting": 0.0622876557191393
+          },
+          "macro_mean": 0.701108859962718,
+          "defined_videos": 10,
+          "clip_bootstrap_95_percentile": [
+            0.504247385325323,
+            0.8753444965098123
+          ]
+        }
+      },
+      "pooled_counts_descriptive_only": {
+        "accepted_correct": 5342,
+        "accepted_wrong": 1854,
+        "accepted_occluded": 1106,
+        "rejected_visible": 1532,
+        "accepted": 8302,
+        "planned": 11857,
+        "visible": 8728
+      }
+    },
+    "ncc_0.8": {
+      "metrics": {
+        "accepted_precision": {
+          "per_video": {
+            "breakdance": 0.9905660377358491,
+            "camel": 0.9736842105263158,
+            "dogs-jump": 0.9836065573770492,
+            "drift-straight": 0.9911111111111112,
+            "goat": 0.9636363636363636,
+            "judo": 1.0,
+            "kite-surf": 0.9701492537313433,
+            "loading": 0.9516129032258065,
+            "mbike-trick": 0.943089430894309,
+            "shooting": 0.8421052631578947
+          },
+          "macro_mean": 0.9609561131396042,
+          "defined_videos": 10,
+          "clip_bootstrap_95_percentile": [
+            0.9309040236831733,
+            0.982276500218699
+          ]
+        },
+        "visible_correct_recall": {
+          "per_video": {
+            "breakdance": 0.15718562874251496,
+            "camel": 0.19733333333333333,
+            "dogs-jump": 0.16423357664233576,
+            "drift-straight": 0.5868421052631579,
+            "goat": 0.11910112359550562,
+            "judo": 0.3443223443223443,
+            "kite-surf": 0.4269293924466338,
+            "loading": 0.23814328960645811,
+            "mbike-trick": 0.22849638870650033,
+            "shooting": 0.03611738148984198
+          },
+          "macro_mean": 0.24987045641486255,
+          "defined_videos": 10,
+          "clip_bootstrap_95_percentile": [
+            0.16092669349094238,
+            0.3506921542729538
+          ]
+        },
+        "acceptance_fraction": {
+          "per_video": {
+            "breakdance": 0.10827374872318693,
+            "camel": 0.19895287958115182,
+            "dogs-jump": 0.12432065217391304,
+            "drift-straight": 0.18860016764459347,
+            "goat": 0.12359550561797752,
+            "judo": 0.23267326732673269,
+            "kite-surf": 0.4400656814449918,
+            "loading": 0.21269296740994853,
+            "mbike-trick": 0.18923076923076923,
+            "shooting": 0.021517553793884484
+          },
+          "macro_mean": 0.183992319294715,
+          "defined_videos": 10,
+          "clip_bootstrap_95_percentile": [
+            0.12542814255036766,
+            0.25462004130069993
+          ]
+        }
+      },
+      "pooled_counts_descriptive_only": {
+        "accepted_correct": 2122,
+        "accepted_wrong": 46,
+        "accepted_occluded": 19,
+        "rejected_visible": 6560,
+        "accepted": 2187,
+        "planned": 11857,
+        "visible": 8728
+      }
+    },
+    "both": {
+      "metrics": {
+        "accepted_precision": {
+          "per_video": {
+            "breakdance": 0.9952153110047847,
+            "camel": 0.98,
+            "dogs-jump": 0.9943820224719101,
+            "drift-straight": 0.9910714285714286,
+            "goat": 0.9636363636363636,
+            "judo": 1.0,
+            "kite-surf": 0.9737827715355806,
+            "loading": 0.9585062240663901,
+            "mbike-trick": 0.9429347826086957,
+            "shooting": 0.9333333333333333
+          },
+          "macro_mean": 0.9732862237228487,
+          "defined_videos": 10,
+          "clip_bootstrap_95_percentile": [
+            0.9591650183086899,
+            0.9861532491929239
+          ]
+        },
+        "visible_correct_recall": {
+          "per_video": {
+            "breakdance": 0.15568862275449102,
+            "camel": 0.196,
+            "dogs-jump": 0.16149635036496351,
+            "drift-straight": 0.5842105263157895,
+            "goat": 0.11910112359550562,
+            "judo": 0.3424908424908425,
+            "kite-surf": 0.4269293924466338,
+            "loading": 0.2330978809283552,
+            "mbike-trick": 0.2278397898883782,
+            "shooting": 0.03160270880361174
+          },
+          "macro_mean": 0.2478457237588571,
+          "defined_videos": 10,
+          "clip_bootstrap_95_percentile": [
+            0.15857539850571944,
+            0.34885976627598736
+          ]
+        },
+        "acceptance_fraction": {
+          "per_video": {
+            "breakdance": 0.10674157303370786,
+            "camel": 0.19633507853403143,
+            "dogs-jump": 0.12092391304347826,
+            "drift-straight": 0.18776194467728416,
+            "goat": 0.12359550561797752,
+            "judo": 0.23143564356435645,
+            "kite-surf": 0.43842364532019706,
+            "loading": 0.20668953687821612,
+            "mbike-trick": 0.18871794871794872,
+            "shooting": 0.01698754246885617
+          },
+          "macro_mean": 0.1817612331856054,
+          "defined_videos": 10,
+          "clip_bootstrap_95_percentile": [
+            0.12278538757871688,
+            0.25279506852111705
+          ]
+        }
+      },
+      "pooled_counts_descriptive_only": {
+        "accepted_correct": 2106,
+        "accepted_wrong": 38,
+        "accepted_occluded": 17,
+        "rejected_visible": 6584,
+        "accepted": 2161,
+        "planned": 11857,
+        "visible": 8728
+      }
+    }
+  },
+  "uncertainty": "20000 sequence-resampling bootstrap draws, seed 677; descriptive population-sampling uncertainty, not correction for model exposure or annotation error",
+  "source_sha256": "9e5b14f7acae3ca20da5443daa279101619e917cab3dc63e542f59e458fc391b",
+  "script_sha256": "b19c56c73a4dbe12238acbc0f29ffa5af8fe103ba3ab97e38b23f5a45bb744fd"
+}

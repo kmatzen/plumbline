@@ -1,0 +1,442 @@
+{
+  "videos": [
+    "bike-packing",
+    "blackswan",
+    "bmx-trees",
+    "car-roundabout",
+    "car-shadow",
+    "cows",
+    "dance-twirl",
+    "dog",
+    "drift-chicane",
+    "gold-fish",
+    "horsejump-high",
+    "india",
+    "lab-coat",
+    "libby",
+    "motocross-jump",
+    "paragliding-launch",
+    "parkour",
+    "pigs",
+    "scooter-black",
+    "soapbox"
+  ],
+  "video_count": 20,
+  "gates": {
+    "lk_available": {
+      "metrics": {
+        "accepted_precision": {
+          "per_video": {
+            "bike-packing": 0.276668960770819,
+            "blackswan": 1.0,
+            "bmx-trees": 0.40456989247311825,
+            "car-roundabout": 0.3197729422894986,
+            "car-shadow": 0.3435897435897436,
+            "cows": 0.9213592233009709,
+            "dance-twirl": 0.15918752952290977,
+            "dog": 0.5412262156448203,
+            "drift-chicane": 0.40390879478827363,
+            "gold-fish": 0.49791790600832836,
+            "horsejump-high": 0.6308411214953271,
+            "india": 0.6559139784946236,
+            "lab-coat": 0.6319218241042345,
+            "libby": 0.3532110091743119,
+            "motocross-jump": 0.5340909090909091,
+            "paragliding-launch": 0.4981313400961025,
+            "parkour": 0.1721105527638191,
+            "pigs": 0.4953173777315297,
+            "scooter-black": 0.5723514211886305,
+            "soapbox": 0.4462734339277549
+          },
+          "macro_mean": 0.4929182088227863,
+          "defined_videos": 20,
+          "clip_bootstrap_95_percentile": [
+            0.4053867347381166,
+            0.587771687803345
+          ]
+        },
+        "visible_correct_recall": {
+          "per_video": {
+            "bike-packing": 0.3857965451055662,
+            "blackswan": 1.0,
+            "bmx-trees": 0.2520938023450586,
+            "car-roundabout": 0.5827586206896552,
+            "car-shadow": 0.4472630173564753,
+            "cows": 0.9303921568627451,
+            "dance-twirl": 0.2,
+            "dog": 0.6305418719211823,
+            "drift-chicane": 0.7961476725521669,
+            "gold-fish": 0.523125,
+            "horsejump-high": 0.5779109589041096,
+            "india": 0.5562310030395137,
+            "lab-coat": 0.6360655737704918,
+            "libby": 0.2655172413793103,
+            "motocross-jump": 0.5,
+            "paragliding-launch": 0.5021528525296017,
+            "parkour": 0.12936732766761094,
+            "pigs": 0.6126126126126126,
+            "scooter-black": 0.47840172786177104,
+            "soapbox": 0.603586889301175
+          },
+          "macro_mean": 0.5304982436949522,
+          "defined_videos": 20,
+          "clip_bootstrap_95_percentile": [
+            0.4370956650060134,
+            0.625053546196164
+          ]
+        },
+        "acceptance_fraction": {
+          "per_video": {
+            "bike-packing": 0.9654485049833887,
+            "blackswan": 1.0,
+            "bmx-trees": 0.39096163951655283,
+            "car-roundabout": 0.773226042428676,
+            "car-shadow": 1.0,
+            "cows": 1.0,
+            "dance-twirl": 0.9742291762540267,
+            "dog": 0.8743068391866913,
+            "drift-chicane": 1.0,
+            "gold-fish": 0.9354479688369505,
+            "horsejump-high": 0.9014321819713563,
+            "india": 0.558,
+            "lab-coat": 0.8008695652173913,
+            "libby": 0.5105386416861827,
+            "motocross-jump": 0.5301204819277109,
+            "paragliding-launch": 0.9512442864398172,
+            "parkour": 0.4152321335419927,
+            "pigs": 0.8840846366145354,
+            "scooter-black": 0.8070907194994786,
+            "soapbox": 0.972
+          },
+          "macro_mean": 0.8122116409052376,
+          "defined_videos": 20,
+          "clip_bootstrap_95_percentile": [
+            0.7169420912692667,
+            0.8962339109132809
+          ]
+        }
+      },
+      "pooled_counts_descriptive_only": {
+        "accepted_correct": 9715,
+        "accepted_wrong": 7410,
+        "accepted_occluded": 4146,
+        "rejected_visible": 2321,
+        "accepted": 21271,
+        "planned": 26374,
+        "visible": 19446
+      }
+    },
+    "fb_1px": {
+      "metrics": {
+        "accepted_precision": {
+          "per_video": {
+            "bike-packing": 0.3094059405940594,
+            "blackswan": 1.0,
+            "bmx-trees": 0.44136807817589574,
+            "car-roundabout": 0.37176470588235294,
+            "car-shadow": 0.351288056206089,
+            "cows": 0.9279368213228035,
+            "dance-twirl": 0.21428571428571427,
+            "dog": 0.6112469437652812,
+            "drift-chicane": 0.43135518157661645,
+            "gold-fish": 0.53085600530856,
+            "horsejump-high": 0.6680327868852459,
+            "india": 0.7864184008762322,
+            "lab-coat": 0.6451612903225806,
+            "libby": 0.42857142857142855,
+            "motocross-jump": 0.5931558935361216,
+            "paragliding-launch": 0.5069328896283971,
+            "parkour": 0.18363636363636363,
+            "pigs": 0.5481220657276995,
+            "scooter-black": 0.61212976022567,
+            "soapbox": 0.490537084398977
+          },
+          "macro_mean": 0.5326102705463045,
+          "defined_videos": 20,
+          "clip_bootstrap_95_percentile": [
+            0.4447151296760191,
+            0.6261343955067112
+          ]
+        },
+        "visible_correct_recall": {
+          "per_video": {
+            "bike-packing": 0.3598848368522073,
+            "blackswan": 1.0,
+            "bmx-trees": 0.2269681742043551,
+            "car-roundabout": 0.5448275862068965,
+            "car-shadow": 0.40053404539385845,
+            "cows": 0.9215686274509803,
+            "dance-twirl": 0.18516320474777448,
+            "dog": 0.6157635467980296,
+            "drift-chicane": 0.7817014446227929,
+            "gold-fish": 0.5,
+            "horsejump-high": 0.5582191780821918,
+            "india": 0.5455927051671733,
+            "lab-coat": 0.6338797814207651,
+            "libby": 0.23793103448275862,
+            "motocross-jump": 0.4148936170212766,
+            "paragliding-launch": 0.49192680301399355,
+            "parkour": 0.09537299338999056,
+            "pigs": 0.601029601029601,
+            "scooter-black": 0.468682505399568,
+            "soapbox": 0.5930735930735931
+          },
+          "macro_mean": 0.5088506639178904,
+          "defined_videos": 20,
+          "clip_bootstrap_95_percentile": [
+            0.41259217346085486,
+            0.6069951189708006
+          ]
+        },
+        "acceptance_fraction": {
+          "per_video": {
+            "bike-packing": 0.8053156146179402,
+            "blackswan": 1.0,
+            "bmx-trees": 0.3226484498160799,
+            "car-roundabout": 0.6217995610826628,
+            "car-shadow": 0.8758974358974358,
+            "cows": 0.983495145631068,
+            "dance-twirl": 0.670041417395306,
+            "dog": 0.756007393715342,
+            "drift-chicane": 0.9193811074918566,
+            "gold-fish": 0.8386199220923762,
+            "horsejump-high": 0.8222409435551812,
+            "india": 0.4565,
+            "lab-coat": 0.7817391304347826,
+            "libby": 0.3770491803278688,
+            "motocross-jump": 0.3960843373493976,
+            "paragliding-launch": 0.9156932453021839,
+            "parkour": 0.28690662493479396,
+            "pigs": 0.7838086476540939,
+            "scooter-black": 0.7393117831074035,
+            "soapbox": 0.8688888888888889
+          },
+          "macro_mean": 0.7110714414647331,
+          "defined_videos": 20,
+          "clip_bootstrap_95_percentile": [
+            0.6100060794544825,
+            0.8022987626102525
+          ]
+        }
+      },
+      "pooled_counts_descriptive_only": {
+        "accepted_correct": 9346,
+        "accepted_wrong": 5956,
+        "accepted_occluded": 3068,
+        "rejected_visible": 4144,
+        "accepted": 18370,
+        "planned": 26374,
+        "visible": 19446
+      }
+    },
+    "ncc_0.8": {
+      "metrics": {
+        "accepted_precision": {
+          "per_video": {
+            "bike-packing": 0.9523809523809523,
+            "blackswan": 1.0,
+            "bmx-trees": 0.9920634920634921,
+            "car-roundabout": 0.9824561403508771,
+            "car-shadow": 1.0,
+            "cows": 1.0,
+            "dance-twirl": 0.9898477157360406,
+            "dog": 0.8241758241758241,
+            "drift-chicane": 1.0,
+            "gold-fish": 0.9314159292035398,
+            "horsejump-high": 0.9854014598540146,
+            "india": 0.9959016393442623,
+            "lab-coat": 0.9603658536585366,
+            "libby": 0.9375,
+            "motocross-jump": 0.9081632653061225,
+            "paragliding-launch": 0.9469026548672567,
+            "parkour": 0.8,
+            "pigs": 0.9394812680115274,
+            "scooter-black": 0.8947368421052632,
+            "soapbox": 0.9952456418383518
+          },
+          "macro_mean": 0.9518019339448032,
+          "defined_videos": 20,
+          "clip_bootstrap_95_percentile": [
+            0.9251691244825815,
+            0.9743012382854934
+          ]
+        },
+        "visible_correct_recall": {
+          "per_video": {
+            "bike-packing": 0.11516314779270634,
+            "blackswan": 0.8734693877551021,
+            "bmx-trees": 0.10469011725293133,
+            "car-roundabout": 0.19310344827586207,
+            "car-shadow": 0.19759679572763686,
+            "cows": 0.38333333333333336,
+            "dance-twirl": 0.11572700296735905,
+            "dog": 0.18472906403940886,
+            "drift-chicane": 0.3274478330658106,
+            "gold-fish": 0.263125,
+            "horsejump-high": 0.11558219178082192,
+            "india": 0.36930091185410335,
+            "lab-coat": 0.3442622950819672,
+            "libby": 0.15517241379310345,
+            "motocross-jump": 0.23670212765957446,
+            "paragliding-launch": 0.05758880516684607,
+            "parkour": 0.030217186024551465,
+            "pigs": 0.4195624195624196,
+            "scooter-black": 0.0734341252699784,
+            "soapbox": 0.3883735312306741
+          },
+          "macro_mean": 0.24742905688170955,
+          "defined_videos": 20,
+          "clip_bootstrap_95_percentile": [
+            0.1741441626840442,
+            0.3363745933900053
+          ]
+        },
+        "acceptance_fraction": {
+          "per_video": {
+            "bike-packing": 0.08372093023255814,
+            "blackswan": 0.8734693877551021,
+            "bmx-trees": 0.06621124540199684,
+            "car-roundabout": 0.08339429407461595,
+            "car-shadow": 0.1517948717948718,
+            "cows": 0.3796116504854369,
+            "dance-twirl": 0.09065807639208467,
+            "dog": 0.16820702402957485,
+            "drift-chicane": 0.16612377850162866,
+            "gold-fish": 0.25153032832498606,
+            "horsejump-high": 0.11541701769165964,
+            "india": 0.244,
+            "lab-coat": 0.2852173913043478,
+            "libby": 0.11241217798594848,
+            "motocross-jump": 0.14759036144578314,
+            "paragliding-launch": 0.057389537836465214,
+            "parkour": 0.020865936358894107,
+            "pigs": 0.31922723091076355,
+            "scooter-black": 0.07924921793534932,
+            "soapbox": 0.28044444444444444
+          },
+          "macro_mean": 0.19882674514532558,
+          "defined_videos": 20,
+          "clip_bootstrap_95_percentile": [
+            0.13087818573170593,
+            0.28877659416718654
+          ]
+        }
+      },
+      "pooled_counts_descriptive_only": {
+        "accepted_correct": 4236,
+        "accepted_wrong": 113,
+        "accepted_occluded": 20,
+        "rejected_visible": 15097,
+        "accepted": 4369,
+        "planned": 26374,
+        "visible": 19446
+      }
+    },
+    "both": {
+      "metrics": {
+        "accepted_precision": {
+          "per_video": {
+            "bike-packing": 0.9663865546218487,
+            "blackswan": 1.0,
+            "bmx-trees": 0.992,
+            "car-roundabout": 0.9821428571428571,
+            "car-shadow": 1.0,
+            "cows": 1.0,
+            "dance-twirl": 0.9895833333333334,
+            "dog": 0.8488372093023255,
+            "drift-chicane": 1.0,
+            "gold-fish": 0.9328703703703703,
+            "horsejump-high": 0.9923076923076923,
+            "india": 1.0,
+            "lab-coat": 0.9601226993865031,
+            "libby": 0.9285714285714286,
+            "motocross-jump": 0.9186046511627907,
+            "paragliding-launch": 0.9553571428571429,
+            "parkour": 0.9259259259259259,
+            "pigs": 0.9411764705882353,
+            "scooter-black": 0.9041095890410958,
+            "soapbox": 0.9952305246422893
+          },
+          "macro_mean": 0.9616613224626919,
+          "defined_videos": 20,
+          "clip_bootstrap_95_percentile": [
+            0.9429689677537015,
+            0.9782426217191338
+          ]
+        },
+        "visible_correct_recall": {
+          "per_video": {
+            "bike-packing": 0.11036468330134357,
+            "blackswan": 0.8734693877551021,
+            "bmx-trees": 0.10385259631490787,
+            "car-roundabout": 0.1896551724137931,
+            "car-shadow": 0.1602136181575434,
+            "cows": 0.38333333333333336,
+            "dance-twirl": 0.11275964391691394,
+            "dog": 0.17980295566502463,
+            "drift-chicane": 0.3274478330658106,
+            "gold-fish": 0.251875,
+            "horsejump-high": 0.11044520547945205,
+            "india": 0.36854103343465044,
+            "lab-coat": 0.34207650273224044,
+            "libby": 0.13448275862068965,
+            "motocross-jump": 0.21010638297872342,
+            "paragliding-launch": 0.05758880516684607,
+            "parkour": 0.023607176581680833,
+            "pigs": 0.4118404118404118,
+            "scooter-black": 0.07127429805615551,
+            "soapbox": 0.38713667285095854
+          },
+          "macro_mean": 0.24049367358327914,
+          "defined_videos": 20,
+          "clip_bootstrap_95_percentile": [
+            0.16636150249038217,
+            0.3300345799844698
+          ]
+        },
+        "acceptance_fraction": {
+          "per_video": {
+            "bike-packing": 0.07906976744186046,
+            "blackswan": 0.8734693877551021,
+            "bmx-trees": 0.06568575932737783,
+            "car-roundabout": 0.08193123628383321,
+            "car-shadow": 0.12307692307692308,
+            "cows": 0.3796116504854369,
+            "dance-twirl": 0.0883571099861942,
+            "dog": 0.1589648798521257,
+            "drift-chicane": 0.16612377850162866,
+            "gold-fish": 0.24040066777963273,
+            "horsejump-high": 0.10951979780960404,
+            "india": 0.2425,
+            "lab-coat": 0.28347826086956524,
+            "libby": 0.09836065573770492,
+            "motocross-jump": 0.12951807228915663,
+            "paragliding-launch": 0.056881665820213305,
+            "parkour": 0.014084507042253521,
+            "pigs": 0.31278748850046,
+            "scooter-black": 0.07612095933263817,
+            "soapbox": 0.27955555555555556
+          },
+          "macro_mean": 0.19297490617236332,
+          "defined_videos": 20,
+          "clip_bootstrap_95_percentile": [
+            0.12470767375274769,
+            0.28372740616156983
+          ]
+        }
+      },
+      "pooled_counts_descriptive_only": {
+        "accepted_correct": 4133,
+        "accepted_wrong": 97,
+        "accepted_occluded": 15,
+        "rejected_visible": 15216,
+        "accepted": 4245,
+        "planned": 26374,
+        "visible": 19446
+      }
+    }
+  },
+  "uncertainty": "20000 sequence-resampling bootstrap draws, seed 677; descriptive population-sampling uncertainty, not correction for model exposure or annotation error",
+  "source_sha256": "8f24f4433ed9721282c54bc5431d3a1d0d1cfbe9494d5ea2bc65b3293086fb65",
+  "script_sha256": "b19c56c73a4dbe12238acbc0f29ffa5af8fe103ba3ab97e38b23f5a45bb744fd"
+}
