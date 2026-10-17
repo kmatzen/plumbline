@@ -330,8 +330,25 @@ numerical precision, not the prompt, checkpoint, inputs, or output parsing.
 The full on-control numerical preflight passed with finite leaf outputs and
 final logits in 3.67 seconds (7,083,801,088 peak allocated bytes). This is not
 end-to-end equivalence to unquantized 7B inference or evidence of judgment quality.
-New `fp32-control_on/off.json` generation attempts are running separately; the
-original failed responses remain intact.
+Both new `fp32-control_on/off.json` generation attempts completed. They return
+readable fenced JSON, so both still fail the unchanged strict parser. The raw
+on-control verdict is `inconsistent`, incorrectly rejecting the all-zero-distance
+control. The raw off-control verdict is also `inconsistent`, matching that
+control's aggregate relation, but its explanation incorrectly says panels 1--4
+are aligned even though all six distances are 50 pixels. Thus resolving arithmetic
+overflow did not establish correct geometric grounding. No output is accepted as
+a structured judgment or DNF label. The runner/helper hashes were verified and
+their executed versions are archived with the results. These two development
+controls do not estimate model-wide reliability or compare unquantized models.
+
+`analyze_vlm_controls.py` produces `paper/results/vlm-control-accounting-v1.json`
+for all seven retained geometry attempts: one OOM failure, two 3B fp16 attempts,
+two 7B NF4 attempts with overflowing score arithmetic, and two with corrected
+score precision. It preserves execution state, strict parsing state, expected
+control relation, and accepted verdict separately. There are no accepted
+structured judgments. Raw-text observations above remain descriptive audits,
+not repaired labels. Tests ensure abstention and execution failure do not count
+as correct answers, and that fenced JSON is not silently accepted.
 
 A separate source-identity VLM pilot uses the first frame of each of these three
 examples. It asks only what physical detail the cyan circle marks, or to abstain;
