@@ -972,6 +972,25 @@ Published ORE scores remain unchanged. Six synthetic tests cover positive
 witnesses, conflicting boxes, opposing cameras, coordinate gauge changes, and
 rejection of reversed corners; they do not validate real-data failure decisions.
 
+`audit_ore_box_preprocessing.py` traces the rescaling, two-corner undistortion,
+and integer conversion separately. Its output reproduces every reversed box
+in the retained audit. Before undistortion, no rescaled box is reversed. After
+undistortion, tracks 2, 1, 4, and 6 contain respectively 24, 372, 40, and 430
+reversed boxes; integer truncation hides one reversal in each of tracks 1 and 6.
+
+Forward-distorting the floating-point corrected corners should recover their
+input pixel coordinates if inversion succeeds. Using the same calibration and
+OpenCV distortion model, the median round-trip errors are respectively 99.40,
+86.48, 0.0954, and 85.66 pixels. Of 6,774 corners, 3,995 have residuals above one
+pixel. That cutoff describes inversion error, not camera quality. All residuals,
+including extreme values, are retained in `box-preprocessing-v2.json` in the
+same results directory. Sorting the corners would not resolve these inversion
+residuals. This establishes a problem with this sample's processed evidence;
+it does not identify which calibration or annotation assumption is responsible,
+nor establish its frequency in the full benchmark. Official scores are not
+changed. A valid replacement would require a justified distortion/calibration
+policy and verification against source images, not an automatic box repair.
+
 DAVIS segmentation objects cannot be assumed static. Intrinsics are also absent
 from our DAVIS inventory. Do not use arbitrary focal lengths or moving masks as
 ORE ground truth. An annotated static-track subset and an explicit calibration
