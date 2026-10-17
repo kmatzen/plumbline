@@ -292,8 +292,9 @@ Its verified redirect uses `/g/rgbd/dataset/freiburg3/` on the official webshare
 host; the catalog's relative archive link without `/g/` returned 404. A HEAD
 request reports 567,005,874 bytes. Download and gzip integrity verification
 completed successfully in `/data3/kmatzen/plumbline/research/static-rgbd-validation-v1`
-on Anima. Selective extraction is running; no completed staging, prediction,
-or result is yet claimed. Existing dynamic
+on Anima. Selective extraction completed with 90 RGB frames, 87 associated
+depth images, and 89 associated reference poses. No camera prediction or
+evaluator result is yet claimed. Existing dynamic
 sequence folders are untouched; the pruning staging script is not used.
 
 `stage_static_rgbd_control.py` implements the fixed RGB selection independently
@@ -307,6 +308,37 @@ accuracy. Five synthetic tests cover sample independence from missing data,
 local timestamp ambiguity, unsafe paths, duplicate archive names, symlinks,
 and nonfinite timestamps. The extraction uses only ordinary archive files and
 refuses an existing destination.
+
+The retained manifest is `results/static-rgbd-control-v1/staging-manifest.json`;
+the local source copy is `tmp/static-rgbd-validation-v1/selected`. All selected
+RGB/depth file hashes and index hashes were checked after transfer, and all
+nearest associations and the stride-three RGB selection were reconstructed
+from the retained indices. RGB images decode as 640x480 uint8 color and depth
+as 640x480 uint16. The archive SHA-256 is
+`c7dfd479b6bf84d87848882d8dfa93715bfa55f4f45d4adc072a67d2f0363df9`.
+
+Depth associations are missing at original frames 12, 46, and 69. Among the
+87 associated depth images, absolute timestamp offsets have median 0.022 ms
+and maximum 0.620 ms; nonzero pixel coverage ranges from 85.93% to 88.34%
+(median 87.41%). These whole-image fractions do not certify any selected
+point's depth. Reference frame 0 is unavailable: its nearest reference time
+is 112.608 ms later and outside the 20 ms tolerance. The other 89 reference
+associations have median absolute offset 2.606 ms and maximum 12.587 ms.
+The raw reference index contains no duplicate timestamps. Associated pose
+values are finite and quaternion norms range from 0.999931 to 1.000072.
+This is an input check, not proof of reference-pose accuracy.
+
+**Prospective availability amendment, before camera inference:** retain the
+original frame-zero feature selection and all 90 tracking frames, but compare
+reference and candidate geometry using the same ten available fit frames
+1–10. Keep the originally planned test frames 11–89 (12 × 79 = 948 planned
+observations). Record frame 0 as reference-unavailable; do not extrapolate a
+pose, resample RGB, or move the test boundary to fit eleven replacement frames.
+This is explicitly a ten-fit-frame control, not the earlier eleven-fit-frame
+DAVIS protocol. The amendment is based only on reference availability, not on
+candidate errors or track survival. Assistant inspection of source frames 0,
+45, and 89 shows the textured panels and floor posters; it is not independent
+validation of all correspondences.
 
 The development protocol is fixed before camera predictions are inspected:
 
