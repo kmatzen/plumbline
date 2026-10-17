@@ -367,6 +367,49 @@ reference-free method. The DAVIS arm has no tracking or judging results yet.
 
 ### Harness first, then evaluator training
 
+**Correspondence component corpus (not camera judgments).**
+`build_tapvid_judge_corpus.py` now constructs annotation-supervised examples from
+the ten TAP-Vid development videos. It never opens the twenty held-out videos.
+Within development, the same name-hash ordering assigns six videos to training,
+two to validation, and two to calibration. All tracks, frames, and derived images
+from a video remain together. Candidate frames are fixed at lags 5, 15, 30, and
+60 after each first-visible query, without selecting by checker score or outcome.
+
+The corpus has 860 planned records: 435 labeled, 163 borderline/unlabeled, 146
+beyond the video, and 116 with an unavailable candidate. Labels refer to the
+reviewed annotation: `close` is within two native Euclidean pixels, `far` is at
+least eight pixels away, and `occluded` means the reference point is annotated
+invisible. The 2–8 pixel margin has no training label. No synthetic explanations,
+VLM answers, camera-quality targets, or staticness claims are used as supervision.
+
+| Partition | Videos | Close | Far | Occluded | Labeled total |
+|---|---:|---:|---:|---:|---:|
+| Train | 6 | 69 | 84 | 35 | 188 |
+| Validation | 2 | 46 | 37 | 45 | 128 |
+| Calibration | 2 | 89 | 17 | 13 | 119 |
+
+Each panel contains the starting frame and candidate frame with context above
+native-resolution 161×161 crops. Cyan rings leave the marked center pixels
+unobscured. Rendering receives only images and the proposed coordinates, never
+reference coordinates, visibility, residuals, or labels. Filenames use opaque
+example IDs. Targets are stored separately in export records, not painted into
+the images. The renderer's first training example of each class was inspected
+for layout; that is not human label validation. Some fur/texture examples remain
+visually ambiguous despite their annotation-derived target, so this is not proof
+that every target is inferable from two images.
+
+Artifacts are on Anima at
+`/data3/kmatzen/plumbline/research/tapvid-davis-v1/judge-corpus-v1`.
+The manifest and three JSONL exports are retained in
+`results/tapvid-judge-corpus-v1/`; image paths in those exports resolve against
+the remote corpus directory. All 598 rendered image hashes and annotation
+targets, and all 435 labeled export records, were independently checked.
+The partitions and class imbalance are explicit. This small, six-video training
+set supports a bounded component pilot, not a claim of a large training corpus.
+No model has yet been trained on it. Validation/calibration must not be merged
+into training, and the earlier held-out baseline result is not fresh evidence
+for any future model-selection loop.
+
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,
 collect verified data, then compare model training with the workflow held fixed.
@@ -395,8 +438,9 @@ judgments; RL could study which frames or geometric checks to request under a
 budget. Neither should optimize against the evaluator's own unchecked scores.
 Any Bayesian optimization of the harness uses development scenes only, and all
 ablation choices and model settings must be frozen before held-out evaluation.
-No fine-tuning or RL has begun, and the currently available labels are
-insufficient for a defensible training experiment.
+No fine-tuning or RL has begun. Camera-failure labels remain insufficient for
+a defensible camera-judge training experiment; the narrower correspondence
+corpus above supplies a separate component-training pilot, not those labels.
 
 Status: protocol under development, not a preregistration or a validated metric.
 The research question is whether a VLM can identify task-failing camera estimates
