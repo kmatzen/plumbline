@@ -836,6 +836,15 @@ SSH reported the YubiKey device unavailable. The existing pilot connection
 remains active. No correctness or response-format result is inferred from file
 existence or successful model loading.
 
+SSH access subsequently recovered without using the token typed into chat.
+The first two completed outputs were retrieved and checked against image and
+executed-runner hashes. Both processed-image audits contain finite tensors and
+608 image tokens with matching placeholders. The raw duplicate-control and
+temporal responses both abstain, citing ambiguity/blur without identifying the
+marked detail. Both wrap their JSON in Markdown fences and therefore fail the
+unchanged strict parser. These are preserved as raw outputs, not accepted labels.
+The two office responses are still pending inspection; no pilot accuracy is claimed.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is
