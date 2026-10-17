@@ -4216,3 +4216,23 @@ certify uniqueness when it finds no disagreement, and does not establish a
 dominant ambiguity explanation for the judge's errors. Tests reproduce the
 parallel-motion ambiguity, show later forward motion can separate forecasts,
 and verify missing-prefix accounting and independence from later observations.
+
+### Correspondence image-input dependence audit
+
+`audit_correspondence_image_dependence.py` uses the first three training-export
+rows without selecting by labels or responses. It retains the frozen prompt,
+checkpoint, adapter, arithmetic, token layout, and image grid, and compares
+the original normalized pixel payload with an all-zero payload. Both arms
+generate eight tokens greedily; no training or calibration reads occur.
+This artificial intervention tests input sensitivity, not natural-image
+accuracy. The record is `results/correspondence-image-dependence-v1/manifest.json`.
+
+All six pairs completed. Base answers remain `far`, but the first-token
+probability distributions change: total variation distances are 0.2248,
+0.2116, and 0.2337. Adapted answers change from `close` to `far` on all three,
+with distances about 0.99967. Real/zero pixel hashes differ, and matched arms
+have identical payload hashes and token counts. Thus the input image does
+influence this configuration on these examples; constant generated labels
+alone do not imply a disconnected image path. This does not establish correct
+visual reasoning, isolate the cause of transfer failure, or justify DNF labels.
+The controls are previously trained examples and cannot measure generalization.

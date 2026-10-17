@@ -1,0 +1,114 @@
+{
+  "status": "complete",
+  "scope": "image-input dependence audit on first three training rows; not accuracy, validation, or model selection",
+  "protocol": "base/adapted; unchanged correspondence prompt; original pixels versus zero normalized pixel payload; identical text, grid and image-token layout; greedy eight tokens; first-token probability total variation",
+  "limitation": "zero payload is an artificial intervention, not a natural image; sensitivity is necessary but not sufficient for useful visual reasoning; only three previously trained examples",
+  "script_sha256": "d4bdc59ae31e472133f23071d75f67e3044d72abb548470dfe590a56d77eea08",
+  "training_manifest_sha256": "c16c4c3a0495e8bd813d0bad8009c89b29047c7142114370f27a51ab0aa58f26",
+  "corpus_manifest_sha256": "24cee1801f19d85f11a57cb6e85770bb6cb5659e7c3047f496a260d8c039a5fc",
+  "attention_helper_sha256": "7d8422de6267caed0dbb9c52316e84fff4a14e6aa1c0affeee03bc646f65f9f9",
+  "records": [
+    {
+      "arm": "base",
+      "id": "df0e06cc4a6feab254b1",
+      "image_sha256": "2c61f34ae38ec163dbc1d89da8524487cd907e162c2dc93e5cde24ed0b060caa",
+      "image_tokens": 609,
+      "conditions": {
+        "original": {
+          "pixel_sha256": "23bd84405542c9ddf96672d046cbcde01820e9b13bae8fb11d5f1bc9eff781e1",
+          "raw_response": "far"
+        },
+        "zero_pixels": {
+          "pixel_sha256": "ab3badaab106d6e278b6544bb96e074e02c7fe879cd0aa5303377c311c6a61be",
+          "raw_response": "far"
+        }
+      },
+      "first_token_total_variation": 0.22480040788650513
+    },
+    {
+      "arm": "base",
+      "id": "7d0f175b90bb53a21476",
+      "image_sha256": "b66ae0b9132657697119775e23254d58d12a824d04ee2db5a27b494fcae3096f",
+      "image_tokens": 609,
+      "conditions": {
+        "original": {
+          "pixel_sha256": "f808682c678c46bc4c014c58d21459b560b84c694e3b0639c3f5b6397e206172",
+          "raw_response": "far"
+        },
+        "zero_pixels": {
+          "pixel_sha256": "ab3badaab106d6e278b6544bb96e074e02c7fe879cd0aa5303377c311c6a61be",
+          "raw_response": "far"
+        }
+      },
+      "first_token_total_variation": 0.2116098254919052
+    },
+    {
+      "arm": "base",
+      "id": "35ab2585e6e80cff5d5d",
+      "image_sha256": "6be581120137804ef557a5578bd2f89e3181ddb1b36de93f3d4849f85a771b62",
+      "image_tokens": 609,
+      "conditions": {
+        "original": {
+          "pixel_sha256": "c30ae2a72cbd2bfa1e3f98f3efd5b2aad702115edf0038c4e386d5a1627e79ea",
+          "raw_response": "far"
+        },
+        "zero_pixels": {
+          "pixel_sha256": "ab3badaab106d6e278b6544bb96e074e02c7fe879cd0aa5303377c311c6a61be",
+          "raw_response": "far"
+        }
+      },
+      "first_token_total_variation": 0.23369018733501434
+    },
+    {
+      "arm": "adapted",
+      "id": "df0e06cc4a6feab254b1",
+      "image_sha256": "2c61f34ae38ec163dbc1d89da8524487cd907e162c2dc93e5cde24ed0b060caa",
+      "image_tokens": 609,
+      "conditions": {
+        "original": {
+          "pixel_sha256": "23bd84405542c9ddf96672d046cbcde01820e9b13bae8fb11d5f1bc9eff781e1",
+          "raw_response": "close"
+        },
+        "zero_pixels": {
+          "pixel_sha256": "ab3badaab106d6e278b6544bb96e074e02c7fe879cd0aa5303377c311c6a61be",
+          "raw_response": "far"
+        }
+      },
+      "first_token_total_variation": 0.9996703267097473
+    },
+    {
+      "arm": "adapted",
+      "id": "7d0f175b90bb53a21476",
+      "image_sha256": "b66ae0b9132657697119775e23254d58d12a824d04ee2db5a27b494fcae3096f",
+      "image_tokens": 609,
+      "conditions": {
+        "original": {
+          "pixel_sha256": "f808682c678c46bc4c014c58d21459b560b84c694e3b0639c3f5b6397e206172",
+          "raw_response": "close"
+        },
+        "zero_pixels": {
+          "pixel_sha256": "ab3badaab106d6e278b6544bb96e074e02c7fe879cd0aa5303377c311c6a61be",
+          "raw_response": "far"
+        }
+      },
+      "first_token_total_variation": 0.9996702671051025
+    },
+    {
+      "arm": "adapted",
+      "id": "35ab2585e6e80cff5d5d",
+      "image_sha256": "6be581120137804ef557a5578bd2f89e3181ddb1b36de93f3d4849f85a771b62",
+      "image_tokens": 609,
+      "conditions": {
+        "original": {
+          "pixel_sha256": "c30ae2a72cbd2bfa1e3f98f3efd5b2aad702115edf0038c4e386d5a1627e79ea",
+          "raw_response": "close"
+        },
+        "zero_pixels": {
+          "pixel_sha256": "ab3badaab106d6e278b6544bb96e074e02c7fe879cd0aa5303377c311c6a61be",
+          "raw_response": "far"
+        }
+      },
+      "first_token_total_variation": 0.9996700286865234
+    }
+  ]
+}
