@@ -608,8 +608,21 @@ evaluation completed: 188/188 correct (69 close, 84 far, 35 occluded), with no
 invalid responses or abstentions. The complete predictions and hash-checked
 analysis are retained as `training-fit.json` and `training-fit-summary.json`
 in the same directory. This establishes fit on the training set, not
-generalization or camera-failure detection. Validation and external-video
-results remain pending.
+generalization or camera-failure detection.
+
+The paired two-video development validation also completed. Base accuracy was
+37/128 (28.9%); adapted accuracy was 73/128 (57.0%), with balanced accuracy
+58.1%. Adapted class recalls were 41/46 close, 29/37 far, and only 3/45
+occluded. Of 57 adapted close predictions, 16 were wrong (71.9% precision).
+The frozen image gate made 30 close predictions with one error (96.7%
+precision), abstaining on the other 98 examples. These different coverage
+levels must accompany any comparison. Both model arms returned valid labels
+for every example. Input hashes and paired processed-image hashes were checked;
+`validation.json` and `validation-summary.json` preserve the full results.
+This development result does not establish a reliable DNF rule. The unchanged
+adapter's predeclared external-video comparison has now been launched; its
+results remain pending. These development diagnostics remain outside the
+manuscript's reported experiments.
 
 The development order follows the useful separation in
 [3DCodeVerse](https://3dcodeverse.com/): improve the evidence/checking workflow,
@@ -3054,7 +3067,7 @@ retained locally in `results/tapvid-external-corpus-v1/`; image panels remain on
 Anima. Every exported image hash, label/prompt mapping, source-code hash, and
 export hash was checked. All test video names and example IDs are disjoint from
 the development corpus. No learned-judge inference has been performed on this
-partition, and the calibration export/images were not opened. The omitted
+partition at preparation time, and the calibration export/images were not opened. The omitted
 borderline/unavailable observations must remain visible in subsequent coverage
 accounting rather than being counted as correct or usable.
 
@@ -3064,7 +3077,7 @@ twenty test video names and example IDs against development, and requires the
 same staging source and prompt. Test inference uses both base and adapted arms
 with identical image payloads, fixed greedy decoding, and the unchanged parser;
 planned and labeled counts remain explicit. The planned tested adapter is the
-currently running fixed 20-pass model, not an adapter selected after viewing
+completed fixed 20-pass model, not an adapter selected after viewing
 test results. The runner is staged separately under the external-corpus directory;
 the active training run's queued evaluator remains its original frozen file.
 A CPU-only selection preflight verified all 971 test examples and image hashes.
@@ -3082,4 +3095,5 @@ percentile interval is descriptive uncertainty, not proof of external validity.
 Input hashes must match the completed fixed 20-pass training manifest, original
 development manifest, test corpus, and original tracker results. Synthetic tests
 check that test-label frequencies cannot choose the majority baseline and that
-an all-abstaining model has zero answer coverage. No real test results exist yet.
+an all-abstaining model has zero answer coverage. Test inference is now running
+under `base-adapted-twenty-pass-v1` on Anima; no completed test result exists yet.

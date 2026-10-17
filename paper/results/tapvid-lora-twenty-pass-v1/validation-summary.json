@@ -1,0 +1,605 @@
+{
+  "scope": "two-video development validation; not independent frame-level evidence or camera DNF",
+  "selection": "only preselected labeled candidate panels; excludes borderline and unavailable cases by corpus construction",
+  "baseline_policy": "majority from training labels only; image check may predict close or abstain, never infer far from rejection",
+  "training_majority_label": "far",
+  "arms": {
+    "base": {
+      "all": {
+        "examples": 128,
+        "confusion": {
+          "close": {
+            "close": 0,
+            "far": 46,
+            "occluded": 0,
+            "uncertain": 0,
+            "invalid": 0
+          },
+          "far": {
+            "close": 0,
+            "far": 37,
+            "occluded": 0,
+            "uncertain": 0,
+            "invalid": 0
+          },
+          "occluded": {
+            "close": 0,
+            "far": 45,
+            "occluded": 0,
+            "uncertain": 0,
+            "invalid": 0
+          }
+        },
+        "accuracy_all_examples": 0.2890625,
+        "class_recall": {
+          "close": 0.0,
+          "far": 1.0,
+          "occluded": 0.0
+        },
+        "balanced_accuracy": 0.3333333333333333,
+        "answered_examples": 128,
+        "answer_coverage": 1.0,
+        "accuracy_answered_only": 0.2890625,
+        "uncertain_examples": 0,
+        "invalid_examples": 0,
+        "close_predictions": 0,
+        "close_precision": null,
+        "false_close_predictions": 0
+      },
+      "per_video": {
+        "breakdance": {
+          "examples": 78,
+          "confusion": {
+            "close": {
+              "close": 0,
+              "far": 27,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            },
+            "far": {
+              "close": 0,
+              "far": 21,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            },
+            "occluded": {
+              "close": 0,
+              "far": 30,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            }
+          },
+          "accuracy_all_examples": 0.2692307692307692,
+          "class_recall": {
+            "close": 0.0,
+            "far": 1.0,
+            "occluded": 0.0
+          },
+          "balanced_accuracy": 0.3333333333333333,
+          "answered_examples": 78,
+          "answer_coverage": 1.0,
+          "accuracy_answered_only": 0.2692307692307692,
+          "uncertain_examples": 0,
+          "invalid_examples": 0,
+          "close_predictions": 0,
+          "close_precision": null,
+          "false_close_predictions": 0
+        },
+        "judo": {
+          "examples": 50,
+          "confusion": {
+            "close": {
+              "close": 0,
+              "far": 19,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            },
+            "far": {
+              "close": 0,
+              "far": 16,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            },
+            "occluded": {
+              "close": 0,
+              "far": 15,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            }
+          },
+          "accuracy_all_examples": 0.32,
+          "class_recall": {
+            "close": 0.0,
+            "far": 1.0,
+            "occluded": 0.0
+          },
+          "balanced_accuracy": 0.3333333333333333,
+          "answered_examples": 50,
+          "answer_coverage": 1.0,
+          "accuracy_answered_only": 0.32,
+          "uncertain_examples": 0,
+          "invalid_examples": 0,
+          "close_predictions": 0,
+          "close_precision": null,
+          "false_close_predictions": 0
+        }
+      },
+      "macro_video_accuracy": 0.2946153846153846,
+      "within_video_association": {
+        "per_video": {
+          "breakdance": {
+            "examples": 78,
+            "observed_accuracy": 0.2692307692307692,
+            "shuffled_expected_accuracy": 0.2692307692307692,
+            "excess_accuracy": 0.0
+          },
+          "judo": {
+            "examples": 50,
+            "observed_accuracy": 0.32,
+            "shuffled_expected_accuracy": 0.32,
+            "excess_accuracy": 0.0
+          }
+        },
+        "macro_video_excess_accuracy": 0.0,
+        "interpretation": "within-video answer/target association beyond marginal label frequencies; not causal image reliance, a trained baseline, or a significance test"
+      }
+    },
+    "adapted": {
+      "all": {
+        "examples": 128,
+        "confusion": {
+          "close": {
+            "close": 41,
+            "far": 4,
+            "occluded": 1,
+            "uncertain": 0,
+            "invalid": 0
+          },
+          "far": {
+            "close": 8,
+            "far": 29,
+            "occluded": 0,
+            "uncertain": 0,
+            "invalid": 0
+          },
+          "occluded": {
+            "close": 8,
+            "far": 34,
+            "occluded": 3,
+            "uncertain": 0,
+            "invalid": 0
+          }
+        },
+        "accuracy_all_examples": 0.5703125,
+        "class_recall": {
+          "close": 0.8913043478260869,
+          "far": 0.7837837837837838,
+          "occluded": 0.06666666666666667
+        },
+        "balanced_accuracy": 0.5805849327588458,
+        "answered_examples": 128,
+        "answer_coverage": 1.0,
+        "accuracy_answered_only": 0.5703125,
+        "uncertain_examples": 0,
+        "invalid_examples": 0,
+        "close_predictions": 57,
+        "close_precision": 0.7192982456140351,
+        "false_close_predictions": 16
+      },
+      "per_video": {
+        "breakdance": {
+          "examples": 78,
+          "confusion": {
+            "close": {
+              "close": 26,
+              "far": 0,
+              "occluded": 1,
+              "uncertain": 0,
+              "invalid": 0
+            },
+            "far": {
+              "close": 8,
+              "far": 13,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            },
+            "occluded": {
+              "close": 7,
+              "far": 21,
+              "occluded": 2,
+              "uncertain": 0,
+              "invalid": 0
+            }
+          },
+          "accuracy_all_examples": 0.5256410256410257,
+          "class_recall": {
+            "close": 0.9629629629629629,
+            "far": 0.6190476190476191,
+            "occluded": 0.06666666666666667
+          },
+          "balanced_accuracy": 0.5495590828924163,
+          "answered_examples": 78,
+          "answer_coverage": 1.0,
+          "accuracy_answered_only": 0.5256410256410257,
+          "uncertain_examples": 0,
+          "invalid_examples": 0,
+          "close_predictions": 41,
+          "close_precision": 0.6341463414634146,
+          "false_close_predictions": 15
+        },
+        "judo": {
+          "examples": 50,
+          "confusion": {
+            "close": {
+              "close": 15,
+              "far": 4,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            },
+            "far": {
+              "close": 0,
+              "far": 16,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            },
+            "occluded": {
+              "close": 1,
+              "far": 13,
+              "occluded": 1,
+              "uncertain": 0,
+              "invalid": 0
+            }
+          },
+          "accuracy_all_examples": 0.64,
+          "class_recall": {
+            "close": 0.7894736842105263,
+            "far": 1.0,
+            "occluded": 0.06666666666666667
+          },
+          "balanced_accuracy": 0.6187134502923977,
+          "answered_examples": 50,
+          "answer_coverage": 1.0,
+          "accuracy_answered_only": 0.64,
+          "uncertain_examples": 0,
+          "invalid_examples": 0,
+          "close_predictions": 16,
+          "close_precision": 0.9375,
+          "false_close_predictions": 1
+        }
+      },
+      "macro_video_accuracy": 0.5828205128205128,
+      "within_video_association": {
+        "per_video": {
+          "breakdance": {
+            "examples": 78,
+            "observed_accuracy": 0.5256410256410257,
+            "shuffled_expected_accuracy": 0.3141025641025641,
+            "excess_accuracy": 0.21153846153846156
+          },
+          "judo": {
+            "examples": 50,
+            "observed_accuracy": 0.64,
+            "shuffled_expected_accuracy": 0.3388,
+            "excess_accuracy": 0.3012
+          }
+        },
+        "macro_video_excess_accuracy": 0.2563692307692308,
+        "interpretation": "within-video answer/target association beyond marginal label frequencies; not causal image reliance, a trained baseline, or a significance test"
+      }
+    },
+    "training_majority": {
+      "all": {
+        "examples": 128,
+        "confusion": {
+          "close": {
+            "close": 0,
+            "far": 46,
+            "occluded": 0,
+            "uncertain": 0,
+            "invalid": 0
+          },
+          "far": {
+            "close": 0,
+            "far": 37,
+            "occluded": 0,
+            "uncertain": 0,
+            "invalid": 0
+          },
+          "occluded": {
+            "close": 0,
+            "far": 45,
+            "occluded": 0,
+            "uncertain": 0,
+            "invalid": 0
+          }
+        },
+        "accuracy_all_examples": 0.2890625,
+        "class_recall": {
+          "close": 0.0,
+          "far": 1.0,
+          "occluded": 0.0
+        },
+        "balanced_accuracy": 0.3333333333333333,
+        "answered_examples": 128,
+        "answer_coverage": 1.0,
+        "accuracy_answered_only": 0.2890625,
+        "uncertain_examples": 0,
+        "invalid_examples": 0,
+        "close_predictions": 0,
+        "close_precision": null,
+        "false_close_predictions": 0
+      },
+      "per_video": {
+        "breakdance": {
+          "examples": 78,
+          "confusion": {
+            "close": {
+              "close": 0,
+              "far": 27,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            },
+            "far": {
+              "close": 0,
+              "far": 21,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            },
+            "occluded": {
+              "close": 0,
+              "far": 30,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            }
+          },
+          "accuracy_all_examples": 0.2692307692307692,
+          "class_recall": {
+            "close": 0.0,
+            "far": 1.0,
+            "occluded": 0.0
+          },
+          "balanced_accuracy": 0.3333333333333333,
+          "answered_examples": 78,
+          "answer_coverage": 1.0,
+          "accuracy_answered_only": 0.2692307692307692,
+          "uncertain_examples": 0,
+          "invalid_examples": 0,
+          "close_predictions": 0,
+          "close_precision": null,
+          "false_close_predictions": 0
+        },
+        "judo": {
+          "examples": 50,
+          "confusion": {
+            "close": {
+              "close": 0,
+              "far": 19,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            },
+            "far": {
+              "close": 0,
+              "far": 16,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            },
+            "occluded": {
+              "close": 0,
+              "far": 15,
+              "occluded": 0,
+              "uncertain": 0,
+              "invalid": 0
+            }
+          },
+          "accuracy_all_examples": 0.32,
+          "class_recall": {
+            "close": 0.0,
+            "far": 1.0,
+            "occluded": 0.0
+          },
+          "balanced_accuracy": 0.3333333333333333,
+          "answered_examples": 50,
+          "answer_coverage": 1.0,
+          "accuracy_answered_only": 0.32,
+          "uncertain_examples": 0,
+          "invalid_examples": 0,
+          "close_predictions": 0,
+          "close_precision": null,
+          "false_close_predictions": 0
+        }
+      },
+      "macro_video_accuracy": 0.2946153846153846,
+      "within_video_association": {
+        "per_video": {
+          "breakdance": {
+            "examples": 78,
+            "observed_accuracy": 0.2692307692307692,
+            "shuffled_expected_accuracy": 0.2692307692307692,
+            "excess_accuracy": 0.0
+          },
+          "judo": {
+            "examples": 50,
+            "observed_accuracy": 0.32,
+            "shuffled_expected_accuracy": 0.32,
+            "excess_accuracy": 0.0
+          }
+        },
+        "macro_video_excess_accuracy": 0.0,
+        "interpretation": "within-video answer/target association beyond marginal label frequencies; not causal image reliance, a trained baseline, or a significance test"
+      }
+    },
+    "frozen_image_close_gate": {
+      "all": {
+        "examples": 128,
+        "confusion": {
+          "close": {
+            "close": 29,
+            "far": 0,
+            "occluded": 0,
+            "uncertain": 17,
+            "invalid": 0
+          },
+          "far": {
+            "close": 1,
+            "far": 0,
+            "occluded": 0,
+            "uncertain": 36,
+            "invalid": 0
+          },
+          "occluded": {
+            "close": 0,
+            "far": 0,
+            "occluded": 0,
+            "uncertain": 45,
+            "invalid": 0
+          }
+        },
+        "accuracy_all_examples": 0.2265625,
+        "class_recall": {
+          "close": 0.6304347826086957,
+          "far": 0.0,
+          "occluded": 0.0
+        },
+        "balanced_accuracy": 0.2101449275362319,
+        "answered_examples": 30,
+        "answer_coverage": 0.234375,
+        "accuracy_answered_only": 0.9666666666666667,
+        "uncertain_examples": 98,
+        "invalid_examples": 0,
+        "close_predictions": 30,
+        "close_precision": 0.9666666666666667,
+        "false_close_predictions": 1
+      },
+      "per_video": {
+        "breakdance": {
+          "examples": 78,
+          "confusion": {
+            "close": {
+              "close": 14,
+              "far": 0,
+              "occluded": 0,
+              "uncertain": 13,
+              "invalid": 0
+            },
+            "far": {
+              "close": 0,
+              "far": 0,
+              "occluded": 0,
+              "uncertain": 21,
+              "invalid": 0
+            },
+            "occluded": {
+              "close": 0,
+              "far": 0,
+              "occluded": 0,
+              "uncertain": 30,
+              "invalid": 0
+            }
+          },
+          "accuracy_all_examples": 0.1794871794871795,
+          "class_recall": {
+            "close": 0.5185185185185185,
+            "far": 0.0,
+            "occluded": 0.0
+          },
+          "balanced_accuracy": 0.1728395061728395,
+          "answered_examples": 14,
+          "answer_coverage": 0.1794871794871795,
+          "accuracy_answered_only": 1.0,
+          "uncertain_examples": 64,
+          "invalid_examples": 0,
+          "close_predictions": 14,
+          "close_precision": 1.0,
+          "false_close_predictions": 0
+        },
+        "judo": {
+          "examples": 50,
+          "confusion": {
+            "close": {
+              "close": 15,
+              "far": 0,
+              "occluded": 0,
+              "uncertain": 4,
+              "invalid": 0
+            },
+            "far": {
+              "close": 1,
+              "far": 0,
+              "occluded": 0,
+              "uncertain": 15,
+              "invalid": 0
+            },
+            "occluded": {
+              "close": 0,
+              "far": 0,
+              "occluded": 0,
+              "uncertain": 15,
+              "invalid": 0
+            }
+          },
+          "accuracy_all_examples": 0.3,
+          "class_recall": {
+            "close": 0.7894736842105263,
+            "far": 0.0,
+            "occluded": 0.0
+          },
+          "balanced_accuracy": 0.2631578947368421,
+          "answered_examples": 16,
+          "answer_coverage": 0.32,
+          "accuracy_answered_only": 0.9375,
+          "uncertain_examples": 34,
+          "invalid_examples": 0,
+          "close_predictions": 16,
+          "close_precision": 0.9375,
+          "false_close_predictions": 1
+        }
+      },
+      "macro_video_accuracy": 0.23974358974358972,
+      "within_video_association": {
+        "per_video": {
+          "breakdance": {
+            "examples": 78,
+            "observed_accuracy": 0.1794871794871795,
+            "shuffled_expected_accuracy": 0.0621301775147929,
+            "excess_accuracy": 0.11735700197238659
+          },
+          "judo": {
+            "examples": 50,
+            "observed_accuracy": 0.3,
+            "shuffled_expected_accuracy": 0.1216,
+            "excess_accuracy": 0.1784
+          }
+        },
+        "macro_video_excess_accuracy": 0.1478785009861933,
+        "interpretation": "within-video answer/target association beyond marginal label frequencies; not causal image reliance, a trained baseline, or a significance test"
+      }
+    }
+  },
+  "paired_correctness_counts": {
+    "base_False_adapted_True": 44,
+    "base_True_adapted_False": 8,
+    "base_False_adapted_False": 47,
+    "base_True_adapted_True": 29
+  },
+  "limitations": "video/track observations are dependent; answered-only accuracy has a model-selected denominator and must be read with coverage and all-example accuracy; generation-format improvement is separate from class recognition; no calibration examples used",
+  "source_sha256": {
+    "paper/results/tapvid-lora-twenty-pass-v1/validation.json": "3a2ef13d577a19bfeb6ee052908c81d954bbb1670cd61871edf5f7eee07338c7",
+    "paper/results/tapvid-judge-corpus-v1/manifest.json": "24cee1801f19d85f11a57cb6e85770bb6cb5659e7c3047f496a260d8c039a5fc",
+    "paper/results/tapvid-davis-v1/identity-development-v1.json.gz": "9e5b14f7acae3ca20da5443daa279101619e917cab3dc63e542f59e458fc391b",
+    "/Users/kmatzen/git/plumbline/paper/analyze_tapvid_lora.py": "ffe6cf8b6202f6ce4b1014910a636128cad6bbbd5fdb4d30dc83040063c93936"
+  }
+}
