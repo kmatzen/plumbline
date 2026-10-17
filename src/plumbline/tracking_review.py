@@ -236,6 +236,8 @@ def validate_trajectory_pair(
     ``min_finite_fraction`` is exposed for future gap-aware renderers, but a
     non-finite accepted pose is still reported as unsupported rather than being
     silently interpolated.
+    Frozen motion is not a structural error: task suitability is assessed
+    separately, and a stationary-camera input can legitimately have no motion.
     """
     if not 0.0 < min_finite_fraction <= 1.0:
         raise ValueError("min_finite_fraction must be in (0, 1]")
@@ -281,11 +283,6 @@ def validate_trajectory_pair(
             if not np.allclose(determinants, 1.0, atol=1e-3):
                 errors.append(f"{name}_improper_rotation")
 
-    if finite.all() and n_frames >= 2:
-        gt_extent = float(np.ptp(gt[:n_frames, :3, 3], axis=0).max())
-        pred_extent = float(np.ptp(pred[:n_frames, :3, 3], axis=0).max())
-        if gt_extent > 1e-6 and pred_extent <= max(gt_extent * 1e-6, 1e-12):
-            errors.append("frozen_predicted_trajectory")
     return TrajectoryGate(not errors, tuple(dict.fromkeys(errors)), n_frames, finite_fraction)
 
 
@@ -431,6 +428,7 @@ def write_tracking_review_artifact(
         "alignment": "sim3_umeyama",
         "input_fingerprint": _array_fingerprint(pred, gt),
         "gate": asdict(gate),
+        "gate_policy": "structural_only_v2",
         "diagnostic_unavailable_reason": diagnostic_unavailable_reason,
         "files": {
             "poses": "poses.npz",
@@ -477,6 +475,8 @@ def build_review_pair(
         second_reference = second_poses["reference"]
     if not np.array_equal(first_reference, second_reference, equal_nan=True):
         raise ValueError("artifacts use different reference frames or poses")
+    if not validate_trajectory_pair(first_reference, first_reference).ok:
+        raise ValueError("reference is invalid; cannot attribute evidence failure to candidates")
 
     swap = int(hashlib.sha256(comparison_id.encode()).hexdigest()[:8], 16) % 2 == 1
     displayed = (

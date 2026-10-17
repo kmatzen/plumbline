@@ -129,18 +129,43 @@ def test_render_trajectory_diagnostic_is_deterministic(tmp_path) -> None:
         assert image.size == (1200, 720)
 
 
-def test_gate_rejects_frozen_and_malformed_trajectories() -> None:
+def test_gate_accepts_frozen_but_rejects_malformed_trajectories() -> None:
     gt = _trajectory()
     frozen = np.repeat(np.eye(4)[None], len(gt), axis=0)
     gate = validate_trajectory_pair(frozen, gt)
-    assert not gate.ok
-    assert "frozen_predicted_trajectory" in gate.errors
+    assert gate.ok
 
     malformed = gt.copy()
     malformed[0, 3, 3] = 2.0
     gate = validate_trajectory_pair(malformed, gt)
     assert not gate.ok
     assert "predicted_invalid_homogeneous_row" in gate.errors
+
+
+def test_frozen_candidate_is_not_an_automatic_dnf(tmp_path):
+    gt = _trajectory()
+    frozen = np.repeat(np.eye(4)[None], len(gt), axis=0)
+    artifact = write_tracking_review_artifact(
+        frozen, gt, tmp_path, dataset="d", sequence="s", system="frozen", config_hash="c"
+    )
+    manifest = json.loads((artifact / "manifest.json").read_text())
+    assert manifest["gate"]["ok"]
+    assert manifest["gate_policy"] == "structural_only_v2"
+    assert manifest["files"]["diagnostic"] is None
+    assert "predicted trajectory" in manifest["diagnostic_unavailable_reason"]
+
+
+def test_invalid_reference_cannot_generate_candidate_failure_vote(tmp_path):
+    gt = _trajectory()
+    gt[0, 3, 3] = 2
+    artifacts = [
+        write_tracking_review_artifact(
+            _trajectory(), gt, tmp_path, dataset="d", sequence="s", system=name, config_hash="c"
+        )
+        for name in ("a", "b")
+    ]
+    with pytest.raises(ValueError, match="reference is invalid"):
+        build_review_pair(*artifacts, tmp_path / "pair", task_id="s", comparison_id="bad-ref")
 
 
 def test_valid_artifact_contains_manifest_poses_metrics_and_diagnostic(tmp_path) -> None:

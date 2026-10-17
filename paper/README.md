@@ -214,6 +214,16 @@ or crashing on two stationary paths. Pose validity remains separate. Such pairs
 cannot receive a preference inferred from missing diagnostic images. This fixes
 an exact degeneracy; it does not solve alignment sensitivity near zero motion.
 
+New review artifacts use `gate_policy: structural_only_v2`. Frozen predictions
+no longer receive an automatic invalid-output label: they can be valid on a
+stationary-camera task, and poor motion recovery belongs to the functional
+assessment. A frozen candidate may still lack a Sim(3) diagnostic. Invalid
+reference poses block pair construction instead of counting against either
+candidate. Historical artifacts and votes retain their original policy; do not
+pool old automatic frozen-track rejections with the new structural-only gate.
+The active human pilot is unchanged. The manuscript source reflects this policy;
+the previously built PDF has not yet been regenerated.
+
 `build_source_preview.py MANIFEST DATA_ROOT NEW_OUTPUT` verifies the source-image
 hashes before staging frames and encoding a source-only MP4. Playback uses the
 median sampling interval; exact timestamps are retained and remain authoritative
