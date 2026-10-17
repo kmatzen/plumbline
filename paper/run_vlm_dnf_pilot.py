@@ -102,6 +102,7 @@ def run(
     visual_tokens: int = 1280,
     quantization: str = "none",
     numeric_preflight_only: bool = False,
+    fp32_attention_scores: bool = False,
 ) -> None:
     if task not in {"dnf", "geometry", "source_identity"}:
         raise ValueError("unknown pilot task")
@@ -126,6 +127,7 @@ def run(
         "scope": "diagnostic-only development pilot",
         "task": task,
         "numeric_preflight_only": numeric_preflight_only,
+        "fp32_attention_scores": fp32_attention_scores,
         "checkpoint": str(checkpoint.resolve()),
         "image_sha256": hashlib.sha256(image.read_bytes()).hexdigest(),
         "prompt": prompt,
@@ -152,7 +154,30 @@ def run(
         output.write_text(json.dumps(result, indent=2) + "\n")
 
     save()
+    original_attention = None
     try:
+        if fp32_attention_scores:
+            import importlib.util
+
+            from transformers.models.qwen2_5_vl import modeling_qwen2_5_vl as implementation
+
+            helper_path = Path(__file__).with_name("fp32_attention_scores.py")
+            spec = importlib.util.spec_from_file_location(
+                "pilot_fp32_attention_scores", helper_path
+            )
+            helper = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(helper)
+            original_attention = implementation.eager_attention_forward
+
+            def score_attention(module, *args, **kwargs):
+                if type(module).__name__ == "Qwen2_5_VLAttention":
+                    return helper.attention(module, *args, **kwargs)
+                return original_attention(module, *args, **kwargs)
+
+            implementation.eager_attention_forward = score_attention
+            result["attention_helper_sha256"] = digest_file(helper_path)
+            result["attention_implementation_sha256"] = digest_file(Path(implementation.__file__))
+            save()
         result["checkpoint_files"] = {
             str(p.relative_to(checkpoint)): digest_file(p)
             for p in sorted(checkpoint.rglob("*"))
@@ -278,6 +303,9 @@ def run(
         result.update({"status": "failed", "traceback": traceback.format_exc()})
         save()
         raise
+    finally:
+        if original_attention is not None:
+            implementation.eager_attention_forward = original_attention
 
 
 if __name__ == "__main__":
@@ -289,6 +317,7 @@ if __name__ == "__main__":
     parser.add_argument("--visual-tokens", type=int, default=1280)
     parser.add_argument("--quantization", choices=("none", "nf4"), default="none")
     parser.add_argument("--numeric-preflight-only", action="store_true")
+    parser.add_argument("--fp32-attention-scores", action="store_true")
     args = parser.parse_args()
     run(
         args.checkpoint,
@@ -298,4 +327,5 @@ if __name__ == "__main__":
         args.visual_tokens,
         args.quantization,
         args.numeric_preflight_only,
+        args.fp32_attention_scores,
     )

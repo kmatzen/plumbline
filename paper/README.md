@@ -311,6 +311,28 @@ numerical failure before interpreting the punctuation as a visual judgment; it
 does not yet distinguish invalid projection weights, upstream attention values,
 or arithmetic overflow. Neither scheduled response is overwritten or repaired.
 
+The separate `audit_vlm_attention.py` traced the first language attention call
+while returning the original attention output unchanged. Queries, keys, and
+values are finite. The unscaled fp16 query-key product contains 157 nonfinite
+entries; the same operands multiplied in fp32 are finite with maximum magnitude
+66,003.890625, above fp16's finite range. Scaling occurs after this overflowing
+product in the installed eager implementation. Its softmax has 891 nonfinite
+entries; the fp32-product softmax has none. The trace records the installed
+implementation hash and is retained with the failed audit run.
+
+The opt-in `--fp32-attention-scores` path computes only language attention score
+products, scaling, masking, and softmax in fp32, then casts probabilities back
+to the query dtype for value aggregation. It preserves grouped-query expansion,
+masking, dropout semantics, and output layout; vision attention is unchanged.
+The helper is separately hashed. Tests cover a constructed fp16 overflow and
+agreement with explicit grouped, causal-mask reference arithmetic. This changes
+numerical precision, not the prompt, checkpoint, inputs, or output parsing.
+The full on-control numerical preflight passed with finite leaf outputs and
+final logits in 3.67 seconds (7,083,801,088 peak allocated bytes). This is not
+end-to-end equivalence to unquantized 7B inference or evidence of judgment quality.
+New `fp32-control_on/off.json` generation attempts are running separately; the
+original failed responses remain intact.
+
 A separate source-identity VLM pilot uses the first frame of each of these three
 examples. It asks only what physical detail the cyan circle marks, or to abstain;
 it explicitly prohibits staticness, motion, camera-quality, and DNF judgments

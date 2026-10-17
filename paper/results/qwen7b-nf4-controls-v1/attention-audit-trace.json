@@ -1,0 +1,111 @@
+{
+  "status": "complete",
+  "scope": "arithmetic audit; original attention returned unchanged",
+  "script_sha256": "7cb1e41c4573a428a8adb333a01d638e3603939131fc263749f425d78488faa2",
+  "runner_sha256": "5559edba890d182aa72af6ce5c0e6eccd8c0fb13cf9b552373f8b394b86513db",
+  "implementation_sha256": "9d6d15040bdb985d9518117ed029f6a318a38abc06091462d96f16cf1d3d7820",
+  "image_sha256": "f02fb29c19fc0dbc5fb5162757920ccc469663de403655b4913c1f6ab112f24d",
+  "layer": 0,
+  "scaling": 0.08838834764831845,
+  "statistics": {
+    "query": {
+      "shape": [
+        1,
+        28,
+        891,
+        128
+      ],
+      "dtype": "torch.float16",
+      "nonfinite": 0,
+      "maximum_finite_absolute": 72.4375
+    },
+    "key": {
+      "shape": [
+        1,
+        4,
+        891,
+        128
+      ],
+      "dtype": "torch.float16",
+      "nonfinite": 0,
+      "maximum_finite_absolute": 173.625
+    },
+    "value": {
+      "shape": [
+        1,
+        4,
+        891,
+        128
+      ],
+      "dtype": "torch.float16",
+      "nonfinite": 0,
+      "maximum_finite_absolute": 3.810546875
+    },
+    "qk_fp16": {
+      "shape": [
+        1,
+        28,
+        891,
+        891
+      ],
+      "dtype": "torch.float16",
+      "nonfinite": 157,
+      "maximum_finite_absolute": 65504.0
+    },
+    "qk_fp32": {
+      "shape": [
+        1,
+        28,
+        891,
+        891
+      ],
+      "dtype": "torch.float32",
+      "nonfinite": 0,
+      "maximum_finite_absolute": 66003.890625
+    },
+    "scaled_fp16": {
+      "shape": [
+        1,
+        28,
+        891,
+        891
+      ],
+      "dtype": "torch.float16",
+      "nonfinite": 157,
+      "maximum_finite_absolute": 5788.0
+    },
+    "scaled_fp32": {
+      "shape": [
+        1,
+        28,
+        891,
+        891
+      ],
+      "dtype": "torch.float32",
+      "nonfinite": 0,
+      "maximum_finite_absolute": 5833.974609375
+    },
+    "softmax_from_fp16": {
+      "shape": [
+        1,
+        28,
+        891,
+        891
+      ],
+      "dtype": "torch.float32",
+      "nonfinite": 891,
+      "maximum_finite_absolute": 1.0
+    },
+    "softmax_from_fp32": {
+      "shape": [
+        1,
+        28,
+        891,
+        891
+      ],
+      "dtype": "torch.float32",
+      "nonfinite": 0,
+      "maximum_finite_absolute": 1.0
+    }
+  }
+}
