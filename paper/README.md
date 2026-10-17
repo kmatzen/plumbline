@@ -86,6 +86,51 @@ and [epipolar geometry](https://docs.opencv.org/4.x/da/de9/tutorial_py_epipolar_
 methods. These are baselines against which the proposed review methodology must
 be tested.
 
+## Human diagnostic-review pilot
+
+`build_review_study.py` creates 150 native-input comparisons and 15 hidden
+repeated presentations, with method names removed and candidate sides randomized.
+The study asks reviewers to compare reference-based trajectory and rotation-error
+plots. It does not ask about rendered-video quality. The present plots clip large
+errors (with clipping counts shown), so reviewers may lack enough information to
+rank some failures. An abstention is a valid response.
+
+The active local packet is `tmp/review-study-v1`, served on port 8766. Keep this
+packet unchanged while reviewers work. To create a separate packet:
+
+```sh
+uv run python paper/build_review_study.py --help
+```
+
+Serve only the packet's `public/` directory; `private/study.json` contains method
+identities and repeat mappings. The browser stores responses locally and exports
+a JSON file through **Download responses**. Partial sessions are supported. Use
+one browser profile per reviewer: changing the reviewer code in a populated
+session does not clear its answers. Retain only the latest cumulative export
+from each reviewer, not several exports of the same person's responses.
+
+Analyze received exports with:
+
+```sh
+uv run python paper/analyze_review_study.py \
+  tmp/review-study-v1/private/study.json reviewer-one.json reviewer-two.json \
+  --output tmp/review-analysis-v1.json
+```
+
+The analyzer rejects duplicate reviewer codes, duplicate responses, and mismatched
+studies. Anonymous codes cannot prove that reviewers are distinct people; that
+must be checked during recruitment. Only original presentations count toward
+consensus. Repeats measure within-reviewer consistency, and repeat-only responses
+are not substituted for missing originals. Consensus requires at least two
+non-abstaining reviewers and a strict majority. Ties, both-poor judgments, and
+abstentions remain distinct. Inter-reviewer exact agreement reports its overlap
+and usable-pair denominators, excluding repeats and abstentions; it is descriptive,
+not a chance-corrected reliability estimate.
+
+No human outcomes have been analyzed yet. Project-member feedback is pilot data,
+not independent external validation. A small partial session cannot establish
+generalization, evaluator superiority, or a publication-ready reliability claim.
+
 Build from the repository root:
 
 ```sh

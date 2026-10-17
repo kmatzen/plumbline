@@ -208,7 +208,40 @@ def test_blinded_pair_and_vote_round_trip(tmp_path) -> None:
     assert row["source"] == "human"
     assert json.loads(log.read_text())["comparison_id"] == "comparison-1"
     with pytest.raises(ValueError, match="already recorded"):
-        record_review_vote(pair_path, "b", log)
+        record_review_vote(pair_path, "b", log, reviewer="human-1")
+    record_review_vote(pair_path, "b", log, reviewer="human-2")
+    assert len(log.read_text().splitlines()) == 2
+
+
+def test_pair_rejects_different_reference_frames(tmp_path) -> None:
+    gt = _trajectory()
+    first = write_tracking_review_artifact(
+        gt, gt, tmp_path / "artifacts", dataset="d", sequence="s", system="a", config_hash="1"
+    )
+    changed = gt.copy()
+    changed[5, 0, 3] += 0.01
+    second = write_tracking_review_artifact(
+        changed,
+        changed,
+        tmp_path / "artifacts",
+        dataset="d",
+        sequence="s",
+        system="b",
+        config_hash="2",
+    )
+    with pytest.raises(ValueError, match="reference frames"):
+        build_review_pair(first, second, tmp_path / "pair", task_id="s", comparison_id="x")
+
+
+def test_calibration_counts_missing_judge_rows_as_uncovered() -> None:
+    human = [{"comparison_id": str(i), "winner": "a", "source": "human"} for i in range(10)]
+    judge = [{"comparison_id": "0", "winner": "a", "source": "vlm"}]
+    result = calibrate_judge_votes(human, judge)
+    assert result["accuracy"] == 1.0
+    assert result["coverage"] == 0.1
+    assert result["n_human_decisive"] == 10
+    with pytest.raises(ValueError, match="aggregate"):
+        calibrate_judge_votes(human + human[:1], judge)
 
 
 def test_gated_pair_has_automatic_outcome(tmp_path) -> None:

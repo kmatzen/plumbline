@@ -458,6 +458,12 @@ def build_review_pair(
     actual = (second["dataset"], second["sequence"])
     if actual != expected:
         raise ValueError(f"artifacts describe different tasks: {expected!r} != {actual!r}")
+    with np.load(first_path / "poses.npz", allow_pickle=False) as first_poses:
+        first_reference = first_poses["reference"]
+    with np.load(second_path / "poses.npz", allow_pickle=False) as second_poses:
+        second_reference = second_poses["reference"]
+    if not np.array_equal(first_reference, second_reference, equal_nan=True):
+        raise ValueError("artifacts use different reference frames or poses")
 
     swap = int(hashlib.sha256(comparison_id.encode()).hexdigest()[:8], 16) % 2 == 1
     displayed = (
@@ -532,7 +538,11 @@ def record_review_vote(
     reviewer: str | None = None,
     source: str = "human",
 ) -> dict[str, Any]:
-    """Append one non-duplicate pair verdict to the canonical JSONL log."""
+    """Append one verdict per comparison, source, and reviewer to the log.
+
+    Independent reviewers may judge the same pair. Gate verdicts remain unique
+    per comparison because they are deterministic, not independent judgments.
+    """
     pair_file = Path(pair_path)
     pair = json.loads(pair_file.read_text(encoding="utf-8"))
     if pair.get("schema_version") != "1.0.0":
@@ -552,8 +562,16 @@ def record_review_vote(
     comparison_id = str(pair["comparison_id"])
     if output.is_file():
         for line in output.read_text(encoding="utf-8").splitlines():
-            if line.strip() and json.loads(line).get("comparison_id") == comparison_id:
-                raise ValueError(f"comparison {comparison_id!r} is already recorded")
+            if not line.strip():
+                continue
+            existing = json.loads(line)
+            if existing.get("comparison_id") != comparison_id:
+                continue
+            same_judge = existing.get("source") == source and existing.get("reviewer") == reviewer
+            if source == "gate" or same_judge:
+                raise ValueError(
+                    f"comparison {comparison_id!r} is already recorded for this reviewer"
+                )
     row = {
         "comparison_id": comparison_id,
         "task_id": str(pair["task_id"]),
@@ -662,14 +680,29 @@ def calibrate_judge_votes(
     """Measure a judge log against human labels on shared comparison IDs.
 
     Accuracy/kappa use only pairs where both sides chose A or B. Coverage is
-    judge-decisive / human-decisive, so a judge cannot inflate agreement by
-    returning ties on difficult cases. Gate-generated rows are excluded.
+    judge-decisive / all human-decisive, including comparisons the judge omitted.
+    Each input must have one label per comparison; aggregate independent human
+    votes explicitly before calibration. Gate-generated rows are excluded.
     """
-    human = {str(row["comparison_id"]): row for row in human_rows if row.get("source") != "gate"}
-    judge = {str(row["comparison_id"]): row for row in judge_rows if row.get("source") != "gate"}
+
+    def unique_rows(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+        selected: dict[str, dict[str, Any]] = {}
+        for row in rows:
+            if row.get("source") == "gate":
+                continue
+            cid = str(row["comparison_id"])
+            if cid in selected:
+                raise ValueError("multiple labels per comparison: aggregate reviewer votes first")
+            selected[cid] = row
+        return selected
+
+    human = unique_rows(human_rows)
+    judge = unique_rows(judge_rows)
     shared_ids = sorted(set(human) & set(judge))
-    human_decisive = [cid for cid in shared_ids if human[cid].get("winner") in {"a", "b"}]
-    decisive = [cid for cid in human_decisive if judge[cid].get("winner") in {"a", "b"}]
+    human_decisive = [cid for cid in human if human[cid].get("winner") in {"a", "b"}]
+    decisive = [
+        cid for cid in human_decisive if cid in judge and judge[cid].get("winner") in {"a", "b"}
+    ]
     confusion = {"a": {"a": 0, "b": 0}, "b": {"a": 0, "b": 0}}
     for cid in decisive:
         confusion[str(human[cid]["winner"])][str(judge[cid]["winner"])] += 1
