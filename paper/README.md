@@ -2864,3 +2864,19 @@ and permissive geometric compatibility can hide a camera perturbation. The
 current fitting rule also requires every prefix observation and loses evidence
 when even one is missing. A missing-aware fit needs an explicit observability
 check, not an implicit pass. These development results stay outside the paper.
+
+`probe_available_fit_consistency.py` tests available-prefix observations without
+changing the original comparison. It requires at least two observations and a
+positive fitting witness, retains missing-query counts, and uses the same joint
+query constraints. This is not a triangulation-precision or observability test.
+`results/rendered-available-fit-control-v1.json.gz` retains every paired transition.
+The unobstructed conditions are unchanged. For occluded measured tracks, the
+numbers of compatible and contradictory slots are also unchanged: 79 slots
+instead resolve to missing query evidence and nine to unestablished fitting
+geometry. The no-restart tracker cannot recover observations after loss, so
+relaxing the prefix requirement alone does not restore usable query evidence.
+For exact visible tracks, all 120 slots now have sufficient fitting evidence:
+all are compatible at zero/one degree, and all contradict the five-degree
+perturbation. This oracle result motivates testing explicit track recovery with
+independent identity checks; it does not justify treating restarted tracks as
+correct or adding any new DNF claims to the manuscript.
