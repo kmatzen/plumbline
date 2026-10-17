@@ -1,0 +1,2947 @@
+{
+  "status": "complete",
+  "scope": "small development visual-adaptation diagnostic, not VLM comparison, camera accuracy, or DNF",
+  "protocol": "first and second native 161x161 panel crops; ImageNet ResNet18; frozen backbone versus trainable layer4; same seed-0 head and training order; 20 epochs; Adam 1e-4; batch 8; inverse-frequency training loss; no augmentation, early stopping or checkpoint selection; validation only after both training arms finish",
+  "limitation": "188 training examples and two validation videos; cropped evidence omits context; pretrained generic backbone differs from Qwen vision encoder; no isolated claim about cause of VLM failure",
+  "corpus_sha256": "24cee1801f19d85f11a57cb6e85770bb6cb5659e7c3047f496a260d8c039a5fc",
+  "script_sha256": "bef6e775359a256c4acf0cdda12cb930b8303d79a0ee5468e891272e0f3d4fa6",
+  "arms": {
+    "frozen": {
+      "status": "complete",
+      "trainable_parameters": 262659,
+      "epochs": [
+        {
+          "epoch": 1,
+          "mean_batch_weighted_loss": 1.072390300162295
+        },
+        {
+          "epoch": 2,
+          "mean_batch_weighted_loss": 0.7889177317314959
+        },
+        {
+          "epoch": 3,
+          "mean_batch_weighted_loss": 0.6599667275205572
+        },
+        {
+          "epoch": 4,
+          "mean_batch_weighted_loss": 0.5713364050743428
+        },
+        {
+          "epoch": 5,
+          "mean_batch_weighted_loss": 0.4862517575000195
+        },
+        {
+          "epoch": 6,
+          "mean_batch_weighted_loss": 0.41434688327160285
+        },
+        {
+          "epoch": 7,
+          "mean_batch_weighted_loss": 0.37740764354771755
+        },
+        {
+          "epoch": 8,
+          "mean_batch_weighted_loss": 0.3255708334927863
+        },
+        {
+          "epoch": 9,
+          "mean_batch_weighted_loss": 0.31588774380531714
+        },
+        {
+          "epoch": 10,
+          "mean_batch_weighted_loss": 0.27125341334241504
+        },
+        {
+          "epoch": 11,
+          "mean_batch_weighted_loss": 0.24802620677237816
+        },
+        {
+          "epoch": 12,
+          "mean_batch_weighted_loss": 0.22004655193775258
+        },
+        {
+          "epoch": 13,
+          "mean_batch_weighted_loss": 0.1927351583825781
+        },
+        {
+          "epoch": 14,
+          "mean_batch_weighted_loss": 0.16643919779899272
+        },
+        {
+          "epoch": 15,
+          "mean_batch_weighted_loss": 0.1413282220985027
+        },
+        {
+          "epoch": 16,
+          "mean_batch_weighted_loss": 0.13273334201980144
+        },
+        {
+          "epoch": 17,
+          "mean_batch_weighted_loss": 0.10344651749634996
+        },
+        {
+          "epoch": 18,
+          "mean_batch_weighted_loss": 0.09287829110597043
+        },
+        {
+          "epoch": 19,
+          "mean_batch_weighted_loss": 0.08047122704459632
+        },
+        {
+          "epoch": 20,
+          "mean_batch_weighted_loss": 0.06741021173272996
+        }
+      ],
+      "checkpoint_sha256": "8ea141e28f2641fd9446ba60c846562a1ff4c743cddc08e749b408febcfe5a10",
+      "validation": [
+        {
+          "id": "f2ab662d01a8e31b1dea",
+          "target": "close",
+          "probabilities": [
+            0.99496990442276,
+            0.0016620844835415483,
+            0.0033680826891213655
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "01b47f9b68dc48073f14",
+          "target": "far",
+          "probabilities": [
+            0.35276252031326294,
+            0.48006588220596313,
+            0.1671716272830963
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "725650956b86b9f0e351",
+          "target": "close",
+          "probabilities": [
+            0.706430971622467,
+            0.22190266847610474,
+            0.07166632264852524
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "11552438faf0b9139f56",
+          "target": "close",
+          "probabilities": [
+            0.5263079404830933,
+            0.25369107723236084,
+            0.22000093758106232
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "2e83aed31495effd8a37",
+          "target": "close",
+          "probabilities": [
+            0.9796939492225647,
+            0.012076418846845627,
+            0.008229568600654602
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "72c1207638caddd9c16d",
+          "target": "close",
+          "probabilities": [
+            0.6938493847846985,
+            0.22329063713550568,
+            0.08285995572805405
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "67f3c2980c3319e3def1",
+          "target": "close",
+          "probabilities": [
+            0.5703168511390686,
+            0.1435168832540512,
+            0.28616631031036377
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "6a8b48fa6b3d9cf65b76",
+          "target": "occluded",
+          "probabilities": [
+            0.08706250041723251,
+            0.8927077054977417,
+            0.020229872316122055
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "c40b2690363ccc2119de",
+          "target": "far",
+          "probabilities": [
+            0.015220783650875092,
+            0.9676973223686218,
+            0.01708187349140644
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "1e1e6d4ea025977f0db9",
+          "target": "occluded",
+          "probabilities": [
+            0.017152346670627594,
+            0.8806360363960266,
+            0.102211594581604
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "ded2961089ad99d6d915",
+          "target": "occluded",
+          "probabilities": [
+            0.004063726402819157,
+            0.9337621331214905,
+            0.06217411160469055
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "7c490fa24ea30bc6a14b",
+          "target": "far",
+          "probabilities": [
+            0.03962557762861252,
+            0.8314432501792908,
+            0.12893114984035492
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "20dfb00126231d7f05d2",
+          "target": "occluded",
+          "probabilities": [
+            0.013295182958245277,
+            0.9208210706710815,
+            0.06588374823331833
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "ca46414c8adb1531ecf8",
+          "target": "occluded",
+          "probabilities": [
+            0.00900475587695837,
+            0.9672142863273621,
+            0.023780981078743935
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "e8fe9f4413af46ad0df5",
+          "target": "occluded",
+          "probabilities": [
+            0.026907436549663544,
+            0.8579515218734741,
+            0.11514104902744293
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "a3624e53bce3e09a31f3",
+          "target": "occluded",
+          "probabilities": [
+            0.011081592179834843,
+            0.7955947518348694,
+            0.19332367181777954
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "4d9cdef228c38c90faef",
+          "target": "occluded",
+          "probabilities": [
+            0.009358451701700687,
+            0.7141093611717224,
+            0.2765321433544159
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "48f0201dd2a7b808f202",
+          "target": "occluded",
+          "probabilities": [
+            0.010012711398303509,
+            0.7506605386734009,
+            0.23932674527168274
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "33c2caae408df20185ff",
+          "target": "far",
+          "probabilities": [
+            0.04621082544326782,
+            0.7056514620780945,
+            0.24813777208328247
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "3f834da9552a6b9208b1",
+          "target": "occluded",
+          "probabilities": [
+            0.09648910164833069,
+            0.8567158579826355,
+            0.04679504409432411
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "c7ac111e50c707edd1ac",
+          "target": "occluded",
+          "probabilities": [
+            0.30648910999298096,
+            0.6449416875839233,
+            0.0485692024230957
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "3e03deee02fd42622275",
+          "target": "occluded",
+          "probabilities": [
+            0.03970273584127426,
+            0.8612915873527527,
+            0.09900567680597305
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "a1d0b1d986d8db0614fd",
+          "target": "far",
+          "probabilities": [
+            0.026619866490364075,
+            0.7190743684768677,
+            0.25430575013160706
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "64c906da40b9f54e4c08",
+          "target": "occluded",
+          "probabilities": [
+            0.0018654202576726675,
+            0.8003185987472534,
+            0.19781599938869476
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "ac333d4e5a3232c39916",
+          "target": "close",
+          "probabilities": [
+            0.9917062520980835,
+            0.005730705335736275,
+            0.002563068177551031
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "bcb6f6e637fb0119e615",
+          "target": "close",
+          "probabilities": [
+            0.9771265387535095,
+            0.011114681139588356,
+            0.011758742853999138
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "7d91598d6fac540a6c76",
+          "target": "occluded",
+          "probabilities": [
+            0.2989465296268463,
+            0.44772443175315857,
+            0.2533290684223175
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "b346d7f9421e09f1fed6",
+          "target": "far",
+          "probabilities": [
+            0.041147902607917786,
+            0.6540216207504272,
+            0.30483049154281616
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "9cd502a2b279778641c2",
+          "target": "close",
+          "probabilities": [
+            0.9240167140960693,
+            0.02049526572227478,
+            0.055487941950559616
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "0bc0759230710295b509",
+          "target": "close",
+          "probabilities": [
+            0.7698767781257629,
+            0.026694772765040398,
+            0.2034284770488739
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "b097b88868ed1fea1062",
+          "target": "occluded",
+          "probabilities": [
+            0.3421327769756317,
+            0.3112047612667084,
+            0.3466624319553375
+          ],
+          "predicted": "occluded"
+        },
+        {
+          "id": "9b3e8cb2b2a4c86e48c1",
+          "target": "far",
+          "probabilities": [
+            0.6393657326698303,
+            0.14504140615463257,
+            0.2155928909778595
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "213ab401b43075f407a9",
+          "target": "close",
+          "probabilities": [
+            0.9838948845863342,
+            0.010272859595716,
+            0.005832175724208355
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "26c6e464b8e4ccde7b4a",
+          "target": "occluded",
+          "probabilities": [
+            0.15400271117687225,
+            0.24607475101947784,
+            0.5999225378036499
+          ],
+          "predicted": "occluded"
+        },
+        {
+          "id": "905953814a73a7cb1241",
+          "target": "far",
+          "probabilities": [
+            0.036168187856674194,
+            0.5189023613929749,
+            0.44492948055267334
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "3d70a8e9b0b88cf67aa8",
+          "target": "close",
+          "probabilities": [
+            0.8070659041404724,
+            0.14107947051525116,
+            0.05185466632246971
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "9dab7211ef9e31ed0055",
+          "target": "occluded",
+          "probabilities": [
+            0.0757518783211708,
+            0.6434342265129089,
+            0.28081390261650085
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "ef89e33d7f61f00aa89b",
+          "target": "close",
+          "probabilities": [
+            0.8638944029808044,
+            0.08664189279079437,
+            0.049463704228401184
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "4b002ebf1374f31e06d7",
+          "target": "close",
+          "probabilities": [
+            0.7231694459915161,
+            0.1412666290998459,
+            0.1355639547109604
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "6affc4245777f22945ca",
+          "target": "occluded",
+          "probabilities": [
+            0.0404181145131588,
+            0.6130766868591309,
+            0.34650519490242004
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "3f52bc3efbeb0b66e197",
+          "target": "occluded",
+          "probabilities": [
+            0.1574506163597107,
+            0.2818872928619385,
+            0.5606620907783508
+          ],
+          "predicted": "occluded"
+        },
+        {
+          "id": "ae3900cdf857b2d49a8b",
+          "target": "close",
+          "probabilities": [
+            0.7119885087013245,
+            0.2303147315979004,
+            0.057696785777807236
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "649ae9122b13dd8b5068",
+          "target": "occluded",
+          "probabilities": [
+            0.0323997363448143,
+            0.7046301364898682,
+            0.26297011971473694
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "21afac03c4f5e732656d",
+          "target": "far",
+          "probabilities": [
+            0.15519499778747559,
+            0.6254640817642212,
+            0.21934093534946442
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "c7b312cd2b34ea460d23",
+          "target": "occluded",
+          "probabilities": [
+            0.21089670062065125,
+            0.43765395879745483,
+            0.3514494001865387
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "81255e29c13d58dd10fb",
+          "target": "close",
+          "probabilities": [
+            0.1878875344991684,
+            0.7481542825698853,
+            0.06395813077688217
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "ef8b4b8da3f6a92a3f80",
+          "target": "occluded",
+          "probabilities": [
+            0.11493424326181412,
+            0.5601783990859985,
+            0.32488736510276794
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "c6ccb85eb919945b7f12",
+          "target": "far",
+          "probabilities": [
+            0.016552850604057312,
+            0.8195447325706482,
+            0.16390247642993927
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "30db20736cdcb4c238f3",
+          "target": "occluded",
+          "probabilities": [
+            0.04089013859629631,
+            0.7652757167816162,
+            0.193834125995636
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "f8736f795ad695a87611",
+          "target": "occluded",
+          "probabilities": [
+            0.04642077162861824,
+            0.8848460912704468,
+            0.06873318552970886
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "dead18919ba43139ea5e",
+          "target": "occluded",
+          "probabilities": [
+            0.009269889444112778,
+            0.9335113763809204,
+            0.05721869319677353
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "940281a0a1998c5dc686",
+          "target": "far",
+          "probabilities": [
+            0.023778079077601433,
+            0.6855418682098389,
+            0.29068005084991455
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "70fbcb07734ba5d438da",
+          "target": "occluded",
+          "probabilities": [
+            0.02452521212399006,
+            0.6995866298675537,
+            0.2758881747722626
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "4b3a9a976f232f113765",
+          "target": "close",
+          "probabilities": [
+            0.36716821789741516,
+            0.5572405457496643,
+            0.07559125125408173
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "956e11ce0ad2fef8ed80",
+          "target": "occluded",
+          "probabilities": [
+            0.002713857451453805,
+            0.9065009951591492,
+            0.09078514575958252
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "5167dd86749bafda96ae",
+          "target": "far",
+          "probabilities": [
+            0.06857166439294815,
+            0.670605480670929,
+            0.2608228623867035
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "22ee0ae304b177aab228",
+          "target": "far",
+          "probabilities": [
+            0.020760558545589447,
+            0.7433135509490967,
+            0.2359258532524109
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "25d83a87473744fd5c23",
+          "target": "occluded",
+          "probabilities": [
+            0.5892860293388367,
+            0.27022597193717957,
+            0.14048798382282257
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "e3431a683d0b6a17301d",
+          "target": "occluded",
+          "probabilities": [
+            0.014985105954110622,
+            0.8540935516357422,
+            0.13092128932476044
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "e9de4f63a4baf81f5078",
+          "target": "far",
+          "probabilities": [
+            0.1232607290148735,
+            0.3444955050945282,
+            0.5322437882423401
+          ],
+          "predicted": "occluded"
+        },
+        {
+          "id": "84efff7504ef374c7878",
+          "target": "occluded",
+          "probabilities": [
+            0.08047885447740555,
+            0.4875979721546173,
+            0.4319232702255249
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "07e0f28445e2efc216d7",
+          "target": "close",
+          "probabilities": [
+            0.9852718114852905,
+            0.01018105261027813,
+            0.004547088872641325
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "02b68ed481e145aaac18",
+          "target": "far",
+          "probabilities": [
+            0.2633286118507385,
+            0.5007895827293396,
+            0.23588179051876068
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "84745b00098010703441",
+          "target": "far",
+          "probabilities": [
+            0.49180904030799866,
+            0.36368438601493835,
+            0.14450649917125702
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "c53f4b37f27841bb8cfe",
+          "target": "far",
+          "probabilities": [
+            0.5721971988677979,
+            0.26529011130332947,
+            0.1625126600265503
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "09833df77b6cf04a4d81",
+          "target": "far",
+          "probabilities": [
+            0.9243013858795166,
+            0.0700155645608902,
+            0.005683045834302902
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "51282d234e646b17e9c4",
+          "target": "far",
+          "probabilities": [
+            0.7776345014572144,
+            0.16004344820976257,
+            0.062322042882442474
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "d63a1257ad6ed4b29ba1",
+          "target": "close",
+          "probabilities": [
+            0.8072028160095215,
+            0.1375366449356079,
+            0.05526065453886986
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "00b4589db43d202e55d3",
+          "target": "close",
+          "probabilities": [
+            0.799399733543396,
+            0.12092310190200806,
+            0.07967719435691833
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "e070816e823321cc451b",
+          "target": "close",
+          "probabilities": [
+            0.80715012550354,
+            0.11390168219804764,
+            0.07894813269376755
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "f9173b68a781b3ee11ee",
+          "target": "close",
+          "probabilities": [
+            0.8472075462341309,
+            0.07324867695569992,
+            0.07954377681016922
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "dfd9e7b61bef5db23453",
+          "target": "close",
+          "probabilities": [
+            0.8543491959571838,
+            0.09423965215682983,
+            0.05141110345721245
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "c293446682f6c94dc41c",
+          "target": "close",
+          "probabilities": [
+            0.5830774903297424,
+            0.15561890602111816,
+            0.261303573846817
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "e6940db209a27400fc28",
+          "target": "close",
+          "probabilities": [
+            0.8436075448989868,
+            0.09399831295013428,
+            0.06239420920610428
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "005b97a86dec7275b731",
+          "target": "close",
+          "probabilities": [
+            0.7514564394950867,
+            0.23524515330791473,
+            0.013298443518579006
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "7ddbd828336d065959c4",
+          "target": "close",
+          "probabilities": [
+            0.2955961227416992,
+            0.6238554120063782,
+            0.08054842799901962
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "dfb4bf7a426db0d78cea",
+          "target": "far",
+          "probabilities": [
+            0.33921369910240173,
+            0.34159204363822937,
+            0.3191942572593689
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "b01b54eb1e7437d86596",
+          "target": "far",
+          "probabilities": [
+            0.5011008977890015,
+            0.31846296787261963,
+            0.1804361343383789
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "421eceda0b7eb85559e9",
+          "target": "close",
+          "probabilities": [
+            0.8868035078048706,
+            0.08318440616130829,
+            0.030012037605047226
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "c4a92f5e80d99abf07ef",
+          "target": "occluded",
+          "probabilities": [
+            0.05453859269618988,
+            0.6226948499679565,
+            0.32276657223701477
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "1b725543df93745ac28a",
+          "target": "far",
+          "probabilities": [
+            0.025331230834126472,
+            0.9132928848266602,
+            0.06137584522366524
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "d733fa216e1f2ec2dc1e",
+          "target": "close",
+          "probabilities": [
+            0.5177503824234009,
+            0.421273410320282,
+            0.06097614765167236
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "c8a8cc19942d5e3d098a",
+          "target": "occluded",
+          "probabilities": [
+            0.06399683654308319,
+            0.7666334509849548,
+            0.16936974227428436
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "8e9ee6a8eb7578b5f5c4",
+          "target": "far",
+          "probabilities": [
+            0.002861498389393091,
+            0.989719808101654,
+            0.007418683730065823
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "e4bb4c36199211022a5f",
+          "target": "occluded",
+          "probabilities": [
+            0.47546881437301636,
+            0.4504879117012024,
+            0.07404327392578125
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "82b1e7332f340b5bb882",
+          "target": "occluded",
+          "probabilities": [
+            0.03265426307916641,
+            0.24812757968902588,
+            0.7192181348800659
+          ],
+          "predicted": "occluded"
+        },
+        {
+          "id": "d6eb14cf9f5c5d37a6a3",
+          "target": "occluded",
+          "probabilities": [
+            0.02298801951110363,
+            0.7872413992881775,
+            0.18977060914039612
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "72c713b07c7f4e2e0875",
+          "target": "close",
+          "probabilities": [
+            0.29126858711242676,
+            0.6768773198127747,
+            0.03185407444834709
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "1fc70205f789aa43af46",
+          "target": "occluded",
+          "probabilities": [
+            0.021589361131191254,
+            0.4908614456653595,
+            0.48754915595054626
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "7a30ddd1acde37f7f724",
+          "target": "occluded",
+          "probabilities": [
+            0.15255163609981537,
+            0.7324663996696472,
+            0.11498202383518219
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "236fefb8817bf31a5515",
+          "target": "occluded",
+          "probabilities": [
+            0.11863052845001221,
+            0.5299991369247437,
+            0.35137033462524414
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "60aca026b8ffbdf7117c",
+          "target": "occluded",
+          "probabilities": [
+            0.04221413657069206,
+            0.7040566205978394,
+            0.2537291944026947
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "8ea46d374b97ee4ae365",
+          "target": "close",
+          "probabilities": [
+            0.6960242986679077,
+            0.24578192830085754,
+            0.058193814009428024
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "68ff3d819d4036f7ed17",
+          "target": "occluded",
+          "probabilities": [
+            0.035438816994428635,
+            0.8422174453735352,
+            0.1223437637090683
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "add254d56d056af5f7ff",
+          "target": "far",
+          "probabilities": [
+            0.036710552871227264,
+            0.8910195827484131,
+            0.07226992398500443
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "41423f7120131f948ef3",
+          "target": "occluded",
+          "probabilities": [
+            0.027811696752905846,
+            0.7320491075515747,
+            0.24013912677764893
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "52c35b599db531cd835b",
+          "target": "occluded",
+          "probabilities": [
+            0.027921104803681374,
+            0.88979572057724,
+            0.082283154129982
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "ce11f1b29c2cdfa6031e",
+          "target": "close",
+          "probabilities": [
+            0.4343138635158539,
+            0.5115547776222229,
+            0.05413135513663292
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "37e154d638e5340b39d3",
+          "target": "far",
+          "probabilities": [
+            0.016513962298631668,
+            0.9319771528244019,
+            0.05150892958045006
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "cedeab62a7c95897600b",
+          "target": "close",
+          "probabilities": [
+            0.3775298595428467,
+            0.4420534670352936,
+            0.18041664361953735
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "eb40dc180ceea211f9ad",
+          "target": "occluded",
+          "probabilities": [
+            0.0010121315717697144,
+            0.9565390348434448,
+            0.042448822408914566
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "22f35e3ab7a9a0a67a2c",
+          "target": "occluded",
+          "probabilities": [
+            0.33957087993621826,
+            0.48414042592048645,
+            0.17628873884677887
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "fe6ccebb6c0aa980fd10",
+          "target": "far",
+          "probabilities": [
+            0.07480625808238983,
+            0.4555390775203705,
+            0.4696546196937561
+          ],
+          "predicted": "occluded"
+        },
+        {
+          "id": "983b82472ca16bc03783",
+          "target": "close",
+          "probabilities": [
+            0.34771445393562317,
+            0.5127319097518921,
+            0.13955363631248474
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "1b55eee75fa24fbb4952",
+          "target": "close",
+          "probabilities": [
+            0.10542720556259155,
+            0.33259257674217224,
+            0.5619802474975586
+          ],
+          "predicted": "occluded"
+        },
+        {
+          "id": "82593710f55c5ac3606c",
+          "target": "close",
+          "probabilities": [
+            0.32112571597099304,
+            0.4097594916820526,
+            0.26911473274230957
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "9d1cf2948610c7140704",
+          "target": "close",
+          "probabilities": [
+            0.05160338804125786,
+            0.5061459541320801,
+            0.44225066900253296
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "7450b4343253034af6cc",
+          "target": "far",
+          "probabilities": [
+            0.03687996789813042,
+            0.7936379313468933,
+            0.1694820672273636
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "764fd6dd01a2ab1ad9e8",
+          "target": "close",
+          "probabilities": [
+            0.7116696238517761,
+            0.2708098292350769,
+            0.017520561814308167
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "a6297fe2d3416855265a",
+          "target": "close",
+          "probabilities": [
+            0.04615027457475662,
+            0.8600137829780579,
+            0.09383589774370193
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "14590c1bfd68c4b75191",
+          "target": "far",
+          "probabilities": [
+            0.013275526463985443,
+            0.829697847366333,
+            0.15702664852142334
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "56a05011dc54e8f2797a",
+          "target": "close",
+          "probabilities": [
+            0.09377527981996536,
+            0.8714812397956848,
+            0.034743532538414
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "5c63c021c2dabe2934c6",
+          "target": "close",
+          "probabilities": [
+            0.43465325236320496,
+            0.3921467363834381,
+            0.17319996654987335
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "212f9bc335f15b8237f7",
+          "target": "close",
+          "probabilities": [
+            0.23249463737010956,
+            0.7082479596138,
+            0.059257395565509796
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "8e778cb336ad0769770e",
+          "target": "close",
+          "probabilities": [
+            0.09755244851112366,
+            0.8097363114356995,
+            0.09271125495433807
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "9953734d3c29d13b2996",
+          "target": "far",
+          "probabilities": [
+            0.10049138218164444,
+            0.7347121238708496,
+            0.16479650139808655
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "2f7ae30315e170550434",
+          "target": "far",
+          "probabilities": [
+            0.04423542320728302,
+            0.6524747610092163,
+            0.30328989028930664
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "56611a404612bf03abef",
+          "target": "occluded",
+          "probabilities": [
+            0.03019047901034355,
+            0.7441554665565491,
+            0.22565406560897827
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "df3ab4e877425c121a70",
+          "target": "close",
+          "probabilities": [
+            0.2998237907886505,
+            0.674809992313385,
+            0.02536626346409321
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "412169b799ff1087eb5a",
+          "target": "far",
+          "probabilities": [
+            0.07586055248975754,
+            0.9095491170883179,
+            0.014590319246053696
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "3a4b2ccf13aea6a06e40",
+          "target": "far",
+          "probabilities": [
+            0.03225848078727722,
+            0.944757878780365,
+            0.022983694449067116
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "1d6ca2e82b452ce131f3",
+          "target": "close",
+          "probabilities": [
+            0.05002680420875549,
+            0.9349572062492371,
+            0.015015987679362297
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "169208ca48617d3d48e4",
+          "target": "close",
+          "probabilities": [
+            0.2255244255065918,
+            0.6339690685272217,
+            0.14050643146038055
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "03ccbc8ae4c2f6cb39c9",
+          "target": "far",
+          "probabilities": [
+            0.0022342223674058914,
+            0.8031331896781921,
+            0.1946326345205307
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "7df6356e76f691cf7ddb",
+          "target": "far",
+          "probabilities": [
+            0.008154218085110188,
+            0.2281981110572815,
+            0.763647735118866
+          ],
+          "predicted": "occluded"
+        },
+        {
+          "id": "933ddb1add9ca1bcd9a5",
+          "target": "far",
+          "probabilities": [
+            0.009095262736082077,
+            0.23620042204856873,
+            0.7547042965888977
+          ],
+          "predicted": "occluded"
+        },
+        {
+          "id": "848ba44d263dded38795",
+          "target": "far",
+          "probabilities": [
+            0.055390048772096634,
+            0.774143636226654,
+            0.1704663187265396
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "bf9acc61d429eaf58dc0",
+          "target": "far",
+          "probabilities": [
+            0.05612722784280777,
+            0.7215425968170166,
+            0.22233016788959503
+          ],
+          "predicted": "far"
+        }
+      ]
+    },
+    "adapted": {
+      "status": "complete",
+      "trainable_parameters": 8656387,
+      "epochs": [
+        {
+          "epoch": 1,
+          "mean_batch_weighted_loss": 1.028833863900063
+        },
+        {
+          "epoch": 2,
+          "mean_batch_weighted_loss": 0.6348113753694169
+        },
+        {
+          "epoch": 3,
+          "mean_batch_weighted_loss": 0.5080479472241504
+        },
+        {
+          "epoch": 4,
+          "mean_batch_weighted_loss": 0.28819092849586553
+        },
+        {
+          "epoch": 5,
+          "mean_batch_weighted_loss": 0.21742397220557594
+        },
+        {
+          "epoch": 6,
+          "mean_batch_weighted_loss": 0.10571477658510396
+        },
+        {
+          "epoch": 7,
+          "mean_batch_weighted_loss": 0.07101487274312943
+        },
+        {
+          "epoch": 8,
+          "mean_batch_weighted_loss": 0.0354944419693935
+        },
+        {
+          "epoch": 9,
+          "mean_batch_weighted_loss": 0.047016301722085194
+        },
+        {
+          "epoch": 10,
+          "mean_batch_weighted_loss": 0.0687446987407229
+        },
+        {
+          "epoch": 11,
+          "mean_batch_weighted_loss": 0.023010445558381745
+        },
+        {
+          "epoch": 12,
+          "mean_batch_weighted_loss": 0.010150321912218947
+        },
+        {
+          "epoch": 13,
+          "mean_batch_weighted_loss": 5.932080712421126e-05
+        },
+        {
+          "epoch": 14,
+          "mean_batch_weighted_loss": 1.4628104874882991e-05
+        },
+        {
+          "epoch": 15,
+          "mean_batch_weighted_loss": 7.809164242915242e-06
+        },
+        {
+          "epoch": 16,
+          "mean_batch_weighted_loss": 6.047707780692961e-06
+        },
+        {
+          "epoch": 17,
+          "mean_batch_weighted_loss": 5.206282834444906e-06
+        },
+        {
+          "epoch": 18,
+          "mean_batch_weighted_loss": 4.585565853689177e-06
+        },
+        {
+          "epoch": 19,
+          "mean_batch_weighted_loss": 3.768888749004389e-06
+        },
+        {
+          "epoch": 20,
+          "mean_batch_weighted_loss": 3.2319064292125327e-06
+        }
+      ],
+      "checkpoint_sha256": "9944c431cdc707f8ae32f900723f0b5cc13892f315da6cbfcca7a5551762392d",
+      "validation": [
+        {
+          "id": "f2ab662d01a8e31b1dea",
+          "target": "close",
+          "probabilities": [
+            0.999504804611206,
+            0.0001270435022888705,
+            0.00036818304215557873
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "01b47f9b68dc48073f14",
+          "target": "far",
+          "probabilities": [
+            0.11694248020648956,
+            0.868811309337616,
+            0.01424612570554018
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "725650956b86b9f0e351",
+          "target": "close",
+          "probabilities": [
+            0.28231385350227356,
+            0.702782928943634,
+            0.01490318588912487
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "11552438faf0b9139f56",
+          "target": "close",
+          "probabilities": [
+            0.9989972710609436,
+            7.665308743298738e-08,
+            0.001002633129246533
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "2e83aed31495effd8a37",
+          "target": "close",
+          "probabilities": [
+            0.9993651509284973,
+            0.00028811328229494393,
+            0.00034679894451983273
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "72c1207638caddd9c16d",
+          "target": "close",
+          "probabilities": [
+            0.9897691011428833,
+            0.0025734941009432077,
+            0.00765745434910059
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "67f3c2980c3319e3def1",
+          "target": "close",
+          "probabilities": [
+            0.9912064671516418,
+            0.005601055920124054,
+            0.003192498115822673
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "6a8b48fa6b3d9cf65b76",
+          "target": "occluded",
+          "probabilities": [
+            0.9998408555984497,
+            6.462663441197947e-05,
+            9.452670201426372e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "c40b2690363ccc2119de",
+          "target": "far",
+          "probabilities": [
+            0.6032102108001709,
+            0.38802841305732727,
+            0.00876137800514698
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "1e1e6d4ea025977f0db9",
+          "target": "occluded",
+          "probabilities": [
+            0.993238091468811,
+            0.00591073464602232,
+            0.000851161137688905
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "ded2961089ad99d6d915",
+          "target": "occluded",
+          "probabilities": [
+            0.9997550845146179,
+            0.00021137662406545132,
+            3.354199361638166e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "7c490fa24ea30bc6a14b",
+          "target": "far",
+          "probabilities": [
+            0.036039818078279495,
+            0.96272212266922,
+            0.00123807683121413
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "20dfb00126231d7f05d2",
+          "target": "occluded",
+          "probabilities": [
+            0.12859578430652618,
+            0.8693661689758301,
+            0.002038040431216359
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "ca46414c8adb1531ecf8",
+          "target": "occluded",
+          "probabilities": [
+            0.014239747077226639,
+            0.9855475425720215,
+            0.00021271769946906716
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "e8fe9f4413af46ad0df5",
+          "target": "occluded",
+          "probabilities": [
+            0.9999749660491943,
+            2.2262698621489108e-05,
+            2.7254736778559163e-06
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "a3624e53bce3e09a31f3",
+          "target": "occluded",
+          "probabilities": [
+            0.999941349029541,
+            2.436218437651405e-06,
+            5.622562093776651e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "4d9cdef228c38c90faef",
+          "target": "occluded",
+          "probabilities": [
+            0.995103120803833,
+            0.0029218292329460382,
+            0.001975002698600292
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "48f0201dd2a7b808f202",
+          "target": "occluded",
+          "probabilities": [
+            0.9990410208702087,
+            0.0005756591563113034,
+            0.00038330527604557574
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "33c2caae408df20185ff",
+          "target": "far",
+          "probabilities": [
+            0.9993768334388733,
+            0.00031642187968827784,
+            0.00030682000215165317
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "3f834da9552a6b9208b1",
+          "target": "occluded",
+          "probabilities": [
+            0.9995059967041016,
+            0.00033053080551326275,
+            0.00016346178017556667
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "c7ac111e50c707edd1ac",
+          "target": "occluded",
+          "probabilities": [
+            0.9999628067016602,
+            1.8393135178484954e-05,
+            1.8796556105371565e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "3e03deee02fd42622275",
+          "target": "occluded",
+          "probabilities": [
+            0.9999088048934937,
+            8.936263475334272e-05,
+            1.7444872355554253e-06
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "a1d0b1d986d8db0614fd",
+          "target": "far",
+          "probabilities": [
+            0.9236071109771729,
+            0.07596153020858765,
+            0.0004313792160246521
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "64c906da40b9f54e4c08",
+          "target": "occluded",
+          "probabilities": [
+            0.3961300849914551,
+            0.6016134023666382,
+            0.0022565030958503485
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "ac333d4e5a3232c39916",
+          "target": "close",
+          "probabilities": [
+            0.9954538345336914,
+            0.004546178504824638,
+            1.2433259977129296e-09
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "bcb6f6e637fb0119e615",
+          "target": "close",
+          "probabilities": [
+            0.9923809170722961,
+            0.007618498057126999,
+            5.98727979195246e-07
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "7d91598d6fac540a6c76",
+          "target": "occluded",
+          "probabilities": [
+            0.8536346554756165,
+            0.14636003971099854,
+            5.3191006372799166e-06
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "b346d7f9421e09f1fed6",
+          "target": "far",
+          "probabilities": [
+            0.961037814617157,
+            0.03894885629415512,
+            1.3234277503215708e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "9cd502a2b279778641c2",
+          "target": "close",
+          "probabilities": [
+            0.944372296333313,
+            0.05552419647574425,
+            0.00010341577581129968
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "0bc0759230710295b509",
+          "target": "close",
+          "probabilities": [
+            0.8738530874252319,
+            0.12517882883548737,
+            0.0009680658113211393
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "b097b88868ed1fea1062",
+          "target": "occluded",
+          "probabilities": [
+            0.9997661709785461,
+            0.0002229279198218137,
+            1.1002372957591433e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "9b3e8cb2b2a4c86e48c1",
+          "target": "far",
+          "probabilities": [
+            0.9829568862915039,
+            0.016927527263760567,
+            0.00011561138671822846
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "213ab401b43075f407a9",
+          "target": "close",
+          "probabilities": [
+            0.9999974966049194,
+            2.315451183676487e-06,
+            2.480067280430376e-07
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "26c6e464b8e4ccde7b4a",
+          "target": "occluded",
+          "probabilities": [
+            0.9999895095825195,
+            5.670660357282031e-06,
+            4.820431058760732e-06
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "905953814a73a7cb1241",
+          "target": "far",
+          "probabilities": [
+            0.9999361038208008,
+            5.905899161007255e-05,
+            4.8498086471227e-06
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "3d70a8e9b0b88cf67aa8",
+          "target": "close",
+          "probabilities": [
+            0.9999648332595825,
+            1.5216285646602046e-05,
+            1.9873656128766015e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "9dab7211ef9e31ed0055",
+          "target": "occluded",
+          "probabilities": [
+            0.99991774559021,
+            1.7601779518372496e-06,
+            8.048475137911737e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "ef89e33d7f61f00aa89b",
+          "target": "close",
+          "probabilities": [
+            0.9998546838760376,
+            0.00014365249080583453,
+            1.6856037063917029e-06
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "4b002ebf1374f31e06d7",
+          "target": "close",
+          "probabilities": [
+            0.9987937211990356,
+            0.001196911558508873,
+            9.315087481809314e-06
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "6affc4245777f22945ca",
+          "target": "occluded",
+          "probabilities": [
+            0.9999967813491821,
+            1.8185197632192285e-06,
+            1.447958766220836e-06
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "3f52bc3efbeb0b66e197",
+          "target": "occluded",
+          "probabilities": [
+            0.9997089505195618,
+            4.098530189367011e-05,
+            0.00025000624009408057
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "ae3900cdf857b2d49a8b",
+          "target": "close",
+          "probabilities": [
+            0.9997885823249817,
+            0.00016172656614799052,
+            4.975264164386317e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "649ae9122b13dd8b5068",
+          "target": "occluded",
+          "probabilities": [
+            0.32392555475234985,
+            0.6739205718040466,
+            0.002153872512280941
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "21afac03c4f5e732656d",
+          "target": "far",
+          "probabilities": [
+            0.27048006653785706,
+            0.7222275137901306,
+            0.007292433641850948
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "c7b312cd2b34ea460d23",
+          "target": "occluded",
+          "probabilities": [
+            0.6041257977485657,
+            0.39209210872650146,
+            0.0037821647711098194
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "81255e29c13d58dd10fb",
+          "target": "close",
+          "probabilities": [
+            0.9992235898971558,
+            0.00010369947267463431,
+            0.0006726692663505673
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "ef8b4b8da3f6a92a3f80",
+          "target": "occluded",
+          "probabilities": [
+            0.9986388087272644,
+            0.0011542753782123327,
+            0.00020686336210928857
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "c6ccb85eb919945b7f12",
+          "target": "far",
+          "probabilities": [
+            0.9992367029190063,
+            0.0006779736140742898,
+            8.523008727934211e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "30db20736cdcb4c238f3",
+          "target": "occluded",
+          "probabilities": [
+            0.9998563528060913,
+            9.736888023326173e-05,
+            4.618887760443613e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "f8736f795ad695a87611",
+          "target": "occluded",
+          "probabilities": [
+            0.9976282715797424,
+            0.001471828669309616,
+            0.0008999639539979398
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "dead18919ba43139ea5e",
+          "target": "occluded",
+          "probabilities": [
+            0.7763573527336121,
+            0.22153562307357788,
+            0.0021069743670523167
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "940281a0a1998c5dc686",
+          "target": "far",
+          "probabilities": [
+            0.9790249466896057,
+            0.008323834277689457,
+            0.012651219964027405
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "70fbcb07734ba5d438da",
+          "target": "occluded",
+          "probabilities": [
+            0.9893799424171448,
+            0.0036756640765815973,
+            0.006944433785974979
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "4b3a9a976f232f113765",
+          "target": "close",
+          "probabilities": [
+            0.9990653395652771,
+            0.0004031617718283087,
+            0.0005315610324032605
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "956e11ce0ad2fef8ed80",
+          "target": "occluded",
+          "probabilities": [
+            0.01415953692048788,
+            0.9851550459861755,
+            0.0006854049279354513
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "5167dd86749bafda96ae",
+          "target": "far",
+          "probabilities": [
+            0.15359647572040558,
+            0.8301026225090027,
+            0.016300911083817482
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "22ee0ae304b177aab228",
+          "target": "far",
+          "probabilities": [
+            0.7430015802383423,
+            0.22535744309425354,
+            0.031641002744436264
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "25d83a87473744fd5c23",
+          "target": "occluded",
+          "probabilities": [
+            0.9988725781440735,
+            0.0005155891412869096,
+            0.0006117660086601973
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "e3431a683d0b6a17301d",
+          "target": "occluded",
+          "probabilities": [
+            0.6577398777008057,
+            0.34053418040275574,
+            0.001725906739011407
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "e9de4f63a4baf81f5078",
+          "target": "far",
+          "probabilities": [
+            0.9953384399414062,
+            0.00359622691757977,
+            0.0010652145138010383
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "84efff7504ef374c7878",
+          "target": "occluded",
+          "probabilities": [
+            0.605482816696167,
+            0.38895320892333984,
+            0.005564000923186541
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "07e0f28445e2efc216d7",
+          "target": "close",
+          "probabilities": [
+            0.6431411504745483,
+            0.35601380467414856,
+            0.0008450121968053281
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "02b68ed481e145aaac18",
+          "target": "far",
+          "probabilities": [
+            0.9948956370353699,
+            0.005028245970606804,
+            7.61357878218405e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "84745b00098010703441",
+          "target": "far",
+          "probabilities": [
+            0.9980642199516296,
+            0.0016590193845331669,
+            0.00027668665279634297
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "c53f4b37f27841bb8cfe",
+          "target": "far",
+          "probabilities": [
+            0.9962649941444397,
+            0.0010255617089569569,
+            0.0027094578836113214
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "09833df77b6cf04a4d81",
+          "target": "far",
+          "probabilities": [
+            0.9839439392089844,
+            0.014897963963449001,
+            0.0011581210419535637
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "51282d234e646b17e9c4",
+          "target": "far",
+          "probabilities": [
+            0.9694252014160156,
+            0.017551971599459648,
+            0.01302287820726633
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "d63a1257ad6ed4b29ba1",
+          "target": "close",
+          "probabilities": [
+            0.8087416291236877,
+            0.1853497475385666,
+            0.005908505991101265
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "00b4589db43d202e55d3",
+          "target": "close",
+          "probabilities": [
+            0.9166155457496643,
+            0.07329267263412476,
+            0.010091794654726982
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "e070816e823321cc451b",
+          "target": "close",
+          "probabilities": [
+            0.8464937806129456,
+            0.1503373235464096,
+            0.003168898168951273
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "f9173b68a781b3ee11ee",
+          "target": "close",
+          "probabilities": [
+            0.7258750200271606,
+            0.2714572846889496,
+            0.0026677842251956463
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "dfd9e7b61bef5db23453",
+          "target": "close",
+          "probabilities": [
+            0.9657983779907227,
+            0.02983235754072666,
+            0.004369248636066914
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "c293446682f6c94dc41c",
+          "target": "close",
+          "probabilities": [
+            0.976983368396759,
+            0.016026481986045837,
+            0.006990172900259495
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "e6940db209a27400fc28",
+          "target": "close",
+          "probabilities": [
+            0.9636635184288025,
+            0.030522365123033524,
+            0.005814081989228725
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "005b97a86dec7275b731",
+          "target": "close",
+          "probabilities": [
+            0.9999114274978638,
+            8.568631164962426e-05,
+            2.8728716188197723e-06
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "7ddbd828336d065959c4",
+          "target": "close",
+          "probabilities": [
+            0.9993811845779419,
+            0.0005965502932667732,
+            2.228292214567773e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "dfb4bf7a426db0d78cea",
+          "target": "far",
+          "probabilities": [
+            0.9998999834060669,
+            7.061671931296587e-05,
+            2.9397788239293732e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "b01b54eb1e7437d86596",
+          "target": "far",
+          "probabilities": [
+            0.9997064471244812,
+            0.0002843878755811602,
+            9.235104698746e-06
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "421eceda0b7eb85559e9",
+          "target": "close",
+          "probabilities": [
+            0.9996645450592041,
+            0.00033548398641869426,
+            2.4041609592018176e-08
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "c4a92f5e80d99abf07ef",
+          "target": "occluded",
+          "probabilities": [
+            0.016032258048653603,
+            0.9839450716972351,
+            2.2674956198898144e-05
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "1b725543df93745ac28a",
+          "target": "far",
+          "probabilities": [
+            0.8878632187843323,
+            0.11213672161102295,
+            7.513370547940212e-08
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "d733fa216e1f2ec2dc1e",
+          "target": "close",
+          "probabilities": [
+            0.9541690945625305,
+            0.045822374522686005,
+            8.485886610287707e-06
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "c8a8cc19942d5e3d098a",
+          "target": "occluded",
+          "probabilities": [
+            0.047261882573366165,
+            0.9526649117469788,
+            7.320345321204513e-05
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "8e9ee6a8eb7578b5f5c4",
+          "target": "far",
+          "probabilities": [
+            0.015424216166138649,
+            0.9845736622810364,
+            2.090758471240406e-06
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "e4bb4c36199211022a5f",
+          "target": "occluded",
+          "probabilities": [
+            0.24862608313560486,
+            0.7512692809104919,
+            0.00010466190724400803
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "82b1e7332f340b5bb882",
+          "target": "occluded",
+          "probabilities": [
+            0.1338396519422531,
+            0.863677442073822,
+            0.0024828948080539703
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "d6eb14cf9f5c5d37a6a3",
+          "target": "occluded",
+          "probabilities": [
+            0.013770555146038532,
+            0.9862225651741028,
+            6.859889253973961e-06
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "72c713b07c7f4e2e0875",
+          "target": "close",
+          "probabilities": [
+            3.168084504068247e-06,
+            0.9999967813491821,
+            1.450660658264269e-08
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "1fc70205f789aa43af46",
+          "target": "occluded",
+          "probabilities": [
+            4.591146353050135e-05,
+            0.9999527931213379,
+            1.3327876331459265e-06
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "7a30ddd1acde37f7f724",
+          "target": "occluded",
+          "probabilities": [
+            0.46808454394340515,
+            0.5319143533706665,
+            1.1136643252029899e-06
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "236fefb8817bf31a5515",
+          "target": "occluded",
+          "probabilities": [
+            0.008030377328395844,
+            0.9919669032096863,
+            2.6987324872607132e-06
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "60aca026b8ffbdf7117c",
+          "target": "occluded",
+          "probabilities": [
+            0.04666893556714058,
+            0.9533290266990662,
+            2.00096428670804e-06
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "8ea46d374b97ee4ae365",
+          "target": "close",
+          "probabilities": [
+            0.937976062297821,
+            0.06200609728693962,
+            1.7741314877639525e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "68ff3d819d4036f7ed17",
+          "target": "occluded",
+          "probabilities": [
+            0.004205156117677689,
+            0.9957635402679443,
+            3.13311793433968e-05
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "add254d56d056af5f7ff",
+          "target": "far",
+          "probabilities": [
+            0.04926794022321701,
+            0.9507259726524353,
+            6.04476281296229e-06
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "41423f7120131f948ef3",
+          "target": "occluded",
+          "probabilities": [
+            0.002257164567708969,
+            0.9948763251304626,
+            0.0028664993587881327
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "52c35b599db531cd835b",
+          "target": "occluded",
+          "probabilities": [
+            0.0002948033798020333,
+            0.999346911907196,
+            0.0003582363424357027
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "ce11f1b29c2cdfa6031e",
+          "target": "close",
+          "probabilities": [
+            0.8105690479278564,
+            0.1801529824733734,
+            0.00927796121686697
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "37e154d638e5340b39d3",
+          "target": "far",
+          "probabilities": [
+            0.24328146874904633,
+            0.7544246912002563,
+            0.002293808152899146
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "cedeab62a7c95897600b",
+          "target": "close",
+          "probabilities": [
+            0.9427875876426697,
+            0.056631967425346375,
+            0.0005805341061204672
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "eb40dc180ceea211f9ad",
+          "target": "occluded",
+          "probabilities": [
+            0.6690815091133118,
+            0.31791552901268005,
+            0.013003015890717506
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "22f35e3ab7a9a0a67a2c",
+          "target": "occluded",
+          "probabilities": [
+            0.035550665110349655,
+            0.9644491672515869,
+            2.2030029356301384e-07
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "fe6ccebb6c0aa980fd10",
+          "target": "far",
+          "probabilities": [
+            0.004285959992557764,
+            0.9957138299942017,
+            2.8627775350287266e-07
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "983b82472ca16bc03783",
+          "target": "close",
+          "probabilities": [
+            0.8031115531921387,
+            0.19443713128566742,
+            0.0024513215757906437
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "1b55eee75fa24fbb4952",
+          "target": "close",
+          "probabilities": [
+            0.908547580242157,
+            0.08267612755298615,
+            0.008776244707405567
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "82593710f55c5ac3606c",
+          "target": "close",
+          "probabilities": [
+            0.9972673654556274,
+            0.0023228370118886232,
+            0.0004098137142136693
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "9d1cf2948610c7140704",
+          "target": "close",
+          "probabilities": [
+            0.9954590797424316,
+            0.004335429985076189,
+            0.0002055210788967088
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "7450b4343253034af6cc",
+          "target": "far",
+          "probabilities": [
+            0.9488633871078491,
+            0.04838801175355911,
+            0.0027486674953252077
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "764fd6dd01a2ab1ad9e8",
+          "target": "close",
+          "probabilities": [
+            0.6844048500061035,
+            0.31521040201187134,
+            0.00038474961183965206
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "a6297fe2d3416855265a",
+          "target": "close",
+          "probabilities": [
+            0.04724080115556717,
+            0.9464715719223022,
+            0.00628766231238842
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "14590c1bfd68c4b75191",
+          "target": "far",
+          "probabilities": [
+            0.23175832629203796,
+            0.6875903606414795,
+            0.08065132796764374
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "56a05011dc54e8f2797a",
+          "target": "close",
+          "probabilities": [
+            0.15369193255901337,
+            0.8355740904808044,
+            0.010734008625149727
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "5c63c021c2dabe2934c6",
+          "target": "close",
+          "probabilities": [
+            0.7634391784667969,
+            0.2149617075920105,
+            0.021599117666482925
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "212f9bc335f15b8237f7",
+          "target": "close",
+          "probabilities": [
+            0.9990472197532654,
+            0.0009378232061862946,
+            1.4883877156535164e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "8e778cb336ad0769770e",
+          "target": "close",
+          "probabilities": [
+            0.08402595669031143,
+            0.9159647822380066,
+            9.270008376915939e-06
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "9953734d3c29d13b2996",
+          "target": "far",
+          "probabilities": [
+            0.9724795818328857,
+            0.02604714222252369,
+            0.0014732416020706296
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "2f7ae30315e170550434",
+          "target": "far",
+          "probabilities": [
+            0.9595805406570435,
+            0.040400195866823196,
+            1.9226119547965936e-05
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "56611a404612bf03abef",
+          "target": "occluded",
+          "probabilities": [
+            0.0004323165339883417,
+            0.9995644688606262,
+            3.14735871143057e-06
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "df3ab4e877425c121a70",
+          "target": "close",
+          "probabilities": [
+            0.38990873098373413,
+            0.6077632308006287,
+            0.002327981172129512
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "412169b799ff1087eb5a",
+          "target": "far",
+          "probabilities": [
+            0.2765616178512573,
+            0.7226565480232239,
+            0.000781856884714216
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "3a4b2ccf13aea6a06e40",
+          "target": "far",
+          "probabilities": [
+            0.15776567161083221,
+            0.8409555554389954,
+            0.001278822892345488
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "1d6ca2e82b452ce131f3",
+          "target": "close",
+          "probabilities": [
+            0.15617746114730835,
+            0.8392257690429688,
+            0.004596779588609934
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "169208ca48617d3d48e4",
+          "target": "close",
+          "probabilities": [
+            0.9047980308532715,
+            0.09483257681131363,
+            0.00036938025732524693
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "03ccbc8ae4c2f6cb39c9",
+          "target": "far",
+          "probabilities": [
+            0.0024257979821413755,
+            0.9915361404418945,
+            0.006038044113665819
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "7df6356e76f691cf7ddb",
+          "target": "far",
+          "probabilities": [
+            0.0003147762909065932,
+            0.8009945750236511,
+            0.19869068264961243
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "933ddb1add9ca1bcd9a5",
+          "target": "far",
+          "probabilities": [
+            0.000387668696930632,
+            0.7990161180496216,
+            0.20059625804424286
+          ],
+          "predicted": "far"
+        },
+        {
+          "id": "848ba44d263dded38795",
+          "target": "far",
+          "probabilities": [
+            0.9999078512191772,
+            9.185983799397945e-05,
+            1.8389407330232643e-07
+          ],
+          "predicted": "close"
+        },
+        {
+          "id": "bf9acc61d429eaf58dc0",
+          "target": "far",
+          "probabilities": [
+            0.9334074854850769,
+            0.06614896655082703,
+            0.0004434942966327071
+          ],
+          "predicted": "close"
+        }
+      ]
+    }
+  },
+  "pretrained_url": "https://download.pytorch.org/models/resnet18-f37072fd.pth",
+  "pretrained_sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+  "train_ids": [
+    "df0e06cc4a6feab254b1",
+    "7d0f175b90bb53a21476",
+    "35ab2585e6e80cff5d5d",
+    "f4ad3121d3e7af709026",
+    "90938371e8920f72d579",
+    "a966c0916c6727af2eeb",
+    "1e60be834636eaff2464",
+    "3fa8a7174a51fb619b9d",
+    "e8b368540127a5a5d0df",
+    "590bd554e32e4481b161",
+    "694f6cdb85422e622d83",
+    "2ab2729b2bcabdad517c",
+    "206c59310127987e5ad8",
+    "85d4939f451a29fb8d77",
+    "82dc9c7168c255e29eb0",
+    "ddd638cef7cc7afe7e3a",
+    "7bc84068c187cb7c19bc",
+    "3c47ecca9c8fa1736311",
+    "e33fed555152c31af8fe",
+    "bef5f9f8ad0da9be19bd",
+    "d9986b9c62e996727971",
+    "bfbf2f7a637b9bd5b91c",
+    "6dd99158383642322c25",
+    "93717291543ee90bade6",
+    "dc130731af8b741898f4",
+    "e5e2a9987e9dfe202513",
+    "6a6191af0919734b9d1a",
+    "5347043b9f8306be1358",
+    "981576ede6594d510cf8",
+    "110312e489a56cac8728",
+    "17835743012cb284562a",
+    "4846ce5797373ab4496f",
+    "e23bea8154fe6f3d5953",
+    "caf119c08c96e993e949",
+    "6a99fb14d456a57bbc65",
+    "0c3f8bcb75db80729355",
+    "dee2a459dea67af4c48f",
+    "e90849c83ed8dcedff09",
+    "c8c717a4ffec7c39c8f5",
+    "8071e5d8d27669bd5ba8",
+    "67c16dbee69318a142eb",
+    "415fc4e7099944eb4307",
+    "0e70917360dc6d93e254",
+    "cc672b784cef087cd220",
+    "caa14c2b67076b6d3138",
+    "650bb3c747f5ef1b6fd2",
+    "d21d832f6904a86a028a",
+    "b2f73062108521d353ff",
+    "7c71e1eeb2d9351bcc11",
+    "7c6e80eaed14ebec688c",
+    "e18c3ebe133debbc39c3",
+    "353a0452687f6067440d",
+    "c1133747b24bb5f018c6",
+    "4da2010def14d1d30a16",
+    "7d6185be438a88e30523",
+    "dd407d5cff2994acbd2b",
+    "6d19992be3d152d84708",
+    "fdeb54a8fca128ada199",
+    "00256bc35fca8eae6b0a",
+    "6e495b73716183a6771f",
+    "675683cc4184a79463ce",
+    "db4031e6672cb82cbe83",
+    "e47a0052ce0d3d552b68",
+    "13095a8b7ec796d99ea8",
+    "8ca5b1e125457d4670cc",
+    "93cf9abc12f1d2ff6309",
+    "2eae34bf93836eb79057",
+    "cd89beab911832bc53ae",
+    "b35b1465ccd0a1eee0c3",
+    "98342196fdf10b2160eb",
+    "c391df6d5f5e372a7ac7",
+    "b6291143f23609df59e4",
+    "e684d416767f11ffba98",
+    "78df9b8279f06e11d0b3",
+    "52c875327f129b252542",
+    "7950f9616be593baade5",
+    "4427f5f29eeef2172b0d",
+    "10aec526fd2e8b0a9bf9",
+    "a8ea42fab3bedd2fd7be",
+    "3f55012bffcf7780854c",
+    "81667b95192a00244823",
+    "f2ce3dc9493cde75f0d6",
+    "f491ff49d12f0fe26a29",
+    "409e50493431a6e9888a",
+    "4d0d3a6e877fa85dfa30",
+    "50ef9b098b8b278e76ec",
+    "27de2b2f33cc4edccf9f",
+    "16d117eac851f6d78425",
+    "56d085b77801df976662",
+    "c8b3a05a1a71b6f77885",
+    "799fa9c7bf1ff0d56754",
+    "f5abb2acc58005a79753",
+    "80aac60566226c55bd12",
+    "4829ac9eb995c0928889",
+    "58316e9c5d850b1f3eaa",
+    "5c544f14a649d59c5379",
+    "08bcb0585b7c2d0a2165",
+    "2713921725f4152ce0bb",
+    "118a5e8f37275f98004a",
+    "b1522aa3dcabab972907",
+    "1dc7dd8ebcb5954fe362",
+    "bc743ea896646b376263",
+    "4b6f078abb719b7216a3",
+    "b5c35ba0014db4d7407b",
+    "ef9810e962db965a95fd",
+    "148239c3103c1aecafdb",
+    "2208164a5cc19f25620b",
+    "cc8a5dc619f201b93754",
+    "bb9988581a50c4787f50",
+    "27bbd075ae6da8cdfa0b",
+    "fd9711745a524aae375e",
+    "0c8538ede1dd69ad2415",
+    "a5305584a3915ba5c92d",
+    "13b370f4fbf3e138986f",
+    "d5e23fd63c90eae17398",
+    "20d89fd5b14b393d1e51",
+    "43cbfcce97ea6f4e10a5",
+    "4425ef7f2e5efa678636",
+    "0422fe8dccaf7110e2b6",
+    "97d2e59063bc0fc90656",
+    "045bcb213374d5eca885",
+    "03579e7c15d323827dcc",
+    "70a250e43b59fc633e9d",
+    "f144e2fd2d9bc2e92a4d",
+    "fd4d23d550d013fedf1e",
+    "429f4a4f76472e731ed3",
+    "7d6909cd502499d9ffbd",
+    "6bd4f3e76395a0e83886",
+    "32cb1d59b5c4056522d6",
+    "21be14bd0fb252dd3a1d",
+    "1b0dd854df0b185348de",
+    "1a5385039ac887501842",
+    "58da421473c4d779461d",
+    "9f33e2ead0d4bfd5466a",
+    "9398c323ebf7d23f5ed6",
+    "af0e7c559c23b19edff3",
+    "a5a76d267ab06056a16a",
+    "f63fda9716a9e1b934a7",
+    "e5b55edd57a265311cc0",
+    "8512b11b6bd217795a3b",
+    "593e5915fe2d75605324",
+    "467cfb4a6bac25ce70e1",
+    "55f1651835c79d4e84f9",
+    "3bd082622f22449bf1f4",
+    "6eae1ab38849959654f1",
+    "eee523f6c19fb287ee7e",
+    "19c38e091715181a16df",
+    "c5d3c61e056b9fa98bdf",
+    "60e3b0eb3ef1cb410015",
+    "2cfe8c5396192ebde323",
+    "3300c16d73a962dcc522",
+    "92ed7cace4a4e68a937e",
+    "b9180bba60ddc8044190",
+    "74eb0a11145daf38714d",
+    "8e366218e3897dfc38eb",
+    "1d0ae2a53a7094f28d4b",
+    "e5735c9b38891920c27d",
+    "8bb5010d42428e054189",
+    "52b56c1e204d86c357fc",
+    "1cbcd8bff151af8dc1d5",
+    "3fbbce7be75a4082cf6d",
+    "61d6bb0e9c8f95112bcb",
+    "b0fba8305c2e96b163fc",
+    "a629355238ec426439aa",
+    "ff8edb8219e7a9de5f91",
+    "9c1082156b04db5d3143",
+    "1f12e92575bb5f59e5bb",
+    "69d472aece693a837368",
+    "35148e5951a5b281551e",
+    "4332d0c267d64bb3f9b3",
+    "d2a909c0ba414ffa85b3",
+    "2dc681d1bffef7298fa4",
+    "eee85aee9b8510f5e495",
+    "387d96e3f33175223b48",
+    "b3982271ba19d12c534f",
+    "96b81ced3e5584b69bc3",
+    "de83b2999d0aa6d2f626",
+    "fc989fb5e911e50f9684",
+    "fc880ddc37b47fdd8ccb",
+    "4ff1b05a8ec00dd3dd7c",
+    "f5bf962d119bc34bd202",
+    "145a0d63c67e23607f2c",
+    "e2b7e77d491defb563b8",
+    "ffcc0587b3a16ee32fdc",
+    "a455dd0a51dfb0128daf",
+    "2dc361ad9321b87f0e67",
+    "c7fbe039bbc0f2601e90",
+    "b120b5909debae27b42a"
+  ],
+  "train_class_counts": [
+    69,
+    84,
+    35
+  ],
+  "torch": "2.6.0+cu124",
+  "gpu": "NVIDIA GeForce GTX 1080 Ti"
+}

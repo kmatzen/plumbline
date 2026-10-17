@@ -4333,3 +4333,36 @@ their split. The existing calibration exports remain unopened. A learned
 verifier that only reproduces classical decisions does not establish the
 requested contribution. BO/RL should wait until this evaluator is validated,
 since optimizing an unreliable score would not demonstrate better tracking.
+
+### Paired-crop visual adaptation diagnostic
+
+`train_visual_correspondence_probe.py` completed a small comparison on Anima.
+It uses the two native 161x161 bottom crops from the original panels, retaining
+their marker rings and omitting context. An ImageNet ResNet18 encodes each
+crop; a shared head receives both features, their absolute difference, and
+their elementwise product. Frozen-backbone and trainable-layer4 arms start
+with the same pretrained weights and seed-0 head. Batch-normalization statistics
+remain frozen in both. Both use 20 epochs, Adam 1e-4, batch size 8, training
+class weights, and the same per-epoch example orders. There is no augmentation,
+early stopping, or best-checkpoint selection. Validation images/labels are
+loaded only after both arms finish; calibration exports are never opened.
+
+The 188 training examples are followed by all 128 development validation
+examples. The frozen arm gets 60/128 correct (46.88%), with close/far/occluded
+recall 63.04%/72.97%/8.89%, balanced accuracy 48.30%. The adapted arm gets
+53/128 (41.41%), with recalls 84.78%/37.84%/0%, balanced accuracy 40.87%.
+Its final training loss is about 0.0000032, which does not establish
+generalization. This setup provides no positive visual-adaptation result.
+It is a generic visual-backbone diagnostic, not an isolated test of adapting
+Qwen's vision encoder. Neither arm supports DNF judgments, and the two-video
+validation set cannot support a broad statistical claim.
+
+The full protocol, epoch losses, checkpoint hashes, and validation predictions
+are in `results/visual-correspondence-probe-v1/manifest.json`. Weights remain
+under Anima's private `/data3/kmatzen/plumbline/research/visual-correspondence-probe-v1`.
+No shared repository or environment was modified. Loader tests reject
+calibration access and mismatched targets; artifact tests verify lineage,
+complete pairing, disjoint IDs, and prediction counts. This unsuccessful
+development experiment is not added to the manuscript. More training on this
+same small corpus is not justified by the result; visibility/ambiguity
+supervision and evidence representation need to be addressed first.
