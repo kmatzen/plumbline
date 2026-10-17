@@ -3,380 +3,127 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>plumbline · reproducible eval for 3D-vision foundation models</title>
-  <meta name="description" content="A Python evaluation harness for 3D-vision foundation models. Pinned, audited configs that reproduce the numbers reported in each paper." />
-  <meta property="og:title" content="plumbline" />
-  <meta property="og:description" content="Reproduce paper numbers from 3D-vision foundation models." />
+  <title>plumbline — reproducibility in 3D vision evaluation</title>
+  <meta name="description" content="An open research effort auditing whether published 3D foundation-model results can be reproduced under explicit evaluation protocols." />
+  <meta property="og:title" content="plumbline · 3D vision reproducibility study" />
+  <meta property="og:description" content="47 paper-match results, protocol audits, and documented negative findings across depth and camera-pose evaluation." />
   <meta property="og:type" content="website" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230a0a0a'/%3E%3Crect x='7.4' y='2' width='1.2' height='10' fill='%23d4f000'/%3E%3Cpolygon points='5,12 11,12 8,15' fill='%23d4f000'/%3E%3C/svg%3E" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23f3f0e8'/%3E%3Crect x='7.4' y='2' width='1.2' height='10' fill='%23ad2b21'/%3E%3Cpolygon points='5,12 11,12 8,15' fill='%23ad2b21'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="research-home">
+  <header class="paper-nav">
+    <a class="wordmark" href="#top">plumbline <span>/ research</span></a>
+    <nav aria-label="Primary navigation">
+      <a href="#question">question</a><a href="#findings">findings</a>
+      <a href="#method">method</a><a href="#evidence">evidence</a>
+      <a href="/explore">data</a><a href="https://github.com/kmatzen/plumbline">code ↗</a>
+    </nav>
+  </header>
 
-  <!-- ruler down the left edge: a quiet structural element, no project state -->
-  <aside class="plumb" aria-hidden="true">
-    <div class="plumb-tick major">000</div>
-    <div class="plumb-tick">010</div>
-    <div class="plumb-tick">020</div>
-    <div class="plumb-tick major">030</div>
-    <div class="plumb-tick">040</div>
-    <div class="plumb-tick">050</div>
-    <div class="plumb-tick major">060</div>
-    <div class="plumb-tick">070</div>
-    <div class="plumb-tick">080</div>
-    <div class="plumb-tick major">090</div>
-    <div class="plumb-mark">plumbline</div>
-  </aside>
-
-  <div class="page" id="top">
-
-    <header class="topbar">
-      <span class="mark"><span class="mark-name">plumbline</span></span>
-      <nav class="nav">
-        <a href="#why">why</a>
-        <a href="#install">install</a>
-        <a href="#supported">supported</a>
-        <a href="#verified">verified</a>
-        <a class="ext" href="https://github.com/kmatzen/plumbline">github↗</a>
-      </nav>
-    </header>
-
-    <!-- ─────────────────── HERO ─────────────────── -->
-    <section class="hero">
-      <h1 class="huge">plumbline<span class="acc">.</span></h1>
-      <p class="tagline">Reproduce paper numbers from 3D-vision foundation models.</p>
-
-      <div class="prose">
-        <p>
-          Plumbline is a Python evaluation harness for monocular depth, multi-view depth,
-          and pose-estimation models — <span class="acc">VGGT</span>,
-          <span class="acc">Depth&nbsp;Anything&nbsp;3</span>, <span class="acc">MASt3R</span>,
-          <span class="acc">Metric3D-v2</span>, <span class="acc">MoGe</span>,
-          <span class="acc">Marigold</span>, and others.
-        </p>
-        <p>
-          Each <em>reproduction</em> is a pinned, audited YAML config — model variant,
-          dataset split, metric, alignment, crops, depth clip — that hits the number
-          reported in the original paper. It exists because the published number is
-          rarely what you get when you clone the model repo and run its eval script.
-        </p>
+  <main id="top">
+    <section class="research-hero">
+      <div class="eyebrow">Open evaluation study · v0.3 in development · updated 2026</div>
+      <h1>Do published 3D-vision results survive a shared evaluation harness?</h1>
+      <p class="dek">Plumbline is a reproducibility study of depth and camera-pose evaluation. It reconstructs the protocols behind reported numbers, reruns public models, and records both matches and failures without collapsing them into a leaderboard.</p>
+      <div class="hero-actions">
+        <a class="primary-link" href="/explore">Explore the evidence →</a>
+        <a href="https://github.com/kmatzen/plumbline/blob/main/REPRODUCTIONS.md">Read the evidence ledger</a>
+        <a href="https://github.com/kmatzen/plumbline">Methods and code</a>
       </div>
-
-      <figure class="hero-shell" aria-label="Sample run">
-<pre class="code"><code><span class="prompt">$</span> pip install plumbline-bench
-<span class="prompt">$</span> plumbline reproduce <span class="hl">da-v2-large-nyuv2</span>
-
-<span class="com">→ AbsRel  0.0428    (paper 0.0420)    ✓ match</span></code></pre>
-      </figure>
+      <dl class="headline-results" aria-label="Current study scope">
+        <div><dt>47</dt><dd>paper-match cells</dd></div>
+        <div><dt>18</dt><dd>model adapters</dd></div>
+        <div><dt>16</dt><dd>dataset families</dd></div>
+        <div><dt>3</dt><dd>evaluation families</dd></div>
+      </dl>
+      <p class="definition">A “paper match” is one primary metric whose target was read directly from the source PDF and whose full recorded run falls within a declared tolerance. Companion metrics never inflate the count.</p>
     </section>
 
-    <!-- ─────────────────── WHY ─────────────────── -->
-    <section class="sec" id="why">
-      <header class="sec-head">
-        <span class="sec-num">why/</span>
-        <h2 class="head">why plumbline</h2>
-        <p class="sub">
-          Comparing modern 3D-vision models is harder than it should be: each repo
-          ships its own eval script, each paper uses its own quietly different
-          protocol, and just running a model produces numbers that don’t match the
-          ones published with it. Plumbline closes that loop.
-        </p>
-      </header>
-
-      <ol class="proto reveal stagger">
-        <li>
-          <span class="proto-num">01</span>
-          <div>
-            <h4>Reproducible by default.</h4>
-            <p>
-              Each entry is a pinned, audited YAML config that targets a specific
-              paper number — model variant, dataset split, metric, alignment, crops,
-              clips — and lands within a documented tolerance.
-            </p>
-          </div>
-        </li>
-        <li>
-          <span class="proto-num">02</span>
-          <div>
-            <h4>One protocol across models.</h4>
-            <p>
-              The same loader, the same alignment, the same crops are used for every
-              model on every dataset. Differences in observed numbers stop being
-              noise from incompatible eval code.
-            </p>
-          </div>
-        </li>
-        <li>
-          <span class="proto-num">03</span>
-          <div>
-            <h4>The right defaults baked in.</h4>
-            <p>
-              The silent protocol details that decide whether a number lands —
-              alignment space, depth clipping, the variant of the dataset that the
-              paper actually used — are pinned per config. You don’t have to
-              rediscover them.
-            </p>
-          </div>
-        </li>
-      </ol>
-    </section>
-
-    <!-- ─────────────────── INSTALL / USE ─────────────────── -->
-    <section class="sec" id="install">
-      <header class="sec-head">
-        <span class="sec-num">use/</span>
-        <h2 class="head">install &amp; use</h2>
-        <p class="sub">requires Python 3.10+ and a CUDA GPU for most models.</p>
-      </header>
-
-      <div class="qs-grid reveal stagger">
-        <figure class="codefig">
-          <figcaption>install</figcaption>
-<pre class="code"><code><span class="prompt">$</span> pip install plumbline-bench<span class="com">    # or:</span>
-<span class="prompt">$</span> uv sync                       <span class="com"># from the repo</span></code></pre>
-        </figure>
-
-        <figure class="codefig">
-          <figcaption>discover</figcaption>
-<pre class="code"><code><span class="prompt">$</span> plumbline list-models
-<span class="prompt">$</span> plumbline list-datasets</code></pre>
-        </figure>
-
-        <figure class="codefig">
-          <figcaption>reproduce a paper number</figcaption>
-<pre class="code"><code><span class="prompt">$</span> export NYUV2_ROOT=/path/to/nyuv2
-<span class="prompt">$</span> plumbline reproduce <span class="hl">da-v2-large-nyuv2</span></code></pre>
-        </figure>
-
-        <figure class="codefig">
-          <figcaption>run any model × dataset</figcaption>
-<pre class="code"><code><span class="prompt">$</span> plumbline run <span class="flag">--model</span> vggt <span class="flag">--dataset</span> eth3d \
-    <span class="flag">--tasks</span> pose <span class="flag">--max-views</span> 4</code></pre>
-        </figure>
+    <section class="paper-section" id="question">
+      <div class="margin-label">01 / research question</div>
+      <div class="section-body two-col">
+        <div><h2>The number is not the protocol.</h2><p class="lead">A benchmark value is the endpoint of a long, often underspecified chain: checkpoint, input resize, dataset selection, crop, valid mask, alignment, aggregation, and metric implementation.</p></div>
+        <div class="research-note"><h3>Working hypothesis</h3><p>Many apparent model differences—and many failed reproductions—are caused by evaluation choices rather than model quality. A useful comparison must expose those choices as data.</p><p>Plumbline tests this by expressing protocols as versioned configurations, sharing metric code across methods, and retaining discrepancies as findings.</p></div>
       </div>
     </section>
 
-    <!-- ─────────────────── SUPPORTED ─────────────────── -->
-    <section class="sec" id="supported">
-      <header class="sec-head">
-        <span class="sec-num">supported/</span>
-        <h2 class="head">models &amp; datasets</h2>
-      </header>
-
-      <div class="cov">
-        <article class="cov-col">
-          <h3>models<span class="cnt">18</span></h3>
-          <ul class="cov-flat">
-            <li>depth-anything-v2</li>
-            <li>depth-anything-3</li>
-            <li>unik3d</li>
-            <li>vda</li>
-            <li>pi3</li>
-            <li>streamvggt</li>
-            <li>vggt-omega</li>
-            <li>metric3d-v2</li>
-            <li>moge</li>
-            <li>vggt</li>
-            <li>dust3r</li>
-            <li>mast3r</li>
-            <li>marigold</li>
-            <li>geowizard</li>
-            <li>depth-pro</li>
-            <li>cut3r</li>
-            <li>monst3r</li>
-            <li>dage</li>
-          </ul>
-        </article>
-
-        <article class="cov-col">
-          <h3>datasets<span class="cnt">16</span></h3>
-          <ul class="cov-flat">
-            <li>nyuv2</li>
-            <li>kitti</li>
-            <li>diode</li>
-            <li>eth3d</li>
-            <li>dtu</li>
-            <li>co3dv2</li>
-            <li>7scenes</li>
-            <li>gso</li>
-            <li>ibims1</li>
-            <li>sintel</li>
-            <li>bonn</li>
-            <li>tum-dynamics</li>
-            <li>booster</li>
-            <li>ddad-moge-eval</li>
-            <li>realestate10k-pose-eval</li>
-            <li>sun-rgbd-native</li>
-          </ul>
-        </article>
+    <section class="paper-section findings" id="findings">
+      <div class="margin-label">02 / findings so far</div>
+      <div class="section-body">
+        <h2>Reproduction is possible—but rarely automatic.</h2>
+        <div class="finding-grid">
+          <article><span class="finding-no">A</span><h3>Protocol details move results materially.</h3><p>Median estimator variants, depth-vs-disparity alignment, crops, frame sets, and aggregation rules can decide whether a public checkpoint reproduces its paper.</p></article>
+          <article><span class="finding-no">B</span><h3>Negative results are evidence.</h3><p>When a released checkpoint remains off-paper after an audited implementation, the result stays visible as upstream-blocked or off-paper—not tuned into a check mark.</p></article>
+          <article><span class="finding-no">C</span><h3>One scalar is not enough for tracking.</h3><p>ATE and pose AUC can hide jitter, local failure, recovery, and coverage. The study now adds blinded pairwise trajectory review with human/VLM calibration.</p></article>
+        </div>
+        <aside class="result-strip"><div><b>Depth</b><span>39 verified primary cells</span></div><div><b>Pose / trajectory</b><span>8 verified primary cells</span></div><div><b>Discrepancies</b><span>root-caused and retained in the public ledger</span></div></aside>
       </div>
-
-      <p class="foot-note">
-        full list of pinned reproductions, paper targets, and tolerances:
-        <a href="https://github.com/kmatzen/plumbline/blob/main/REPRODUCTIONS.md">REPRODUCTIONS.md</a>
-        · adding a model or dataset:
-        <a href="https://github.com/kmatzen/plumbline/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.
-      </p>
     </section>
 
-    <!-- ─────────────────── VERIFIED ─────────────────── -->
-    <section class="sec" id="verified">
-      <header class="sec-head">
-        <span class="sec-num">verified/</span>
-        <h2 class="head">paper-match cells</h2>
-        <p class="sub">
-          Each verified result is a pinned config whose observed number lands
-          within the documented tolerance of the value reported in the
-          source paper — audited against the source PDF
-          (table&nbsp;+&nbsp;column&nbsp;+&nbsp;row). See them all in the
-          <a href="/explore">interactive deviation field</a>, or the full table in
-          <a href="https://github.com/kmatzen/plumbline/blob/main/REPRODUCTIONS.md">REPRODUCTIONS.md</a>.
-        </p>
-      </header>
-
-      <ul class="stat-row" aria-label="harness scope and evidence">
-        <li class="stat"><span class="stat-n">16</span><span class="stat-label">models</span></li>
-        <li class="stat"><span class="stat-n">12</span><span class="stat-label">datasets</span></li>
-        <li class="stat"><span class="stat-n">47</span><span class="stat-label">verified results</span></li>
-      </ul>
-
-      <a class="explore-cta reveal" href="/explore">
-        <span class="ex-text">
-          <span class="ex-kicker">explore/ the verified matrix ↗</span>
-          <span class="ex-title">All 36, traced to their papers.</span>
-          <span class="ex-sub">A model&nbsp;&times;&nbsp;benchmark matrix — switch metrics, and hover any number for its source-paper citation (table, column, row) and how far it lands from the paper.</span>
-        </span>
-        <svg class="ex-mini" viewBox="0 0 220 84" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-          <g font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">
-            <!-- header -->
-            <line x1="8" y1="20" x2="212" y2="20" stroke="#26241f"/>
-            <line x1="54" y1="6" x2="54" y2="80" stroke="#26241f"/>
-            <text x="14" y="15" fill="#6c6960" font-size="7">model</text>
-            <text x="74" y="15" fill="#6c6960" font-size="7">NYU</text>
-            <text x="120" y="15" fill="#6c6960" font-size="7">KITTI</text>
-            <text x="172" y="15" fill="#6c6960" font-size="7">CO3D</text>
-            <text x="14" y="38" fill="#d4d1c2" font-size="7">DA-V2</text>
-            <text x="14" y="58" fill="#d4d1c2" font-size="7">MoGe</text>
-            <text x="14" y="78" fill="#d4d1c2" font-size="7">DAGE</text>
-            <rect x="60" y="30" width="40" height="14" fill="rgba(212,240,0,0.08)"/>
-            <text x="68" y="40" fill="#d4f000">.0428</text>
-            <text x="116" y="40" fill="#d4d1c2">.0710</text>
-            <text x="166" y="40" fill="#6c6960" font-size="11">·</text>
-            <text x="68" y="60" fill="#d4f000">.0342</text>
-            <text x="116" y="60" fill="#d4f000">.0404</text>
-            <text x="166" y="60" fill="#6c6960" font-size="11">·</text>
-            <text x="68" y="80" fill="#6c6960" font-size="11">·</text>
-            <text x="116" y="80" fill="#6c6960" font-size="11">·</text>
-            <text x="170" y="80" fill="#d4d1c2">.858</text>
-          </g>
-        </svg>
-      </a>
-
-
-      <p class="foot-note">
-        Δ is the relative deviation from the paper number. Tolerance is pinned
-        per-cell in each YAML; cells outside their declared tolerance never count
-        as ✓ and are tracked in
-        <a href="https://github.com/kmatzen/plumbline/blob/main/docs/DISCREPANCIES.md">docs/DISCREPANCIES.md</a>
-        (paper text vs upstream code mismatches, checkpoint-generation drift,
-        paper-private eval recipes — never silently glossed over). Full list with
-        commits + tolerances in
-        <a href="https://github.com/kmatzen/plumbline/blob/main/REPRODUCTIONS.md">REPRODUCTIONS.md</a>.
-      </p>
+    <section class="paper-section" id="method">
+      <div class="margin-label">03 / method</div>
+      <div class="section-body">
+        <h2>From paper claim to auditable result.</h2>
+        <ol class="method-flow">
+          <li><span>01</span><div><h3>Read the primary source</h3><p>Record table, row, column, metric direction, target, and tolerance from the PDF—not a secondary benchmark list.</p></div></li>
+          <li><span>02</span><div><h3>Reconstruct the protocol</h3><p>Pin checkpoint, dataset records, preprocessing, alignment, masks, metric implementation, and aggregation in YAML.</p></div></li>
+          <li><span>03</span><div><h3>Run the full evaluation</h3><p>Cache raw predictions before alignment, preserve environment metadata, and reject partial runs below the declared sample floor.</p></div></li>
+          <li><span>04</span><div><h3>Classify the evidence</h3><p>Promote only full runs within tolerance. Keep mismatches, private-recipe gaps, and informational comparisons visibly separate.</p></div></li>
+        </ol>
+        <figure class="protocol-figure"><figcaption>Evaluation chain recorded for every result</figcaption><div class="chain" role="img" aria-label="Paper claim flows through protocol, public model, shared evaluator, and evidence ledger"><span>paper claim</span><i>→</i><span>pinned protocol</span><i>→</i><span>public checkpoint</span><i>→</i><span>shared evaluator</span><i>→</i><span>evidence ledger</span></div></figure>
+      </div>
     </section>
 
-    <footer class="foot">
-      <span>© 2026 Kevin Blackburn-Matzen</span>
-      <span class="sep">/</span>
-      <span>apache-2.0</span>
-      <span class="pad"></span>
-      <div class="links">
-        <a href="https://github.com/kmatzen/plumbline">github</a>
-        <a href="https://pypi.org/project/plumbline-bench/">pypi</a>
+    <section class="paper-section" id="evidence">
+      <div class="margin-label">04 / evidence</div>
+      <div class="section-body">
+        <div class="evidence-head"><div><h2>Inspect every primary result.</h2><p class="lead">The interactive matrix shows observed and paper values, relative deviation, citation location, protocol family, and whether a cell is verified or informational.</p></div><a class="primary-link" href="/explore">Open the evidence explorer →</a></div>
+        <ul class="stat-row" aria-label="harness scope and evidence"><li class="stat"><span class="stat-n">18</span><span class="stat-label">models</span></li><li class="stat"><span class="stat-n">16</span><span class="stat-label">datasets</span></li><li class="stat"><span class="stat-n">47</span><span class="stat-label">verified results</span></li></ul>
+        <div class="evidence-links">
+          <a href="/explore"><b>Interactive matrix</b><span>Filter and inspect primary and companion measurements.</span></a>
+          <a href="https://github.com/kmatzen/plumbline/blob/main/REPRODUCTIONS.md"><b>Reproduction ledger</b><span>Protocols, observed values, paper targets, and run notes.</span></a>
+          <a href="https://github.com/kmatzen/plumbline/blob/main/docs/DISCREPANCIES.md"><b>Discrepancy log</b><span>Unresolved and root-caused deviations, including negative results.</span></a>
+          <a href="https://github.com/kmatzen/plumbline/blob/main/docs/CAMERA_TRACKING_REVIEW_HARNESS.md"><b>Tracking review protocol</b><span>Blinded pairwise review and preference-calibrated ranking.</span></a>
+        </div>
       </div>
-    </footer>
-  </div>
+    </section>
 
+    <section class="paper-section" id="supported">
+      <div class="margin-label">05 / study coverage</div>
+      <div class="section-body">
+        <h2>Current experimental surface.</h2>
+        <div class="cov">
+          <article class="cov-col"><h3>models<span class="cnt">18</span></h3><ul class="cov-flat"><li>depth-anything-v2</li><li>depth-anything-3</li><li>unik3d</li><li>vda</li><li>pi3</li><li>streamvggt</li><li>vggt-omega</li><li>metric3d-v2</li><li>moge</li><li>vggt</li><li>dust3r</li><li>mast3r</li><li>marigold</li><li>geowizard</li><li>depth-pro</li><li>cut3r</li><li>monst3r</li><li>dage</li></ul></article>
+          <article class="cov-col"><h3>datasets<span class="cnt">16</span></h3><ul class="cov-flat"><li>nyuv2</li><li>kitti</li><li>diode</li><li>eth3d</li><li>dtu</li><li>co3dv2</li><li>7scenes</li><li>gso</li><li>ibims1</li><li>sintel</li><li>bonn</li><li>tum-dynamics</li><li>booster</li><li>ddad-moge-eval</li><li>realestate10k-pose-eval</li><li>sun-rgbd-native</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="paper-section reproduce" id="reproduce">
+      <div class="margin-label">06 / reproduce &amp; cite</div>
+      <div class="section-body two-col">
+        <div><h2>The code is an instrument for the study.</h2><p>Run a pinned experiment, inspect its exact configuration, or contribute a protocol correction. Most model runs require CUDA; the evidence and configuration ledger do not.</p><pre><code><span>$</span> pip install plumbline-bench
+<span>$</span> plumbline reproduce da-v2-large-nyuv2
+
+→ AbsRel  0.0428
+→ paper   0.0420
+→ status  match</code></pre></div>
+        <div class="cite-card"><h3>Citation and scope</h3><p>Plumbline is an evolving open research artifact. Cite the repository version used, and cite each upstream model and dataset whose results you report.</p><a href="https://github.com/kmatzen/plumbline/blob/main/CITATION.cff">CITATION.cff →</a><a href="https://github.com/kmatzen/plumbline/blob/main/reproductions/AUDIT.md">source audit →</a><a href="https://github.com/kmatzen/plumbline/blob/main/THIRD_PARTY_NOTICES.md">licenses →</a><small>The distributed package includes non-commercial upstream components. See the per-component notices before reuse.</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="paper-footer"><span>plumbline · open 3D evaluation research</span><span>Kevin Blackburn-Matzen · 2026</span><span><a href="https://github.com/kmatzen/plumbline">GitHub</a> · <a href="https://pypi.org/project/plumbline-bench/">PyPI</a></span></footer>
   <script>
     (() => {
-      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      // ─── scroll-spy nav highlight ────────────────────────────────────
-      const navLinks = Array.from(document.querySelectorAll('.nav a[href^="#"]'));
-      const sections = navLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
-      const navObs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            const id = e.target.id;
-            navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
-          }
-        });
-      }, { rootMargin: '-40% 0px -55% 0px' });
-      sections.forEach(s => navObs.observe(s));
-
-      // ─── plumb-ruler active tick follows scroll progress ────────────
-      const ticks = Array.from(document.querySelectorAll('.plumb-tick'));
-      const updateRuler = () => {
-        const max = document.documentElement.scrollHeight - window.innerHeight;
-        const pct = max > 0 ? window.scrollY / max : 0;
-        const idx = Math.min(ticks.length - 1, Math.floor(pct * ticks.length));
-        ticks.forEach((t, i) => t.classList.toggle('active', i === idx));
-      };
-      window.addEventListener('scroll', updateRuler, { passive: true });
-      updateRuler();
-
-      if (reduced) {
-        // No animations: jump to final state.
-        document.querySelectorAll('.spark[data-pct]').forEach(s => {
-          s.style.setProperty('--pct', s.dataset.pct + '%');
-        });
-        document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
-        return;
-      }
-
-      // ─── reveal-on-scroll: fade+slide elements when they enter ──────
-      //   Also fires the sparkline marker tween (markers start at paper-
-      //   center until --pct is set, then CSS transitions them to position).
-      const revealObs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (!e.isIntersecting) return;
-          e.target.classList.add('in-view');
-          e.target.querySelectorAll('.spark[data-pct]').forEach(s => {
-            s.style.setProperty('--pct', s.dataset.pct + '%');
-          });
-          revealObs.unobserve(e.target);
-        });
-      }, { rootMargin: '0px 0px -8% 0px' });
-      document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-
-      // ─── stat count-up: animate big numbers from 0 to target ────────
-      const ease = t => 1 - Math.pow(1 - t, 3);
-      function countUp(el, target, duration = 900) {
-        const start = performance.now();
-        function step(now) {
-          const t = Math.min(1, (now - start) / duration);
-          el.textContent = Math.round(target * ease(t));
-          if (t < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-      }
-      const statObs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (!e.isIntersecting) return;
-          e.target.querySelectorAll('.stat-n').forEach(n => {
-            // Read target from text on first run; store on dataset for re-runs.
-            const target = parseInt(n.dataset.target || n.textContent, 10);
-            n.dataset.target = String(target);
-            n.textContent = '0';
-            countUp(n, target);
-          });
-          statObs.unobserve(e.target);
-        });
-      }, { rootMargin: '0px 0px -20% 0px' });
-      document.querySelectorAll('.stat-row').forEach(s => statObs.observe(s));
+      const links = [...document.querySelectorAll('.paper-nav a[href^="#"]')];
+      const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+      const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+      }), { rootMargin: '-35% 0px -60% 0px' });
+      sections.forEach(section => observer.observe(section));
     })();
   </script>
 </body>
