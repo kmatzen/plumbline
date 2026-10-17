@@ -181,6 +181,44 @@ assert all(not r["reversed_before_distortion"] for t in boxes for r in t["rows"]
 for phrase in ("3,995 of 6,774", "130 of 948", "49 of 708", "Twelve of 28"):
     assert phrase in TEX
 
+timing = json.loads((ROOT / "paper/results/dense/tum-pose-timing-xyz-v2.json").read_text())
+assert timing["comparison_start_frame"] == 1
+assert timing["fit_original_frames"] == list(range(1, 12))
+assert len(timing["common_observations"]) == 141
+for value in timing["common_median_pixels"].values():
+    assert f"{value:.3f}" in TEX
+paired = [
+    abs(r["pixels"]["associated_reference"] - r["pixels"]["interpolated_reference"])
+    for r in timing["common_observations"]
+]
+assert f"{np.median(paired):.3f}" in TEX and f"{max(paired):.3f}" in TEX
+assert "141 of 936" in TEX
+description_root = ROOT / "paper/results/description-controls-v1"
+description = json.loads((description_root / "shapes.json").read_text())
+identity = json.loads((description_root / "identity-repeat.json").read_text())
+for key in (
+    "image_sha256",
+    "processed_input_audit",
+    "checkpoint_files",
+    "runner_sha256",
+    "settings",
+    "attention_helper_sha256",
+    "attention_implementation_sha256",
+):
+    assert description[key] == identity[key]
+assert description["processed_input_audit"]["actual_image_tokens"] == 680
+assert description["processed_input_audit"]["expected_image_tokens"] == 680
+assert description["processed_input_audit"]["pixel_finite"]
+assert description["processed_input_audit"]["pixel_std"] > 0
+assert identity["parsed_response"] is None and identity["parse_error"] == "invalid_json"
+assert '"verdict": "abstain"' in identity["raw_response"]
+arithmetic = json.loads(
+    (ROOT / "paper/results/qwen7b-nf4-controls-v1/attention-audit-trace.json").read_text()
+)["statistics"]
+assert arithmetic["query"]["nonfinite"] == arithmetic["key"]["nonfinite"] == 0
+assert arithmetic["qk_fp16"]["nonfinite"] > 0 and arithmetic["qk_fp32"]["nonfinite"] == 0
+assert f"{arithmetic['qk_fp32']['maximum_finite_absolute']:,.2f}" in TEX
+
 print(
     "Selected manuscript counts match retained records; human validation and general claims are not certified"
 )
