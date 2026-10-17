@@ -172,6 +172,13 @@ attempt is `dage-walking-xyz-v2`. Preserve both records. An attempt directory or
 `running` manifest alone does not prove a process is live; check the process or
 active execution handle. A `complete` result is still not a human usability label.
 
+After copying a completed run's `manifest.json`, `prediction.npz`, and
+`reference.npz` locally, use `analyze_dense_run.py RUN NEW_OUTPUT_DIRECTORY`.
+It verifies prediction-file and reference-array hashes, pose counts, and ordered
+timestamps before rendering reference-assisted diagnostics. It does not recheck
+the remote source images or assign a functional-DNF label. Its summary reports
+the sampled duration and interval; a 90-frame sample is not an entire sequence.
+
 ## Human diagnostic-review pilot
 
 `build_review_study.py` creates 150 native-input comparisons and 15 hidden
