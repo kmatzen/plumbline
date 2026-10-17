@@ -1,0 +1,249 @@
+{
+  "scope": "development diagnostic agreement; not independent visibility truth, camera accuracy, DNF, or held-out validation",
+  "limitations": "reference cues can be wrong; repeated frames and both methods are dependent; no sample-level significance claim; missing cases are never counted as camera failures",
+  "policy": "all 1536 proposals retained; 2/8 pixel thresholds unchanged; only reference depth/mask non-rejected backgrounds and normal-supported foregrounds receive diagnostic close/far labels; all other references remain unresolved or borderline; no occluded labels inferred",
+  "source_sha256": {
+    "predictions": "8317152ee38f6663927ccfa3ae65bf61daf2129743c1c9e6348e90bb687e8db4",
+    "analysis": "58de6e7a977b3a5f5078a2914fd8f3e51c46b138f71112eda12bb7bfc93df486",
+    "reference": {
+      "corpus": "ede3a00933d40f3f30d8d437eacdcd755dfe3c453b3aafebbeddce77803f7261",
+      "background": "486e07bc95e50566a80b3ada46946635781aec2aedce8e6f5f13bf0cd3525815",
+      "motion": "80a15784be2fd4168b5c00b081cb6753cd59cffe8876833751101946fac305ad",
+      "analysis": "ed660ea831122820a205da92c4241ea656012c7af47651e7d559c4b6dbd62a31"
+    }
+  },
+  "results": {
+    "all": {
+      "planned": 1536,
+      "diagnostic_labeled": 389,
+      "counts": {
+        "geometry_unavailable": 592,
+        "diagnostic_labeled": 389,
+        "borderline": 393,
+        "reference_visibility_unresolved_or_rejected": 162
+      },
+      "all_planned_answers": {
+        "unavailable": 592,
+        "close": 402,
+        "uncertain": 432,
+        "occluded": 66,
+        "far": 44
+      },
+      "confusion": {
+        "close": {
+          "close": 337,
+          "uncertain": 13,
+          "occluded": 2
+        },
+        "far": {
+          "far": 29,
+          "uncertain": 4,
+          "occluded": 4
+        }
+      },
+      "answered": 372,
+      "correct": 366,
+      "answer_coverage_on_diagnostic_labels": 0.9562982005141388,
+      "agreement_on_all_diagnostic_labels": 0.9408740359897172,
+      "conditional_agreement": 0.9838709677419355,
+      "per_label_recall_including_abstentions": {
+        "close": 0.9573863636363636,
+        "far": 0.7837837837837838
+      },
+      "balanced_agreement_including_abstentions": 0.8705850737100738,
+      "close_precision_on_diagnostic_labels": 1.0
+    },
+    "rgb_abstained": {
+      "planned": 1193,
+      "diagnostic_labeled": 142,
+      "counts": {
+        "geometry_unavailable": 592,
+        "borderline": 343,
+        "reference_visibility_unresolved_or_rejected": 116,
+        "diagnostic_labeled": 142
+      },
+      "all_planned_answers": {
+        "unavailable": 592,
+        "uncertain": 381,
+        "occluded": 60,
+        "close": 124,
+        "far": 36
+      },
+      "confusion": {
+        "close": {
+          "close": 98,
+          "uncertain": 11,
+          "occluded": 2
+        },
+        "far": {
+          "far": 23,
+          "uncertain": 4,
+          "occluded": 4
+        }
+      },
+      "answered": 127,
+      "correct": 121,
+      "answer_coverage_on_diagnostic_labels": 0.8943661971830986,
+      "agreement_on_all_diagnostic_labels": 0.852112676056338,
+      "conditional_agreement": 0.952755905511811,
+      "per_label_recall_including_abstentions": {
+        "close": 0.8828828828828829,
+        "far": 0.7419354838709677
+      },
+      "balanced_agreement_including_abstentions": 0.8124091833769254,
+      "close_precision_on_diagnostic_labels": 1.0
+    },
+    "scene_3835": {
+      "planned": 384,
+      "diagnostic_labeled": 99,
+      "counts": {
+        "geometry_unavailable": 104,
+        "diagnostic_labeled": 99,
+        "borderline": 120,
+        "reference_visibility_unresolved_or_rejected": 61
+      },
+      "all_planned_answers": {
+        "unavailable": 104,
+        "close": 121,
+        "uncertain": 141,
+        "occluded": 12,
+        "far": 6
+      },
+      "confusion": {
+        "close": {
+          "close": 92,
+          "uncertain": 4,
+          "occluded": 1
+        },
+        "far": {
+          "far": 2
+        }
+      },
+      "answered": 95,
+      "correct": 94,
+      "answer_coverage_on_diagnostic_labels": 0.9595959595959596,
+      "agreement_on_all_diagnostic_labels": 0.9494949494949495,
+      "conditional_agreement": 0.9894736842105263,
+      "per_label_recall_including_abstentions": {
+        "close": 0.9484536082474226,
+        "far": 1.0
+      },
+      "balanced_agreement_including_abstentions": 0.9742268041237113,
+      "close_precision_on_diagnostic_labels": 1.0
+    },
+    "scene_5397": {
+      "planned": 384,
+      "diagnostic_labeled": 102,
+      "counts": {
+        "geometry_unavailable": 125,
+        "reference_visibility_unresolved_or_rejected": 40,
+        "diagnostic_labeled": 102,
+        "borderline": 117
+      },
+      "all_planned_answers": {
+        "unavailable": 125,
+        "far": 18,
+        "occluded": 23,
+        "uncertain": 126,
+        "close": 92
+      },
+      "confusion": {
+        "close": {
+          "close": 77,
+          "uncertain": 3
+        },
+        "far": {
+          "far": 14,
+          "uncertain": 4,
+          "occluded": 4
+        }
+      },
+      "answered": 95,
+      "correct": 91,
+      "answer_coverage_on_diagnostic_labels": 0.9313725490196079,
+      "agreement_on_all_diagnostic_labels": 0.8921568627450981,
+      "conditional_agreement": 0.9578947368421052,
+      "per_label_recall_including_abstentions": {
+        "close": 0.9625,
+        "far": 0.6363636363636364
+      },
+      "balanced_agreement_including_abstentions": 0.7994318181818182,
+      "close_precision_on_diagnostic_labels": 1.0
+    },
+    "scene_4385": {
+      "planned": 384,
+      "diagnostic_labeled": 143,
+      "counts": {
+        "diagnostic_labeled": 143,
+        "borderline": 91,
+        "reference_visibility_unresolved_or_rejected": 24,
+        "geometry_unavailable": 126
+      },
+      "all_planned_answers": {
+        "close": 144,
+        "uncertain": 85,
+        "unavailable": 126,
+        "occluded": 24,
+        "far": 5
+      },
+      "confusion": {
+        "close": {
+          "close": 134,
+          "uncertain": 4,
+          "occluded": 1
+        },
+        "far": {
+          "far": 4
+        }
+      },
+      "answered": 139,
+      "correct": 138,
+      "answer_coverage_on_diagnostic_labels": 0.972027972027972,
+      "agreement_on_all_diagnostic_labels": 0.965034965034965,
+      "conditional_agreement": 0.9928057553956835,
+      "per_label_recall_including_abstentions": {
+        "close": 0.9640287769784173,
+        "far": 1.0
+      },
+      "balanced_agreement_including_abstentions": 0.9820143884892086,
+      "close_precision_on_diagnostic_labels": 1.0
+    },
+    "scene_4970": {
+      "planned": 384,
+      "diagnostic_labeled": 45,
+      "counts": {
+        "geometry_unavailable": 237,
+        "diagnostic_labeled": 45,
+        "borderline": 65,
+        "reference_visibility_unresolved_or_rejected": 37
+      },
+      "all_planned_answers": {
+        "unavailable": 237,
+        "close": 45,
+        "uncertain": 80,
+        "occluded": 7,
+        "far": 15
+      },
+      "confusion": {
+        "close": {
+          "close": 34,
+          "uncertain": 2
+        },
+        "far": {
+          "far": 9
+        }
+      },
+      "answered": 43,
+      "correct": 43,
+      "answer_coverage_on_diagnostic_labels": 0.9555555555555556,
+      "agreement_on_all_diagnostic_labels": 0.9555555555555556,
+      "conditional_agreement": 1.0,
+      "per_label_recall_including_abstentions": {
+        "close": 0.9444444444444444,
+        "far": 1.0
+      },
+      "balanced_agreement_including_abstentions": 0.9722222222222222,
+      "close_precision_on_diagnostic_labels": 1.0
+    }
+  }
+}

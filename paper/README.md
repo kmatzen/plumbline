@@ -4420,3 +4420,32 @@ Future evaluator comparisons must include this stronger temporal baseline and
 report its visibility errors, coverage, and task limitations. The complete
 record is `results/tapvid-cotracker-verifier-v1/manifest.json`; an artifact test
 checks exact membership, provenance, decisions, window limits, and counts.
+
+### Matched temporal verifier on MOVi camera markers
+
+`probe_movi_temporal_verifier.py` runs the same frozen CoTracker3 checkpoint on
+all four MOVi videos, with all 64 original fixed frame-zero queries. The tracker
+sees only the 24 RGB frames and these query coordinates, not camera predictions,
+reference geometry, or diagnostic labels. The saved camera proposals are compared
+with its tracks afterwards. All 1,536 slots remain; unavailable proposals do
+not become camera failures. `analyze_movi_temporal_verifier.py` replays the exact
+389 diagnostic labels and source hashes from the earlier VLM analysis.
+
+The temporal verifier agrees on 366/389 (94.09%), with 17 uncertain answers.
+It agrees on 366/372 decisive answers (98.39%), at 95.63% coverage. Close/far
+recall is 337/352 and 29/37, giving 87.06% balanced agreement. Six diagnostically
+visible cases are predicted occluded; none of the 337 close predictions is
+false under these reference cues. On the 142 RGB-baseline-abstained labeled
+cases, it agrees on 121, predicts occluded incorrectly on six, and abstains on
+15. These are diagnostic agreements, not calibrated guarantees or independent
+visibility truth. Four developmental scenes cannot establish generalization.
+
+The complete inference and diagnostic records are under
+`results/movi-temporal-verifier-v1`. An artifact test verifies script lineage,
+complete paired membership, original decision thresholds, and exact replay.
+This existing-method result is substantially stronger than the current learned
+panel judge on the same correspondence task. Further correspondence-only
+training is not justified as the main contribution without evidence of an
+advantage over this baseline. The remaining research target is task-level
+camera failure with staticness and evidence sufficiency handled explicitly;
+accurate tracking of a moving object is not evidence of a correct camera.
