@@ -455,6 +455,30 @@ need to be committed.
 
 ## Direct reference-free baseline: ORE
 
+### First DAVIS development output (not a quality result)
+
+The official 480p train/validation archive was staged on Anima with SHA-256
+`e3d0b5b77c3d031b000a19e0e25e3e2cac65d183755601bc2cf066df1a2aa492`:
+90 sequences, 6,208 frames. The first listed training sequence, `bear`, was
+selected for a 60-frame development prefix, without selecting on output quality.
+Validation sequences have not been used for development inference.
+
+`results/davis/davis-dage-bear-v1/` retains the prediction and execution manifest.
+This run completed in 75.30 seconds including model loading, with peak allocated
+GPU memory of 7,043,777,536 bytes. It is one run, not a runtime benchmark.
+Prediction bytes and all 60 source-frame hashes were verified locally.
+
+`build_reference_free_review.py` renders source frames, three coordinate views
+of the estimated trajectory, camera +Z direction glyphs, and between-frame
+translation/rotation. There are no reference poses, alignment errors, or time
+units. The plot is a diagnostic, not a validity metric. Its record is retained
+as `review.json`; the source-containing image is local at
+`tmp/davis-bear-review-v2/review.png`, not redistributed in the repository.
+The recorded verdict remains **unreviewed**. This sheet lacks synchronized
+dense video and independent reprojection evidence; it cannot establish DNF.
+
+### ORE comparison requirements
+
 Chen et al., [Object Reprojection Error (NeurIPS 2023)](https://papers.nips.cc/paper_files/paper/2023/file/eb206443c93d07da8b1974b768d8a0d4-Paper-Datasets_and_Benchmarks.pdf)
 already evaluate trajectories without reference camera poses. This is a required
 comparison, not a novelty claim for this project.
