@@ -48,6 +48,14 @@ public API may change between 0.x releases.
 
 ### Added
 
+- `plumbline tracking-review judge` now provides a provider-neutral
+  JSON-over-stdin contract for local or hosted visual judges. It validates the
+  verdict, applies a timeout, and writes to the same append-only log used by
+  the calibration command.
+- `plumbline tracking-review propose` now performs reproducible mixed-parameter
+  design search. It starts with space-filling proposals, then uses
+  Gaussian-process expected improvement, seeded multi-objective
+  scalarizations, and learned constraint probabilities.
 - Camera-tracking evaluations can emit versioned trajectory review artifacts
   directly with `plumbline run --tracking-review-dir`, ready for deterministic
   blinded A/B pairing, human or VLM votes, calibration, and task-bootstrap
@@ -58,9 +66,8 @@ public API may change between 0.x releases.
   GT-scaled diagnostic PNGs, validity gates, blinded A/B bundles, append-only
   human votes, balanced pair selection, Bradley–Terry ratings, and task-level
   bootstrap confidence intervals. `plumbline tracking-review` exposes the
-  render/pair/vote/rank workflow. The design documents human/VLM calibration,
-  multi-objective Bayesian optimization, and why RL is reserved for genuinely
-  sequential tracking policies.
+  render/pair/vote/judge/calibrate/rank/propose workflow. RL remains reserved
+  for tracking policies that make decisions during a run.
 
 Codebase review sweep (issues #163–#182). Highest-impact first:
 

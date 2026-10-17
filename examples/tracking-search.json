@@ -1,0 +1,44 @@
+{
+  "parameters": {
+    "confidence": {
+      "type": "float",
+      "low": 0.001,
+      "high": 0.5,
+      "log": true
+    },
+    "precision": {
+      "type": "choice",
+      "values": [
+        "fp16",
+        "fp32"
+      ]
+    },
+    "window": {
+      "type": "int",
+      "low": 2,
+      "high": 16
+    }
+  },
+  "objectives": [
+    {
+      "name": "preference",
+      "direction": "maximize"
+    },
+    {
+      "name": "latency_ms",
+      "direction": "minimize"
+    }
+  ],
+  "constraints": [
+    {
+      "name": "coverage",
+      "op": ">=",
+      "value": 0.95
+    },
+    {
+      "name": "peak_vram_gb",
+      "op": "<=",
+      "value": 10.5
+    }
+  ]
+}

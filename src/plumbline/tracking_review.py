@@ -15,6 +15,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import shlex
+import subprocess
 from collections import Counter
 from dataclasses import asdict, dataclass
 from itertools import combinations
@@ -40,6 +42,7 @@ __all__ = [
     "fit_bradley_terry",
     "record_review_vote",
     "render_trajectory_diagnostic",
+    "run_external_judge",
     "trajectory_diagnostics",
     "validate_trajectory_pair",
     "write_tracking_review_artifact",
@@ -564,6 +567,93 @@ def record_review_vote(
     with output.open("a", encoding="utf-8") as stream:
         stream.write(json.dumps(row, sort_keys=True) + "\n")
     return row
+
+
+def run_external_judge(
+    pair_path: str | Path,
+    command: str | list[str],
+    *,
+    timeout_seconds: float = 120.0,
+) -> dict[str, Any]:
+    """Run a provider adapter using a stable JSON-over-stdin contract.
+
+    The adapter receives the pair metadata, an absolute review-image path, and
+    the fixed rubric. It must write one JSON object to stdout with ``winner``
+    (``a``, ``b``, ``tie``, or ``both_bad``). Provider credentials and API
+    details stay outside Plumbline, which keeps this path usable with local
+    VLMs, hosted services, and future providers.
+    """
+    pair_file = Path(pair_path)
+    pair = json.loads(pair_file.read_text(encoding="utf-8"))
+    if pair.get("schema_version") != "1.0.0":
+        raise ValueError(f"unsupported pair schema in {pair_file}")
+    automatic = pair.get("automatic_winner")
+    if automatic is not None:
+        return {
+            "winner": automatic,
+            "reason": "validity gate",
+            "provider": "gate",
+            "comparison_id": pair["comparison_id"],
+        }
+    review_image = pair.get("review_image")
+    if not review_image:
+        raise ValueError("pair has no review image")
+    image_path = (pair_file.parent / str(review_image)).resolve()
+    if not image_path.is_file():
+        raise ValueError(f"review image not found: {image_path}")
+    argv = shlex.split(command) if isinstance(command, str) else list(command)
+    if not argv:
+        raise ValueError("judge command must not be empty")
+    if timeout_seconds <= 0:
+        raise ValueError("timeout_seconds must be positive")
+    request = {
+        "schema_version": "1.0.0",
+        "comparison_id": pair["comparison_id"],
+        "task_id": pair["task_id"],
+        "review_image": str(image_path),
+        "allowed_verdicts": ["a", "b", "tie", "both_bad"],
+        "rubric": [
+            "path geometry and endpoint or loop consistency",
+            "local motion fidelity and absence of jitter",
+            "recovery from occlusion or fast motion",
+            "coverage and catastrophic failures",
+            "resource cost only as a separately labeled tie-breaker",
+        ],
+        "instruction": (
+            "Compare Candidate A and Candidate B without identifying the systems. "
+            "Return JSON with winner and a short reason."
+        ),
+    }
+    try:
+        completed = subprocess.run(
+            argv,
+            input=json.dumps(request),
+            capture_output=True,
+            text=True,
+            timeout=timeout_seconds,
+            check=False,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise ValueError(f"judge command timed out after {timeout_seconds:g}s") from exc
+    if completed.returncode != 0:
+        detail = completed.stderr.strip() or completed.stdout.strip() or "no output"
+        raise ValueError(f"judge command failed with exit {completed.returncode}: {detail}")
+    try:
+        response = json.loads(completed.stdout)
+    except json.JSONDecodeError as exc:
+        raise ValueError("judge command did not return one JSON object") from exc
+    if not isinstance(response, dict) or response.get("winner") not in {
+        "a",
+        "b",
+        "tie",
+        "both_bad",
+    }:
+        raise ValueError("judge response needs winner: a, b, tie, or both_bad")
+    return {
+        **response,
+        "comparison_id": str(pair["comparison_id"]),
+        "provider": str(response.get("provider", argv[0])),
+    }
 
 
 def calibrate_judge_votes(

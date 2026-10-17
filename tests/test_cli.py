@@ -264,6 +264,75 @@ def test_tracking_review_calibrate_command(tmp_path: Path) -> None:
     assert payload["accuracy"] == 1.0
 
 
+def test_tracking_review_judge_command_records_provider_vote(tmp_path: Path) -> None:
+    from PIL import Image
+
+    pair_dir = tmp_path / "pair"
+    pair_dir.mkdir()
+    Image.new("RGB", (4, 4), "white").save(pair_dir / "review.png")
+    pair = {
+        "schema_version": "1.0.0",
+        "comparison_id": "judge-cli-1",
+        "task_id": "tum/walk",
+        "system_a": "hidden-a",
+        "system_b": "hidden-b",
+        "review_image": "review.png",
+        "automatic_winner": None,
+    }
+    pair_path = pair_dir / "pair.json"
+    pair_path.write_text(json.dumps(pair))
+    adapter = tmp_path / "adapter.py"
+    adapter.write_text(
+        "import json,sys\n"
+        "request=json.load(sys.stdin)\n"
+        "assert request['allowed_verdicts']==['a','b','tie','both_bad']\n"
+        "print(json.dumps({'winner':'b','reason':'steadier','provider':'test'}))\n"
+    )
+    comparisons = tmp_path / "judge.jsonl"
+    result = runner.invoke(
+        app,
+        [
+            "tracking-review",
+            "judge",
+            "--pair",
+            str(pair_path),
+            "--command",
+            f"{sys.executable} {adapter}",
+            "--comparisons",
+            str(comparisons),
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert json.loads(result.stdout)["judge"]["winner"] == "b"
+    assert json.loads(comparisons.read_text())["source"] == "vlm"
+
+
+def test_tracking_review_propose_command(tmp_path: Path) -> None:
+    spec = {
+        "parameters": {"window": {"type": "int", "low": 2, "high": 8}},
+        "objectives": [{"name": "quality", "direction": "maximize"}],
+    }
+    spec_path = tmp_path / "search.json"
+    spec_path.write_text(json.dumps(spec))
+    result = runner.invoke(
+        app,
+        [
+            "tracking-review",
+            "propose",
+            "--spec",
+            str(spec_path),
+            "--candidates",
+            "32",
+            "--seed",
+            "3",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    proposal = json.loads(result.stdout)
+    assert proposal["strategy"] == "space_filling"
+    assert 2 <= proposal["parameters"]["window"] <= 8
+
+
 def test_python_m_entrypoint() -> None:
     # ``python -m plumbline`` must work even where the console script isn't on
     # PATH (relies only on __main__.py + the package being importable).

@@ -1,8 +1,9 @@
 # Camera-tracking review harness
 
-Status: artifact, validity-gate, blinded-pair, human-vote, and ranking paths are
-implemented in `plumbline.tracking_review` and `plumbline tracking-review`.
-VLM calibration and Bayesian search remain.
+Status: artifact generation, validity gates, blinded pairs, human and external
+judge votes, calibration, ranking, and Bayesian proposals are implemented in
+`plumbline.tracking_review`, `plumbline.design_search`, and
+`plumbline tracking-review`.
 
 ## Decision
 
@@ -147,15 +148,32 @@ plumbline tracking-review vote \
 plumbline tracking-review rank \
   --comparisons comparisons.jsonl --bootstrap 1000 --output ratings.json
 
-# A provider-specific VLM runner writes a separate verdict log with
-# `tracking-review vote --source vlm`; promotion requires human agreement.
+# The adapter command reads one JSON request from stdin and writes one JSON
+# response to stdout. It may call a local model or a hosted service.
+plumbline tracking-review judge \
+  --pair pairs/tum-walk-001/pair.json \
+  --command "python my_vlm_adapter.py" \
+  --comparisons vlm.jsonl --output judge-result.json
+
+# A judge is not accepted until it agrees with a separate human log.
 plumbline tracking-review calibrate \
   --human human.jsonl --judge vlm.jsonl --output calibration.json
 ```
 
+The judge request contains the absolute path to `review.png`, the comparison
+ID, the task ID, allowed verdicts, and the fixed rubric. The adapter returns:
+
+```json
+{"winner": "a", "reason": "lower drift and less jitter", "provider": "local-vlm"}
+```
+
+Plumbline runs the command without a shell, applies a timeout, validates the
+response, and records the vote in the append-only log. API keys and provider
+libraries remain in the adapter.
+
 ## Design search
 
-### Bayesian optimization: yes, after the review signal is calibrated
+### Bayesian optimization
 
 Camera trackers expose expensive mixed parameters (resolution, window length,
 confidence thresholds, global-alignment iterations, precision, and keyframe
@@ -165,11 +183,50 @@ policy). Constrained multi-objective Bayesian optimization is a good fit:
 - hard constraints: no gate failure, minimum coverage, maximum memory/runtime;
 - fidelity levels: short/cheap sequence subset → full benchmark;
 - observations keyed by the existing `config_hash` and prediction cache;
-- acquisition over Pareto hypervolume, not an arbitrary weighted sum.
+- seeded random scalarizations across objectives, so repeated proposals sample
+  different parts of the Pareto surface;
+- Gaussian-process feasibility estimates for declared coverage, memory, or
+  runtime constraints.
 
 The optimizer must hold out sequences when reporting the final winner. Using
 the evaluation set for both search and selection would merely automate
 benchmark overfitting.
+
+The search specification is plain JSON:
+
+```json
+{
+  "parameters": {
+    "precision": {"type": "choice", "values": ["fp16", "fp32"]},
+    "window": {"type": "int", "low": 2, "high": 16},
+    "confidence": {"type": "float", "low": 0.001, "high": 0.5, "log": true}
+  },
+  "objectives": [
+    {"name": "preference", "direction": "maximize"},
+    {"name": "latency_ms", "direction": "minimize"}
+  ],
+  "constraints": [
+    {"name": "coverage", "op": ">=", "value": 0.95},
+    {"name": "peak_vram_gb", "op": "<=", "value": 10.5}
+  ]
+}
+```
+
+Each line in `observations.jsonl` contains `parameters`, `metrics`, and an
+optional `status`. Failed runs may use `"status": "failed"`. Propose the next
+configuration with:
+
+```bash
+plumbline tracking-review propose \
+  --spec tracking-search.json \
+  --observations observations.jsonl \
+  --seed 4 --output next-config.json
+```
+
+The first proposals use space-filling search. After three successful
+observations, the command uses Gaussian-process expected improvement and
+constraint probabilities. The result includes a stable `config_hash` for the
+prediction cache.
 
 ### RL: not the first tool
 
@@ -189,12 +246,12 @@ the search “RL” adds complexity without a defensible advantage.
 2. ✅ Add validity gates and deterministically blinded pair generation.
 3. ✅ Add a local human-review CLI that writes append-only JSONL verdicts.
 4. ✅ Fit ratings and task-bootstrap intervals using `tracking_review`.
-5. Add an optional provider-neutral VLM judge and validate it against human
-   labels.
-6. Only then add constrained multi-objective Bayesian search over explicitly
-   declared adapter parameters.
+5. ✅ Add a provider-neutral VLM command contract and calibration report. A
+   specific judge still needs human labels before its results can be trusted.
+6. ✅ Add constrained multi-objective Bayesian proposals over declared mixed
+   parameters.
 
-No GPU is needed for steps 1–4. `anima`'s 1080 Ti is sufficient for cached
+No GPU is needed for review and proposal generation. `anima`'s 1080 Ti is sufficient for cached
 tracker inference and diagnostic generation; a larger rented GPU is justified
 only for methods that cannot fit or for high-throughput search after the
 evaluation instrument is validated.

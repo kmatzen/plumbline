@@ -719,6 +719,95 @@ def tracking_review_calibrate(
         console.print(f"[green]wrote calibration[/green]: {output}")
 
 
+@tracking_review_app.command("judge")
+def tracking_review_judge(
+    pair: Path = typer.Option(..., "--pair", help="Pair bundle's pair.json."),
+    command: str = typer.Option(
+        ..., "--command", help="Provider adapter command; reads JSON stdin and writes JSON stdout."
+    ),
+    comparisons: Path = typer.Option(..., "--comparisons", help="Append-only VLM JSONL log."),
+    timeout: float = typer.Option(120.0, "--timeout", min=0.1),
+    output: Path | None = typer.Option(None, "--output", "-o", help="Optional raw result JSON."),
+) -> None:
+    """Run a provider-neutral visual judge and record its verdict."""
+    import json
+
+    from plumbline.tracking_review import record_review_vote, run_external_judge
+
+    try:
+        result = run_external_judge(pair, command, timeout_seconds=timeout)
+        row = record_review_vote(
+            pair,
+            str(result["winner"]),
+            comparisons,
+            reviewer=str(result["provider"]),
+            source="vlm",
+        )
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    payload = {"judge": result, "recorded": row}
+    rendered = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    if output is None:
+        typer.echo(rendered, nl=False)
+    else:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(rendered, encoding="utf-8")
+        console.print(f"[green]wrote judge result[/green]: {output}")
+
+
+@tracking_review_app.command("propose")
+def tracking_review_propose(
+    spec: Path = typer.Option(..., "--spec", help="JSON parameter/objective search specification."),
+    observations: Path | None = typer.Option(
+        None, "--observations", help="JSONL completed evaluations; omit for initial design."
+    ),
+    output: Path | None = typer.Option(None, "--output", "-o"),
+    seed: int = typer.Option(0, "--seed"),
+    candidates: int = typer.Option(2048, "--candidates", min=16),
+) -> None:
+    """Propose one mixed-parameter configuration using Bayesian search."""
+    import json
+    from dataclasses import asdict
+
+    from plumbline.design_search import propose_configuration
+
+    if not spec.is_file():
+        raise typer.BadParameter(f"Search spec not found: {spec}")
+    try:
+        spec_data = json.loads(spec.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise typer.BadParameter(f"{spec}: {exc}") from exc
+    if not isinstance(spec_data, dict):
+        raise typer.BadParameter("search spec must be a JSON object")
+    rows: list[dict[str, Any]] = []
+    if observations is not None:
+        if not observations.is_file():
+            raise typer.BadParameter(f"Observations file not found: {observations}")
+        for line_number, line in enumerate(
+            observations.read_text(encoding="utf-8").splitlines(), 1
+        ):
+            if not line.strip():
+                continue
+            try:
+                item = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise typer.BadParameter(f"{observations}:{line_number}: {exc}") from exc
+            if not isinstance(item, dict):
+                raise typer.BadParameter(f"{observations}:{line_number}: expected JSON object")
+            rows.append(item)
+    try:
+        proposal = propose_configuration(spec_data, rows, seed=seed, candidate_count=candidates)
+    except (TypeError, ValueError) as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    rendered = json.dumps(asdict(proposal), indent=2, sort_keys=True) + "\n"
+    if output is None:
+        typer.echo(rendered, nl=False)
+    else:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(rendered, encoding="utf-8")
+        console.print(f"[green]wrote proposal[/green]: {output}")
+
+
 @app.command("clear-cache")
 def clear_cache(
     model: str | None = typer.Option(None, "--model", help="Only clear this model's cache."),

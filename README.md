@@ -50,6 +50,12 @@ API will still change before 1.0.
   correspondences) wired through the runner for ETH3D / DTU / T&T
   chamfer. Per-view-masked chamfer (CUT3R / MASt3R lineage) lands the
   structurally-correct DTU and ETH3D protocols.
+- **Camera-tracking review** records fixed diagnostic images, blinded A/B
+  votes, judge calibration, and Bradley–Terry ratings. A provider-neutral
+  command can call a local or hosted visual model. Mixed-parameter Bayesian
+  search proposes new tracker settings while accounting for coverage, runtime,
+  and memory limits. See
+  [the review harness](./docs/CAMERA_TRACKING_REVIEW_HARNESS.md).
 
 ## What's verified vs upstream-blocked
 

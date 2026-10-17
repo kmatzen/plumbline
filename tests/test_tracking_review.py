@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 
 import numpy as np
 import pytest
@@ -15,6 +16,7 @@ from plumbline.tracking_review import (
     fit_bradley_terry,
     record_review_vote,
     render_trajectory_diagnostic,
+    run_external_judge,
     trajectory_diagnostics,
     validate_trajectory_pair,
     write_tracking_review_artifact,
@@ -268,3 +270,35 @@ def test_judge_calibration_reports_coverage_accuracy_and_kappa() -> None:
     assert result["accuracy"] == pytest.approx(0.5)
     assert result["cohen_kappa"] == pytest.approx(0.0)
     assert result["confusion"] == {"a": {"a": 1, "b": 0}, "b": {"a": 1, "b": 0}}
+
+
+def test_provider_neutral_judge_receives_image_and_returns_verdict(tmp_path) -> None:
+    gt = _trajectory()
+    first = write_tracking_review_artifact(
+        gt, gt, tmp_path / "artifacts", dataset="tum", sequence="walk", system="x", config_hash="1"
+    )
+    changed = gt.copy()
+    changed[:, 1, 3] += np.linspace(0, 0.2, len(gt))
+    second = write_tracking_review_artifact(
+        changed,
+        gt,
+        tmp_path / "artifacts",
+        dataset="tum",
+        sequence="walk",
+        system="y",
+        config_hash="2",
+    )
+    pair = build_review_pair(
+        first, second, tmp_path / "pair", task_id="tum/walk", comparison_id="judge-1"
+    )
+    adapter = tmp_path / "judge.py"
+    adapter.write_text(
+        "import json, pathlib, sys\n"
+        "request=json.load(sys.stdin)\n"
+        "assert pathlib.Path(request['review_image']).is_file()\n"
+        "print(json.dumps({'winner':'a','reason':'less drift','provider':'test-vlm'}))\n"
+    )
+    result = run_external_judge(pair, [sys.executable, str(adapter)])
+    assert result["winner"] == "a"
+    assert result["provider"] == "test-vlm"
+    assert result["comparison_id"] == "judge-1"
