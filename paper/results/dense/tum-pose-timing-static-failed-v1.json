@@ -1,0 +1,12 @@
+{
+  "status": "failed",
+  "scope": "retained development attempt, no camera-quality result",
+  "command": "uv run python -m paper.probe_tum_pose_timing paper/results/dense/dage-walking-static-v1 paper/results/dense/tum-anchor-static-v1.json tmp/tum-anchor-source/rgbd_dataset_freiburg3_walking_static/groundtruth.txt paper/results/dense/tum-pose-timing-static-v1.json",
+  "runner_sha256": "80ff34ba4b5810e719546af3831552bfc2c42cfab6a6108e9e21fd61e056d434",
+  "groundtruth_sha256": "e18b9028ab473d1ed150a621c32b09a68c630290088f49abfac4f329b81fdc46",
+  "error": "ValueError: invalid pose interpolation input",
+  "diagnosis": "Global strict monotonicity check rejected a duplicate timestamp outside the selected RGB clip. The two rows have different poses. No completed output was written.",
+  "duplicate_timestamp": 1341846251.4587,
+  "duplicate_zero_based_data_rows": [2453, 2454],
+  "groundtruth_data_rows": 2484
+}

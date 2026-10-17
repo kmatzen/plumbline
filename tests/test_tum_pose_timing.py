@@ -26,4 +26,15 @@ def test_no_extrapolation_or_interpolation_across_large_gaps():
     assert interpolate([0.0, 1.0], poses, -1)[1]["status"] == "outside_reference_span"
     assert interpolate([0.0, 1.0], poses, 2)[1]["status"] == "outside_reference_span"
     with pytest.raises(ValueError):
-        interpolate([0.0, 0.0], poses, 0.0)
+        interpolate([1.0, 0.0], poses, 0.0)
+
+
+def test_duplicate_timestamp_is_ambiguous_only_when_needed():
+    poses = np.repeat(np.eye(4)[None], 5, axis=0)
+    times = [0.0, 0.01, 0.01, 0.02, 0.03]
+    poses[2, 0, 3] = 1
+    assert interpolate(times, poses, 0.01)[1]["status"] == "ambiguous_duplicate_timestamp"
+    assert interpolate(times, poses, 0.005)[1]["status"] == "ambiguous_duplicate_bracket"
+    assert interpolate(times, poses, 0.015)[1]["status"] == "ambiguous_duplicate_bracket"
+    assert interpolate(times, poses, 0.025)[1]["status"] == "interpolated"
+    assert interpolate(times, poses, 0.02)[1]["status"] == "exact"

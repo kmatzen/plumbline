@@ -355,6 +355,27 @@ in this early-fit diagnostic, not that either reference association resolves
 the scene-motion, track-correctness, or conditioning confounds. Original
 production references and reported method scores remain unchanged.
 
+The stationary TUM clip supplies a second development check. Its trajectory
+file has two different poses at timestamp 1341846251.4587, outside the selected
+clip. The original global strict-monotonicity check rejected the file; that
+attempt is retained as `tum-pose-timing-static-failed-v1.json`, alongside the
+executed runner. Interpolation now rejects duplicates when the query or either
+bracketing timestamp uses them; unrelated duplicates do not invalidate the
+whole sequence. No duplicate poses are averaged. The existing loader's
+last-row timestamp mapping is used only to reproduce its retained reference.
+
+The stationary clip also starts before the reference span. Its full-window
+unavailable result is retained as `tum-pose-timing-static-v2.json`. The v3
+comparison uses the same explicit frame-1 start and frames 1–11 fit as the XYZ
+follow-up. All twelve slots fit under both policies, but only 380 of 936 later
+observations are comparable. Associated/interpolated aggregate medians are
+7.922/7.045 px; the median absolute paired change is 0.952 px and the maximum
+is 256.146 px. The change is not uniformly beneficial: slot 0's median increases
+from 52.792 to 291.308 px, while slot 5's decreases from 5.914 to 4.943 px.
+Changing timestamp policy does not resolve these early-fit diagnostic
+confounds or validate a failure threshold. The two sequences are development
+examples, not a sampled estimate of general timing sensitivity.
+
 #### Source-track comprehension pilot
 
 The corrected 7B NF4 configuration was subsequently evaluated on the same three

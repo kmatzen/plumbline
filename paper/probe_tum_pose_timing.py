@@ -20,7 +20,7 @@ def interpolate(times, poses, query, max_gap=0.05):
     if (
         len(times) < 2
         or not np.isfinite(times).all()
-        or not (np.diff(times) > 0).all()
+        or not (np.diff(times) >= 0).all()
         or poses.shape != (len(times), 4, 4)
         or not np.isfinite(poses).all()
         or not np.isfinite(query)
@@ -30,6 +30,8 @@ def interpolate(times, poses, query, max_gap=0.05):
         raise ValueError("invalid pose interpolation input")
     right = int(np.searchsorted(times, query))
     if right < len(times) and times[right] == query:
+        if np.count_nonzero(times == query) > 1:
+            return None, {"status": "ambiguous_duplicate_timestamp", "timestamp": float(query)}
         return poses[right].copy(), {
             "status": "exact",
             "bracket_seconds": [float(query), float(query)],
@@ -38,6 +40,11 @@ def interpolate(times, poses, query, max_gap=0.05):
     if right == 0 or right == len(times):
         return None, {"status": "outside_reference_span"}
     left = right - 1
+    if np.count_nonzero(times == times[left]) > 1 or np.count_nonzero(times == times[right]) > 1:
+        return None, {
+            "status": "ambiguous_duplicate_bracket",
+            "bracket_seconds": [float(times[left]), float(times[right])],
+        }
     gap = float(times[right] - times[left])
     record = {"bracket_seconds": [float(times[left]), float(times[right])], "gap_seconds": gap}
     if gap > max_gap:
@@ -94,6 +101,8 @@ def run(run_path, tracks_path, groundtruth_path, output, start_frame=0):
         "policy": "linear translation and quaternion SLERP at RGB time; maximum bracket gap 50 ms; no extrapolation; same tracks and 11-frame fit",
         "frames": timing,
         "interpolation_counts": dict(Counter(r["status"] for r in timing)),
+        "duplicate_reference_timestamps": [float(t) for t, n in Counter(times).items() if n > 1],
+        "duplicate_policy": "retained reference reproduction uses loader last-row timestamp mapping; interpolation rejects duplicate timestamps only when used by the query or its bracket",
         "comparison_start_frame": start_frame,
         "excluded_prefix_frames": list(range(start_frame)),
         "fit_original_frames": list(range(start_frame, start_frame + 11)),
