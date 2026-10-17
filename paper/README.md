@@ -3007,3 +3007,20 @@ Repeated witnesses across configurations are not independent observations.
 The broad local command `uv run pytest -q -m 'not weights'` completed with
 1,936 passed, one skipped (unstaged KITTI MoGe-eval bundle), and six weight-backed
 tests deselected. These are software checks, not publication-readiness evidence.
+
+### One actual-camera review example
+
+`build_letter_camera_review.py` uses the previously shown printed-e detail
+(slot 6) with saved estimated cameras. It fits one point per candidate from
+frames 1–10 using common published calibration, then projects each fixed point
+at frames 1, 45, and 89. There are no deliberately added camera errors and no
+reference-pose/depth inputs. The display shows source crops above opaque A/B
+rows, and asks only whether each cross stays on the same part of the letter.
+The crops follow the fallible RGB track; this is a comprehension example, not a
+randomly sampled or independent validation study. The local inspected image is
+`tmp/letter-camera-review-v3/review.png`; its hash, mappings, fitting observations,
+and all 180 projections are retained in
+`results/static-rgbd-control-v1/letter-camera-review-v1.json`.
+Projection uses the full inverse transform because saved rotation matrices are
+not perfectly orthonormal. All 180 projections match a separate homogeneous
+inverse calculation within 1e-8 pixels. No user answer has yet been recorded.
