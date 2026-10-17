@@ -1,0 +1,4394 @@
+{
+  "source_provenance_limit": "Legacy cache keys do not hash all frames or record timestamps.",
+  "rows": [
+    {
+      "sample_id": "realestate10k/008cd8c450342e49",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.15629629629629624,
+      "normalized_ate": 0.4634650403856411,
+      "translation_p95": 0.6859188577321721,
+      "rotation_mean": 0.7569198039020999,
+      "translation_direction_mean": 40.72039697628973
+    },
+    {
+      "sample_id": "realestate10k/008cd8c450342e49",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.8703703703703702,
+      "normalized_ate": 0.029012337586170375,
+      "translation_p95": 0.043570814402864456,
+      "rotation_mean": 0.16930107451201476,
+      "translation_direction_mean": 4.373641602745514
+    },
+    {
+      "sample_id": "realestate10k/008cd8c450342e49",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.08148148148148149,
+      "normalized_ate": 0.3380871404650004,
+      "translation_p95": 0.5436532814049113,
+      "rotation_mean": 1.3364774400990092,
+      "translation_direction_mean": 35.1576023505054
+    },
+    {
+      "sample_id": "realestate10k/00a54225c5cb1913",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.0,
+      "normalized_ate": 0.7097981524995871,
+      "translation_p95": 1.0773048021441805,
+      "rotation_mean": 4.640025357029629,
+      "translation_direction_mean": 70.53281576168037
+    },
+    {
+      "sample_id": "realestate10k/00a54225c5cb1913",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.0,
+      "normalized_ate": 0.28055992740982183,
+      "translation_p95": 0.4321132730912042,
+      "rotation_mean": 3.4444095073158314,
+      "translation_direction_mean": 71.1465819401843
+    },
+    {
+      "sample_id": "realestate10k/00a54225c5cb1913",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.07185185185185186,
+      "normalized_ate": 0.5098667121538704,
+      "translation_p95": 0.8776611994641168,
+      "rotation_mean": 3.316739881493857,
+      "translation_direction_mean": 62.99325501481734
+    },
+    {
+      "sample_id": "realestate10k/00cf0a94235771bb",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.6111111111111112,
+      "normalized_ate": 0.1489994808663144,
+      "translation_p95": 0.24438445007283588,
+      "rotation_mean": 0.20789618144028738,
+      "translation_direction_mean": 14.02635303315121
+    },
+    {
+      "sample_id": "realestate10k/00cf0a94235771bb",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9266666666666669,
+      "normalized_ate": 0.02481426437718598,
+      "translation_p95": 0.04087028091542116,
+      "rotation_mean": 0.0807765949764749,
+      "translation_direction_mean": 2.7517414773489284
+    },
+    {
+      "sample_id": "realestate10k/00cf0a94235771bb",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.9044444444444444,
+      "normalized_ate": 0.06616695212102439,
+      "translation_p95": 0.12374270920979025,
+      "rotation_mean": 0.11282368392059643,
+      "translation_direction_mean": 3.292638363953475
+    },
+    {
+      "sample_id": "realestate10k/00cfc0ecd345deb4",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.8822222222222222,
+      "normalized_ate": 0.13314463782515798,
+      "translation_p95": 0.21065587954903456,
+      "rotation_mean": 0.6203276510511423,
+      "translation_direction_mean": 4.063136661089778
+    },
+    {
+      "sample_id": "realestate10k/00cfc0ecd345deb4",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9733333333333333,
+      "normalized_ate": 0.07541458809751331,
+      "translation_p95": 0.13378791356505226,
+      "rotation_mean": 0.8727506886626655,
+      "translation_direction_mean": 1.2062772226524066
+    },
+    {
+      "sample_id": "realestate10k/00cfc0ecd345deb4",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.9570370370370369,
+      "normalized_ate": 0.06635681159593285,
+      "translation_p95": 0.11711388322393157,
+      "rotation_mean": 0.841907134519232,
+      "translation_direction_mean": 1.6372877483772066
+    },
+    {
+      "sample_id": "realestate10k/015d8a2a2834d38c",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.8118518518518518,
+      "normalized_ate": 0.08287296446063573,
+      "translation_p95": 0.14266707073323237,
+      "rotation_mean": 3.3782213310602005,
+      "translation_direction_mean": 5.456556259856115
+    },
+    {
+      "sample_id": "realestate10k/015d8a2a2834d38c",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9711111111111111,
+      "normalized_ate": 0.0160924770554809,
+      "translation_p95": 0.027439418001155493,
+      "rotation_mean": 1.1758910371104554,
+      "translation_direction_mean": 0.7646201059951637
+    },
+    {
+      "sample_id": "realestate10k/015d8a2a2834d38c",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8222222222222223,
+      "normalized_ate": 0.08862387596693667,
+      "translation_p95": 0.15646185498874998,
+      "rotation_mean": 3.500415152205067,
+      "translation_direction_mean": 5.831335431448481
+    },
+    {
+      "sample_id": "realestate10k/0181d3b41c2cf87c",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.8896296296296295,
+      "normalized_ate": 0.0444945965701868,
+      "translation_p95": 0.07790434208738971,
+      "rotation_mean": 1.2734630261327817,
+      "translation_direction_mean": 3.813204579557376
+    },
+    {
+      "sample_id": "realestate10k/0181d3b41c2cf87c",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9244444444444445,
+      "normalized_ate": 0.041138044566574446,
+      "translation_p95": 0.06918007984569402,
+      "rotation_mean": 1.5475693919817861,
+      "translation_direction_mean": 2.746981435495934
+    },
+    {
+      "sample_id": "realestate10k/0181d3b41c2cf87c",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.9088888888888889,
+      "normalized_ate": 0.04309025344144379,
+      "translation_p95": 0.07088532507421526,
+      "rotation_mean": 0.8022297139412686,
+      "translation_direction_mean": 3.1404350014478433
+    },
+    {
+      "sample_id": "realestate10k/01842c6b21e1d679",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.8281481481481481,
+      "normalized_ate": 0.06030896359057192,
+      "translation_p95": 0.10283094748902881,
+      "rotation_mean": 1.5521513560981526,
+      "translation_direction_mean": 5.501004800905125
+    },
+    {
+      "sample_id": "realestate10k/01842c6b21e1d679",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9785185185185185,
+      "normalized_ate": 0.05691215801624281,
+      "translation_p95": 0.09803079418416517,
+      "rotation_mean": 0.5715423931723336,
+      "translation_direction_mean": 1.1962915062311374
+    },
+    {
+      "sample_id": "realestate10k/01842c6b21e1d679",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.7792592592592592,
+      "normalized_ate": 0.06429974202418466,
+      "translation_p95": 0.11553380533922245,
+      "rotation_mean": 0.660110894990736,
+      "translation_direction_mean": 7.135853564028821
+    },
+    {
+      "sample_id": "realestate10k/01866b81c3b90f2c",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.1622222222222222,
+      "normalized_ate": 0.4725621948260915,
+      "translation_p95": 0.7502266121560968,
+      "rotation_mean": 2.188368635345556,
+      "translation_direction_mean": 33.33001322719671
+    },
+    {
+      "sample_id": "realestate10k/01866b81c3b90f2c",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.8192592592592592,
+      "normalized_ate": 0.04883621093253086,
+      "translation_p95": 0.08477607870572718,
+      "rotation_mean": 1.208017303476629,
+      "translation_direction_mean": 5.828199222705823
+    },
+    {
+      "sample_id": "realestate10k/01866b81c3b90f2c",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.722962962962963,
+      "normalized_ate": 0.046034900907388585,
+      "translation_p95": 0.0783657661667447,
+      "rotation_mean": 0.4714282556383767,
+      "translation_direction_mean": 8.844139552944544
+    },
+    {
+      "sample_id": "realestate10k/018f7907401f2fef",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.9170370370370371,
+      "normalized_ate": 0.06720923157445607,
+      "translation_p95": 0.11481008987700451,
+      "rotation_mean": 0.7909123902575033,
+      "translation_direction_mean": 2.796264893350873
+    },
+    {
+      "sample_id": "realestate10k/018f7907401f2fef",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9762962962962963,
+      "normalized_ate": 0.018887621007511683,
+      "translation_p95": 0.03186254812934976,
+      "rotation_mean": 0.7779672939793559,
+      "translation_direction_mean": 1.014434623772581
+    },
+    {
+      "sample_id": "realestate10k/018f7907401f2fef",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.7703703703703703,
+      "normalized_ate": 0.09676514469457481,
+      "translation_p95": 0.12823836802558142,
+      "rotation_mean": 1.5181821405465203,
+      "translation_direction_mean": 7.404732138565631
+    },
+    {
+      "sample_id": "realestate10k/0196dedebec3dad2",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.765925925925926,
+      "normalized_ate": 0.16128102625200957,
+      "translation_p95": 0.22455660215215506,
+      "rotation_mean": 0.5607697774032612,
+      "translation_direction_mean": 8.259451594078275
+    },
+    {
+      "sample_id": "realestate10k/0196dedebec3dad2",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9385185185185185,
+      "normalized_ate": 0.04403511750731059,
+      "translation_p95": 0.05915337927441986,
+      "rotation_mean": 0.7802637862270395,
+      "translation_direction_mean": 2.3352092715305446
+    },
+    {
+      "sample_id": "realestate10k/0196dedebec3dad2",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.962962962962963,
+      "normalized_ate": 0.040077027097861526,
+      "translation_p95": 0.07379677404976354,
+      "rotation_mean": 0.47077950054168427,
+      "translation_direction_mean": 1.6341521708480833
+    },
+    {
+      "sample_id": "realestate10k/01a5cc3805e94c21",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.9429629629629628,
+      "normalized_ate": 0.04621074552878559,
+      "translation_p95": 0.07993097460114226,
+      "rotation_mean": 0.757043957845417,
+      "translation_direction_mean": 2.1517691096474203
+    },
+    {
+      "sample_id": "realestate10k/01a5cc3805e94c21",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9896296296296296,
+      "normalized_ate": 0.012303496735002376,
+      "translation_p95": 0.021013016626987388,
+      "rotation_mean": 0.5513025043681298,
+      "translation_direction_mean": 0.834784261773517
+    },
+    {
+      "sample_id": "realestate10k/01a5cc3805e94c21",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.965925925925926,
+      "normalized_ate": 0.009479382867195407,
+      "translation_p95": 0.014208331370204188,
+      "rotation_mean": 0.5555540072653306,
+      "translation_direction_mean": 1.5361162777227917
+    },
+    {
+      "sample_id": "realestate10k/01cefee9563f691a",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.9162962962962964,
+      "normalized_ate": 0.060916024435774534,
+      "translation_p95": 0.0856650557177464,
+      "rotation_mean": 0.8662438379808192,
+      "translation_direction_mean": 2.75353681469267
+    },
+    {
+      "sample_id": "realestate10k/01cefee9563f691a",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9822222222222223,
+      "normalized_ate": 0.01826973278505014,
+      "translation_p95": 0.03227495798510194,
+      "rotation_mean": 0.1446197351952676,
+      "translation_direction_mean": 0.9682361233320425
+    },
+    {
+      "sample_id": "realestate10k/01cefee9563f691a",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.30444444444444446,
+      "normalized_ate": 0.31585757509718615,
+      "translation_p95": 0.5838479192657027,
+      "rotation_mean": 2.6599368720145695,
+      "translation_direction_mean": 24.943807260761286
+    },
+    {
+      "sample_id": "realestate10k/01e18dbbf22ff263",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.8874074074074073,
+      "normalized_ate": 0.22186525633962412,
+      "translation_p95": 0.3624163988112531,
+      "rotation_mean": 1.5116209621070684,
+      "translation_direction_mean": 3.5235415638460332
+    },
+    {
+      "sample_id": "realestate10k/01e18dbbf22ff263",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9777777777777779,
+      "normalized_ate": 0.008380377393018732,
+      "translation_p95": 0.012186523810271688,
+      "rotation_mean": 0.2779552191199709,
+      "translation_direction_mean": 1.1786410469886506
+    },
+    {
+      "sample_id": "realestate10k/01e18dbbf22ff263",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.7362962962962963,
+      "normalized_ate": 0.07983812458052918,
+      "translation_p95": 0.14058421362048898,
+      "rotation_mean": 1.390173639949378,
+      "translation_direction_mean": 8.549243743657259
+    },
+    {
+      "sample_id": "realestate10k/01f7915dce639515",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.2111111111111111,
+      "normalized_ate": 0.3026720112907284,
+      "translation_p95": 0.4844754623456871,
+      "rotation_mean": 0.29031427839282625,
+      "translation_direction_mean": 32.64560885033874
+    },
+    {
+      "sample_id": "realestate10k/01f7915dce639515",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.8103703703703703,
+      "normalized_ate": 0.017480280058743632,
+      "translation_p95": 0.02701182892097994,
+      "rotation_mean": 0.108478986873822,
+      "translation_direction_mean": 6.169452785816332
+    },
+    {
+      "sample_id": "realestate10k/01f7915dce639515",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.6799999999999999,
+      "normalized_ate": 0.12825865343549991,
+      "translation_p95": 0.23334579214466764,
+      "rotation_mean": 0.15362483521470446,
+      "translation_direction_mean": 10.178025987271608
+    },
+    {
+      "sample_id": "realestate10k/0223924f43297881",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.911111111111111,
+      "normalized_ate": 0.061683543315284896,
+      "translation_p95": 0.09404573006630344,
+      "rotation_mean": 0.36028165971125,
+      "translation_direction_mean": 3.1513534337722287
+    },
+    {
+      "sample_id": "realestate10k/0223924f43297881",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9888888888888888,
+      "normalized_ate": 0.013544320369396675,
+      "translation_p95": 0.018886247135491637,
+      "rotation_mean": 0.4668470749926005,
+      "translation_direction_mean": 0.5948187121791444
+    },
+    {
+      "sample_id": "realestate10k/0223924f43297881",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8014814814814815,
+      "normalized_ate": 0.05723621805156197,
+      "translation_p95": 0.09498620940048398,
+      "rotation_mean": 0.5425632152962141,
+      "translation_direction_mean": 6.5037925978320255
+    },
+    {
+      "sample_id": "realestate10k/025ce727b1b55932",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.9562962962962963,
+      "normalized_ate": 0.021458184432032835,
+      "translation_p95": 0.031275119462301756,
+      "rotation_mean": 0.35373652256463695,
+      "translation_direction_mean": 1.8875859190885298
+    },
+    {
+      "sample_id": "realestate10k/025ce727b1b55932",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.8962962962962963,
+      "normalized_ate": 0.04985862597921137,
+      "translation_p95": 0.07953974355051135,
+      "rotation_mean": 1.2761077384350579,
+      "translation_direction_mean": 3.6327573007138976
+    },
+    {
+      "sample_id": "realestate10k/025ce727b1b55932",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.6977777777777777,
+      "normalized_ate": 0.09466949027544075,
+      "translation_p95": 0.15123024689706657,
+      "rotation_mean": 1.1321443926862114,
+      "translation_direction_mean": 9.569299145702425
+    },
+    {
+      "sample_id": "realestate10k/02b59cd60efb924e",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.7340740740740742,
+      "normalized_ate": 0.2527424238211864,
+      "translation_p95": 0.4295788997628456,
+      "rotation_mean": 0.8054453274013744,
+      "translation_direction_mean": 9.188550008769734
+    },
+    {
+      "sample_id": "realestate10k/02b59cd60efb924e",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.8155555555555555,
+      "normalized_ate": 0.019705647286067877,
+      "translation_p95": 0.03429726076607511,
+      "rotation_mean": 1.839623199871188,
+      "translation_direction_mean": 6.049418474338304
+    },
+    {
+      "sample_id": "realestate10k/02b59cd60efb924e",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8466666666666666,
+      "normalized_ate": 0.036473512946202644,
+      "translation_p95": 0.055739873538578955,
+      "rotation_mean": 0.5896011948224414,
+      "translation_direction_mean": 4.989149631055204
+    },
+    {
+      "sample_id": "realestate10k/02c485bd207116d4",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.505185185185185,
+      "normalized_ate": 0.39637372840045665,
+      "translation_p95": 0.6604488163932244,
+      "rotation_mean": 3.1474282347948725,
+      "translation_direction_mean": 20.924192283215195
+    },
+    {
+      "sample_id": "realestate10k/02c485bd207116d4",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9733333333333332,
+      "normalized_ate": 0.03428546178098111,
+      "translation_p95": 0.052228102503495265,
+      "rotation_mean": 0.5957583694017736,
+      "translation_direction_mean": 1.2938194088446582
+    },
+    {
+      "sample_id": "realestate10k/02c485bd207116d4",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.342962962962963,
+      "normalized_ate": 0.37703513846393033,
+      "translation_p95": 0.6926463517384742,
+      "rotation_mean": 6.247635809695574,
+      "translation_direction_mean": 27.014639600295688
+    },
+    {
+      "sample_id": "realestate10k/03482c3bd66de195",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.8444444444444446,
+      "normalized_ate": 0.04995453984649761,
+      "translation_p95": 0.10538728328908925,
+      "rotation_mean": 3.516676226437251,
+      "translation_direction_mean": 3.548200775340543
+    },
+    {
+      "sample_id": "realestate10k/03482c3bd66de195",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9385185185185185,
+      "normalized_ate": 0.03885129506691156,
+      "translation_p95": 0.06651773890249736,
+      "rotation_mean": 2.0912996788317235,
+      "translation_direction_mean": 0.8883092410734955
+    },
+    {
+      "sample_id": "realestate10k/03482c3bd66de195",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.7933333333333332,
+      "normalized_ate": 0.03606996993425825,
+      "translation_p95": 0.055405685844779076,
+      "rotation_mean": 3.042275526762641,
+      "translation_direction_mean": 6.714455713020916
+    },
+    {
+      "sample_id": "realestate10k/0362399a61c18ad5",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.2866666666666667,
+      "normalized_ate": 0.3732693802613524,
+      "translation_p95": 0.6778349258077843,
+      "rotation_mean": 0.2086948922424657,
+      "translation_direction_mean": 30.22684031934301
+    },
+    {
+      "sample_id": "realestate10k/0362399a61c18ad5",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.908148148148148,
+      "normalized_ate": 0.046853794677331424,
+      "translation_p95": 0.06755350042166383,
+      "rotation_mean": 0.11376642687924671,
+      "translation_direction_mean": 3.217421148377411
+    },
+    {
+      "sample_id": "realestate10k/0362399a61c18ad5",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.6644444444444445,
+      "normalized_ate": 0.2873753835192581,
+      "translation_p95": 0.5191655348320169,
+      "rotation_mean": 0.329261787768103,
+      "translation_direction_mean": 10.560710876274053
+    },
+    {
+      "sample_id": "realestate10k/036f135766f38f78",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.8599999999999999,
+      "normalized_ate": 0.07937852395127983,
+      "translation_p95": 0.13267659994469527,
+      "rotation_mean": 0.31009296844170825,
+      "translation_direction_mean": 5.7533217228117906
+    },
+    {
+      "sample_id": "realestate10k/036f135766f38f78",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9711111111111111,
+      "normalized_ate": 0.04055051023024776,
+      "translation_p95": 0.06661820868661644,
+      "rotation_mean": 0.35889337092742785,
+      "translation_direction_mean": 1.3978777428358322
+    },
+    {
+      "sample_id": "realestate10k/036f135766f38f78",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.951851851851852,
+      "normalized_ate": 0.043818298191740504,
+      "translation_p95": 0.07376279839141567,
+      "rotation_mean": 0.43438540418034494,
+      "translation_direction_mean": 1.9004685760472957
+    },
+    {
+      "sample_id": "realestate10k/037e8191b3985142",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.5066666666666668,
+      "normalized_ate": 0.26598307873486987,
+      "translation_p95": 0.3636854904074163,
+      "rotation_mean": 2.0042132273171793,
+      "translation_direction_mean": 18.614569792486158
+    },
+    {
+      "sample_id": "realestate10k/037e8191b3985142",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.8851851851851851,
+      "normalized_ate": 0.11340414092202267,
+      "translation_p95": 0.1923277610926634,
+      "rotation_mean": 1.580319414434041,
+      "translation_direction_mean": 4.346895999970696
+    },
+    {
+      "sample_id": "realestate10k/037e8191b3985142",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.4985185185185185,
+      "normalized_ate": 0.1657695592584188,
+      "translation_p95": 0.23247042760280073,
+      "rotation_mean": 3.4796631308922175,
+      "translation_direction_mean": 15.567113298356096
+    },
+    {
+      "sample_id": "realestate10k/039b153af4fbfba7",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.914074074074074,
+      "normalized_ate": 0.03290975694667391,
+      "translation_p95": 0.04760007055067035,
+      "rotation_mean": 0.5241700345396102,
+      "translation_direction_mean": 3.081443659601257
+    },
+    {
+      "sample_id": "realestate10k/039b153af4fbfba7",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9881481481481482,
+      "normalized_ate": 0.006078939064363955,
+      "translation_p95": 0.008953212848203666,
+      "rotation_mean": 0.4494088215768691,
+      "translation_direction_mean": 0.8225034422353679
+    },
+    {
+      "sample_id": "realestate10k/039b153af4fbfba7",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8474074074074075,
+      "normalized_ate": 0.03520951396511271,
+      "translation_p95": 0.04610570588222084,
+      "rotation_mean": 1.4042553211618765,
+      "translation_direction_mean": 4.936143716793007
+    },
+    {
+      "sample_id": "realestate10k/03adff83538bdb4e",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.11111111111111116,
+      "normalized_ate": 0.8093351000797525,
+      "translation_p95": 1.3782933039146408,
+      "rotation_mean": 0.761807965600316,
+      "translation_direction_mean": 54.229203930878235
+    },
+    {
+      "sample_id": "realestate10k/03adff83538bdb4e",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.03185185185185185,
+      "normalized_ate": 0.6184051957951769,
+      "translation_p95": 0.9267311198306238,
+      "rotation_mean": 0.32368182555075964,
+      "translation_direction_mean": 60.1612723501554
+    },
+    {
+      "sample_id": "realestate10k/03adff83538bdb4e",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.04888888888888889,
+      "normalized_ate": 0.7562669109509981,
+      "translation_p95": 1.2329278742545993,
+      "rotation_mean": 0.4404225584489606,
+      "translation_direction_mean": 52.913693969400164
+    },
+    {
+      "sample_id": "realestate10k/03de2844d3c8314e",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.8814814814814815,
+      "normalized_ate": 0.08283154378266311,
+      "translation_p95": 0.1506126130085299,
+      "rotation_mean": 0.811932571576723,
+      "translation_direction_mean": 3.9568399616390897
+    },
+    {
+      "sample_id": "realestate10k/03de2844d3c8314e",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9437037037037037,
+      "normalized_ate": 0.04507651338005151,
+      "translation_p95": 0.07641687349761668,
+      "rotation_mean": 0.9207068273484018,
+      "translation_direction_mean": 2.0483926559531023
+    },
+    {
+      "sample_id": "realestate10k/03de2844d3c8314e",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8133333333333332,
+      "normalized_ate": 0.07242195214350731,
+      "translation_p95": 0.1306977926113014,
+      "rotation_mean": 0.9092512645854101,
+      "translation_direction_mean": 6.11913452687981
+    },
+    {
+      "sample_id": "realestate10k/03fe94a439456692",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.6666666666666669,
+      "normalized_ate": 0.07584223814531751,
+      "translation_p95": 0.1442575916276071,
+      "rotation_mean": 0.8887563389836741,
+      "translation_direction_mean": 13.684512650165733
+    },
+    {
+      "sample_id": "realestate10k/03fe94a439456692",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9140740740740741,
+      "normalized_ate": 0.028329925358454133,
+      "translation_p95": 0.040474188653937204,
+      "rotation_mean": 0.6095408375156935,
+      "translation_direction_mean": 3.0906247158573996
+    },
+    {
+      "sample_id": "realestate10k/03fe94a439456692",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.4933333333333332,
+      "normalized_ate": 0.1635892408159289,
+      "translation_p95": 0.26657499320866535,
+      "rotation_mean": 1.4097529960607105,
+      "translation_direction_mean": 22.14346841186886
+    },
+    {
+      "sample_id": "realestate10k/04433dcf217ad9a0",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.35333333333333333,
+      "normalized_ate": 0.6017524268581836,
+      "translation_p95": 1.0079153200977002,
+      "rotation_mean": 1.654370160887799,
+      "translation_direction_mean": 30.73582861464022
+    },
+    {
+      "sample_id": "realestate10k/04433dcf217ad9a0",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.8437037037037036,
+      "normalized_ate": 0.052584228050455956,
+      "translation_p95": 0.06922971338171872,
+      "rotation_mean": 2.1618089116021495,
+      "translation_direction_mean": 5.13984450532387
+    },
+    {
+      "sample_id": "realestate10k/04433dcf217ad9a0",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.5555555555555556,
+      "normalized_ate": 0.18353532842893666,
+      "translation_p95": 0.2589837598785195,
+      "rotation_mean": 2.5502044577323106,
+      "translation_direction_mean": 14.14061972252833
+    },
+    {
+      "sample_id": "realestate10k/047c29e9138af233",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.9185185185185186,
+      "normalized_ate": 0.10649967726800727,
+      "translation_p95": 0.1739742992222725,
+      "rotation_mean": 0.6908190821359871,
+      "translation_direction_mean": 2.9253396253037054
+    },
+    {
+      "sample_id": "realestate10k/047c29e9138af233",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9644444444444444,
+      "normalized_ate": 0.03200222639263869,
+      "translation_p95": 0.058230178347584004,
+      "rotation_mean": 0.7528560106877394,
+      "translation_direction_mean": 1.435015324754738
+    },
+    {
+      "sample_id": "realestate10k/047c29e9138af233",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8266666666666665,
+      "normalized_ate": 0.1176035710936959,
+      "translation_p95": 0.17904321423520217,
+      "rotation_mean": 4.161583717660482,
+      "translation_direction_mean": 4.558308702241764
+    },
+    {
+      "sample_id": "realestate10k/049a98f70ce9f471",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.9192592592592593,
+      "normalized_ate": 0.033517509314409985,
+      "translation_p95": 0.055918409111109776,
+      "rotation_mean": 0.6819776860373417,
+      "translation_direction_mean": 2.913263604646161
+    },
+    {
+      "sample_id": "realestate10k/049a98f70ce9f471",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9614814814814814,
+      "normalized_ate": 0.017542236190730146,
+      "translation_p95": 0.028506528587104916,
+      "rotation_mean": 0.5690501505810471,
+      "translation_direction_mean": 1.612585830042497
+    },
+    {
+      "sample_id": "realestate10k/049a98f70ce9f471",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8622222222222222,
+      "normalized_ate": 0.03604422888713712,
+      "translation_p95": 0.05654303622085662,
+      "rotation_mean": 0.9294160671257676,
+      "translation_direction_mean": 4.685364495177196
+    },
+    {
+      "sample_id": "realestate10k/04b580ea1f4df0a5",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.9074074074074073,
+      "normalized_ate": 0.059931666218225654,
+      "translation_p95": 0.10386079309601115,
+      "rotation_mean": 0.3312660044751128,
+      "translation_direction_mean": 3.2360090788426588
+    },
+    {
+      "sample_id": "realestate10k/04b580ea1f4df0a5",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.94,
+      "normalized_ate": 0.013659040277043273,
+      "translation_p95": 0.020391230587327693,
+      "rotation_mean": 0.336788634448232,
+      "translation_direction_mean": 2.256457792007316
+    },
+    {
+      "sample_id": "realestate10k/04b580ea1f4df0a5",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8844444444444444,
+      "normalized_ate": 0.01976518605533328,
+      "translation_p95": 0.030099977942743987,
+      "rotation_mean": 0.6444901114170237,
+      "translation_direction_mean": 4.011736042756778
+    },
+    {
+      "sample_id": "realestate10k/04db26572a791881",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.9651851851851851,
+      "normalized_ate": 0.025597010580108454,
+      "translation_p95": 0.04198067184549039,
+      "rotation_mean": 0.4957066375061976,
+      "translation_direction_mean": 1.483330818735968
+    },
+    {
+      "sample_id": "realestate10k/04db26572a791881",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9903703703703705,
+      "normalized_ate": 0.00556625967386256,
+      "translation_p95": 0.008647536810102652,
+      "rotation_mean": 0.5908604884466789,
+      "translation_direction_mean": 0.46518787535973893
+    },
+    {
+      "sample_id": "realestate10k/04db26572a791881",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.6362962962962962,
+      "normalized_ate": 0.0812456408159364,
+      "translation_p95": 0.1399567222207278,
+      "rotation_mean": 3.931897669960629,
+      "translation_direction_mean": 11.481829337095778
+    },
+    {
+      "sample_id": "realestate10k/04e2be0415136fa9",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.017037037037037035,
+      "normalized_ate": 0.8682047770048255,
+      "translation_p95": 1.6589047976271318,
+      "rotation_mean": 7.82956278594967,
+      "translation_direction_mean": 44.985629552514446
+    },
+    {
+      "sample_id": "realestate10k/04e2be0415136fa9",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.09777777777777774,
+      "normalized_ate": 0.3411046224335575,
+      "translation_p95": 0.522896971478335,
+      "rotation_mean": 1.8612258941645903,
+      "translation_direction_mean": 61.08295396995484
+    },
+    {
+      "sample_id": "realestate10k/04e2be0415136fa9",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.025925925925925925,
+      "normalized_ate": 0.24618964840586585,
+      "translation_p95": 0.37490816853771824,
+      "rotation_mean": 5.545947305165707,
+      "translation_direction_mean": 52.71894821976519
+    },
+    {
+      "sample_id": "realestate10k/04ec725465dc5329",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.954074074074074,
+      "normalized_ate": 0.051590243797748334,
+      "translation_p95": 0.0797397849394102,
+      "rotation_mean": 0.6147668326960657,
+      "translation_direction_mean": 1.7930910804757
+    },
+    {
+      "sample_id": "realestate10k/04ec725465dc5329",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9318518518518518,
+      "normalized_ate": 0.03151846090354363,
+      "translation_p95": 0.047391103787391024,
+      "rotation_mean": 0.5398782696074147,
+      "translation_direction_mean": 2.463104280355383
+    },
+    {
+      "sample_id": "realestate10k/04ec725465dc5329",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8659259259259258,
+      "normalized_ate": 0.04627020712553022,
+      "translation_p95": 0.06727316812815502,
+      "rotation_mean": 2.975279393762909,
+      "translation_direction_mean": 3.296621420429737
+    },
+    {
+      "sample_id": "realestate10k/04f5153fc5255516",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.7451851851851853,
+      "normalized_ate": 0.08232932801003696,
+      "translation_p95": 0.1204547283764398,
+      "rotation_mean": 0.2541071942258188,
+      "translation_direction_mean": 8.125339962188816
+    },
+    {
+      "sample_id": "realestate10k/04f5153fc5255516",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9548148148148149,
+      "normalized_ate": 0.013012675862913286,
+      "translation_p95": 0.021344753372324336,
+      "rotation_mean": 0.09473409435948675,
+      "translation_direction_mean": 1.7931789219561145
+    },
+    {
+      "sample_id": "realestate10k/04f5153fc5255516",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.7911111111111111,
+      "normalized_ate": 0.05014811946672117,
+      "translation_p95": 0.0948575916676395,
+      "rotation_mean": 0.2074649112232783,
+      "translation_direction_mean": 6.783128544127764
+    },
+    {
+      "sample_id": "realestate10k/053e78d3134437a5",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.025925925925925925,
+      "normalized_ate": 0.8239143789330061,
+      "translation_p95": 1.5579151864275311,
+      "rotation_mean": 4.398627014089212,
+      "translation_direction_mean": 54.66512037006468
+    },
+    {
+      "sample_id": "realestate10k/053e78d3134437a5",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.031851851851851846,
+      "normalized_ate": 0.8916119979713923,
+      "translation_p95": 1.3292925862386238,
+      "rotation_mean": 3.9718570964780673,
+      "translation_direction_mean": 55.61147832605093
+    },
+    {
+      "sample_id": "realestate10k/053e78d3134437a5",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.0762962962962963,
+      "normalized_ate": 0.9763296960312845,
+      "translation_p95": 1.5673359809333516,
+      "rotation_mean": 3.828967018750578,
+      "translation_direction_mean": 55.59180612232603
+    },
+    {
+      "sample_id": "realestate10k/0542630de1d734de",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.7807407407407407,
+      "normalized_ate": 0.1317746291775333,
+      "translation_p95": 0.23416654002620696,
+      "rotation_mean": 0.9267276880697549,
+      "translation_direction_mean": 7.103092385555433
+    },
+    {
+      "sample_id": "realestate10k/0542630de1d734de",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9755555555555555,
+      "normalized_ate": 0.007752062634095742,
+      "translation_p95": 0.013218692752109396,
+      "rotation_mean": 0.6347160661422487,
+      "translation_direction_mean": 1.1343327896209041
+    },
+    {
+      "sample_id": "realestate10k/0542630de1d734de",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8511111111111112,
+      "normalized_ate": 0.07084026123524531,
+      "translation_p95": 0.10588660522200519,
+      "rotation_mean": 1.609595324398947,
+      "translation_direction_mean": 4.65730655547616
+    },
+    {
+      "sample_id": "realestate10k/058c67085c217b96",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.7,
+      "normalized_ate": 0.12392022974671256,
+      "translation_p95": 0.16688528570457137,
+      "rotation_mean": 0.55872941134791,
+      "translation_direction_mean": 10.176191925964213
+    },
+    {
+      "sample_id": "realestate10k/058c67085c217b96",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9348148148148148,
+      "normalized_ate": 0.020686473660411247,
+      "translation_p95": 0.0376429288133468,
+      "rotation_mean": 0.9011982143448057,
+      "translation_direction_mean": 2.370542054619094
+    },
+    {
+      "sample_id": "realestate10k/058c67085c217b96",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.9259259259259259,
+      "normalized_ate": 0.049027554788227595,
+      "translation_p95": 0.08120584473399514,
+      "rotation_mean": 0.6068642620460016,
+      "translation_direction_mean": 2.7695041908114524
+    },
+    {
+      "sample_id": "realestate10k/059058768c222bd6",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.5296296296296297,
+      "normalized_ate": 0.11321498313624487,
+      "translation_p95": 0.15628602705961755,
+      "rotation_mean": 2.2097789828765433,
+      "translation_direction_mean": 16.885882444008097
+    },
+    {
+      "sample_id": "realestate10k/059058768c222bd6",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9688888888888889,
+      "normalized_ate": 0.015713919739537865,
+      "translation_p95": 0.024436231799116356,
+      "rotation_mean": 0.5776079094591645,
+      "translation_direction_mean": 1.3296140730984871
+    },
+    {
+      "sample_id": "realestate10k/059058768c222bd6",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.754074074074074,
+      "normalized_ate": 0.05045962013777252,
+      "translation_p95": 0.07484056842099351,
+      "rotation_mean": 0.6592421169369577,
+      "translation_direction_mean": 7.8386352449673815
+    },
+    {
+      "sample_id": "realestate10k/05a0ad1e2aa632e7",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.6000000000000001,
+      "normalized_ate": 0.37338769653428283,
+      "translation_p95": 0.48321899065256824,
+      "rotation_mean": 1.7054004581050441,
+      "translation_direction_mean": 16.659348075149786
+    },
+    {
+      "sample_id": "realestate10k/05a0ad1e2aa632e7",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9851851851851853,
+      "normalized_ate": 0.00920065462652992,
+      "translation_p95": 0.015873947409493383,
+      "rotation_mean": 0.481559652828504,
+      "translation_direction_mean": 0.858087240274889
+    },
+    {
+      "sample_id": "realestate10k/05a0ad1e2aa632e7",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.7555555555555554,
+      "normalized_ate": 0.15505225516135618,
+      "translation_p95": 0.24820683511384756,
+      "rotation_mean": 2.6604709917328906,
+      "translation_direction_mean": 7.513041647604079
+    },
+    {
+      "sample_id": "realestate10k/05a6149f1fcee38d",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.8288888888888889,
+      "normalized_ate": 0.02057929268746182,
+      "translation_p95": 0.03086990924176072,
+      "rotation_mean": 0.378818875528422,
+      "translation_direction_mean": 5.6951067996369895
+    },
+    {
+      "sample_id": "realestate10k/05a6149f1fcee38d",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9940740740740741,
+      "normalized_ate": 0.008285632187623801,
+      "translation_p95": 0.013779205248237456,
+      "rotation_mean": 0.1688655531540243,
+      "translation_direction_mean": 0.6785065929389208
+    },
+    {
+      "sample_id": "realestate10k/05a6149f1fcee38d",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.9244444444444444,
+      "normalized_ate": 0.011371685867405355,
+      "translation_p95": 0.01776558505925785,
+      "rotation_mean": 0.26728079964971413,
+      "translation_direction_mean": 2.7678847168246343
+    },
+    {
+      "sample_id": "realestate10k/05b1462991e38e4d",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.722962962962963,
+      "normalized_ate": 0.11918331405407548,
+      "translation_p95": 0.1991288539141335,
+      "rotation_mean": 4.953640623897676,
+      "translation_direction_mean": 7.724860638422968
+    },
+    {
+      "sample_id": "realestate10k/05b1462991e38e4d",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.8,
+      "normalized_ate": 0.10188056675131124,
+      "translation_p95": 0.18796404186165216,
+      "rotation_mean": 5.171482749893219,
+      "translation_direction_mean": 6.292514065995517
+    },
+    {
+      "sample_id": "realestate10k/05b1462991e38e4d",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8985185185185185,
+      "normalized_ate": 0.041773025840354375,
+      "translation_p95": 0.07399106929621849,
+      "rotation_mean": 2.594834623907158,
+      "translation_direction_mean": 3.026552314687246
+    },
+    {
+      "sample_id": "realestate10k/05c57211be152630",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.35481481481481475,
+      "normalized_ate": 0.5981955283970981,
+      "translation_p95": 1.138524133197648,
+      "rotation_mean": 2.094335297854747,
+      "translation_direction_mean": 27.170684959690966
+    },
+    {
+      "sample_id": "realestate10k/05c57211be152630",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9051851851851852,
+      "normalized_ate": 0.043006582759356225,
+      "translation_p95": 0.0699724506971131,
+      "rotation_mean": 0.9030161900077761,
+      "translation_direction_mean": 3.3347876528633775
+    },
+    {
+      "sample_id": "realestate10k/05c57211be152630",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.9311111111111111,
+      "normalized_ate": 0.06291612569579917,
+      "translation_p95": 0.11447106434985295,
+      "rotation_mean": 0.5602351208569275,
+      "translation_direction_mean": 2.58900195074749
+    },
+    {
+      "sample_id": "realestate10k/069597e1fe899530",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.6103703703703705,
+      "normalized_ate": 0.09890679967843297,
+      "translation_p95": 0.16206422107420165,
+      "rotation_mean": 1.4947819263187303,
+      "translation_direction_mean": 13.666942675766366
+    },
+    {
+      "sample_id": "realestate10k/069597e1fe899530",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.7644444444444444,
+      "normalized_ate": 0.0323220317956655,
+      "translation_p95": 0.05243169095926189,
+      "rotation_mean": 2.2186206094462126,
+      "translation_direction_mean": 7.543841331242041
+    },
+    {
+      "sample_id": "realestate10k/069597e1fe899530",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.74,
+      "normalized_ate": 0.06259995777146968,
+      "translation_p95": 0.09008691455491155,
+      "rotation_mean": 2.095037142888344,
+      "translation_direction_mean": 9.613384772504533
+    },
+    {
+      "sample_id": "realestate10k/06a2911e9add96c6",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.9740740740740741,
+      "normalized_ate": 0.04220790718971766,
+      "translation_p95": 0.07516814229072,
+      "rotation_mean": 0.38257452200851916,
+      "translation_direction_mean": 1.2244902510441524
+    },
+    {
+      "sample_id": "realestate10k/06a2911e9add96c6",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9525925925925925,
+      "normalized_ate": 0.049727736656285805,
+      "translation_p95": 0.09176128178546193,
+      "rotation_mean": 0.38658902227369635,
+      "translation_direction_mean": 1.9133936201984392
+    },
+    {
+      "sample_id": "realestate10k/06a2911e9add96c6",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8274074074074075,
+      "normalized_ate": 0.06689869997685077,
+      "translation_p95": 0.08924189785503525,
+      "rotation_mean": 0.493427423475135,
+      "translation_direction_mean": 5.649595244105179
+    },
+    {
+      "sample_id": "realestate10k/06b1d1272b162490",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.29111111111111115,
+      "normalized_ate": 0.2024473430073922,
+      "translation_p95": 0.3463930293097951,
+      "rotation_mean": 11.82618437131614,
+      "translation_direction_mean": 25.670584623105178
+    },
+    {
+      "sample_id": "realestate10k/06b1d1272b162490",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.2903703703703704,
+      "normalized_ate": 0.09941438679348423,
+      "translation_p95": 0.15880051483553836,
+      "rotation_mean": 13.21955698321431,
+      "translation_direction_mean": 17.843778580099936
+    },
+    {
+      "sample_id": "realestate10k/06b1d1272b162490",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.137037037037037,
+      "normalized_ate": 0.511509726708022,
+      "translation_p95": 0.7428650052736518,
+      "rotation_mean": 12.566159283453347,
+      "translation_direction_mean": 36.30350176573698
+    },
+    {
+      "sample_id": "realestate10k/0720bead0cc7cbbf",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.8518518518518519,
+      "normalized_ate": 0.054584739130714585,
+      "translation_p95": 0.07815624877409133,
+      "rotation_mean": 1.193205523197154,
+      "translation_direction_mean": 4.800295929721771
+    },
+    {
+      "sample_id": "realestate10k/0720bead0cc7cbbf",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9251851851851852,
+      "normalized_ate": 0.036769399894032086,
+      "translation_p95": 0.05499545500428445,
+      "rotation_mean": 0.3864557922063453,
+      "translation_direction_mean": 2.748342938428682
+    },
+    {
+      "sample_id": "realestate10k/0720bead0cc7cbbf",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.251111111111111,
+      "normalized_ate": 0.5904207169456076,
+      "translation_p95": 0.9015504852081399,
+      "rotation_mean": 2.0443393888487575,
+      "translation_direction_mean": 38.00638451479562
+    },
+    {
+      "sample_id": "realestate10k/074653ff3928b9fe",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.4081481481481481,
+      "normalized_ate": 0.35770089405131406,
+      "translation_p95": 0.5691600013969282,
+      "rotation_mean": 0.41013129836167067,
+      "translation_direction_mean": 25.094948669895857
+    },
+    {
+      "sample_id": "realestate10k/074653ff3928b9fe",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9237037037037036,
+      "normalized_ate": 0.024717169555273113,
+      "translation_p95": 0.03370696458360013,
+      "rotation_mean": 0.17432605981233779,
+      "translation_direction_mean": 2.7933849800893027
+    },
+    {
+      "sample_id": "realestate10k/074653ff3928b9fe",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.12666666666666668,
+      "normalized_ate": 0.3974898690724737,
+      "translation_p95": 0.7458109619304423,
+      "rotation_mean": 0.2709289318831084,
+      "translation_direction_mean": 31.314587505962955
+    },
+    {
+      "sample_id": "realestate10k/075f0d808a621ae2",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.7785185185185184,
+      "normalized_ate": 0.17363969173303437,
+      "translation_p95": 0.31714313332707045,
+      "rotation_mean": 0.460560940569592,
+      "translation_direction_mean": 8.415645737317659
+    },
+    {
+      "sample_id": "realestate10k/075f0d808a621ae2",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.8725925925925927,
+      "normalized_ate": 0.05217342134294299,
+      "translation_p95": 0.07335524695703978,
+      "rotation_mean": 0.7541426808802797,
+      "translation_direction_mean": 4.267068075574125
+    },
+    {
+      "sample_id": "realestate10k/075f0d808a621ae2",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.708888888888889,
+      "normalized_ate": 0.16018009977686762,
+      "translation_p95": 0.2732283806708621,
+      "rotation_mean": 0.40357258672993346,
+      "translation_direction_mean": 10.542849840030076
+    },
+    {
+      "sample_id": "realestate10k/078b8bdc29565cac",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.7251851851851853,
+      "normalized_ate": 0.11404142604989698,
+      "translation_p95": 0.20894540150122745,
+      "rotation_mean": 1.4987820694866325,
+      "translation_direction_mean": 9.2448871532193
+    },
+    {
+      "sample_id": "realestate10k/078b8bdc29565cac",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9007407407407407,
+      "normalized_ate": 0.03830249107099925,
+      "translation_p95": 0.05816041471611763,
+      "rotation_mean": 0.7748165166167779,
+      "translation_direction_mean": 3.3927198951758335
+    },
+    {
+      "sample_id": "realestate10k/078b8bdc29565cac",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.8474074074074075,
+      "normalized_ate": 0.08378149290839368,
+      "translation_p95": 0.1424083490048858,
+      "rotation_mean": 1.563449463977581,
+      "translation_direction_mean": 4.6371111949911095
+    },
+    {
+      "sample_id": "realestate10k/07d0229847bd7408",
+      "sigma": 0.0,
+      "method": "dust3r",
+      "auc30": 0.66,
+      "normalized_ate": 0.13346007582577923,
+      "translation_p95": 0.223199054452572,
+      "rotation_mean": 0.5960995992455537,
+      "translation_direction_mean": 11.030861698477523
+    },
+    {
+      "sample_id": "realestate10k/07d0229847bd7408",
+      "sigma": 0.0,
+      "method": "mast3r",
+      "auc30": 0.9577777777777776,
+      "normalized_ate": 0.01326457365998697,
+      "translation_p95": 0.0204740081613239,
+      "rotation_mean": 0.48380247653131514,
+      "translation_direction_mean": 1.7734286676470048
+    },
+    {
+      "sample_id": "realestate10k/07d0229847bd7408",
+      "sigma": 0.0,
+      "method": "vggt",
+      "auc30": 0.9459259259259258,
+      "normalized_ate": 0.025572329887482554,
+      "translation_p95": 0.039692195052968095,
+      "rotation_mean": 0.3954302285969742,
+      "translation_direction_mean": 2.098122373986998
+    },
+    {
+      "sample_id": "realestate10k/008cd8c450342e49",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.0037037037037037034,
+      "normalized_ate": 0.9049196080629804,
+      "translation_p95": 1.465799199159024,
+      "rotation_mean": 1.9353674218388184,
+      "translation_direction_mean": 66.07281295467337
+    },
+    {
+      "sample_id": "realestate10k/008cd8c450342e49",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.725925925925926,
+      "normalized_ate": 0.04302768003234185,
+      "translation_p95": 0.06906198991071,
+      "rotation_mean": 0.9085702947272488,
+      "translation_direction_mean": 8.75276023341831
+    },
+    {
+      "sample_id": "realestate10k/008cd8c450342e49",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.6777777777777777,
+      "normalized_ate": 0.08844736459405728,
+      "translation_p95": 0.14198293288995817,
+      "rotation_mean": 0.28992862265288355,
+      "translation_direction_mean": 10.669413706278789
+    },
+    {
+      "sample_id": "realestate10k/00a54225c5cb1913",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.00814814814814815,
+      "normalized_ate": 0.9392114533488953,
+      "translation_p95": 1.4964258659788885,
+      "rotation_mean": 3.2393746414015956,
+      "translation_direction_mean": 70.34448049210783
+    },
+    {
+      "sample_id": "realestate10k/00a54225c5cb1913",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.031111111111111114,
+      "normalized_ate": 0.4416527584117292,
+      "translation_p95": 0.7431173212106044,
+      "rotation_mean": 3.702283176679545,
+      "translation_direction_mean": 62.574500812690765
+    },
+    {
+      "sample_id": "realestate10k/00a54225c5cb1913",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.00814814814814815,
+      "normalized_ate": 0.6732956928636149,
+      "translation_p95": 1.184713535896005,
+      "rotation_mean": 3.5139675297736606,
+      "translation_direction_mean": 69.42325485209705
+    },
+    {
+      "sample_id": "realestate10k/00cf0a94235771bb",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.11407407407407408,
+      "normalized_ate": 0.5774763947146672,
+      "translation_p95": 0.8692394177268234,
+      "rotation_mean": 0.9445243032427991,
+      "translation_direction_mean": 44.39971865338768
+    },
+    {
+      "sample_id": "realestate10k/00cf0a94235771bb",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.8711111111111111,
+      "normalized_ate": 0.030153252820159772,
+      "translation_p95": 0.04019066621876452,
+      "rotation_mean": 0.07595301181970403,
+      "translation_direction_mean": 4.3545982238778
+    },
+    {
+      "sample_id": "realestate10k/00cf0a94235771bb",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9177777777777777,
+      "normalized_ate": 0.05083089699892505,
+      "translation_p95": 0.09007553691707143,
+      "rotation_mean": 0.16249627314166887,
+      "translation_direction_mean": 2.8957835050758116
+    },
+    {
+      "sample_id": "realestate10k/00cfc0ecd345deb4",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.9007407407407407,
+      "normalized_ate": 0.0795579489663157,
+      "translation_p95": 0.14189006939569407,
+      "rotation_mean": 0.444554010113364,
+      "translation_direction_mean": 3.431267297605047
+    },
+    {
+      "sample_id": "realestate10k/00cfc0ecd345deb4",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9748148148148149,
+      "normalized_ate": 0.08524835507899477,
+      "translation_p95": 0.15161853731699693,
+      "rotation_mean": 0.8311564075674852,
+      "translation_direction_mean": 1.1440672552052908
+    },
+    {
+      "sample_id": "realestate10k/00cfc0ecd345deb4",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9807407407407406,
+      "normalized_ate": 0.06327548664234703,
+      "translation_p95": 0.10994171860721041,
+      "rotation_mean": 0.3937087978532191,
+      "translation_direction_mean": 1.1145467513418397
+    },
+    {
+      "sample_id": "realestate10k/015d8a2a2834d38c",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.8859259259259259,
+      "normalized_ate": 0.07633632726541348,
+      "translation_p95": 0.10312090699420384,
+      "rotation_mean": 1.603244834952656,
+      "translation_direction_mean": 3.7018572228853017
+    },
+    {
+      "sample_id": "realestate10k/015d8a2a2834d38c",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9600000000000001,
+      "normalized_ate": 0.010719058356035852,
+      "translation_p95": 0.015484404463123977,
+      "rotation_mean": 1.1391737694028414,
+      "translation_direction_mean": 1.3253763289753817
+    },
+    {
+      "sample_id": "realestate10k/015d8a2a2834d38c",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9666666666666667,
+      "normalized_ate": 0.03122225519262208,
+      "translation_p95": 0.05467741238015011,
+      "rotation_mean": 1.020180737943062,
+      "translation_direction_mean": 1.3208996907691264
+    },
+    {
+      "sample_id": "realestate10k/0181d3b41c2cf87c",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.7066666666666667,
+      "normalized_ate": 0.22115393864445884,
+      "translation_p95": 0.34375957701295884,
+      "rotation_mean": 4.179517674816551,
+      "translation_direction_mean": 10.82969770683144
+    },
+    {
+      "sample_id": "realestate10k/0181d3b41c2cf87c",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9162962962962963,
+      "normalized_ate": 0.03129542995988569,
+      "translation_p95": 0.05249082216640204,
+      "rotation_mean": 1.7763450666687153,
+      "translation_direction_mean": 2.9897921591287524
+    },
+    {
+      "sample_id": "realestate10k/0181d3b41c2cf87c",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9207407407407407,
+      "normalized_ate": 0.026935338355323177,
+      "translation_p95": 0.052501538632511585,
+      "rotation_mean": 0.8491696687363545,
+      "translation_direction_mean": 2.8074092524931578
+    },
+    {
+      "sample_id": "realestate10k/01842c6b21e1d679",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.9237037037037037,
+      "normalized_ate": 0.04005462694694919,
+      "translation_p95": 0.06004516419419029,
+      "rotation_mean": 1.9918926018423864,
+      "translation_direction_mean": 1.9126289853671248
+    },
+    {
+      "sample_id": "realestate10k/01842c6b21e1d679",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.874074074074074,
+      "normalized_ate": 0.07329169920585342,
+      "translation_p95": 0.12709902724822525,
+      "rotation_mean": 0.9345733908590017,
+      "translation_direction_mean": 4.347120663544116
+    },
+    {
+      "sample_id": "realestate10k/01842c6b21e1d679",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8977777777777778,
+      "normalized_ate": 0.04602458630091952,
+      "translation_p95": 0.07827984194847187,
+      "rotation_mean": 0.5968459919737997,
+      "translation_direction_mean": 3.4611448413935824
+    },
+    {
+      "sample_id": "realestate10k/01866b81c3b90f2c",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.08666666666666667,
+      "normalized_ate": 0.7093241103692798,
+      "translation_p95": 1.1447986562305057,
+      "rotation_mean": 3.486823839408279,
+      "translation_direction_mean": 37.92617397486093
+    },
+    {
+      "sample_id": "realestate10k/01866b81c3b90f2c",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.6014814814814815,
+      "normalized_ate": 0.06252163739659991,
+      "translation_p95": 0.10155173415026496,
+      "rotation_mean": 3.1651297604024453,
+      "translation_direction_mean": 12.429524090583588
+    },
+    {
+      "sample_id": "realestate10k/01866b81c3b90f2c",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.6274074074074074,
+      "normalized_ate": 0.05407808934041767,
+      "translation_p95": 0.08702019110183798,
+      "rotation_mean": 0.6195160420912228,
+      "translation_direction_mean": 12.023295150515304
+    },
+    {
+      "sample_id": "realestate10k/018f7907401f2fef",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.9725925925925926,
+      "normalized_ate": 0.03168466184863317,
+      "translation_p95": 0.054245570462485904,
+      "rotation_mean": 0.3807752747168425,
+      "translation_direction_mean": 1.264228947702947
+    },
+    {
+      "sample_id": "realestate10k/018f7907401f2fef",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.951111111111111,
+      "normalized_ate": 0.0165462961944485,
+      "translation_p95": 0.03013760644976787,
+      "rotation_mean": 1.5184005787320014,
+      "translation_direction_mean": 1.696122351936883
+    },
+    {
+      "sample_id": "realestate10k/018f7907401f2fef",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9348148148148148,
+      "normalized_ate": 0.04162479824007313,
+      "translation_p95": 0.0593848526442746,
+      "rotation_mean": 0.5536577640175436,
+      "translation_direction_mean": 2.3560359624527587
+    },
+    {
+      "sample_id": "realestate10k/0196dedebec3dad2",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.7014814814814816,
+      "normalized_ate": 0.4749302611163004,
+      "translation_p95": 0.9128256380712634,
+      "rotation_mean": 1.4970518259986743,
+      "translation_direction_mean": 12.066591502412509
+    },
+    {
+      "sample_id": "realestate10k/0196dedebec3dad2",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9133333333333334,
+      "normalized_ate": 0.052189444841159845,
+      "translation_p95": 0.06800021494032897,
+      "rotation_mean": 0.9205738505372194,
+      "translation_direction_mean": 3.0327269835786677
+    },
+    {
+      "sample_id": "realestate10k/0196dedebec3dad2",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.945925925925926,
+      "normalized_ate": 0.03732022842640024,
+      "translation_p95": 0.06842290458654414,
+      "rotation_mean": 0.47573657944287917,
+      "translation_direction_mean": 2.0726593739177077
+    },
+    {
+      "sample_id": "realestate10k/01a5cc3805e94c21",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.9696296296296296,
+      "normalized_ate": 0.04120560140206692,
+      "translation_p95": 0.07759312226996945,
+      "rotation_mean": 0.7147640684193677,
+      "translation_direction_mean": 1.2239975033626171
+    },
+    {
+      "sample_id": "realestate10k/01a5cc3805e94c21",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9859259259259259,
+      "normalized_ate": 0.014358383766438032,
+      "translation_p95": 0.025061102200558478,
+      "rotation_mean": 0.5782181482623137,
+      "translation_direction_mean": 0.9983994170557259
+    },
+    {
+      "sample_id": "realestate10k/01a5cc3805e94c21",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9740740740740741,
+      "normalized_ate": 0.006086098894574814,
+      "translation_p95": 0.0069251453389777475,
+      "rotation_mean": 0.3565684630533918,
+      "translation_direction_mean": 1.23557709483262
+    },
+    {
+      "sample_id": "realestate10k/01cefee9563f691a",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.9244444444444445,
+      "normalized_ate": 0.03999493538464498,
+      "translation_p95": 0.07210330541730312,
+      "rotation_mean": 1.259439529536569,
+      "translation_direction_mean": 2.5436484862200746
+    },
+    {
+      "sample_id": "realestate10k/01cefee9563f691a",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9666666666666667,
+      "normalized_ate": 0.013254963678903461,
+      "translation_p95": 0.021018304941058278,
+      "rotation_mean": 0.19687162727467974,
+      "translation_direction_mean": 1.423657364116476
+    },
+    {
+      "sample_id": "realestate10k/01cefee9563f691a",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8414814814814816,
+      "normalized_ate": 0.07532312693280895,
+      "translation_p95": 0.12084515457424906,
+      "rotation_mean": 0.8717890759415747,
+      "translation_direction_mean": 5.203868326802198
+    },
+    {
+      "sample_id": "realestate10k/01e18dbbf22ff263",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.8311111111111111,
+      "normalized_ate": 0.25996451382234237,
+      "translation_p95": 0.410882811636478,
+      "rotation_mean": 1.095000102564719,
+      "translation_direction_mean": 6.6187236321793295
+    },
+    {
+      "sample_id": "realestate10k/01e18dbbf22ff263",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9681481481481481,
+      "normalized_ate": 0.015469533162847758,
+      "translation_p95": 0.02394531909648808,
+      "rotation_mean": 0.7312448843220863,
+      "translation_direction_mean": 1.4717306662024536
+    },
+    {
+      "sample_id": "realestate10k/01e18dbbf22ff263",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9244444444444445,
+      "normalized_ate": 0.028470073717787626,
+      "translation_p95": 0.04654667246103211,
+      "rotation_mean": 0.5775197574957268,
+      "translation_direction_mean": 2.7960759664584955
+    },
+    {
+      "sample_id": "realestate10k/01f7915dce639515",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.5414814814814816,
+      "normalized_ate": 0.19703328326263805,
+      "translation_p95": 0.36113761858646737,
+      "rotation_mean": 0.14952120800051216,
+      "translation_direction_mean": 16.037072998737738
+    },
+    {
+      "sample_id": "realestate10k/01f7915dce639515",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.7600000000000001,
+      "normalized_ate": 0.01768387557244417,
+      "translation_p95": 0.023994240321347587,
+      "rotation_mean": 0.16571006987311612,
+      "translation_direction_mean": 7.692072891420397
+    },
+    {
+      "sample_id": "realestate10k/01f7915dce639515",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9007407407407407,
+      "normalized_ate": 0.02913206225867767,
+      "translation_p95": 0.047403569863289224,
+      "rotation_mean": 0.07508647059863174,
+      "translation_direction_mean": 3.4590481478934216
+    },
+    {
+      "sample_id": "realestate10k/0223924f43297881",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.8777777777777779,
+      "normalized_ate": 0.07069472486099185,
+      "translation_p95": 0.12269473683850776,
+      "rotation_mean": 0.5530279674743053,
+      "translation_direction_mean": 4.137222915950032
+    },
+    {
+      "sample_id": "realestate10k/0223924f43297881",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9859259259259259,
+      "normalized_ate": 0.01030819049559006,
+      "translation_p95": 0.014753419519977584,
+      "rotation_mean": 0.4772556662552132,
+      "translation_direction_mean": 0.8243870228978919
+    },
+    {
+      "sample_id": "realestate10k/0223924f43297881",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9651851851851851,
+      "normalized_ate": 0.01613886778102619,
+      "translation_p95": 0.024764853298845996,
+      "rotation_mean": 0.182848067496224,
+      "translation_direction_mean": 1.57337787870695
+    },
+    {
+      "sample_id": "realestate10k/025ce727b1b55932",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.9251851851851852,
+      "normalized_ate": 0.04231993197668914,
+      "translation_p95": 0.06770263186267866,
+      "rotation_mean": 0.4630639927213719,
+      "translation_direction_mean": 2.644388126547765
+    },
+    {
+      "sample_id": "realestate10k/025ce727b1b55932",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9407407407407408,
+      "normalized_ate": 0.02688147047301254,
+      "translation_p95": 0.047857420827583166,
+      "rotation_mean": 0.7607059944481852,
+      "translation_direction_mean": 2.250749804255185
+    },
+    {
+      "sample_id": "realestate10k/025ce727b1b55932",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9637037037037037,
+      "normalized_ate": 0.026331808187808444,
+      "translation_p95": 0.041238977938531464,
+      "rotation_mean": 0.36400340805936177,
+      "translation_direction_mean": 1.5638660825924653
+    },
+    {
+      "sample_id": "realestate10k/02b59cd60efb924e",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.8162962962962962,
+      "normalized_ate": 0.06134037049373407,
+      "translation_p95": 0.09913912657183019,
+      "rotation_mean": 0.4857318888996268,
+      "translation_direction_mean": 6.223172864354374
+    },
+    {
+      "sample_id": "realestate10k/02b59cd60efb924e",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.8377777777777777,
+      "normalized_ate": 0.028561861448858243,
+      "translation_p95": 0.0479391429473359,
+      "rotation_mean": 1.7738681926909357,
+      "translation_direction_mean": 5.345276398831464
+    },
+    {
+      "sample_id": "realestate10k/02b59cd60efb924e",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9400000000000001,
+      "normalized_ate": 0.022421925791862175,
+      "translation_p95": 0.03305333252268962,
+      "rotation_mean": 0.500627169514194,
+      "translation_direction_mean": 2.2420975933062857
+    },
+    {
+      "sample_id": "realestate10k/02c485bd207116d4",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.5681481481481483,
+      "normalized_ate": 0.33896565520180855,
+      "translation_p95": 0.5442206162214295,
+      "rotation_mean": 2.3244693349823793,
+      "translation_direction_mean": 17.467846257760304
+    },
+    {
+      "sample_id": "realestate10k/02c485bd207116d4",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9548148148148148,
+      "normalized_ate": 0.04580576248917187,
+      "translation_p95": 0.07763620405756144,
+      "rotation_mean": 1.1374447591294619,
+      "translation_direction_mean": 1.76308136172149
+    },
+    {
+      "sample_id": "realestate10k/02c485bd207116d4",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.757037037037037,
+      "normalized_ate": 0.10351383326915357,
+      "translation_p95": 0.1888352602233685,
+      "rotation_mean": 1.3408985312934227,
+      "translation_direction_mean": 9.3262676423229
+    },
+    {
+      "sample_id": "realestate10k/03482c3bd66de195",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.9081481481481481,
+      "normalized_ate": 0.06371646981599122,
+      "translation_p95": 0.11850060161613213,
+      "rotation_mean": 1.5454944040998213,
+      "translation_direction_mean": 2.5824608444485984
+    },
+    {
+      "sample_id": "realestate10k/03482c3bd66de195",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 1.0,
+      "normalized_ate": 0.009710803598264098,
+      "translation_p95": 0.017227580217394525,
+      "rotation_mean": 0.36551420723845396,
+      "translation_direction_mean": 0.46112438826899843
+    },
+    {
+      "sample_id": "realestate10k/03482c3bd66de195",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9562962962962963,
+      "normalized_ate": 0.025211891547271752,
+      "translation_p95": 0.042278683109106555,
+      "rotation_mean": 0.6728405125195481,
+      "translation_direction_mean": 1.8217720557250825
+    },
+    {
+      "sample_id": "realestate10k/0362399a61c18ad5",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.3133333333333333,
+      "normalized_ate": 0.5455783182350131,
+      "translation_p95": 0.782400790124821,
+      "rotation_mean": 0.1737270018634387,
+      "translation_direction_mean": 32.25435554803333
+    },
+    {
+      "sample_id": "realestate10k/0362399a61c18ad5",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.7829629629629629,
+      "normalized_ate": 0.07082491213441439,
+      "translation_p95": 0.10926465963218733,
+      "rotation_mean": 0.3926400896896047,
+      "translation_direction_mean": 7.020855900364447
+    },
+    {
+      "sample_id": "realestate10k/0362399a61c18ad5",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8185185185185185,
+      "normalized_ate": 0.0471941534499651,
+      "translation_p95": 0.059994734078755454,
+      "rotation_mean": 0.09646909011581765,
+      "translation_direction_mean": 5.890918369086833
+    },
+    {
+      "sample_id": "realestate10k/036f135766f38f78",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.8955555555555554,
+      "normalized_ate": 0.07004939472894152,
+      "translation_p95": 0.10777693734217009,
+      "rotation_mean": 0.29134099835167004,
+      "translation_direction_mean": 3.569306644373977
+    },
+    {
+      "sample_id": "realestate10k/036f135766f38f78",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9348148148148148,
+      "normalized_ate": 0.034611525243743016,
+      "translation_p95": 0.055144526952549344,
+      "rotation_mean": 0.6753974636836791,
+      "translation_direction_mean": 2.471011815893408
+    },
+    {
+      "sample_id": "realestate10k/036f135766f38f78",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9822222222222223,
+      "normalized_ate": 0.0201366329405779,
+      "translation_p95": 0.039085619337553355,
+      "rotation_mean": 0.25677853116091004,
+      "translation_direction_mean": 0.9964278855878476
+    },
+    {
+      "sample_id": "realestate10k/037e8191b3985142",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.9266666666666666,
+      "normalized_ate": 0.06384826645215899,
+      "translation_p95": 0.10109527283257784,
+      "rotation_mean": 0.9043093073167341,
+      "translation_direction_mean": 2.6336560294278595
+    },
+    {
+      "sample_id": "realestate10k/037e8191b3985142",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9177777777777778,
+      "normalized_ate": 0.08031367308494353,
+      "translation_p95": 0.1416113776710175,
+      "rotation_mean": 1.7249754833837398,
+      "translation_direction_mean": 3.7452743202791754
+    },
+    {
+      "sample_id": "realestate10k/037e8191b3985142",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8881481481481482,
+      "normalized_ate": 0.04562525404056367,
+      "translation_p95": 0.06553359052394342,
+      "rotation_mean": 1.92868445179674,
+      "translation_direction_mean": 3.200353749203005
+    },
+    {
+      "sample_id": "realestate10k/039b153af4fbfba7",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.92,
+      "normalized_ate": 0.029179897180508146,
+      "translation_p95": 0.04247158208964477,
+      "rotation_mean": 0.6386217531050287,
+      "translation_direction_mean": 2.8772780538053513
+    },
+    {
+      "sample_id": "realestate10k/039b153af4fbfba7",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9859259259259259,
+      "normalized_ate": 0.012397560562295308,
+      "translation_p95": 0.020471422135864035,
+      "rotation_mean": 0.3360984088928815,
+      "translation_direction_mean": 0.9328030744034708
+    },
+    {
+      "sample_id": "realestate10k/039b153af4fbfba7",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9651851851851851,
+      "normalized_ate": 0.021161065537147146,
+      "translation_p95": 0.03545789486564077,
+      "rotation_mean": 0.4728177367903949,
+      "translation_direction_mean": 1.5681172427596126
+    },
+    {
+      "sample_id": "realestate10k/03adff83538bdb4e",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.0,
+      "normalized_ate": 0.8668810213747608,
+      "translation_p95": 1.309416832339094,
+      "rotation_mean": 2.8618898258729812,
+      "translation_direction_mean": 79.07804172794808
+    },
+    {
+      "sample_id": "realestate10k/03adff83538bdb4e",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.003703703703703704,
+      "normalized_ate": 0.19633660321303928,
+      "translation_p95": 0.34795613225240807,
+      "rotation_mean": 1.0397822373510035,
+      "translation_direction_mean": 75.19857172532953
+    },
+    {
+      "sample_id": "realestate10k/03adff83538bdb4e",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.15111111111111108,
+      "normalized_ate": 0.8208479794232855,
+      "translation_p95": 1.2183779417899656,
+      "rotation_mean": 0.39069792982840645,
+      "translation_direction_mean": 46.79874479272921
+    },
+    {
+      "sample_id": "realestate10k/03de2844d3c8314e",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.8911111111111113,
+      "normalized_ate": 0.07751760841187844,
+      "translation_p95": 0.12053863570379388,
+      "rotation_mean": 0.7099534282573724,
+      "translation_direction_mean": 3.8249763514145356
+    },
+    {
+      "sample_id": "realestate10k/03de2844d3c8314e",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9385185185185185,
+      "normalized_ate": 0.04545337399018826,
+      "translation_p95": 0.07453470211059032,
+      "rotation_mean": 0.8960590355754584,
+      "translation_direction_mean": 2.2493818169244215
+    },
+    {
+      "sample_id": "realestate10k/03de2844d3c8314e",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9607407407407407,
+      "normalized_ate": 0.033031629913210736,
+      "translation_p95": 0.05862086855428323,
+      "rotation_mean": 0.32934716567157124,
+      "translation_direction_mean": 1.5992937099636562
+    },
+    {
+      "sample_id": "realestate10k/03fe94a439456692",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.6303703703703704,
+      "normalized_ate": 0.14505924260137656,
+      "translation_p95": 0.2811086813439516,
+      "rotation_mean": 0.5397753289338877,
+      "translation_direction_mean": 13.552676168285632
+    },
+    {
+      "sample_id": "realestate10k/03fe94a439456692",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9074074074074073,
+      "normalized_ate": 0.03437614986087828,
+      "translation_p95": 0.053623579937608815,
+      "rotation_mean": 0.6252898353009056,
+      "translation_direction_mean": 3.165603844344163
+    },
+    {
+      "sample_id": "realestate10k/03fe94a439456692",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9059259259259259,
+      "normalized_ate": 0.03842304776628902,
+      "translation_p95": 0.0539044927102603,
+      "rotation_mean": 0.6741571541573806,
+      "translation_direction_mean": 3.1720199937290086
+    },
+    {
+      "sample_id": "realestate10k/04433dcf217ad9a0",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.2762962962962963,
+      "normalized_ate": 0.5568664796960906,
+      "translation_p95": 0.8898016343048407,
+      "rotation_mean": 1.953655909033839,
+      "translation_direction_mean": 32.6693358287591
+    },
+    {
+      "sample_id": "realestate10k/04433dcf217ad9a0",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.8214814814814816,
+      "normalized_ate": 0.05916556636286464,
+      "translation_p95": 0.08154484850338796,
+      "rotation_mean": 1.8886231963911468,
+      "translation_direction_mean": 5.820974527881955
+    },
+    {
+      "sample_id": "realestate10k/04433dcf217ad9a0",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8133333333333336,
+      "normalized_ate": 0.04282598052691551,
+      "translation_p95": 0.06559326500478364,
+      "rotation_mean": 0.8187403952414596,
+      "translation_direction_mean": 6.12639358185674
+    },
+    {
+      "sample_id": "realestate10k/047c29e9138af233",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.7851851851851852,
+      "normalized_ate": 0.17597440447690893,
+      "translation_p95": 0.3319198049400236,
+      "rotation_mean": 0.829260039302652,
+      "translation_direction_mean": 9.373471914491263
+    },
+    {
+      "sample_id": "realestate10k/047c29e9138af233",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.951851851851852,
+      "normalized_ate": 0.044449558673281306,
+      "translation_p95": 0.07902528967454281,
+      "rotation_mean": 1.13268810837828,
+      "translation_direction_mean": 1.670807152961648
+    },
+    {
+      "sample_id": "realestate10k/047c29e9138af233",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9318518518518518,
+      "normalized_ate": 0.0356420538027186,
+      "translation_p95": 0.057524248270333395,
+      "rotation_mean": 1.444225185688143,
+      "translation_direction_mean": 2.0448182612455548
+    },
+    {
+      "sample_id": "realestate10k/049a98f70ce9f471",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.15851851851851848,
+      "normalized_ate": 0.8507797588754493,
+      "translation_p95": 1.1678348227997617,
+      "rotation_mean": 7.132866763745994,
+      "translation_direction_mean": 40.07236060512012
+    },
+    {
+      "sample_id": "realestate10k/049a98f70ce9f471",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9607407407407407,
+      "normalized_ate": 0.028653545674060938,
+      "translation_p95": 0.04723484427329353,
+      "rotation_mean": 0.7105027658833281,
+      "translation_direction_mean": 1.6042619213958125
+    },
+    {
+      "sample_id": "realestate10k/049a98f70ce9f471",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.854074074074074,
+      "normalized_ate": 0.040553987411254065,
+      "translation_p95": 0.07152687632532852,
+      "rotation_mean": 1.1117555860989998,
+      "translation_direction_mean": 4.768836615443153
+    },
+    {
+      "sample_id": "realestate10k/04b580ea1f4df0a5",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.16592592592592592,
+      "normalized_ate": 0.5484161173228941,
+      "translation_p95": 1.007257762498519,
+      "rotation_mean": 1.6602745894388762,
+      "translation_direction_mean": 38.92601396248951
+    },
+    {
+      "sample_id": "realestate10k/04b580ea1f4df0a5",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.8518518518518519,
+      "normalized_ate": 0.047705626663347954,
+      "translation_p95": 0.09336780934095987,
+      "rotation_mean": 0.8545490024377284,
+      "translation_direction_mean": 4.8912687785407885
+    },
+    {
+      "sample_id": "realestate10k/04b580ea1f4df0a5",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9059259259259259,
+      "normalized_ate": 0.03150385297569035,
+      "translation_p95": 0.05461092243379345,
+      "rotation_mean": 0.7874311682097631,
+      "translation_direction_mean": 3.290092656997549
+    },
+    {
+      "sample_id": "realestate10k/04db26572a791881",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.9525925925925927,
+      "normalized_ate": 0.02599530414776127,
+      "translation_p95": 0.03827682232658773,
+      "rotation_mean": 0.4709055539913432,
+      "translation_direction_mean": 1.9168796639723642
+    },
+    {
+      "sample_id": "realestate10k/04db26572a791881",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9355555555555556,
+      "normalized_ate": 0.018562622335163353,
+      "translation_p95": 0.024401379652896796,
+      "rotation_mean": 2.1967375273931817,
+      "translation_direction_mean": 1.1804150553750432
+    },
+    {
+      "sample_id": "realestate10k/04db26572a791881",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8903703703703704,
+      "normalized_ate": 0.031905742145157144,
+      "translation_p95": 0.04745597648673019,
+      "rotation_mean": 0.8955834263949513,
+      "translation_direction_mean": 3.7777857323131414
+    },
+    {
+      "sample_id": "realestate10k/04e2be0415136fa9",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.12074074074074076,
+      "normalized_ate": 0.315005053270093,
+      "translation_p95": 0.45337100366568805,
+      "rotation_mean": 4.604409435144035,
+      "translation_direction_mean": 33.91641273749197
+    },
+    {
+      "sample_id": "realestate10k/04e2be0415136fa9",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.11333333333333331,
+      "normalized_ate": 0.31966635402895094,
+      "translation_p95": 0.5193467362961115,
+      "rotation_mean": 1.7012918084953201,
+      "translation_direction_mean": 56.93294890711092
+    },
+    {
+      "sample_id": "realestate10k/04e2be0415136fa9",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.060000000000000005,
+      "normalized_ate": 0.8457075737872235,
+      "translation_p95": 1.3712509159913697,
+      "rotation_mean": 5.36100130213901,
+      "translation_direction_mean": 52.515501203703046
+    },
+    {
+      "sample_id": "realestate10k/04ec725465dc5329",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.9659259259259259,
+      "normalized_ate": 0.016639736421473754,
+      "translation_p95": 0.024167343067927206,
+      "rotation_mean": 0.6806854904844803,
+      "translation_direction_mean": 1.397417432904622
+    },
+    {
+      "sample_id": "realestate10k/04ec725465dc5329",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.8762962962962962,
+      "normalized_ate": 0.05097561826007607,
+      "translation_p95": 0.07977115607132894,
+      "rotation_mean": 0.9187171641341518,
+      "translation_direction_mean": 4.152948109450883
+    },
+    {
+      "sample_id": "realestate10k/04ec725465dc5329",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9059259259259259,
+      "normalized_ate": 0.04586222076470425,
+      "translation_p95": 0.07622207510032762,
+      "rotation_mean": 2.2364356896764783,
+      "translation_direction_mean": 2.3858812644455445
+    },
+    {
+      "sample_id": "realestate10k/04f5153fc5255516",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.17407407407407408,
+      "normalized_ate": 0.7563347649414672,
+      "translation_p95": 0.9741516121136334,
+      "rotation_mean": 0.9710648205284343,
+      "translation_direction_mean": 41.379891732833805
+    },
+    {
+      "sample_id": "realestate10k/04f5153fc5255516",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9777777777777779,
+      "normalized_ate": 0.010554995137600255,
+      "translation_p95": 0.014880342257553957,
+      "rotation_mean": 0.06843919611685068,
+      "translation_direction_mean": 1.1116649328984667
+    },
+    {
+      "sample_id": "realestate10k/04f5153fc5255516",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8340740740740741,
+      "normalized_ate": 0.06659780399545454,
+      "translation_p95": 0.1244762307119837,
+      "rotation_mean": 0.21895828941294065,
+      "translation_direction_mean": 5.571624451447526
+    },
+    {
+      "sample_id": "realestate10k/053e78d3134437a5",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.0,
+      "normalized_ate": 0.9564540178400057,
+      "translation_p95": 1.5102456447146484,
+      "rotation_mean": 4.209046944120942,
+      "translation_direction_mean": 78.51204013817453
+    },
+    {
+      "sample_id": "realestate10k/053e78d3134437a5",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.09703703703703703,
+      "normalized_ate": 0.7012473159289073,
+      "translation_p95": 0.9515896851884371,
+      "rotation_mean": 4.8303728159363555,
+      "translation_direction_mean": 47.8218313904693
+    },
+    {
+      "sample_id": "realestate10k/053e78d3134437a5",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.137037037037037,
+      "normalized_ate": 0.7098410898637365,
+      "translation_p95": 1.262093995247568,
+      "rotation_mean": 3.8298144482756724,
+      "translation_direction_mean": 41.56351126750632
+    },
+    {
+      "sample_id": "realestate10k/0542630de1d734de",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.9185185185185184,
+      "normalized_ate": 0.03995149290494376,
+      "translation_p95": 0.0701890294230463,
+      "rotation_mean": 0.4216076425561464,
+      "translation_direction_mean": 3.9291404302104285
+    },
+    {
+      "sample_id": "realestate10k/0542630de1d734de",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9607407407407408,
+      "normalized_ate": 0.019587689067030387,
+      "translation_p95": 0.0268002386658807,
+      "rotation_mean": 0.584448180959557,
+      "translation_direction_mean": 1.6794656793416713
+    },
+    {
+      "sample_id": "realestate10k/0542630de1d734de",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9614814814814815,
+      "normalized_ate": 0.016349405253042043,
+      "translation_p95": 0.023519899285247732,
+      "rotation_mean": 0.4174961995890755,
+      "translation_direction_mean": 1.5620843451987387
+    },
+    {
+      "sample_id": "realestate10k/058c67085c217b96",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.08740740740740742,
+      "normalized_ate": 0.747956729153806,
+      "translation_p95": 1.1182934148124728,
+      "rotation_mean": 11.802316496182245,
+      "translation_direction_mean": 48.54167988223662
+    },
+    {
+      "sample_id": "realestate10k/058c67085c217b96",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.8318518518518518,
+      "normalized_ate": 0.03656623655470592,
+      "translation_p95": 0.06696489280522525,
+      "rotation_mean": 1.6147416881895162,
+      "translation_direction_mean": 5.53763556866996
+    },
+    {
+      "sample_id": "realestate10k/058c67085c217b96",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8533333333333334,
+      "normalized_ate": 0.06369226860943335,
+      "translation_p95": 0.08743711317258927,
+      "rotation_mean": 0.9619032524126004,
+      "translation_direction_mean": 4.921084053871614
+    },
+    {
+      "sample_id": "realestate10k/059058768c222bd6",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.7629629629629628,
+      "normalized_ate": 0.06742285111816473,
+      "translation_p95": 0.10247322755485688,
+      "rotation_mean": 1.1939940164464036,
+      "translation_direction_mean": 8.198970007009935
+    },
+    {
+      "sample_id": "realestate10k/059058768c222bd6",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.962962962962963,
+      "normalized_ate": 0.014645841109735722,
+      "translation_p95": 0.02391967682427036,
+      "rotation_mean": 0.4430328410225795,
+      "translation_direction_mean": 1.4522011160679085
+    },
+    {
+      "sample_id": "realestate10k/059058768c222bd6",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.948888888888889,
+      "normalized_ate": 0.020963463651138055,
+      "translation_p95": 0.03156125423456437,
+      "rotation_mean": 0.30448421647263574,
+      "translation_direction_mean": 2.085444413640312
+    },
+    {
+      "sample_id": "realestate10k/05a0ad1e2aa632e7",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.8903703703703703,
+      "normalized_ate": 0.06047181857046538,
+      "translation_p95": 0.09841225948069053,
+      "rotation_mean": 0.5446711767888351,
+      "translation_direction_mean": 3.8260361349910736
+    },
+    {
+      "sample_id": "realestate10k/05a0ad1e2aa632e7",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9688888888888889,
+      "normalized_ate": 0.01446661425261472,
+      "translation_p95": 0.024961201800900668,
+      "rotation_mean": 0.7968804380941664,
+      "translation_direction_mean": 1.4105615431750076
+    },
+    {
+      "sample_id": "realestate10k/05a0ad1e2aa632e7",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8725925925925926,
+      "normalized_ate": 0.06316649895514326,
+      "translation_p95": 0.1205022953016154,
+      "rotation_mean": 0.9741794471889231,
+      "translation_direction_mean": 4.33390786056967
+    },
+    {
+      "sample_id": "realestate10k/05a6149f1fcee38d",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.851111111111111,
+      "normalized_ate": 0.039963120095772915,
+      "translation_p95": 0.07691525214059033,
+      "rotation_mean": 0.43638975499887117,
+      "translation_direction_mean": 4.994817014853183
+    },
+    {
+      "sample_id": "realestate10k/05a6149f1fcee38d",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9674074074074074,
+      "normalized_ate": 0.008616159604598463,
+      "translation_p95": 0.015589209236345478,
+      "rotation_mean": 0.15796322832115195,
+      "translation_direction_mean": 1.4101993363235883
+    },
+    {
+      "sample_id": "realestate10k/05a6149f1fcee38d",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9466666666666667,
+      "normalized_ate": 0.010336671532104215,
+      "translation_p95": 0.017803390621536953,
+      "rotation_mean": 0.17824390698938733,
+      "translation_direction_mean": 1.9942970313008532
+    },
+    {
+      "sample_id": "realestate10k/05b1462991e38e4d",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.4414814814814813,
+      "normalized_ate": 0.35412996251086215,
+      "translation_p95": 0.6040300338125042,
+      "rotation_mean": 7.481937227941244,
+      "translation_direction_mean": 19.44638550327057
+    },
+    {
+      "sample_id": "realestate10k/05b1462991e38e4d",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.8518518518518519,
+      "normalized_ate": 0.04768949485090284,
+      "translation_p95": 0.07705188351329963,
+      "rotation_mean": 3.934732710996711,
+      "translation_direction_mean": 4.1529137745547855
+    },
+    {
+      "sample_id": "realestate10k/05b1462991e38e4d",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9044444444444444,
+      "normalized_ate": 0.043565942748640875,
+      "translation_p95": 0.0700169364863023,
+      "rotation_mean": 2.117531256962181,
+      "translation_direction_mean": 3.0875451695254545
+    },
+    {
+      "sample_id": "realestate10k/05c57211be152630",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.08592592592592592,
+      "normalized_ate": 0.8572982231868532,
+      "translation_p95": 1.6528188761632618,
+      "rotation_mean": 3.56760587022779,
+      "translation_direction_mean": 53.159802216240486
+    },
+    {
+      "sample_id": "realestate10k/05c57211be152630",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.8792592592592591,
+      "normalized_ate": 0.056391370355669185,
+      "translation_p95": 0.0921237196764684,
+      "rotation_mean": 1.3006027276482364,
+      "translation_direction_mean": 4.132084068310605
+    },
+    {
+      "sample_id": "realestate10k/05c57211be152630",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9007407407407407,
+      "normalized_ate": 0.10230593364528723,
+      "translation_p95": 0.1841110982847312,
+      "rotation_mean": 0.7995017929031027,
+      "translation_direction_mean": 3.5166070152978377
+    },
+    {
+      "sample_id": "realestate10k/069597e1fe899530",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.5659259259259259,
+      "normalized_ate": 0.0921378574204423,
+      "translation_p95": 0.1445476979427217,
+      "rotation_mean": 1.7812678190338735,
+      "translation_direction_mean": 13.94506994198521
+    },
+    {
+      "sample_id": "realestate10k/069597e1fe899530",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.8437037037037036,
+      "normalized_ate": 0.02738302783423622,
+      "translation_p95": 0.04271778179243299,
+      "rotation_mean": 2.78247769489865,
+      "translation_direction_mean": 4.56230405912927
+    },
+    {
+      "sample_id": "realestate10k/069597e1fe899530",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8066666666666666,
+      "normalized_ate": 0.03220480078568565,
+      "translation_p95": 0.05421336438539711,
+      "rotation_mean": 1.9592789912413875,
+      "translation_direction_mean": 6.3552830801711355
+    },
+    {
+      "sample_id": "realestate10k/06a2911e9add96c6",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.9725925925925926,
+      "normalized_ate": 0.03693748085526259,
+      "translation_p95": 0.05621216621435096,
+      "rotation_mean": 0.48823963280275945,
+      "translation_direction_mean": 1.3014281491386843
+    },
+    {
+      "sample_id": "realestate10k/06a2911e9add96c6",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9422222222222222,
+      "normalized_ate": 0.05431436062381881,
+      "translation_p95": 0.10153646046194267,
+      "rotation_mean": 0.4506829224975916,
+      "translation_direction_mean": 2.1777522611914173
+    },
+    {
+      "sample_id": "realestate10k/06a2911e9add96c6",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.937037037037037,
+      "normalized_ate": 0.051402256705796304,
+      "translation_p95": 0.07698973090758676,
+      "rotation_mean": 0.28296381222760364,
+      "translation_direction_mean": 2.355818366532177
+    },
+    {
+      "sample_id": "realestate10k/06b1d1272b162490",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.1740740740740741,
+      "normalized_ate": 0.8206549398251796,
+      "translation_p95": 1.2961018852654906,
+      "rotation_mean": 12.679928862872925,
+      "translation_direction_mean": 46.22688131984301
+    },
+    {
+      "sample_id": "realestate10k/06b1d1272b162490",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.27185185185185184,
+      "normalized_ate": 0.09573080009450831,
+      "translation_p95": 0.15151590489307673,
+      "rotation_mean": 13.64589910136648,
+      "translation_direction_mean": 17.995439226169673
+    },
+    {
+      "sample_id": "realestate10k/06b1d1272b162490",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.3577777777777778,
+      "normalized_ate": 0.16155290032160388,
+      "translation_p95": 0.2703190202274297,
+      "rotation_mean": 11.811963041291811,
+      "translation_direction_mean": 17.65390546093511
+    },
+    {
+      "sample_id": "realestate10k/0720bead0cc7cbbf",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.8111111111111112,
+      "normalized_ate": 0.08701067898000821,
+      "translation_p95": 0.12980346522711525,
+      "rotation_mean": 0.5596885608545219,
+      "translation_direction_mean": 6.09046953373824
+    },
+    {
+      "sample_id": "realestate10k/0720bead0cc7cbbf",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9066666666666666,
+      "normalized_ate": 0.043660597016539605,
+      "translation_p95": 0.06736344899119368,
+      "rotation_mean": 0.47459604614096623,
+      "translation_direction_mean": 3.2828168167955547
+    },
+    {
+      "sample_id": "realestate10k/0720bead0cc7cbbf",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9022222222222223,
+      "normalized_ate": 0.048072035056643946,
+      "translation_p95": 0.06985804030674844,
+      "rotation_mean": 0.8947355457070747,
+      "translation_direction_mean": 3.465948748811184
+    },
+    {
+      "sample_id": "realestate10k/074653ff3928b9fe",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.10074074074074076,
+      "normalized_ate": 0.9222942697345122,
+      "translation_p95": 1.369355859226306,
+      "rotation_mean": 1.4255918556871772,
+      "translation_direction_mean": 54.441911605961245
+    },
+    {
+      "sample_id": "realestate10k/074653ff3928b9fe",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.8518518518518517,
+      "normalized_ate": 0.03490460038975877,
+      "translation_p95": 0.05312605666143105,
+      "rotation_mean": 0.12182358586737255,
+      "translation_direction_mean": 4.9496736072426595
+    },
+    {
+      "sample_id": "realestate10k/074653ff3928b9fe",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8696296296296296,
+      "normalized_ate": 0.04278041063747658,
+      "translation_p95": 0.06478520604336717,
+      "rotation_mean": 0.09462809406433731,
+      "translation_direction_mean": 4.452080644856446
+    },
+    {
+      "sample_id": "realestate10k/075f0d808a621ae2",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.8125925925925925,
+      "normalized_ate": 0.1532890887947595,
+      "translation_p95": 0.29916229019630197,
+      "rotation_mean": 0.4743814949872592,
+      "translation_direction_mean": 6.240711158771357
+    },
+    {
+      "sample_id": "realestate10k/075f0d808a621ae2",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.8651851851851852,
+      "normalized_ate": 0.05371348279229139,
+      "translation_p95": 0.07199471007903208,
+      "rotation_mean": 0.8092319969140793,
+      "translation_direction_mean": 4.491886618886539
+    },
+    {
+      "sample_id": "realestate10k/075f0d808a621ae2",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8614814814814815,
+      "normalized_ate": 0.06023357268611454,
+      "translation_p95": 0.11500595240697409,
+      "rotation_mean": 0.27415233645134784,
+      "translation_direction_mean": 4.645429599673613
+    },
+    {
+      "sample_id": "realestate10k/078b8bdc29565cac",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.8022222222222223,
+      "normalized_ate": 0.06858754189028385,
+      "translation_p95": 0.0995369787494814,
+      "rotation_mean": 0.8585612982532685,
+      "translation_direction_mean": 6.523083964315525
+    },
+    {
+      "sample_id": "realestate10k/078b8bdc29565cac",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.917037037037037,
+      "normalized_ate": 0.039539932254193916,
+      "translation_p95": 0.06097553000363602,
+      "rotation_mean": 0.24328801512356163,
+      "translation_direction_mean": 2.8782473611914656
+    },
+    {
+      "sample_id": "realestate10k/078b8bdc29565cac",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.9614814814814815,
+      "normalized_ate": 0.0159635065416712,
+      "translation_p95": 0.024011473907591684,
+      "rotation_mean": 0.25422642722868605,
+      "translation_direction_mean": 1.6155073928868309
+    },
+    {
+      "sample_id": "realestate10k/07d0229847bd7408",
+      "sigma": 1.5,
+      "method": "dust3r",
+      "auc30": 0.3592592592592593,
+      "normalized_ate": 0.19558491625188743,
+      "translation_p95": 0.3644231985287386,
+      "rotation_mean": 0.8404085522357859,
+      "translation_direction_mean": 22.65777332466701
+    },
+    {
+      "sample_id": "realestate10k/07d0229847bd7408",
+      "sigma": 1.5,
+      "method": "mast3r",
+      "auc30": 0.9096296296296296,
+      "normalized_ate": 0.007768864409326473,
+      "translation_p95": 0.0121591650682269,
+      "rotation_mean": 0.9129315297143783,
+      "translation_direction_mean": 3.2751796290514816
+    },
+    {
+      "sample_id": "realestate10k/07d0229847bd7408",
+      "sigma": 1.5,
+      "method": "vggt",
+      "auc30": 0.8362962962962963,
+      "normalized_ate": 0.052066841756283976,
+      "translation_p95": 0.08046636180130995,
+      "rotation_mean": 0.7714413955660129,
+      "translation_direction_mean": 5.402541375140711
+    }
+  ],
+  "failures": [],
+  "blur_effects": {
+    "dust3r": {
+      "n_paired_clips": 50,
+      "native_auc30": 0.6556444444444444,
+      "blurred_auc30": 0.5895703703703704,
+      "mean_delta": -0.06607407407407408,
+      "paired_clip_bootstrap_ci95": [
+        -0.1344911111111111,
+        -0.002458888888888879
+      ]
+    },
+    "mast3r": {
+      "n_paired_clips": 50,
+      "native_auc30": 0.8452148148148149,
+      "blurred_auc30": 0.8241481481481479,
+      "mean_delta": -0.021066666666666668,
+      "paired_clip_bootstrap_ci95": [
+        -0.03650444444444447,
+        -0.006918148148148157
+      ]
+    },
+    "vggt": {
+      "n_paired_clips": 50,
+      "native_auc30": 0.6723555555555555,
+      "blurred_auc30": 0.8205185185185186,
+      "mean_delta": 0.148162962962963,
+      "paired_clip_bootstrap_ci95": [
+        0.09943629629629631,
+        0.20169148148148147
+      ]
+    }
+  },
+  "comparisons": [
+    {
+      "sample_id": "realestate10k/008cd8c450342e49",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.714074074074074,
+      "ate_advantage": -0.43445270279947074,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/008cd8c450342e49",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.07481481481481475,
+      "ate_advantage": -0.12537789992064075,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/008cd8c450342e49",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.7888888888888888,
+      "ate_advantage": 0.30907480287883,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/00a54225c5cb1913",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": 0.0,
+      "ate_advantage": -0.4292382250897653,
+      "tie": true,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/00a54225c5cb1913",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.07185185185185186,
+      "ate_advantage": -0.19993144034571675,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/00a54225c5cb1913",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": -0.07185185185185186,
+      "ate_advantage": 0.22930678474404853,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/00cf0a94235771bb",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.3155555555555557,
+      "ate_advantage": -0.12418521648912842,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/00cf0a94235771bb",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.2933333333333332,
+      "ate_advantage": -0.08283252874529001,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/00cf0a94235771bb",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.022222222222222476,
+      "ate_advantage": 0.04135268774383841,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/00cfc0ecd345deb4",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.09111111111111103,
+      "ate_advantage": -0.05773004972764467,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/00cfc0ecd345deb4",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.07481481481481467,
+      "ate_advantage": -0.06678782622922513,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/00cfc0ecd345deb4",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.016296296296296364,
+      "ate_advantage": -0.009057776501580461,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/015d8a2a2834d38c",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.15925925925925932,
+      "ate_advantage": -0.06678048740515483,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/015d8a2a2834d38c",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.010370370370370474,
+      "ate_advantage": 0.005750911506300943,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/015d8a2a2834d38c",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.14888888888888885,
+      "ate_advantage": 0.07253139891145577,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0181d3b41c2cf87c",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.034814814814814965,
+      "ate_advantage": -0.0033565520036123522,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0181d3b41c2cf87c",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.01925925925925931,
+      "ate_advantage": -0.0014043431287430047,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0181d3b41c2cf87c",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.015555555555555656,
+      "ate_advantage": 0.0019522088748693475,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01842c6b21e1d679",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.15037037037037038,
+      "ate_advantage": -0.003396805574329108,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01842c6b21e1d679",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.04888888888888887,
+      "ate_advantage": 0.003990778433612743,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01842c6b21e1d679",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.19925925925925925,
+      "ate_advantage": 0.007387584007941851,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01866b81c3b90f2c",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.6570370370370371,
+      "ate_advantage": -0.42372598389356064,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01866b81c3b90f2c",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.5607407407407408,
+      "ate_advantage": -0.4265272939187029,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01866b81c3b90f2c",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.09629629629629621,
+      "ate_advantage": -0.0028013100251422784,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/018f7907401f2fef",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.059259259259259234,
+      "ate_advantage": -0.048321610566944395,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/018f7907401f2fef",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.14666666666666683,
+      "ate_advantage": 0.029555913120118738,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/018f7907401f2fef",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.20592592592592607,
+      "ate_advantage": 0.07787752368706313,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0196dedebec3dad2",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.17259259259259252,
+      "ate_advantage": -0.11724590874469898,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0196dedebec3dad2",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.197037037037037,
+      "ate_advantage": -0.12120399915414805,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0196dedebec3dad2",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": -0.02444444444444449,
+      "ate_advantage": -0.003958090409449062,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01a5cc3805e94c21",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.046666666666666856,
+      "ate_advantage": -0.033907248793783214,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01a5cc3805e94c21",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.022962962962963185,
+      "ate_advantage": -0.03673136266159018,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01a5cc3805e94c21",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.02370370370370367,
+      "ate_advantage": -0.0028241138678069683,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/01cefee9563f691a",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.06592592592592594,
+      "ate_advantage": -0.042646291650724394,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01cefee9563f691a",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.6118518518518519,
+      "ate_advantage": 0.2549415506614116,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01cefee9563f691a",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.6777777777777778,
+      "ate_advantage": 0.29758784231213603,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01e18dbbf22ff263",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.09037037037037055,
+      "ate_advantage": -0.2134848789466054,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01e18dbbf22ff263",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.15111111111111097,
+      "ate_advantage": -0.14202713175909493,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/01e18dbbf22ff263",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.24148148148148152,
+      "ate_advantage": 0.07145774718751044,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01f7915dce639515",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.5992592592592592,
+      "ate_advantage": -0.28519173123198477,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01f7915dce639515",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.4688888888888888,
+      "ate_advantage": -0.1744133578552285,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/01f7915dce639515",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.13037037037037036,
+      "ate_advantage": 0.11077837337675628,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0223924f43297881",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.07777777777777783,
+      "ate_advantage": -0.048139222945888224,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0223924f43297881",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.10962962962962952,
+      "ate_advantage": -0.004447325263722927,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/0223924f43297881",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.18740740740740736,
+      "ate_advantage": 0.04369189768216529,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/025ce727b1b55932",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": 0.06000000000000005,
+      "ate_advantage": 0.028400441547178534,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/025ce727b1b55932",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.2585185185185186,
+      "ate_advantage": 0.07321130584340792,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/025ce727b1b55932",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.19851851851851854,
+      "ate_advantage": 0.04481086429622938,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/02b59cd60efb924e",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.08148148148148127,
+      "ate_advantage": -0.2330367765351185,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/02b59cd60efb924e",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.11259259259259236,
+      "ate_advantage": -0.21626891087498373,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/02b59cd60efb924e",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": -0.03111111111111109,
+      "ate_advantage": 0.016767865660134766,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/02c485bd207116d4",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.4681481481481482,
+      "ate_advantage": -0.3620882666194755,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/02c485bd207116d4",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.16222222222222193,
+      "ate_advantage": -0.019338589936526318,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/02c485bd207116d4",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.6303703703703701,
+      "ate_advantage": 0.3427496766829492,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/03482c3bd66de195",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.09407407407407398,
+      "ate_advantage": -0.011103244779586047,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/03482c3bd66de195",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.05111111111111133,
+      "ate_advantage": -0.01388456991223936,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/03482c3bd66de195",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.1451851851851853,
+      "ate_advantage": -0.002781325132653313,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/0362399a61c18ad5",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.6214814814814813,
+      "ate_advantage": -0.326415585584021,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0362399a61c18ad5",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.3777777777777778,
+      "ate_advantage": -0.0858939967420943,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0362399a61c18ad5",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.24370370370370353,
+      "ate_advantage": 0.2405215888419267,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/036f135766f38f78",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.11111111111111127,
+      "ate_advantage": -0.03882801372103206,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/036f135766f38f78",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.09185185185185207,
+      "ate_advantage": -0.03556022575953932,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/036f135766f38f78",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.019259259259259198,
+      "ate_advantage": 0.0032677879614927408,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/037e8191b3985142",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.37851851851851825,
+      "ate_advantage": -0.1525789378128472,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/037e8191b3985142",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.008148148148148293,
+      "ate_advantage": -0.10021351947645107,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/037e8191b3985142",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.38666666666666655,
+      "ate_advantage": 0.05236541833639613,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/039b153af4fbfba7",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.07407407407407418,
+      "ate_advantage": -0.026830817882309954,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/039b153af4fbfba7",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.06666666666666654,
+      "ate_advantage": 0.0022997570184387986,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/039b153af4fbfba7",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.14074074074074072,
+      "ate_advantage": 0.029130574900748753,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/03adff83538bdb4e",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": 0.07925925925925931,
+      "ate_advantage": -0.19092990428457557,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/03adff83538bdb4e",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.06222222222222227,
+      "ate_advantage": -0.05306818912875444,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/03adff83538bdb4e",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": -0.017037037037037038,
+      "ate_advantage": 0.13786171515582113,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/03de2844d3c8314e",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.06222222222222218,
+      "ate_advantage": -0.0377550304026116,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/03de2844d3c8314e",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.06814814814814829,
+      "ate_advantage": -0.010409591639155794,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/03de2844d3c8314e",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.13037037037037047,
+      "ate_advantage": 0.027345438763455805,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/03fe94a439456692",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.2474074074074073,
+      "ate_advantage": -0.04751231278686338,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/03fe94a439456692",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.17333333333333367,
+      "ate_advantage": 0.08774700267061139,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/03fe94a439456692",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.42074074074074097,
+      "ate_advantage": 0.13525931545747477,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04433dcf217ad9a0",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.4903703703703703,
+      "ate_advantage": -0.5491681988077277,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04433dcf217ad9a0",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.20222222222222225,
+      "ate_advantage": -0.418217098429247,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04433dcf217ad9a0",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.28814814814814804,
+      "ate_advantage": 0.1309511003784807,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/047c29e9138af233",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.045925925925925815,
+      "ate_advantage": -0.07449745087536858,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/047c29e9138af233",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.09185185185185207,
+      "ate_advantage": 0.011103893825688632,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/047c29e9138af233",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.1377777777777779,
+      "ate_advantage": 0.08560134470105721,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/049a98f70ce9f471",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.04222222222222205,
+      "ate_advantage": -0.01597527312367984,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/049a98f70ce9f471",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.05703703703703711,
+      "ate_advantage": 0.0025267195727271333,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/049a98f70ce9f471",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.09925925925925916,
+      "ate_advantage": 0.018501992696406972,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04b580ea1f4df0a5",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.03259259259259262,
+      "ate_advantage": -0.04627262594118238,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04b580ea1f4df0a5",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.022962962962962963,
+      "ate_advantage": -0.04016648016289237,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/04b580ea1f4df0a5",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.05555555555555558,
+      "ate_advantage": 0.006106145778290007,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04db26572a791881",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.02518518518518531,
+      "ate_advantage": -0.020030750906245894,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04db26572a791881",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.3288888888888889,
+      "ate_advantage": 0.055648630235827945,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04db26572a791881",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.3540740740740742,
+      "ate_advantage": 0.07567938114207384,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04e2be0415136fa9",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.08074074074074071,
+      "ate_advantage": -0.5271001545712679,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04e2be0415136fa9",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.00888888888888889,
+      "ate_advantage": -0.6220151285989596,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04e2be0415136fa9",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.07185185185185182,
+      "ate_advantage": -0.09491497402769164,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/04ec725465dc5329",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": 0.022222222222222143,
+      "ate_advantage": -0.020071782894204707,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/04ec725465dc5329",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.0881481481481482,
+      "ate_advantage": -0.005320036672218115,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/04ec725465dc5329",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.06592592592592605,
+      "ate_advantage": 0.014751746221986592,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04f5153fc5255516",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.2096296296296296,
+      "ate_advantage": -0.06931665214712368,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04f5153fc5255516",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.045925925925925815,
+      "ate_advantage": -0.0321812085433158,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/04f5153fc5255516",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.1637037037037038,
+      "ate_advantage": 0.03713544360380788,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/053e78d3134437a5",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.005925925925925921,
+      "ate_advantage": 0.06769761903838623,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/053e78d3134437a5",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.050370370370370385,
+      "ate_advantage": 0.15241531709827838,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/053e78d3134437a5",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": -0.04444444444444446,
+      "ate_advantage": 0.08471769805989215,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/0542630de1d734de",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.19481481481481477,
+      "ate_advantage": -0.12402256654343756,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0542630de1d734de",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.07037037037037042,
+      "ate_advantage": -0.06093436794228799,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0542630de1d734de",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.12444444444444436,
+      "ate_advantage": 0.06308819860114957,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/058c67085c217b96",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.2348148148148148,
+      "ate_advantage": -0.10323375608630131,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/058c67085c217b96",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.22592592592592597,
+      "ate_advantage": -0.07489267495848496,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/058c67085c217b96",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.008888888888888835,
+      "ate_advantage": 0.02834108112781635,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/059058768c222bd6",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.43925925925925924,
+      "ate_advantage": -0.097501063396707,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/059058768c222bd6",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.22444444444444434,
+      "ate_advantage": -0.06275536299847234,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/059058768c222bd6",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.2148148148148149,
+      "ate_advantage": 0.03474570039823466,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/05a0ad1e2aa632e7",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.3851851851851852,
+      "ate_advantage": -0.3641870419077529,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/05a0ad1e2aa632e7",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.15555555555555534,
+      "ate_advantage": -0.21833544137292665,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/05a0ad1e2aa632e7",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.22962962962962985,
+      "ate_advantage": 0.14585160053482626,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/05a6149f1fcee38d",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.1651851851851852,
+      "ate_advantage": -0.012293660499838018,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/05a6149f1fcee38d",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.0955555555555555,
+      "ate_advantage": -0.009207606820056464,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/05a6149f1fcee38d",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.06962962962962971,
+      "ate_advantage": 0.003086053679781554,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/05b1462991e38e4d",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.07703703703703701,
+      "ate_advantage": -0.017302747302764238,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/05b1462991e38e4d",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.17555555555555546,
+      "ate_advantage": -0.0774102882137211,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/05b1462991e38e4d",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": -0.09851851851851845,
+      "ate_advantage": -0.060107540910956866,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/05c57211be152630",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.5503703703703704,
+      "ate_advantage": -0.5551889456377419,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/05c57211be152630",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.5762962962962963,
+      "ate_advantage": -0.5352794027012989,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/05c57211be152630",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": -0.025925925925925908,
+      "ate_advantage": 0.019909542936442946,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/069597e1fe899530",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.15407407407407392,
+      "ate_advantage": -0.06658476788276746,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/069597e1fe899530",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.12962962962962954,
+      "ate_advantage": -0.03630684190696329,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/069597e1fe899530",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.02444444444444438,
+      "ate_advantage": 0.030277925975804178,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/06a2911e9add96c6",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": 0.021481481481481546,
+      "ate_advantage": 0.007519829466568144,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/06a2911e9add96c6",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.1466666666666666,
+      "ate_advantage": 0.024690792787133112,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/06a2911e9add96c6",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.12518518518518507,
+      "ate_advantage": 0.017170963320564968,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/06b1d1272b162490",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": 0.000740740740740764,
+      "ate_advantage": -0.10303295621390797,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/06b1d1272b162490",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.15407407407407414,
+      "ate_advantage": 0.3090623837006298,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/06b1d1272b162490",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.15333333333333338,
+      "ate_advantage": 0.41209533991453773,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0720bead0cc7cbbf",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.07333333333333336,
+      "ate_advantage": -0.0178153392366825,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0720bead0cc7cbbf",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.6007407407407408,
+      "ate_advantage": 0.535835977814893,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/0720bead0cc7cbbf",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.6740740740740743,
+      "ate_advantage": 0.5536513170515756,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/074653ff3928b9fe",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.5155555555555555,
+      "ate_advantage": -0.33298372449604097,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/074653ff3928b9fe",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.28148148148148144,
+      "ate_advantage": 0.039788975021159634,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/074653ff3928b9fe",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.7970370370370369,
+      "ate_advantage": 0.3727726995172006,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/075f0d808a621ae2",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.09407407407407431,
+      "ate_advantage": -0.12146627039009138,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/075f0d808a621ae2",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": 0.06962962962962937,
+      "ate_advantage": -0.01345959195616675,
+      "tie": false,
+      "disagrees": true
+    },
+    {
+      "sample_id": "realestate10k/075f0d808a621ae2",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.16370370370370368,
+      "ate_advantage": 0.10800667843392463,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/078b8bdc29565cac",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.17555555555555546,
+      "ate_advantage": -0.07573893497889772,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/078b8bdc29565cac",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.12222222222222223,
+      "ate_advantage": -0.030259933141503298,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/078b8bdc29565cac",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.05333333333333323,
+      "ate_advantage": 0.04547900183739443,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/07d0229847bd7408",
+      "a": "dust3r",
+      "b": "mast3r",
+      "auc_delta": -0.2977777777777776,
+      "ate_advantage": -0.12019550216579226,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/07d0229847bd7408",
+      "a": "dust3r",
+      "b": "vggt",
+      "auc_delta": -0.2859259259259258,
+      "ate_advantage": -0.10788774593829668,
+      "tie": false,
+      "disagrees": false
+    },
+    {
+      "sample_id": "realestate10k/07d0229847bd7408",
+      "a": "mast3r",
+      "b": "vggt",
+      "auc_delta": 0.01185185185185178,
+      "ate_advantage": 0.012307756227495584,
+      "tie": false,
+      "disagrees": false
+    }
+  ],
+  "native_pair_count": 150,
+  "decisive_pair_count": 149,
+  "disagreement_count": 27,
+  "interpretation": "Metric disagreement is not evidence of which metric or method is better."
+}
