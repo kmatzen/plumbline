@@ -2533,10 +2533,11 @@ class TestBooster:
             read_booster_calib(p)
 
     def test_booster_disparity_to_depth_helper(self) -> None:
-        disp = np.array([[100.0, 200.0]], dtype=np.float32)
+        disp = np.array([[100.0, 200.0, 0.0, -1.0]], dtype=np.float32)
         out = booster_disparity_to_depth(disp, fx=1000.0, baseline_mm=50.0)
         assert out.dtype == np.float32
-        np.testing.assert_allclose(out, np.array([[0.5, 0.25]]), rtol=1e-4)
+        np.testing.assert_allclose(out[:, :2], np.array([[0.5, 0.25]]), rtol=1e-4)
+        assert np.isinf(out[:, 2:]).all()
 
 
 # ---------------------------------------------------------------------------

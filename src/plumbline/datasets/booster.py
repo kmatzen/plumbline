@@ -30,6 +30,7 @@ Download::
 
 from __future__ import annotations
 
+import logging
 import xml.etree.ElementTree as ET
 from collections.abc import Iterator
 from pathlib import Path
@@ -49,6 +50,8 @@ from plumbline.datasets.base import Dataset, Sample
 from plumbline.datasets.registry import register_dataset
 
 __all__ = ["BoosterDataset", "booster_disparity_to_depth", "read_booster_calib"]
+
+log = logging.getLogger("plumbline.datasets.booster")
 
 
 def _parse_opencv_matrix(node: ET.Element, rows: int, cols: int) -> NDArray[np.float64]:
@@ -90,7 +93,9 @@ def booster_disparity_to_depth(
     baseline_mm: float,
 ) -> NDArray[np.float32]:
     """Convert Booster left disparity (px) to metric depth (m)."""
-    depth = (fx * baseline_mm) / (disp.astype(np.float64) + 1e-6) / 1000.0
+    disparity = disp.astype(np.float64)
+    depth = np.full(disparity.shape, np.inf, dtype=np.float64)
+    np.divide(fx * baseline_mm, disparity * 1000.0, out=depth, where=disparity > 0)
     return depth.astype(np.float32)
 
 
@@ -189,8 +194,10 @@ class BoosterDataset(Dataset):
         if not self.frame_records:
             raise DatasetNotAvailable(f"No Booster frames under {train_root}")
         if len(self.frame_records) != 228:
-            # Warn via metadata; do not hard-fail — partial staging is useful for smoke.
-            pass
+            log.warning(
+                "Booster training split has %d/228 frames; results are not paper-comparable",
+                len(self.frame_records),
+            )
 
     def __len__(self) -> int:
         return len(self.frame_records)
