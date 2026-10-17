@@ -3420,3 +3420,10 @@ assuming a static scene. Eleven targeted staging/input/preservation tests pass,
 including the added sequence. Outputs and conclusions will be recorded only
 after their execution and verification; the saved protocol is not evidence of
 a completed experiment.
+
+Staging completed on Anima with all 90 planned RGB frames. The saved
+`staging-manifest.json` records 89 reference associations (only frame 0 is
+unavailable) and 83 depth associations. Thus all preselected scoring frames
+1–89 have reference associations for the later validation step. Depth is not
+an input to inference or geometric scoring. Camera inference is a separate
+step; staging success does not establish successful method outputs.
