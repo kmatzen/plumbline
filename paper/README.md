@@ -826,6 +826,16 @@ with descriptions of both panels; it explicitly excludes camera/DNF judgments.
 Parsing checks the response schema and evidence-panel names only. This pilot
 cannot provide temporal accuracy, training labels, or camera-quality evidence.
 
+The four-image job was launched in
+`/data3/kmatzen/plumbline/research/track-identity-pairs-v1` on Anima after 16
+crop/parser/input-audit tests passed. The executed runner and numerical helper
+are retained locally in `results/track-identity-pairs-v1`. The first result file
+appeared and the existing connection proceeded to another model load, but its
+response has not been inspected: a separate result-copy connection failed when
+SSH reported the YubiKey device unavailable. The existing pilot connection
+remains active. No correctness or response-format result is inferred from file
+existence or successful model loading.
+
 DA3 has now completed the same 90-frame control. Inputs are byte-identical to
 DAGE after RGB decoding, and the checkpoint, adapter source files, settings,
 and query-chunk helper hash match the earlier DA3 DAVIS run. The new runner is
