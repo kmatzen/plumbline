@@ -2771,3 +2771,31 @@ from our DAVIS inventory. Do not use arbitrary focal lengths or moving masks as
 ORE ground truth. An annotated static-track subset and an explicit calibration
 policy are needed. Predicted calibration would define an estimated-intrinsics
 variant and must be reported separately from known-intrinsics evaluation.
+
+### Reference-seeded pixel transfer audit
+
+`audit_rgbd_seed_transfer.py` checks whether the existing RGB-D controls can
+supply precise image-position labels. It fixes frame 1 as the source, samples
+its nearest-pixel depth for each original grid track, and transfers the resulting
+3D point using reference poses to frames 11 through 89. All twelve slots remain
+in the accounting; an unavailable source is never replaced with a later one.
+It compares transferred pixels with RGB-only LK observations, not with candidate
+camera outputs. Depth and reference poses are scoring-only evidence here.
+
+The retained `seed-transfer-v1.json` files in `results/static-rgbd-control-v1/`
+and `results/office-rgbd-replication-v1/` contain all 948 planned observations
+per sequence. The near control has 564 comparisons, 158 unavailable-source
+observations, and 226 missing image tracks; median compared disagreement is
+3.486 native pixels, with 81 comparisons within two pixels. The office control
+has 441 comparisons, 237 unavailable-source observations, and 270 missing image
+tracks; its median is 3.225 pixels, with 124 comparisons within two pixels.
+All 790 and 711 available projections, respectively, were independently replayed
+using explicit backprojection and camera rotation/translation equations.
+
+These residuals do not identify an erroneous source: image tracking, depth,
+timing, calibration, and scene effects can all contribute. Target visibility was
+not independently established. Therefore this audit does not provide exact
+pixel ground truth or camera-DNF labels. A two-pixel training target built by
+silently transferring these depth samples would be unjustified; reference
+uncertainty and visibility need separate treatment. This development audit is
+not added to the manuscript's experiments.
