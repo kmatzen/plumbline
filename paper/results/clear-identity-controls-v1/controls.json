@@ -1,0 +1,35 @@
+{
+  "scope": "generated clear-target identity sanity controls; not real scenes, staticness or camera DNF",
+  "script_sha256": "5f79d4445c00bbcc1fa7a7b1e68bec2f61b023391ac30eafd2abb5e57e9a9675",
+  "opencv_version": "4.13.0",
+  "cases": [
+    {
+      "name": "control-1.png",
+      "image_sha256": "b276173d4c69cf3cf887d09cb5077c58cf1bd785616b8a6f48c4a4fb92b7fefc",
+      "target_shape": "triangle",
+      "target_center_xy": [
+        155,
+        230
+      ]
+    },
+    {
+      "name": "control-2.png",
+      "image_sha256": "b7ffb686bf3bc519b852d5f783c3c4552d9d8d56fa5f3ed04d5e42a45e9f8898",
+      "target_shape": "rectangle",
+      "target_center_xy": [
+        360,
+        235
+      ]
+    },
+    {
+      "name": "control-3.png",
+      "image_sha256": "06a6bebed6df1d9ff7b40d328596087c6fd8c7af0b88346ac81b8d8f26972c1a",
+      "target_shape": "circle",
+      "target_center_xy": [
+        535,
+        235
+      ]
+    }
+  ],
+  "policy": "same source-identity prompt; target labels exist only in this manifest, not in model inputs"
+}

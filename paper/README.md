@@ -282,11 +282,35 @@ small and blurred; all use Markdown fences and fail strict parsing. Thus the
 larger configuration supplied no scene identities on this pilot, even apart
 from formatting. This does not establish that the details are objectively
 unidentifiable or that the model cannot perform broader scene interpretation.
-The pilot lacks a clear-target positive control and human answers, so excessive
+That pilot alone lacks a clear-target positive control and human answers, so excessive
 abstention versus appropriate uncertainty remains unresolved. Records are in
 `paper/results/source-identity-7b-v1/`; input and prompt hashes match the 3B trials,
 and runner hashes match the archived corrected 7B runner. No prompt retries,
 labels, staticness judgments, or DNF decisions were generated from these answers.
+
+`build_identity_controls.py` constructs a follow-up coarse-identity sanity check:
+an orange triangle, blue rectangle, and purple circle on a plain background.
+Three inputs differ only in which shape contains the cyan marker and its
+magnified crop. The exact source-identity prompt, pinned 7B checkpoint, NF4
+configuration, 768-token visual budget, and corrected fp32 attention-score
+implementation are unchanged. These are generated images, not video frames;
+the prompt's source-video framing is therefore a limitation. The marked
+interiors are uniform, so even identifying the shape would not establish a
+unique trackable point. This check addresses coarse target identification,
+not staticness, temporal tracking, or camera quality. Inputs and their known
+shape identities are retained in `results/clear-identity-controls-v1/`.
+
+All three attempts completed. Every raw answer says `abstain`, with almost
+identical claims that the marked detail is too small and blurry; none names
+the shape. Every answer also uses Markdown fences and fails the unchanged
+strict JSON parser. Input, runner, helper, and prompt identities were checked
+against the retained inputs and current executed source. These results do not
+demonstrate coarse target identification, and weaken an interpretation of the
+earlier abstentions as evidence that only the real targets were unreadable.
+They do not isolate prompt effects, model limitations, quantization, or the
+image-processing path. A generic image-description and processed-input audit
+is needed before assigning this configuration any camera-failure judgments.
+No accepted labels or training examples were produced.
 
 The larger-model follow-up is Qwen2.5-VL-7B-Instruct at pinned revision
 `cc594898137f460bfe9f0759e9844b3ce807cfb5`, staged in Anima's `/data3` HF cache.
